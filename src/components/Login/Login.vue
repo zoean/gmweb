@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { login, getUserByToken } from '../../request/api';
+import { login } from '../../request/api';
 export default {
     data() {
         return {
@@ -54,7 +54,6 @@ export default {
                     if(res.code == 200){
                         this.fullscreenLoading = true;
                         localStorage.setItem("jhToken", res.data.token);
-                        this.getUserByToken();
                         setTimeout(() => {
                             this.fullscreenLoading = false;
                             this.$router.push({ path: '/'});
@@ -65,14 +64,6 @@ export default {
                     }
                 })
             }
-        },
-        getUserByToken() {
-            this.$smoke_post(`/api`+`${getUserByToken}`,{}).then(res => {
-                console.log(res);
-                this.$store.dispatch('actionsSetName', res.data.name);
-                this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
-                this.$store.dispatch('actionsSetUuid', res.data.uuid);
-            })
         },
         alertClose() {
             this.alertFlag = false;

@@ -36,20 +36,15 @@
                         <el-submenu index="1">
                           <template slot="title">
                             <i class="el-icon-location"></i>
-                            <span>导航一</span>
+                            <span>基础模块</span>
                           </template>
                           <el-menu-item-group>
-                            <template slot="title">分组一</template>
-                            <el-menu-item index="1-1">选项1</el-menu-item>
-                            <el-menu-item index="1-2">选项2</el-menu-item>
+                            <template slot="title">人员管理</template>
+                            <el-menu-item index="1-1">人员列表</el-menu-item>
                           </el-menu-item-group>
-                          <el-menu-item-group title="分组2">
+                          <!-- <el-menu-item-group title="分组2">
                             <el-menu-item index="1-3">选项3</el-menu-item>
-                          </el-menu-item-group>
-                          <el-submenu index="1-4">
-                            <template slot="title">选项4</template>
-                            <el-menu-item index="1-4-1">选项1</el-menu-item>
-                          </el-submenu>
+                          </el-menu-item-group> -->
                         </el-submenu>
                         <el-menu-item index="2">
                           <i class="el-icon-menu"></i>
@@ -69,6 +64,25 @@
 
                 <el-main>
                     
+                    <el-table
+                      :data="tableData"
+                      style="width: 100%">
+                      <el-table-column
+                        prop="date"
+                        label="日期"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="name"
+                        label="姓名"
+                        width="180">
+                      </el-table-column>
+                      <el-table-column
+                        prop="address"
+                        label="地址">
+                      </el-table-column>
+                    </el-table>
+
                 </el-main>
 
             </el-container>
@@ -78,16 +92,33 @@
 </template>
 
 <script>
-import { getUserByToken } from '../../request/api';
+import { getUserByToken, getUserDetailedList } from '../../request/api';
 export default {
     name: 'index',
     data() {
         return {
-            
+            tableData: [{
+                  date: '2016-05-02',
+                  name: '王小虎',
+                  address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                  date: '2016-05-04',
+                  name: '王小虎',
+                  address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                  date: '2016-05-01',
+                  name: '王小虎',
+                  address: '上海市普陀区金沙江路 1519 弄'
+                }, {
+                  date: '2016-05-03',
+                  name: '王小虎',
+                  address: '上海市普陀区金沙江路 1516 弄'
+            }]
         }
     },
     created() {
-        
+        this.getUserByToken();
+        this.getUserDetailedList();
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -106,6 +137,19 @@ export default {
             localStorage.removeItem('jhToken');
             this.$router.push({ path: '/login'});
         },
+        getUserByToken() {
+            this.$smoke_post(`/api`+`${getUserByToken}`,{}).then(res => {
+                console.log(res);
+                this.$store.dispatch('actionsSetName', res.data.name);
+                this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
+                this.$store.dispatch('actionsSetUuid', res.data.uuid);
+            })
+        },
+        getUserDetailedList() {
+            this.$smoke_post(`/api`+`${getUserDetailedList}`,{}).then(res => {
+                console.log(res);
+            })
+        }
     },
     mounted() {
         
