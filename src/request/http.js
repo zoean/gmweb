@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 axios.defaults.timeout = 5000;
-// axios.defaults.baseURL ='http://www.baidu.com';
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "https://testgm.jhwx.com" : "";
 
 //http request 拦截器
 axios.interceptors.request.use(
@@ -11,11 +11,8 @@ axios.interceptors.request.use(
       config.headers = {
         'Content-Type':'application/json'
       }
-      if (token || location.href == 'http://localhost:8080/login') {
+      if (token) {
         config.headers.Authorization = token;
-      }else{
-        // alert("您先登录");
-        location.href = '/login';
       }
       return config;
     },
@@ -27,12 +24,12 @@ axios.interceptors.request.use(
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
     // console.log(response);
-    if (response.data.code < 10008 && response.data.code != 200){
-      location.href = '/login';
-    }else{
-      return response
-    }
-    // return response
+    // if (response.data.code < 10008 && response.data.code != 200){
+    //   location.href = '/login';
+    // }else{
+    //   return response
+    // }
+    return response
 }, err => {
     if (err && err.response) {
       switch (err.response.status) {

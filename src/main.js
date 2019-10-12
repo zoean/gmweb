@@ -16,6 +16,23 @@ Vue.prototype.$smoke_post = smoke_post;
 
 Vue.config.productionTip = false
 
+//路由守卫
+router.beforeEach((to, from, next) => {
+  const jhToken = localStorage.getItem("jhToken");
+  if (!jhToken) {//未登录
+      if (to.path !== '/login') {//跳转到登录页
+          return next({path: '/login'});
+      }else {
+          next();
+      }
+  }else {//已登录
+      if (to.path === '/login') {//跳转到首页
+          return next({path: '/'});
+      }
+      next();
+  }
+})
+
 new Vue({
   router,
   store,

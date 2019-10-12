@@ -65,21 +65,19 @@
                 <el-main>
                     
                     <el-table
-                      :data="tableData"
+                      :data="userList"
                       style="width: 100%">
                       <el-table-column
-                        prop="date"
-                        label="日期"
-                        width="180">
+                        :prop="item.prop"
+                        :label="item.label"
+                        v-for="(item, index) in columnList"
+                        :key="index"
+                        >
                       </el-table-column>
-                      <el-table-column
-                        prop="name"
-                        label="姓名"
-                        width="180">
-                      </el-table-column>
-                      <el-table-column
-                        prop="address"
-                        label="地址">
+                      <el-table-column prop="active" label="操作">
+                        <template slot-scope="scope">
+                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        </template>
                       </el-table-column>
                     </el-table>
 
@@ -93,27 +91,19 @@
 
 <script>
 import { getUserByToken, getUserDetailedList } from '../../request/api';
+import { getTextByJs } from '../../assets/js/common'
 export default {
     name: 'index',
     data() {
         return {
-            tableData: [{
-                  date: '2016-05-02',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                  date: '2016-05-04',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                  date: '2016-05-01',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                  date: '2016-05-03',
-                  name: '王小虎',
-                  address: '上海市普陀区金沙江路 1516 弄'
-            }]
+            userList: [],
+            columnList: [
+                { 'prop': 'name', 'label': '姓名' },
+                { 'prop': 'accountNumber', 'label': '手机号' },
+                { 'prop': 'jobStatus', 'label': '状态' },
+                { 'prop': 'orgUuidList', 'label': '部门' },
+                { 'prop': 'roleUuidList', 'label': '角色' },
+            ]
         }
     },
     created() {
@@ -121,6 +111,9 @@ export default {
         this.getUserDetailedList();
     },
     methods: {
+        handleClick(row) {
+            console.log(row);
+        },
         handleOpen(key, keyPath) {
           console.log(key, keyPath);
         },
@@ -138,7 +131,7 @@ export default {
             this.$router.push({ path: '/login'});
         },
         getUserByToken() {
-            this.$smoke_post(`/api`+`${getUserByToken}`,{}).then(res => {
+            this.$smoke_post(`/smoke_api`+`${getUserByToken}`,{}).then(res => {
                 console.log(res);
                 this.$store.dispatch('actionsSetName', res.data.name);
                 this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
@@ -146,8 +139,14 @@ export default {
             })
         },
         getUserDetailedList() {
-            this.$smoke_post(`/api`+`${getUserDetailedList}`,{}).then(res => {
+            this.$smoke_post(`/smoke_api`+`${getUserDetailedList}`,{}).then(res => {
                 console.log(res);
+                // 用户列表
+                res.data.list.map(data => {
+                    data.orgUuidList = getTextByJs(data.orgUuidList);
+                    data.roleUuidList = getTextByJs(data.roleUuidList);
+                })
+                this.userList = res.data.list;
             })
         }
     },
