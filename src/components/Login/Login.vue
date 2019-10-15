@@ -46,7 +46,7 @@ export default {
                 this.alertFlag = true;
                 this.alertTitle = '亲，账号密码不能为空哦！'
             }else{
-                this.$smoke_post(`/api`+`${login}`, {
+                this.$smoke_post(`/smoke_api`+`${login}`, {
                     accountNumber: this.accountNumber,
                     password: this.password
                 }).then(res => {
