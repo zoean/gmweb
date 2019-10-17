@@ -9,7 +9,7 @@ const state = {
     uuid: '', //唯一标识
     accountNumber: '',//手机号
     commonFlag: false,//Header+Aside控制
-    oneLogin: '', //是否首次登录(true:是 false:不是)
+    // oneLogin: false, //是否首次登录(true:是 false:不是)
 }
 
 const mutations = {
@@ -28,9 +28,9 @@ const mutations = {
     setCommonFlag(state,commonFlag){
         return(state.commonFlag = commonFlag);
     },
-    setOneLogin(state,oneLogin){
-        return(state.oneLogin = oneLogin);
-    },
+    // setOneLogin(state,oneLogin){
+    //     return(state.oneLogin = oneLogin);
+    // },
 }
 
 const actions = {
@@ -49,9 +49,9 @@ const actions = {
     actionsSetCommonFlag(context, commonFlag) {
         return context.commit('setCommonFlag', commonFlag);
     },
-    actionsSetOneLogin(context, oneLogin) {
-        return context.commit('setOneLogin', oneLogin);
-    },
+    // actionsSetOneLogin(context, oneLogin) {
+    //     return context.commit('setOneLogin', oneLogin);
+    // },
 }
 
 export default new Vuex.Store({

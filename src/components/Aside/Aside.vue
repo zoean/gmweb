@@ -45,7 +45,7 @@ export default {
     name: '',
     data() {
         return {
-          activeIndex: '',
+          activeIndex: '1-1',
         }
     },
     created() {
@@ -72,7 +72,7 @@ export default {
         this.$router.push({ path: route });
       },
       router_index() {
-        let index = '';
+        let index = '1-1';
         switch(this.$route.path){
           case '/base/people':
             index = '1-1';

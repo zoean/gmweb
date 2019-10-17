@@ -53,7 +53,7 @@ export default {
     name: '',
     data() {
         return {
-            centerDialogVisible: this.$store.state.oneLogin,
+            centerDialogVisible: false,
             form: {
                 password1: '',
                 password2: '',
@@ -112,11 +112,14 @@ export default {
         getUserByToken() {
             this.$smoke_post(getUserByToken,{}).then(res => {
                 console.log(res);
+        
+                this.centerDialogVisible = res.data.oneLogin;
+
                 this.$store.dispatch('actionsSetName', res.data.name);
                 this.$store.dispatch('actionsSetAccountNumber', res.data.accountNumber);
                 this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
                 this.$store.dispatch('actionsSetUuid', res.data.uuid);
-                this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
+                // this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
             })
         },
     },

@@ -26,6 +26,6 @@ export default {
 
 <style lang="less" scoped>
     .main-area{
-        width: calc( 100vw - 3rem );
+        width: calc( 100vw - 3.65rem );
     }
 </style>
