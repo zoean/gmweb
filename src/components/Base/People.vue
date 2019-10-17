@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width: 100%;">
         <el-container>
             
             <el-container class="index-main">
@@ -8,7 +8,7 @@
                     
                     <el-table
                       :data="userList"
-                      style="width: 100%">
+                      style="width: calc( 100vw - 3.8rem)">
                       <el-table-column
                         :prop="item.prop"
                         :label="item.label"
@@ -23,6 +23,14 @@
                       </el-table-column>
                     </el-table>
 
+                    <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        :total="10"
+                        :page-size='5'
+                    >
+                    </el-pagination>
+
                 </el-main>
 
             </el-container>
@@ -33,7 +41,7 @@
 
 <script>
 import { getUserDetailedList } from '../../request/api';
-import { getTextByJs } from '../../assets/js/common'
+import { getTextByJs, getTextByState } from '../../assets/js/common'
 export default {
     name: 'people',
     data() {
@@ -55,15 +63,17 @@ export default {
     methods: {
         handleClick(row) {
             console.log(row);
+            alert('暂未开发');
         },
         
         getUserDetailedList() {
-            this.$smoke_post(`/smoke_api`+`${getUserDetailedList}`,{}).then(res => {
+            this.$smoke_post(getUserDetailedList,{}).then(res => {
                 console.log(res);
                 // 用户列表
                 res.data.list.map(data => {
                     data.orgUuidList = getTextByJs(data.orgUuidList);
                     data.roleUuidList = getTextByJs(data.roleUuidList);
+                    data.jobStatus = getTextByState(data.jobStatus);
                 })
                 this.userList = res.data.list;
             })
@@ -76,11 +86,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    
     .el-main{
         // background: grey;
     }
     .index-main{
         height: calc( 100vh - 60px);
+    }
+    .el-pagination{
+        text-align: right;
+        margin-top: .4rem;
     }
 </style>

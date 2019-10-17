@@ -1,12 +1,12 @@
 <template>
-    <div class="main-area">
-        www
+    <div>
+        ww用户详情页
     </div>
 </template>
 
 <script>
 export default {
-    name: 'index',
+    name: 'people-default',
     data() {
         return {
            
@@ -25,7 +25,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        width: calc( 100vw - 3rem );
-    }
+    
 </style>

@@ -11,3 +11,13 @@ export const getTextByJs = (arr) => {
     }
     return str;
 }
+
+export const getTextByState = (state) => {
+    let str = '';
+    if(state == 1){
+        str = '在职';
+    }else{
+        str = '离职';
+    }
+    return str;
+}

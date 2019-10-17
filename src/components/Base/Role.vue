@@ -1,12 +1,12 @@
 <template>
     <div class="main-area">
-        www
+        role
     </div>
 </template>
 
 <script>
 export default {
-    name: 'index',
+    name: 'role',
     data() {
         return {
            

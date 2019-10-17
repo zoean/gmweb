@@ -7,7 +7,9 @@ const state = {
     name: '', //用户姓名
     jobNumber: '', //用户工号
     uuid: '', //唯一标识
-    accountNumber: ''//手机号
+    accountNumber: '',//手机号
+    commonFlag: false,//Header+Aside控制
+    oneLogin: '', //是否首次登录(true:是 false:不是)
 }
 
 const mutations = {
@@ -23,6 +25,12 @@ const mutations = {
     setUuid(state,uuid){
         return(state.uuid = uuid);
     },
+    setCommonFlag(state,commonFlag){
+        return(state.commonFlag = commonFlag);
+    },
+    setOneLogin(state,oneLogin){
+        return(state.oneLogin = oneLogin);
+    },
 }
 
 const actions = {
@@ -37,6 +45,12 @@ const actions = {
     },
     actionsSetAccountNumber(context, accountNumber) {
         return context.commit('setAccountNumber', accountNumber);
+    },
+    actionsSetCommonFlag(context, commonFlag) {
+        return context.commit('setCommonFlag', commonFlag);
+    },
+    actionsSetOneLogin(context, oneLogin) {
+        return context.commit('setOneLogin', oneLogin);
     },
 }
 

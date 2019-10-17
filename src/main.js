@@ -20,7 +20,7 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   const jhToken = localStorage.getItem("jhToken");
   if (!jhToken) {//未登录
-      if (to.path !== '/login') {//跳转到登录页
+      if (to.path !== '/login') {//跳转到登录页    
           return next({path: '/login'});
       }else {
           next();

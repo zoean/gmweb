@@ -6,16 +6,17 @@
             :visible.sync="centerDialogVisible"
             width="30%"
             center>
-            <div style="margin-bottom: 22px;">姓名<span style="margin-left: 50px;">{{$store.state.name}}</span></div>
-            <div style="margin-bottom: 22px;">手机号<span style="margin-left: 35px;">{{$store.state.accountNumber}}</span></div>
+            <div style="height: .6rem; line-height: .6rem;">姓名<span style="margin-left: 50px;">{{$store.state.name}}</span></div>
+            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">手机号<span style="margin-left: 35px;">{{$store.state.accountNumber}}</span></div>
             <el-form :model="form">
-              <el-form-item label="新密码" :label-width="formLabelWidth">
+              <el-form-item label="原密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password1" autocomplete="off" type="password"></el-input>
               </el-form-item>
-              <el-form-item label="确认密码" :label-width="formLabelWidth">
+              <el-form-item label="新密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password2" autocomplete="off" type="password"></el-input>
               </el-form-item>
             </el-form>
+
             <span slot="footer" class="dialog-footer">
               <el-button @click="dialog_cancel">取 消</el-button>
               <el-button type="primary" @click="dialoghold">保 存</el-button>
@@ -24,7 +25,7 @@
 
         <el-row>
             <el-col :span="12">
-                <div class="index-hleft">京华教育--综合后台</div>
+                <div class="index-hleft">京华大地--综合后台</div>
             </el-col>
             <el-col :span="12">
                 <el-dropdown>
@@ -45,13 +46,14 @@
 </template>
 
 <script>
-import { getUserByToken } from '../../request/api';
-import { getTextByJs } from '../../assets/js/common'
+import { getUserByToken, logOut, updateUserPassword } from '../../request/api';
+import { getTextByJs } from '../../assets/js/common';
+import { pass_word } from '../../assets/js/data';
 export default {
     name: '',
     data() {
         return {
-            centerDialogVisible: false,
+            centerDialogVisible: this.$store.state.oneLogin,
             form: {
                 password1: '',
                 password2: '',
@@ -60,7 +62,7 @@ export default {
         }
     },
     created() {
-        // this.getUserByToken();
+        this.getUserByToken();
     },
     methods: {
         change_password(){
@@ -71,8 +73,11 @@ export default {
             console.log("userInfo");
         },
         logout() {
-            console.log(22);
+            // this.$smoke_post(logOut,{}).then(res => {
+            //     console.log(res);
+            // })
             localStorage.removeItem('jhToken');
+            this.$store.dispatch('actionsSetCommonFlag', false);
             this.$router.push({ path: '/login'});
         },
         dialog_cancel() {
@@ -80,15 +85,38 @@ export default {
         },
         // 保存密码接口
         dialoghold() {
-            this.centerDialogVisible = false;
+            let type = '';
+            if((!pass_word.test(this.form.password2))||(!this.form.password1)||(!this.form.password2)){
+                this.$message({
+                    message: '密码必须由6-12位数字或字母组成',
+                    type: 'error'
+                });
+            }else{
+                this.$smoke_post(updateUserPassword,{
+                    oldPassword: this.form.password1,
+                    newPassword: this.form.password2
+                }).then(res => {
+                    if(res.code == 200){
+                        type = 'success';
+                        this.centerDialogVisible = false;
+                    }else{
+                        type = 'error';
+                    }
+                    this.$message({
+                        message: res.msg,
+                        type: type
+                    });
+                });
+            }
         },
         getUserByToken() {
-            this.$smoke_post(`/smoke_api`+`${getUserByToken}`,{}).then(res => {
+            this.$smoke_post(getUserByToken,{}).then(res => {
                 console.log(res);
                 this.$store.dispatch('actionsSetName', res.data.name);
                 this.$store.dispatch('actionsSetAccountNumber', res.data.accountNumber);
                 this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
                 this.$store.dispatch('actionsSetUuid', res.data.uuid);
+                this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
             })
         },
     },

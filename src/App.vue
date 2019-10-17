@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Header v-if="flag"></Header>
+    <Header v-if="$store.state.commonFlag"></Header>
     <el-container>
-      <Aside v-if="flag"></Aside>
+      <Aside v-if="$store.state.commonFlag"></Aside>
       <router-view/>
     </el-container>
   </div>
@@ -18,15 +18,14 @@ export default {
   },
   data() {
     return{
-      flag: true
+      
     }
   },
   created() {
-    // console.log(this.$route.path);
     if(this.$route.path == '/login'){
-      this.flag = false;
+      this.$store.dispatch('actionsSetCommonFlag', false);
     }else{
-      this.flag = true;
+      this.$store.dispatch('actionsSetCommonFlag', true);
     }
   }
 }

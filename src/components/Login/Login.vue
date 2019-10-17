@@ -46,17 +46,18 @@ export default {
                 this.alertFlag = true;
                 this.alertTitle = '亲，账号密码不能为空哦！'
             }else{
-                this.$smoke_post(`/smoke_api`+`${login}`, {
+                this.$smoke_post(login, {
                     accountNumber: this.accountNumber,
                     password: this.password
                 }).then(res => {
                     // console.log(res);
                     if(res.code == 200){
                         this.fullscreenLoading = true;
+                        this.$store.dispatch('actionsSetCommonFlag', true);                        
                         localStorage.setItem("jhToken", res.data.token);
                         setTimeout(() => {
                             this.fullscreenLoading = false;
-                            this.$router.push({ path: '/'});
+                            this.$router.push({ path: '/base/people'});
                         }, 1000);
                     }else{
                         this.alertFlag = true;
