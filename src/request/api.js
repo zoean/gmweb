@@ -7,6 +7,7 @@ export const getUserDetailedList = '/api/basicApp/getUserDetailedList'; //获取
 export const getOrgSubsetByUuid = '/api/org/getOrgSubsetByUuid'; //查询组织信息（包含子集）
 export const getRoleList = '/api/role/getRoleList'; //获取所有角色信息
 export const getRoleMenuList = '/api/role/getRoleMenuList'; //获取角色的菜单信息
+export const getRoleGroupList = '/api/role/getRoleGroupList'; //获取所有角色组（包含角色）信息
 export const addMenu = '/api/menu/addMenu'; //新增菜单
 export const deleteMenu = '/api/menu/deleteMenu'; //删除菜单
 export const getMenuSubsetByUuid = '/api/menu/getMenuSubsetByUuid'; //查询菜单信息（包含子集）

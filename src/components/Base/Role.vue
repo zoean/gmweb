@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { getRoleGroupList } from '../../request/api';
 export default {
     name: 'role',
     data() {
@@ -13,10 +14,15 @@ export default {
         }
     },
     created() {
-
+        this.getRoleGroupList();
     },
     methods: {
-        
+        getRoleGroupList() {
+            this.$smoke_get(getRoleGroupList, {}).then(res => {
+                console.log(res);
+
+            })
+        },
     },
     mounted() {
         

@@ -130,7 +130,7 @@ export default {
                 jobStatus: 1, // 状态选择value
                 name: '', //姓名
                 orgUuidList: [], //组织唯一标识集合
-                pageSize: 5, //单页请求的数量
+                pageSize: 8, //单页请求的数量
                 roleUuid: '', //角色唯一标识
                 sortSet: [], //排序集合
             }
@@ -167,7 +167,9 @@ export default {
             this.getUserDetailedList();
         },
         handleZuzhiChange(arr) {
-            console.log(arr);
+            // console.log(arr.slice(-1));
+            arr = arr.slice(-1);
+            // console.log(arr);
             this.screenForm.orgUuidList = arr;
             this.getUserDetailedList();
         },
@@ -208,7 +210,7 @@ export default {
             this.screenForm.orgUuidList = [];
             this.screenForm.roleUuid = '';
             this.screenForm.sortSet = [];
-            this.jobStatusText = [];
+            this.jobStatusText = '';
             this.roleUuidText = '';
             
             // 主动触发clearable
@@ -240,11 +242,12 @@ export default {
             line-height: .6rem;
             text-align: center;
             font-size: .2rem;
-            background: #ccc;
-            margin-bottom: .2rem;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
         }
         .people-screen{
-            margin-bottom: .2rem;
+            margin-bottom: .3rem;
             .screen-li{
                 width: 90%;
             }
