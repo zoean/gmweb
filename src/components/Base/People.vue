@@ -1,96 +1,91 @@
 <template>
-    <div style="width: 100%;">
-        <el-container>
-            
-            <el-container class="index-main">
+    <div style="">
+        <el-container class="index-main">
 
-                <el-main>
+            <el-main>
 
-                    <div class="people-title">公司人员列表</div>
+                <div class="people-title">公司人员列表</div>
 
-                    <el-row class="people-screen">
-                        <el-col :span="5">
-                            <el-cascader
-                                ref="cascader"
-                                class="screen-li"
-                                placeholder="请选择组织架构"
-                                :show-all-levels=false
-                                :options="zuzhiOptions"
-                                @change='handleZuzhiChange'
-                                :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList' }"
-                                clearable>
-                            </el-cascader>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-select v-model="roleUuidText" placeholder="请选择角色" @change='handleRoleUuidChange' class="screen-li" clearable>
-                                <el-option
-                                  v-for="item in roleOptions"
-                                  :key="item.uuid"
-                                  :label="item.name"
-                                  :value="item.uuid">
-                                </el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-select v-model="jobStatusText" placeholder="请选择员工状态" @change='handleJobStatusChange' class="screen-li" clearable>
-                                <el-option
-                                  v-for="item in jobStatusOptions"
-                                  :key="item.value"
-                                  :label="item.label"
-                                  :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-col>
-                    </el-row>
+                <el-row class="people-screen">
+                    <el-col :span="5">
+                        <el-cascader
+                            ref="cascader"
+                            class="screen-li"
+                            placeholder="请选择组织架构"
+                            :show-all-levels=false
+                            :options="zuzhiOptions"
+                            @change='handleZuzhiChange'
+                            :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList' }"
+                            clearable>
+                        </el-cascader>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-select v-model="roleUuidText" placeholder="请选择角色" @change='handleRoleUuidChange' class="screen-li" clearable>
+                            <el-option
+                              v-for="item in roleOptions"
+                              :key="item.uuid"
+                              :label="item.name"
+                              :value="item.uuid">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-select v-model="jobStatusText" placeholder="请选择员工状态" @change='handleJobStatusChange' class="screen-li" clearable>
+                            <el-option
+                              v-for="item in jobStatusOptions"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
 
-                    <el-row class="people-screen">
-                        <el-col :span="5">
-                            <el-input v-model="screenForm.name" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
-                        </el-col>
-                        <el-col :span="5">
-                            <el-button type="primary" @click="smoke_search">搜 索</el-button>
-                        </el-col>
-                        <el-col :span="9">
-                            <el-button type="primary" class='smoke-fr' style="margin-right: 4.5%;" @click="smoke_clear">清 空 条 件</el-button>
-                        </el-col>
-                    </el-row>
-                    
-                    <el-table
-                      :data="userList"
-                      style="width: calc( 100vw - 3.65rem)">
-                      <el-table-column
-                        :prop="item.prop"
-                        :label="item.label"
-                        v-for="(item, index) in columnList"
-                        :key="index"
-                        >
-                      </el-table-column>
-                      <el-table-column prop="active" label="操作">
-                        <template slot-scope="scope">
-                            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-                        </template>
-                      </el-table-column>
-                    </el-table>
-
-                    <el-pagination
-                        background
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total='total'
-                        :page-size='screenForm.pageSize'
-                        :page-sizes="[2, 3, 5, 8]"
-                        :hide-on-single-page="totalFlag"
-                        @current-change="handleCurrentChange"
-                        @size-change="handleSizeChange"
-                        style="margin-right: 1.2%;"
+                <el-row class="people-screen">
+                    <el-col :span="5">
+                        <el-input v-model="screenForm.name" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
+                    </el-col>
+                    <el-col :span="5">
+                        <el-button type="primary" @click="smoke_search">搜 索</el-button>
+                    </el-col>
+                    <el-col :span="9">
+                        <el-button type="primary" class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
+                    </el-col>
+                </el-row>
+                
+                <el-table
+                  :data="userList"
+                  style="width: calc( 100vw - 3.65rem)">
+                  <el-table-column
+                    :prop="item.prop"
+                    :label="item.label"
+                    v-for="(item, index) in columnList"
+                    :key="index"
                     >
-                    </el-pagination>
+                  </el-table-column>
+                  <el-table-column prop="active" label="操作">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
 
-                </el-main>
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total='total'
+                    :page-size='screenForm.pageSize'
+                    :page-sizes="[2, 3, 5, 8]"
+                    :hide-on-single-page="totalFlag"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
+                >
+                </el-pagination>
 
-            </el-container>
+            </el-main>
 
         </el-container>
     </div>
