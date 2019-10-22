@@ -11,7 +11,11 @@
 
                 <el-table
                   :data="menuList"
-                  style="width: calc( 100vw - 3.65rem)">
+                  style="width: calc( 100vw - 3.65rem)"
+                  row-key="uuid"
+                  default-expand-all
+                  :tree-props="{children: 'children', hasChildren: 'hasChildren'}"  
+                >
                   <el-table-column
                     :prop="item.prop"
                     :label="item.label"
@@ -21,13 +25,27 @@
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="handleUpdataClick(scope.row)" type="text" size="small">修改</el-button>
+                        <el-popover
+                          placement="top"
+                          width="200"
+                          trigger="click"
+                          :ref="`popover-${scope.$index}`"
+                          >
+                          <p style="margin-bottom: .2rem;">确定要删除此菜单吗？</p>
+                          <div style="text-align: right; margin: 0">
+                            <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                            <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
+                          </div>
+                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                        </el-popover>
+                        <el-button @click="handleAddClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">添加</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
 
                 <el-drawer
-                    title="增加菜单"
+                    :title="drawerTitle"
                     :visible.sync="drawer"
                     :direction="direction"
                     :before-close="handleClose">
@@ -48,8 +66,8 @@
                         </el-form-item>
 
                         <el-form-item>
-                          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                          <el-button @click="resetForm('ruleForm')">重置</el-button>
+                          <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
+                          <el-button @click="resetForm()">重置</el-button>
                         </el-form-item>
 
                     </el-form>
@@ -67,15 +85,17 @@
 
 // default-expand-all 默认table要不要展开
 
-import { getMenuDetailsSubsetByUuid, addMenu } from '../../request/api';
+import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu } from '../../request/api';
 export default {
-    name: 'zuzhi',
+    name: 'menua',
     data() {
         return {
             menuList: [],
             columnList: [
-                { 'prop': 'uuid', 'label': 'id' },
-                { 'prop': 'name', 'label': '组织名称' },
+                { 'prop': 'name', 'label': '菜单名称' },
+                { 'prop': 'icon', 'label': '菜单icon' },
+                { 'prop': 'menuComponent', 'label': '菜单路由组成' },
+                { 'prop': 'url', 'label': '菜单路由地址' },
             ],
             drawer: false,
             direction: 'rtl',
@@ -84,6 +104,8 @@ export default {
                 name: '',
                 menuComponent: '',
                 url: '',
+                uuid: '',
+                parentUuid: '',
             },
             rules: {
                 name: [
@@ -95,7 +117,9 @@ export default {
                 url: [
                   { required: true, message: '请输入菜单路由跳转地址', trigger: 'blur' }
                 ],
-            }
+            },
+            drawerTitle: '新建菜单',
+
         }
     },
     created() {
@@ -106,25 +130,66 @@ export default {
             this.$refs[formName].validate((valid) => {
               if (valid) {
                 console.log(this.ruleForm);
-                this.addMenu();
+                if(this.drawerTitle == '新建菜单'){
+                    this.addMenu();
+                }else{
+                    this.updateMenu();
+                }
               } else {
                 console.log('error submit!!');
                 return false;
               }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        resetForm() {
+            this.ruleForm.icon = '';
+            this.ruleForm.name = '';
+            this.ruleForm.menuComponent = '';
+            this.ruleForm.url = '';
+            this.ruleForm.uuid = '';
+            this.ruleForm.parentUuid = '';
+        },
+        handleDeleteClick(scope) {
+            // console.log(scope.row.uuid);
+            this.$smoke_post(deleteMenu, {
+                uuid: scope.row.uuid
+            }).then(res => {
+                console.log(res);
+                if(res.code == 200){
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功', 
+                    });
+                    this.getMenuDetailsSubsetByUuid();
+                }
+            })
         },
         add_menu() {
             this.drawer = true;
+            this.drawerTitle = '新建菜单';
+            this.resetForm();
+        },
+        handleAddClick(row) {
+            console.log(row);
+            this.drawer = true;
+            this.drawerTitle = '新建菜单';
+            this.resetForm();
+            this.ruleForm.parentUuid = row.uuid;
         },
         handleClose(done) {
             done();
         },
-        handleClick(row) {
+        handleUpdataClick(row) {
             console.log(row);
-            alert('暂未开发');
+            this.drawer = true;
+            this.drawerTitle = '修改菜单';
+            this.ruleForm.name = row.name;
+            this.ruleForm.icon = row.icon;
+            this.ruleForm.menuComponent = row.menuComponent;
+            this.ruleForm.url = row.url;
+            this.ruleForm.uuid = row.uuid;
+            this.ruleForm.parentUuid = row.parentUuid;
         },
         getMenuDetailsSubsetByUuid() {
             let arr;
@@ -132,8 +197,8 @@ export default {
                 uuid: ""
             }).then(res => {
                 console.log(res.data);
-                
-                // this.zuzhiList = arr;
+                arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
+                this.menuList = arr;
             })
         },
         addMenu() {
@@ -144,7 +209,16 @@ export default {
                     this.getMenuDetailsSubsetByUuid();
                 }
             })
-        }
+        },
+        updateMenu() {
+            this.$smoke_post(updateMenu, this.ruleForm).then(res => {
+                console.log(res);
+                if(res.code == 200){
+                    this.drawer = false;
+                    this.getMenuDetailsSubsetByUuid();
+                }
+            })
+        },
     },
     mounted() {
         
@@ -177,7 +251,7 @@ export default {
 </style>
 <style>
     .el-drawer__header{
-        font-size: .3rem !important;
+        font-size: 18px !important;
     }
     .demo-ruleForm{
         border: 1px dashed #ccc;

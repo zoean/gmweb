@@ -109,7 +109,7 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .smoke-fr{
-    float: right;
+    float: right !important;
 }
 
 .smoke-img{

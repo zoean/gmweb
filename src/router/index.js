@@ -1,12 +1,15 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Index from '@/components/Index/Index';
-import Login from '@/components/Login/Login';
-import People from '@/components/Base/People';
-import Menu from '@/components/Base/Menu';
-import Role from '@/components/Base/Role';
-import Zuzhi from '@/components/Base/Zuzhi';
+import index from '@/components/Index/Index';
+import login from '@/components/Login/Login';
+import people from '@/components/Base/People';
+import peopleDefault from '@/components/Base/PeopleDefault';
+import peopleChange from '@/components/Base/PeopleChange';
+import menu from '@/components/Base/Menu';
+import role from '@/components/Base/Role';
+import zuzhi from '@/components/Base/Zuzhi';
+import timeData from '@/components/Statistics/Time';
 
 Vue.use(Router);
 
@@ -22,32 +25,47 @@ export default new Router({
         {
             path: '/',
             name: 'index',
-            component: Index
+            component: index
         },
         {
             path: '/login',
             name: 'login',
-            component: Login
+            component: login
         },
         {
             path: '/base/people',
             name: 'people',
-            component: People
+            component: people
+        },
+        {
+            path: '/base/people/default',
+            name: 'peopleDefault',
+            component: peopleDefault
+        },
+        {
+            path: '/base/people/change',
+            name: 'peopleChange',
+            component: peopleChange
         },
         {
             path: '/base/menu',
             name: 'menu',
-            component: Menu
+            component: menu
         },
         {
             path: '/base/role',
             name: 'role',
-            component: Role
+            component: role
         },
         {
             path: '/base/zuzhi',
             name: 'zuzhi',
-            component: Zuzhi
+            component: zuzhi
+        },
+        {
+            path: '/timeData',
+            name: 'timeData',
+            component: timeData
         },
     ]
 })

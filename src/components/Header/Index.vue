@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { getUserByToken, logOut, updateUserPassword } from '../../request/api';
+import { getUserLoginMessage, logOut, updateUserPassword } from '../../request/api';
 import { getTextByJs } from '../../assets/js/common';
 import { pass_word } from '../../assets/js/data';
 export default {
@@ -62,7 +62,7 @@ export default {
         }
     },
     created() {
-        this.getUserByToken();
+        this.getUserLoginMessage();
     },
     methods: {
         change_password(){
@@ -71,6 +71,8 @@ export default {
         },
         userInfo() {
             console.log("userInfo");
+            alert('暂未开发');
+            // this.$router.push({path: '/base/people/default'});
         },
         logout() {
             // this.$smoke_post(logOut,{}).then(res => {
@@ -109,8 +111,8 @@ export default {
                 });
             }
         },
-        getUserByToken() {
-            this.$smoke_post(getUserByToken,{}).then(res => {
+        getUserLoginMessage() {
+            this.$smoke_post(getUserLoginMessage,{}).then(res => {
                 console.log(res);
         
                 this.centerDialogVisible = res.data.oneLogin;
@@ -119,6 +121,7 @@ export default {
                 this.$store.dispatch('actionsSetAccountNumber', res.data.accountNumber);
                 this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
                 this.$store.dispatch('actionsSetUuid', res.data.uuid);
+                this.$store.dispatch('actionsSetUserMenuList', res.data.userMenuList);
                 // this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
             })
         },

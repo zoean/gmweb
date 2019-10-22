@@ -68,7 +68,7 @@
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -139,7 +139,12 @@ export default {
     methods: {
         handleClick(row) {
             console.log(row);
-            alert('暂未开发');
+            this.$router.push({
+                path: '/base/people/change',
+                query: {
+                    uuid: row.uuid
+                }
+            })
         },
         handleRoleUuidChange(value) {
             console.log(value);

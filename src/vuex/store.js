@@ -10,6 +10,7 @@ const state = {
     accountNumber: '',//手机号
     commonFlag: false,//Header+Aside控制
     // oneLogin: false, //是否首次登录(true:是 false:不是)
+    userMenuList: [],
 }
 
 const mutations = {
@@ -31,6 +32,9 @@ const mutations = {
     // setOneLogin(state,oneLogin){
     //     return(state.oneLogin = oneLogin);
     // },
+    setUserMenuList(state,userMenuList){
+        return(state.userMenuList = userMenuList);
+    },
 }
 
 const actions = {
@@ -48,6 +52,9 @@ const actions = {
     },
     actionsSetCommonFlag(context, commonFlag) {
         return context.commit('setCommonFlag', commonFlag);
+    },
+    actionsSetUserMenuList(context, userMenuList) {
+        return context.commit('setUserMenuList', userMenuList);
     },
     // actionsSetOneLogin(context, oneLogin) {
     //     return context.commit('setOneLogin', oneLogin);
