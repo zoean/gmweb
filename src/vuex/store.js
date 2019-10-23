@@ -10,7 +10,7 @@ const state = {
     accountNumber: '',//手机号
     commonFlag: false,//Header+Aside控制
     // oneLogin: false, //是否首次登录(true:是 false:不是)
-    userMenuList: [],
+    userMenuList: [], //用户路由表
 }
 
 const mutations = {

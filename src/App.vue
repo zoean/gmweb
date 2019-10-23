@@ -22,12 +22,21 @@ export default {
     }
   },
   created() {
-    if(this.$route.path == '/login'){
+    if((this.$route.path == '/login') || ((this.$route.path == '/404'))){
       this.$store.dispatch('actionsSetCommonFlag', false);
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
     }
-  }
+  },
+  watch:{
+    '$route.path': function(newVal,oldVal){
+      if(newVal == '/404' || newVal == '/login'){
+        this.$store.dispatch('actionsSetCommonFlag', false);
+      }else{
+        this.$store.dispatch('actionsSetCommonFlag', true);
+      }
+    }
+  },
 }
 </script>
 

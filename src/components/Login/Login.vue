@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { login } from '../../request/api';
+import { login, getUserLoginMessage } from '../../request/api';
 export default {
     data() {
         return {
@@ -55,9 +55,12 @@ export default {
                         this.fullscreenLoading = true;
                         this.$store.dispatch('actionsSetCommonFlag', true);                        
                         localStorage.setItem("jhToken", res.data.token);
+
+                        this.getUserLoginMessage();
+
                         setTimeout(() => {
                             this.fullscreenLoading = false;
-                            this.$router.push({ path: '/base/people'});
+                            this.$router.push({ path: '/'});
                         }, 1000);
                     }else{
                         this.alertFlag = true;
@@ -65,6 +68,12 @@ export default {
                     }
                 })
             }
+        },
+        getUserLoginMessage() {
+            this.$smoke_post(getUserLoginMessage,{}).then(res => {
+                // console.log(JSON.stringify(res.data.userMenuList));
+                localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
+            })
         },
         alertClose() {
             this.alertFlag = false;

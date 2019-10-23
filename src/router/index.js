@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import index from '@/components/Index/Index';
+import four from '@/components/Index/Four';
 import login from '@/components/Login/Login';
 import people from '@/components/Base/People';
 import peopleDefault from '@/components/Base/PeopleDefault';
@@ -67,5 +68,14 @@ export default new Router({
             name: 'timeData',
             component: timeData
         },
+        {
+            path: '/404',
+            name: '404',
+            component: four,
+        },
+        {
+            path: '*',
+            redirect: '/404'
+        }
     ]
 })

@@ -51,7 +51,12 @@ export default {
         }
     },
     created() {
-        this.getUserDetailed();
+        console.log(this.$route.query.uuid);
+        if((this.$route.query.uuid == '') || (this.$route.query.uuid == undefined)){
+            this.$router.push({ path: '/' });
+        }else{
+            this.getUserDetailed();           
+        }
     },
     methods: {
         getUserDetailed() {

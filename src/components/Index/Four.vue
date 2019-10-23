@@ -1,6 +1,6 @@
 <template>
     <div class="main-area">
-        欢迎来到京华大地--综合后台
+        <img src="../../assets/images/404.png" alt="" class="images-404">
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
         }
     },
     created() {
-
+        
     },
     methods: {
         
@@ -26,6 +26,10 @@ export default {
 
 <style lang="less" scoped>
     .main-area{
-        width: calc( 100vw - 3.65rem );
+        width: 100vw;
+        text-align: center;
+        .images-404{
+            margin-top: 2rem;
+        }
     }
 </style>

@@ -4,9 +4,11 @@
             
             <el-menu
                 :default-active="activeIndex"
+                ref="elmenu"
                 class="el-menu-vertical-demo"
                 @open="handleOpen"
                 @close="handleClose"
+                :default-openeds="openedsIndex"
                 >
 
                 <div v-for="(item,index) in $store.state.userMenuList" :key="index">
@@ -45,7 +47,8 @@ export default {
     name: '',
     data() {
         return {
-          activeIndex: '/base/people',
+          activeIndex: '/base',
+          openedsIndex: ['']
         }
     },
     created() {
@@ -68,6 +71,14 @@ export default {
         this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
           console.log(res);
         })
+      }
+    },
+    watch:{
+      '$route.path': function(newVal,oldVal){
+        if(newVal == '/' || newVal == '/timeData'){
+          this.openedsIndex = [];
+          this.activeIndex = '';
+        }
       }
     },
     mounted() {

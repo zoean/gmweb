@@ -25,7 +25,7 @@
 
         <el-row>
             <el-col :span="12">
-                <div class="index-hleft">京华大地--综合后台</div>
+                <div class="index-hleft" @click="$router.push({path: '/'})">京华大地--综合后台</div>
             </el-col>
             <el-col :span="12">
                 <el-dropdown>
@@ -79,6 +79,7 @@ export default {
             //     console.log(res);
             // })
             localStorage.removeItem('jhToken');
+            localStorage.removeItem('userMenuList');
             this.$store.dispatch('actionsSetCommonFlag', false);
             this.$router.push({ path: '/login'});
         },
@@ -122,6 +123,8 @@ export default {
                 this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
                 this.$store.dispatch('actionsSetUuid', res.data.uuid);
                 this.$store.dispatch('actionsSetUserMenuList', res.data.userMenuList);
+
+                localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
                 // this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
             })
         },
@@ -143,6 +146,7 @@ export default {
     .index-hleft{
         font-size: 24px;
         letter-spacing: .04rem;
+        cursor: pointer;
     }
     .el-dropdown{
         float: right;
