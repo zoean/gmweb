@@ -27,5 +27,8 @@ export default {
 <style lang="less" scoped>
     .main-area{
         width: calc( 100vw - 3.65rem );
+        font-size: .4rem;
+        text-align: center;
+        padding-top: 2rem;
     }
 </style>

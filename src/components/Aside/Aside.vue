@@ -23,7 +23,9 @@
                         :index="`${res.url}`" 
                         @click="active_router(res)"
                         v-if="res.disabled"
-                      >{{res.name}}
+                      >
+                      <i :class="res.icon"></i>
+                      {{res.name}}
                       </el-menu-item>
                     </div>
                   </el-submenu>
@@ -77,8 +79,8 @@ export default {
       '$route.path': function(newVal,oldVal){
         if(newVal == '/' || newVal == '/timeData'){
           this.openedsIndex = [];
-          this.activeIndex = '';
         }
+        this.activeIndex = newVal;
       }
     },
     mounted() {
