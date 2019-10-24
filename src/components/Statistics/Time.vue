@@ -70,6 +70,7 @@
 
 <script>
 import { countCallRecord, getOrgSubsetByUuid } from '../../request/api';
+import { columnListYes, columnListNo } from '../../assets/js/data';
 export default {
     name: 'index',
     data() {
@@ -79,34 +80,7 @@ export default {
                 orgUuidList: [],
                 time: 0
             },
-            columnList: [
-                { 'prop': 'orgName', 'label': '统计单元' },
-                { 'prop': 'title0', 'label': '0--1' },
-                { 'prop': 'title1', 'label': '1--2' },
-                { 'prop': 'title2', 'label': '2--3' },
-                { 'prop': 'title3', 'label': '3--4' },
-                { 'prop': 'title4', 'label': '4--5' },
-                { 'prop': 'title5', 'label': '5--6' },
-                { 'prop': 'title6', 'label': '6--7' },
-                { 'prop': 'title7', 'label': '7--8' },
-                { 'prop': 'title8', 'label': '8--9' },
-                { 'prop': 'title9', 'label': '9--10' },
-                { 'prop': 'title10', 'label': '10--11' },
-                { 'prop': 'title11', 'label': '11--12' },
-                { 'prop': 'title12', 'label': '12--13' },
-                { 'prop': 'title13', 'label': '13--14' },
-                { 'prop': 'title14', 'label': '14--15' },
-                { 'prop': 'title15', 'label': '15--16' },
-                { 'prop': 'title16', 'label': '16--17' },
-                { 'prop': 'title17', 'label': '17--18' },
-                { 'prop': 'title18', 'label': '18--19' },
-                { 'prop': 'title19', 'label': '19--20' },
-                { 'prop': 'title20', 'label': '20--21' },
-                { 'prop': 'title21', 'label': '21--22' },
-                { 'prop': 'title22', 'label': '22--23' },
-                { 'prop': 'title23', 'label': '23--24' },
-                { 'prop': 'totalPassTime', 'label': '全天合计单位：小时' },
-            ],
+            columnList: columnListNo,
             tableData: [],
             timeDate: '',
         }
@@ -126,7 +100,7 @@ export default {
         },
         handleZuzhiChange(arr) {
             let brr = [];
-            console.log(arr);
+            // console.log(arr);
             arr.map(res => {
                 if(res.length == 1){
                     brr.push(res[0]);
@@ -134,26 +108,38 @@ export default {
                     brr.push(res[res.length-1]);
                 }
             })
-            console.log(brr);
+            // console.log(brr);
             this.form.orgUuidList = brr;
         },
         handleClick(row) {
-            console.log(row);
+            // console.log(row);
         },
         timeChange() {
-            console.log(this.timeDate.getTime());
+            // console.log(this.timeDate.getTime());
             this.form.time = this.timeDate.getTime();
         },
         countCallRecord() {
             this.$smoke_post(countCallRecord, this.form).then(res => {
-                console.log(res);
-                res.data.map(lls => {
-                    lls.list.map((act,index) => {
-                        lls['title' + index] = act.passTime;
+                if(res.code == 200){
+                    this.$message({
+                        type: 'success',
+                        message: '查询成功'
                     })
-                })
-                console.log(res.data);
-                this.tableData = res.data;
+                    // console.log(res);
+                    res.data.map(lls => {
+                        lls.list.map((act,index) => {
+                            lls['title' + index] = act.passTime;
+                        })
+                    })
+                    // console.log(res.data);
+                    this.tableData = res.data;
+                    this.columnList = columnListYes;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
             })
         }
     },
