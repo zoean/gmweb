@@ -40,6 +40,7 @@
                                 plain 
                                 style="width: 50%;"
                                 @click="countCallRecord"
+                                v-loading.fullscreen.lock="fullscreenLoading"
                             >确定</el-button>
                         </el-col>
 
@@ -83,6 +84,7 @@ export default {
             columnList: columnListNo,
             tableData: [],
             timeDate: '',
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -119,21 +121,21 @@ export default {
             this.form.time = this.timeDate.getTime();
         },
         countCallRecord() {
+            this.fullscreenLoading = true;
             this.$smoke_post(countCallRecord, this.form).then(res => {
                 if(res.code == 200){
-                    this.$message({
-                        type: 'success',
-                        message: '查询成功'
-                    })
                     // console.log(res);
-                    res.data.map(lls => {
-                        lls.list.map((act,index) => {
-                            lls['title' + index] = act.passTime;
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        res.data.map(lls => {
+                            lls.list.map((act,index) => {
+                                lls['title' + index] = act.passTime;
+                            })
                         })
-                    })
-                    // console.log(res.data);
-                    this.tableData = res.data;
-                    this.columnList = columnListYes;
+                        // console.log(res.data);
+                        this.tableData = res.data;
+                        this.columnList = columnListYes;
+                    }, 1000);
                 }else{
                     this.$message({
                         type: 'error',

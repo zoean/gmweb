@@ -45,8 +45,8 @@ export default {
         return {
             zuzhiList: [],
             columnList: [
-                { 'prop': 'uuid', 'label': 'id' },
                 { 'prop': 'name', 'label': '组织名称' },
+                { 'prop': 'uuid', 'label': 'id' },
             ],
         }
     },

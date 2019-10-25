@@ -65,7 +65,7 @@
                     </el-col>
                 </el-row>
 
-                <div style="margin-top: .2rem; height: .3rem; line-height: .3rem; font-size: 16px;">当前选择：{{currentRow.name}}</div>
+                <div style="margin-top: .2rem; height: .3rem; line-height: .3rem; font-size: 16px;" v-if="currentRow">当前选择：<span>{{currentRow.name}}</span></div>
 
                 <div style="margin-top: .2rem; height: .3rem; line-height: .3rem; font-size: 16px;">搜索结果：</div>
 
@@ -102,16 +102,54 @@
                 
             </div>
 
-            
+        </el-drawer>
+
+        <el-drawer
+            title="创建并关联"
+            :visible.sync="drawerCreate"
+            :direction="direction"
+            size="40%"
+            :before-close="handleClose"   
+        >
+                        
+            <el-form :model="createForm" ref="createForm" style="width: 80%; margin: 0 auto;" :rules="rules">
+                <el-form-item label="用户名" prop="strId"> 
+                    <el-input v-model="createForm.strId"></el-input>
+                </el-form-item>
+                <el-form-item label="JQ姓名" prop="nickname">
+                    <el-input v-model="createForm.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="JQ账号类型" prop="type">
+                    <el-select v-model="createForm.type" placeholder="请选择JQ账号" @change="createItem">
+                        <el-option
+                            v-for="item in selectCreate"
+                            :key="item.type"
+                            :label="item.name"
+                            :value="item.type">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="手机号码">
+                  <el-input v-model="createForm.mobile"></el-input>
+                </el-form-item>
+                <el-form-item label="电子邮箱">
+                  <el-input v-model="createForm.email"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-row style="margin-top: .5rem;">
+                <el-col :span="11" style="text-align: right;" :offset="1"><el-button type="primary" @click="createNo">取消</el-button></el-col>
+                <el-col :span="11" style="text-align: left;" :offset="1"><el-button type="primary" @click="createYes('createForm')">创建关联</el-button></el-col>
+            </el-row>
 
         </el-drawer>
 
-        <el-button type="primary" @click="onSubmit" style="margin-left: 6.8rem; width: 2rem;">保存</el-button>
+        <el-button type="primary" @click="onSubmit" style="margin-left: 6.8rem; width: 2rem;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
     </div>
 </template>
 
 <script>
-import { getUserDetailed, getJqAccountNumberList, phoneUserList } from '../../request/api';
+import { getUserDetailed, getJqAccountNumberList, phoneUserList, updateUser, addUserJqUser } from '../../request/api';
 import { getTextByState, getTextByJs } from '../../assets/js/common'
 export default {
     name: 'index',
@@ -120,10 +158,12 @@ export default {
             uuid: this.$route.query.uuid,
             form: {},
             formText: {},
+            drawerCreate: false,
             drawerSearch: false,
             direction: 'rtl',
             selectValue: '',
             selectOptions: [],
+            selectCreate: [],
             searchForm: {
                 accountType: 0, //账号类型
                 currentPage: 1, //当前页数
@@ -131,7 +171,7 @@ export default {
                 pageSize: 8, //每页显示条目个数
                 userName: '', //jq的用户名	
             },
-            total: null, //总条目数
+            total: 0, //总条目数
             totalFlag: false, //当只有一页时隐藏分页
             tableData: [],
             columnList: [
@@ -143,6 +183,27 @@ export default {
                 name: '',
                 uin: '',
                 userName: '',
+            },
+            fullscreenLoading: false,
+            createForm: {
+                email: '',
+                mobile: '',
+                nickname: '', //姓名
+                strId: '', //用户名 字母开头,由字母、数字、下划线组成,总长度为3~20;不可重复，不可修改
+                type: null,
+                userUuid: ''
+            },
+            rules: {
+                nickname: [
+                    { required: true, message: '请输入JQ姓名', trigger: 'blur' },
+                ],
+                strId: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+                ],
+                type: [
+                    { required: true, message: '请选择JQ账号类型', trigger: 'blur' },
+                ]
             }
         }
     },
@@ -179,31 +240,65 @@ export default {
             })
         },
         onSubmit() {
-            console.log('222');
-            alert('暂未开发');
+            console.log(this.currentRow);
+            this.fullscreenLoading = true;
+            this.$smoke_post(updateUser, {
+                jqName: this.currentRow.name,
+                jqUserName: this.currentRow.userName,
+                uin: this.currentRow.uin,
+                userUuid: this.uuid
+            }).then(res => {
+                console.log(res);
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.getUserDetailed();
+                        this.$router.push({ path: '/base/people'});
+                    }, 1000);
+                }
+            })
         },
         searchJQ() {
             this.drawerSearch = true;
+            this.selectValue = '';
+            this.searchForm.name = '';
+            this.searchForm.userName = '';
+            this.searchForm.accountType = 0;
+            this.currentRow.name = '';
+            this.tableData = [];
             this.getJqAccountNumberList();
         },
         addJQ() {
-            alert('正在开发中');
+            this.drawerCreate = true;
+            this.getJqAccountNumberList();
         },
         getJqAccountNumberList() {
             this.$smoke_get(getJqAccountNumberList,{}).then(res => {
                 console.log(res);
                 this.selectOptions = res.data;
+                this.selectCreate = res.data;
             })
         },
         changeItem(value) {
             console.log(value);
             this.searchForm.accountType = value;
         },
+        createItem(value) {
+            console.log(value);
+            this.createForm.type = value;
+        },
         phoneUserList() {
             this.$smoke_post(phoneUserList, this.searchForm).then(res => {
                 console.log(res);
-                this.tableData = res.data.list;
-                this.total = res.data.total;
+                if(res.code == 200){
+                    this.tableData = res.data.list;
+                    this.total = res.data.total;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
             })
         },
         searchBtn() {
@@ -221,6 +316,30 @@ export default {
             }else{
                 this.drawerSearch = false;
             }
+        },
+        createNo() {
+            this.drawerCreate = false;
+        },
+        createYes(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.createForm.userUuid = this.uuid;
+                    this.$smoke_post(addUserJqUser, this.createForm).then(res => {
+                        console.log(res);
+                        if(res.code == 200) {
+                            this.drawerCreate = false;
+                            this.currentRow.name = this.createForm.nickname;
+                            this.currentRow.userName = this.createForm.strId;
+                            this.currentRow.uin = res.data;
+                        }
+                    })
+
+                } else {
+                  console.log('error submit!!');
+                  return false;
+                }
+            });
+            
         }
     },
     mounted() {
