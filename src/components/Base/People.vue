@@ -122,7 +122,7 @@ export default {
             screenForm: {
                 accountNumber: '', //账号（手机号）
                 currentPage: 1, //当前页
-                jobStatus: 1, // 状态选择value
+                jobStatus: '', // 状态选择value
                 name: '', //姓名
                 orgUuidList: [], //组织唯一标识集合
                 pageSize: 8, //单页请求的数量
@@ -149,11 +149,13 @@ export default {
         handleRoleUuidChange(value) {
             console.log(value);
             this.screenForm.roleUuid = value;
+            this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         },
         handleJobStatusChange(value) {
             console.log(value);
             this.screenForm.jobStatus = value;
+            this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         },
         handleSizeChange(index) {
@@ -171,6 +173,7 @@ export default {
             arr = arr.slice(-1);
             // console.log(arr);
             this.screenForm.orgUuidList = arr;
+            this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         },
         getUserDetailedList() {
@@ -201,6 +204,7 @@ export default {
             })
         },
         smoke_search() {
+            this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         },
         smoke_clear() {
@@ -221,7 +225,8 @@ export default {
             }catch(err){
                 this.$refs.cascader.handleClear(obj)
             }
-            // this.getUserDetailedList();
+            this.screenForm.currentPage = 1;
+            this.getUserDetailedList();
         }
     },
     mounted() {

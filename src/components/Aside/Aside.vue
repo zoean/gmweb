@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="routersFlag">
         <el-aside width='3rem'>
             
             <el-menu
@@ -9,6 +9,7 @@
                 @open="handleOpen"
                 @close="handleClose"
                 :default-openeds="openedsIndex"
+                :unique-opened=true
                 >
 
                 <div v-for="(item,index) in $store.state.userMenuList" :key="index">
@@ -50,7 +51,8 @@ export default {
     data() {
         return {
           activeIndex: '/base',
-          openedsIndex: ['']
+          openedsIndex: [''],
+          routersFlag: '',
         }
     },
     created() {
@@ -58,6 +60,7 @@ export default {
     },
     methods: {
       active_router(index) {
+        console.log(index);
         this.$router.push({ path: index.url });
       },
       router_index() {
@@ -69,22 +72,32 @@ export default {
       handleClose(key, keyPath) {
           console.log(key, keyPath);
       },
-      getMenuDetailsSubsetByUuid() {
-        this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
-          console.log(res);
-        })
-      }
+      // getMenuDetailsSubsetByUuid() {
+      //   this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
+      //     console.log(res);
+      //   })
+      // }
     },
     watch:{
       '$route.path': function(newVal,oldVal){
-        if(newVal == '/' || newVal == '/timeData'){
+        if(newVal == '/' || newVal == '/knowp'){
           this.openedsIndex = [];
+          this.routersFlag = false;
+          console.log(this.routersFlag);
+        }else{
+          this.routersFlag = true;
         }
         this.activeIndex = newVal;
       }
     },
     mounted() {
-        
+        if(this.$route.path == '/' || this.$route.path == '/knowp'){
+          this.openedsIndex = [];
+          this.routersFlag = false;
+          console.log(this.routersFlag);
+        }else{
+          this.routersFlag = true;
+        }
     }
 }
 </script>

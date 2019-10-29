@@ -23,11 +23,20 @@
             </el-form-item>
 
             <el-form-item label="拥有角色：">
-                <el-input v-model="formText.roleUuidList" disabled></el-input>
+
+                <el-select v-model="roleArr" multiple placeholder="请选择角色" @change='handleRoleUuidChange'>
+                  <el-option
+                    v-for="item in roleOptions"
+                    :key="item.uuid"
+                    :label="item.name"
+                    :value="item.uuid">
+                  </el-option>
+                </el-select>
+
             </el-form-item>
 
             <el-form-item label="关联JQ用户：">
-                <el-input v-model="formText.uin" disabled></el-input>
+                <div>{{formText.uin}}</div>
                 <el-button type="primary" plain style="margin-top: .2rem" @click="searchJQ">查找并关联</el-button>
                 <el-button type="primary" plain style="margin-top: .2rem" @click="addJQ">创建并关联</el-button>
             </el-form-item>
@@ -144,12 +153,13 @@
 
         </el-drawer>
 
-        <el-button type="primary" @click="onSubmit" style="margin-left: 6.8rem; width: 2rem;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+        <el-button type="primary" @click="onSubmit" style="margin-left: 6.8rem; width: 1rem;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+        <el-button type="primary" style="width: 1rem;" @click="$router.go(-1)">取消</el-button>
     </div>
 </template>
 
 <script>
-import { getUserDetailed, getJqAccountNumberList, phoneUserList, updateUser, addUserJqUser } from '../../request/api';
+import { getUserDetailed, getJqAccountNumberList, phoneUserList, updateUser, addUserJqUser, getRoleList } from '../../request/api';
 import { getTextByState, getTextByJs } from '../../assets/js/common'
 export default {
     name: 'index',
@@ -204,7 +214,9 @@ export default {
                 type: [
                     { required: true, message: '请选择JQ账号类型', trigger: 'blur' },
                 ]
-            }
+            },
+            roleOptions: [],
+            roleArr: []
         }
     },
     created() {
@@ -214,8 +226,18 @@ export default {
         }else{
             this.getUserDetailed();           
         }
+        this.getRoleList();
     },
     methods: {
+        handleRoleUuidChange(value) {
+            console.log(value);
+        },
+        getRoleList() {
+            this.$smoke_get(getRoleList, {}).then(res => {
+                console.log(res);
+                this.roleOptions = res.data;
+            })
+        },
         handleHighLightChange(val) {
             this.currentRow = val;
         },
@@ -236,7 +258,9 @@ export default {
                 this.formText = res.data;
                 this.formText.jobStatus = getTextByState(res.data.jobStatus);
                 this.formText.orgUuidList = getTextByJs(res.data.orgUuidList);
-                this.formText.roleUuidList = getTextByJs(res.data.roleUuidList);
+                this.formText.roleUuidList.map(sll => {
+                    this.roleArr.push(sll.uuid);
+                })
             })
         },
         onSubmit() {
@@ -245,7 +269,8 @@ export default {
             this.$smoke_post(updateUser, {
                 jqName: this.currentRow.name,
                 jqUserName: this.currentRow.userName,
-                uin: this.currentRow.uin,
+                roleUuidList: this.roleArr,
+                uin: this.formText.uin,
                 userUuid: this.uuid
             }).then(res => {
                 console.log(res);
@@ -315,6 +340,7 @@ export default {
                 })
             }else{
                 this.drawerSearch = false;
+                this.formText.uin = this.currentRow.uin;
             }
         },
         createNo() {
@@ -330,7 +356,7 @@ export default {
                             this.drawerCreate = false;
                             this.currentRow.name = this.createForm.nickname;
                             this.currentRow.userName = this.createForm.strId;
-                            this.currentRow.uin = res.data;
+                            this.formText.uin = res.data;
                         }
                     })
 

@@ -344,11 +344,12 @@ export default {
             this.ruleForm.name = row.name;
         },
         getUserByRoleUuid(id) {
+            var this_ = this;
             this.$smoke_post(getUserByRoleUuid, {
                 roleUuid: id
             }).then(res => {
                 console.log(res);
-                this.rolePeopleList = res.data;
+                this_.rolePeopleList = res.data;
             })
         },
         inner_search() {
@@ -416,6 +417,7 @@ export default {
                 console.log(res);
                 if(res.code == 200){
                     this.innerDrawer = false;
+                    // console.log(this.ruleForm.uuid);
                     this.getUserByRoleUuid(this.ruleForm.uuid);
                 }
             })

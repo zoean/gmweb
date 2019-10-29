@@ -11,6 +11,8 @@ import menu from '@/components/Base/Menu';
 import role from '@/components/Base/Role';
 import zuzhi from '@/components/Base/Zuzhi';
 import timeData from '@/components/Statistics/Time';
+import knowp from '@/components/Knowp/Index';
+import crm from '@/components/Crm/Index';
 
 Vue.use(Router);
 
@@ -64,9 +66,19 @@ export default new Router({
             component: zuzhi
         },
         {
-            path: '/timeData',
+            path: '/crm/timeData',
             name: 'timeData',
             component: timeData
+        },
+        {
+            path: '/knowp',
+            name: 'knowp',
+            component: knowp
+        },
+        {
+            path: '/crm',
+            name: 'crm',
+            component: crm
         },
         {
             path: '/404',

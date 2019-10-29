@@ -67,6 +67,9 @@ export default {
                 //替换key（includeSubsetList换为children）table子节点key必须为children
                 arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
                 console.log(arr);
+                arr.map(sll => {
+                    sll.name = sll.name;
+                })
                 this.zuzhiList = arr;
             })
         },
@@ -99,6 +102,22 @@ export default {
             }
         }
     }
+
+    .main-area /deep/ .el-table__row--level-1 .el-table__indent{
+        padding-left: 50px !important;
+    }
+
+    .main-area /deep/ .el-table__row--level-2 .el-table__indent{
+        padding-left: 100px !important;
+    }
+
+    .main-area /deep/ .el-table__row--level-3 .el-table__indent{
+        padding-left: 150px !important;
+    }
+
+    // .main-area /deep/ th{
+    //     text-align: center !important;
+    // }
 
 /* //element-ui table的去除右侧滚动条的样式 */
 ::-webkit-scrollbar {

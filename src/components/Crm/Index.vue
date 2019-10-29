@@ -1,12 +1,12 @@
 <template>
     <div class="main-area">
-        <img src="../../assets/images/404.png" alt="" class="images-404">
+        CRM
     </div>
 </template>
 
 <script>
 export default {
-    name: 'four',
+    name: 'index',
     data() {
         return {
            

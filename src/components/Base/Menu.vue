@@ -162,6 +162,7 @@ export default {
                         message: '删除成功', 
                     });
                     this.getMenuDetailsSubsetByUuid();
+                    location.reload();
                 }
             })
         },
@@ -207,6 +208,7 @@ export default {
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
+                    location.reload();
                 }
             })
         },
@@ -216,6 +218,7 @@ export default {
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
+                    location.reload();
                 }
             })
         },

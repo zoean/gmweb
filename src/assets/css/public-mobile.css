@@ -131,3 +131,11 @@ a:link,a:active,a:visited,a:hover {
 .smoke-overflow{
     overflow: hidden !important;
 }
+
+.smoke-border{
+    border: 1px solid #ccc;
+}
+
+.smoke-fff{
+    background: #ffffff;
+}

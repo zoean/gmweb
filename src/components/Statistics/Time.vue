@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="time">
 
         <el-container class="index-main">
 
@@ -14,6 +14,7 @@
                                 ref="cascader"
                                 class="screen-li"
                                 placeholder="请选择统计单元"
+                                collapse-tags
                                 :show-all-levels=false
                                 :options="zuzhiOptions"
                                 @change='handleZuzhiChange'
@@ -89,7 +90,7 @@ export default {
     },
     created() {
         this.getOrgSubsetByUuid();
-
+        this.timeDate = new Date();
     },
     methods: {
         getOrgSubsetByUuid() {
@@ -121,28 +122,40 @@ export default {
             this.form.time = this.timeDate.getTime();
         },
         countCallRecord() {
-            this.fullscreenLoading = true;
-            this.$smoke_post(countCallRecord, this.form).then(res => {
-                if(res.code == 200){
-                    // console.log(res);
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        res.data.map(lls => {
-                            lls.list.map((act,index) => {
-                                lls['title' + index] = act.passTime;
+            this.form.time = this.timeDate.getTime();
+            if(this.form.orgUuidList.length != 0 && this.form.time != 0) {
+                this.fullscreenLoading = true;
+                this.$smoke_post(countCallRecord, this.form).then(res => {
+                    if(res.code == 200){
+                        // console.log(res);
+                        setTimeout(() => {
+                            this.fullscreenLoading = false;
+                            res.data.map(lls => {
+                                lls.totalPassTime = Math.round((lls.totalPassTime / 3600) * 100) / 100;
+                                lls.list.map((act,index) => {
+                                    lls['title' + index] = Math.round((act.passTime / 3600) * 100) / 100;
+                                })
                             })
-                        })
-                        // console.log(res.data);
-                        this.tableData = res.data;
-                        this.columnList = columnListYes;
-                    }, 1000);
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
-            })
+                            console.log(res.data);
+                            this.tableData = res.data;
+                            this.columnList = columnListYes;
+                        }, 1000);
+                    }else{
+                        setTimeout(() => {
+                            this.fullscreenLoading = false;
+                            this.$message({
+                                type: 'error',
+                                message: res.msg
+                            })
+                        }, 1000)
+                    }
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请选择您查询的条件'
+                })
+            }
         }
     },
     mounted() {
@@ -169,9 +182,7 @@ export default {
             margin-bottom: 1rem;
         }
     }
-</style>
-<style>
-    .el-table td, .el-table th{
+    .time /deep/ .el-table .cell{
         text-align: center !important;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="login-bg">
         <div class="login-contain">
-            <div class="login-text">京华大地--综合后台</div>
+            <div class="login-text">京华综合管理后台</div>
             <el-input v-model="accountNumber" placeholder="请输入账号"></el-input>
             <el-input v-model="password" placeholder="请输入密码" show-password></el-input>
             <el-alert
