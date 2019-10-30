@@ -5,9 +5,10 @@
             title="设置密码"
             :visible.sync="centerDialogVisible"
             width="30%"
+            :before-close="handleClose"
             center>
-            <div style="height: .6rem; line-height: .6rem;">姓名<span style="margin-left: 50px;">{{$store.state.name}}</span></div>
-            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">手机号<span style="margin-left: 35px;">{{$store.state.accountNumber}}</span></div>
+            <div style="height: .6rem; line-height: .6rem;">姓名<span style="margin-left: 25%;">{{$store.state.name}}</span></div>
+            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">手机号<span style="margin-left: 21%;">{{$store.state.accountNumber}}</span></div>
             <el-form :model="form">
               <el-form-item label="原密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password1" autocomplete="off" type="password"></el-input>
@@ -18,7 +19,7 @@
             </el-form>
 
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialog_cancel">取 消</el-button>
+              <el-button @click="dialog_cancel" v-if="!oneLogin">取 消</el-button>
               <el-button type="primary" @click="dialoghold">保 存</el-button>
             </span>
         </el-dialog>
@@ -27,7 +28,7 @@
             <el-col :span="20" style="height: 60px !important;">
                 <div class="index-hleft" @click="iconTitleClick">
                 
-                <i class="el-icon-s-home" style="font-size: 26px;"></i>
+                <el-image style="width: 40px; height: 40px; position: relative; top: 10px;" :src="require('../../assets/images/logo.png')" fit="fit"></el-image>
                 <span> 京华综合管理后台</span>
 
                 </div>
@@ -84,6 +85,7 @@ export default {
             },
             formLabelWidth: '120px',
             defaultActive: '',
+            oneLogin: null,
         }
     },
     created() {
@@ -198,6 +200,8 @@ export default {
                 if(res.code == 200) {
                     this.centerDialogVisible = res.data.oneLogin;
 
+                    this.oneLogin = res.data.oneLogin;
+
                     this.$store.dispatch('actionsSetName', res.data.name);
                     this.$store.dispatch('actionsSetAccountNumber', res.data.accountNumber);
                     this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
@@ -211,6 +215,14 @@ export default {
                 }
             })
         },
+        handleClose() {
+            console.log(this.oneLogin);
+            if(this.oneLogin){
+                this.centerDialogVisible = true;
+            }else{
+                this.centerDialogVisible = false;
+            }
+        }
     },
     watch:{
       '$route.path': function(newVal,oldVal){
@@ -244,7 +256,7 @@ export default {
         width: 100%;
     }
     .index-hleft{
-        width: 260px;
+        width: 300px;
         float: left;
         font-size: 24px;
         letter-spacing: .04rem;
@@ -261,13 +273,14 @@ export default {
     }
     .el-menu-demo{
         float: right;
-        width: calc( 100% - 260px );
+        width: calc( 100% - 300px );
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;
     }
     .el-menu-item{
         font-size: 20px;
+        line-height: 64px !important;
     }
 </style>
 <style>

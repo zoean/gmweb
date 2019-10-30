@@ -1,7 +1,9 @@
 <template>
     <div class="main-area">
-        知识点体系
+        <div>教研管理</div>
+        <div style="margin-top: 1rem;">未完待续....</div>
     </div>
+    
 </template>
 
 <script>
@@ -28,6 +30,7 @@ export default {
     .main-area{
         width: 100vw;
         text-align: center;
+        font-size: .3rem;
         .images-404{
             margin-top: 2rem;
         }
