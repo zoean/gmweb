@@ -11,7 +11,9 @@ import menu from '@/components/Base/Menu';
 import role from '@/components/Base/Role';
 import zuzhi from '@/components/Base/Zuzhi';
 import timeData from '@/components/Statistics/Time';
+import everyTime from '@/components/Statistics/EveryTime';
 import knowp from '@/components/Knowp/Index';
+import classManage from '@/components/Knowp/ClassManage';
 import crm from '@/components/Crm/Index';
 
 Vue.use(Router);
@@ -71,9 +73,19 @@ export default new Router({
             component: timeData
         },
         {
+            path: '/crm/everyTime',
+            name: 'everyTime',
+            component: everyTime
+        },
+        {
             path: '/knowp',
             name: 'knowp',
             component: knowp
+        },
+        {
+            path: '/knowp/classManage',
+            name: 'classManage',
+            component: classManage
         },
         {
             path: '/crm',

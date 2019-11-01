@@ -34,3 +34,29 @@ export const columnListNo = [
     { 'prop': 'day', 'label': '天数' },
     { 'prop': 'totalPassTime', 'label': '全天合计单位：小时' },
 ]
+
+export const everyTimeList = [
+    { 'prop': 'areaId', 'label': '号码归属' },
+    { 'prop': 'callStyle', 'label': '呼叫方式' },
+    { 'prop': 'calledId', 'label': '座席电话' },
+    { 'prop': 'callerArea', 'label': '客户归属' },
+    { 'prop': 'callerId', 'label': '客户电话' },
+    { 'prop': 'callerQueueTime', 'label': '进入队列' },
+    { 'prop': 'callerStime', 'label': '呼入系统应答时间' },
+    { 'prop': 'dealState', 'label': '处理状态' },
+    { 'prop': 'dnis', 'label': '中继号码' },
+    { 'prop': 'duration', 'label': '通话时长（秒）' },
+    { 'prop': 'hangupSide', 'label': '挂机方' },
+    { 'prop': 'insertDbTime', 'label': '插库时间' },
+    { 'prop': 'insertTime', 'label': '电话开始呼叫时间' },
+    { 'prop': 'isCalledPhone', 'label': '是否接通' },
+    { 'prop': 'pathway', 'label': '呼叫途径' },
+    { 'prop': 'phoneId', 'label': '电话记录id' },
+    { 'prop': 'queueName', 'label': '呼叫节点' },
+    { 'prop': 'recordFile', 'label': '录音URL链接' },
+    { 'prop': 'resume', 'label': '此电话的备注' },
+    { 'prop': 'ringTime', 'label': '响铃时长（秒）' },
+    { 'prop': 'satisfactionDegree', 'label': '电话满意度评价' },
+    { 'prop': 'seatId', 'label': '坐席工号' },
+    { 'prop': 'uin', 'label': '座席账号' }
+]

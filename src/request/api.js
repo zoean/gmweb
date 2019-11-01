@@ -1,4 +1,5 @@
 
+// 基础模块接口
 export const getUserDetailedList = '/api/basicApp/getUserDetailedList'; //获取员工详情信息集合
 export const getUserLoginMessage = '/api/basicApp/getUserLoginMessage'; //获取员工信息
 export const getOrgUserBasic = '/api/basicApp/getOrgUserBasic'; //获取组织对应的员工信息
@@ -27,6 +28,17 @@ export const getMenuSubsetByUuid = '/api/menu/getMenuSubsetByUuid'; //查询菜�
 export const getMenuDetailsSubsetByUuid = '/api/menu/getMenuDetailsSubsetByUuid'; //查询菜单详情信息（包含子集）
 export const updateMenu = '/api/menu/updateMenu'; //修改菜单
 
+// JQ接口
 export const phoneUserList = '/api/phone/phoneUserList'; //获取jq的员工信息
 export const countCallRecord = '/api/phone/countCallRecord'; //统计通话记录
+export const getCallRecord = '/api/phone/getCallRecord'; //获取通话记录
 export const getJqAccountNumberList = '/api/phone/getJqAccountNumberList'; //获取jq的账号信息集合 (get)
+
+// 知识体系接口
+export const getKnowledgeStructure = '/api/knowledgeSystem/knowledge/getKnowledgeStructure'; //获取知识体系结构
+export const addClassify = '/api/knowledgeSystem/classify/addClassify'; //新增分类接口
+export const deleteClassifyByUuid = '/api/knowledgeSystem/classify/deleteClassifyByUuid'; //删除分类接口
+export const updateClassify = '/api/knowledgeSystem/classify/updateClassify'; //更新分类接口
+
+
+

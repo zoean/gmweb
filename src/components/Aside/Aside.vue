@@ -80,7 +80,7 @@ export default {
     },
     watch:{
       '$route.path': function(newVal,oldVal){
-        if(newVal == '/' || newVal == '/knowp'){
+        if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
           console.log(this.routersFlag);
@@ -91,7 +91,7 @@ export default {
       }
     },
     mounted() {
-        if(this.$route.path == '/' || this.$route.path == '/knowp'){
+        if(this.$route.path == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
           console.log(this.routersFlag);

@@ -22,6 +22,32 @@ export const getTextByState = (state) => {
     return str;
 }
 
+// 查看通时数据text转换
+export const getTextByTime = (state, state1, state2, text1, text2) => {
+    let str = '';
+    if(state == state1){
+        str = text1;
+    }else if(state == state2){
+        str = text2;
+    }
+    return str;
+}
+
+export const timestampToTime = (timestamp) => {
+    if(timestamp == '' || timestamp == 0){
+        return '';
+    }else{
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        var D = date.getDate() + ' ';
+        var h = date.getHours() + ':';
+        var m = date.getMinutes() + ':';
+        var s = date.getSeconds();
+        return Y + M + D + h + m + s;
+    }
+}
+
 // 去重数组中的对象
 export const deteleObject = (obj) => {
     var uniques = [];
