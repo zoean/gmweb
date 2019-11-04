@@ -35,10 +35,17 @@ export const getCallRecord = '/api/phone/getCallRecord'; //获取通话记录
 export const getJqAccountNumberList = '/api/phone/getJqAccountNumberList'; //获取jq的账号信息集合 (get)
 
 // 知识体系接口
-export const getKnowledgeStructure = '/api/knowledgeSystem/knowledge/getKnowledgeStructure'; //获取知识体系结构
 export const addClassify = '/api/knowledgeSystem/classify/addClassify'; //新增分类接口
 export const deleteClassifyByUuid = '/api/knowledgeSystem/classify/deleteClassifyByUuid'; //删除分类接口
+export const getClassifyByUuid = '/api/knowledgeSystem/classify/getClassifyByUuid'; //获取分类信息
+export const getClassifyByParentUuid = '/api/knowledgeSystem/classify/getClassifyByParentUuid'; //获取子分类信息列表
 export const updateClassify = '/api/knowledgeSystem/classify/updateClassify'; //更新分类接口
+export const sortNumber1 = '/api/knowledgeSystem/classify/sortNumber'; //分类移动位置
 
+export const addExamDirection = '/api/knowledgeSystem/examDirection/addExamDirection'; //新增考试方向
+export const deleteExamDirectionByUuid = '/api/knowledgeSystem/examDirection/deleteExamDirectionByUuid'; //删除考试方向
+export const getExamDirectionByUuid = '/api/knowledgeSystem/examDirection/getExamDirectionByUuid'; //获取考试方向信息
+export const updateExamDirection = '/api/knowledgeSystem/examDirection/updateExamDirection'; //更新考试方向
+export const sortNumber2 = '/api/knowledgeSystem/examDirection/sortNumber'; //考试方向移动位置
 
-
+export const getKnowledgeStructure = '/api/knowledgeSystem/knowledge/getKnowledgeStructure'; //获取知识体系结构

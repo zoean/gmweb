@@ -92,3 +92,18 @@ export const removeAaary = (_arr, _obj) => {
     }
 }
  
+
+export const classTextById = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '一级分类';
+            break;
+        case 2:
+            str = '二级分类';
+            break;
+        case 3:
+            str = '考试项目';
+    }
+    return str;
+}

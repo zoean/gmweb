@@ -28,7 +28,7 @@ module.exports = {
         proxy: {//配置跨域
             '/smoke_api': {
                 target: 'https://testgm.jhwx.com',
-                ws: true,
+                ws: false,
                 changOrigin: true,//允许跨域
                 pathRewrite: {
                     '^/smoke_api': ''//请求的时候使用这个smoke_api就可以

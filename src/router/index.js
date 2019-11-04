@@ -14,6 +14,7 @@ import timeData from '@/components/Statistics/Time';
 import everyTime from '@/components/Statistics/EveryTime';
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
+import subject from '@/components/Knowp/Subject';
 import crm from '@/components/Crm/Index';
 
 Vue.use(Router);
@@ -86,6 +87,11 @@ export default new Router({
             path: '/knowp/classManage',
             name: 'classManage',
             component: classManage
+        },
+        {
+            path: '/knowp/subject',
+            name: 'subject',
+            component: subject
         },
         {
             path: '/crm',
