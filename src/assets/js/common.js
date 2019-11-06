@@ -104,6 +104,10 @@ export const classTextById = (id) => {
             break;
         case 3:
             str = '考试项目';
+            break;
+        case 4:
+            str = '科目';
+            break;
     }
     return str;
 }

@@ -30,14 +30,14 @@
                           trigger="click"
                           :ref="`popover-${scope.$index}`"
                           >
-                          <p style="margin-bottom: .2rem;">确定要删除此大类吗？</p>
+                          <p style="margin-bottom: .2rem;">您确定要删除吗？</p>
                           <div style="text-align: right; margin: 0">
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                            <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
+                            <el-button type="primary" size="mini" @click="deleteAll(scope)">确定</el-button>
                           </div>
                           <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button @click="addClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">添加</el-button>
+                        <el-button @click="addClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -104,7 +104,7 @@
                     <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                         
                         <el-form-item label="所属大类" prop="selectuuid">
-                            <el-select v-model="ruleForm2.selectuuid" placeholder="请选择一级大类" @change='handleOneChange' class="screen-li" clearable>
+                            <el-select v-model="ruleForm2.selectuuid" @focus='focusOne' placeholder="请选择一级大类" @change='handleOneChange' class="screen-li" clearable>
                                 <el-option
                                     v-for="item in oneOptions"
                                     :key="item.uuid"
@@ -115,7 +115,7 @@
                         </el-form-item>
 
                         <el-form-item label="二级分类" prop="classifyUuid">
-                            <el-select v-model="ruleForm2.classifyUuid" placeholder="请选择二级分类" @change='handleTwoChange' class="screen-li" clearable>
+                            <el-select v-model="ruleForm2.classifyUuid" @focus="focusTwo" placeholder="请选择二级分类" @change='handleTwoChange' class="screen-li" clearable>
                                 <el-option
                                     v-for="item in twoOptions"
                                     :key="item.uuid"
@@ -155,6 +155,7 @@
                         </el-form-item>
 
                     </el-form>
+
                 </el-drawer>
 
                 <el-drawer
@@ -164,7 +165,48 @@
                 :before-close="handleClose"
                 >
 
-                <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">添加科目</div>
+                    <el-form :model="ruleForm3" :rules="rules3" ref="ruleForm3" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                        
+                        <el-form-item label="关联科目" prop="subjectUuid">
+                        
+                            <el-autocomplete
+                                class="inline-input"
+                                v-model="subjectText"
+                                :fetch-suggestions="querySearch"
+                                placeholder="请输入内容"
+                                :trigger-on-focus="true"
+                                @select="handleSelect"
+                                :disabled="this.drawerTitle3 == '添加科目' ? false : true"
+                            ></el-autocomplete>
+
+                        </el-form-item>
+
+                        <el-form-item label="用户开放" prop="switch1">
+                            <el-switch
+                                :active-value='1'
+                                :inactive-value='0'
+                                v-model="ruleForm3.userOpenStatus"
+                                active-color="#13ce66"
+                                inactive-color="#cccccc">
+                            </el-switch>
+                        </el-form-item>
+
+                        <el-form-item label="标为重点" prop="switch2">
+                            <el-switch
+                                :active-value='1'
+                                :inactive-value='0'
+                                v-model="ruleForm3.emphasisStatus"
+                                active-color="#13ce66"
+                                inactive-color="#cccccc">
+                            </el-switch>
+                        </el-form-item>
+
+                        <el-form-item>
+                          <el-button type="primary" @click="submitForm3('ruleForm3')">确定</el-button>
+                          <el-button @click="quxiao">取消</el-button>
+                        </el-form-item>
+
+                    </el-form>
 
                 </el-drawer>
 
@@ -185,6 +227,12 @@ import {
     getExamDirectionByUuid,
     updateExamDirection,
     getClassifyByUuid,
+    deleteExamDirectionByUuid,
+    getSubjectByName,
+    addExamAndSubjectRelation,
+    getExamAndSubjectRelation,
+    deleteExamAndSubjectRelation,
+    updateExamAndSubjectRelation,
     addExamDirection // 新增考试项接口
 } from '../../request/api';
 import { classTextById } from '../../assets/js/common';
@@ -237,13 +285,61 @@ export default {
             },
             oneOptions: [],
             twoOptions: [],
+            oneParentUuid: '',
             twoParentUuid: '',
+            editTwoUuid: '', //选择二级大类时的uuid
+            ruleForm3: {
+                emphasisStatus: 0,
+                examDirectionUuid: '',
+                subjectUuid: '',
+                userOpenStatus: 0
+            },
+            rules3: {
+
+            },
+            restaurants: [],
+            subjectText: '',
         }
     },
     created() {
         this.getKnowledgeStructure();
+        this.handleFocus();
     },
     methods: {
+        handleFocus() {
+            let arr;
+            this.$smoke_post(getSubjectByName, {
+                name: ''
+            }).then(res => {
+                console.log(res.data);
+                arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
+                this.restaurants = arr;
+            })
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            console.log(restaurants);
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelect(item) {
+            console.log(item);
+            this.ruleForm3.subjectUuid = item.uuid;
+        },
+        focusOne() {
+            this.twoParentUuid = '';
+            this.getClassifyByParentUuid();
+        },
+        focusTwo() {
+            this.twoParentUuid = this.oneParentUuid;
+            this.getClassifyByParentUuid();
+        },
         handleOneChange(value) {
             console.log(value);
             this.twoParentUuid = value;
@@ -286,6 +382,11 @@ export default {
                             if(qqs.children.length != 0) {
                                 qqs.children.map(aas => {
                                     aas.level = classTextById(aas.level);
+                                    if(aas.children.length != 0) {
+                                        aas.children.map(wwd => {
+                                            wwd.level = classTextById(wwd.level);
+                                        })
+                                    }
                                 })
                             }
                         })
@@ -294,20 +395,6 @@ export default {
                 this.total = res.data.total;
                 this.classForm.pageSize = res.data.pageSize;
             })
-        },
-        editClick(row) {
-            console.log(row);
-            if(row.level == '一级分类' || row.level == '二级分类') {
-                this.drawer1 = true;
-                this.drawerTitle1 = '编辑' + row.name;
-                this.getClassifyByUuid(row.uuid);
-            }else if(row.level == '考试项目'){
-                this.drawer2 = true;
-                this.drawerTitle2 = '编辑' + row.name;
-                this.ruleForm2.name = row.name;
-                this.ruleForm2.uuid = row.uuid;
-                this.getExamDirectionByUuid();
-            }
         },
         getClassifyByUuid(uuid) {
             this.$smoke_post(getClassifyByUuid, {
@@ -326,10 +413,21 @@ export default {
                 uuid: this.ruleForm2.uuid
             }).then(res => {
                 console.log(res);
+                this.ruleForm2.selectuuid = res.data.classifyOneName;
+                this.ruleForm2.classifyUuid = res.data.classifyTwoName;
+                this.oneParentUuid = res.data.classifyOneUuid;
+                this.twoParentUuid = res.data.classifyTwoUuid;
+                this.editTwoUuid = res.data.classifyTwoUuid;
             })
         },
         addclass() {
             this.drawer1 = true;
+            this.drawerTitle1 = '创建一级大类',
+            this.ruleForm1.uuid = '',
+            this.ruleForm1.parentUuid = '',
+            this.ruleForm1.name = '',
+            this.ruleForm1.emphasisStatus = 0;
+            this.ruleForm1.userOpenStatus = 0;
         },
         handleClose(done) {
             done();
@@ -364,6 +462,43 @@ export default {
                 }
             });
         },
+        submitForm3(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    console.log(this.ruleForm3);
+                    if(this.drawerTitle3 == '添加科目'){
+                        this.addExamAndSubjectRelation();
+                    }else{
+                        this.updateExamAndSubjectRelation();
+                    }
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        updateExamAndSubjectRelation() {
+            this.$smoke_post(updateExamAndSubjectRelation, this.ruleForm3).then(res => {
+                if(res.code == 200) {
+                    this.drawer3 = false;
+                    this.getKnowledgeStructure();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
+        addExamAndSubjectRelation() {
+            this.$smoke_post(addExamAndSubjectRelation, this.ruleForm3).then(res => {
+                console.log(res);
+                if(res.code == 200) {
+                    this.drawer3 = false;
+                    this.getKnowledgeStructure();
+                }
+            });
+        },
         addClassify() {
             this.$smoke_post(addClassify, this.ruleForm1).then(res => {
                 console.log(res);
@@ -392,13 +527,54 @@ export default {
         quxiao() {
             this.drawer1 = false;
             this.drawer2 = false;
+            this.drawer3 = false;
+        },
+        deleteAll(scope) {
+            if(scope.row.level == '一级分类' || scope.row.level == '二级分类') {
+                this.handleDeleteClick(scope);
+            }else if(scope.row.level == '考试项目') {
+                this.deleteExamDirectionByUuid(scope);
+            }else if(scope.row.level == '科目') {
+                this.deleteExamAndSubjectRelation(scope);
+            }
+        },
+        deleteExamAndSubjectRelation(scope) {
+            this.$smoke_post(deleteExamAndSubjectRelation, {
+                examDirectionUuid: scope.row.examItemUuid,
+                subjectUuid: scope.row.uuid
+            }).then(res => {
+                if(res.code == 200) {
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功', 
+                    });
+                    this.getKnowledgeStructure();
+                }
+            })
         },
         handleDeleteClick(scope) {
             this.$smoke_post(deleteClassifyByUuid, {
                 uuid: scope.row.uuid
             }).then(res => {
                 console.log(res);
-                if(res.code == 200){
+                if(res.code == 200) {
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功', 
+                    });
+                    this.getKnowledgeStructure();
+                }
+            })
+        },
+        deleteExamDirectionByUuid(scope) {
+            this.$smoke_post(deleteExamDirectionByUuid, {
+                classifyUuid: scope.row.classifyUuid,
+                uuid: scope.row.uuid
+            }).then(res => {
+                console.log(res);
+                if(res.code == 200) {
                     scope._self.$refs[`popover-${scope.$index}`].doClose();
                     this.$message({
                         type: 'success',
@@ -430,13 +606,53 @@ export default {
             }else if(row.level == '考试项目') {
                 this.drawer3 = true;
                 this.drawerTitle3 = '添加科目';
+                this.ruleForm3.examDirectionUuid = row.uuid;
+            }else if(row.level == '科目') {
+                this.$router.push({
+                    path: '/knowp/contents',
+                    query: {
+                        id: row.uuid
+                    }
+                })
             }
+        },
+        editClick(row) {
+            console.log(row);
+            if(row.level == '一级分类' || row.level == '二级分类') {
+                this.drawer1 = true;
+                this.drawerTitle1 = '编辑' + row.name;
+                this.getClassifyByUuid(row.uuid);
+            }else if(row.level == '考试项目') {
+                this.drawer2 = true;
+                this.drawerTitle2 = '编辑' + row.name;
+                this.ruleForm2.name = row.name;
+                this.ruleForm2.uuid = row.uuid;
+                this.getExamDirectionByUuid();
+            }else if(row.level == '科目') {
+                this.drawer3 = true;
+                this.drawerTitle3 = '编辑' + row.name;
+                this.getExamAndSubjectRelation(row.examItemUuid, row.uuid);
+            }
+        },
+        getExamAndSubjectRelation(examDirectionUuid, subjectUuid) {
+            this.$smoke_post(getExamAndSubjectRelation, {
+                examDirectionUuid: examDirectionUuid,
+                subjectUuid: subjectUuid
+            }).then(res => {
+                console.log(res);
+                this.ruleForm3.emphasisStatus = res.data.emphasisStatus;
+                this.ruleForm3.examDirectionUuid = res.data.examDirectionUuid;
+                this.subjectText = res.data.subjectName;
+                this.ruleForm3.subjectUuid = res.data.subjectUuid;
+                this.ruleForm3.userOpenStatus = res.data.userOpenStatus;
+            })
         },
         addExamDirection() {
             this.$smoke_post(addExamDirection, this.ruleForm2).then(res => {
                 console.log(res);
                 if(res.code == 200) {
                     this.drawer2 = false;
+                    this.getKnowledgeStructure();
                 }else{
                     this.$message({
                         type: 'error',
@@ -446,8 +662,11 @@ export default {
             })
         },
         updateExamDirection() {
+            this.ruleForm2.classifyUuid = this.editTwoUuid;
             this.$smoke_post(updateExamDirection, this.ruleForm2).then(res => {
                 console.log(res);
+                this.drawer2 = false;
+                this.getKnowledgeStructure();
             })
         }
     },
