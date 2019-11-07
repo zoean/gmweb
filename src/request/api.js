@@ -67,6 +67,14 @@ export const updateSubjectCatalogue = '/api/knowledgeSystem/subjectCatalogue/upd
 export const getSubjectCatalogueByParentUuid = '/api/knowledgeSystem/subjectCatalogue/getSubjectCatalogueByParentUuid' //获取目录的子目录信息
 export const getSubjectCatalogueByUuid = '/api/knowledgeSystem/subjectCatalogue/getSubjectCatalogueByUuid' //获取科目目录信息
 
+export const addKnowledgePoints = '/api/knowledgeSystem/knowledgePoints/addKnowledgePoints' //新增知识点
+export const deleteKnowledgePoints = '/api/knowledgeSystem/knowledgePoints/deleteKnowledgePoints' //删除知识点
+export const getKnowledgePointsByCatalogueUuid = '/api/knowledgeSystem/knowledgePoints/getKnowledgePointsByCatalogueUuid' //获取知识点根据科目目录uuid
+export const getKnowledgePointsByUuid = '/api/knowledgeSystem/knowledgePoints/getKnowledgePointsByUuid' //获取知识点根据uuid
+export const sortNumber4 = '/api/knowledgeSystem/knowledgePoints/sortNumber' //知识点移动位置
+export const updateKnowledgePoints = '/api/knowledgeSystem/knowledgePoints/updateKnowledgePoints' //更新知识点
+
 export const getKnowledgeStructure = '/api/knowledgeSystem/knowledge/getKnowledgeStructure'; //获取知识体系结构
 export const getSubjectByExamUuidAndName = '/api/knowledgeSystem/knowledge/getSubjectByExamUuidAndName'; //获取科目根据考试项和科目名称
 export const getSubjectCatalogueBySubjectUuid = '/api/knowledgeSystem/knowledge/getSubjectCatalogueBySubjectUuid'; //获取科目目录信息（包含子集）
+export const getCatalogueAndKnowBySubjectUuid = '/api/knowledgeSystem/knowledge/getCatalogueAndKnowBySubjectUuid'; //获取知识点信息List

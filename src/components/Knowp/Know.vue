@@ -11,10 +11,8 @@
                     <el-menu-item index="2" >知识点体系</el-menu-item>
                 </el-menu>
 
-                <el-button type="primary" @click="addContentsClick" style="margin-bottom: .2rem;">添加目录</el-button>
-
                 <el-table
-                  :data="contentsList"
+                  :data="knowsList"
                   row-key="uuid"
                   default-expand-all
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
@@ -28,11 +26,12 @@
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button v-if="scope.row.level == 3" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
                         <el-popover
                           placement="top"
                           width="200"
                           trigger="click"
+                          v-if="scope.row.level == 3"
                           :ref="`popover-${scope.$index}`"
                           >
                           <p style="margin-bottom: .2rem;">确定要删除吗？</p>
@@ -42,7 +41,7 @@
                           </div>
                           <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button v-if="scope.row.level != 3" @click="addClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">添加</el-button>
+                        <el-button v-if="scope.row.level == 2" @click="addClick(scope.row)" type="text" size="small">添加</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -51,7 +50,7 @@
                     background
                     layout="total, sizes, prev, pager, next, jumper"
                     :total='total'
-                    :page-size='contentsForm.pageSize'
+                    :page-size='knowsForm.pageSize'
                     :page-sizes="[8, 10, 20, 30]"
                     :hide-on-single-page="totalFlag"
                     @current-change="handleCurrentChange"
@@ -63,16 +62,28 @@
                     :title="drawerTitle1"
                     :visible.sync="drawer1"
                     :direction="direction"
+                    size="35%"
                     :before-close="handleClose">
 
                     <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                         
-                        <el-form-item label="目录序名" prop="sortNumberName">
+                        <el-form-item label="序号名称" prop="sortNumberName">
                           <el-input v-model="ruleForm1.sortNumberName"></el-input>
                         </el-form-item>
 
-                        <el-form-item label="章节名称" prop="name">
+                        <el-form-item label="知识点名称" prop="name">
                           <el-input v-model="ruleForm1.name"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="2015-2018年考试平均分值" prop="averageScore">
+                          <el-input v-model="ruleForm1.averageScore"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="重要级别" prop="specialStatus">
+                            <el-radio v-model="ruleForm1.emphasisLevel" :label="1">A</el-radio>
+                            <el-radio v-model="ruleForm1.emphasisLevel" :label="2">B</el-radio>
+                            <el-radio v-model="ruleForm1.emphasisLevel" :label="3">C</el-radio>
+                            <el-radio v-model="ruleForm1.emphasisLevel" :label="4">D</el-radio>
                         </el-form-item>
 
                         <el-form-item label="特殊标记" prop="specialStatus">
@@ -103,13 +114,15 @@
 
 <script>
 import { 
-    addSubjectCatalogue,
-    getSubjectCatalogueBySubjectUuid,
-    deleteSubjectCatalogueByUuid,
+    getCatalogueAndKnowBySubjectUuid,
+    addKnowledgePoints,
+    deleteKnowledgePoints,
     updateSubjectCatalogue,
-    getSubjectCatalogueByParentUuid,
-    getSubjectCatalogueByUuid
+    getKnowledgePointsByUuid
 } from '../../request/api';
+import {
+    emphasisLevelByText
+} from '../../assets/js/common';
 export default {
     name: 'index',
     data() {
@@ -117,37 +130,38 @@ export default {
             total: null,
             totalFlag: false,
             ruleForm1: {
-                name: '', //科目目录名称
-                parentUuid: '', //科目目录的父uuid
-                sortNumberName: '', //科目目录序名
+                averageScore: '', //2015-2018年考试平均分值
+                catalogueUuid: '', //科目目录的uuid
+                emphasisLevel: 0, //重点级别（0：未选 1：A 2：B 3：C 4：D）
+                name: '', //知识点名称
+                sortNumberName: '', //序号名称
                 specialStatus: 0, //标记特殊（1：标记 0：未标记）
-                subjectUuid: '', //科目的uuid
-                uuid: '', //科目目录的uuid
+                uuid: '', //当前知识点的uuid
             },
             rules1: {
                 
             },
-            contentsList: [],
+            knowsList: [],
             columnList: [
-                { 'prop': 'sortNumberName', 'label': '目录序名' },
-                { 'prop': 'name', 'label': '章节名称' },
-                { 'prop': 'sortNumber', 'label': '同级排序' },
+                { 'prop': 'sortNumberName', 'label': '知识点序号' },
+                { 'prop': 'name', 'label': '知识点名称' },
+                { 'prop': 'averageScore', 'label': '2015--2018年考试平均分值' },
+                { 'prop': 'emphasisLevel', 'label': '重要级别' },
             ],
-            contentsForm: {
+            knowsForm: {
                 currentPage: 1, //当前页数
                 pageSize: 8, //每页显示条目个数	
                 uuid: '', //科目的uuid
             },
-            drawerTitle1: '添加目录',
+            drawerTitle1: '添加知识点',
             drawer1: false,
             direction: 'rtl',
-            activeIndex: '1',
+            activeIndex: '2',
         }
     },
     created() {
-        this.contentsForm.uuid = this.$route.query.id;
-        this.ruleForm1.subjectUuid = this.$route.query.id;
-        this.getSubjectCatalogueBySubjectUuid();
+        this.knowsForm.uuid = this.$route.query.id;
+        this.getCatalogueAndKnowBySubjectUuid();
     },
     methods: {
         handleSelect(value) {
@@ -167,53 +181,41 @@ export default {
                 })
             }
         },
-        addContentsClick() {
-            this.drawer1 = true;
-            this.drawerTitle1 = '添加目录';
-            this.ruleForm1.parentUuid = '';
-            this.ruleForm1.subjectUuid = this.$route.query.id;
-            this.ruleForm1.uuid = '';
-        },
         editClick(scope) {
             console.log(scope);
             this.drawer1 = true;
-            this.drawerTitle1 = '编辑目录';
-            if(scope.level == 1){
-                this.ruleForm1.parentUuid = '';
-            }else{
-                this.ruleForm1.subjectUuid = '';
-            }
-            this.getSubjectCatalogueByUuid(scope);
+            this.drawerTitle1 = '编辑知识点';
+            this.getKnowledgePointsByUuid(scope);
         },
-        getSubjectCatalogueByUuid(scope) {
-            this.$smoke_post(getSubjectCatalogueByUuid, {
+        getKnowledgePointsByUuid(scope) {
+            this.$smoke_post(getKnowledgePointsByUuid, {
                 uuid: scope.uuid
             }).then(res => {
                 console.log(res);
+                this.ruleForm1.averageScore = res.data.averageScore;
+                this.ruleForm1.catalogueUuid = res.data.catalogueUuid;
+                this.ruleForm1.emphasisLevel = res.data.emphasisLevel;
                 this.ruleForm1.name = res.data.name;
-                this.ruleForm1.sortNumberName = res.data.sortNumberName;
+                this.ruleForm1.sortNumberName = res.data.sortNumber;
                 this.ruleForm1.specialStatus = res.data.specialStatus;
-                this.ruleForm1.parentUuid = res.data.parentUuid;
                 this.ruleForm1.uuid = res.data.uuid;
             })
         },
         deleteClick(scope) {
-            this.deleteSubjectCatalogueByUuid(scope);
+            this.deleteKnowledgePoints(scope);
         },
         addClick(scope) {
             console.log(scope);
             this.drawer1 = true;
-            this.drawerTitle1 = '添加目录';
-            this.ruleForm1.parentUuid = scope.uuid;
-            this.ruleForm1.subjectUuid = '';
-            this.ruleForm1.uuid = '';
+            this.drawerTitle1 = '添加知识点';
+            this.ruleForm1.catalogueUuid = scope.uuid;
         },
-        addSubjectCatalogue() {
-            this.$smoke_post(addSubjectCatalogue, this.ruleForm1).then(res => {
+        addKnowledgePoints() {
+            this.$smoke_post(addKnowledgePoints, this.ruleForm1).then(res => {
                 console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
-                    this.getSubjectCatalogueBySubjectUuid();
+                    this.getCatalogueAndKnowBySubjectUuid();
                 }else{
                     this.$message({
                         type: 'error',
@@ -222,21 +224,30 @@ export default {
                 }
             })
         },
-        getSubjectCatalogueBySubjectUuid() {
+        getCatalogueAndKnowBySubjectUuid() {
             let arr;
-            this.$smoke_post(getSubjectCatalogueBySubjectUuid, this.contentsForm).then(res => {
+            this.$smoke_post(getCatalogueAndKnowBySubjectUuid, this.knowsForm).then(res => {
                 console.log(res);
+                res.data.list.map(sll => {
+                    if(sll.list.length != 0) {
+                        sll.list.map(oop => {
+                            oop.list = oop.knowList;
+                            if(oop.list.length != 0) {
+                                oop.list.map(qqs => {
+                                    qqs.emphasisLevel = emphasisLevelByText(qqs.emphasisLevel);
+                                })
+                            }
+                        })
+                    }
+                });
                 arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
-                this.contentsList = arr;
+                this.knowsList = arr;
                 this.total = res.data.total;
             })
         },
-        deleteSubjectCatalogueByUuid(scope) {
-            console.log(scope.row);
-            console.log(scope.row.level);
-            this.$smoke_post(deleteSubjectCatalogueByUuid, {
-                parentUuid: scope.row.level == 1 ? '' : scope.row.parentUuid,
-                subjectUuid: scope.row.level == 1 ? this.contentsForm.uuid : '',
+        deleteKnowledgePoints(scope) {
+            this.$smoke_post(deleteKnowledgePoints, {
+                catalogueUuid: scope.row.catalogueUuid,
                 uuid: scope.row.uuid
             }).then(res => {
                 if(res.code == 200) {
@@ -245,17 +256,17 @@ export default {
                         type: 'success',
                         message: '删除成功', 
                     });
-                    this.getSubjectCatalogueBySubjectUuid();
+                    this.getCatalogueAndKnowBySubjectUuid();
                 }
             })
         },
         handleCurrentChange(index) {
-            this.contentsForm.currentPage = index;
-            this.getSubjectCatalogueBySubjectUuid();
+            this.knowsForm.currentPage = index;
+            this.getCatalogueAndKnowBySubjectUuid();
         },
         handleSizeChange(index) {
-            this.contentsForm.pageSize = index;
-            this.getSubjectCatalogueBySubjectUuid();
+            this.knowsForm.pageSize = index;
+            this.getCatalogueAndKnowBySubjectUuid();
         },
         handleClose(done) {
             done();
@@ -268,7 +279,7 @@ export default {
                         type: 'success',
                         message: '编辑成功'
                     })
-                    this.getSubjectCatalogueBySubjectUuid();
+                    this.getCatalogueAndKnowBySubjectUuid();
                 }else{
                     this.$message({
                         type: 'error',
@@ -280,8 +291,8 @@ export default {
         submitForm1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if(this.drawerTitle1 == '添加目录'){
-                        this.addSubjectCatalogue();
+                    if(this.drawerTitle1 == '添加知识点'){
+                        this.addKnowledgePoints();
                     }else{
                         this.updateSubjectCatalogue();
                     }

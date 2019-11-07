@@ -111,3 +111,22 @@ export const classTextById = (id) => {
     }
     return str;
 }
+
+export const emphasisLevelByText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = 'A';
+            break;
+        case 2:
+            str = 'B';
+            break;
+        case 3:
+            str = 'C';
+            break;
+        case 4:
+            str = 'D';
+            break;
+    }
+    return str;
+}

@@ -11,7 +11,7 @@
                 <el-row style="margin-bottom: 20px;">
 
                     <el-col :span="4">
-                        <el-select v-model="subjectForm.uuid" placeholder="请选择考试项目" style="width: 90%">
+                        <el-select v-model="subjectForm.uuid" @change="subjectChange" clearable placeholder="请选择考试项目" style="width: 90%">
                             <el-option
                               v-for="item in subjectOption"
                               :key="item.uuid"
@@ -51,7 +51,7 @@
                           trigger="click"
                           :ref="`popover-${scope.$index}`"
                           >
-                          <p style="margin-bottom: .2rem;">确定要删除此大类吗？</p>
+                          <p style="margin-bottom: .2rem;">确定要删除吗？</p>
                           <div style="text-align: right; margin: 0">
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
@@ -160,6 +160,9 @@ export default {
     methods: {
         addSubjectClick() {
             this.drawer1 = true;
+        },
+        subjectChange() {
+            this.getSubjectByExamUuidAndName();
         },
         getExamBasic() {
             this.$smoke_get(getExamBasic, {}).then(res => {

@@ -15,6 +15,7 @@ import everyTime from '@/components/Statistics/EveryTime';
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
 import subject from '@/components/Knowp/Subject';
+import know from '@/components/Knowp/Know';
 import contents from '@/components/Knowp/Contents';
 import crm from '@/components/Crm/Index';
 
@@ -98,6 +99,11 @@ export default new Router({
             path: '/knowp/contents',
             name: 'contents',
             component: contents
+        },
+        {
+            path: '/knowp/know',
+            name: 'know',
+            component: know
         },
         {
             path: '/crm',
