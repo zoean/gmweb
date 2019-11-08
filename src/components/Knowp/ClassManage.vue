@@ -21,7 +21,7 @@
                     :key="index"
                     >
                   </el-table-column>
-                  <el-table-column prop="active" label="操作">
+                  <el-table-column prop="active" label="操作" min-width="150%">
                     <template slot-scope="scope">
                         <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
                         <el-popover
@@ -38,6 +38,8 @@
                           <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
                         <el-button @click="addClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
+                        <el-button v-if="!scope.row.sortUpFlag" @click="sortNumber(scope.row, 'up')" type="text" size="small">排序向上</el-button>
+                        <el-button v-if="!scope.row.sortDownFlag" @click="sortNumber(scope.row, 'down')" type="text" size="small">排序向下</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -233,9 +235,12 @@ import {
     getExamAndSubjectRelation,
     deleteExamAndSubjectRelation,
     updateExamAndSubjectRelation,
+    sortNumber1,
+    sortNumber2,
+    sortNumberSubjectRelation,
     addExamDirection // 新增考试项接口
 } from '../../request/api';
-import { classTextById } from '../../assets/js/common';
+import { classTextById, sortNumberMove } from '../../assets/js/common';
 export default {
     name: 'index',
     data() {
@@ -306,6 +311,26 @@ export default {
         this.handleFocus();
     },
     methods: {
+        sortNumber(scope, move) {
+            let json = sortNumberMove(this.classList, scope, move);
+
+            if(scope.level == '一级分类' || scope.level == '二级分类'){
+                this.$smoke_post(sortNumber1, json).then(res => {
+                    console.log(res);
+                    this.getKnowledgeStructure();
+                })
+            }else if(scope.level == '考试项目') {
+                this.$smoke_post(sortNumber2, json).then(res => {
+                    console.log(res);
+                    this.getKnowledgeStructure();
+                })
+            }else if(scope.level == '科目') {
+                this.$smoke_post(sortNumberSubjectRelation, json).then(res => {
+                    console.log(res);
+                    this.getKnowledgeStructure();
+                })
+            }
+        },
         handleFocus() {
             let arr;
             this.$smoke_post(getSubjectByName, {
@@ -375,15 +400,35 @@ export default {
                 arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
                 this.classList = arr;
                 this.classList.map(sll => {
+                    if(sll.sortNumber == 1) {
+                        sll.sortUpFlag = true;
+                    }else if(sll.sortNumber == res.data.list.length){
+                        sll.sortDownFlag = true;
+                    }
                     sll.level = classTextById(sll.level);
                     if(sll.children.length != 0) {
                         sll.children.map(qqs => {
+                            if(qqs.sortNumber == 1) {
+                                qqs.sortUpFlag = true;
+                            }else if(qqs.sortNumber == sll.children.length){
+                                qqs.sortDownFlag = true;
+                            }
                             qqs.level = classTextById(qqs.level);
                             if(qqs.children.length != 0) {
                                 qqs.children.map(aas => {
+                                    if(aas.sortNumber == 1) {
+                                        aas.sortUpFlag = true;
+                                    }else if(aas.sortNumber == qqs.children.length){
+                                        aas.sortDownFlag = true;
+                                    }
                                     aas.level = classTextById(aas.level);
                                     if(aas.children.length != 0) {
                                         aas.children.map(wwd => {
+                                            if(wwd.sortNumber == 1) {
+                                                wwd.sortUpFlag = true;
+                                            }else if(wwd.sortNumber == aas.children.length){
+                                                wwd.sortDownFlag = true;
+                                            }
                                             wwd.level = classTextById(wwd.level);
                                         })
                                     }

@@ -130,3 +130,71 @@ export const emphasisLevelByText = (id) => {
     }
     return str;
 }
+
+export const sortNumberMove = (arr, scope, move) => {
+    let json = {};
+    console.log(arr);
+    console.log(scope);
+    console.log(move);
+    arr.map((sll, index) => {
+        if(scope.uuid == sll.uuid){
+            json.moveSortNumber = sll.sortNumber;
+            json.moveUuid = sll.uuid;
+            if(move == 'up') {
+                json.effectSortNumber = arr[index - 1].sortNumber;
+                json.effectUuid = arr[index - 1].uuid;
+            }else if(move == 'down') {
+                json.effectSortNumber = arr[index + 1].sortNumber;
+                json.effectUuid = arr[index + 1].uuid;
+            }
+            json.parentUuid = '';
+        }else{
+            sll.children.map((qqs, index) => {
+                if(scope.uuid == qqs.uuid) {
+                    console.log('3322323');
+                    json.moveSortNumber = qqs.sortNumber;
+                    json.moveUuid = qqs.uuid;
+                    if(move == 'up') {
+                        json.effectSortNumber = sll.children[index - 1].sortNumber;
+                        json.effectUuid = sll.children[index - 1].uuid;
+                    }else if(move == 'down') {
+                        json.effectSortNumber = sll.children[index + 1].sortNumber;
+                        json.effectUuid = sll.children[index + 1].uuid;
+                    }
+                    json.parentUuid = sll.uuid;
+                }else{
+                    qqs.children.map((aas, index) => {
+                        if(scope.uuid == aas.uuid) {
+                            json.moveSortNumber = aas.sortNumber;
+                            json.moveUuid = aas.uuid;
+                            if(move == 'up') {
+                                json.effectSortNumber = qqs.children[index - 1].sortNumber;
+                                json.effectUuid = qqs.children[index - 1].uuid;
+                            }else if(move == 'down') {
+                                json.effectSortNumber = qqs.children[index + 1].sortNumber;
+                                json.effectUuid = qqs.children[index + 1].uuid;
+                            }
+                            json.parentUuid = qqs.uuid;
+                        }else{
+                            aas.children.map((wwd, index) => {
+                                if(scope.uuid == wwd.uuid) {
+                                    json.moveSortNumber = wwd.sortNumber;
+                                    json.moveUuid = wwd.uuid;
+                                    if(move == 'up') {
+                                        json.effectSortNumber = aas.children[index - 1].sortNumber;
+                                        json.effectUuid = aas.children[index - 1].uuid;
+                                    }else if(move == 'down') {
+                                        json.effectSortNumber = aas.children[index + 1].sortNumber;
+                                        json.effectUuid = aas.children[index + 1].uuid;
+                                    }
+                                    json.parentUuid = aas.uuid;
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    })
+    return json;
+}

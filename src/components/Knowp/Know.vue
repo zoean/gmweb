@@ -117,7 +117,7 @@ import {
     getCatalogueAndKnowBySubjectUuid,
     addKnowledgePoints,
     deleteKnowledgePoints,
-    updateSubjectCatalogue,
+    updateKnowledgePoints,
     getKnowledgePointsByUuid
 } from '../../request/api';
 import {
@@ -196,7 +196,7 @@ export default {
                 this.ruleForm1.catalogueUuid = res.data.catalogueUuid;
                 this.ruleForm1.emphasisLevel = res.data.emphasisLevel;
                 this.ruleForm1.name = res.data.name;
-                this.ruleForm1.sortNumberName = res.data.sortNumber;
+                this.ruleForm1.sortNumberName = res.data.sortNumberName;
                 this.ruleForm1.specialStatus = res.data.specialStatus;
                 this.ruleForm1.uuid = res.data.uuid;
             })
@@ -271,8 +271,8 @@ export default {
         handleClose(done) {
             done();
         },
-        updateSubjectCatalogue() {
-            this.$smoke_post(updateSubjectCatalogue, this.ruleForm1).then(res => {
+        updateKnowledgePoints() {
+            this.$smoke_post(updateKnowledgePoints, this.ruleForm1).then(res => {
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.$message({
@@ -294,7 +294,7 @@ export default {
                     if(this.drawerTitle1 == '添加知识点'){
                         this.addKnowledgePoints();
                     }else{
-                        this.updateSubjectCatalogue();
+                        this.updateKnowledgePoints();
                     }
                 } else {
                     console.log('error submit!!');
