@@ -53,6 +53,7 @@ export const getExamAndSubjectRelation = '/api/knowledgeSystem/examDirection/get
 export const updateExamAndSubjectRelation = '/api/knowledgeSystem/examDirection/updateExamAndSubjectRelation'; //更新考试项和科目的关系
 export const sortNumberSubjectRelation= '/api/knowledgeSystem/examDirection/sortNumberSubjectRelation'; //科目关系移动位置
 export const getExamBasic= '/api/knowledgeSystem/examDirection/getExamBasic'; //查询考试项基本信息
+export const getSubjectBasicByExamUuid= '/api/knowledgeSystem/examDirection/getSubjectBasicByExamUuid'; //查询科目基本信息根据考试项唯一标识
 
 export const addSubject = '/api/knowledgeSystem/subject/addSubject'; //新增科目
 export const deleteSubject = '/api/knowledgeSystem/subject/deleteSubject'; //删除科目
@@ -78,3 +79,8 @@ export const getKnowledgeStructure = '/api/knowledgeSystem/knowledge/getKnowledg
 export const getSubjectByExamUuidAndName = '/api/knowledgeSystem/knowledge/getSubjectByExamUuidAndName'; //获取科目根据考试项和科目名称
 export const getSubjectCatalogueBySubjectUuid = '/api/knowledgeSystem/knowledge/getSubjectCatalogueBySubjectUuid'; //获取科目目录信息（包含子集）
 export const getCatalogueAndKnowBySubjectUuid = '/api/knowledgeSystem/knowledge/getCatalogueAndKnowBySubjectUuid'; //获取知识点信息List
+
+export const addCourseVideo = '/api/knowledgeSystem/courseVideo/addCourseVideo'; //新增课程视频
+export const getCourseVideoByUuid = '/api/knowledgeSystem/courseVideo/getCourseVideoByUuid'; //获取课程视频根据唯一标识
+export const getCourseVideoList = '/api/knowledgeSystem/courseVideo/getCourseVideoList'; //获取课程视频列表
+export const updateCourseVideo = '/api/knowledgeSystem/courseVideo/updateCourseVideo'; //更新课程视频

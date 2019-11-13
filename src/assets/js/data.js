@@ -60,3 +60,9 @@ export const everyTimeList = [
     { 'prop': 'seatId', 'label': '坐席工号' },
     { 'prop': 'uin', 'label': '座席账号' }
 ]
+
+export const vedioTypeArr = [
+    { 'value': 1, 'label': '录播课时' },
+    { 'value': 2, 'label': '直播回放' },
+    { 'value': 3, 'label': '短视频' },
+]
