@@ -84,3 +84,5 @@ export const addCourseVideo = '/api/knowledgeSystem/courseVideo/addCourseVideo';
 export const getCourseVideoByUuid = '/api/knowledgeSystem/courseVideo/getCourseVideoByUuid'; //获取课程视频根据唯一标识
 export const getCourseVideoList = '/api/knowledgeSystem/courseVideo/getCourseVideoList'; //获取课程视频列表
 export const updateCourseVideo = '/api/knowledgeSystem/courseVideo/updateCourseVideo'; //更新课程视频
+export const deleteCourseVideoByUuid = '/api/knowledgeSystem/courseVideo/deleteCourseVideoByUuid'; //删除课程视频
+export const uploadimg = '/api/knowledgeSystem/courseVideo/uploadimg'; //文件上传

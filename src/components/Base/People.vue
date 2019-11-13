@@ -59,13 +59,13 @@
                 <el-table
                   :data="userList"
                   style="width: calc( 100vw - 3.65rem)">
-                  <el-table-column
+                  <af-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
                     :key="index"
                     >
-                  </el-table-column>
+                  </af-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
                         <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
@@ -105,6 +105,7 @@ export default {
                 { 'prop': 'jobStatus', 'label': '状态' },
                 { 'prop': 'orgUuidList', 'label': '部门' },
                 { 'prop': 'roleUuidList', 'label': '角色' },
+                { 'prop': 'hiredDate', 'label': '入职时间' },
             ],
             total: null, //总条目数
             totalFlag: false, //当只有一页时隐藏分页

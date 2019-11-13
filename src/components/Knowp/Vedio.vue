@@ -11,7 +11,7 @@
                 <el-row style="margin-bottom: 20px;">
 
                     <el-col :span="4">
-                        <el-select v-model="listForm.type" @change="vedioTypeChange" clearable placeholder="请选择类型" style="width: 90%">
+                        <el-select v-model="listForm.type" @change="vedioTypeChange1" clearable placeholder="请选择类型" style="width: 90%">
                             <el-option
                               v-for="item in vedioTypeArr"
                               :key="item.value"
@@ -44,7 +44,7 @@
                     </el-col>
 
                     <el-col :span="6">
-                        <el-input v-model="listForm.name" placeholder="请输入编号、标题、链接" style="width: 90%"></el-input>
+                        <el-input v-model="listForm.likeName" placeholder="请输入编号、标题、链接" style="width: 90%"></el-input>
                     </el-col>
                     <el-col :span="2">
                         <el-button type="primary" @click="subjectSearch" style="width: 90%">搜索</el-button>
@@ -57,14 +57,14 @@
                   row-key="uuid"
                   default-expand-all
                   style="width: calc( 100vw - 3.65rem)">
-                  <el-table-column
+                  <af-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
                     :key="index"
                     >
-                  </el-table-column>
-                  <el-table-column prop="active" label="操作">
+                  </af-table-column>
+                  <af-table-column prop="active" label="操作">
                     <template slot-scope="scope">
                         <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
                         <el-popover
@@ -81,7 +81,7 @@
                           <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
                     </template>
-                  </el-table-column>
+                  </af-table-column>
                 </el-table>
 
                 <el-pagination
@@ -109,7 +109,8 @@
                           
                             <el-upload
                                 class="avatar-uploader"
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :data='uploadData'
+                                action="https://testgm.jhwx.com/api/knowledgeSystem/courseVideo/uploadimg"
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
@@ -155,7 +156,7 @@
 
                         <el-form-item label="视频类型" prop="type">
 
-                            <el-select v-model="vedioForm.type" placeholder="请选择视频类型" @change='vedioTypeChange' clearable>
+                            <el-select v-model="vedioForm.type" placeholder="请选择视频类型" @change='vedioTypeChange2' clearable>
                                 <el-option
                                   v-for="item in vedioTypeArr"
                                   :key="item.value"
@@ -233,6 +234,18 @@
 
                         </el-form-item>
 
+                        <el-form-item label="视频编号" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
+                          <span>{{vedioForm.number}}</span>
+                        </el-form-item>
+
+                        <el-form-item label="最后修改人" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
+                          <span>{{vedioForm.updateUserName}}</span>
+                        </el-form-item>
+
+                        <el-form-item label="最后修改时间" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
+                          <span>{{vedioForm.updateTime}}</span>
+                        </el-form-item>
+
                         <el-form-item>
                           <el-button type="primary" @click="submitForm('vedioForm')">确定</el-button>
                           <el-button @click="quxiao">取消</el-button>
@@ -256,9 +269,10 @@ import {
     getCourseVideoList,
     updateCourseVideo,
     getSubjectBasicByExamUuid,
+    deleteCourseVideoByUuid,
     getExamBasic,
 } from '../../request/api';
-import { getTextByJs } from '../../assets/js/common';
+import { getTextByJs, timestampToTime } from '../../assets/js/common';
 import { vedioTypeArr } from '../../assets/js/data';
 export default {
     name: 'subject',
@@ -266,7 +280,7 @@ export default {
         return {
             vedioList: [],
             columnList: [
-                { 'prop': 'soreNumber', 'label': '视频ID' },
+                { 'prop': 'number', 'label': '视频ID' },
                 { 'prop': 'name', 'label': '视频标题' },
                 { 'prop': 'url', 'label': '视频链接' },
                 { 'prop': 'speaker', 'label': '主讲人' },
@@ -349,7 +363,8 @@ export default {
                     { name: '标签三', uuid: '113' },
                 ], //主关联的知识点集合
                 courseDataList: [], //辅助资料集合
-                coverUrl: '111', //封面链接
+                coverUrl: '', //封面链接
+                coverName: '',
                 examDirectionUuid: '', //考试方向的uuid
                 fileSize: 2, //视频大小（单位：M）
                 length: 111, //视频长度（单位：秒）
@@ -360,8 +375,13 @@ export default {
                 subjectName: '', //科目的name
                 type: null, //视频类型(1：录播课时 2：直播回放 3：短视频)
                 url: '', //视频链接
+                updateTime: '', //更新时间(10位)
+                updateUserName: '', //更新用户姓名
+                updateUserUuid: '', //更新用户唯一标识
+                number: '', //视频编号
                 uuid: '', //视频自身uuid
-            }
+            },
+            uploadData: {}
         }
     },
     created() {
@@ -382,7 +402,8 @@ export default {
         beforeAvatarUpload(file) {
           const isJPG = file.type === 'image/jpeg';
           const isLt2M = file.size / 1024 / 1024 < 2;
-
+          console.log(this.vedioForm.coverName);
+          this.uploadData = { name: this.vedioForm.coverName };
           if (!isJPG) {
             this.$message.error('上传头像图片只能是 JPG 格式!');
           }
@@ -394,8 +415,10 @@ export default {
 
         addVedioClick() {
             this.drawer1 = true;
+            this.drawerTitle1 = '添加视频资源';
+            this.vedioForm.coverName = '11';
         },
-        vedioTypeChange(value) {
+        vedioTypeChange1(value) {
             this.listForm.type = value;
             this.getCourseVideoList();
         },
@@ -416,7 +439,7 @@ export default {
         subjectChange(value) {
             this.vedioForm.subjectUuid = value;
         },
-        vedioTypeChange(value) {
+        vedioTypeChange2(value) {
             this.vedioForm.type = value;
         },
 
@@ -507,6 +530,7 @@ export default {
             }).then(res => {
                 // console.log(res);
                 this.vedioForm.coverUrl = res.data.coverUrl;
+                this.vedioForm.coverName = res.data.coverName;
                 this.vedioForm.name = res.data.name;
                 this.vedioForm.url = res.data.url;
                 this.vedioForm.examDirectionUuid = res.data.examDirectionUuid;
@@ -516,23 +540,25 @@ export default {
                 this.vedioForm.speaker = res.data.speaker;
                 this.vedioForm.remarks = res.data.remarks;
                 this.vedioForm.uuid = res.data.uuid;
+                this.vedioForm.updateTime = timestampToTime(res.data.updateTime);
+                this.vedioForm.updateUserName = res.data.updateUserName;
+                this.vedioForm.number = res.data.number;
             })
         },
         deleteClick(scope) {
             console.log(scope);
-            // this.$smoke_post(deleteSubject, {
-            //     uuid: scope.row.uuid
-            // }).then(res => {
-            //     if(res.code == 200) {
-            //         scope._self.$refs[`popover-${scope.$index}`].doClose();
-            //         this.$message({
-            //             type: 'success',
-            //             message: '删除成功', 
-            //         });
-            //         this.getCourseVideoList();
-            //     }
-            // })
-            alert('暂未开发');
+            this.$smoke_post(deleteCourseVideoByUuid, {
+                uuid: scope.row.uuid
+            }).then(res => {
+                if(res.code == 200) {
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功', 
+                    });
+                    this.getCourseVideoList();
+                }
+            })
         },
         knopPointsClick() {
             console.log(222);
