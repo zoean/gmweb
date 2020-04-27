@@ -9,7 +9,7 @@
 
                 <el-row class="people-screen">
 
-                    <el-col :span="3">
+                    <el-col :span="3" v-if="addEnums">
                         <el-button type="primary" @click="addEnumClick">新增枚举</el-button>
                     </el-col>
 
@@ -37,7 +37,7 @@
                     <el-table-column prop="active" label="操作">
                       <template slot-scope="scope">
                           <el-button @click="customerDetails(scope.row)" type="text" >查看详情</el-button>
-                          <el-button @click="editEnumClick(scope.row)" type="text" >修改</el-button>
+                          <el-button v-if="editEnums" @click="editEnumClick(scope.row)" type="text" >修改</el-button>
                       </template>
                     </el-table-column>
                 </el-table>
@@ -91,7 +91,7 @@
 
                     <el-row class="people-screen">
 
-                        <el-col :span="3" style="margin-left: 22px;">
+                        <el-col :span="3" style="margin-left: 22px;" v-if="addEnumsDetails">
                             <el-button type="primary" @click="addEnumItemClick">新增枚举项</el-button>
                         </el-col>
 
@@ -133,7 +133,7 @@
                           :key="index"
                           >
                         </el-table-column>
-                        <el-table-column prop="active" label="操作">
+                        <el-table-column prop="active" label="操作" v-if="editEnumsDetails">
                           <template slot-scope="scope">
                               <el-button @click="editEnumItemClick(scope.row)" type="text" >修改</el-button>
                           </template>
@@ -162,7 +162,7 @@ export default {
                 name: '',
             },
             list: [],
-            total: '',
+            total: null,
             columnList: [
                 { 'prop': 'number', 'label': '枚举编号' },
                 { 'prop': 'name', 'label': '枚举名称' },
@@ -197,10 +197,19 @@ export default {
             },
             enumItemTitle: '',
             enumItemFlag: false,
+            addEnums: null,
+            addEnumsDetails: null,
+            editEnums: null,
+            editEnumsDetails: null,
         }
     },
     created() {
         this.getEnumList();
+        let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
+        this.addEnums = buttonMap.addEnums;
+        this.addEnumsDetails = buttonMap.addEnumsDetails;
+        this.editEnums = buttonMap.editEnums;
+        this.editEnumsDetails = buttonMap.editEnumsDetails;
     },
     methods: {
         handleClose(done) {

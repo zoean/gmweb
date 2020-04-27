@@ -20,6 +20,7 @@
                   <el-table-column
                     :prop="item.prop"
                     :label="item.label"
+                    :width="item.label == '菜单名称' ? '250px' : ''"
                     v-for="(item, index) in columnList"
                     :key="index"
                     >
@@ -54,16 +55,26 @@
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                         
                         <el-form-item label="菜单名称" prop="name">
-                          <el-input v-model="ruleForm.name"></el-input>
+                          <el-input v-model="ruleForm.name" placeholder="菜单名称"></el-input>
                         </el-form-item>
                         <el-form-item label="菜单路由组成" prop="menuComponent">
-                          <el-input v-model="ruleForm.menuComponent"></el-input>
+                          <el-input v-model="ruleForm.menuComponent" placeholder="菜单路由组成"></el-input>
                         </el-form-item>
                         <el-form-item label="菜单路由地址" prop="url">
-                          <el-input v-model="ruleForm.url"></el-input>
+                          <el-input v-model="ruleForm.url" placeholder="菜单路由地址"></el-input>
                         </el-form-item>
                         <el-form-item label="菜单icon" prop="icon">
-                          <el-input v-model="ruleForm.icon"></el-input>
+                          <el-input v-model="ruleForm.icon" placeholder="菜单icon"></el-input>
+                        </el-form-item>
+                        <el-form-item label="菜单类型" prop="level">
+                            <el-select v-model="ruleForm.level" placeholder="请选择菜单类型">
+                                <el-option
+                                  v-for="item in levelList"
+                                  :key="item.name"
+                                  :label="item.name"
+                                  :value="item.number">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
 
                         <el-form-item>
@@ -87,6 +98,7 @@
 // default-expand-all 默认table要不要展开
 
 import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu } from '../../request/api';
+import { levelFunc } from '../../assets/js/common';
 export default {
     name: 'menua',
     data() {
@@ -97,6 +109,7 @@ export default {
                 { 'prop': 'icon', 'label': '菜单icon' },
                 { 'prop': 'menuComponent', 'label': '菜单路由组成' },
                 { 'prop': 'url', 'label': '菜单路由地址' },
+                { 'prop': 'level', 'label': '菜单类型' },
             ],
             drawer: false,
             direction: 'rtl',
@@ -107,6 +120,7 @@ export default {
                 url: '',
                 uuid: '',
                 parentUuid: '',
+                level: '',
             },
             rules: {
                 name: [
@@ -118,9 +132,17 @@ export default {
                 url: [
                   { required: true, message: '请输入菜单路由跳转地址', trigger: 'blur' }
                 ],
+                level: [
+                  { required: true, message: '请选择菜单类型', trigger: 'blur' }
+                ],
             },
             drawerTitle: '新建菜单',
             fullscreenLoading: false,
+            levelList: [
+                { 'name': '目录', 'number': 1 },
+                { 'name': '页面', 'number': 2 },
+                { 'name': '按钮', 'number': 3 },
+            ]
         }
     },
     created() {
@@ -192,6 +214,13 @@ export default {
             this.ruleForm.url = row.url;
             this.ruleForm.uuid = row.uuid;
             this.ruleForm.parentUuid = row.parentUuid;
+            if(row.level == '目录') {
+                this.ruleForm.level = 1;
+            }else if(row.level == '页面') {
+                this.ruleForm.level = 2;
+            }else if(row.level == '按钮') {
+                this.ruleForm.level = 3;
+            }
         },
         getMenuDetailsSubsetByUuid() {
             let arr;
@@ -204,7 +233,7 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
-                        this.menuList = arr;
+                        this.menuList = levelFunc(arr);
                     }, 300);
                 }else{
                     setTimeout(() => {

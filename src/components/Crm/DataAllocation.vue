@@ -7,7 +7,7 @@
 
                 <div class="people-title">分配引擎配置</div>
 
-                <el-row style="margin-bottom: 20px;">
+                <el-row style="margin-bottom: 20px;" v-if="addDataAllocation">
 
                     <el-col style="width: 140px;"><el-button style="width: 90%;" type="primary" @click="addAlloZu">添加分配组</el-button></el-col>
 
@@ -28,23 +28,23 @@
 
                     <el-table-column prop="active" label="操作" width="500px">
                       <template slot-scope="scope">
-                          <el-button @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
+                          <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
                           <el-popover
                             placement="top"
                             width="200"
                             trigger="click"
                             :ref="`popover-${scope.$index}`"
                             >
-                            <p style="margin-bottom: .2rem;">确定要删除此菜单吗？</p>
+                            <p style="margin-bottom: .2rem;">确定要删除此分配组吗？</p>
                             <div style="text-align: right; margin: 0">
                               <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                               <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
                             </div>
-                            <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                            <el-button v-if="delDataAllocation" slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                           </el-popover>
-                          <el-button @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">配置组员</el-button>
-                          <el-button @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
-                          <el-button v-if="scope.row.setFlag" @click="handleOneKeyClick(scope.row)" type="text"  style="margin-left: .2rem;">一键分配</el-button>
+                          <el-button v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">配置组员</el-button>
+                          <el-button v-if="addDataAllocationLink" @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
+                          <el-button v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" type="text"  style="margin-left: .2rem;">一键分配</el-button>
                       </template>
                     </el-table-column>
 
@@ -331,6 +331,12 @@ export default {
             restaurants: [],
             enumList: {}, //枚举选项数组
             createLinkUrl: '',
+            addDataAllocation: null,
+            addDataAllocationLink: null,
+            addDataAllocationPeople: null,
+            delDataAllocation: null,
+            editDataAllocation: null,
+            oneKeyPush: null,
         }
     },
     created() {
@@ -339,6 +345,13 @@ export default {
         this.enumByEnumNums(arr);
         this.getExamBasic();
         this.getSchoolList();
+        let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
+        this.addDataAllocation = buttonMap.addDataAllocation;
+        this.addDataAllocationLink = buttonMap.addDataAllocationLink;
+        this.addDataAllocationPeople = buttonMap.addDataAllocationPeople;
+        this.delDataAllocation = buttonMap.delDataAllocation;
+        this.editDataAllocation = buttonMap.editDataAllocation;
+        this.oneKeyPush = buttonMap.oneKeyPush;
     },
     methods: {
         handleCopy() {

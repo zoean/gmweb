@@ -229,53 +229,18 @@ export default {
         },
         handleSelect(item) {
             console.log(item);
-            console.log(this.$store.state.userMenuList);
-            let flag = true;
             if(item == '/base'){
-                if(this.$store.state.userMenuList[0].includeSubsetList.length != 0){
-                    this.$store.state.userMenuList[0].includeSubsetList.map((res,index) => {
-                        if(res.disabled && flag){
-                            flag = false;
-                            this.$router.push({
-                                path: this.$store.state.userMenuList[0].includeSubsetList[index].url,
-                            });
-                        }
-                    })
-                }else{
-                    this.$router.push({
-                        path: this.$store.state.userMenuList[0].includeSubsetList[0].url,
-                    });
-                }
+                this.$router.push({
+                    path: this.$store.state.userMenuList[0].defaultUrl,
+                });
             }else if(item == '/crm'){
-                if(this.$store.state.userMenuList[1].includeSubsetList.length != 0){
-                    this.$store.state.userMenuList[1].includeSubsetList.map(res => {
-                        if(res.disabled && flag){
-                            flag = false;
-                            this.$router.push({
-                                path: res.includeSubsetList[0].url,
-                            });
-                        }
-                    })
-                }else{
-                    this.$router.push({
-                        path: this.$store.state.userMenuList[1].url,
-                    });
-                }
+                this.$router.push({
+                    path: this.$store.state.userMenuList[1].defaultUrl,
+                });
             }else if(item == '/knowp'){
-                if(this.$store.state.userMenuList[2].includeSubsetList.length != 0){
-                    this.$store.state.userMenuList[2].includeSubsetList.map((res,index) => {
-                        if(res.disabled && flag){
-                            flag = false;
-                            this.$router.push({
-                                path: this.$store.state.userMenuList[2].includeSubsetList[index].url,
-                            });
-                        }
-                    })
-                }else{
-                    this.$router.push({
-                        path: this.$store.state.userMenuList[2].includeSubsetList[0].url,
-                    });
-                }
+                this.$router.push({
+                    path: this.$store.state.userMenuList[2].defaultUrl,
+                });
             }
         },
         iconTitleClick() {

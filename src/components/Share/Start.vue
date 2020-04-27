@@ -3,7 +3,7 @@
 </template>
     
 <script>
-// import jsmc from '../../assets/js/jsmc.min.js';
+import jsmc from '../../assets/js/jsmc.min.js';
 import json2 from '../../assets/js/json2';
 export default {
     name: 'start',

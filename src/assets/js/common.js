@@ -680,3 +680,21 @@ export const SetTreeFunc = (arr) => {
     json.flagArr = SetArrExp;
     return json;
 }
+
+export const levelFunc = (arr) => {
+    for(var i in arr) {
+        if(arr[i].children != undefined){
+            if(arr[i].level == 1) {
+                arr[i].level = '目录';
+            }else if(arr[i].level == 2){
+                arr[i].level = '页面';
+            }else if(arr[i].level == 3){
+                arr[i].level = '按钮';
+            }
+            levelFunc(arr[i].children);
+        }else{
+            break;
+        }
+    }
+    return arr;
+}

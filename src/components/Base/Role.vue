@@ -452,12 +452,18 @@ export default {
                             console.log(tag);
                             if(tag.flag && (element.includeSubsetList.length == 0)){
                                 this.checkedKeys.push(tag.uuid);
-                            }else if(element.includeSubsetList.length != 0){
+                            }else if(tag.includeSubsetList.length != 0){
                                 tag.includeSubsetList.forEach(sll => {
-                                    if(sll.flag){
+                                    if(sll.flag && sll.includeSubsetList.length == 0){
                                         this.checkedKeys.push(sll.uuid);
-                                    }else{
-                                        return;
+                                    }else if(sll.includeSubsetList.length != 0){
+                                        sll.includeSubsetList.forEach(wwq => {
+                                            if(wwq.flag && wwq.includeSubsetList.length == 0){
+                                                this.checkedKeys.push(wwq.uuid);
+                                            }else{
+                                                return;
+                                            }
+                                        })
                                     }
                                 })
                             }
@@ -474,8 +480,19 @@ export default {
                 menuUuidList: this.$refs.tree.getCheckedKeys(),
                 roleUuid: this.ruleForm.uuid
             }).then(res => {
-                console.log(res);
-                this.drawerMenu = false;
+                if(res.code == 200) {
+                    console.log(res);
+                    this.drawerMenu = false;
+                    this.$message({
+                        type: 'success',
+                        message: '配置成功'
+                    })
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
             })
         }
     },
