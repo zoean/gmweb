@@ -7,7 +7,7 @@
                 <div class="people-title">公司人员列表</div>
 
                 <el-row class="people-screen">
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <el-cascader
                             ref="cascader"
                             class="screen-li"
@@ -19,7 +19,7 @@
                             clearable>
                         </el-cascader>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <el-select v-model="roleUuidText" placeholder="请选择角色" @change='handleRoleUuidChange' class="screen-li" clearable>
                             <el-option
                               v-for="item in roleOptions"
@@ -29,7 +29,7 @@
                             </el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <el-select v-model="jobStatusText" placeholder="请选择员工状态" @change='handleJobStatusChange' class="screen-li" clearable>
                             <el-option
                               v-for="item in jobStatusOptions"
@@ -39,36 +39,53 @@
                             </el-option>
                         </el-select>
                     </el-col>
+                    <el-col :span="5">
+                        <el-date-picker
+                            clearable
+                            v-model="dataPicker"
+                            :default-time="['00:00:00', '23:59:59']"
+                            type="daterange"
+                            range-separator="至"
+                            @change="datePickerChange"
+                            start-placeholder="入职开始日期"
+                            end-placeholder="入职结束日期">
+                        </el-date-picker>
+                    </el-col>
                 </el-row>
 
                 <el-row class="people-screen">
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <el-input v-model="screenForm.name" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="4">
                         <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
                     </el-col>
                     <el-col :span="5">
                         <el-button type="primary" @click="smoke_search">搜 索</el-button>
                     </el-col>
-                    <el-col :span="9">
+                    <el-col :span="11">
                         <el-button type="primary" class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
+                        <el-button type="primary" class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
                     </el-col>
                 </el-row>
                 
                 <el-table
                   :data="userList"
-                  style="width: calc( 100vw - 3.65rem)">
-                  <af-table-column
+                  @sort-change="sortChange"
+                  v-loading="fullscreenLoading"
+                  style="width: calc( 100vw - 3.8rem)">
+                  <el-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
+                    :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
                     :key="index"
                     >
-                  </af-table-column>
-                  <el-table-column prop="active" label="操作">
+                  </el-table-column>
+                  <el-table-column prop="active" label="操作" v-if="peopleEdit">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button @click="handleEditClick(scope.row)" type="text">编辑</el-button>
+                        <el-button @click="handlePremissClick(scope.row)" type="text">数据权限</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -78,7 +95,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total='total'
                     :page-size='screenForm.pageSize'
-                    :page-sizes="[2, 3, 5, 8]"
+                    :page-sizes="[10, 20, 30]"
                     :hide-on-single-page="totalFlag"
                     @current-change="handleCurrentChange"
                     @size-change="handleSizeChange"
@@ -92,14 +109,15 @@
 </template>
 
 <script>
-import { getUserDetailedList, getRoleList, getOrgSubsetByUuid } from '../../request/api';
-import { getTextByJs, getTextByState } from '../../assets/js/common'
+import { getUserDetailedList, getRoleList, getOrgSubsetByUuid, exportUserDetailedList } from '../../request/api';
+import { getTextByJs, getTextByState, sortTextNum } from '../../assets/js/common'
 export default {
     name: 'people',
     data() {
         return {
             userList: [],
             columnList: [
+                { 'prop': 'jobNumber', 'label': '员工工号' },
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'accountNumber', 'label': '手机号' },
                 { 'prop': 'jobStatus', 'label': '状态' },
@@ -126,22 +144,117 @@ export default {
                 jobStatus: '', // 状态选择value
                 name: '', //姓名
                 orgUuidList: [], //组织唯一标识集合
-                pageSize: 8, //单页请求的数量
+                pageSize: 10, //单页请求的数量
                 roleUuid: '', //角色唯一标识
                 sortSet: [], //排序集合
-            }
+                startHiredDate: '',
+                endHiredDate: '',
+            },
+            dataPicker: [],
+            sortSetList: [
+                {'jobNumber': ''},
+                {'name': ''},
+                {'hiredDate': ''},
+                {'jobStatus': ''},
+            ],
+            fullscreenLoading: false,
+            peopleEdit: null,
         }
     },
     created() {
         this.getUserDetailedList();
         this.getRoleList();
         this.getOrgSubsetByUuid();
+        let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
+        console.log(buttonMap);
+        this.peopleEdit = buttonMap.peopleEdit;
     },
     methods: {
-        handleClick(row) {
+        sortChange(data) {
+            console.log(data);
+            this.screenForm.sortSet = [];
+            const id = sortTextNum(data.prop);
+            if(data.order == "descending"){
+                this.sortSetList[id][data.prop] = 'DESC';
+            }else if(data.order == "ascending"){
+                this.sortSetList[id][data.prop] = 'ASC';
+            }
+            this.screenForm.sortSet.push(this.sortSetList[id]);
+            this.getUserDetailedList();
+        },
+        datePickerChange(value) {
+            console.log(value);
+            if (value == null) {
+                this.screenForm.startHiredDate = '';
+                this.screenForm.endHiredDate = '';
+            }else{
+                this.screenForm.startHiredDate = value[0].getTime()/1000;
+                this.screenForm.endHiredDate = value[1].getTime()/1000;
+            }
+        },
+        export_Staff() {
+            // console.log(this.screenForm.orgUuidList);
+
+            let str = '';
+
+            this.screenForm.sortSet.map(sll => {
+                for(var key in sll){
+                    str = key + '-' + sll[key]
+                }
+            })
+
+            if(this.screenForm.orgUuidList[0] == undefined){
+                this.screenForm.orgUuidList[0] = '';
+            }
+            const href = 'https://testgm.jhwx.com' + exportUserDetailedList +
+            '?jobStatus=' + this.screenForm.jobStatus +
+            '&accountNumber=' + this.screenForm.accountNumber + 
+            '&name=' + this.screenForm.name + 
+            '&roleUuid=' + this.screenForm.roleUuid + 
+            '&startHiredDate=' + this.screenForm.startHiredDate +
+            '&endHiredDate=' + this.screenForm.endHiredDate + 
+            '&sortSet=' + str + 
+            '&orgUuidList=' + this.screenForm.orgUuidList[0];
+            ;
+            console.log(href);
+
+            // this.$smoke_get(exportUserDetailedList, {
+            //     jobStatus: this.screenForm.jobStatus,
+            //     accountNumber: this.screenForm.accountNumber,
+            //     name: this.screenForm.name,
+            //     roleUuid: this.screenForm.roleUuid,
+            //     startHiredDate: this.screenForm.startHiredDate,
+            //     endHiredDate: this.screenForm.endHiredDate,
+            //     sortSet: str,
+            //     orgUuidList: this.screenForm.orgUuidList[0],
+            //     responseType: 'blob'
+            // }).then(res => {
+            //     const blob = new Blob([res.data], { type: 'application/ms-excel;charset=utf-8' });
+            //     let url = window.URL.createObjectURL(blob);
+            //     let link = document.createElement('a');
+            //     link.style.display = 'none';
+            //     link.href = url;
+            //     link.download = '员工管理.xlsx'; 
+            //     document.body.appendChild(link);
+            //     link.click();  //a标签自动触发点击事件
+            //     document.body.removeChild(link);
+            // })
+
+            window.open(href, '_blank');
+
+        },
+        handleEditClick(row) {
             console.log(row);
             this.$router.push({
                 path: '/base/people/change',
+                query: {
+                    uuid: row.uuid
+                }
+            })
+        },
+        handlePremissClick(row) {
+            this.$router.push({
+                path: '/base/people/premiss',
                 query: {
                     uuid: row.uuid
                 }
@@ -178,16 +291,31 @@ export default {
             this.getUserDetailedList();
         },
         getUserDetailedList() {
+            this.fullscreenLoading = true;
             this.$smoke_post(getUserDetailedList,this.screenForm).then(res => {
                 console.log(res);
-                this.total = res.data.total;
-                // 用户列表
-                res.data.list.map(data => {
-                    data.orgUuidList = getTextByJs(data.orgUuidList);
-                    data.roleUuidList = getTextByJs(data.roleUuidList);
-                    data.jobStatus = getTextByState(data.jobStatus);
-                })
-                this.userList = res.data.list;
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.total = res.data.total;
+                        // 用户列表
+                        res.data.list.map(data => {
+                            data.orgUuidList = getTextByJs(data.orgUuidList);
+                            data.roleUuidList = getTextByJs(data.roleUuidList);
+                            data.jobStatus = getTextByState(data.jobStatus);
+                            data.hiredDate = data.hiredDate.split(" ")[0];
+                        })
+                        this.userList = res.data.list;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
             })
         },
         getRoleList() {
@@ -244,13 +372,14 @@ export default {
         height: calc( 100vh - 60px);
         .people-title{
             width: 100%;
-            height: .6rem;
-            line-height: .6rem;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            font-size: .2rem;
-            background: #aaa;
+            font-size: 15px;
+            background: #fff;
             margin-bottom: .3rem;
-            color: #fff;
+            color: #666666;
+            font-weight: bold;
         }
         .people-screen{
             margin-bottom: .3rem;
@@ -263,4 +392,15 @@ export default {
         text-align: right;
         margin-top: .4rem;
     }
+/* //element-ui table的去除右侧滚动条的样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 1px;
+}
+    /* // 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 0px;
+    border-radius: 8px;
+}
 </style>

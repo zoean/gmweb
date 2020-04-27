@@ -34,17 +34,18 @@
                   :data="subjectList"
                   row-key="uuid"
                   default-expand-all
-                  style="width: calc( 100vw - 3.65rem)">
+                  style="width: calc( 100vw - 3.8rem)">
                   <el-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
                     :key="index"
+                    :width="index == 0 ? '100' : null"
                     >
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
                         <el-popover
                           placement="top"
                           width="200"
@@ -56,9 +57,9 @@
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
                           </div>
-                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button @click="detailsClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">详情</el-button>
+                        <el-button @click="detailsClick(scope.row)" type="text"  style="margin-left: .2rem;">详情</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -68,7 +69,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total='total'
                     :page-size='subjectForm.pageSize'
-                    :page-sizes="[8, 10, 20, 30]"
+                    :page-sizes="[10, 20, 30]"
                     :hide-on-single-page="totalFlag"
                     @current-change="handleCurrentChange"
                     @size-change="handleSizeChange"
@@ -145,7 +146,7 @@ export default {
             subjectForm: {
                 currentPage: 1,
                 name: '',
-                pageSize: 8,
+                pageSize: 10,
                 uuid: ''
             },
             totalFlag: false,
@@ -270,6 +271,12 @@ export default {
                         message: '删除成功', 
                     });
                     this.getSubjectByExamUuidAndName();
+                }else{
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'error',
+                        message: res.msg, 
+                    });
                 }
             })
         },
@@ -289,17 +296,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .el-main{
-        // background: grey;
-    }
     .index-main{
         height: calc( 100vh - 60px);
         .people-title{
             width: 100%;
-            height: .6rem;
-            line-height: .6rem;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            font-size: .2rem;
+            font-size: 15px;
             background: #aaa;
             margin-bottom: .3rem;
             color: #fff;

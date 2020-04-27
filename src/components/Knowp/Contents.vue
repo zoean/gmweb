@@ -4,12 +4,42 @@
 
             <el-main>
 
-                <div class="people-title">目录和知识点管理</div> 
+                <div class="people-title">
 
-                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                    <el-menu-item index="1">教材目录结构</el-menu-item>
-                    <el-menu-item index="2" >知识点体系</el-menu-item>
-                </el-menu>
+                    <i class="el-icon-arrow-left smoke-left-icon" @click="$router.push('/knowp/subject')"></i>
+                    <span>{{uploadData.subjectName}}目录管理</span>
+
+                </div>
+
+                <div style="overflow: hidden;">
+
+                    <div style="float: left;">
+
+                        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1">教材目录结构</el-menu-item>
+                            <el-menu-item index="2" >知识点体系</el-menu-item>
+                        </el-menu>
+
+                    </div>
+
+                    <div style="float: right; width:220px;">
+
+                        <el-upload
+                            class="avatar-uploader"
+                            :data='uploadData'
+                            action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelSubject"
+                            :headers="headersObj"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <el-button type="primary">导入目录</el-button>
+                        </el-upload>
+
+                        <el-button type="primary" @click="outExcelSubject" style="position: relative; left: 120px; top: -40px;">导出目录</el-button>
+
+                    </div>
+
+                </div>
 
                 <el-button type="primary" @click="addContentsClick" style="margin-bottom: .2rem;">添加目录</el-button>
 
@@ -17,18 +47,20 @@
                   :data="contentsList"
                   row-key="uuid"
                   default-expand-all
+                  v-loading.fullscreen.lock="fullscreenLoading"
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-                  style="width: calc( 100vw - 3.65rem)">
-                  <el-table-column
+                  :row-class-name="tableRowClassName"
+                  style="width: calc( 100vw - 3.8rem)">
+                  <af-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
                     :key="index"
                     >
-                  </el-table-column>
+                  </af-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
                         <el-popover
                           placement="top"
                           width="200"
@@ -40,9 +72,9 @@
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
                           </div>
-                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button v-if="scope.row.level != 3" @click="addClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">添加</el-button>
+                        <el-button v-if="scope.row.level != 3" @click="addClick(scope.row)" type="text"  style="margin-left: .2rem;">添加</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -52,7 +84,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total='total'
                     :page-size='contentsForm.pageSize'
-                    :page-sizes="[8, 10, 20, 30]"
+                    :page-sizes="[10, 20, 30]"
                     :hide-on-single-page="totalFlag"
                     @current-change="handleCurrentChange"
                     @size-change="handleSizeChange"
@@ -108,7 +140,11 @@ import {
     deleteSubjectCatalogueByUuid,
     updateSubjectCatalogue,
     getSubjectCatalogueByParentUuid,
-    getSubjectCatalogueByUuid
+    getSubjectCatalogueByUuid,
+
+    outExcelKnow,
+    outExcelSubject,
+    readExcelSubject
 } from '../../request/api';
 export default {
     name: 'index',
@@ -135,21 +171,78 @@ export default {
             ],
             contentsForm: {
                 currentPage: 1, //当前页数
-                pageSize: 8, //每页显示条目个数	
+                pageSize: 10, //每页显示条目个数	
                 uuid: '', //科目的uuid
             },
             drawerTitle1: '添加目录',
             drawer1: false,
             direction: 'rtl',
             activeIndex: '1',
+            uploadData: {
+                subjectUuid: '',
+                subjectName: ''
+            },
+            headersObj: {
+                Authorization: ''
+            },
+            fullscreenLoading: false,
         }
     },
     created() {
         this.contentsForm.uuid = this.$route.query.id;
         this.ruleForm1.subjectUuid = this.$route.query.id;
+        this.uploadData.subjectUuid = this.$route.query.id;
         this.getSubjectCatalogueBySubjectUuid();
+        const jhToken = localStorage.getItem('jhToken');
+        this.headersObj.Authorization = jhToken;
     },
     methods: {
+        outExcelSubject() {
+            const href = 'https://testgm.jhwx.com' + outExcelSubject + '?subjectUuid=' + this.$route.query.id;
+            window.open(href, '_blank');
+        },
+        handleAvatarSuccess(res, file) {
+            console.log(res);
+            console.log(file);
+            let str = '';
+            if(res.code == 200) {
+                if(res.data.length == 0){
+                    this.$notify({
+                        title: '成功',
+                        message: '上传成功',
+                        type: 'success'
+                    });
+                }else{
+                    res.data.map(sll => {
+                        str = str + sll + '\n';
+                    })
+                    console.log(str);
+                    this.$notify.error({
+                        title: '失败',
+                        message: str,
+                        duration: 0
+                    });
+                }
+            }else{
+                this.$notify.error({
+                    title: '失败',
+                    message: '上传失败',
+                });
+            }
+        },
+        beforeAvatarUpload(file) {
+            console.log(file);
+        },
+        tableRowClassName({row, rowIndex}) {
+            if (row.level == 1) {
+                return 'one-row';
+            } else if (row.level == 2) {
+                return 'two-row';
+            } else if (row.level == 3) {
+                return 'three-row';
+            }
+            return '';
+        },
         handleSelect(value) {
             if(value == '1') {
                 this.$router.push({
@@ -224,11 +317,30 @@ export default {
         },
         getSubjectCatalogueBySubjectUuid() {
             let arr;
+            this.fullscreenLoading = true;
             this.$smoke_post(getSubjectCatalogueBySubjectUuid, this.contentsForm).then(res => {
                 console.log(res);
-                arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
-                this.contentsList = arr;
-                this.total = res.data.total;
+                if(res.code == 200) {
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
+                        this.contentsList = arr;
+                        this.total = res.data.total;
+                        this.uploadData.subjectName = res.data.name;
+                    }, 300);
+
+                }else{
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+
+                }
             })
         },
         deleteSubjectCatalogueByUuid(scope) {
@@ -246,6 +358,12 @@ export default {
                         message: '删除成功', 
                     });
                     this.getSubjectCatalogueBySubjectUuid();
+                }else{
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'error',
+                        message: res.msg, 
+                    });
                 }
             })
         },
@@ -318,13 +436,14 @@ export default {
         height: calc( 100vh - 60px);
         .people-title{
             width: 100%;
-            height: .6rem;
-            line-height: .6rem;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            font-size: .2rem;
+            font-size: 15px;
             background: #aaa;
             margin-bottom: .3rem;
             color: #fff;
+            position: relative;
         }
         .people-screen{
             margin-bottom: .3rem;
@@ -338,4 +457,15 @@ export default {
         margin-top: 30px;
         margin-bottom: 30px;
     }
+
+/* //element-ui table的去除右侧滚动条的样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 1px;
+}
+    /* // 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 8px;
+}
 </style>

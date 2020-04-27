@@ -23,13 +23,16 @@ axios.interceptors.request.use(
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-    // console.log(response);
-    // if (response.data.code < 10008 && response.data.code != 200){
-    //   location.href = '/login';
-    // }else{
-    //   return response
-    // }
-    return response
+    console.log(response);
+    if (response.data.code == 10002){
+      location.href = '/';
+      localStorage.removeItem('jhToken');
+      localStorage.removeItem('userMenuList');
+      localStorage.removeItem('initOptions');
+      return response
+    }else{
+      return response
+    }
 }, err => {
     if (err && err.response) {
       switch (err.response.status) {

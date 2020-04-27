@@ -4,29 +4,61 @@
 
             <el-main>
 
-                <div class="people-title">目录和知识点管理</div> 
+                <div class="people-title">
 
-                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                    <el-menu-item index="1">教材目录结构</el-menu-item>
-                    <el-menu-item index="2" >知识点体系</el-menu-item>
-                </el-menu>
+                    <i class="el-icon-arrow-left smoke-left-icon" @click="$router.push('/knowp/subject')"></i>
+                    <span>{{uploadData.subjectName}}知识点管理</span>
+
+                </div>
+
+                <div style="overflow: hidden;">
+
+                    <div style="float: left;">
+
+                        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                            <el-menu-item index="1">教材目录结构</el-menu-item>
+                            <el-menu-item index="2" >知识点体系</el-menu-item>
+                        </el-menu>
+                    </div>
+
+                    <div style="float: right; width:240px;">
+
+                        <el-upload
+                            class="avatar-uploader"
+                            :data='uploadData'
+                            action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelKnow"
+                            :headers="headersObj"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <el-button type="primary">导入知识点</el-button>
+                        </el-upload>
+
+                        <el-button type="primary" @click="outExcelKnow" style="position: relative; left: 124px; top: -40px;">导出知识点</el-button>
+
+                    </div>
+
+                </div>
 
                 <el-table
                   :data="knowsList"
                   row-key="uuid"
                   default-expand-all
+                  v-loading.fullscreen.lock="fullscreenLoading"
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-                  style="width: calc( 100vw - 3.65rem)">
+                  :row-class-name="tableRowClassName"
+                  style="width: calc( 100vw - 3.8rem)">
                   <el-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
                     :key="index"
+                    :width="index == 1 ? '300' : null"
                     >
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.level == 3" @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button v-if="scope.row.level == 3" @click="editClick(scope.row)" type="text" >编辑</el-button>
                         <el-popover
                           placement="top"
                           width="200"
@@ -39,9 +71,9 @@
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
                           </div>
-                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button v-if="scope.row.level == 2" @click="addClick(scope.row)" type="text" size="small">添加</el-button>
+                        <el-button v-if="scope.row.level == 2" @click="addClick(scope.row)" type="text" >添加</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -51,7 +83,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total='total'
                     :page-size='knowsForm.pageSize'
-                    :page-sizes="[8, 10, 20, 30]"
+                    :page-sizes="[10, 20, 30]"
                     :hide-on-single-page="totalFlag"
                     @current-change="handleCurrentChange"
                     @size-change="handleSizeChange"
@@ -118,7 +150,8 @@ import {
     addKnowledgePoints,
     deleteKnowledgePoints,
     updateKnowledgePoints,
-    getKnowledgePointsByUuid
+    getKnowledgePointsByUuid,
+    outExcelKnow
 } from '../../request/api';
 import {
     emphasisLevelByText
@@ -127,6 +160,7 @@ export default {
     name: 'index',
     data() {
         return {
+            name: '',
             total: null,
             totalFlag: false,
             ruleForm1: {
@@ -150,20 +184,79 @@ export default {
             ],
             knowsForm: {
                 currentPage: 1, //当前页数
-                pageSize: 8, //每页显示条目个数	
+                pageSize: 10, //每页显示条目个数	
                 uuid: '', //科目的uuid
             },
             drawerTitle1: '添加知识点',
             drawer1: false,
             direction: 'rtl',
             activeIndex: '2',
+            uploadData: {
+                subjectUuid: '',
+                subjectName: ''
+            },
+            headersObj: {
+                Authorization: ''
+            },
+            fullscreenLoading: false,
         }
     },
     created() {
         this.knowsForm.uuid = this.$route.query.id;
+        this.uploadData.subjectUuid = this.$route.query.id;
         this.getCatalogueAndKnowBySubjectUuid();
+        const jhToken = localStorage.getItem('jhToken');
+        this.headersObj.Authorization = jhToken;
     },
     methods: {
+        outExcelKnow() {
+            const href = 'https://testgm.jhwx.com' + outExcelKnow + '?subjectUuid=' + this.$route.query.id;
+            window.open(href, '_blank');
+        },
+        handleAvatarSuccess(res, file) {
+            console.log(res);
+            console.log(file);
+            let str = '';
+            if(res.code == 200) {
+                if(res.data.length == 0){
+                    this.$notify({
+                        title: '成功',
+                        message: '上传成功',
+                        type: 'success'
+                    });
+                }else{
+                    res.data.map(sll => {
+                        str = str + sll + '\n';
+                    })
+                    console.log(str);
+                    this.$notify.error({
+                        title: '失败',
+                        message: str,
+                        duration: 0
+                    });
+                }
+            }else{
+                this.$notify.error({
+                    title: '失败',
+                    message: '上传失败',
+                });
+            }
+        },
+        beforeAvatarUpload(file) {
+            console.log(file);
+        },
+
+        tableRowClassName({row, rowIndex}) {
+            if (row.level == 1) {
+                return 'one-row';
+            } else if (row.level == 2) {
+                return 'two-row';
+            } else if (row.level == 3) {
+                return 'three-row';
+            }
+            return '';
+        },
+
         handleSelect(value) {
             if(value == '1') {
                 this.$router.push({
@@ -226,23 +319,47 @@ export default {
         },
         getCatalogueAndKnowBySubjectUuid() {
             let arr;
+            this.fullscreenLoading = true;
             this.$smoke_post(getCatalogueAndKnowBySubjectUuid, this.knowsForm).then(res => {
+
                 console.log(res);
-                res.data.list.map(sll => {
-                    if(sll.list.length != 0) {
-                        sll.list.map(oop => {
-                            oop.list = oop.knowList;
-                            if(oop.list.length != 0) {
-                                oop.list.map(qqs => {
-                                    qqs.emphasisLevel = emphasisLevelByText(qqs.emphasisLevel);
+                if(res.code == 200) {
+
+                    setTimeout(() => {
+
+                        this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            if(sll.list.length != 0) {
+                                sll.list.map(oop => {
+                                    oop.list = oop.knowList;
+                                    if(oop.list.length != 0) {
+                                        oop.list.map(qqs => {
+                                            qqs.emphasisLevel = emphasisLevelByText(qqs.emphasisLevel);
+                                        })
+                                    }
                                 })
                             }
+                        });
+                        arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
+                        this.knowsList = arr;
+                        this.total = res.data.total;
+                        this.uploadData.subjectName = res.data.name;
+
+                    }, 300);
+
+                }else{
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
                         })
-                    }
-                });
-                arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
-                this.knowsList = arr;
-                this.total = res.data.total;
+                    }, 300)
+
+                }
+
+                
             })
         },
         deleteKnowledgePoints(scope) {
@@ -329,13 +446,14 @@ export default {
         height: calc( 100vh - 60px);
         .people-title{
             width: 100%;
-            height: .6rem;
-            line-height: .6rem;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            font-size: .2rem;
+            font-size: 15px;
             background: #aaa;
             margin-bottom: .3rem;
             color: #fff;
+            position: relative;
         }
         .people-screen{
             margin-bottom: .3rem;
@@ -349,4 +467,15 @@ export default {
         margin-top: 30px;
         margin-bottom: 30px;
     }
+
+/* //element-ui table的去除右侧滚动条的样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 1px;
+}
+    /* // 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 0px;
+}
 </style>

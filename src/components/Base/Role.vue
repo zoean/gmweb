@@ -13,7 +13,8 @@
 
                 <el-table
                   :data="roleList"
-                  style="width: calc( 100vw - 3.65rem)">
+                  v-loading="fullscreenLoading"
+                  style="width: calc( 100vw - 3.8rem)">
                   <el-table-column
                     :prop="item.prop"
                     :label="item.label"
@@ -23,7 +24,7 @@
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleUpdataClick(scope.row)" type="text" size="small">修改</el-button>
+                        <el-button @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
                         <el-popover
                           placement="top"
                           width="200"
@@ -35,12 +36,12 @@
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
                           </div>
-                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
 
-                        <el-button @click="handleMenuClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">配置菜单</el-button>
+                        <el-button @click="handleMenuClick(scope.row)" type="text"  style="margin-left: .2rem;">配置菜单</el-button>
 
-                        <el-button @click="handlePeopleClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">配置人员</el-button>
+                        <el-button @click="handlePeopleClick(scope.row)" type="text"  style="margin-left: .2rem;">配置人员</el-button>
 
                     </template>
                   </el-table-column>
@@ -100,8 +101,8 @@
                     >
 
                     <el-row style="margin: .2rem; height: .6rem; background: #aaa; line-height: .6rem; text-align: center; color: #fff;">
-                      <el-col :span="18"><div>{{ruleForm.name}}现有{{rolePeopleList.length}}人</div></el-col>
-                      <el-col :span="6"><div style="cursor: pointer;" @click="addRoleUser">添加成员</div></el-col>
+                        <el-col :span="18"><div>{{ruleForm.name}}现有{{rolePeopleList.length}}人</div></el-col>
+                        <el-col :span="6"><div style="cursor: pointer;" @click="addRoleUser">添加成员</div></el-col>
                     </el-row>
 
                     <el-tag
@@ -190,7 +191,7 @@ import {
     insertRoleAndUserRelation,
     deleteRoleAndUserRelation
 } from '../../request/api';
-import { deteleObject, removeAaary } from '../../assets/js/common'
+import { deteleObject, removeObject } from '../../assets/js/common'
 export default {
     name: 'role',
     data() {
@@ -236,6 +237,7 @@ export default {
                   { required: true, message: '请输入角色描述', trigger: 'blur' }
                 ],
             },
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -275,13 +277,25 @@ export default {
             })
         },
         getRoleDetailedList() {
+            this.fullscreenLoading = true;
             this.$smoke_post(getRoleDetailedList, {}).then(res => {
-                console.log(res);
-                this.roleList = res.data;
-                res.data.map((res,index) => {
-                    res['visible'] = false;
-                })
-                console.log(res);
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        res.data.map((res,index) => {
+                            res['visible'] = false;
+                        })
+                        this.roleList = res.data;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
             })
         },
         add_role() {
@@ -372,7 +386,7 @@ export default {
         tagClose(tag) {
             let arr;
             console.log(tag);
-            arr = removeAaary(this.searchOkTags, tag);
+            arr = removeObject(this.searchOkTags, tag);
             this.searchOkTags = arr;
         },
         userDel(tag){
@@ -433,18 +447,24 @@ export default {
                 arr.forEach(element => {
                     if((element.flag) && (element.includeSubsetList.length == 0)){
                         this.checkedKeys.push(element.uuid);
-                    }else{
-                        if(element.includeSubsetList.length != 0){
-                            element.includeSubsetList.forEach(tag => {
-                                if(tag.flag){
-                                    this.checkedKeys.push(tag.uuid);
-                                }
-                            })
-                        }else{
-                            return;
-                        }
+                    }else if(element.includeSubsetList.length != 0){
+                        element.includeSubsetList.forEach(tag => {
+                            console.log(tag);
+                            if(tag.flag && (element.includeSubsetList.length == 0)){
+                                this.checkedKeys.push(tag.uuid);
+                            }else if(element.includeSubsetList.length != 0){
+                                tag.includeSubsetList.forEach(sll => {
+                                    if(sll.flag){
+                                        this.checkedKeys.push(sll.uuid);
+                                    }else{
+                                        return;
+                                    }
+                                })
+                            }
+                        })
                     }
                 });
+                console.log(this.checkedKeys);
                 this.treeData = arr;
             })
         },
@@ -471,13 +491,14 @@ export default {
             height: calc( 100vh - 60px);
             .people-title{
                 width: 100%;
-                height: .6rem;
-                line-height: .6rem;
+                height: 40px;
+                line-height: 40px;
                 text-align: center;
-                font-size: .2rem;
-                background: #aaa;
+                font-size: 15px;
+                background: #fff;
                 margin-bottom: .3rem;
-                color: #fff;
+                color: #666666;
+                font-weight: bold;
             }
             .people-screen{
                 margin-bottom: .3rem;

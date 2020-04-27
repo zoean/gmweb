@@ -1,17 +1,18 @@
 <template>
-    <el-header class="">
+    <el-header class="" style="height: 60px;">
 
         <el-dialog
             title="设置密码"
             :visible.sync="centerDialogVisible"
             width="30%"
+            :show-close="centerDialogVisible"
             :before-close="handleClose"
             center>
-            <div style="height: .6rem; line-height: .6rem;">姓名<span style="margin-left: 25%;">{{$store.state.name}}</span></div>
-            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">手机号<span style="margin-left: 21%;">{{$store.state.accountNumber}}</span></div>
+            <div style="height: .6rem; line-height: .6rem;">姓名<span style="margin-left: 92px;">{{$store.state.name}}</span></div>
+            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">手机号<span style="margin-left: 76px;">{{$store.state.accountNumber}}</span></div>
             <el-form :model="form">
               <el-form-item label="原密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password1" autocomplete="off" type="password"></el-input>
+                <el-input v-model="form.password1" autocomplete="off" type="password" style=""></el-input>
               </el-form-item>
               <el-form-item label="新密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password2" autocomplete="off" type="password"></el-input>
@@ -28,8 +29,10 @@
             <el-col :span="20" style="height: 60px !important;">
                 <div class="index-hleft" @click="iconTitleClick">
                 
-                <el-image style="width: 40px; height: 40px; position: relative; top: 10px;" :src="require('../../assets/images/logo.png')" fit="fit"></el-image>
-                <span> 京华综合管理后台</span>
+                <!-- <el-image style="width: 24px; height: 24px; position: relative; top: 6px;" :src="require('../../assets/images/logo.png')" fit="fit"></el-image> -->
+                <!-- <div style="display: inline-block; margin-left: 10px;">京华综合管理后台</div> -->
+
+                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="require('../../assets/images/logo_Name.png')" fit="fit"></el-image>
 
                 </div>
 
@@ -38,11 +41,11 @@
                     class="el-menu-demo"
                     mode="horizontal"
                     @select="handleSelect"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b">
+                    background-color="#fff"
+                    text-color="#333333"
+                    active-text-color="#488FF7">
                     <el-menu-item 
-                        v-for="(item,index) in $store.state.userMenuList" 
+                        v-for="(item,index) in $store.state.userMenuList"
                         v-if="item.disabled"
                         :index="`${item.url}`"
                         :key="index">
@@ -53,12 +56,15 @@
             </el-col>
 
             <el-col :span="4">
+                <el-badge :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
+                    <i class="el-icon-bell" style="font-size: 18px;"></i>
+                </el-badge>
                 <el-dropdown>
                     <div class="el-dropdown-link index-hright">
                         {{$store.state.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item>
+                      <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
                       <el-dropdown-item @click.native="change_password">修改密码</el-dropdown-item>
                       <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
@@ -66,12 +72,41 @@
     
             </el-col>
         </el-row>
+
+        <el-drawer 
+            :title="drawerTitle"
+            :visible.sync="drawer"
+            :direction="direction"
+            :before-close="handleCloseDrawer"
+        >
+
+            <el-table
+                border
+                :data="tableData"
+            >
+
+                <el-table-column
+                    :prop="item.props"
+                    :label="item.label"
+                    v-for="(item, index) in columnListTree"
+                    :key="index">
+                </el-table-column>
+
+            </el-table>
+
+        </el-drawer>
         
     </el-header>
 </template>
 
 <script>
-import { getUserLoginMessage, logOut, updateUserPassword } from '../../request/api';
+import { 
+    getUserLoginMessage,
+    logOut, 
+    updateUserPassword,
+    readUuid,
+    getStationNews,
+} from '../../request/api';
 import { getTextByJs } from '../../assets/js/common';
 import { pass_word } from '../../assets/js/data';
 export default {
@@ -86,29 +121,58 @@ export default {
             formLabelWidth: '120px',
             defaultActive: '',
             oneLogin: null,
+            drawer: false,
+            drawerTitle: '消息列表',
+            direction: 'rtl',
+            notReadNumValue: null,
+            newsForm: {
+                pageSize: 10,
+                currentPage: 1,
+                total: null,
+            },
+            tableData: [],
+            columnListTree: [
+                { props: 'createTime', label: '创建时间' },
+                { props: 'msg', label: '消息内容' },
+                { props: 'readState', label: '读取状态' },
+            ]
         }
     },
     created() {
         this.getUserLoginMessage();
+        this.notReadNumValue = localStorage.getItem("notReadNum");
     },
     methods: {
+        getStationNews() {
+            this.$smoke_post(getStationNews, this.newsForm).then(res => {
+                if(res.code == 200) {
+                    
+                }
+            })
+        },
+        badgeClick() {
+            this.drawer = true;
+        },
+        handleCloseDrawer(done) {
+            done();
+        },
         handleSelect(item) {
             console.log(item);
             console.log(this.$store.state.userMenuList);
             let flag = true;
             if(item == '/base'){
                 if(this.$store.state.userMenuList[0].includeSubsetList.length != 0){
-                    this.$store.state.userMenuList[0].includeSubsetList.map(res => {
+                    this.$store.state.userMenuList[0].includeSubsetList.map((res,index) => {
                         if(res.disabled && flag){
                             flag = false;
                             this.$router.push({
-                                path: res.url,
+                                path: this.$store.state.userMenuList[0].includeSubsetList[index].url,
                             });
                         }
                     })
                 }else{
                     this.$router.push({
-                        path: this.$store.state.userMenuList[0].url,
+                        path: this.$store.state.userMenuList[0].includeSubsetList[0].url,
                     });
                 }
             }else if(item == '/crm'){
@@ -117,7 +181,7 @@ export default {
                         if(res.disabled && flag){
                             flag = false;
                             this.$router.push({
-                                path: res.url,
+                                path: res.includeSubsetList[0].url,
                             });
                         }
                     })
@@ -128,17 +192,17 @@ export default {
                 }
             }else if(item == '/knowp'){
                 if(this.$store.state.userMenuList[2].includeSubsetList.length != 0){
-                    this.$store.state.userMenuList[2].includeSubsetList.map(res => {
+                    this.$store.state.userMenuList[2].includeSubsetList.map((res,index) => {
                         if(res.disabled && flag){
                             flag = false;
                             this.$router.push({
-                                path: res.url,
+                                path: this.$store.state.userMenuList[2].includeSubsetList[index].url,
                             });
                         }
                     })
                 }else{
                     this.$router.push({
-                        path: this.$store.state.userMenuList[2].url,
+                        path: this.$store.state.userMenuList[2].includeSubsetList[0].url,
                     });
                 }
             }
@@ -162,8 +226,10 @@ export default {
             // })
             localStorage.removeItem('jhToken');
             localStorage.removeItem('userMenuList');
+            localStorage.removeItem('initOptions');
             this.$store.dispatch('actionsSetCommonFlag', false);
             this.$router.push({ path: '/login'});
+
         },
         dialog_cancel() {
             this.centerDialogVisible = false;
@@ -195,6 +261,7 @@ export default {
             }
         },
         getUserLoginMessage() {
+            var that = this;
             this.$smoke_post(getUserLoginMessage,{}).then(res => {
                 console.log(res);
                 if(res.code == 200) {
@@ -207,9 +274,47 @@ export default {
                     this.$store.dispatch('actionsSetJobNumber', res.data.jobNumber);
                     this.$store.dispatch('actionsSetUuid', res.data.uuid);
                     this.$store.dispatch('actionsSetUserMenuList', res.data.userMenuList);
+                    this.$store.dispatch('actionsSetAvatar', res.data.avatar);
 
                     localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
+                    localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
                     // this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
+
+                    if( "WebSocket" in window ) {
+
+                        console.log("您的浏览器支持 WebSocket!");
+
+                        var http = 'wss://testwebsocket.jhwx.com' + '/websocket/msg/' + res.data.uuid;
+
+                        var ws = new WebSocket(http);
+
+                        ws.onopen = function() {
+                            // Web Socket 已连接上，使用 send() 方法发送数据
+                            // alert("数据发送中...");
+                            ws.send('消息发送');
+                        };
+
+                        ws.onmessage = function (evt) { 
+                            if(evt.data.indexOf("notReadNum") != -1) {
+                                console.log(evt);
+                                let infoData = eval("(" + evt.data + ")");;
+                                console.log(infoData);
+                                that.$notify({
+                                    title: '消息',
+                                    message: infoData.msg,
+                                    type: 'success',
+                                    offset: 60
+                                });
+                                localStorage.setItem("notReadNum", infoData.notReadNum);
+                                that.notReadNumValue = infoData.notReadNum;
+                            }
+                        };
+
+                    }else{
+                        console.log("您的浏览器不支持 WebSocket!");
+                    }
+
+
                 }else{
                     this.logout();
                 }
@@ -249,8 +354,8 @@ export default {
 
 <style lang="less" scoped>
     .el-header{
-        background: #545c64;
-        color: #fff;
+        background: #fff;
+        color: #333333;
         line-height: 60px;
         padding: 0 .4rem;
         width: 100%;
@@ -258,7 +363,8 @@ export default {
     .index-hleft{
         width: 300px;
         float: left;
-        font-size: 24px;
+        height: 60px;
+        font-size: 18px;
         letter-spacing: .04rem;
         cursor: pointer;
     }
@@ -266,10 +372,10 @@ export default {
         float: right;
     }
     .index-hright{
-        font-size: 18px;
+        font-size: 16px;
         text-align: right;
         cursor: pointer;
-        color: #fff;
+        color: #333333;
     }
     .el-menu-demo{
         float: right;
@@ -279,16 +385,12 @@ export default {
         border-bottom: none;
     }
     .el-menu-item{
-        font-size: 20px;
-        line-height: 64px !important;
+        font-size: 16px;
+        line-height: 62px !important;
+        height: 60px !important;
     }
-</style>
-<style>
-    .el-form-item__label{
-        text-align: left !important;
-        width: 80px !important;
-    }
-    .el-form-item__content{
-        margin-left: 80px !important;
+    .el-menu-item:hover{
+        background-color: #fff!important;
+        color: #488FF7!important;
     }
 </style>

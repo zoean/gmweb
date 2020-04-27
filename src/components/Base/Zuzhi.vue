@@ -9,9 +9,10 @@
 
                 <el-table
                   :data="zuzhiList"
-                  style="width: calc( 100vw - 3.65rem)"
+                  style="width: calc( 100vw - 3.8rem)"
                   row-key="uuid"
                   border
+                  :indent='35'
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
                   <el-table-column
                     :prop="item.prop"
@@ -20,11 +21,11 @@
                     :key="index"
                     >
                   </el-table-column>
-                  <el-table-column prop="active" label="操作">
+                  <!-- <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="handleClick(scope.row)" type="text" >查看</el-button>
                     </template>
-                  </el-table-column>
+                  </el-table-column> -->
                 </el-table>
 
             </el-main>
@@ -46,7 +47,7 @@ export default {
             zuzhiList: [],
             columnList: [
                 { 'prop': 'name', 'label': '组织名称' },
-                { 'prop': 'uuid', 'label': 'id' },
+                // { 'prop': 'uuid', 'label': 'id' },
             ],
         }
     },
@@ -54,10 +55,10 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
-        handleClick(row) {
-            console.log(row);
-            alert('暂未开发');
-        },
+        // handleClick(row) {
+        //     console.log(row);
+        //     alert('暂未开发');
+        // },
         getOrgSubsetByUuid() {
             let arr;
             this.$smoke_post(getOrgSubsetByUuid, {
@@ -86,13 +87,14 @@ export default {
             height: calc( 100vh - 60px);
             .people-title{
                 width: 100%;
-                height: .6rem;
-                line-height: .6rem;
+                height: 40px;
+                line-height: 40px;
                 text-align: center;
-                font-size: .2rem;
-                background: #aaa;
+                font-size: 15px;
+                background: #fff;
                 margin-bottom: .3rem;
-                color: #fff;
+                color: #666666;
+                font-weight: bold;
             }
             .people-screen{
                 margin-bottom: .3rem;
@@ -101,18 +103,6 @@ export default {
                 }
             }
         }
-    }
-
-    .main-area /deep/ .el-table__row--level-1 .el-table__indent{
-        padding-left: 50px !important;
-    }
-
-    .main-area /deep/ .el-table__row--level-2 .el-table__indent{
-        padding-left: 100px !important;
-    }
-
-    .main-area /deep/ .el-table__row--level-3 .el-table__indent{
-        padding-left: 150px !important;
     }
 
     // .main-area /deep/ th{

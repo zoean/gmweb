@@ -1,0 +1,881 @@
+<template>
+    <div class="">
+
+        <el-container class="index-main">
+
+            <el-main>
+
+                <div class="people-title">员工数据权限管理</div>
+
+                <el-row class="tab-title">
+
+                    <el-col class="tab-title-div">成员信息</el-col>
+
+                </el-row>
+
+                <el-row style="margin-top: 10px;">
+
+                    <el-col :span="18">
+
+                        <el-table
+                            :data="userList"
+                            :show-header="false"
+                            border
+                            >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '200' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+
+                </el-row>
+
+
+                <el-row class="tab-title" style="margin-top: 20px;">
+
+                    <el-col class="tab-title-div">分校平台</el-col>
+
+                </el-row>
+
+                <el-row style="margin-top: 10px;">
+
+                    <el-col :span="18">
+
+                        <el-table
+                            :data="schoolList"
+                            :show-header="false"
+                            border
+                            >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '200' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+
+                    <el-col :span="5" :offset="1">
+
+                        <el-button type="primary" @click="editSchoolClick">修改分校</el-button>
+
+                    </el-col>
+
+                </el-row>
+
+                <el-drawer
+                    :title="drawerTitle0"
+                    :visible.sync="drawer0"
+                    :direction="direction0"
+                    size="50%"
+                    :before-close="handleClose">
+
+                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                        <el-table
+                            border
+                            ref="multipleTable"
+                            @selection-change="handleSelectionChange"
+                            :data="tableDataSchool"
+                        >
+                            
+                            <el-table-column
+                              type="selection"
+
+                              width="55">
+                            </el-table-column>
+
+                            <el-table-column
+                                :prop="item.props"
+                                :label="item.label"
+                                v-for="(item, index) in columnList1"
+                                :key="index">
+                            </el-table-column>
+
+                        </el-table>
+
+                    </el-row>
+
+                    <el-button type="primary" style="margin: 0 20px;" @click="addSchool">确定</el-button>
+                    
+                </el-drawer>
+
+
+                <el-row class="tab-title" style="margin-top: 20px;">
+
+                    <el-col class="tab-title-div">坐席数据</el-col>
+
+                </el-row>
+
+                <el-row style="margin-top: 10px;">
+
+                    <el-col :span="18">
+
+                        <el-table
+                            :data="seatList"
+                            :show-header="false"
+                            border
+                            >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '200' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+
+                    <el-col :span="5" :offset="1">
+
+                        <el-button type="primary" @click="editPeopleClick">修改部门与人员</el-button>
+
+                    </el-col>
+
+                </el-row>
+
+
+                <el-drawer
+                    :title="drawerTitle1"
+                    :visible.sync="drawer1"
+                    :direction="direction1"
+                    size="50%"
+                    :before-close="handleClose">
+
+                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                        <el-col :span="10">
+
+                            <el-input
+                                placeholder="输入您想查找的人员"
+                                style="margin-bottom: 10px;"
+                                v-model="filterText">
+                            </el-input>
+
+                            <el-tree
+                                ref="tree"
+                                :data="treeData"
+                                show-checkbox
+                                style="margin-left: 0px;"
+                                node-key="uuid"
+                                :check-strictly="true"
+                                :default-expanded-keys="defaultExpandedKeys"
+                                :default-checked-keys="defaultCheckedKeys"
+                                :filter-node-method="filterNode"
+                                @check="handleCheckChange"
+                                :props="defaultProps"
+                            >
+                            </el-tree>
+
+                        </el-col>
+
+                        <el-col :span="13" :offset="1">
+                        
+                            <el-table
+                                border
+                                :data="tableData"
+                            >
+
+                                <el-table-column
+                                    :prop="item.props"
+                                    :label="item.label"
+                                    v-for="(item, index) in columnList1"
+                                    :key="index">
+                                </el-table-column>
+
+                                <el-table-column prop="limitLimit" label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
+                                    </template>
+                                </el-table-column>
+
+                            </el-table>
+
+                        </el-col>
+
+                    </el-row>
+
+                    <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
+                    
+                </el-drawer>
+
+
+                <el-row class="tab-title" style="margin-top: 20px;">
+
+                    <el-col class="tab-title-div">回收线索</el-col>
+
+                </el-row>
+
+                <el-row style="margin-top: 10px;">
+
+                    <el-col :span="18">
+
+                        <el-table
+                            :data="backList"
+                            :show-header="false"
+                            border
+                            >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '200' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+
+                    <el-col :span="5" :offset="1">
+
+                        <el-button type="primary" @click="editBackClick">修改考试项</el-button>
+
+                    </el-col>
+
+                </el-row>
+
+
+                <el-drawer
+                    :title="drawerTitle2"
+                    :visible.sync="drawer2"
+                    :direction="direction2"
+                    size="50%"
+                    :before-close="handleClose">
+
+                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                        <el-col :span="10">
+
+                            <!-- <el-input
+                                placeholder="输入您想查找的考试项"
+                                style="margin-bottom: 10px;"
+                                v-model="filterTextExam">
+                            </el-input> -->
+
+                            <el-tree
+                                ref="treeExam"
+                                :data="treeDataExam"
+                                show-checkbox
+                                style="margin-left: 0px;"
+                                node-key="uuid"
+                                :check-strictly="true"
+                                :default-expanded-keys="defaultExpandedKeysExam"
+                                :default-checked-keys="defaultCheckedKeysExam"
+                                @check="handleCheckChangeExam"
+                                :props="defaultPropsExam"
+                            >
+                            </el-tree>
+
+                        </el-col>
+
+                        <el-col :span="13" :offset="1">
+                        
+                            <el-table
+                                border
+                                :data="tableDataExam"
+                            >
+
+                                <el-table-column
+                                    :prop="item.props"
+                                    :label="item.label"
+                                    v-for="(item, index) in columnList1"
+                                    :key="index">
+                                </el-table-column>
+
+                                <el-table-column prop="limitLimit" label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" type="text" @click="handleDeleteClickExam(scope.row)">移除</el-button>
+                                    </template>
+                                </el-table-column>
+
+                            </el-table>
+
+                        </el-col>
+
+                    </el-row>
+
+                    <el-button type="primary" style="margin: 0 20px;" @click="addExam">确定</el-button>
+                    
+                </el-drawer>
+
+
+                <el-row class="tab-title" style="margin-top: 20px;">
+
+                    <el-col class="tab-title-div">数据组与溢出</el-col>
+
+                </el-row>
+
+                <el-row style="margin-top: 10px;">
+
+                    <el-col :span="18">
+
+                        <el-table
+                            :data="dataSetList"
+                            :show-header="false"
+                            border
+                            >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '200' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+
+                    <el-col :span="5" :offset="1">
+
+                        <el-button type="primary" @click="editDataSetClick">修改数据组</el-button>
+
+                    </el-col>
+
+                </el-row>
+
+
+                <el-drawer
+                    :title="drawerTitle3"
+                    :visible.sync="drawer3"
+                    :direction="direction3"
+                    size="50%"
+                    :before-close="handleClose">
+
+                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                        <el-col :span="10">
+
+                            <!-- <el-input
+                                placeholder="输入您想查找的考试项"
+                                style="margin-bottom: 10px;"
+                                v-model="filterTextExam">
+                            </el-input> -->
+
+                            <el-tree
+                                ref="treeSet"
+                                :data="treeDataSet"
+                                show-checkbox
+                                style="margin-left: 0px;"
+                                node-key="uuid"
+                                :check-strictly="true"
+                                :default-expanded-keys="defaultExpandedKeysSet"
+                                :default-checked-keys="defaultCheckedKeysSet"
+                                @check="handleCheckChangeSet"
+                                :props="defaultPropsSet"
+                            >
+                            </el-tree>
+
+                        </el-col>
+
+                        <el-col :span="13" :offset="1">
+                        
+                            <el-table
+                                border
+                                :data="tableDataSet"
+                            >
+
+                                <el-table-column
+                                    :prop="item.props"
+                                    :label="item.label"
+                                    v-for="(item, index) in columnList1"
+                                    :key="index">
+                                </el-table-column>
+
+                                <el-table-column prop="limitLimit" label="操作">
+                                    <template slot-scope="scope">
+                                        <el-button size="mini" type="text" @click="handleDeleteClickSet(scope.row)">移除</el-button>
+                                    </template>
+                                </el-table-column>
+
+                            </el-table>
+
+                        </el-col>
+
+                    </el-row>
+
+                    <el-button type="primary" style="margin: 0 20px;" @click="addSet">确定</el-button>
+                    
+                </el-drawer>
+
+                <el-button type="primary" @click="onSubmit" class="btn-ok">保存</el-button>
+
+            </el-main>
+
+        </el-container>
+        
+    </div>
+</template>
+
+<script>
+import { getPermission, getPermissionUpdate } from '../../request/api';
+import { peopleTreeFunc, peopleArrExp, removeEvery, ExamArrExp, ExamTreeFunc, quchong, SetArrExp, SetTreeFunc } from '../../assets/js/common';
+export default {
+    name: 'peopleDataPermiss',
+    data() {
+        return {
+            userUuid: this.$route.query.uuid,
+            userList: [
+                { attr: '姓名', attrText: '' },
+                { attr: '手机号码', attrText: '' },
+                { attr: '隶属部门', attrText: '' },
+                { attr: '后台角色', attrText: '' },
+            ],
+            schoolList: [
+                { attr: '管理分校', attrData: [], attrText: '' },
+            ],
+            seatList: [
+                { attr: '管理部门与人员', attrData: [], attrText: '' },
+            ],
+            backList: [
+                { attr: '管理考试项', attrData: [], attrText: '' },
+            ],
+            dataSetList: [
+                { attr: '管理数据组', attrData: [], attrText: '' },
+            ],
+            userColumnList: [
+                { 'prop': 'attr', 'label': 'attr' },
+                { 'prop': 'attrText', 'label': 'attrText' },
+            ],
+            drawerTitle1: '配置部门与人员',
+            drawer1: false,
+            direction1: 'rtl',
+            filterText: '',
+            treeData: [],
+            json: null,
+            defaultExpandedKeys: [],
+            defaultCheckedKeys: [],
+            tableData: [],
+            defaultProps: {
+              children: 'list',
+              label: 'name',
+            },
+            columnList1: [
+                { props: 'name', label: '姓名'},
+            ],
+            drawerTitle2: '配置考试项目',
+            drawer2: false,
+            direction2: 'rtl',
+            filterTextExam: '',
+            treeDataExam: [],
+            jsonExam: null,
+            defaultExpandedKeysExam: [],
+            defaultCheckedKeysExam: [],
+            tableDataExam: [],
+            defaultPropsExam: {
+              children: 'list',
+              label: 'name',
+            },
+            drawerTitle3: '配置数据组',
+            drawer3: false,
+            direction3: 'rtl',
+            filterTextSet: '',
+            treeDataSet: [],
+            jsonSet: null,
+            defaultExpandedKeysSet: [],
+            defaultCheckedKeysSet: [],
+            tableDataSet: [],
+            defaultPropsSet: {
+              children: 'list',
+              label: 'name',
+            },
+            onSubmitList: [],
+            drawer0: false,
+            drawerTitle0: '选择分校',
+            direction0: 'rtl',
+            tableDataSchool: [],
+            tableDataSchoolFlagArr: [],
+        }
+    },
+    created() {
+        if((this.$route.query.uuid == '') || (this.$route.query.uuid == undefined)){
+            this.$router.push({ path: '/' });
+        }else{
+            this.getPermission();
+        }
+    },
+    methods: {
+        getPermission() {
+            let keysArr = [];
+            let keysArrExam = [];
+            let keysArrSet = [];
+            
+            peopleArrExp.length = 0;
+            ExamArrExp.length = 0;
+            SetArrExp.length = 0;
+
+            this.seatList[0].attrText = '';
+            this.backList[0].attrText = '';
+            this.dataSetList[0].attrText = '';
+            this.schoolList[0].attrText = '';
+            this.seatList[0].attrData = [];
+            this.backList[0].attrData = [];
+            this.dataSetList[0].attrData = [];
+            this.schoolList[0].attrData = [];
+            this.$smoke_post(getPermission, {
+                userUuid: this.userUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.userList[0].attrText = res.data.user.name;
+                    this.userList[1].attrText = res.data.user.accountNumber;
+                    this.userList[2].attrText = res.data.user.orgList.join(' - ');
+                    this.userList[3].attrText = res.data.user.roleList.join('，');
+
+                    // seatList
+                    this.json = peopleTreeFunc(res.data.orgList);
+                    this.treeData = this.json.arr;
+                    this.seatList[0].attrData = this.json.flagArr = quchong(this.json.flagArr, 'uuid');
+                    console.log(this.json.arr);
+                    if(this.json.flagArr.length > 0) {
+                        this.json.flagArr.map(sll => {
+                            this.seatList[0].attrText += sll.name + '，'
+                            keysArr.push(sll.uuid);
+                        })
+                    }
+                    if (this.seatList[0].attrText.length > 0) {
+                        this.seatList[0].attrText = this.seatList[0].attrText.substr(0, this.seatList[0].attrText.length - 1);
+                    }
+                    this.defaultExpandedKeys = this.defaultCheckedKeys = keysArr;
+
+                    //examItem
+                    this.jsonExam = ExamTreeFunc([res.data.examItem]);
+                    this.treeDataExam = this.jsonExam.arr;
+                    this.backList[0].attrData = this.jsonExam.flagArr = quchong(this.jsonExam.flagArr, 'uuid');
+                    console.log(this.jsonExam.flagArr);
+                    if(this.jsonExam.flagArr.length > 0) {
+                        this.jsonExam.flagArr.map(sll => {
+                            this.backList[0].attrText += sll.name + '，'
+                            keysArrExam.push(sll.uuid);
+                        })
+                    }
+                    if (this.backList[0].attrText.length > 0) {
+                        this.backList[0].attrText = this.backList[0].attrText.substr(0, this.backList[0].attrText.length - 1);
+                    }
+                    this.defaultExpandedKeysExam = this.defaultCheckedKeysExam = keysArrExam;
+
+                    //clueDataList
+                    this.jsonSet = SetTreeFunc([res.data.clueDataList]);
+                    this.treeDataSet = this.jsonSet.arr;
+                    this.dataSetList[0].attrData = this.jsonSet.flagArr = quchong(this.jsonSet.flagArr, 'uuid');
+                    console.log(this.jsonSet.flagArr);
+                    if(this.jsonSet.flagArr.length > 0) {
+                        this.jsonSet.flagArr.map(sll => {
+                            this.dataSetList[0].attrText += sll.name + '，'
+                            keysArrSet.push(sll.uuid);
+                        })
+                    }
+                    if (this.dataSetList[0].attrText.length > 0) {
+                        this.dataSetList[0].attrText = this.dataSetList[0].attrText.substr(0, this.dataSetList[0].attrText.length - 1);
+                    }
+                    this.defaultExpandedKeysSet = this.defaultCheckedKeysSet = keysArrSet;
+
+                    this.tableDataSchool = res.data.schoolList;
+                    res.data.schoolList.map(sll => {
+                        if(sll.flag) {
+                            this.schoolList[0].attrText += sll.name + '，';
+                            this.tableDataSchoolFlagArr.push(sll);
+                            this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
+                        }
+                    });
+                    this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+                }
+            })
+        },
+        toggleSelection(rowArr, selected) {
+            let that = this;
+            that.$nextTick(function() {
+                rowArr.map(sll => {
+                    that.$refs.multipleTable.toggleRowSelection(sll, selected);
+                })
+            })
+        },
+        getCheckedNodes() {
+            let arr = [];
+            this.$nextTick(() => {
+                console.log(this.$refs.tree.getCheckedNodes());
+                this.$refs.tree.getCheckedNodes().map(sll => {
+                    arr.push(sll);
+                })
+                this.tableData = arr;
+                peopleArrExp.length = 0; //将common.js里的peopleArrExp数组重新重置为空
+            })
+        },
+        getCheckedNodesExam() {
+            let arr = [];
+            this.$nextTick(() => {
+                console.log(this.$refs.treeExam.getCheckedNodes());
+                this.$refs.treeExam.getCheckedNodes().map(sll => {
+                    arr.push(sll);
+                })
+                this.tableDataExam = arr;
+                ExamArrExp.length = 0; //将common.js里的ExamArrExp数组重新重置为空
+            })
+        },
+        getCheckedNodesSet() {
+            let arr = [];
+            this.$nextTick(() => {
+                console.log(this.$refs.treeSet.getCheckedNodes());
+                this.$refs.treeSet.getCheckedNodes().map(sll => {
+                    arr.push(sll);
+                })
+                this.tableDataSet = arr;
+                SetArrExp.length = 0; //将common.js里的SetArrExp数组重新重置为空
+            })
+        },
+        onSubmit() {
+            this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.tableDataSchoolFlagArr);
+            this.$smoke_post(getPermissionUpdate, {
+                list: this.onSubmitList,
+                userUuid: this.userUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '保存成功', 
+                    });
+                    setTimeout(() => {
+                        this.$router.push({
+                            path: '/base/people',
+                        })
+                    }, 300)
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg, 
+                    });
+                }
+            })
+        },
+        editSchoolClick() {
+            this.drawer0 = true;
+            this.toggleSelection(this.tableDataSchoolFlagArr, true);
+        },
+        editPeopleClick() {
+            this.drawer1 = true;
+            this.getCheckedNodes();
+        },
+        editBackClick() {
+            this.drawer2 = true;
+            this.getCheckedNodesExam();
+        },
+        editDataSetClick() {
+            this.drawer3 = true;
+            this.getCheckedNodesSet();
+        },
+        handleClose(done) {
+            done();
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
+        },
+        handleCheckChange(data, value) {
+            console.log(data);
+            console.log(value);
+            this.getCheckedNodes();
+        },
+        handleCheckChangeExam(data, value){
+            this.getCheckedNodesExam();
+        },
+        handleCheckChangeSet(data, value) {
+            this.getCheckedNodesSet();
+        },
+        addPeople() {
+            this.seatList[0].attrText = '';
+            this.seatList[0].attrData = this.$refs.tree.getCheckedNodes();
+            this.$refs.tree.getCheckedNodes().map(sll => {
+                this.seatList[0].attrText += sll.name + '，'
+            })
+            if (this.seatList[0].attrText.length > 0) {
+                this.seatList[0].attrText = this.seatList[0].attrText.substr(0, this.seatList[0].attrText.length - 1);
+            }
+            this.drawer1 = false;
+            console.log(this.seatList);
+        },
+        addExam() {
+            this.backList[0].attrText = '';
+            this.backList[0].attrData = this.$refs.treeExam.getCheckedNodes();
+            this.$refs.treeExam.getCheckedNodes().map(sll => {
+                this.backList[0].attrText += sll.name + '，'
+            })
+            if (this.backList[0].attrText.length > 0) {
+                this.backList[0].attrText = this.backList[0].attrText.substr(0, this.backList[0].attrText.length - 1);
+            }
+            this.drawer2 = false;
+            console.log(this.backList);
+        },
+        addSet() {
+            this.dataSetList[0].attrText = '';
+            this.dataSetList[0].attrData = this.$refs.treeSet.getCheckedNodes();
+            this.$refs.treeSet.getCheckedNodes().map(sll => {
+                this.dataSetList[0].attrText += sll.name + '，'
+            })
+            if (this.dataSetList[0].attrText.length > 0) {
+                this.dataSetList[0].attrText = this.dataSetList[0].attrText.substr(0, this.dataSetList[0].attrText.length - 1);
+            }
+            this.drawer3 = false;
+            console.log(this.dataSetList);
+        },
+        addSchool() {
+
+            if(this.tableDataSchoolFlagArr.length == 1) {
+
+                this.schoolList[0].attrText = '';
+                this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
+                this.schoolList[0].attrData.map(sll => {
+                    this.schoolList[0].attrText += sll.name + '，'
+                })
+                if (this.schoolList[0].attrText.length > 0) {
+                    this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+                }
+                this.drawer0 = false;
+                console.log(this.tableDataSchoolFlagArr);
+
+            }else if(this.tableDataSchoolFlagArr.length == 0){
+                
+                this.$message({
+                    type: 'error',
+                    message: '分校权限不能为空', 
+                });
+
+            }else{
+
+                this.$message({
+                    type: 'error',
+                    message: '分校权限是唯一选项', 
+                });
+
+            }
+        },
+        handleDeleteClick(row) {
+            console.log(row);
+            let arrKey = []; //当前人员或组织的key的集合
+            let arr = []; //当前人员或组织的Nodes的集合
+            arr = removeEvery(row, this.$refs.tree.getCheckedNodes());
+            console.log(arr);
+            arr.map(sll => {
+                arrKey.push(sll.uuid);
+            })
+            this.$nextTick(() => {
+                this.$refs.tree.setCheckedKeys(arrKey, true);
+                this.tableData = arr;
+            })
+        },
+        handleDeleteClickExam(row) {
+            console.log(row);
+            let arrKey = []; //当前考试项的key的集合
+            let arr = []; //当前考试项的Nodes的集合
+            arr = removeEvery(row, this.$refs.treeExam.getCheckedNodes());
+            console.log(arr);
+            arr.map(sll => {
+                arrKey.push(sll.uuid);
+            })
+            this.$nextTick(() => {
+                this.$refs.treeExam.setCheckedKeys(arrKey, true);
+                this.tableDataExam = arr;
+            })
+        },
+        handleDeleteClickSet(row) {
+            console.log(row);
+            let arrKey = []; //当前数据组的key的集合
+            let arr = []; //当前数据组的Nodes的集合
+            arr = removeEvery(row, this.$refs.treeSet.getCheckedNodes());
+            console.log(arr);
+            arr.map(sll => {
+                arrKey.push(sll.uuid);
+            })
+            this.$nextTick(() => {
+                this.$refs.treeSet.setCheckedKeys(arrKey, true);
+                this.tableDataSet = arr;
+            })
+        },
+        handleSelectionChange(val) {
+            console.log(val);
+            this.tableDataSchoolFlagArr = val;
+        }
+    },
+    mounted() {
+        
+    },
+    watch: {
+        filterText(val) {
+            this.$refs.tree.filter(val);
+        },
+    },
+}
+</script>
+
+<style lang="less" scoped>
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: calc( 100vw - 3.8rem);
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #fff;
+            margin-bottom: .3rem;
+            color: #666666;
+            font-weight: bold;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
+            }
+        }
+        .tab-title{
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 14px;
+            .tab-title-div{
+                width: 200px;
+                background: #fff;
+                font-weight: bold;
+                color: orange;
+            }
+        }
+        .note{
+            height: 40px; 
+            line-height: 40px; 
+            color: green; 
+            font-size: 14px;
+        }
+        .btn-ok{
+            width: 120px;
+            position: relative;
+            left: 50%;
+            margin-left: -60px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    }
+    .el-pagination{
+        text-align: right;
+        margin-top: .4rem;
+    }
+    /* //element-ui table的去除右侧滚动条的样式 */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 1px;
+    }
+        /* // 滚动条的滑块 */
+    ::-webkit-scrollbar-thumb {
+        background-color: #a1a3a9;
+        border-radius: 8px;
+    }
+</style>

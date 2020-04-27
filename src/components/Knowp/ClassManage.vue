@@ -12,18 +12,20 @@
                   :data="classList"
                   row-key="uuid"
                   default-expand-all
+                  :indent="35"
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-                  style="width: calc( 100vw - 3.65rem)">
-                  <el-table-column
+                  style="width: calc( 100vw - 3.8rem)">
+                  <af-table-column
                     :prop="item.prop"
                     :label="item.label"
                     v-for="(item, index) in columnList"
                     :key="index"
+                    :width="index == 0 ? '500' : null"
                     >
-                  </el-table-column>
+                  </af-table-column>
                   <el-table-column prop="active" label="操作" min-width="150%">
                     <template slot-scope="scope">
-                        <el-button @click="editClick(scope.row)" type="text" size="small">编辑</el-button>
+                        <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
                         <el-popover
                           placement="top"
                           width="200"
@@ -35,11 +37,11 @@
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="deleteAll(scope)">确定</el-button>
                           </div>
-                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button @click="addClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
-                        <el-button v-if="!scope.row.sortUpFlag" @click="sortNumber(scope.row, 'up')" type="text" size="small">排序向上</el-button>
-                        <el-button v-if="!scope.row.sortDownFlag" @click="sortNumber(scope.row, 'down')" type="text" size="small">排序向下</el-button>
+                        <el-button @click="addClick(scope.row)" type="text"  style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
+                        <el-button v-if="!scope.row.sortUpFlag" @click="sortNumber(scope.row, 'up')" type="text" >排序向上</el-button>
+                        <el-button v-if="!scope.row.sortDownFlag" @click="sortNumber(scope.row, 'down')" type="text" >排序向下</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -49,7 +51,7 @@
                     layout="total, sizes, prev, pager, next, jumper"
                     :total='total'
                     :page-size='classForm.pageSize'
-                    :page-sizes="[8, 10, 20, 30]"
+                    :page-sizes="[10, 20, 30]"
                     :hide-on-single-page="totalFlag"
                     @current-change="handleCurrentChange"
                     @size-change="handleSizeChange"
@@ -102,6 +104,7 @@
                 :visible.sync="drawer2"
                 :direction="direction"
                 :before-close="handleClose"
+                size="40%"
                 >
                     <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                         
@@ -129,6 +132,34 @@
 
                         <el-form-item label="考试项类名" prop="name">
                           <el-input v-model="ruleForm2.name"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="创建考试品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
+                          <el-row>
+                              <el-col :span="18"><el-input v-model="categoryAll.categoryNameAdd"></el-input></el-col>
+                              <el-col :span="5" :offset="1"><el-button type="primary" @click="categoryNameAdd">确定</el-button></el-col>
+                          </el-row>
+                        </el-form-item>
+
+                        <el-form-item label="编辑考试品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
+                          <el-row>
+                              <el-col :span="18"><el-input v-model="categoryAll.categoryNameEdit"></el-input></el-col>
+                              <el-col :span="5" :offset="1"><el-button type="primary" @click="categoryNameEdit">确定</el-button></el-col>
+                          </el-row>
+                        </el-form-item>
+
+                        <el-form-item label="考试项目品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
+                            <el-tag
+                                style="margin-right: .2rem; cursor: pointer;" 
+                                v-for="tag in categoryList"
+                                :key="tag.uuid"
+                                closable
+                                :disable-transitions="false"
+                                @close="tagDel(tag)"
+                                @click="tagClick(tag)"
+                                >
+                                {{tag.name}}
+                            </el-tag>
                         </el-form-item>
 
                         <el-form-item label="用户开放" prop="switch1">
@@ -238,6 +269,11 @@ import {
     sortNumber1,
     sortNumber2,
     sortNumberSubjectRelation,
+    addExamCategory,
+    updateExamCategory,
+    getExamCategoryByExamUuid,
+    getExamCategoryByUuid,
+    deleteExamCategory,
     addExamDirection // 新增考试项接口
 } from '../../request/api';
 import { classTextById, sortNumberMove } from '../../assets/js/common';
@@ -282,6 +318,7 @@ export default {
                 classifyUuid: '', //考试分类的uuid
                 emphasisStatus: 0, //重点的状态（1：勾选 0：未勾选）
                 name: '', //考试方向名称
+                categoryName: '', //考试项目品类
                 uuid: '',
                 userOpenStatus: 0, //用户开放的状态（1：开放 0：未开放）
             },
@@ -304,6 +341,13 @@ export default {
             },
             restaurants: [],
             subjectText: '',
+            categoryList: [],
+            categoryAll: {
+                categoryType: 'add',
+                categoryUuid: '',
+                categoryNameAdd: '',
+                categoryNameEdit: '',
+            }
         }
     },
     created() {
@@ -498,6 +542,7 @@ export default {
                     console.log(this.ruleForm2);
                     if(this.drawerTitle2 == '创建考试项目'){
                         this.addExamDirection();
+                        
                     }else{
                         this.updateExamDirection();
                     }
@@ -610,6 +655,12 @@ export default {
                         message: '删除成功', 
                     });
                     this.getKnowledgeStructure();
+                }else{
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.$message({
+                        type: 'error',
+                        message: res.msg, 
+                    });
                 }
             })
         },
@@ -673,6 +724,9 @@ export default {
                 this.ruleForm2.name = row.name;
                 this.ruleForm2.uuid = row.uuid;
                 this.getExamDirectionByUuid();
+                this.getExamCategoryByExamUuid();
+                this.categoryAll.categoryNameAdd = '';
+                this.categoryAll.categoryNameEdit = '';
             }else if(row.level == '科目') {
                 this.drawer3 = true;
                 this.drawerTitle3 = '编辑' + row.name;
@@ -713,6 +767,87 @@ export default {
                 this.drawer2 = false;
                 this.getKnowledgeStructure();
             })
+        },
+        categoryNameAdd() {
+            this.categoryNameAdd();
+        },
+        categoryNameEdit() {
+            this.updateExamCategory();
+        },
+        categoryNameAdd() {
+            this.$smoke_post(addExamCategory, {
+                examDirectionUuid: this.ruleForm2.uuid,
+                name: this.categoryAll.categoryNameAdd
+            }).then(res => {
+                console.log(res);
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '添加成功',
+                    });
+                    this.getExamCategoryByExamUuid();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg,
+                    });
+                }
+            })  
+        },
+        getExamCategoryByExamUuid() {
+            this.$smoke_post(getExamCategoryByExamUuid, {
+                uuid: this.ruleForm2.uuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.categoryList = res.data
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg,
+                    });
+                }
+            })
+        },
+        tagDel(tag) {
+            console.log(tag);
+            this.deleteExamCategory(tag);
+        },
+        tagClick(tag) {
+            this.categoryAll.categoryNameEdit = tag.name;
+            this.categoryAll.categoryType = 'edit';
+            this.categoryAll.categoryUuid = tag.uuid;
+        },
+        updateExamCategory() {
+            this.$smoke_post(updateExamCategory, {
+                name: this.categoryAll.categoryNameEdit,
+                uuid: this.categoryAll.categoryUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '编辑成功',
+                    });
+                    this.getExamCategoryByExamUuid();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg,
+                    });
+                }
+            })
+        },
+        deleteExamCategory(tag) {
+            this.$smoke_post(deleteExamCategory, {
+                uuid: tag.uuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功',
+                    });
+                    this.getExamCategoryByExamUuid();
+                }
+            })
         }
     },
     mounted() {
@@ -722,17 +857,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .el-main{
-        // background: grey;
-    }
     .index-main{
         height: calc( 100vh - 60px);
         .people-title{
             width: 100%;
-            height: .6rem;
-            line-height: .6rem;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            font-size: .2rem;
+            font-size: 15px;
             background: #aaa;
             margin-bottom: .3rem;
             color: #fff;

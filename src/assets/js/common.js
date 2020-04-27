@@ -1,7 +1,11 @@
 export const getTextByJs = (arr) => {
     let str = "";
     for (var i = 0; i < arr.length; i++) {
-        str += arr[i].name+ "，";
+        if(arr[i].name == undefined){
+            str = '';
+        }else{
+            str += arr[i].name+ "，";
+        }
     }
     //去掉最后一个逗号(如果不需要去掉，就不用写)
     if (str.length > 0) {
@@ -35,17 +39,169 @@ export const getTextByTime = (state, state1, state2, text1, text2) => {
 
 export const timestampToTime = (timestamp) => {
     if(timestamp == '' || timestamp == 0){
-        return '';
+        return '- -';
     }else{
         var date = timestamp.length == 10 ? new Date(timestamp * 1000) : new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
         var Y = date.getFullYear() + '-';
         var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-        var D = date.getDate() + ' ';
+        var D = (date.getDate() + 1 < 11 ? '0' + date.getDate() : date.getDate()) + ' ';
         var h = date.getHours() + ':';
-        var m = date.getMinutes() + ':';
-        var s = date.getSeconds();
+        var m = (date.getMinutes() + 1 < 11 ? '0' + date.getMinutes()  : date.getMinutes()) + ':'
+        var s = (date.getSeconds() + 1 < 11 ? '0' + date.getSeconds() : date.getSeconds());
         return Y + M + D + h + m + s;
     }
+}
+
+export const backType = (type) => {
+    let str = '';
+    if(type == '1'){
+        str = '首咨';
+    }else if(type == '2'){
+        str = '回收池';
+    }
+    return str;
+}
+
+export const smoke_MJ_5 = (type) => {
+    let str = '';
+    if(type == '1'){
+        str = 'A+';
+    }else if(type == '2'){
+        str = 'A';
+    }else if(type == '3'){
+        str = 'B';
+    }else if(type == '4'){
+        str = 'C';
+    }else if(type == '5'){
+        str = 'D';
+    }else if(type == '6'){
+        str = 'E';
+    }
+    return str;
+}
+
+export const genderText = (id) => {
+    let str;
+    switch (id) {
+        case 0:
+            str = '女';
+            break;
+        case 1:
+            str = '男';
+            break;
+        case 2:
+            str = '';
+            break;
+    }
+    return str;
+}
+
+export const smoke_MJ_6 = (type) => {
+    let str = '';
+    if(type == '1'){
+        str = '百度信息流';
+    }else if(type == '2'){
+        str = '头条信息流';
+    }else if(type == '3'){
+        str = '自制推广页';
+    }else if(type == '4'){
+        str = '京华官网';
+    }else if(type == '5'){
+        str = '京华APP';
+    }else if(type == '6'){
+        str = '京华小程序';
+    }else if(type == '7'){
+        str = '京华公众号';
+    }else if(type == '8'){
+        str = '胜学官网';
+    }else if(type == '9'){
+        str = '集团官网';
+    }
+    return str;
+}
+
+export const smoke_MJ_4 = (type) => {
+    let str;
+    switch (type) {
+        case 1:
+            str = '座机外呼';
+            break;
+        case 2:
+            str = '微信沟通';
+            break;
+        case 3:
+            str = '手机外呼';
+            break;
+        case 0:
+            str = '其他';
+            break;
+    }
+    return str;
+}
+
+export const pathWayText = (type) => {
+    let str = '';
+    if(type == 1){
+        str = '呼叫中心';
+    }else if(type == 2){
+        str = '工作手机';
+    }
+    return str;
+}
+
+export const classTypeText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '2019年一级注册消防工程师【300分梦想签约班】';
+            break;
+        case 2:
+            str = '2019年一级注册消防工程师【名师冠名取证班】';
+            break;
+        case 3:
+            str = '2019年一级注册消防工程师【300小时集训班】';
+            break;
+    }
+    return str;
+}
+
+export const classTypeString = (id) => {
+    let str;
+    switch (id) {
+        case 0:
+            str = '普通班';
+            break;
+        case 1:
+            str = '高端班';
+            break;
+    }
+    return str;
+}
+
+export const orderTypeText = (id) => {
+    let str;
+    switch (id) {
+        case 0:
+            str = '普通单';
+            break;
+        case 1:
+            str = '定金单';
+            break;
+        case 2:
+            str = '尾款单';
+            break;
+    }
+    return str;
+}
+
+export const backEnable = (enable) => {
+    let str = '';
+    if(enable == '1'){
+        str = '开启';
+    }else if(enable == '0'){
+        str = '关闭';
+    }
+    return str;
 }
 
 // 去重数组中的对象
@@ -72,7 +228,7 @@ export const deteleObject = (obj) => {
 }
 
 // 删除数组中的某一个对象
-export const removeAaary = (_arr, _obj) => {
+export const removeObject = (_arr, _obj) => {
     var length = _arr.length;
     for (var i = 0; i < length; i++) {
         if (_arr[i] == _obj) {
@@ -91,7 +247,13 @@ export const removeAaary = (_arr, _obj) => {
         }
     }
 }
- 
+
+//删除数组中的指定元素
+export const removeEvery = (str, arr) => {
+    const index = arr.indexOf(str);
+    arr.splice(index, 1);
+    return arr;
+}
 
 export const classTextById = (id) => {
     let str;
@@ -112,6 +274,68 @@ export const classTextById = (id) => {
     return str;
 }
 
+export const workingLifeText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '尚未工作';
+            break;
+        case 2:
+            str = '1年';
+            break;
+        case 3:
+            str = '2年';
+            break;
+        case 4:
+            str = '3年';
+            break;
+        case 5:
+            str = '4年';
+            break;
+        case 6:
+            str = '5年';
+            break;
+        case 7:
+            str = '6年';
+            break;
+        case 8:
+            str = '7年';
+            break;
+        case 9:
+            str = '8年';
+            break;
+        case 10:
+            str = '9年';
+            break;
+        case 11:
+            str = '10年';
+            break;
+        case 12:
+            str = '10年以上';
+            break;
+    }
+    return str;
+}
+
+export const evidencePurposeText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '获取额外收入';
+            break;
+        case 2:
+            str = '工作使用';
+            break;
+        case 3:
+            str = '充实学习';
+            break;
+        case 4:
+            str = '其它';
+            break;
+    }
+    return str;
+}
+
 export const emphasisLevelByText = (id) => {
     let str;
     switch (id) {
@@ -126,6 +350,25 @@ export const emphasisLevelByText = (id) => {
             break;
         case 4:
             str = 'D';
+            break;
+    }
+    return str;
+}
+
+export const sortTextNum = (text) => {
+    let str;
+    switch (text) {
+        case 'jobNumber':
+            str = 0;
+            break;
+        case 'name':
+            str = 1;
+            break;
+        case 'hiredDate':
+            str = 2;
+            break;
+        case 'jobStatus':
+            str = 3;
             break;
     }
     return str;
@@ -196,5 +439,244 @@ export const sortNumberMove = (arr, scope, move) => {
             })
         }
     })
+    return json;
+}
+
+export const formatSeconds = (value) => {
+	var theTime = parseInt(value);
+	var theTime1 = 0;
+	var theTime2 = 0;
+
+	if(theTime >= 60) {
+		theTime1 = parseInt(theTime / 60);
+		theTime = parseInt(theTime % 60);
+		if(theTime1 >= 60) {
+			theTime2 = parseInt(theTime1 / 60);
+			theTime1 = parseInt(theTime1 % 60);
+		}
+	}
+	if(theTime < 10) {
+		theTime = "0" + parseInt(theTime)
+	}
+	var result = "" + theTime + "";
+	if(theTime1 >= 0) {
+		if(theTime1 < 10) {
+			theTime1 = "0" + parseInt(theTime1)
+		}
+		result = "" + theTime1 + ":" + result;
+	}
+	if(theTime2 >= 0) {
+		if(theTime2 < 10) {
+			theTime2 = "0" + parseInt(theTime2)
+		}
+		result = "" + theTime2 + ":" + result;
+	}
+	return result;
+}
+
+export const vedioTypeText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '录播课时';
+            break;
+        case 2:
+            str = '直播回放';
+            break;
+        case 3:
+            str = '短视频';
+            break;
+    }
+    return str;
+}
+
+export const stateText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '开启';
+            break;
+        case 0:
+            str = '关闭';
+            break;
+    }
+    return str;
+}
+
+export const managerName = (arr) => {
+    let str = "";
+    for (var i = 0; i < arr.length; i++) {
+        str += arr[i]+ "，";
+    }
+    //去掉最后一个逗号(如果不需要去掉，就不用写)
+    if (str.length > 0) {
+        str = str.substr(0, str.length - 1);
+    }else{
+        str = '暂无';
+    }
+    return str;
+}
+
+export const quchong = (arr, name) =>{
+    var hash = {};
+    return arr.reduce(function (item, next) {
+      hash[next[name]] ? '' : hash[next[name]] = true && item.push(next);
+      return item;
+    }, []);
+}
+
+export const pushPeopleFunc = (arr) => {
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            arr[i].userList.map(sll => {
+                sll.orgName = sll.userName;
+                sll.orgUuid = sll.userUuid
+            })
+            arr[i].list = arr[i].list.concat(arr[i].userList);
+            pushPeopleFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    return arr;
+}
+
+export let flagArrAll = []; //默认展开分配人员数组
+export const treeFunc = (arr) => {
+    let json = {
+        'arr': null,
+        'flagArr': null,
+    }
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            arr[i].userList.map(sll => {
+                sll.orgName = sll.userName;
+                sll.orgUuid = sll.userUuid
+                if(sll.flag){
+                    // console.log(sll.userUuid);
+                    flagArrAll.push(sll.userUuid);
+                }
+            })
+            arr[i].list = arr[i].list.concat(arr[i].userList);
+            treeFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    json.arr = arr;
+    json.flagArr = flagArrAll;
+    return json;
+}
+
+export let teacherArrExp = []; //默认展开班主任数组
+export const teacherTreeFunc = (arr) => {
+    let json = {
+        'arr': null,
+        'flagArr': null,
+    }
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            arr[i].classTeacherBasicList.map(sll => {
+                sll.orgName = sll.userName;
+                sll.orgUuid = sll.userUuid
+                if(sll.flag){
+                    // console.log(sll.userUuid);
+                    teacherArrExp.push(sll.userUuid);
+                }
+                if(sll.studentNum > 0 && sll.flag) {
+                    sll.disabled = true;
+                }
+            })
+            arr[i].list = arr[i].list.concat(arr[i].classTeacherBasicList);
+            teacherTreeFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    json.arr = arr;
+    json.flagArr = teacherArrExp;
+    return json;
+}
+
+
+export let peopleArrExp = []; //默认展开人员数组
+export const peopleTreeFunc = (arr) => {
+    let json = {
+        'arr': null,
+        'flagArr': null,
+    }
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            if(arr[i].flag) {
+                peopleArrExp.push({ name: arr[i].name, type: arr[i].type, uuid: arr[i].uuid});
+            }
+            arr[i].userList.map(sll => {
+                if(sll.flag){
+                    // console.log(sll.userUuid);
+                    peopleArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
+                }
+            })
+            arr[i].list = arr[i].list.concat(arr[i].userList);
+            peopleTreeFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    json.arr = arr;
+    json.flagArr = peopleArrExp;
+    return json;
+}
+
+export let ExamArrExp = []; //默认展开人员数组
+export const ExamTreeFunc = (arr) => {
+    let json = {
+        'arr': null,
+        'flagArr': null,
+    }
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            if(arr[i].flag) {
+                ExamArrExp.push({ name: arr[i].name, type: arr[i].type, uuid: arr[i].uuid});
+            }
+            arr[i].list.map(sll => {
+                if(sll.flag){
+                    // console.log(sll.userUuid);
+                    ExamArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
+                }
+            })
+            ExamTreeFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    json.arr = arr;
+    json.flagArr = ExamArrExp;
+    return json;
+}
+
+export let SetArrExp = []; //默认展开人员数组
+export const SetTreeFunc = (arr) => {
+    let json = {
+        'arr': null,
+        'flagArr': null,
+    }
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            if(arr[i].flag) {
+                SetArrExp.push({ name: arr[i].name, type: arr[i].type, uuid: arr[i].uuid});
+            }
+            arr[i].list.map(sll => {
+                if(sll.flag){
+                    // console.log(sll.userUuid);
+                    SetArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
+                }
+            })
+            SetTreeFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    json.arr = arr;
+    json.flagArr = SetArrExp;
     return json;
 }

@@ -11,7 +11,8 @@
 
                 <el-table
                   :data="menuList"
-                  style="width: calc( 100vw - 3.65rem)"
+                  style="width: calc( 100vw - 3.8rem)"
+                  v-loading="fullscreenLoading"
                   row-key="uuid"
                   default-expand-all
                   :tree-props="{children: 'children', hasChildren: 'hasChildren'}"  
@@ -25,7 +26,7 @@
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleUpdataClick(scope.row)" type="text" size="small">修改</el-button>
+                        <el-button @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
                         <el-popover
                           placement="top"
                           width="200"
@@ -37,9 +38,9 @@
                             <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                             <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
                           </div>
-                          <el-button slot="reference" type="text" size="small" style="margin-left: .2rem;">删除</el-button>
+                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                         </el-popover>
-                        <el-button @click="handleAddClick(scope.row)" type="text" size="small" style="margin-left: .2rem;">添加</el-button>
+                        <el-button @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">添加</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -119,7 +120,7 @@ export default {
                 ],
             },
             drawerTitle: '新建菜单',
-
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -194,12 +195,26 @@ export default {
         },
         getMenuDetailsSubsetByUuid() {
             let arr;
+            this.fullscreenLoading = true;
             this.$smoke_post(getMenuDetailsSubsetByUuid, {
                 uuid: ""
             }).then(res => {
                 console.log(res.data);
-                arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
-                this.menuList = arr;
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
+                        this.menuList = arr;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
             })
         },
         addMenu() {
@@ -235,13 +250,14 @@ export default {
             height: calc( 100vh - 60px);
             .people-title{
                 width: 100%;
-                height: .6rem;
-                line-height: .6rem;
+                height: 40px;
+                line-height: 40px;
                 text-align: center;
-                font-size: .2rem;
-                background: #aaa;
+                font-size: 15px;
+                background: #fff;
                 margin-bottom: .3rem;
-                color: #fff;
+                color: #666666;
+                font-weight: bold;
             }
             .people-screen{
                 margin-bottom: .3rem;
@@ -251,20 +267,15 @@ export default {
             }
         }
     }
-</style>
-<style>
-    .el-drawer__header{
-        font-size: 18px !important;
-    }
-    .demo-ruleForm{
-        border: 1px dashed #ccc;
-        padding: .4rem;
-        margin: .2rem;
-    }
-    .el-form-item__label{
-        width: 1.6rem !important;
-    }
-    .el-form-item__content{
-        margin-left: 1.6rem !important;
-    }
+/* //element-ui table的去除右侧滚动条的样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 1px;
+}
+    /* // 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 0px;
+    border-radius: 8px;
+}
 </style>

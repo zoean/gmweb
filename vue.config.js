@@ -12,7 +12,7 @@ module.exports = {
 
     indexPath: 'index.html',
     filenameHashing: true,
-    productionSourceMap: true,
+    productionSourceMap: false,
 
     css: {
         extract: false, // 是否使用css分离插件 ExtractTextPlugin

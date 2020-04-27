@@ -11,6 +11,7 @@ const state = {
     commonFlag: false,//Header+Aside控制
     // oneLogin: false, //是否首次登录(true:是 false:不是)
     userMenuList: [], //用户路由表
+    avatar: '', //用户头像
 }
 
 const mutations = {
@@ -35,6 +36,9 @@ const mutations = {
     setUserMenuList(state,userMenuList){
         return(state.userMenuList = userMenuList);
     },
+    setAvatar(state,avatar){
+        return(state.avatar = avatar);
+    },
 }
 
 const actions = {
@@ -55,6 +59,9 @@ const actions = {
     },
     actionsSetUserMenuList(context, userMenuList) {
         return context.commit('setUserMenuList', userMenuList);
+    },
+    actionsSetAvatar(context, avatar) {
+        return context.commit('setAvatar', avatar);
     },
     // actionsSetOneLogin(context, oneLogin) {
     //     return context.commit('setOneLogin', oneLogin);

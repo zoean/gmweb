@@ -139,3 +139,169 @@ a:link,a:active,a:visited,a:hover {
 .smoke-fff{
     background: #ffffff;
 }
+
+.smoke-left-icon{
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+
+.el-table .one-row {
+    color: #009933;
+    font-size: 18px;
+}
+
+.el-table .two-row {
+    color: #009999;
+    font-size: 16px;
+}
+
+.el-table .three-row {
+    color: #666666;
+}
+
+.el-table .dialState {
+    color: orange;
+}
+
+.el-notification {white-space:pre !important; width: auto !important; }
+
+.el-drawer__header{
+    font-size: 16px !important;
+}
+.demo-ruleForm{
+    border: 1px dashed #ccc;
+    padding: .4rem;
+    margin: .2rem;
+}
+
+.el-drawer__body .el-tree{
+    margin-left: 15px;
+}
+
+.el-menu-item, .el-submenu__title{
+    height: 44px !important;
+    line-height: 44px !important;
+}
+
+.el-form-item{
+    margin-bottom: 12px !important;
+    margin-top: 10px !important;
+}
+
+.el-form-item__label{
+    text-align: right !important;
+    padding-right: 20px !important;
+    width: 120px !important;
+}
+.el-form-item__content{
+    margin-left: 120px !important;
+}
+
+.el-card__body{
+    padding: 0 !important;
+}
+
+.el-drawer__body{
+    overflow-y:scroll;
+}
+.el-drawer__body::-webkit-scrollbar {
+    width: 1px;
+    height: 1px;
+}
+.el-drawer__body::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 0px;
+}
+.el-table .url-column .cell{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.inputNum{
+    width: 80px !important;
+}
+
+.el-select{
+    width: 100%;
+}
+
+:focus{
+    outline:0;
+}
+
+.area-select.large{
+    width: 100% !important;
+}
+.area-select{
+    height: 32px !important;
+    line-height: 32px !important;
+    position: relative;
+    top: 4px;
+}
+
+.area-select .area-selected-trigger{
+    padding: 0px 20px 7px 12px !important;
+}
+
+.cascader-menu-list .cascader-menu-option.selected{
+    color: #409EFF !important;
+}
+
+.el-col-6{
+    height: 54px !important;
+}
+
+.seatData .area-select .area-selected-trigger{
+    padding: 4px 20px 7px 12px !important;
+}
+.seatData{
+    height: 40px !important;
+}
+.seatData .area-cascader-wrap{
+    height: 40px !important;
+}
+.seatData .area-cascader-wrap .area-select{
+    position: relative;
+    top: 0px;
+    height: 40px !important;
+}
+
+.el-form-item__error{
+    padding-top: 0 !important;
+}
+
+/* 边框的border设为none */
+.borderNone input{
+    border: none;
+}
+
+.el-badge__content.is-fixed {
+    top: 18px;
+    right: 6px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

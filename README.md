@@ -49,3 +49,9 @@ this.$smoke_get(`/api`+`${media_info}`).then(res => {
     >{{num.name}}
     </el-menu-item>
 </el-submenu>
+
+this.$forceUpdate(); 强制刷新
+
+@keyup.enter.native="name_search"  标签内添加回车事件
+
+el-autocomplete的一个坑，el-autocomplete显示的时候必须有value字段，可以在返回的对象里面手动添加一个value属性，item.value = item.name;

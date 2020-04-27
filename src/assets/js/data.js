@@ -30,35 +30,40 @@ export const columnListYes = [
 ]
 
 export const columnListNo = [
-    { 'prop': 'orgName', 'label': '统计单元' },
-    { 'prop': 'day', 'label': '天数' },
-    { 'prop': 'totalPassTime', 'label': '全天合计单位：小时' },
+    { 'prop': 'orgName', 'label': '电话数据' },
+    { 'prop': 'day', 'label': '地区归属' },
+    { 'prop': 'totalPassTime', 'label': '姓名' },
+    { 'prop': 'totalPassTime', 'label': '性别' },
+    { 'prop': 'totalPassTime', 'label': '级别' },
+    { 'prop': 'totalPassTime', 'label': '拨通 / 拨打' },
+    { 'prop': 'totalPassTime', 'label': '最后联系时间' },
+    { 'prop': 'totalPassTime', 'label': '最近备注' },
 ]
 
 export const everyTimeList = [
-    { 'prop': 'areaId', 'label': '号码归属' },
-    { 'prop': 'callStyle', 'label': '呼叫方式' },
     { 'prop': 'calledId', 'label': '座席电话' },
-    { 'prop': 'callerArea', 'label': '客户归属' },
-    { 'prop': 'callerId', 'label': '客户电话' },
-    { 'prop': 'callerQueueTime', 'label': '进入队列' },
-    { 'prop': 'callerStime', 'label': '呼入系统应答时间' },
-    { 'prop': 'dealState', 'label': '处理状态' },
-    { 'prop': 'dnis', 'label': '中继号码' },
-    { 'prop': 'duration', 'label': '通话时长（秒）' },
-    { 'prop': 'hangupSide', 'label': '挂机方' },
-    { 'prop': 'insertDbTime', 'label': '插库时间' },
     { 'prop': 'insertTime', 'label': '电话开始呼叫时间' },
+    { 'prop': 'callerId', 'label': '客户电话' },
+    { 'prop': 'callerArea', 'label': '客户归属' },
     { 'prop': 'isCalledPhone', 'label': '是否接通' },
-    { 'prop': 'pathway', 'label': '呼叫途径' },
-    { 'prop': 'phoneId', 'label': '电话记录id' },
-    { 'prop': 'queueName', 'label': '呼叫节点' },
-    { 'prop': 'recordFile', 'label': '录音URL链接' },
-    { 'prop': 'resume', 'label': '此电话的备注' },
-    { 'prop': 'ringTime', 'label': '响铃时长（秒）' },
-    { 'prop': 'satisfactionDegree', 'label': '电话满意度评价' },
-    { 'prop': 'seatId', 'label': '坐席工号' },
-    { 'prop': 'uin', 'label': '座席账号' }
+    { 'prop': 'duration', 'label': '通话时长（秒）' },
+    { 'prop': 'dealState', 'label': '处理状态' },
+    { 'prop': 'resume', 'label': '通话备注' },
+    // { 'prop': 'areaId', 'label': '号码归属' },
+    // { 'prop': 'callStyle', 'label': '呼叫方式' },
+    // { 'prop': 'callerQueueTime', 'label': '进入队列' },
+    // { 'prop': 'callerStime', 'label': '呼入系统应答时间' },
+    // { 'prop': 'dnis', 'label': '中继号码' },
+    // { 'prop': 'hangupSide', 'label': '挂机方' },
+    // { 'prop': 'insertDbTime', 'label': '插库时间' },
+    // { 'prop': 'pathway', 'label': '呼叫途径' },
+    // { 'prop': 'phoneId', 'label': '电话记录id' },
+    // { 'prop': 'queueName', 'label': '呼叫节点' },
+    // { 'prop': 'recordFile', 'label': '录音URL链接' },
+    // { 'prop': 'ringTime', 'label': '响铃时长（秒）' },
+    // { 'prop': 'satisfactionDegree', 'label': '电话满意度评价' },
+    // { 'prop': 'seatId', 'label': '坐席工号' },
+    // { 'prop': 'uin', 'label': '座席账号' }
 ]
 
 export const vedioTypeArr = [
@@ -66,3 +71,27 @@ export const vedioTypeArr = [
     { 'value': 2, 'label': '直播回放' },
     { 'value': 3, 'label': '短视频' },
 ]
+
+export const dateList = [
+    { 'value': 1, 'label': '星期一' },
+    { 'value': 2, 'label': '星期二' },
+    { 'value': 3, 'label': '星期三' },
+    { 'value': 4, 'label': '星期四' },
+    { 'value': 5, 'label': '星期五' },
+    { 'value': 6, 'label': '星期六' },
+    { 'value': 7, 'label': '星期七' },
+]
+
+//枚举编号
+export const MJ_1 = 'MJ-1'; //客户学历
+export const MJ_2 = 'MJ-2'; //工作年限
+export const MJ_3 = 'MJ-3'; //取证目的
+export const MJ_4 = 'MJ-4'; //沟通方式
+export const MJ_5 = 'MJ-5'; //意向等级
+export const MJ_6 = 'MJ-6'; //推广渠道
+export const MJ_7 = 'MJ-7'; //推广账号
+export const MJ_8 = 'MJ-8'; //公司分校
+export const MJ_9 = 'MJ-9'; //jq平台账号
+export const MJ_10 = 'MJ-10'; //学籍状态
+export const MJ_11 = 'MJ-11'; //学习状况
+export const MJ_12 = 'MJ-12'; //跟进类型

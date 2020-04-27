@@ -12,9 +12,9 @@
                 :unique-opened=true
                 >
 
-                <div v-for="(item,index) in $store.state.userMenuList" :key="index">
+                <div v-for="(item,index) in userMenuList" :key="index">
 
-                  <el-submenu :index="`${item.url}`" v-if="item.includeSubsetList.length != 0 && item.disabled">
+                  <el-submenu :index="`${item.url}`" v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'">
                     <template slot="title">
                       <i :class="item.icon"></i>
                       <span>{{item.name}}</span>
@@ -23,7 +23,7 @@
                       <el-menu-item 
                         :index="`${res.url}`" 
                         @click="active_router(res)"
-                        v-if="res.disabled"
+                        v-if="res.disabled && res.menuComponent != 'button'"
                       >
                       <i :class="res.icon"></i>
                       {{res.name}}
@@ -31,10 +31,15 @@
                     </div>
                   </el-submenu>
 
-                  <el-menu-item :index="`${item.url}`" v-if="item.includeSubsetList.length == 0 && item.disabled" @click="active_router(item)">
+                  <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)">
                     <i :class="item.icon"></i>
                     <span slot="title">{{item.name}}</span>
                   </el-menu-item>
+
+                  <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
+                    <i :class="item.icon"></i>
+                    <span slot="title">{{item.name}}</span>
+                  </el-menu-item> -->
 
                 </div>
                 
@@ -50,9 +55,10 @@ export default {
     name: '',
     data() {
         return {
-          activeIndex: '/base',
+          activeIndex: '',
           openedsIndex: [''],
           routersFlag: '',
+          userMenuList: [],
         }
     },
     created() {
@@ -80,21 +86,49 @@ export default {
     },
     watch:{
       '$route.path': function(newVal,oldVal){
+        console.log(newVal);
         if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
           console.log(this.routersFlag);
+          this.activeIndex = newVal;
+        }else if(newVal.indexOf("/base/people") != -1){
+          this.routersFlag = true;
+          this.activeIndex = '/base/people';
+          this.userMenuList = this.$store.state.userMenuList[0].includeSubsetList;
+        }else if(newVal == '/crm/myClient/allDay'){
+          this.routersFlag = true;
+          this.userMenuList = this.$store.state.userMenuList[1].includeSubsetList;
+          this.activeIndex = newVal;
+        }else if(newVal == '/knowp/classManage'){
+          this.routersFlag = true;
+          this.userMenuList = this.$store.state.userMenuList[2].includeSubsetList;
+          this.activeIndex = newVal;
         }else{
           this.routersFlag = true;
+          this.activeIndex = newVal;
         }
-        this.activeIndex = newVal;
       }
     },
     mounted() {
+        const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
+        const arr = this.$route.path.split("/");
         if(this.$route.path == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
           console.log(this.routersFlag);
+        }else if(arr[1] == 'base'){
+          this.routersFlag = true;
+          this.userMenuList = userMenuList[0].includeSubsetList;
+          if(arr[2] == 'people') {
+            this.activeIndex = '/base/people';
+          }
+        }else if(arr[1] == 'crm'){
+          this.routersFlag = true;
+          this.userMenuList = userMenuList[1].includeSubsetList;
+        }else if(arr[1] == 'knowp'){
+          this.routersFlag = true;
+          this.userMenuList = userMenuList[2].includeSubsetList;
         }else{
           this.routersFlag = true;
         }
@@ -107,6 +141,7 @@ export default {
         height: 100%;
         .el-menu{
             height: 100%;
+            border-top: 1px solid #e6e6e6;
         }
     }
 </style>

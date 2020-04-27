@@ -10,7 +10,7 @@
 
 <script>
 import Header from './components/Header/Index';
-import Aside from './components/Aside/Aside';
+import Aside from './components/Header/Aside';
 export default {
   name: 'app',
   components: {

@@ -41,7 +41,6 @@
                                 plain 
                                 style="width: 50%;"
                                 @click="countCallRecord"
-                                v-loading.fullscreen.lock="fullscreenLoading"
                             >确定</el-button>
                         </el-col>
 
@@ -50,7 +49,8 @@
                     <el-table
                         :data="tableData"
                         border
-                        style="width: calc( 100vw - 3.65rem)">
+                        v-loading="fullscreenLoading"
+                        style="width: calc( 100vw - 3.8rem)">
 
                         <el-table-column
                             :prop="item.prop"
@@ -74,7 +74,7 @@
 import { countCallRecord, getOrgSubsetByUuid } from '../../request/api';
 import { columnListYes, columnListNo } from '../../assets/js/data';
 export default {
-    name: 'index',
+    name: 'timeData',
     data() {
         return {
             zuzhiOptions: [],
@@ -122,9 +122,9 @@ export default {
             this.form.time = this.timeDate.getTime();
         },
         countCallRecord() {
+            this.fullscreenLoading = true;
             this.form.time = this.timeDate.getTime();
             if(this.form.orgUuidList.length != 0 && this.form.time != 0) {
-                this.fullscreenLoading = true;
                 this.$smoke_post(countCallRecord, this.form).then(res => {
                     if(res.code == 200){
                         // console.log(res);
@@ -139,7 +139,7 @@ export default {
                             console.log(res.data);
                             this.tableData = res.data;
                             this.columnList = columnListYes;
-                        }, 1000);
+                        }, 300);
                     }else{
                         setTimeout(() => {
                             this.fullscreenLoading = false;
@@ -147,14 +147,17 @@ export default {
                                 type: 'error',
                                 message: res.msg
                             })
-                        }, 1000)
+                        }, 300)
                     }
                 })
             }else{
-                this.$message({
-                    type: 'error',
-                    message: '请选择您查询的条件'
-                })
+                setTimeout(() => {
+                    this.fullscreenLoading = false;
+                    this.$message({
+                        type: 'error',
+                        message: '请选择您查询的条件'
+                    })
+                }, 300)
             }
         }
     },
@@ -169,10 +172,10 @@ export default {
         height: calc( 100vh - 60px);
         .people-title{
             width: 100%;
-            height: .6rem;
-            line-height: .6rem;
+            height: 40px;
+            line-height: 40px;
             text-align: center;
-            font-size: .2rem;
+            font-size: 15px;
             background: #aaa;
             margin-bottom: .3rem;
             color: #fff;
