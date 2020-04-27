@@ -167,6 +167,10 @@ a:link,a:active,a:visited,a:hover {
     color: orange;
 }
 
+.el-table .readState {
+    font-weight: bold;
+}
+
 .el-notification {white-space:pre !important; width: auto !important; }
 
 .el-drawer__header{
@@ -284,10 +288,6 @@ a:link,a:active,a:visited,a:hover {
     top: 18px;
     right: 6px;
 }
-
-
-
-
 
 
 

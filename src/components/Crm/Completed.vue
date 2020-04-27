@@ -25,7 +25,7 @@
                     <el-table-column
                       :prop="item.prop"
                       :label="item.label"
-                      :width="item.label == '电话数据' ? '150px' : ''"
+                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
@@ -47,6 +47,8 @@
                     :followFlag='followFlag' 
                     :drawer.sync='drawer'
                     :userUuid='form.userUuid'
+                    :schoolId='schoolId'
+                    :examItem='examItem'
                     :clueDataSUuid='clueDataSUuid'
                     :comMode='comMode'
                     :callLogUuid='callLogUuid'
@@ -101,6 +103,8 @@ export default {
             clueDataSUuid: '',
             callLogUuid: '',
             comMode: '',
+            schoolId: '',
+            examItem: '',
 
             fullscreenLoading: false,
         }
@@ -128,6 +132,7 @@ export default {
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = true;
             this.comMode = '微信沟通';
+            this.examItem = row.examItemId;
         },
         changeDrawer(val){
             // console.log(val);
@@ -146,6 +151,7 @@ export default {
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
                         })
                         this.list = res.data.list;
+                        this.schoolId = res.data.schoolId;
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -190,6 +196,7 @@ export default {
                             this.drawer = true;
                             this.followFlag = true;
                             this.comMode = '手机外呼';
+                            this.examItem = scope.examItemId;
                         }else{
                             this.$message({
                                 type: 'error',
@@ -229,6 +236,7 @@ export default {
                             this.drawer = true;
                             this.followFlag = true;
                             this.comMode = '座机外呼';
+                            this.examItem = scope.examItemId;
                         }else{
                             this.$message({
                                 type: 'error',

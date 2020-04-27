@@ -92,15 +92,15 @@ export default {
           this.routersFlag = false;
           console.log(this.routersFlag);
           this.activeIndex = newVal;
-        }else if(newVal.indexOf("/base/people") != -1){
+        }else if(newVal.indexOf("/base") != -1){
           this.routersFlag = true;
-          this.activeIndex = '/base/people';
+          this.activeIndex = newVal;
           this.userMenuList = this.$store.state.userMenuList[0].includeSubsetList;
-        }else if(newVal == '/crm/myClient/allDay'){
+        }else if(newVal.indexOf("/crm") != -1){
           this.routersFlag = true;
           this.userMenuList = this.$store.state.userMenuList[1].includeSubsetList;
           this.activeIndex = newVal;
-        }else if(newVal == '/knowp/classManage'){
+        }else if(newVal.indexOf("/knowp") != -1){
           this.routersFlag = true;
           this.userMenuList = this.$store.state.userMenuList[2].includeSubsetList;
           this.activeIndex = newVal;
@@ -120,9 +120,6 @@ export default {
         }else if(arr[1] == 'base'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[0].includeSubsetList;
-          if(arr[2] == 'people') {
-            this.activeIndex = '/base/people';
-          }
         }else if(arr[1] == 'crm'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[1].includeSubsetList;

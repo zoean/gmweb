@@ -9,46 +9,23 @@
             <el-col :span="12">
 
                 <el-input
-                    placeholder="请输入姓名"
-                    size="small"
+                    placeholder="输入您想查找的人员"
                     style="margin-bottom: 10px;"
-                    @keyup.enter.native="name_search"
-                    v-model="name_input">
-                    <i slot="suffix" class="el-input__icon el-icon-search" style="cursor: pointer;" @click="name_search" v-if="treeShow"></i>
-                    <i slot="suffix" class="el-input__icon el-icon-close" style="cursor: pointer;" @click="name_colse" v-if="!treeShow"></i>
+                    v-model="filterText">
                 </el-input>
 
                 <el-tree
                     ref="tree"
                     :data="treeData"
-                    v-show="treeShow"
                     show-checkbox
                     style="margin-left: 0px;"
                     node-key="orgUuid"
                     :default-expanded-keys="defaultExpandedKeys"
                     :default-checked-keys="defaultCheckedKeys"
+                    :filter-node-method="filterNode"
                     @check="handleCheckChange"
                     :props="defaultProps">
                 </el-tree>
-
-                <el-table
-                    border
-                    v-show="!treeShow"
-                    ref="treeTable"
-                    :data="tableTreeData"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column
-                        type="selection"
-                        width="55">
-                    </el-table-column>
-                    <el-table-column
-                        :prop="item.props"
-                        :label="item.label"
-                        v-for="(item, index) in columnTreeList"
-                        :key="index">
-                    </el-table-column>
-                </el-table>
 
             </el-col>
 
@@ -112,16 +89,10 @@ export default {
                 { props: 'userName', label: '已选组员'},
                 { props: 'userUin', label: '主JQ账号'},
             ],
-            columnTreeList: [
-                { props: 'userName', label: '已选组员'},
-                { props: 'userUin', label: '主JQ账号'},
-                { props: 'limitLimit', label: '分配上限'},
-            ],
             uuid: '',
-            name_input: '',
             treeShow: true,
-            tableTreeData: [],
             toggleRowList: [],
+            filterText: '',
         }
     },
     created() {
@@ -186,70 +157,18 @@ export default {
                 })
             }
         },
-        name_search() {
-            console.log(this.name_input);
-            this.$smoke_post(getRuleUserLimit, {
-                name: this.name_input,
-                uuid: this.groupId
-            }).then(res => {
-                if(res.code == 200) {
-                    this.treeShow = false;
-                    this.tableTreeData = res.data;
-                    
-                    res.data.map(sll => {
-                        this.tableData.map(ass => {
-                            if(sll.flag || sll.userUuid == ass.userUuid){
-                                this.$nextTick(() => {
-                                    this.$refs.treeTable.toggleRowSelection(sll, true);
-                                })
-                            }
-                        })
-                    })
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
-            })
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.orgName.indexOf(value) !== -1;
         },
-        name_colse() {
-            this.treeShow = true;
-            this.$forceUpdate();
-        },
-        handleSelectionChange(val) {
-            console.log(val);
-            // let arr = [];
-            // val.map(sll => {
-            //     arr.push(sll.userUuid);
-            // })
-            // this.$nextTick(() => {
-            //     this.defaultExpandedKeys = this.defaultCheckedKeys = this.defaultCheckedKeys.concat(arr);
-            //     this.getCheckedNodes();
-            // })
-
-            if(val.length == 0) {
-                this.toggleRowList = [...new Set(this.toggleRowList)];
-                console.log(this.toggleRowList);
-                this.$nextTick(() => {
-                    // this.defaultExpandedKeys = this.toggleRowList; 动态展开有问题
-                    this.$refs.tree.setCheckedKeys(this.toggleRowList, true);
-                    this.getCheckedNodes();
-                })
-            }else{
-                let arr = [];
-                val.map(sll => {
-                    arr.push(sll.userUuid);
-                })
-                this.$nextTick(() => {
-                    this.defaultExpandedKeys = this.defaultCheckedKeys = this.defaultCheckedKeys.concat(arr);
-                    this.getCheckedNodes();
-                })
-            }
-        }
     },
     mounted() {
         
-    }
+    },
+    watch: {
+        filterText(val) {
+            this.$refs.tree.filter(val);
+        },
+    },
 }
 </script>

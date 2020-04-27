@@ -177,7 +177,7 @@
                     style="width: calc( 100vw - 3.8rem)">
                     <el-table-column
                       type="selection"
-                      width="55">
+                      width="45">
                     </el-table-column>
                     <el-table-column
                       :prop="item.prop"

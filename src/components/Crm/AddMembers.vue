@@ -46,7 +46,7 @@
                     @selection-change="handleSelectionChange">
                     <el-table-column
                       type="selection"
-                      width="55">
+                      width="45">
                     </el-table-column>
                     <el-table-column
                         :prop="item.prop"

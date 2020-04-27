@@ -52,7 +52,7 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
-                                    <el-input v-model="ruleForm.age" size="small"></el-input>
+                                    <el-input-number v-model="ruleForm.age" :precision="0" :step="1" :min="1" :max="150" size="small" style="width: 100%;"></el-input-number>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
@@ -178,7 +178,7 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="班型报价" prop="classOffer">
-                                    <el-input v-model="ruleForm.classOffer" size="small"></el-input>
+                                    <el-input-number v-model="ruleForm.classOffer" :precision="2" :step="1" :min="0" size="small" style="width: 100%;"></el-input-number>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
@@ -253,7 +253,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
-                          v-for="(item, index) in notesColumnList"
+                          v-for="(item, index) in notesColumnListFollow"
                           :key="index"
                           >
                         </el-table-column>
@@ -289,7 +289,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
-                          v-for="(item, index) in notesColumnList"
+                          v-for="(item, index) in notesColumnListCall"
                           :key="index"
                           >
                         </el-table-column>
@@ -407,12 +407,12 @@
 
                 </el-row>
                 
-                <el-row>
+                <!-- <el-row>
 
                     <el-col :span="5" :offset="2">主推班型：</el-col>
                     <el-col :span="15">{{notesDetailsForm.notes.classType}}</el-col>
 
-                </el-row>
+                </el-row> -->
 
                 <el-row>
 
@@ -583,20 +583,25 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             notesList: [],
             notesCallList: [],
-            notesColumnList: [
+            notesColumnListFollow: [
                 { 'prop': 'createTime', 'label': '创建时间' },
                 { 'prop': 'entryPerson', 'label': '录入人' },
                 { 'prop': 'comMode', 'label': '沟通方式' },
-                { 'prop': 'classType', 'label': '主推班型' },
-                { 'prop': 'classOffer', 'label': '班型报价' },
-                // { 'prop': 'clueDataSUuid', 'label': '线索数据的唯一标识' },
+                // { 'prop': 'classType', 'label': '主推班型' },
+                { 'prop': 'classOffer', 'label': '班型报价（元）' },
                 { 'prop': 'intentionLevel', 'label': '意向等级' },
                 { 'prop': 'nextContactTime', 'label': '下次联系时间' },
                 { 'prop': 'runOutPromise', 'label': '截杀承诺' },
-                { 'prop': 'pathWay', 'label': '呼叫途径' },
-                // { 'prop': 'recordUrl', 'label': '录音地址' },
                 { 'prop': 'remarks', 'label': '其他备注' },
-                // { 'prop': 'uuid', 'label': '线索数据备注的唯一标识' },
+            ],
+            notesColumnListCall: [
+                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'seatName', 'label': '所属坐席' },
+                { 'prop': 'isCalledPhone', 'label': '是否接通' },
+                { 'prop': 'callStyle', 'label': '呼叫方式' },
+                { 'prop': 'duration', 'label': '通话时长(秒)' },
+                { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
+                { 'prop': 'recordUrl', 'label': '录音地址' },
             ],
             columnWidth: 90,
             columnFlag: false,
@@ -744,7 +749,7 @@ export default {
                         sll.intentionLevel = smoke_MJ_5(sll.intentionLevel);
                         sll.createTime = timestampToTime(Number(sll.createTime));
                         sll.nextContactTime = timestampToTime(Number(sll.nextContactTime));
-                        sll.classType = classTypeText(Number(sll.classType));
+                        // sll.classType = classTypeText(Number(sll.classType));
                     })
                     this.notesList = res.data.list;
                     this.notesForm.total = res.data.total;
@@ -831,7 +836,7 @@ export default {
                 }else{
                     this.$message({
                         type: 'error',
-                        message: '添加备注失败',
+                        message: res.msg,
                     })
                 }
             })
@@ -842,12 +847,19 @@ export default {
                 this.columnFlag = false;
                 if(res.code == 200) {
                     res.data.list.map(sll => {
-                        sll.comMode = smoke_MJ_4(sll.comMode);
-                        sll.intentionLevel = smoke_MJ_5(sll.intentionLevel);
                         sll.createTime = timestampToTime(Number(sll.createTime));
-                        sll.nextContactTime = timestampToTime(Number(sll.nextContactTime));
-                        sll.pathWay = pathWayText(Number(sll.pathWay));
-                        sll.classType = classTypeText(Number(sll.classType));
+                        if(sll.isCalledPhone == null) {
+                            sll.isCalledPhone = '';
+                        }else if(sll.isCalledPhone == 1) {
+                            sll.isCalledPhone = '接通';
+                        }else{
+                            sll.isCalledPhone = '未接通';
+                        }
+                        if(sll.callStyle == 1) {
+                            sll.callStyle = '呼叫中心';
+                        }else if(sll.callStyle == 2) {
+                            sll.callStyle = '工作手机';
+                        }
                         if(sll.recordUrl){
                             this.columnWidth = 314;
                             this.columnFlag = true;

@@ -78,7 +78,7 @@
                     
                         <el-row>
                             <el-col :span="6">
-                                <el-select v-model="selectValue" placeholder="请选择JQ账号" @change="changeItem">
+                                <el-select v-model="selectValue" placeholder="请选择JQ账号" @change="changeItem" style="width: 100%;">
                                     <el-option
                                       v-for="item in selectOptions"
                                       :key="item.type"

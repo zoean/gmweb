@@ -111,11 +111,12 @@
                     style="width: calc( 100vw - 3.8rem)">
                     <el-table-column
                       type="selection"
-                      width="55">
+                      width="45">
                     </el-table-column>
                     <el-table-column
                       :prop="item.prop"
                       :label="item.label"
+                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
@@ -147,6 +148,8 @@
                     :followFlag='followFlag' 
                     :drawer.sync='drawer'
                     :userUuid='form.userUuid'
+                    :schoolId='schoolId'
+                    :examItem='examItem'
                     :clueDataSUuid='clueDataSUuid'
                     :comMode='comMode'
                     :callLogUuid='callLogUuid'
@@ -222,6 +225,8 @@ export default {
             clueDataSUuid: '',
             callLogUuid: '',
             comMode: '',
+            schoolId: '',
+            examItem: '',
         }
     },
     components: {
@@ -268,6 +273,7 @@ export default {
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
                         })
                         this.list = res.data.list;
+                        this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
                     }, 300);
                 }else{
@@ -288,10 +294,12 @@ export default {
             this.followFlag = false;
         },
         handleAddClick(row) {
+            console.log(row);
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = true;
             this.comMode = '微信沟通';
+            this.examItem = row.examItemId;
         },
         datePickerChange(value) {
             console.log(value);

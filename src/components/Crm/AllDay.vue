@@ -101,7 +101,7 @@
                     style="width: calc( 100vw - 3.8rem)">
                     <el-table-column
                       :prop="item.prop"
-                      :width="item.label == '电话数据' ? '150px' : ''"
+                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       :label="item.label"
                       v-for="(item, index) in columnList"
                       :key="index"

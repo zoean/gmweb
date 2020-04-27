@@ -8,14 +8,20 @@
             :show-close="centerDialogVisible"
             :before-close="handleClose"
             center>
-            <div style="height: .6rem; line-height: .6rem;">姓名<span style="margin-left: 92px;">{{$store.state.name}}</span></div>
-            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">手机号<span style="margin-left: 76px;">{{$store.state.accountNumber}}</span></div>
+            <div style="height: .6rem; line-height: .6rem;">
+                <span style="margin-left: 72px;">姓名</span>
+                <span style="margin-left: 20px;">{{$store.state.name}}</span>
+            </div>
+            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">
+                <span style="margin-left: 56px;">手机号</span>
+                <span style="margin-left: 20px;">{{$store.state.accountNumber}}</span>
+            </div>
             <el-form :model="form">
               <el-form-item label="原密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password1" autocomplete="off" type="password" style=""></el-input>
+                <el-input v-model="form.password1" autocomplete="off" type="password" style="width: 80%;"></el-input>
               </el-form-item>
               <el-form-item label="新密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password2" autocomplete="off" type="password"></el-input>
+                <el-input v-model="form.password2" autocomplete="off" type="password" style="width: 80%;"></el-input>
               </el-form-item>
             </el-form>
 
@@ -75,6 +81,7 @@
 
         <el-drawer 
             :title="drawerTitle"
+            size="50%"
             :visible.sync="drawer"
             :direction="direction"
             :before-close="handleCloseDrawer"
@@ -82,6 +89,8 @@
 
             <el-table
                 border
+                :row-class-name="tableRowClassName"
+                style="margin: 22px; width: 90%;"
                 :data="tableData"
             >
 
@@ -92,7 +101,26 @@
                     :key="index">
                 </el-table-column>
 
+                <el-table-column prop="active" label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="handleLookClick(scope.row)">查看</el-button>
+                    </template>
+                </el-table-column>
+
             </el-table>
+
+            <el-pagination
+                background
+                class="pagination"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total='newsForm.total'
+                :page-size='newsForm.pageSize'
+                :page-sizes="[10, 20, 30]"
+                :hide-on-single-page="totalFlag"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+            >
+            </el-pagination>
 
         </el-drawer>
         
@@ -107,7 +135,7 @@ import {
     readUuid,
     getStationNews,
 } from '../../request/api';
-import { getTextByJs } from '../../assets/js/common';
+import { getTextByJs, timestampToTime } from '../../assets/js/common';
 import { pass_word } from '../../assets/js/data';
 export default {
     name: '',
@@ -135,18 +163,61 @@ export default {
                 { props: 'createTime', label: '创建时间' },
                 { props: 'msg', label: '消息内容' },
                 { props: 'readState', label: '读取状态' },
-            ]
+            ],
+            totalFlag: false, //当只有一页时隐藏分页
         }
     },
     created() {
         this.getUserLoginMessage();
-        this.notReadNumValue = localStorage.getItem("notReadNum");
+        this.getStationNews();
     },
     methods: {
+        handleSizeChange(index) {
+            console.log(index);
+            this.newsForm.pageSize = index;
+            this.getStationNews();
+        },
+        handleCurrentChange(index) {
+            console.log(index);
+            this.newsForm.currentPage = index;
+            this.getStationNews();
+        },
+        handleLookClick(row) {
+            this.$smoke_get(readUuid + row.uuid, {}).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '查看成功'
+                    })
+                    this.drawer = false;
+                    if(row.type == 1) {
+                        this.$router.push({
+                            path: '/crm/myClient/firstTime'
+                        })
+                    }else{
+                        this.$router.push({
+                            path: '/crm/myStudents/newStudents'
+                        })
+                    }
+                }
+            })
+        },
         getStationNews() {
+            let num = 0;
             this.$smoke_post(getStationNews, this.newsForm).then(res => {
                 if(res.code == 200) {
-                    
+                    res.data.list.map(sll => {
+                        sll.createTime = timestampToTime(Number(sll.createTime));
+                        if(sll.readState == 0) {
+                            sll.readState = '未读';
+                            num++;
+                        }else{
+                            sll.readState = '已读';
+                        }
+                    })
+                    this.tableData = res.data.list;
+                    this.newsForm.total = res.data.total;
+                    this.notReadNumValue = num;
                 }
             })
         },
@@ -229,7 +300,6 @@ export default {
             localStorage.removeItem('initOptions');
             this.$store.dispatch('actionsSetCommonFlag', false);
             this.$router.push({ path: '/login'});
-
         },
         dialog_cancel() {
             this.centerDialogVisible = false;
@@ -305,15 +375,13 @@ export default {
                                     type: 'success',
                                     offset: 60
                                 });
-                                localStorage.setItem("notReadNum", infoData.notReadNum);
-                                that.notReadNumValue = infoData.notReadNum;
+                                that.getStationNews();
                             }
                         };
 
                     }else{
                         console.log("您的浏览器不支持 WebSocket!");
                     }
-
 
                 }else{
                     this.logout();
@@ -327,7 +395,14 @@ export default {
             }else{
                 this.centerDialogVisible = false;
             }
-        }
+        },
+        tableRowClassName({row, rowIndex}) {
+            console.log(row);
+            if (row.readState == '未读') {
+                return 'readState';
+            }
+            return '';
+        },
     },
     watch:{
       '$route.path': function(newVal,oldVal){
@@ -392,5 +467,21 @@ export default {
     .el-menu-item:hover{
         background-color: #fff!important;
         color: #488FF7!important;
+    }
+    .pagination{
+        text-align: right;
+        margin-top: .4rem;
+        margin-right: .6rem;
+    }
+    /* //element-ui table的去除右侧滚动条的样式 */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 1px;
+    }
+        /* // 滚动条的滑块 */
+    ::-webkit-scrollbar-thumb {
+        background-color: #a1a3a9;
+        border-radius: 0px;
+        border-radius: 8px;
     }
 </style>
