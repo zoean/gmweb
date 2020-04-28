@@ -18,15 +18,16 @@
                     v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)"
                 >
-                    <af-table-column
+                    <el-table-column
                       :prop="item.prop"
                       :label="item.label"
+                      :width="item.label == '分配组' ? '190px' : ''"
                       v-for="(item, index) in columnList1"
                       :key="index"
                       >
-                    </af-table-column>
+                    </el-table-column>
 
-                    <el-table-column prop="active" label="操作" width="500px">
+                    <el-table-column prop="active" label="操作" width="400px">
                       <template slot-scope="scope">
                           <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
                           <el-popover

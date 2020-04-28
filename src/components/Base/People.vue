@@ -65,7 +65,7 @@
                     </el-col>
                     <el-col :span="11">
                         <el-button type="primary" class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
-                        <el-button type="primary" class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
+                        <el-button v-if="exportPeople" type="primary" class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
                     </el-col>
                 </el-row>
                 
@@ -82,10 +82,10 @@
                     :key="index"
                     >
                   </el-table-column>
-                  <el-table-column prop="active" label="操作" v-if="peopleEdit">
+                  <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss">
                     <template slot-scope="scope">
-                        <el-button @click="handleEditClick(scope.row)" type="text">编辑</el-button>
-                        <el-button @click="handlePremissClick(scope.row)" type="text">数据权限</el-button>
+                        <el-button v-if="peopleEdit" @click="handleEditClick(scope.row)" type="text">编辑</el-button>
+                        <el-button v-if="dataPermiss" @click="handlePermissClick(scope.row)" type="text">数据权限</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -159,6 +159,8 @@ export default {
             ],
             fullscreenLoading: false,
             peopleEdit: null,
+            dataPermiss: null,
+            exportPeople: null,
         }
     },
     created() {
@@ -168,6 +170,8 @@ export default {
         let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
         console.log(buttonMap);
         this.peopleEdit = buttonMap.peopleEdit;
+        this.dataPermiss = buttonMap.dataPermiss;
+        this.exportPeople = buttonMap.exportPeople;
     },
     methods: {
         sortChange(data) {
@@ -252,9 +256,9 @@ export default {
                 }
             })
         },
-        handlePremissClick(row) {
+        handlePermissClick(row) {
             this.$router.push({
-                path: '/base/people/premiss',
+                path: '/base/people/permiss',
                 query: {
                     uuid: row.uuid
                 }

@@ -134,8 +134,9 @@ import {
     updateUserPassword,
     readUuid,
     getStationNews,
+    getClueDataNumber
 } from '../../request/api';
-import { getTextByJs, timestampToTime } from '../../assets/js/common';
+import { getTextByJs, timestampToTime, menuNumberFunc } from '../../assets/js/common';
 import { pass_word } from '../../assets/js/data';
 export default {
     name: '',
@@ -165,11 +166,13 @@ export default {
                 { props: 'readState', label: '读取状态' },
             ],
             totalFlag: false, //当只有一页时隐藏分页
+            clueDataNumberList: []
         }
     },
     created() {
         this.getUserLoginMessage();
         this.getStationNews();
+        // this.getClueDataNumber();
     },
     methods: {
         handleSizeChange(index) {
@@ -295,6 +298,13 @@ export default {
                 });
             }
         },
+        // getClueDataNumber() {
+        //     this.$smoke_get(getClueDataNumber, {}).then(res => {
+        //         if(res.code == 200) {
+
+        //         }
+        //     })
+        // },
         getUserLoginMessage() {
             var that = this;
             this.$smoke_post(getUserLoginMessage,{}).then(res => {

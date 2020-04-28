@@ -131,6 +131,7 @@ export const getClueDataDetails = '/api/phone/clueData/getClueDataDetails'; //�
 export const getAllUserClueData = '/api/phone/clueData/getAllUserClueData'; //获取所有坐席线索数据    
 export const getSpillPoolClueData = '/api/phone/clueData/getSpillPoolClueData'; //获取溢出池线索数据    
 export const consumerCallDataList = '/api/phone/clueData/consumerCallDataList'; //获取用户线索列表数据    
+export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获取坐席的线索数量情况    
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）

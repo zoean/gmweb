@@ -9,7 +9,7 @@ import menu from '@/components/Base/Menu';
 import people from '@/components/Base/People';
 import peopleDefault from '@/components/Base/PeopleDefault';
 import peopleChange from '@/components/Base/PeopleChange';
-import peopleDataPremiss from '@/components/Base/PeopleDataPremiss';
+import peopledataPermiss from '@/components/Base/PeopleDataPermiss';
 import role from '@/components/Base/Role';
 import zuzhi from '@/components/Base/Zuzhi';
 
@@ -81,9 +81,9 @@ export default new Router({
             component: peopleChange
         },
         {
-            path: '/base/people/premiss',
-            name: 'peopleDataPremiss',
-            component: peopleDataPremiss
+            path: '/base/people/permiss',
+            name: 'peopledataPermiss',
+            component: peopledataPermiss
         },
         {
             path: '/base/menu',
