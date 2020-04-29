@@ -41,7 +41,7 @@
 
                         <el-button @click="handleMenuClick(scope.row)" type="text"  style="margin-left: .2rem;">配置菜单</el-button>
 
-                        <el-button @click="handlePeopleClick(scope.row)" type="text"  style="margin-left: .2rem;">配置人员</el-button>
+                        <!-- <el-button @click="handlePeopleClick(scope.row)" type="text" style="margin-left: .2rem;">配置人员</el-button> -->
 
                     </template>
                   </el-table-column>

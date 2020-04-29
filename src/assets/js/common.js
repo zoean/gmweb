@@ -704,13 +704,17 @@ export const levelFunc = (arr) => {
 
 export const menuNumberFunc = (arr, brr) => {
 
-    arr[1].includeSubsetList[0].includeSubsetList[0].name = arr[1].includeSubsetList[0].includeSubsetList[0].name + '（' + brr[0] + '）';
-    arr[1].includeSubsetList[0].includeSubsetList[1].name = arr[1].includeSubsetList[0].includeSubsetList[1].name + '（' + brr[1] + '）';
-    arr[1].includeSubsetList[0].includeSubsetList[2].name = arr[1].includeSubsetList[0].includeSubsetList[2].name + '（' + brr[2] + '）';
-    arr[1].includeSubsetList[0].includeSubsetList[3].name = arr[1].includeSubsetList[0].includeSubsetList[3].name + '（' + brr[3] + '）';
-    arr[1].includeSubsetList[0].includeSubsetList[4].name = arr[1].includeSubsetList[0].includeSubsetList[4].name + '（' + brr[4] + '）';
-    arr[1].includeSubsetList[0].includeSubsetList[5].name = arr[1].includeSubsetList[0].includeSubsetList[5].name + '（' + brr[5] + '）';
+    if(arr[1].includeSubsetList[0].includeSubsetList[0].name.indexOf('（') == -1) {
 
+        arr[1].includeSubsetList[0].includeSubsetList[0].name = arr[1].includeSubsetList[0].includeSubsetList[0].name + '（' + brr[0] + '）';
+        arr[1].includeSubsetList[0].includeSubsetList[1].name = arr[1].includeSubsetList[0].includeSubsetList[1].name + '（' + brr[1] + '）';
+        arr[1].includeSubsetList[0].includeSubsetList[2].name = arr[1].includeSubsetList[0].includeSubsetList[2].name + '（' + brr[3] + '）';
+        arr[1].includeSubsetList[0].includeSubsetList[3].name = arr[1].includeSubsetList[0].includeSubsetList[3].name + '（' + brr[2] + '）';
+        arr[1].includeSubsetList[0].includeSubsetList[4].name = arr[1].includeSubsetList[0].includeSubsetList[4].name + '（' + brr[4] + '）';
+        arr[1].includeSubsetList[0].includeSubsetList[5].name = arr[1].includeSubsetList[0].includeSubsetList[5].name + '（' + brr[5] + '）';
+
+    }
+    
     return arr;
 
 }

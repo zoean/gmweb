@@ -96,7 +96,7 @@ export default {
                 { 'prop': 'name', 'label': '渠道名称' },
                 { 'prop': 'number', 'label': '渠道ID' },
                 { 'prop': 'remarks', 'label': '渠道备注' },
-                { 'prop': 'uuid', 'label': '渠道的唯一标识' },
+                // { 'prop': 'uuid', 'label': '渠道的唯一标识' },
             ],
             drawer: false,
             drawerTitle: '新增渠道',
