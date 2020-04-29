@@ -111,7 +111,16 @@
                       <template slot-scope="scope">
                           <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                           <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
-                          <el-button @click="release(scope.row)" type="text" >释放数据</el-button>
+                          <el-popconfirm
+                            confirmButtonText='确定'
+                            cancelButtonText='取消'
+                            icon="el-icon-info"
+                            iconColor="red"
+                            title="确认释放该数据吗？"
+                            @onConfirm="release(scope.row)"
+                          >
+                            <el-button type="text" slot="reference">释放数据</el-button>
+                          </el-popconfirm>
                           <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
                       </template>
@@ -453,6 +462,9 @@ export default {
                 .screen-li{
                     width: 90%;
                 }
+            }
+            .el-button{
+              margin-left: 10px;
             }
         }
     }

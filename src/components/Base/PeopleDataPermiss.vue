@@ -5,7 +5,7 @@
 
             <el-main>
 
-                <div class="people-title">员工数据权限管理</div>
+                <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工数据权限管理</div>
 
                 <el-row class="tab-title">
 
@@ -80,28 +80,8 @@
                     :before-close="handleClose">
 
                     <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+                        <el-radio v-model="radioId" v-for="(item, index) in tableDataSchool" :label="item.name" :key="index"></el-radio>
 
-                        <el-table
-                            border
-                            ref="multipleTable"
-                            @selection-change="handleSelectionChange"
-                            :data="tableDataSchool"
-                        >
-                            
-                            <el-table-column
-                              type="selection"
-
-                              width="45">
-                            </el-table-column>
-
-                            <el-table-column
-                                :prop="item.props"
-                                :label="item.label"
-                                v-for="(item, index) in columnList1"
-                                :key="index">
-                            </el-table-column>
-
-                        </el-table>
 
                     </el-row>
 
@@ -496,7 +476,8 @@ export default {
             drawerTitle0: '选择分校',
             direction0: 'rtl',
             tableDataSchool: [],
-            tableDataSchoolFlagArr: [],
+            tableDataSchoolFlagArr: {},
+            radioId: ''
         }
     },
     created() {
@@ -507,6 +488,9 @@ export default {
         }
     },
     methods: {
+        goback(){
+        this.$router.go(-1)
+        },
         getPermission() {
             let keysArr = [];
             let keysArrExam = [];
@@ -584,8 +568,9 @@ export default {
                     this.tableDataSchool = res.data.schoolList;
                     res.data.schoolList.map(sll => {
                         if(sll.flag) {
+                            this.radioId = sll.name
                             this.schoolList[0].attrText += sll.name + '，';
-                            this.tableDataSchoolFlagArr.push(sll);
+                            // this.tableDataSchoolFlagArr.push(sll);
                             this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
                         }
                     });
@@ -635,7 +620,10 @@ export default {
             })
         },
         onSubmit() {
+            console.log(this.tableDataSchoolFlagArr)
             this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.tableDataSchoolFlagArr);
+            // this.onSubmitList.push()
+            console.log(this.onSubmitList)
             this.$smoke_post(getPermissionUpdate, {
                 list: this.onSubmitList,
                 userUuid: this.userUuid
@@ -660,7 +648,7 @@ export default {
         },
         editSchoolClick() {
             this.drawer0 = true;
-            this.toggleSelection(this.tableDataSchoolFlagArr, true);
+            // this.toggleSelection(this.tableDataSchoolFlagArr, true);
         },
         editPeopleClick() {
             this.drawer1 = true;
@@ -730,16 +718,13 @@ export default {
         },
         addSchool() {
 
-            if(this.tableDataSchoolFlagArr.length == 1) {
+            if(this.tableDataSchoolFlagArr.name) {
 
-                this.schoolList[0].attrText = '';
-                this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
-                this.schoolList[0].attrData.map(sll => {
-                    this.schoolList[0].attrText += sll.name + '，'
-                })
-                if (this.schoolList[0].attrText.length > 0) {
-                    this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
-                }
+                this.schoolList[0].attrText = this.tableDataSchoolFlagArr.name;
+                this.schoolList[0].attrData = this.tableDataSchoolFlagArr.name;
+                // if (this.schoolList[0].attrText.length > 0) {
+                //     this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+                // }
                 this.drawer0 = false;
                 console.log(this.tableDataSchoolFlagArr);
 
@@ -800,10 +785,6 @@ export default {
                 this.$refs.treeSet.setCheckedKeys(arrKey, true);
                 this.tableDataSet = arr;
             })
-        },
-        handleSelectionChange(val) {
-            console.log(val);
-            this.tableDataSchoolFlagArr = val;
         }
     },
     mounted() {
@@ -813,6 +794,17 @@ export default {
         filterText(val) {
             this.$refs.tree.filter(val);
         },
+        radioId(val){
+            this.tableDataSchoolFlagArr.name = val
+            let curSchool = this.tableDataSchool.find(item => {
+                return item.name === val
+            })
+            this.tableDataSchoolFlagArr.uuid = curSchool.uuid
+            this.tableDataSchoolFlagArr.type = curSchool.type
+            console.log(this.tableDataSchoolFlagArr)
+            // this.schoolList.attrText = val
+            // this.schoolList.attrData = [val]
+        }
     },
 }
 </script>
@@ -830,6 +822,13 @@ export default {
             margin-bottom: .3rem;
             color: #666666;
             font-weight: bold;
+            position: relative;
+            i{
+                position: absolute;
+                left: 10px;
+                top: 13px;
+                cursor: pointer;
+            }
         }
         .people-screen{
             margin-bottom: .3rem;
