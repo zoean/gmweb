@@ -144,7 +144,7 @@ export default {
     margin-top: -3.2rem;
     .contain-model{
         width: 2.6rem;
-        height: 2.6rem;
+        // height: 2.6rem;
         position: absolute;
         top: 2.4rem;
         left: 1.4rem;
@@ -156,9 +156,10 @@ export default {
             width: 100%;
             letter-spacing: .2rem;
             padding-left: .4rem;
-            position: absolute;
-            bottom: 0;
-            left: 0;
+            margin-top: .14rem;
+            // position: absolute;
+            // bottom: 0;
+            // left: 0;
         }
         .el-input{
             font-size: 13px;
