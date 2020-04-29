@@ -282,7 +282,7 @@ export default {
                 dayList: [], //溢出量再分配
                 name: '', //分配组名
                 describe: '', //分配组描述
-                state: null, //分配组状态（1：开启 0：关闭）
+                state: 1, //分配组状态（1：开启 0：关闭）
                 schoolId: '', //分校名称
                 uuid: '', //分配组的uuid
             },
@@ -396,7 +396,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     console.log(this.ruleFormLink);
-                    this.createLinkUrl = 'http://api.jhwx.com/jhservice/AddUser?ruleid='
+                    this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
                      + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
                      + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc
                      + '&jqadmin=' + this.ruleFormLink.jqadmin;
@@ -441,6 +441,7 @@ export default {
                             }
                         })
                         this.dataAlloList = res.data.list;
+                        this.dataAlloForm.total = res.data.total;
                     }, 300);
 
                 }else{

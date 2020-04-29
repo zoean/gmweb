@@ -170,9 +170,8 @@ export default {
         }
     },
     created() {
-        this.getUserLoginMessage();
         this.getStationNews();
-        // this.getClueDataNumber();
+        this.getClueDataNumber();
     },
     methods: {
         handleSizeChange(index) {
@@ -298,13 +297,18 @@ export default {
                 });
             }
         },
-        // getClueDataNumber() {
-        //     this.$smoke_get(getClueDataNumber, {}).then(res => {
-        //         if(res.code == 200) {
-
-        //         }
-        //     })
-        // },
+        getClueDataNumber() {
+            let arr = [];
+            this.$smoke_get(getClueDataNumber, {}).then(res => {
+                if(res.code == 200) {
+                    for(let i in res.data) {
+                        arr.push(res.data[i]);
+                    }
+                    this.clueDataNumberList = arr;
+                    this.getUserLoginMessage();
+                }
+            })
+        },
         getUserLoginMessage() {
             var that = this;
             this.$smoke_post(getUserLoginMessage,{}).then(res => {
@@ -321,9 +325,11 @@ export default {
                     this.$store.dispatch('actionsSetUserMenuList', res.data.userMenuList);
                     this.$store.dispatch('actionsSetAvatar', res.data.avatar);
 
-                    localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
+                    console.log(this.clueDataNumberList);
                     // this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
+
+                    localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(res.data.userMenuList, this.clueDataNumberList)));
 
                     if( "WebSocket" in window ) {
 

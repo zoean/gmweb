@@ -581,7 +581,7 @@ export default {
                     this.customerForm.createTime = timestampToTime(Number(res.data.createTime));
                     this.customerForm.education = res.data.education == 0 || res.data.education == null ? '' : String(res.data.education);
                     this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 ? '' : String(res.data.evidencePurpose)
-                    this.customerForm.examPeriod = res.data.examPeriod;
+                    this.customerForm.examPeriod = Number(res.data.examPeriod);
                     this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
                     this.customerForm.graduationMajor = res.data.graduationMajor;
                     this.customerForm.name = res.data.name;

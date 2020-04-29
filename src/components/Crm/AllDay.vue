@@ -147,10 +147,11 @@ import {
     seatOut,
     clueDataRelease,  
     enumByEnumNums,
-    getRuleItem
+    getRuleItem,
+    getClueDataNumber
 } from '../../request/api';
 import Start from '../../components/Share/Start';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, menuNumberFunc } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -206,6 +207,7 @@ export default {
 
             enumList: {},
             fullscreenLoading: false,
+            clueDataNumberList: []
         }
     },
     components: {
@@ -214,7 +216,7 @@ export default {
     created() {
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
-        this.getClueDataAll();
+        this.getClueDataNumber();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         this.jqStart = browserfly.noConflict();
@@ -287,6 +289,18 @@ export default {
             // console.log(val);
             this.drawer = val;
         },
+        getClueDataNumber() {
+            let arr = [];
+            this.$smoke_get(getClueDataNumber, {}).then(res => {
+                if(res.code == 200) {
+                    for(let i in res.data) {
+                        arr.push(res.data[i]);
+                    }
+                    this.clueDataNumberList = arr;
+                    this.getClueDataAll();
+                }
+            })
+        },
         getClueDataAll() {
             this.fullscreenLoading = true;
             this.drawer = false;
@@ -301,6 +315,8 @@ export default {
                         })
                         this.schoolId = res.data.schoolId;
                         this.list = res.data.list;
+                        this.clueDataNumberList[0] = res.data.total;
+                        localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
                     }, 300);
                 }else{
                     setTimeout(() => {
