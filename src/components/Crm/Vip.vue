@@ -25,6 +25,7 @@
                     <el-table-column
                       :prop="item.prop"
                       :label="item.label"
+                      :formatter="item.formatter"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
@@ -141,7 +142,7 @@ export default {
             columnList: [
                 { 'prop': 'tel', 'label': '电话数据' },
                 { 'prop': 'ruleNumberName', 'label': '地区归属' },
-                { 'prop': 'callLastTime', 'label': '最后联系时间' },
+                { 'prop': 'callLastTime', 'label': '最后联系时间'},
                 // { 'prop': 'phone', 'label': '所属坐席' },
                 // { 'prop': 'phone', 'label': '通话次数' },
                 // { 'prop': 'phone', 'label': '来源渠道' },
@@ -177,7 +178,7 @@ export default {
             this.$smoke_post(getRecoveryPoolDataList, this.form).then(res => {
                 if(res.code == 200) {
                     res.data.list.map(sll => {
-                        sll.callLastTime = timestampToTime(Number(sll.callLastTime));
+                        sll.callLastTime = timestampToTime(Number(sll.lastCallTime));
                     })
                     this.list = res.data.list;
                 }
