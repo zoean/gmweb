@@ -15,6 +15,7 @@
 
                 <el-table
                     :data="list"
+                    v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
                     <el-table-column
                       :prop="item.prop"
@@ -30,6 +31,19 @@
                       </template>
                     </el-table-column>
                 </el-table>
+
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    style="text-align: right; margin-top: 20px;"
+                    :total='form.total'
+                    :page-size='form.pageSize'
+                    :page-sizes="[10, 20, 30]"
+                    :hide-on-single-page="totalFlag"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
+                >
+                </el-pagination>
 
                 <el-drawer
                     :title="drawerTitle1"
@@ -80,6 +94,7 @@
 
                     <el-table
                         :data="teacherList"
+                        v-loading="fullscreenLoadingDetails"
                         style="width:94%; margin: 0 auto;">
                         <el-table-column
                           :prop="item.prop"
@@ -209,8 +224,9 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 sortSet: [],
-                total: 0
+                total: null
             },
+            totalFlag: false,
             list: [],
             columnList1: [
                 { 'prop': 'examItem', 'label': '考试项目' },
@@ -291,6 +307,8 @@ export default {
                 classUserUuid: '',
             },
             teacherMoveList: [],
+            fullscreenLoading: false,
+            fullscreenLoadingDetails: false
         }
     },
     created() {
@@ -298,6 +316,16 @@ export default {
         this.getExamBasic();
     },
     methods: {
+        handleCurrentChange(index) {
+            console.log(index);
+            this.form.currentPage = index;
+            this.getClueDataAll();
+        },
+        handleSizeChange(index) {
+            console.log(index);
+            this.form.pageSize = index;
+            this.getClueDataAll();
+        }, 
         addClassClick() {
             this.drawer1 = true;
             this.ruleForm1.classType = '';
@@ -361,12 +389,29 @@ export default {
             this.ruleForm1.subjectText = item.value;
         },
         getClassList() {
+            this.fullscreenLoading = true;
             this.$smoke_post(getClassList, this.form).then(res => {
                 if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.classType = classTypeString(sll.classType);
-                    })
-                    this.list = res.data.list;
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.classType = classTypeString(sll.classType);
+                        })
+                        this.list = res.data.list;
+                        this.form.total = res.data.total;
+                    }, 300);
+
+                }else{
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+
                 }
             })
         },
@@ -394,12 +439,23 @@ export default {
             })
         },
         getClassTeacherList() {
+            this.fullscreenLoadingDetails = true;
             this.$smoke_post(getClassTeacherList, this.teacherForm).then(res => {
                 if(res.code == 200) {
-                    // res.data.list.map(sll => {
-                    //     sll.classType = classTypeString(sll.classType);
-                    // })
-                    this.teacherList = res.data.list;
+
+                    setTimeout(() => {
+                        this.fullscreenLoadingDetails = false;
+                        this.teacherList = res.data.list;
+                    }, 300);
+
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoadingDetails = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
                 }
             })
         },

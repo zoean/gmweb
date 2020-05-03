@@ -557,6 +557,11 @@ export default {
                     console.log(res);
                     this.drawerFlag1 = false;
                     this.getDataAllocationRulesList();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg, 
+                    });
                 }
             })
         },

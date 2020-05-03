@@ -14,6 +14,7 @@
                 <el-table
                     :data="list"
                     ref="tree"
+                    v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
                     
                     <el-table-column
@@ -466,6 +467,7 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             pageshow: true, //分页重新渲染
             schoolList: [],
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -657,14 +659,30 @@ export default {
             })
         },
         getClassTeaStudent() {
+            this.fullscreenLoading = true;
             this.$smoke_post(getClassTeaStudent, this.form).then(res => {
                 if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.createTime  = timestampToTime(Number(sll.createTime));
-                        sll.classType = classTypeString(sll.classType);
-                        sll.orderType = orderTypeText(sll.orderType);
-                    })
-                    this.list = res.data.list;
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.createTime  = timestampToTime(Number(sll.createTime));
+                            sll.classType = classTypeString(sll.classType);
+                            sll.orderType = orderTypeText(sll.orderType);
+                        })
+                        this.list = res.data.list;
+                    }, 300);
+
+                }else{
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+
                 }
             })
         },

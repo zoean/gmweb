@@ -41,6 +41,19 @@
                     </el-table-column>
                 </el-table>
 
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    style="text-align: right; margin-top: 20px;"
+                    :total='form.total'
+                    :page-size='form.pageSize'
+                    :page-sizes="[10, 20, 30]"
+                    :hide-on-single-page="totalFlag"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
+                >
+                </el-pagination>
+
                 <CustomerNotes 
                     v-if="drawer"
                     @changeDrawer="changeDrawer"
@@ -82,8 +95,10 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 userUuid: '',
+                total: null,
                 tel: '',
             },
+            totalFlag: false,
             list: [],
             columnList: [
                 { 'prop': 'phone', 'label': '电话数据' },
@@ -121,6 +136,16 @@ export default {
         this.jqStart = browserfly.noConflict();
     },
     methods: {
+        handleCurrentChange(index) {
+            console.log(index);
+            this.form.currentPage = index;
+            this.getClueDataAll();
+        },
+        handleSizeChange(index) {
+            console.log(index);
+            this.form.pageSize = index;
+            this.getClueDataAll();
+        },
         //客户信息
         customerInfo(row) {
             this.drawer = true;
@@ -151,6 +176,7 @@ export default {
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
                         })
                         this.list = res.data.list;
+                        this.form.total = res.data.total;
                         this.schoolId = res.data.schoolId;
                     }, 300);
                 }else{

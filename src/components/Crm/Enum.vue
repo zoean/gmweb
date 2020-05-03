@@ -26,6 +26,7 @@
                 <el-table
                     :data="list"
                     ref="tree"
+                    v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
                     <el-table-column
                       :prop="item.prop"
@@ -125,6 +126,7 @@
                         :data="enumItemList"
                         border
                         ref="enumItemTree"
+                        v-loading="fullscreenLoadingDetails"
                         style="width: 94%; margin: 0 auto; margin-top: 20px;">
                         <el-table-column
                           :prop="item.prop"
@@ -201,6 +203,8 @@ export default {
             addEnumsDetails: null,
             editEnums: null,
             editEnumsDetails: null,
+            fullscreenLoading: false,
+            fullscreenLoadingDetails: false,
         }
     },
     created() {
@@ -288,14 +292,30 @@ export default {
             })
         },
         getEnumList() {
+            this.fullscreenLoading = true;
             this.$smoke_post(getEnumList, this.form).then(res => {
                 if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.enableText = backEnable(sll.enable);
-                    })
-                    this.list = res.data.list;
-                    this.total = res.data.total;
-                    console.log(this.list);
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.enableText = backEnable(sll.enable);
+                        })
+                        this.list = res.data.list;
+                        this.total = res.data.total;
+                        console.log(this.list);
+                    }, 300);
+
+                }else{
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+
                 }
             })
         },
@@ -362,14 +382,28 @@ export default {
             })
         },
         getEnumItem() {
+            this.fullscreenLoadingDetails = true;
             this.$smoke_post(getEnumItem, {
                 uuid: this.enumItemForm.enumUuid,
             }).then(res => {
                 if(res.code == 200) {
-                    res.data.map(sll => {
-                        sll.enableSonText = backEnable(sll.enable);
-                    })
-                    this.enumItemList = res.data;
+
+                    setTimeout(() => {
+                        this.fullscreenLoadingDetails = false;
+                        res.data.map(sll => {
+                            sll.enableSonText = backEnable(sll.enable);
+                        })
+                        this.enumItemList = res.data;
+                    }, 300);
+
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoadingDetails = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
                 }
             })
         },

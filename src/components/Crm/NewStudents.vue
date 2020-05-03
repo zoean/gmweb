@@ -14,6 +14,7 @@
                 <el-table
                     :data="list"
                     ref="tree"
+                    v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
                     <el-table-column
                       type="selection"
@@ -71,6 +72,7 @@ export default {
             ],
             tabsList: [],
             classUuidDefault: '',
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -82,20 +84,33 @@ export default {
             this.classTeaGetWaitStudent('click', scope.uuid)
         },
         getClassTeaClass() {
+            this.fullscreenLoading = true;
             this.$smoke_get(getClassTeaClass,{}).then(res => {
                 if(res.code == 200) {
-                    res.data.map(sll => {
-                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
-                    })
-                    this.tabsList = res.data;
-                    this.getWaitStudentList();
-                    this.form.classUuid = res.data[0].uuid;
-                    this.classUuidDefault = res.data[0].uuid;
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        if(res.data.length != 0) {
+                            res.data.map(sll => {
+                            sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
+                            })
+                            this.tabsList = res.data;
+                            this.getWaitStudentList();
+                            this.form.classUuid = res.data[0].uuid;
+                            this.classUuidDefault = res.data[0].uuid;
+                        }
+                    }, 300);
+
                 }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
+
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+
                 }
             })
         },

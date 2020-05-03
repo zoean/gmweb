@@ -127,6 +127,19 @@
                     </el-table-column>
                 </el-table>
 
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    style="text-align: right; margin-top: 20px;"
+                    :total='form.total'
+                    :page-size='form.pageSize'
+                    :page-sizes="[10, 20, 30]"
+                    :hide-on-single-page="totalFlag"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
+                >
+                </el-pagination>
+
                 <CustomerNotes 
                     v-if="drawer"
                     @changeDrawer="changeDrawer"
@@ -170,6 +183,7 @@ export default {
             form: {
                 currentPage: 1,
                 pageSize: 10,
+                total: null,
                 userUuid: '',
                 tel: '',
                 endTime: '', //筛选条件结束条件
@@ -181,6 +195,7 @@ export default {
                 selectTime: '', //未联间隔
                 ruleNumberName: '', //分配组组名
             },
+            totalFlag: false,
             ruleNumberNameList: [], //分配组数组
             selectTimeList: [
                 { 'name': '今日已联', 'number': 0 },
@@ -234,6 +249,16 @@ export default {
         this.getRuleItem();
     },
     methods: {
+        handleCurrentChange(index) {
+            console.log(index);
+            this.form.currentPage = index;
+            this.getClueDataAll();
+        },
+        handleSizeChange(index) {
+            console.log(index);
+            this.form.pageSize = index;
+            this.getClueDataAll();
+        }, 
         selectTimeChange(value) {
             console.log(value.length);
             const time = new Date(new Date().toLocaleDateString()).getTime();
@@ -324,7 +349,7 @@ export default {
                         })
                         this.schoolId = res.data.schoolId;
                         this.list = res.data.list;
-                        this.clueDataNumberList[0] = res.data.total;
+                        this.form.total = this.clueDataNumberList[0] = res.data.total;
                         localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
                     }, 300);
                 }else{
