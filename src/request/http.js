@@ -23,8 +23,7 @@ axios.interceptors.request.use(
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-    console.log(response);
-    if (response.data.code == 10002){
+    if (response.data && response.data.code == 10002){
       location.href = '/';
       localStorage.removeItem('jhToken');
       localStorage.removeItem('userMenuList');

@@ -138,7 +138,6 @@ export default {
             })
         },
         handleClick1(item) {
-            console.log(item);
             if(item.id == 1){
                 this.loginPlatform(item.id);
             }else{
@@ -147,7 +146,6 @@ export default {
             }
         },
         handleClick2() {
-            console.log(item);
             const href = item.https;
             window.open(href, '_blank');
         },

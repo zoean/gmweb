@@ -703,9 +703,7 @@ export const levelFunc = (arr) => {
 //菜单num统计
 
 export const menuNumberFunc = (arr, brr) => {
-
     if(arr[1].includeSubsetList[0].includeSubsetList[0].name.indexOf('(') == -1) { //避免name重复加()
-
         arr[1].includeSubsetList[0].includeSubsetList[0].name = arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[1].name = arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + brr[1] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[2].name = arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[3] + ')';
