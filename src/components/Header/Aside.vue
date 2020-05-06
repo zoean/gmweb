@@ -66,17 +66,16 @@ export default {
     },
     methods: {
       active_router(index) {
-        console.log(index);
         this.$router.push({ path: index.url });
       },
       router_index() {
         this.activeIndex = this.$route.path;
       },
       handleOpen(key, keyPath) {
-          console.log(key, keyPath);
+          // console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-          console.log(key, keyPath);
+          // console.log(key, keyPath);
       },
       // getMenuDetailsSubsetByUuid() {
       //   this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
@@ -85,8 +84,7 @@ export default {
       // }
     },
     watch:{
-      '$route.path': function(newVal,oldVal){
-        console.log(newVal);
+      '$route.path': function(newVal){
         if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
@@ -116,7 +114,6 @@ export default {
         if(this.$route.path == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
-          console.log(this.routersFlag);
         }else if(arr[1] == 'base'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[0].includeSubsetList;
