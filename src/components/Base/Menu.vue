@@ -76,6 +76,16 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
+                        <el-form-item label="页面字段编号" prop="pageNum">
+                            <el-select v-model="ruleForm.pageNum" clearable placeholder="请选择页面字段编号">
+                                <el-option
+                                  v-for="item in pageNumList"
+                                  :key="item.name"
+                                  :label="item.name"
+                                  :value="item.number">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
 
                         <el-form-item>
                           <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
@@ -97,7 +107,7 @@
 
 // default-expand-all 默认table要不要展开
 
-import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu } from '../../request/api';
+import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu, itemList } from '../../request/api';
 import { levelFunc } from '../../assets/js/common';
 export default {
     name: 'menua',
@@ -110,6 +120,7 @@ export default {
                 { 'prop': 'menuComponent', 'label': '菜单路由组成' },
                 { 'prop': 'url', 'label': '菜单路由地址' },
                 { 'prop': 'level', 'label': '菜单类型' },
+                { 'prop': 'pageNum', 'label': '页面字段编号' },
             ],
             drawer: false,
             direction: 'rtl',
@@ -121,6 +132,7 @@ export default {
                 uuid: '',
                 parentUuid: '',
                 level: '',
+                pageNum: '',
             },
             rules: {
                 name: [
@@ -142,13 +154,27 @@ export default {
                 { 'name': '目录', 'number': 1 },
                 { 'name': '页面', 'number': 2 },
                 { 'name': '按钮', 'number': 3 },
-            ]
+            ],
+            pageNumList: [],
         }
     },
     created() {
         this.getMenuDetailsSubsetByUuid();
+        this.itemList();
     },
     methods: {
+        itemList() {
+            this.$smoke_get(itemList, {}).then(res => {
+                if(res.code == 200) {
+                    this.pageNumList = res.data;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
@@ -171,6 +197,7 @@ export default {
             this.ruleForm.url = '';
             this.ruleForm.uuid = '';
             this.ruleForm.parentUuid = '';
+            this.ruleForm.level = '';
         },
         handleDeleteClick(scope) {
             // console.log(scope.row.uuid);
@@ -212,6 +239,7 @@ export default {
             this.ruleForm.icon = row.icon;
             this.ruleForm.menuComponent = row.menuComponent;
             this.ruleForm.url = row.url;
+            this.ruleForm.pageNum = row.pageNum;
             this.ruleForm.uuid = row.uuid;
             this.ruleForm.parentUuid = row.parentUuid;
             if(row.level == '目录') {
