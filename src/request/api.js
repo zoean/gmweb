@@ -175,6 +175,15 @@ export const updateEnum = '/api/phone/dataDictionary/updateEnum'; //修改枚举
 export const updateEnumItem = '/api/phone/dataDictionary/updateEnumItem'; //修改枚举项
 export const enumByEnumNums = '/api/phone/dataDictionary/enumByEnumNums'; //根据枚举编号获取枚举列表
 
+//页面字段管理
+export const addPage = '/api/phone/pageFieldsMag/addPage';//新增页面
+export const getPage = '/api/phone/pageFieldsMag/pageList';//获取页面列表
+export const updatePage = '/api/phone/pageFieldsMag/updatePage';//更新页面信息
+export const addField = '/api/phone/pageFieldsMag/addPageField';//新增字段
+export const updateField = '/api/phone/pageFieldsMag/updatePageField';//更新字段
+export const getField = '/api/phone/pageFieldsMag/pageFieldList';//字段列表
+export const getFieldDetail = '/api/phone/pageFieldsMag/pageFieldDetails'//获取字段详情;
+
 //拨打记录
 export const getClueCallLog = '/api/phone/callLog/getClueCallLog'; //获取线索数据的通话记录
 
