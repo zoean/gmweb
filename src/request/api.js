@@ -29,6 +29,7 @@ export const deleteMenu = '/api/menu/deleteMenu'; //删除菜单
 export const getMenuSubsetByUuid = '/api/menu/getMenuSubsetByUuid'; //查询菜单信息（包含子集）
 export const getMenuDetailsSubsetByUuid = '/api/menu/getMenuDetailsSubsetByUuid'; //查询菜单详情信息（包含子集）
 export const updateMenu = '/api/menu/updateMenu'; //修改菜单
+export const itemList = '/api/phone/pageFieldsMag/itemList'; //页面枚举列表
 
 // JQ接口
 export const phoneUserList = '/api/phone/phoneUserList'; //获取jq的员工信息
@@ -133,6 +134,7 @@ export const getAllUserClueData = '/api/phone/clueData/getAllUserClueData'; //�
 export const getSpillPoolClueData = '/api/phone/clueData/getSpillPoolClueData'; //获取溢出池线索数据    
 export const consumerCallDataList = '/api/phone/clueData/consumerCallDataList'; //获取用户线索列表数据    
 export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获取坐席的线索数量情况    
+export const copyTel = '/api/phone/clueData/copyTel'; //复制手机号码    
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）

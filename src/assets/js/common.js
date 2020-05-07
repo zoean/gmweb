@@ -704,12 +704,13 @@ export const levelFunc = (arr) => {
 
 export const menuNumberFunc = (arr, brr) => {
     if(arr[1].includeSubsetList[0].includeSubsetList[0].name.indexOf('(') == -1) { //避免name重复加()
-        arr[1].includeSubsetList[0].includeSubsetList[0].name = arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[1].name = arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + brr[1] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[2].name = arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[3] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[3].name = arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + brr[2] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[4].name = arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[5].name = arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[5] + ')';
+
+        arr[1].includeSubsetList[0].includeSubsetList[0].name = brr[0] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[1].name = brr[1] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + brr[1] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[2].name = brr[3] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[3] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[3].name = brr[2] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + brr[2] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[4].name = brr[4] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[5] + ')';
 
     }
     
@@ -717,7 +718,17 @@ export const menuNumberFunc = (arr, brr) => {
 
 }
 
+//copyData
 
+export const copyData = (data) => {
+    let url = data;
+    let oInput = document.createElement('input');
+    oInput.value = url;
+    document.body.appendChild(oInput);
+    oInput.select(); // 选择对象;
+    document.execCommand("Copy"); // 执行浏览器复制命令
+    oInput.remove();
+}
 
 
 

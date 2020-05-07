@@ -99,6 +99,13 @@
                     v-loading="fullscreenLoading"
                     :row-class-name="tableRowClassName"
                     style="width: calc( 100vw - 3.8rem)">
+
+                    <el-table-column prop="phoneIcon" label="" width="60px;">
+                        <template slot-scope="scope">
+                            <i class="el-icon-document-copy" @click="phoneCopy(scope.row)"></i>
+                      </template>
+                    </el-table-column>
+
                     <el-table-column
                       :prop="item.prop"
                       :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
@@ -107,6 +114,7 @@
                       :key="index"
                       >
                     </el-table-column>
+
                     <el-table-column prop="active" label="操作" width="400px;">
                       <template slot-scope="scope">
                           <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
@@ -341,6 +349,8 @@ export default {
                     }
                     this.clueDataNumberList = arr;
                     this.getClueDataAll();
+                }else{
+                    this.getClueDataAll();
                 }
             })
         },
@@ -486,6 +496,9 @@ export default {
             }
             return '';
         },
+        phoneCopy(row) {
+            
+        }
     },
     mounted() {
         

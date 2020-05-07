@@ -306,6 +306,8 @@ export default {
                     }
                     this.clueDataNumberList = arr;
                     this.getUserLoginMessage();
+                }else{
+                    this.getUserLoginMessage();
                 }
             })
         },

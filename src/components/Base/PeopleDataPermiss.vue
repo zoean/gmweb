@@ -182,12 +182,12 @@
 
                             </el-table>
 
+                            <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
+
                         </el-col>
 
                     </el-row>
 
-                    <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
-                    
                 </el-drawer>
 
 
