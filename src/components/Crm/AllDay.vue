@@ -178,7 +178,8 @@ import {
     clueDataRelease,  
     enumByEnumNums,
     getRuleItem,
-    getClueDataNumber
+    getClueDataNumber,
+    getListField
 } from '../../request/api';
 import Start from '../../components/Share/Start';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, menuNumberFunc } from '../../assets/js/common';
@@ -255,8 +256,16 @@ export default {
         let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
+        this.getListField()
     },
     methods: {
+        getListField(){
+          this.$smoke_post(getListField, {num: this.$store.state.pageNum}).then( res => {
+            if(res.code == 200){
+              console.log(res.data)
+            }
+          })
+        },
         handleCurrentChange(index) {
             console.log(index);
             this.form.currentPage = index;

@@ -21,7 +21,6 @@ export default {
     created() {
         const initOptions = localStorage.getItem('initOptions');
         this.form = JSON.parse(initOptions);
-        console.log(this.form);
         if(this.form != undefined) {
             this.smoke_init();
         }

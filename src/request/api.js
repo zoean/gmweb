@@ -121,6 +121,7 @@ export const getSchoolList = '/api/phone/DataAutDis/getSchoolList'; //获取分�
 
 //线索数据
 export const getClueDataByUserUuid = '/api/phone/clueData/getClueDataByUserUuid'; //获取员工的线索数据
+export const getListField = '/api/phone/pageFieldsMag/getUserPageField';//获取页面字段
 
 export const getClueDataAll = '/api/phone/clueData/getClueDataAll'; //获取员工的全部客户
 export const firstConDataList = '/api/phone/clueData/firstConDataList'; //获取员工的首咨线索数据

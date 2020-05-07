@@ -1,8 +1,10 @@
 // vue.config.js
-
+const production = process.env.NODE_ENV === "production"
 module.exports = {
+  
     //基本根url配置项
     publicPath: process.env.NODE_ENV === "production" ? "./" : "./",
+    
 
     //build构建后生成的文件夹
     outputDir: 'dist',
@@ -42,5 +44,11 @@ module.exports = {
         preProcessor: 'less',
         patterns: []
       }
+    },
+
+    configureWebpack: config => {
+       if(production){
+         config.devtool = 'cheap-module-eval-source-map'
+       }
     }
 }

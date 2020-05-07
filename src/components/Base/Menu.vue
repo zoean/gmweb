@@ -27,7 +27,7 @@
                   </el-table-column>
                   <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <el-button @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
+                        <el-button @click="handleUpdataClick(scope.row)" type="text">修改</el-button>
                         <el-popover
                           placement="top"
                           width="200"

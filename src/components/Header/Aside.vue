@@ -6,8 +6,6 @@
                 :default-active="activeIndex"
                 ref="elmenu"
                 class="el-menu-vertical-demo"
-                @open="handleOpen"
-                @close="handleClose"
                 :default-openeds="openedsIndex"
                 :unique-opened=true
                 >
@@ -66,17 +64,27 @@ export default {
     },
     methods: {
       active_router(index) {
+        this.$store.commit('setPageNum', index.pageNum)
         this.$router.push({ path: index.url });
       },
       router_index() {
         this.activeIndex = this.$route.path;
       },
-      handleOpen(key, keyPath) {
-          // console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-          // console.log(key, keyPath);
-      },
+      filterPageNum(obj){
+        obj.map(subObj => {
+          if(subObj.url == this.activeIndex){
+            this.$store.commit('setPageNum', subObj.pageNum)
+          }else if(subObj.includeSubsetList){
+            this.filterPageNum(subObj.includeSubsetList)
+          }
+        })
+      }
+      // handleOpen(key, keyPath) {
+      //     console.log(key, keyPath);
+      // },
+      // handleClose(key, keyPath) {
+      //     console.log(key, keyPath);
+      // },
       // getMenuDetailsSubsetByUuid() {
       //   this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
       //     console.log(res);
@@ -110,7 +118,7 @@ export default {
     },
     mounted() {
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
-        const arr = this.$route.path.split("/");
+        const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
@@ -120,6 +128,7 @@ export default {
         }else if(arr[1] == 'crm'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[1].includeSubsetList;
+          this.filterPageNum(this.userMenuList)
         }else if(arr[1] == 'knowp'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[2].includeSubsetList;
