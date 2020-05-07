@@ -35,7 +35,7 @@ import newStudents from '@/components/Crm/NewStudents';
 import registered from '@/components/Crm/Registered';
 import headMaster from '@/components/Crm/HeadMaster';
 import vip from '@/components/Crm/Vip';
-import fieldManagement from '@/components/Crm/fieldManagement';
+import fieldManagement from '@/components/Crm/FieldManagement';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';

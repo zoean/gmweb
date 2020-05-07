@@ -12,6 +12,7 @@ const state = {
     // oneLogin: false, //是否首次登录(true:是 false:不是)
     userMenuList: [], //用户路由表
     avatar: '', //用户头像
+    pageNum: ''
 }
 
 const mutations = {
@@ -39,6 +40,9 @@ const mutations = {
     setAvatar(state,avatar){
         return(state.avatar = avatar);
     },
+    setPageNum(state, pageNum){
+        state.pageNum = pageNum
+    }
 }
 
 const actions = {

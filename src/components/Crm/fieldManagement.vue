@@ -9,7 +9,7 @@
           <el-button  type="primary">搜索</el-button>
         </div>
         <el-table :data="pageManageList.list">
-          <el-table-column v-for="(item, index) in pageManageListColumn" :prop="item.prop" :key="index" :label="item.label">
+          <el-table-column v-for="(item, index) in pageManageListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">
           </el-table-column> 
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -109,6 +109,7 @@
 </template>
 <script>
 import {addPage, getPage, updatePage, addField, updateField, getField, getFieldDetail} from '@/request/api'
+import {timestampToTime} from '@/assets/js/common'
 export default {
   data(){
     return {
@@ -116,13 +117,16 @@ export default {
       pageManageList: [],
       pageManageListColumn:[
         {
+          'prop':'number', 'label': '页面编号'
+        },        
+        {
           'prop':'name', 'label': '页面名称'
         },        
         {
           'prop':'describe', 'label': '页面描述'
         },
         {
-          'prop':'createTime', 'label': '创建时间'
+          'prop':'createTime', 'label': '创建时间', formatter: this.timeFormatter
         }
       ],
       addEditPageVisible: false,
@@ -196,6 +200,9 @@ export default {
     this.getPageManageList()
   },
   methods: {
+    timeFormatter(row, column, cellValue){
+      return timestampToTime(Number(cellValue))
+    },
     statusFormatter(row, column, cellValue){
       return cellValue ? '是' : '否'
     },
@@ -233,6 +240,7 @@ export default {
                   message: '添加页面成功'
                 })
                 this.addEditPageVisible = false
+                this.getPageManageList()
               }else{
                 this.$message({
                   type: 'error', 
