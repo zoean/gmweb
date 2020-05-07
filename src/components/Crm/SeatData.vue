@@ -109,14 +109,30 @@
                     ref="tableSelect"
                     v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
+
                     <el-table-column
                       type="selection"
                       width="45">
                     </el-table-column>
+
+                    <el-table-column
+                      prop="phone"
+                      label="电话数据"
+                      width="100">
+                    </el-table-column>
+
+                    <el-table-column prop="phoneIcon" label="" width="50px;">
+                        <template slot-scope="scope">
+                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                                <i class="el-icon-document-copy" style="cursor: pointer;" @click="phoneCopy(scope.row)"></i>
+                            </el-tooltip>
+                      </template>
+                    </el-table-column>
+                    
                     <el-table-column
                       :prop="item.prop"
                       :label="item.label"
-                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
+                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
@@ -171,8 +187,9 @@ import {
     enumByEnumNums, 
     getRuleItem,
     clueDataRelease,
+    copyTel,
 } from '../../request/api';
-import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText } from '../../assets/js/common';
+import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText, copyData } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
 import { MJ_6 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
@@ -205,7 +222,6 @@ export default {
             ruleNumberNameList: [], //分配组数组
             list: [],
             columnList: [
-                { 'prop': 'phone', 'label': '电话数据' },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目' },
                 { 'prop': 'userName', 'label': '所属坐席' },
@@ -381,6 +397,28 @@ export default {
                     }
                 })
             }
+        },
+        phoneCopy(row) {
+            console.log(row.clueDataSUuid);
+            this.copyTel(row.clueDataSUuid);
+        },
+        copyTel(id) {
+            this.$smoke_post(copyTel, {
+                uuid: id
+            }).then(res => {
+                if(res.code == 200) {
+                    copyData(res.data);
+                    this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
         },
     },
     mounted() {
