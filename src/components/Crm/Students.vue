@@ -16,19 +16,40 @@
                     ref="tree"
                     v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
+
+                    <el-table-column
+                      prop="tel"
+                      label="电话数据"
+                      width="100">
+                    </el-table-column>
+
+                    <el-table-column prop="phoneIcon" label="" width="50px;">
+                        <template slot-scope="scope">
+                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
                     
                     <el-table-column
                       :prop="item.prop"
                       :label="item.label"
+                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
                     </el-table-column>
+
                     <el-table-column prop="active" label="操作">
                       <template slot-scope="scope">
                           <el-button @click="studentDetails(scope.row)" type="text" >学员详情</el-button>
                       </template>
                     </el-table-column>
+
                 </el-table>
 
                 <el-drawer
@@ -363,9 +384,10 @@ import {
     getClassTeaStuNotes, 
     getClassTeaClass,
     enumByEnumNums,
-    getSchoolList
+    getSchoolList,
+    copyTel,
 } from '../../request/api';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, } from '../../assets/js/common';
+import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -382,7 +404,6 @@ export default {
             },
             list: [],
             columnList: [
-                { 'prop': 'tel', 'label': '电话数据' },
                 // { 'prop': 'clueUserUuid', 'label': '所属坐席' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },
@@ -540,9 +561,10 @@ export default {
                 if(res.code == 200) {
                     if(this.$route.query.id == undefined){
                         this.titleFlag = false;
-                        this.form.classTeaUuid = localStorage.getItem("userUuid");
-                        this.form.classUuid = res.data[0].uuid;
-                        this.classUuidDefault = res.data[0].uuid;
+                        if(res.data.length) {
+                            this.form.classUuid = res.data[0].uuid;
+                            this.classUuidDefault = res.data[0].uuid;
+                        }
                     }else{
                         this.titleFlag = true;
                         this.form.classTeaUuid = this.$route.query.id;
@@ -707,6 +729,28 @@ export default {
                     this.pageshow = true;
                 });
             }
+        },
+        phoneCopy(row) {
+            console.log(row.clueDataSUuid);
+            this.copyTel(row.clueDataSUuid);
+        },
+        copyTel(id) {
+            this.$smoke_post(copyTel, {
+                uuid: id
+            }).then(res => {
+                if(res.code == 200) {
+                    copyData(res.data);
+                    this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
         },
     },
     mounted() {

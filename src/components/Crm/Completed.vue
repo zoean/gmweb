@@ -22,14 +22,34 @@
                     :data="list"
                     v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)">
+
+                    <el-table-column
+                      prop="phone"
+                      label="电话数据"
+                      width="100">
+                    </el-table-column>
+
+                    <el-table-column prop="phoneIcon" label="" width="50px;">
+                        <template slot-scope="scope">
+                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
+                            </el-tooltip>
+                      </template>
+                    </el-table-column>
+
                     <el-table-column
                       :prop="item.prop"
                       :label="item.label"
-                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
+                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
                     </el-table-column>
+
                     <el-table-column prop="active" label="操作" width="400px;">
                       <template slot-scope="scope">
                           <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
@@ -39,6 +59,7 @@
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
                       </template>
                     </el-table-column>
+
                 </el-table>
 
                 <el-pagination
@@ -82,9 +103,10 @@ import {
     phoneOut,
     seatOut,
     clueDataRelease,  
+    copyTel
 } from '../../request/api';
 import Start from '../../components/Share/Start';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, copyData } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -101,7 +123,6 @@ export default {
             totalFlag: false,
             list: [],
             columnList: [
-                { 'prop': 'phone', 'label': '电话数据' },
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
@@ -297,7 +318,29 @@ export default {
                     message: '请联系主管配置jq账号'
                 })
             }
-        }
+        },
+        phoneCopy(row) {
+            console.log(row.clueDataSUuid);
+            this.copyTel(row.clueDataSUuid);
+        },
+        copyTel(id) {
+            this.$smoke_post(copyTel, {
+                uuid: id
+            }).then(res => {
+                if(res.code == 200) {
+                    copyData(res.data);
+                    this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
     },
     mounted() {
         

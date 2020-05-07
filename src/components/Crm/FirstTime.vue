@@ -32,7 +32,11 @@
                     <el-table-column prop="phoneIcon" label="" width="50px;">
                         <template slot-scope="scope">
                             <el-tooltip effect="dark" content="复制手机号码" placement="top">
-                                <i class="el-icon-document-copy" style="cursor: pointer;" @click="phoneCopy(scope.row)"></i>
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
                             </el-tooltip>
                       </template>
                     </el-table-column>

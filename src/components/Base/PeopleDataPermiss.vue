@@ -7,66 +7,173 @@
 
                 <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工数据权限管理</div>
 
-                <el-row class="tab-title">
 
-                    <el-col class="tab-title-div">成员信息</el-col>
+                <el-row class="tab">
 
-                </el-row>
+                    <el-col :span="6" class="tab-left">
 
-                <el-row style="margin-top: 10px;">
+                        <div class="tab-left-title">成员信息</div>
 
-                    <el-col :span="18">
+                        <div class="tab-xian"></div>
+
+                        <el-image
+                            style="width: 1rem; height: 1rem; border-radius: 50%; margin-top: .2rem;"
+                            :src="require('../../assets/images/header_img.png')">
+                        </el-image>
 
                         <el-table
+                            style="margin-top: .2rem;"
                             :data="userList"
+                            :cell-style='cellStyle'
                             :show-header="false"
-                            border
                             >
                             <el-table-column
                                 :prop="item.prop"
                                 :label="item.label"
-                                :width="item.prop == 'attr' ? '200' : ''"
                                 v-for="(item, index) in userColumnList"
                                 :key="index"
                                 >
                             </el-table-column>
                         </el-table>
 
-                    </el-col>
-
-                </el-row>
-
-
-                <el-row class="tab-title" style="margin-top: 20px;">
-
-                    <el-col class="tab-title-div">分校平台</el-col>
-
-                </el-row>
-
-                <el-row style="margin-top: 10px;">
-
-                    <el-col :span="18">
-
-                        <el-table
-                            :data="schoolList"
-                            :show-header="false"
-                            border
-                            >
-                            <el-table-column
-                                :prop="item.prop"
-                                :label="item.label"
-                                :width="item.prop == 'attr' ? '200' : ''"
-                                v-for="(item, index) in userColumnList"
-                                :key="index"
-                                >
-                            </el-table-column>
-                        </el-table>
+                        <el-image
+                            class="tab-left-image"
+                            :src="require('../../assets/images/info-back.png')">
+                        </el-image>
 
                     </el-col>
 
-                    <el-col :span="5" :offset="1">
+                    <el-col :span="17" :offset="1" class="tab-right">
 
-                        <el-button type="primary" @click="editSchoolClick">修改分校</el-button>
+                        <div class="tab-right-title">分校平台</div>
+
+                        <div class="tab-xian"></div>
+
+                        <el-row style="margin-bottom: 20px;">
+                        
+                            <el-col :span="18">
+                            
+                                <el-table
+                                    :data="schoolList"
+                                    :show-header="false"
+                                    >
+                                    <el-table-column
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        :width="item.prop == 'attr' ? '150' : ''"
+                                        v-for="(item, index) in userColumnList"
+                                        :key="index"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+
+                            </el-col>
+
+                            <el-col :span="5" :offset="1">
+                            
+                                <el-button type="primary" @click="editSchoolClick" style="margin-top: 4px;">修改分校</el-button>
+
+                            </el-col>
+
+                        </el-row>
+
+                        <div class="tab-right-title">坐席数据</div>
+
+                        <div class="tab-xian"></div>
+
+                        <el-row style="margin-bottom: 20px;">
+                        
+                            <el-col :span="18">
+                            
+                                <el-table
+                                    :data="seatList"
+                                    :show-header="false"
+                                    >
+                                    <el-table-column
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        :width="item.prop == 'attr' ? '150' : ''"
+                                        v-for="(item, index) in userColumnList"
+                                        :key="index"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+
+                            </el-col>
+
+                            <el-col :span="5" :offset="1">
+                            
+                                <el-button type="primary" @click="editPeopleClick" style="margin-top: 4px;">修改部门与人员</el-button>
+
+                            </el-col>
+
+                        </el-row>
+
+                        <div class="tab-right-title">回收线索</div>
+
+                        <div class="tab-xian"></div>
+
+                        <el-row style="margin-bottom: 20px;">
+                        
+                            <el-col :span="18">
+                            
+                                <el-table
+                                    :data="backList"
+                                    :show-header="false"
+                                    >
+                                    <el-table-column
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        :width="item.prop == 'attr' ? '150' : ''"
+                                        v-for="(item, index) in userColumnList"
+                                        :key="index"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+
+                            </el-col>
+
+                            <el-col :span="5" :offset="1">
+                            
+                                <el-button type="primary" @click="editBackClick" style="margin-top: 4px;">修改考试项</el-button>
+
+                            </el-col>
+
+                        </el-row>
+
+                        <div class="tab-right-title">数据组与溢出</div>
+
+                        <div class="tab-xian"></div>
+
+                        <el-row style="margin-bottom: 20px;">
+                        
+                            <el-col :span="18">
+                            
+                                <el-table
+                                    :data="dataSetList"
+                                    :show-header="false"
+                                    >
+                                    <el-table-column
+                                        :prop="item.prop"
+                                        :label="item.label"
+                                        :width="item.prop == 'attr' ? '150' : ''"
+                                        v-for="(item, index) in userColumnList"
+                                        :key="index"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+
+                            </el-col>
+
+                            <el-col :span="5" :offset="1">
+                            
+                                <el-button type="primary" @click="editDataSetClick" style="margin-top: 4px;">修改数据组</el-button>
+
+                            </el-col>
+
+                        </el-row>
+
+                        <el-button type="primary" @click="onSubmit" class="btn-ok">保存</el-button>
 
                     </el-col>
 
@@ -88,43 +195,6 @@
                     <el-button type="primary" style="margin: 0 20px;" @click="addSchool">确定</el-button>
                     
                 </el-drawer>
-
-
-                <el-row class="tab-title" style="margin-top: 20px;">
-
-                    <el-col class="tab-title-div">坐席数据</el-col>
-
-                </el-row>
-
-                <el-row style="margin-top: 10px;">
-
-                    <el-col :span="18">
-
-                        <el-table
-                            :data="seatList"
-                            :show-header="false"
-                            border
-                            >
-                            <el-table-column
-                                :prop="item.prop"
-                                :label="item.label"
-                                :width="item.prop == 'attr' ? '200' : ''"
-                                v-for="(item, index) in userColumnList"
-                                :key="index"
-                                >
-                            </el-table-column>
-                        </el-table>
-
-                    </el-col>
-
-                    <el-col :span="5" :offset="1">
-
-                        <el-button type="primary" @click="editPeopleClick">修改部门与人员</el-button>
-
-                    </el-col>
-
-                </el-row>
-
 
                 <el-drawer
                     :title="drawerTitle1"
@@ -182,50 +252,13 @@
 
                             </el-table>
 
-                            <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
+                            <el-button type="primary" style="margin: 20px 0;" @click="addPeople">确定</el-button>
 
                         </el-col>
 
                     </el-row>
 
                 </el-drawer>
-
-
-                <el-row class="tab-title" style="margin-top: 20px;">
-
-                    <el-col class="tab-title-div">回收线索</el-col>
-
-                </el-row>
-
-                <el-row style="margin-top: 10px;">
-
-                    <el-col :span="18">
-
-                        <el-table
-                            :data="backList"
-                            :show-header="false"
-                            border
-                            >
-                            <el-table-column
-                                :prop="item.prop"
-                                :label="item.label"
-                                :width="item.prop == 'attr' ? '200' : ''"
-                                v-for="(item, index) in userColumnList"
-                                :key="index"
-                                >
-                            </el-table-column>
-                        </el-table>
-
-                    </el-col>
-
-                    <el-col :span="5" :offset="1">
-
-                        <el-button type="primary" @click="editBackClick">修改考试项</el-button>
-
-                    </el-col>
-
-                </el-row>
-
 
                 <el-drawer
                     :title="drawerTitle2"
@@ -282,50 +315,13 @@
 
                             </el-table>
 
+                            <el-button type="primary" style="margin: 20px 0;" @click="addExam">确定</el-button>
+
                         </el-col>
 
                     </el-row>
 
-                    <el-button type="primary" style="margin: 0 20px;" @click="addExam">确定</el-button>
-                    
                 </el-drawer>
-
-
-                <el-row class="tab-title" style="margin-top: 20px;">
-
-                    <el-col class="tab-title-div">数据组与溢出</el-col>
-
-                </el-row>
-
-                <el-row style="margin-top: 10px;">
-
-                    <el-col :span="18">
-
-                        <el-table
-                            :data="dataSetList"
-                            :show-header="false"
-                            border
-                            >
-                            <el-table-column
-                                :prop="item.prop"
-                                :label="item.label"
-                                :width="item.prop == 'attr' ? '200' : ''"
-                                v-for="(item, index) in userColumnList"
-                                :key="index"
-                                >
-                            </el-table-column>
-                        </el-table>
-
-                    </el-col>
-
-                    <el-col :span="5" :offset="1">
-
-                        <el-button type="primary" @click="editDataSetClick">修改数据组</el-button>
-
-                    </el-col>
-
-                </el-row>
-
 
                 <el-drawer
                     :title="drawerTitle3"
@@ -382,15 +378,13 @@
 
                             </el-table>
 
+                            <el-button type="primary" style="margin: 20px 0;" @click="addSet">确定</el-button>
+
                         </el-col>
 
                     </el-row>
 
-                    <el-button type="primary" style="margin: 0 20px;" @click="addSet">确定</el-button>
-                    
                 </el-drawer>
-
-                <el-button type="primary" @click="onSubmit" class="btn-ok">保存</el-button>
 
             </el-main>
 
@@ -477,7 +471,10 @@ export default {
             direction0: 'rtl',
             tableDataSchool: [],
             tableDataSchoolFlagArr: {},
-            radioId: ''
+            radioId: '',
+            cellStyle: {
+                'text-align': 'center'
+            }
         }
     },
     created() {
@@ -489,7 +486,7 @@ export default {
     },
     methods: {
         goback(){
-        this.$router.go(-1)
+            this.$router.go(-1);
         },
         getPermission() {
             let keysArr = [];
@@ -830,22 +827,40 @@ export default {
                 cursor: pointer;
             }
         }
-        .people-screen{
-            margin-bottom: .3rem;
-            .screen-li{
-                width: 90%;
+        .tab{
+            height: 90%;
+            .tab-xian{
+                height: 1px;
+                width: 100%;
+                background: #E9E9E9;
             }
-        }
-        .tab-title{
-            height: 40px;
-            text-align: center;
-            line-height: 40px;
-            font-size: 14px;
-            .tab-title-div{
-                width: 200px;
+            .tab-left{
                 background: #fff;
-                font-weight: bold;
-                color: orange;
+                min-height: 100%;
+                text-align: center;
+                position: relative;
+                .tab-left-title{
+                    height: 54px;
+                    line-height: 54px;
+                    font-size: 16px;
+                }
+                .tab-left-image{
+                    width: 100%;
+                    height: 2rem;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
+            }
+            .tab-right{
+                background: #fff;
+                min-height: 100%;
+                .tab-right-title{
+                    height: 54px;
+                    line-height: 54px;
+                    font-size: 16px;
+                    padding-left: 10px;
+                }
             }
         }
         .note{
