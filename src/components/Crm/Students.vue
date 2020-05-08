@@ -557,7 +557,9 @@ export default {
             });
         },
         getClassTeaClass() {
-            this.$smoke_get(getClassTeaClass,{}).then(res => {
+            this.$smoke_get(getClassTeaClass,{
+                classTeaUuid: this.$route.query.id || ''
+            }).then(res => {
                 if(res.code == 200) {
                     if(this.$route.query.id == undefined){
                         this.titleFlag = false;

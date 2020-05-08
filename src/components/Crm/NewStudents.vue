@@ -85,7 +85,9 @@ export default {
         },
         getClassTeaClass() {
             this.fullscreenLoading = true;
-            this.$smoke_get(getClassTeaClass,{}).then(res => {
+            this.$smoke_get(getClassTeaClass,{
+                classTeaUuid: ''
+            }).then(res => {
                 if(res.code == 200) {
 
                     setTimeout(() => {
