@@ -185,9 +185,9 @@
         <el-table ref="curFieldTable" :data="curFieldList" class="field-table" @selection-change="handleSelectionChange"  :row-key="getRowKey">
           <el-table-column
             type="selection"
-            width="55" :reserve-selection="true">
+            width="55" :reserve-selection="true" :selectable="checkboxT" disabled>
           </el-table-column>
-          <el-table-column v-for="(item,index) in curFieldColumn" :key="index" :prop="item.prop" :label="item.label" :selectable="item.ifDef"></el-table-column>
+          <el-table-column v-for="(item,index) in curFieldColumn" :key="index" :prop="item.prop" :label="item.label"></el-table-column>
         </el-table>
         <span slot="footer" class="dialog-footer">
             <el-button @click="editFieldVisible = false">取 消</el-button>
@@ -221,6 +221,7 @@ export default {
         return {
             editFieldVisible: false,
             curFieldList: [],
+            updateFieldArray: [],
             curFieldColumn: [
               {
                 label: '字段编号',prop: 'num'
@@ -303,6 +304,13 @@ export default {
         this.getRuleItem();
     },
     methods: {
+      checkboxT(row, index){
+        if(row.ifDef){
+          return false
+        }else{
+          return true
+        }
+      },
       filterPageNum(obj){
         if(obj && obj.length > 0){
           obj.map(subObj => {
@@ -349,13 +357,12 @@ export default {
         this.$smoke_post(getListField, {num: this.$store.state.pageNum}).then( res => {
           if(res.code == 200){
             this.curFieldList = res.data
-            if(this.curFieldList){
-              this.curFieldList.forEach(item => {
-                if(item.flag){
-                  this.$refs['curFieldTable'].toggleRowSelection(this.curFieldList[item.sortNum - 1], true)
-                  if(!this.fieldNum.includes(item.num)){
-                    this.fieldNum.push(item.num)                    
-                  } 
+            if(this.curFieldList && this.curFieldList.length > 0){
+              this.curFieldList.forEach((item, index) => {
+                if(item && item.flag){
+                  this.$nextTick(() => {
+                    this.$refs['curFieldTable'].toggleRowSelection(this.curFieldList[index], true)
+                  })
                 }
               }) 
             }
@@ -364,21 +371,24 @@ export default {
         })
       },
       editFieldSubmit(){
-        let updateFieldArray = []
-        this.curFieldList.forEach( item => {
-            if(this.fieldNum.includes(item.num)){
-                updateFieldArray.push(item.num)
+        let selectionRows = this.$refs['curFieldTable'].store.states.selection
+        this.updateFieldArray = []
+        this.curFieldList.map(item => {
+          selectionRows.map(row => {
+            if(item.num == row.num){
+              this.updateFieldArray.push(item.num)
             }
+          })
         })
-        this.$smoke_post(updateListField, {num: this.$store.state.pageNum, fieldList: updateFieldArray}).then(res => {
-            if(res.code == 200){
-                this.$message({
-                    type: 'success',
-                    message: '字段配置成功'
-                })
-                this.editFieldVisible = false
-                this.getClueDataAll()
-            }
+        this.$smoke_post(updateListField, {num: this.$store.state.pageNum, fieldList: this.updateFieldArray}).then(res => {
+          if(res.code == 200){
+            this.$message({
+                type: 'success',
+                message: '字段配置成功'
+            })
+            this.editFieldVisible = false
+            this.getClueDataAll()
+          }
         })
       },
         handleCurrentChange(index) {
