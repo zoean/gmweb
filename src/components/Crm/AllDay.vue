@@ -98,19 +98,21 @@
                     :data="list"
                     v-loading="fullscreenLoading"
                     :row-class-name="tableRowClassName"
-                    style="width: calc( 100vw - 3.8rem)">
-
-                    <el-table-column prop="phoneIcon" label="" width="60px;">
-                        <template slot-scope="scope">
-                            <i class="el-icon-document-copy" @click="phoneCopy(scope.row)"></i>
+                    style="width: calc( 100vw - 3.8rem)"
+                    :row-key="getRowKey">
+                    
+                    <el-table-column
+                      align="right" width="60px">
+                      <template slot="header" slot-scope="scope">
+                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
                     </el-table-column>
-
                     <el-table-column
-                      :prop="item.prop"
+                      :prop="item.props"
                       :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       :label="item.label"
                       v-for="(item, index) in columnList"
+                      :sortable="item.ifSort ? true : false"
                       :key="index"
                       >
                     </el-table-column>
@@ -166,11 +168,25 @@
             </el-main>
 
         </el-container>
-
+      <el-dialog :visible.sync="editFieldVisible" title="编辑字段" :close-on-click-modal="false">
+        <p>拖拽表格数据行即可对字段进行排序</p>
+        <el-table ref="curFieldTable" :data="curFieldList" class="field-table" @selection-change="handleSelectionChange"  :row-key="getRowKey">
+          <el-table-column
+            type="selection"
+            width="55" :reserve-selection="true">
+          </el-table-column>
+          <el-table-column v-for="(item,index) in curFieldColumn" :key="index" :prop="item.prop" :label="item.label" :selectable="item.ifDef"></el-table-column>
+        </el-table>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="editFieldVisible = false">取 消</el-button>
+            <el-button type="primary" @click="editFieldSubmit">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
 </template>
 
 <script>
+import Sortable from 'sortablejs'
 import { 
     getClueDataAll,
     phoneOut,
@@ -179,7 +195,8 @@ import {
     enumByEnumNums,
     getRuleItem,
     getClueDataNumber,
-    getListField
+    getListField,
+    updateListField
 } from '../../request/api';
 import Start from '../../components/Share/Start';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, menuNumberFunc } from '../../assets/js/common';
@@ -189,6 +206,20 @@ export default {
     name: 'sevenDay',
     data() {
         return {
+            editFieldVisible: false,
+            curFieldList: [],
+            curFieldColumn: [
+              {
+                label: '字段编号',prop: 'num'
+              },
+              {
+                label:'字段名称', prop: 'label',
+              }
+              // {
+              //   label: '字段排序', prop: 'sortNum'
+              // }
+            ],
+            fieldNum: [],
             form: {
                 currentPage: 1,
                 pageSize: 10,
@@ -203,6 +234,7 @@ export default {
                 workingLife: '', //工作年限
                 selectTime: '', //未联间隔
                 ruleNumberName: '', //分配组组名
+                num: this.$store.state.pageNum
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -256,30 +288,95 @@ export default {
         let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
-        this.getListField()
     },
     methods: {
-        getListField(){
-          this.$smoke_post(getListField, {num: this.$store.state.pageNum}).then( res => {
-            if(res.code == 200){
-              console.log(res.data)
+      filterPageNum(obj){
+        if(obj && obj.length > 0){
+          obj.map(subObj => {
+            if(subObj.url == this.$route.path){
+              this.$store.commit('setPageNum', subObj.pageNum)
+            }else if(subObj && subObj.includeSubsetList){
+              this.filterPageNum(subObj.includeSubsetList)
             }
           })
-        },
+        }
+      },
+      rowDrop(){
+          const el = document.querySelectorAll('.field-table>.el-table__body-wrapper > table > tbody')[0]
+          Sortable.create(el, {
+              disabled: false,
+              onEnd: (evt) => {
+                  const tempItem = this.curFieldList.splice(evt.oldIndex, 1)[0]
+                  this.curFieldList.splice(evt.newIndex, 0, tempItem)
+                  var newArray = this.curFieldList.slice(0)
+                  this.curFieldList = [];
+                  this.$nextTick(() => {
+                      this.curFieldList = newArray;
+                  });
+              }
+          })
+      },
+      getRowKey(row){
+        return row.num
+      },
+      handleSelectionChange(row) {//监听selection选择事件
+        this.fieldNum = []
+        for(let i in row){//去重以免发生意外的push
+          if(!this.fieldNum.includes(row[i].num)){
+            this.fieldNum.push(row[i].num)
+          }  		
+        }
+      },
+      editFieldHandle(){
+        this.editFieldVisible = true
+        this.getListField()
+      },
+      getListField(){
+        this.$smoke_post(getListField, {num: this.$store.state.pageNum}).then( res => {
+          if(res.code == 200){
+            this.curFieldList = res.data
+            if(this.curFieldList){
+              this.curFieldList.forEach(item => {
+                if(item.flag){
+                  this.$refs['curFieldTable'].toggleRowSelection(this.curFieldList[item.sortNum - 1], true)
+                  if(!this.fieldNum.includes(item.num)){
+                    this.fieldNum.push(item.num)                    
+                  } 
+                }
+              }) 
+            }
+            this.rowDrop()
+          }
+        })
+      },
+      editFieldSubmit(){
+        let updateFieldArray = []
+        this.curFieldList.forEach( item => {
+            if(this.fieldNum.includes(item.num)){
+                updateFieldArray.push(item.num)
+            }
+        })
+        this.$smoke_post(updateListField, {num: this.$store.state.pageNum, fieldList: updateFieldArray}).then(res => {
+            if(res.code == 200){
+                this.$message({
+                    type: 'success',
+                    message: '字段配置成功'
+                })
+                this.editFieldVisible = false
+                this.getClueDataAll()
+            }
+        })
+      },
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.getClueDataAll();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.getClueDataAll();
         }, 
         selectTimeChange(value) {
-            console.log(value.length);
             const time = new Date(new Date().toLocaleDateString()).getTime();
-            console.log(time);
             const oneTime = time - ( 3600 * 1000 * 24 * 1 );
             const threeTime = time - ( 3600 * 1000 * 24 * 3 );
             const fourTime = time - ( 3600 * 1000 * 24 * 4 );
@@ -358,7 +455,6 @@ export default {
             this.fullscreenLoading = true;
             this.drawer = false;
             this.$smoke_post(getClueDataAll, this.form).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -366,10 +462,13 @@ export default {
                             sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
                         })
+                        this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
                         localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
+                        let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
+                        this.filterPageNum(userMenuList)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -388,7 +487,6 @@ export default {
             this.$smoke_post(clueDataRelease, {
                 list: arr
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',
@@ -399,8 +497,6 @@ export default {
             })
         },
         phoneOut( scope ) {
-            console.log(this.initOptions);
-            console.log(scope);
             if(this.initOptions != undefined){
                 this.$smoke_post(phoneOut, {
                     adminUin: this.initOptions.adminUin,
@@ -428,7 +524,6 @@ export default {
                         })
                     }
 	                this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                        console.log('监听成功-callTip');
                         console.log(message);
                         console.log(jsonObject);
                     });
@@ -501,7 +596,8 @@ export default {
         }
     },
     mounted() {
-        
+      let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
+      this.filterPageNum(userMenuList)
     }
 }
 </script>
@@ -528,6 +624,11 @@ export default {
             }
             .el-button{
               margin-left: 10px;
+            }
+            .edit-field-icon{
+              color: #5cb6ff;
+              font-size: 20px;
+              cursor: pointer;
             }
         }
     }

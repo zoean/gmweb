@@ -28,8 +28,6 @@ export default {
     },
     methods: {
         handleAvatarSuccess(res, file) {
-            console.log(res);
-            console.log(file);
             let str = '';
             if(res.code == 200) {
                 if(res.data.length == 0){

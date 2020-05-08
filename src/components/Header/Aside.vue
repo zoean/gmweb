@@ -69,16 +69,7 @@ export default {
       },
       router_index() {
         this.activeIndex = this.$route.path;
-      },
-      filterPageNum(obj){
-        obj.map(subObj => {
-          if(subObj.url == this.activeIndex){
-            this.$store.commit('setPageNum', subObj.pageNum)
-          }else if(subObj.includeSubsetList){
-            this.filterPageNum(subObj.includeSubsetList)
-          }
-        })
-      }
+      }      
       // handleOpen(key, keyPath) {
       //     console.log(key, keyPath);
       // },
@@ -128,7 +119,6 @@ export default {
         }else if(arr[1] == 'crm'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[1].includeSubsetList;
-          this.filterPageNum(this.userMenuList)
         }else if(arr[1] == 'knowp'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[2].includeSubsetList;
