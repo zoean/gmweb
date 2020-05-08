@@ -234,7 +234,7 @@ export default {
                 workingLife: '', //工作年限
                 selectTime: '', //未联间隔
                 ruleNumberName: '', //分配组组名
-                num: this.$store.state.pageNum
+                num: ''
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -295,6 +295,7 @@ export default {
           obj.map(subObj => {
             if(subObj.url == this.$route.path){
               this.$store.commit('setPageNum', subObj.pageNum)
+              this.form.num = subObj.pageNum
             }else if(subObj && subObj.includeSubsetList){
               this.filterPageNum(subObj.includeSubsetList)
             }
@@ -454,6 +455,8 @@ export default {
         getClueDataAll() {
             this.fullscreenLoading = true;
             this.drawer = false;
+            let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
+            this.filterPageNum(userMenuList)
             this.$smoke_post(getClueDataAll, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
@@ -467,8 +470,6 @@ export default {
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
                         localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
-                        let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
-                        this.filterPageNum(userMenuList)
                     }, 300);
                 }else{
                     setTimeout(() => {

@@ -22,13 +22,11 @@ export default {
     }
   },
   created() {
-    const userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
     if((this.$route.path == '/login') || ((this.$route.path == '/404'))){
       this.$store.dispatch('actionsSetCommonFlag', false);
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
     }
-    this.filterPageNum(userMenuList)
   },
   watch:{
     '$route.path': function(newVal,oldVal){
@@ -40,16 +38,6 @@ export default {
     }
   },
   methods: {
-    filterPageNum(obj){
-      obj.map(subObj => {
-        if(subObj.url == this.$route.path){
-          this.$store.commit('setPageNum', subObj.pageNum)
-          console.log(this.$store.state.pageNum)
-        }else if(subObj.includeSubsetList){
-          this.filterPageNum(subObj.includeSubsetList)
-        }
-      })
-    }
   }
 }
 </script>
