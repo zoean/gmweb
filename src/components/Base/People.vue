@@ -219,7 +219,6 @@ export default {
             '&endHiredDate=' + this.screenForm.endHiredDate + 
             '&sortSet=' + str + 
             '&orgUuidList=' + this.screenForm.orgUuidList[0];
-            ;
             console.log(href);
 
             // this.$smoke_get(exportUserDetailedList, {

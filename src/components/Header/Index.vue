@@ -62,6 +62,7 @@
             </el-col>
 
             <el-col :span="4">
+                <span style="position: absolute; right: 154px; font-size: 14px;">Beta 1.0.0</span>
                 <el-badge :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
                     <i class="el-icon-bell" style="font-size: 18px;"></i>
                 </el-badge>

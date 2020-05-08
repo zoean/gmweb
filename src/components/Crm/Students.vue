@@ -67,6 +67,13 @@
                                     <el-col :span="6">
                                         <el-form-item label="客户手机" prop="tel">
                                             <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
+                                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                                                <el-image
+                                                    style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"
+                                                    @click="phoneCopyFun"
+                                                    :src="require('../../assets/images/copy-icon.png')">
+                                                </el-image>
+                                            </el-tooltip>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="6">
@@ -482,6 +489,7 @@ export default {
             pageshow: true, //分页重新渲染
             schoolList: [],
             fullscreenLoading: false,
+            copyClueDataSUuid: '', //学员详情copy手机号时用的clueDataSUuid
         }
     },
     created() {
@@ -523,6 +531,7 @@ export default {
             console.log(row);
             this.drawer = true;
             this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
+            this.copyClueDataSUuid = row.clueDataSUuid;
             this.getStudentDetails(row.uuid);
         },
         cityChange() {
@@ -748,6 +757,9 @@ export default {
                 }
             })
         },
+        phoneCopyFun() {
+            this.copyTel(this.copyClueDataSUuid);
+        }
     },
     mounted() {
         
