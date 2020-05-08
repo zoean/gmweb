@@ -228,7 +228,7 @@ import {
     pushPeopleFunc,
 } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
-import { MJ_6 } from '../../assets/js/data';
+import { MJ_6, zuzhiUuid } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'reCoverData',
@@ -427,7 +427,7 @@ export default {
         },
         getRuleUserStructureLimit() {
             this.$smoke_post(getRuleUserStructureLimit, {
-                uuid: '2a39b4c564494c58a0b15512a62e7014'
+                uuid: zuzhiUuid
             }).then(res => {
                 if(res.code == 200) {
                     this.treeData = pushPeopleFunc(res.data.list);

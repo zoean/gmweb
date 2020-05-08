@@ -904,11 +904,13 @@ export default {
 
                     this.notesDetailsForm.notes.classOffer = res.data.notes.classOffer;
 
-                    this.classTypeList.map(sll => {
-                        if(res.data.notes.classType = sll.number) {
-                            this.notesDetailsForm.notes.classType = sll.name;       
-                        }
-                    })
+                    if(this.classTypeList) {
+                        this.classTypeList.map(sll => {
+                            if(res.data.notes.classType = sll.number) {
+                                this.notesDetailsForm.notes.classType = sll.name;       
+                            }
+                        })
+                    }
 
                     this.notesDetailsForm.notes.comMode = smoke_MJ_4(res.data.notes.comMode);              
                     this.notesDetailsForm.notes.entryPerson = res.data.notes.entryPerson;              

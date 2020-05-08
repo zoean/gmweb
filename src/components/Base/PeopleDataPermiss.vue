@@ -43,7 +43,7 @@
 
                     </el-col>
 
-                    <el-col :span="17" :offset="1" class="tab-right">
+                    <el-col :span="18" class="tab-right">
 
                         <div class="tab-right-title">分校平台</div>
 
@@ -884,6 +884,8 @@ export default {
             .tab-right{
                 background: #fff;
                 min-height: 100%;
+                width: calc( 75% - 20px);
+                margin-left: 20px;
                 .tab-right-title{
                     height: 54px;
                     line-height: 54px;

@@ -95,3 +95,9 @@ export const MJ_9 = 'MJ-9'; //jq平台账号
 export const MJ_10 = 'MJ-10'; //学籍状态
 export const MJ_11 = 'MJ-11'; //学习状况
 export const MJ_12 = 'MJ-12'; //跟进类型
+
+//溢出池和回收池 分配至人
+export const zuzhiUuid = '2a39b4c564494c58a0b15512a62e7014';
+
+//人员详情角色 超级管理员的 uuid
+export const superManageUuid = '383799112b0d47a7a3341bce77f8b776';

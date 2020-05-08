@@ -107,14 +107,25 @@
                         <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
                     </el-table-column>
+                    
                     <el-table-column
                       :prop="item.props"
-                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '100px': item.label == '拨通 / 拨打' ? '100px' : ''"
+                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
                       :label="item.label"
                       v-for="(item, index) in columnList"
                       :sortable="item.ifSort ? true : false"
                       :key="index"
                       >
+                      <template slot-scope="scope">
+                            <span>{{scope.row[item.props]}}</span>
+                            <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
+                            </el-tooltip>
+                      </template>
                     </el-table-column>
 
                     <el-table-column prop="active" label="操作" width="400px;">
@@ -126,6 +137,7 @@
                             cancelButtonText='取消'
                             icon="el-icon-info"
                             iconColor="red"
+                            placement="top"
                             title="确认释放该数据吗？"
                             @onConfirm="release(scope.row)"
                           >
@@ -196,10 +208,11 @@ import {
     getRuleItem,
     getClueDataNumber,
     getListField,
-    updateListField
+    updateListField,
+    copyTel
 } from '../../request/api';
 import Start from '../../components/Share/Start';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, menuNumberFunc } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, menuNumberFunc, copyData } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -250,7 +263,7 @@ export default {
             ],
             list: [],
             columnList: [
-                { 'prop': 'phone', 'label': '电话数据' },
+                { 'prop': 'tel', 'label': '电话数据' },
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
@@ -593,8 +606,27 @@ export default {
             return '';
         },
         phoneCopy(row) {
-            
-        }
+            console.log(row.clueDataSUuid);
+            this.copyTel(row.clueDataSUuid);
+        },
+        copyTel(id) {
+            this.$smoke_post(copyTel, {
+                uuid: id
+            }).then(res => {
+                if(res.code == 200) {
+                    copyData(res.data);
+                    this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
     },
     mounted() {
       let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))

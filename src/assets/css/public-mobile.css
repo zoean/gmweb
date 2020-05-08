@@ -291,11 +291,15 @@ a:link,a:active,a:visited,a:hover {
 
 .copy-icon-style{
     position: relative; 
-    left: -10px;
+    left: 10px;
     top: 2px;
     cursor: pointer;
     width: 14px;
     height: 14px;
+}
+
+.el-popover{
+    line-height: 2.2 !important;
 }
 
 

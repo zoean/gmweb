@@ -24,14 +24,15 @@
                     style="width: calc( 100vw - 3.8rem)">
 
                     <el-table-column
-                      prop="phone"
-                      label="电话数据"
-                      width="100">
-                    </el-table-column>
-
-                    <el-table-column prop="phoneIcon" label="" width="50px;">
-                        <template slot-scope="scope">
-                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                      :prop="item.prop"
+                      :label="item.label"
+                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
+                      v-for="(item, index) in columnList"
+                      :key="index"
+                      >
+                      <template slot-scope="scope">
+                            <span>{{scope.row[item.prop]}}</span>
+                            <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
                                 <el-image
                                     class="copy-icon-style"
                                     @click="phoneCopy(scope.row)"
@@ -41,20 +42,21 @@
                       </template>
                     </el-table-column>
 
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
-                      v-for="(item, index) in columnList"
-                      :key="index"
-                      >
-                    </el-table-column>
-
                     <el-table-column prop="active" label="操作" width="400px;">
                       <template slot-scope="scope">
                           <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                           <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
-                          <el-button @click="release(scope.row)" type="text" >释放数据</el-button>
+                          <el-popconfirm
+                            confirmButtonText='确定'
+                            cancelButtonText='取消'
+                            icon="el-icon-info"
+                            iconColor="red"
+                            placement="top"
+                            title="确认释放该数据吗？"
+                            @onConfirm="release(scope.row)"
+                          >
+                            <el-button type="text" slot="reference">释放数据</el-button>
+                          </el-popconfirm>
                           <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
                       </template>
@@ -123,6 +125,7 @@ export default {
             totalFlag: false,
             list: [],
             columnList: [
+                { 'prop': 'phone', 'label': '电话数据' },
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
@@ -367,6 +370,14 @@ export default {
                 .screen-li{
                     width: 90%;
                 }
+            }
+            .el-button{
+              margin-left: 10px;
+            }
+            .edit-field-icon{
+              color: #5cb6ff;
+              font-size: 20px;
+              cursor: pointer;
             }
         }
     }

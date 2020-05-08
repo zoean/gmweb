@@ -24,14 +24,15 @@
                     style="width: calc( 100vw - 3.8rem)">
 
                     <el-table-column
-                      prop="phone"
-                      label="电话数据"
-                      width="100">
-                    </el-table-column>
-
-                    <el-table-column prop="phoneIcon" label="" width="50px;">
-                        <template slot-scope="scope">
-                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                      :prop="item.prop"
+                      :label="item.label"
+                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
+                      v-for="(item, index) in columnList"
+                      :key="index"
+                      >
+                      <template slot-scope="scope">
+                            <span>{{scope.row[item.prop]}}</span>
+                            <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
                                 <el-image
                                     class="copy-icon-style"
                                     @click="phoneCopy(scope.row)"
@@ -39,15 +40,6 @@
                                 </el-image>
                             </el-tooltip>
                       </template>
-                    </el-table-column>
-
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
-                      v-for="(item, index) in columnList"
-                      :key="index"
-                      >
                     </el-table-column>
 
                     <el-table-column prop="active" label="操作" width="400px;">
@@ -123,6 +115,7 @@ export default {
             totalFlag: false,
             list: [],
             columnList: [
+                { 'prop': 'phone', 'label': '电话数据' },
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },

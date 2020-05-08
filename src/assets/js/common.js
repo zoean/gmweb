@@ -707,10 +707,10 @@ export const menuNumberFunc = (arr, brr) => {
 
         arr[1].includeSubsetList[0].includeSubsetList[0].name = brr[0] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[1].name = brr[1] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + brr[1] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[2].name = brr[3] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[3] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[2].name = brr[3] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[5] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[3].name = brr[2] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + brr[2] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[4].name = brr[4] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[5] + ')';
+        arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[3] + ')';
 
     }
     

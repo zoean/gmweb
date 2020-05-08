@@ -196,7 +196,8 @@
 
 <script>
 import { getUserDetailed, getJqAccountNumberList, phoneUserList, updateUser, addUserJqUser, getRoleList } from '../../request/api';
-import { getTextByState, getTextByJs } from '../../assets/js/common'
+import { getTextByState, getTextByJs, quchong } from '../../assets/js/common';
+import { superManageUuid } from '../../assets/js/data';
 export default {
     name: 'peopleChange',
     data() {
@@ -290,7 +291,8 @@ export default {
         getRoleList() {
             this.$smoke_get(getRoleList, {}).then(res => {
                 console.log(res);
-                this.roleOptions = res.data;
+                res.data.push({name: '超级管理员', uuid: superManageUuid});
+                this.roleOptions = quchong(res.data, 'uuid');
             })
         },
         handleHighLightChange(val) {

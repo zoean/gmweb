@@ -18,30 +18,22 @@
                     style="width: calc( 100vw - 3.8rem)">
 
                     <el-table-column
-                      prop="tel"
-                      label="电话数据"
-                      width="100">
-                    </el-table-column>
-
-                    <el-table-column prop="phoneIcon" label="" width="50px;">
-                        <template slot-scope="scope">
-                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
-                                <el-image
-                                    class="copy-icon-style"
-                                    @click="phoneCopy(scope.row)"
-                                    :src="require('../../assets/images/copy-icon.png')">
-                                </el-image>
-                            </el-tooltip>
-                        </template>
-                    </el-table-column>
-                    
-                    <el-table-column
                       :prop="item.prop"
                       :label="item.label"
                       :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
+                      <template slot-scope="scope">
+                            <span>{{scope.row[item.prop]}}</span>
+                            <el-tooltip effect="dark" v-if="item.prop == 'tel'" content="复制手机号码" placement="top">
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
+                            </el-tooltip>
+                      </template>
                     </el-table-column>
 
                     <el-table-column prop="active" label="操作">
@@ -404,6 +396,7 @@ export default {
             },
             list: [],
             columnList: [
+                { 'prop': 'tel', 'label': '电话数据' },
                 // { 'prop': 'clueUserUuid', 'label': '所属坐席' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },
