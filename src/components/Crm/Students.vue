@@ -589,6 +589,7 @@ export default {
             })
         },
         getStudentDetails(id) {
+            const date = new Date;
             this.$smoke_post(getStudentDetails, {
                 studentUuid: id
             }).then(res => {
@@ -606,8 +607,8 @@ export default {
                     this.customerForm.classTeaName = res.data.classTeaName;
                     this.customerForm.createTime = timestampToTime(Number(res.data.createTime));
                     this.customerForm.education = res.data.education == 0 || res.data.education == null ? '' : String(res.data.education);
-                    this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 ? '' : String(res.data.evidencePurpose)
-                    this.customerForm.examPeriod = Number(res.data.examPeriod);
+                    this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 ? date.getTime() : String(res.data.evidencePurpose)
+                    this.customerForm.examPeriod = res.data.examPeriod == '' ? '' : Number(res.data.examPeriod);
                     this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
                     this.customerForm.graduationMajor = res.data.graduationMajor;
                     this.customerForm.name = res.data.name;

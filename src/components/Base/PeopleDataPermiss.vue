@@ -271,11 +271,11 @@
 
                         <el-col :span="10">
 
-                            <!-- <el-input
+                            <el-input
                                 placeholder="输入您想查找的考试项"
                                 style="margin-bottom: 10px;"
                                 v-model="filterTextExam">
-                            </el-input> -->
+                            </el-input>
 
                             <el-tree
                                 ref="treeExam"
@@ -286,6 +286,7 @@
                                 :check-strictly="true"
                                 :default-expanded-keys="defaultExpandedKeysExam"
                                 :default-checked-keys="defaultCheckedKeysExam"
+                                :filter-node-method="filterNodeExam"
                                 @check="handleCheckChangeExam"
                                 :props="defaultPropsExam"
                             >
@@ -334,11 +335,11 @@
 
                         <el-col :span="10">
 
-                            <!-- <el-input
-                                placeholder="输入您想查找的考试项"
+                            <el-input
+                                placeholder="输入您想查找的数据组"
                                 style="margin-bottom: 10px;"
-                                v-model="filterTextExam">
-                            </el-input> -->
+                                v-model="filterTextSet">
+                            </el-input>
 
                             <el-tree
                                 ref="treeSet"
@@ -349,6 +350,7 @@
                                 :check-strictly="true"
                                 :default-expanded-keys="defaultExpandedKeysSet"
                                 :default-checked-keys="defaultCheckedKeysSet"
+                                :filter-node-method="filterNodeSet"
                                 @check="handleCheckChangeSet"
                                 :props="defaultPropsSet"
                             >
@@ -666,6 +668,14 @@ export default {
             if (!value) return true;
             return data.name.indexOf(value) !== -1;
         },
+        filterNodeExam(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
+        },
+        filterNodeSet(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
+        },
         handleCheckChange(data, value) {
             console.log(data);
             console.log(value);
@@ -791,6 +801,12 @@ export default {
         filterText(val) {
             this.$refs.tree.filter(val);
         },
+        filterTextExam(val) {
+            this.$refs.treeExam.filter(val);
+        },
+        filterTextSet(val) {
+            this.$refs.treeSet.filter(val);
+        },
         radioId(val){
             this.tableDataSchoolFlagArr.name = val
             let curSchool = this.tableDataSchool.find(item => {
@@ -807,6 +823,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+    // @media screen and (max-width: 1640px) {
+    //     .tab-left-image{
+    //         height: 2rem !important;
+    //     }
+    // }
+    // @media screen and (min-width: 1920px) {
+    //     .tab-left-image{
+    //         height: auto !important;
+    //     }
+    // }
+
     .index-main{
         height: calc( 100vh - 60px);
         .people-title{
@@ -842,12 +870,13 @@ export default {
                 .tab-left-title{
                     height: 54px;
                     line-height: 54px;
-                    font-size: 16px;
+                    font-size: 15px;
+                    font-weight: bold;
                 }
                 .tab-left-image{
                     width: 100%;
-                    height: 2rem;
                     position: absolute;
+                    height: 2rem;
                     bottom: 0;
                     left: 0;
                 }
@@ -858,8 +887,9 @@ export default {
                 .tab-right-title{
                     height: 54px;
                     line-height: 54px;
-                    font-size: 16px;
+                    font-size: 15px;
                     padding-left: 10px;
+                    font-weight: bold;
                 }
             }
         }
