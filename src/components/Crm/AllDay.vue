@@ -110,7 +110,7 @@
                     
                     <el-table-column
                       :prop="item.props"
-                      :width="item.label == '最后联系时间' ? '110px ' : item.label == '拨通 / 拨打' ? '100px' : ''"
+                      :width="item.label == '最后联系时间' ? '110px ': item.label == '手机号码' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       :label="item.label"
                       v-for="(item, index) in columnList"
                       :sortable="item.ifSort ? true : false"
@@ -264,14 +264,14 @@ export default {
             ],
             list: [],
             columnList: [
-                { 'prop': 'tel', 'label': '电话数据' },
-                { 'prop': 'name', 'label': '姓名' },
-                { 'prop': 'education', 'label': '学历' },
-                { 'prop': 'workingLife', 'label': '工作年限' },
-                { 'prop': 'lastCallTime', 'label': '最后联系时间' },
-                // { 'prop': 'dataType', 'label': '下次联系时间' },
-                { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
-                { 'prop': 'school', 'label': '注册平台' },
+                // { 'prop': 'tel', 'label': '电话数据' },
+                // { 'prop': 'name', 'label': '姓名' },
+                // { 'prop': 'education', 'label': '学历' },
+                // { 'prop': 'workingLife', 'label': '工作年限' },
+                // { 'prop': 'lastCallTime', 'label': '最后联系时间' },
+                // // { 'prop': 'dataType', 'label': '下次联系时间' },
+                // { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
+                // { 'prop': 'school', 'label': '注册平台' },
             ],
             initOptions: {},
             jqStart: null,
