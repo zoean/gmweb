@@ -359,22 +359,28 @@ export default {
       },
       editFieldSubmit(){
         let selectionRows = this.$refs['curFieldTable'].store.states.selection
-        console.log(selectionRows)
-        this.updateFieldArray = new Array()
+        let selectionArray = []
+        this.updateFieldArray = []
         selectionRows.map(item => {
           if(item){
+            selectionArray.push(item.num)
+          }
+        })
+        this.curFieldList.map(item => {
+          if(selectionArray.includes(item.num)){
             this.updateFieldArray.push(item.num)
           }
         })
+        console.log(this.updateFieldArray)
         this.$smoke_post(updateListField, {num: this.$store.state.pageNum, fieldList: this.updateFieldArray}).then(res => {
-            if(res.code == 200){
-                this.$message({
-                    type: 'success',
-                    message: '字段配置成功'
-                })
-                this.editFieldVisible = false
-                this.getClueDataAll()
-            }
+          if(res.code == 200){
+            this.$message({
+                type: 'success',
+                message: '字段配置成功'
+            })
+            this.editFieldVisible = false
+            this.getClueDataAll()
+          }
         })
       },
         handleCurrentChange(index) {
