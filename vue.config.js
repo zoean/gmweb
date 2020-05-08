@@ -48,7 +48,7 @@ module.exports = {
 
     configureWebpack: config => {
        if(production){
-         config.devtool = 'cheap-module-eval-source-map'
+         config.devtool = 'source-map'
        }
     }
 }

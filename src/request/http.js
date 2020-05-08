@@ -63,7 +63,7 @@ export const smoke_post = (url,params = {}) => {
     return new Promise((resolve,reject) => {
       axios.post(url, params)
         .then(response => {
-            resolve(response.data);
+          response.data ? resolve(response.data) : resolve(response)
         },err => {
             reject(err)
         })

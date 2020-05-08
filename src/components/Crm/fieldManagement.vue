@@ -54,8 +54,8 @@
         <el-form-item label="字段props" prop="props">
           <el-input v-model="addEditFieldForm.props" placeholder="请输入字段props"></el-input>
         </el-form-item>      
-        <el-form-item label="sql字段key" prop="sqlKey">
-          <el-input v-model="addEditFieldForm.sqlKey" placeholder="请输入sql字段key"></el-input>
+        <el-form-item label="sql字段key" prop="sqlField">
+          <el-input v-model="addEditFieldForm.sqlField" placeholder="请输入sql字段key"></el-input>
         </el-form-item>         
         <el-form-item label="是否默认" prop="ifDef">
           <el-switch
@@ -149,7 +149,7 @@ export default {
         label: '',
         describe: '',
         props: '',
-        sqlKey: '',
+        sqlField: '',
         ifOpen: false,
         ifDef: false,
         ifSort: false,
@@ -284,7 +284,7 @@ export default {
           this.addEditFieldForm.label = res.data.label
           this.addEditFieldForm.describe = res.data.describe
           this.addEditFieldForm.props = res.data.props
-          this.addEditFieldForm.sqlKey = res.data.sqlKey || ''
+          this.addEditFieldForm.sqlField = res.data.sqlField || ''
           this.addEditFieldForm.ifDef = res.data.ifDef ? true : false
           this.addEditFieldForm.ifOpen = res.data.ifOpen ? true : false
           this.addEditFieldForm.ifSort = res.data.ifSort ? true : false
@@ -350,7 +350,7 @@ export default {
       this.addEditFieldForm.label =  ''
       this.addEditFieldForm.describe = ''
       this.addEditFieldForm.props = ''
-      this.addEditFieldForm.sqlKey = ''
+      this.addEditFieldForm.sqlField = ''
       this.addEditFieldForm.ifOpen = false
       this.addEditFieldForm.ifDef = false
       this.addEditFieldForm.ifSort = false

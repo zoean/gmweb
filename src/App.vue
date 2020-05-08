@@ -37,6 +37,8 @@ export default {
       }
     }
   },
+  methods: {
+  }
 }
 </script>
 
