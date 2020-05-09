@@ -99,7 +99,7 @@
                     </el-col>
 
                     <el-col :span="4">
-                        <el-button type="primary" @click="TransferToGoogClick" class="screen-li">转至公池</el-button>
+                        <el-button type="primary" @click="TransferToGoogClick" class="screen-li">释放数据</el-button>
                     </el-col>
 
                 </el-row>
@@ -379,7 +379,7 @@ export default {
             if(userCDARUuidArr.length == 0) {
                 this.$message({
                     type: 'error',
-                    message: '请您先勾选您要转至公池的数据'
+                    message: '请您先勾选您要释放的数据'
                 })
             }else{
                 this.$smoke_post(clueDataRelease, {
@@ -389,7 +389,7 @@ export default {
                     if(res.code == 200) {
                         this.$message({
                             type: 'success',
-                            message: '数据转至公池成功'
+                            message: '数据释放成功'
                         })
                         this.getAllUserClueData();
                     }

@@ -302,7 +302,14 @@ a:link,a:active,a:visited,a:hover {
     line-height: 2.2 !important;
 }
 
-
+.el-textarea .el-input__count{
+    color: #909399;
+    background: transparent !important;
+    position: absolute;
+    font-size: 12px;
+    bottom: -10px;
+    right: 10px;
+}
 
 
 

@@ -141,7 +141,7 @@
 
                         </el-row>
 
-                        <div class="tab-right-title">数据组与溢出</div>
+                        <div class="tab-right-title">分配组与溢出</div>
 
                         <div class="tab-xian"></div>
 
@@ -167,7 +167,7 @@
 
                             <el-col :span="5" :offset="1">
                             
-                                <el-button type="primary" @click="editDataSetClick" style="margin-top: 4px;">修改数据组</el-button>
+                                <el-button type="primary" @click="editDataSetClick" style="margin-top: 4px;">修改分配组</el-button>
 
                             </el-col>
 
@@ -336,7 +336,7 @@
                         <el-col :span="10">
 
                             <el-input
-                                placeholder="输入您想查找的数据组"
+                                placeholder="输入您想查找的分配组"
                                 style="margin-bottom: 10px;"
                                 v-model="filterTextSet">
                             </el-input>
@@ -419,7 +419,7 @@ export default {
                 { attr: '管理考试项', attrData: [], attrText: '' },
             ],
             dataSetList: [
-                { attr: '管理数据组', attrData: [], attrText: '' },
+                { attr: '管理分配组', attrData: [], attrText: '' },
             ],
             userColumnList: [
                 { 'prop': 'attr', 'label': 'attr' },
@@ -454,7 +454,7 @@ export default {
               children: 'list',
               label: 'name',
             },
-            drawerTitle3: '配置数据组',
+            drawerTitle3: '配置分配组',
             drawer3: false,
             direction3: 'rtl',
             filterTextSet: '',
@@ -781,8 +781,8 @@ export default {
         },
         handleDeleteClickSet(row) {
             console.log(row);
-            let arrKey = []; //当前数据组的key的集合
-            let arr = []; //当前数据组的Nodes的集合
+            let arrKey = []; //当前分配组的key的集合
+            let arr = []; //当前分配组的Nodes的集合
             arr = removeEvery(row, this.$refs.treeSet.getCheckedNodes());
             console.log(arr);
             arr.map(sll => {

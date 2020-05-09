@@ -76,16 +76,16 @@
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                         
                             <el-form-item label="分配组名" prop="name">
-                                <el-input v-model="ruleForm.name" placeholder="请输入分配组名"></el-input>
+                                <el-input v-model="ruleForm.name" placeholder="请输入分配组名" size="small"></el-input>
                             </el-form-item>
 
                             <el-form-item label="分配组描述" prop="describe">
-                                <el-input v-model="ruleForm.describe" placeholder="请输入分配组描述"></el-input>
+                                <el-input v-model="ruleForm.describe" placeholder="请输入分配组描述" size="small"></el-input>
                             </el-form-item>
 
                             <el-form-item label="分校平台" prop="schoolId">
 
-                                <el-select v-model="ruleForm.schoolId" placeholder="请选择分校平台" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
+                                <el-select v-model="ruleForm.schoolId" placeholder="请选择分校平台" size="small" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
                                     <el-option
                                       v-for="item in schoolList"
                                       :key="item.id"
@@ -103,9 +103,37 @@
 
                             </el-form-item>
 
+                            <el-form-item label="坐席分类" prop="classType">
+                              
+                                <el-select @change="classTypeFun" v-model="ruleForm.classType" placeholder="请选择坐席分类" size="small" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
+                                    <el-option
+                                      v-for="item in classTypeList"
+                                      :key="item.name"
+                                      :label="item.name"
+                                      :value="item.number">
+                                    </el-option>
+                                </el-select>
+
+                            </el-form-item>
+
+                            <el-form-item label="所属考试项" prop="examItemText" v-if="ruleForm.classType">
+                              
+                                <el-autocomplete
+                                    style="width: 100%;"
+                                    size="small"
+                                    v-model="ruleForm.examItemText"
+                                    :fetch-suggestions="querySearch"
+                                    placeholder="请输入考试项目"
+                                    :trigger-on-focus="true"
+                                    :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false"
+                                    @select="handleSelectExam"
+                                ></el-autocomplete>
+
+                            </el-form-item>
+
                             <el-form-item label="溢出量再分配" prop="dayList">
                               
-                                <el-select v-model="ruleForm.dayList" multiple placeholder="请选择">
+                                <el-select v-model="ruleForm.dayList" multiple placeholder="请选择" size="small">
                                     <el-option
                                       v-for="item in dateList"
                                       :key="item.value"
@@ -117,8 +145,15 @@
                             </el-form-item>
 
                             <el-form-item>
-                                <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
-                                <el-button @click="quxiao">取消</el-button>
+
+                                <div style="margin-top: 1rem;">
+
+                                    <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
+
+                                    <el-button @click="quxiao">取消</el-button>
+
+                                </div>
+                                
                             </el-form-item>
 
                         </el-form>
@@ -187,9 +222,9 @@
 
                             </el-form-item>
 
-                            <el-form-item label="渠道账号" prop="acc">
+                            <el-form-item label="推广账号" prop="acc">
                               
-                                <el-select v-model="ruleFormLink.acc" placeholder="请选择渠道账号" size="small">
+                                <el-select v-model="ruleFormLink.acc" placeholder="请选择推广账号" size="small">
                                     <el-option
                                       v-for="item in enumList['MJ-7']"
                                       :key="item.name"
@@ -200,7 +235,7 @@
 
                             </el-form-item>
 
-                            <el-form-item label="jq平台账号" prop="jqadmin">
+                            <!-- <el-form-item label="jq平台账号" prop="jqadmin">
                               
                                 <el-select v-model="ruleFormLink.jqadmin" placeholder="请选择jq平台账号" size="small">
                                     <el-option
@@ -211,7 +246,7 @@
                                     </el-option>
                                 </el-select>
 
-                            </el-form-item>
+                            </el-form-item> -->
 
                             <el-form-item>
                                 <el-button @click="quxiaoLink" size="small" style="margin-top: 20px;">取消</el-button>
@@ -285,6 +320,9 @@ export default {
                 state: 1, //分配组状态（1：开启 0：关闭）
                 schoolId: '', //分校名称
                 uuid: '', //分配组的uuid
+                examItemId: '', //考试项目id
+                examItemText: '', //考试项目Text
+                classType: '', //班型坐席（0：普通班坐席 1：高端班坐席）
             },
             rules: {
                 name: [
@@ -293,7 +331,17 @@ export default {
                 describe: [
                   { required: true, message: '请输入分配组描述', trigger: 'blur' }
                 ],
+                examItemText: [
+                  { required: true, message: '请选择考试项目', trigger: 'change' }
+                ],
+                classType: [
+                  { required: true, message: '请选择坐席分类', trigger: 'change' }
+                ],
             },
+            classTypeList: [
+                { name: '普通班坐席', number: 0},
+                { name: '高端班坐席', number: 1},
+            ],
             dateList: dateList,
             schoolList: [],
             drawerTitle2: '分配组员',
@@ -313,7 +361,7 @@ export default {
                 spread: '',  //渠道
                 projectId: '',  //考试项 id
                 projectText: '',  //考试项 
-                jqadmin: '', //jq账号
+                // jqadmin: '', //jq账号
             },
             rulesLink: {
                 projectText: [
@@ -323,11 +371,11 @@ export default {
                   { required: true, message: '请选择来源渠道', trigger: 'blur' }
                 ],
                 // acc: [
-                //   { required: true, message: '请选择渠道账号', trigger: 'blur' }
+                //   { required: true, message: '请选择推广账号', trigger: 'blur' }
                 // ],
-                jqadmin: [
-                  { required: true, message: '请选择jq平台账号', trigger: 'blur' }
-                ],
+                // jqadmin: [
+                //   { required: true, message: '请选择jq平台账号', trigger: 'blur' }
+                // ],
             },
             restaurants: [],
             enumList: {}, //枚举选项数组
@@ -398,8 +446,8 @@ export default {
                     console.log(this.ruleFormLink);
                     this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
                      + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
-                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc
-                     + '&jqadmin=' + this.ruleFormLink.jqadmin;
+                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
+                    //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
                     console.log(this.createLinkUrl);
                 } else {
                     console.log('error submit!!');
@@ -505,12 +553,11 @@ export default {
         addAlloZu() {
             this.drawerFlag1 = true;
             this.drawerTitle1 = '添加分配组';
-            this.ruleForm.name = '';
-            this.ruleForm.describe = '';
-            this.ruleForm.state = null;
-            this.ruleForm.dayList = [];
-            this.ruleForm.uuid = '';
-            this.ruleForm.schoolId = '';
+
+            //重置表单
+            this.$nextTick(() => {
+                this.$refs['ruleForm'].resetFields();
+            })
         },
         getDataAllocationRulesByUuid(scope) {
             console.log(scope);
@@ -613,6 +660,16 @@ export default {
             console.log(item);
             this.ruleFormLink.projectId = item.id;
         },
+        handleSelectExam(item) {
+            console.log(item);
+            this.ruleForm.examItemId = item.id;
+            this.ruleForm.examItemText = item.value;
+        },
+        classTypeFun(val) {
+            console.log(val);
+            this.ruleForm.examItemId = '';
+            this.ruleForm.examItemText = '';
+        }
     },
     mounted() {
         
@@ -632,10 +689,6 @@ export default {
             background: #aaa;
             margin-bottom: .3rem;
             color: #fff;
-        }
-        .screen-li{
-            width: 90%;
-            margin-bottom: 1rem;
         }
     }
     .timeData /deep/ .el-table .cell{

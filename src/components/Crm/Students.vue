@@ -316,13 +316,27 @@
                                         </el-form-item>
 
                                     </el-col>
+                                    
+                                </el-row>
 
-                                    <el-col :span="18">
+                                <el-row>
+
+                                    <el-col>
                                         <el-form-item label="跟进内容" prop="followUpContent">
-                                            <el-input v-model="customerForm.followUpContent" size="small" ></el-input>
+
+                                            <el-input 
+                                                type="textarea" 
+                                                v-model="customerForm.followUpContent" 
+                                                size="small" 
+                                                show-word-limit
+                                                maxlength='100'
+                                                placeholder="请输入跟进内容"
+
+                                            ></el-input>
+
                                         </el-form-item>
                                     </el-col>
-                                    
+
                                 </el-row>
                                 
                                 <el-form-item>
@@ -609,8 +623,8 @@ export default {
                     this.customerForm.classTeaName = res.data.classTeaName;
                     this.customerForm.createTime = timestampToTime(Number(res.data.createTime));
                     this.customerForm.education = res.data.education == 0 || res.data.education == null ? '' : String(res.data.education);
-                    this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 ? date.getTime() : String(res.data.evidencePurpose)
-                    this.customerForm.examPeriod = res.data.examPeriod == '' ? '' : Number(res.data.examPeriod);
+                    this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 ? '' : String(res.data.evidencePurpose)
+                    this.customerForm.examPeriod = res.data.examPeriod == "" ? date.getTime() : Number(res.data.examPeriod);
                     this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
                     this.customerForm.graduationMajor = res.data.graduationMajor;
                     this.customerForm.name = res.data.name;

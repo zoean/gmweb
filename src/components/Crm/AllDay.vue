@@ -100,10 +100,9 @@
                     :row-class-name="tableRowClassName"
                     style="width: calc( 100vw - 3.8rem)"
                     :row-key="getRowKey">
-                    
                     <el-table-column
                       :prop="item.props"
-                      :width="item.label == '最后联系时间' ? '110px ': item.label == '手机号码' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
+                      :min-width="item.props == 'lastCallTime' ? '140px' : item.props == 'name' ? '80px' : item.props == 'workingLife' ? '100px' : item.props == 'tel' ? '130px' : ''"
                       :label="item.label"
                       v-for="(item, index) in columnList"
                       :sortable="item.ifSort ? true : false"
@@ -121,7 +120,7 @@
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="active" label="操作" width="400px;">
+                    <el-table-column prop="active" label="操作" width="350px;">
                       <template slot-scope="scope">
                           <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                           <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
@@ -561,7 +560,7 @@ export default {
                 }
             }
             .el-button{
-              margin-left: 10px;
+              margin-left: 5px;
             }
             .edit-field-icon{
               color: #5cb6ff;
