@@ -230,32 +230,53 @@ export default {
                 arr.push(sll.uuid);
             })
 
-            
+            if(this.list.length == 0 || arr.length == 0) {
 
-            this.$smoke_post(obtainRPCD, {
-                uuidList: arr,
-            }).then(res => {
-                if(res.code == 200) {
-                    if(res.data.result){
-                        this.$message({
-                            type: 'success',
-                            message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
-                        });
-                        this.getUserRPCDList();
+                if(this.list.length == 0) {
+
+                    this.$message({
+                        type: 'error',
+                        message: '当前暂无可领取数据'
+                    });
+
+                }else{
+
+                    this.$message({
+                        type: 'error',
+                        message: '请您先勾选您要领取的数据'
+                    });
+
+                }
+
+            }else{
+
+                this.$smoke_post(obtainRPCD, {
+                    uuidList: arr,
+                }).then(res => {
+                    if(res.code == 200) {
+                        if(res.data.result){
+                            this.$message({
+                                type: 'success',
+                                message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
+                            });
+                            this.getUserRPCDList();
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: res.data.msg
+                            });
+                            this.getUserRPCDList();
+                        }
                     }else{
                         this.$message({
                             type: 'error',
-                            message: res.data.msg
+                            message: res.msg
                         });
-                        this.getUserRPCDList();
                     }
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    });
-                }
-            })
+                })
+
+            }
+            
         }
     },
     mounted() {

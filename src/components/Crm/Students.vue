@@ -316,13 +316,27 @@
                                         </el-form-item>
 
                                     </el-col>
+                                    
+                                </el-row>
 
-                                    <el-col :span="18">
+                                <el-row>
+
+                                    <el-col>
                                         <el-form-item label="跟进内容" prop="followUpContent">
-                                            <el-input v-model="customerForm.followUpContent" size="small" ></el-input>
+
+                                            <el-input 
+                                                type="textarea" 
+                                                v-model="customerForm.followUpContent" 
+                                                size="small" 
+                                                show-word-limit
+                                                maxlength='100'
+                                                placeholder="请输入跟进内容"
+
+                                            ></el-input>
+
                                         </el-form-item>
                                     </el-col>
-                                    
+
                                 </el-row>
                                 
                                 <el-form-item>
