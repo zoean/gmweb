@@ -229,6 +229,9 @@ export default {
             this.$refs.tree.selection.map(sll => {
                 arr.push(sll.uuid);
             })
+
+            
+
             this.$smoke_post(obtainRPCD, {
                 uuidList: arr,
             }).then(res => {
