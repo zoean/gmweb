@@ -102,13 +102,6 @@
                     :row-key="getRowKey">
                     
                     <el-table-column
-                      align="right" width="60px">
-                      <template slot="header" slot-scope="scope">
-                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
-                      </template>
-                    </el-table-column>
-                    
-                    <el-table-column
                       :prop="item.props"
                       :width="item.label == '最后联系时间' ? '110px ': item.label == '手机号码' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       :label="item.label"
@@ -147,6 +140,13 @@
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
                       </template>
                     </el-table-column>
+                    
+                    <el-table-column
+                      align="right" width="60px">
+                      <template slot="header">
+                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
+                      </template>
+                    </el-table-column>
                 </el-table>
 
                 <el-pagination
@@ -180,25 +180,11 @@
             </el-main>
 
         </el-container>
-      <el-dialog :visible.sync="editFieldVisible" title="编辑字段" :close-on-click-modal="false">
-        <p>拖拽表格数据行即可对字段进行排序</p>
-        <el-table ref="curFieldTable" :data="curFieldList" class="field-table" @selection-change="handleSelectionChange"  :row-key="getRowKey">
-          <el-table-column
-            type="selection"
-            width="55" :reserve-selection="true" :selectable="checkboxT" disabled>
-          </el-table-column>
-          <el-table-column v-for="(item,index) in curFieldColumn" :key="index" :prop="item.prop" :label="item.label"></el-table-column>
-        </el-table>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="editFieldVisible = false">取 消</el-button>
-            <el-button type="primary" @click="editFieldSubmit">确 定</el-button>
-        </span>
-      </el-dialog>
+      <PageFieldManage :setPageNum="setPageNum" />
     </div>
 </template>
 
 <script>
-import Sortable from 'sortablejs'
 import { 
     getClueDataAll,
     phoneOut,
@@ -207,32 +193,29 @@ import {
     enumByEnumNums,
     getRuleItem,
     getClueDataNumber,
-    getListField,
-    updateListField,
     copyTel
 } from '../../request/api';
+import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, menuNumberFunc, copyData } from '../../assets/js/common';
+import { timestampToTime, menuNumberFunc, copyData } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
-    name: 'sevenDay',
+    name: 'AllDay',
+    components: {
+        Start, 
+        CustomerNotes,
+        PageFieldManage
+    },
+    watch:{
+        '$store.state.editFieldVisible'(val){
+            if(!val && this.$store.state.pageNum == 'YM_1'){
+                this.getClueDataAll()
+            }
+        }
+    },
     data() {
         return {
-            editFieldVisible: false,
-            curFieldList: [],
-            updateFieldArray: [],
-            curFieldColumn: [
-              {
-                label: '字段编号',prop: 'num'
-              },
-              {
-                label:'字段名称', prop: 'label',
-              }
-              // {
-              //   label: '字段排序', prop: 'sortNum'
-              // }
-            ],
             fieldNum: [],
             form: {
                 currentPage: 1,
@@ -289,9 +272,6 @@ export default {
             clueDataNumberList: []
         }
     },
-    components: {
-        Start, CustomerNotes
-    },
     created() {
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
@@ -304,93 +284,15 @@ export default {
         this.getRuleItem();
     },
     methods: {
-      checkboxT(row, index){
-        if(row.ifDef){
-          return false
-        }else{
-          return true
-        }
-      },
-      filterPageNum(obj){
-        if(obj && obj.length > 0){
-          obj.map(subObj => {
-            if(subObj.url == this.$route.path){
-              this.$store.commit('setPageNum', subObj.pageNum)
-              this.form.num = subObj.pageNum
-            }else if(subObj && subObj.includeSubsetList){
-              this.filterPageNum(subObj.includeSubsetList)
-            }
-          })
-        }
-      },
-      rowDrop(){
-          const el = document.querySelectorAll('.field-table>.el-table__body-wrapper > table > tbody')[0]
-          Sortable.create(el, {
-              disabled: false,
-              onEnd: (evt) => {
-                  const tempItem = this.curFieldList.splice(evt.oldIndex, 1)[0]
-                  this.curFieldList.splice(evt.newIndex, 0, tempItem)
-                  var newArray = this.curFieldList.slice(0)
-                  this.curFieldList = [];
-                  this.$nextTick(() => {
-                      this.curFieldList = newArray;
-                  });
-              }
-          })
-      },
-      getRowKey(row){
-        return row.num
-      },
-      handleSelectionChange(row) {//监听selection选择事件
-        this.fieldNum = []
-        for(let i in row){//去重以免发生意外的push
-          if(!this.fieldNum.includes(row[i].num)){
-            this.fieldNum.push(row[i].num)
-          }  		
-        }
-      },
-      editFieldHandle(){
-        this.editFieldVisible = true
-        this.getListField()
-      },
-      getListField(){
-        this.$smoke_post(getListField, {num: this.$store.state.pageNum}).then( res => {
-          if(res.code == 200){
-            this.curFieldList = res.data
-            if(this.curFieldList && this.curFieldList.length > 0){
-              this.curFieldList.forEach((item, index) => {
-                if(item && item.flag){
-                  this.$nextTick(() => {
-                    this.$refs['curFieldTable'].toggleRowSelection(this.curFieldList[index], true)
-                  })
-                }
-              }) 
-            }
-            this.rowDrop()
-          }
-        })
-      },
-      editFieldSubmit(){
-        let selectionRows = this.$refs['curFieldTable'].store.states.selection
-        this.updateFieldArray = []
-        this.curFieldList.map(item => {
-          selectionRows.map(row => {
-            if(item.num == row.num){
-              this.updateFieldArray.push(item.num)
-            }
-          })
-        })
-        this.$smoke_post(updateListField, {num: this.$store.state.pageNum, fieldList: this.updateFieldArray}).then(res => {
-          if(res.code == 200){
-            this.$message({
-                type: 'success',
-                message: '字段配置成功'
-            })
-            this.editFieldVisible = false
-            this.getClueDataAll()
-          }
-        })
-      },
+        setPageNum(pageNum){
+            this.form.num = pageNum
+        },
+    getRowKey(row){
+      return row.num
+    },
+    editFieldHandle(){
+        this.$store.commit('setEditFieldVisible', true)
+    },
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.getClueDataAll();
@@ -478,8 +380,6 @@ export default {
         getClueDataAll() {
             this.fullscreenLoading = true;
             this.drawer = false;
-            let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
-            this.filterPageNum(userMenuList)
             this.$smoke_post(getClueDataAll, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
@@ -609,14 +509,13 @@ export default {
                 })
             }
         },
-        tableRowClassName({row, rowIndex}) {
+        tableRowClassName({row}) {
             if (row.dialState == 0) {
                 return 'dialState';
             }
             return '';
         },
         phoneCopy(row) {
-            console.log(row.clueDataSUuid);
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {
@@ -637,10 +536,6 @@ export default {
                 }
             })
         },
-    },
-    mounted() {
-      let userMenuList = JSON.parse(localStorage.getItem('userMenuList'))
-      this.filterPageNum(userMenuList)
     }
 }
 </script>

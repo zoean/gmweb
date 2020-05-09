@@ -99,16 +99,18 @@
                     :data="list"
                     ref="tableSelect"
                     v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)">
+                    style="width: calc( 100vw - 3.8rem)"
+                    :row-key="getRowKey">
                     <el-table-column
                       type="selection"
                       width="45">
                     </el-table-column>
                     <el-table-column
-                      :prop="item.prop"
+                      :prop="item.props"
                       :label="item.label"
                       :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
+                      :sortable="item.ifSort ? true : false"
                       :key="index"
                       >
                     </el-table-column>
@@ -116,6 +118,12 @@
                       <template slot-scope="scope">
                           <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      align="right" width="60px">
+                      <template slot="header">
+                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
                     </el-table-column>
                 </el-table>
@@ -206,11 +214,12 @@
             </el-main>
 
         </el-container>
-
+        <PageFieldManage :setPageNum="setPageNum" />
     </div>
 </template>
 
 <script>
+import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     getRecoveryPoolDataList, 
     getExamBasic,
@@ -249,7 +258,8 @@ export default {
                 province: '',
                 provinceCity: [], //所在省市
                 spread: '',
-                userUuid: ''
+                userUuid: '',
+                num: ''
             },
             list: [],
             columnList: [
@@ -294,11 +304,13 @@ export default {
         }
     },
     components: {
-        CustomerNotes
+        CustomerNotes,
+        PageFieldManage
     },
     created() {
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
+        this.form.num = this.$store.state.pageNum
         this.getRecoveryPoolDataList();
         this.getExamBasic();
         let arr = [MJ_6];
@@ -307,8 +319,16 @@ export default {
         this.getRuleItem();
     },
     methods: {
+        setPageNum(pageNum){
+            this.form.num = pageNum
+        },
+        getRowKey(row){
+            return row.num
+        },
+        editFieldHandle(){
+            this.$store.commit('setEditFieldVisible', true)
+        },
         datePickerChange(value) {
-            console.log(value);
             if (value == null) {
                 this.form.startTime = '';
                 this.form.endTime = '';
@@ -334,7 +354,6 @@ export default {
             })
         },
         customerInfo(row) {
-            console.log(row);
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = false;
@@ -357,12 +376,13 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         res.data.list.map(sll => {
-                            sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
-                            sll.createTime = timestampToTime(Number(sll.createTime));
+                            sll.lastCallTime = sll.lastCallTime ? timestampToTime(Number(sll.lastCallTime)) : '---'
+                            sll.createTime = sll.createTime ? timestampToTime(Number(sll.createTime)) : '---'
                             sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
                         })
                         this.list = res.data.list;
+                        this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
                     }, 300);
@@ -383,14 +403,12 @@ export default {
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -401,11 +419,11 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
+            
             this.form.examItemId = item.id;
         },
         cityChange() {
-            console.log(this.form.provinceCity);
+            
             this.form.province = this.form.provinceCity[0];
             this.form.city = this.form.provinceCity[1];
         },
@@ -435,12 +453,12 @@ export default {
             })
         },
         handleSizeChange(index) {
-            console.log(index);
+            
             this.form.pageSize = index;
             this.getRecoveryPoolDataList();
         },
         handleCurrentChange(index) {
-            console.log(index);
+            
             this.form.currentPage = index;
             this.getRecoveryPoolDataList();
         },
@@ -454,14 +472,14 @@ export default {
         getCheckedNodes() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.tree.getCheckedNodes());
+                
                 this.$refs.tree.getCheckedNodes().map(sll => {
                     if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
                         arr.push(sll);
                     }
                 })
                 this.tableData = arr;
-                console.log(this.tableData);
+                
             })
         },
         addPeople() {
@@ -507,13 +525,15 @@ export default {
             }
         },
     },
-    mounted() {
-        
-    },
     watch: {
         filterText(val) {
             this.$refs.tree.filter(val);
         },
+        '$store.state.editFieldVisible'(val){
+            if(!val && this.$store.state.pageNum == 'YM_2'){
+                this.getRecoveryPoolDataList()
+            }
+        }
     },
 }
 </script>

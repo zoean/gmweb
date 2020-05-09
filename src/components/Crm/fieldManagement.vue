@@ -216,6 +216,7 @@ export default {
     editPageHandle(index, row){
       this.addEditPageVisible = true
       this.addEditPageType = 'edit'
+      this.resetAddEditPageForm()
       this.addEditPageForm.name = row.name
       this.addEditPageForm.describe = row.describe
       this.addEditPageForm.uuid = row.uuid
@@ -228,6 +229,7 @@ export default {
     resetAddEditPageForm(){
       this.addEditPageForm.describe = ''
       this.addEditPageForm.name = ''
+      this.$refs['addEditPageForm'].resetFields()
     },
     submitAddEditPage(){
       this.$refs['addEditPageForm'].validate((valid) => {
@@ -279,6 +281,7 @@ export default {
     editFieldHandle(index, row){
       this.addEditFieldType = "edit"
       this.addEditFieldVisible = true
+      this.resetAddEditFieldForm()
       this.$smoke_post(getFieldDetail, {uuid: row.uuid}).then(res => {
         if(res.code == 200){
           this.addEditFieldForm.label = res.data.label
@@ -354,6 +357,7 @@ export default {
       this.addEditFieldForm.ifOpen = false
       this.addEditFieldForm.ifDef = false
       this.addEditFieldForm.ifSort = false
+      this.$refs['addEdiFieldForm'].resetFields()
     }
   }
 }

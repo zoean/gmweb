@@ -12,7 +12,8 @@ const state = {
     // oneLogin: false, //是否首次登录(true:是 false:不是)
     userMenuList: [], //用户路由表
     avatar: '', //用户头像
-    pageNum: ''
+    pageNum: '',//页面编号
+    editFieldVisible: false,//页面字段排序dialog
 }
 
 const mutations = {
@@ -42,6 +43,9 @@ const mutations = {
     },
     setPageNum(state, pageNum){
         state.pageNum = pageNum
+    },
+    setEditFieldVisible(state, Boole){
+        state.editFieldVisible = Boole
     }
 }
 
@@ -67,6 +71,9 @@ const actions = {
     actionsSetAvatar(context, avatar) {
         return context.commit('setAvatar', avatar);
     },
+    actionsEditField(context){
+        context.commit('setEditFieldVisible', true)
+    }
     // actionsSetOneLogin(context, oneLogin) {
     //     return context.commit('setOneLogin', oneLogin);
     // },
