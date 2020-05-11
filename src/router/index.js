@@ -30,6 +30,8 @@ import seatData from '@/components/Crm/SeatData';
 import overflow from '@/components/Crm/Overflow';
 import toallocate from '@/components/Crm/Toallocate';
 import enums from '@/components/Crm/Enum';
+import extendLinkList from '@/components/Crm/ExtendLinkList';
+import enterClues from '@/components/Crm/EnterClues';
 import students from '@/components/Crm/Students';
 import newStudents from '@/components/Crm/NewStudents';
 import registered from '@/components/Crm/Registered';
@@ -173,6 +175,18 @@ export default new Router({
             path: '/crm/crmConfig/enums',
             name: 'enums',
             component: enums
+        },
+
+        {
+            path: '/crm/promotion/extendLinkList',
+            name: 'extendLinkList',
+            component: extendLinkList
+        },
+
+        {
+            path: '/crm/promotion/enterClues',
+            name: 'enterClues',
+            component: enterClues
         },
         
         {

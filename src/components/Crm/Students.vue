@@ -546,6 +546,7 @@ export default {
             this.drawer = true;
             this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
             this.copyClueDataSUuid = row.clueDataSUuid;
+            this.tabs_active = 'first';
             this.getStudentDetails(row.uuid);
         },
         cityChange() {

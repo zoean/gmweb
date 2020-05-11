@@ -282,9 +282,10 @@ import {
     enumByEnumNums,
     getExamBasic,
     getSchoolList,
+    popularizeUrl
 } from '../../request/api';
 import { dateList } from '../../assets/js/data';
-import { stateText, getTextByJs, quchong } from '../../assets/js/common';
+import { stateText, getTextByJs, quchong, copyData } from '../../assets/js/common';
 import { MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import Tree from '../Share/Tree';
 export default {
@@ -404,7 +405,11 @@ export default {
     },
     methods: {
         handleCopy() {
-            this.copyData(this.createLinkUrl);
+            this.$message({
+              message: '复制成功',
+              type: 'success'
+            });
+            copyData(this.createLinkUrl);
         },
         getSchoolList() {
             this.$smoke_get(getSchoolList, {}).then(res => {
@@ -417,19 +422,6 @@ export default {
                     });
                 }
             })
-        },
-        copyData(data) {
-            let url = data;
-            let oInput = document.createElement('input');
-            oInput.value = url;
-            document.body.appendChild(oInput);
-            oInput.select(); // 选择对象;
-            document.execCommand("Copy"); // 执行浏览器复制命令
-            this.$message({
-              message: '复制成功',
-              type: 'success'
-            });
-            oInput.remove();
         },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
@@ -444,21 +436,38 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     console.log(this.ruleFormLink);
-                    this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
-                     + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
-                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
-                    //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
-                    console.log(this.createLinkUrl);
+                    this.popularizeUrl();
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
         },
+        popularizeUrl() {
+            this.$smoke_post(popularizeUrl, {
+                accId: this.ruleFormLink.acc,
+                examItemsId: this.ruleFormLink.projectId,
+                ruleId: this.ruleFormLink.ruleid,
+                spreadId: this.ruleFormLink.spread,
+            }).then(res => {
+                if(res.code == 200) {
+                    this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
+                     + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
+                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
+                    //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
+                    console.log(this.createLinkUrl);
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         createLinksClick(row) {
+            this.drawerFlagLink = true;
             this.ruleFormLink.ruleid = row.id; //分配组ID
             this.ruleFormLink.ruleName = row.name; //分配组Name
-            this.drawerFlagLink = true;
             this.ruleFormLink.acc = '';
             this.ruleFormLink.spread = '';
             this.ruleFormLink.projectId = '';

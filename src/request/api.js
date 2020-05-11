@@ -118,6 +118,8 @@ export const getRuleUserLimit = '/api/phone/DataAutDis/getRuleUserLimit'; //获�
 export const getRuleItem = '/api/phone/DataAutDis/getRuleItem'; //获取分配规则项列表
 export const getRuleItemAuth = '/api/phone/DataAutDis/getRuleItemAuth'; //获取分配规则项列表（带权限）
 export const getSchoolList = '/api/phone/DataAutDis/getSchoolList'; //获取分校集合
+export const getPopularizeUrl = '/api/phone/DataAutDis/getPopularizeUrl'; //获取推广链接
+export const popularizeUrl = '/api/phone/DataAutDis/popularizeUrl'; //生成推广链接
 
 //线索数据
 export const getClueDataByUserUuid = '/api/phone/clueData/getClueDataByUserUuid'; //获取员工的线索数据
