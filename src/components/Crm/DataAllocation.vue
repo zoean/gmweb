@@ -187,14 +187,14 @@
 
                         <el-form :model="ruleFormLink" :rules="rulesLink" ref="ruleFormLink" class="demo-ruleForm">
 
-                            <el-form-item label="分配规则" prop="ruleid">
+                            <el-form-item label="分配组" prop="ruleid">
                               
                                 <el-input v-model="ruleFormLink.ruleName" readonly class="borderNone" size="small"></el-input>
 
                             </el-form-item>
 
 
-                            <el-form-item label="考试方向" prop="projectId">
+                            <el-form-item label="考试方向" prop="projectText">
                               
                                 <el-autocomplete
                                     class="inline-input"
@@ -356,8 +356,8 @@ export default {
             drawerTitleLink: '生成推广链接',
             drawerFlagLink: false,
             ruleFormLink: {
-                ruleid: '',  //分配规则Id
-                ruleName: '',  //分配规则Name
+                ruleid: '',  //分配组Id
+                ruleName: '',  //分配组Name
                 acc: '',  //推广账号
                 spread: '',  //渠道
                 projectId: '',  //考试项 id
@@ -366,7 +366,7 @@ export default {
             },
             rulesLink: {
                 projectText: [
-                  { required: true, message: '请选择考试方向', trigger: 'blur' }
+                  { required: true, message: '请选择考试方向', trigger: 'change' }
                 ],
                 spread: [
                   { required: true, message: '请选择来源渠道', trigger: 'blur' }
@@ -668,6 +668,7 @@ export default {
         handleSelect(item) {
             console.log(item);
             this.ruleFormLink.projectId = item.id;
+            this.ruleFormLink.projectText = item.value;
         },
         handleSelectExam(item) {
             console.log(item);

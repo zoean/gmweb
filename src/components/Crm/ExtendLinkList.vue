@@ -165,7 +165,7 @@ export default {
                 total: null,
                 accId: '', //推广账号
                 examItemsId: '', //考试方向
-                ruleId: '', //分配规则Id
+                ruleId: '', //分配组Id
                 spreadId: '', //渠道
                 userName: '', //创建人
                 // userUuid: ''
