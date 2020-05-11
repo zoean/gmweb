@@ -56,7 +56,10 @@
         </el-form-item>      
         <el-form-item label="sql字段key" prop="sqlField">
           <el-input v-model="addEditFieldForm.sqlField" placeholder="请输入sql字段key"></el-input>
-        </el-form-item>         
+        </el-form-item>      
+        <el-form-item label="表头字段宽度" prop="width">
+          <el-input v-model="addEditFieldForm.width" placeholder="请输入表头字段宽度"></el-input>
+        </el-form-item>        
         <el-form-item label="是否默认" prop="ifDef">
           <el-switch
             v-model="addEditFieldForm.ifDef"
@@ -153,7 +156,8 @@ export default {
         ifOpen: false,
         ifDef: false,
         ifSort: false,
-        pageUuid: ''
+        pageUuid: '',
+        width: 80
       },
       addEditFieldRules: {
         label:[
@@ -169,6 +173,11 @@ export default {
         props:[
            {
             required: true, message:'请输入字段props', trigger: 'blur'
+          }
+        ],
+        width:[
+           {
+            required: true, message:'请输入表头字段宽度', trigger: 'blur'
           }
         ],
       },
@@ -294,6 +303,7 @@ export default {
           this.addEditFieldForm.ifOpen = res.data.ifOpen ? true : false
           this.addEditFieldForm.ifSort = res.data.ifSort ? true : false
           this.addEditFieldForm.uuid = row.uuid
+          this.addEditFieldForm.width = row.width
         }
       })
     },
@@ -359,6 +369,7 @@ export default {
       this.addEditFieldForm.ifOpen = false
       this.addEditFieldForm.ifDef = false
       this.addEditFieldForm.ifSort = false
+      this.addEditFieldForm.width = 80
       this.$nextTick(()=>{
         this.$refs['addEditFieldForm'].resetFields()
       })

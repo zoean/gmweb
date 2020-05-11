@@ -108,14 +108,34 @@
                     :data="list"
                     ref="tableSelect"
                     v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)">
+                    style="width: calc( 100vw - 3.8rem)"
+                    :row-key="getRowKey"
+                    @sort-change="tableSort">
 
                     <el-table-column
                       type="selection"
                       width="45">
                     </el-table-column>
-
                     <el-table-column
+                      :prop="item.props"
+                      :label="item.label"
+                      v-for="(item, index) in columnList"
+                      :sortable="item.ifSort ? 'custom' : false"
+                      :min-width="item.width"
+                      :key="index"
+                      >
+                      <template slot-scope="scope">
+                            <span>{{scope.row[item.props]}}</span>
+                            <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
+                            </el-tooltip>
+                      </template>
+                    </el-table-column>
+                    <!--<el-table-column
                       :prop="item.prop"
                       :label="item.label"
                       :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
@@ -132,12 +152,18 @@
                                 </el-image>
                             </el-tooltip>
                       </template>
-                    </el-table-column>
+                    </el-table-column>-->
 
                     <el-table-column prop="active" label="操作" width="200px;">
                       <template slot-scope="scope">
                           <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      align="right" width="60px">
+                      <template slot="header">
+                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
                     </el-table-column>
                 </el-table>
@@ -173,7 +199,7 @@
             </el-main>
 
         </el-container>
-
+        <PageFieldManage :setPageNum="setPageNum" />
     </div>
 </template>
 
@@ -186,14 +212,20 @@ import {
     clueDataRelease,
     copyTel,
 } from '../../request/api';
-import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText, copyData } from '../../assets/js/common';
+import PageFieldManage from '@/components/Base/PageFieldManage';
+import { copyData } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
 import { MJ_6 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'seatData',
+    components: {
+        CustomerNotes,
+        PageFieldManage
+    },
     data() {
         return {
+            fieldNum: [],
             form: {
                 currentPage: 1,
                 pageSize: 10,
@@ -209,7 +241,9 @@ export default {
                 city: '',
                 provinceCity: [], //所在省市
                 spread: '',
-                userUuid: ''
+                userUuid: '',
+                num: '',
+                sortSet: []
             },
             totalFlag: false,
             dialStateList: [
@@ -219,14 +253,14 @@ export default {
             ruleNumberNameList: [], //分配组数组
             list: [],
             columnList: [
-                { 'prop': 'phone', 'label': '电话数据' },
-                { 'prop': 'provinceCity', 'label': '所在地区' },
-                { 'prop': 'examItem', 'label': '所属项目' },
-                { 'prop': 'userName', 'label': '所属坐席' },
-                { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
-                { 'prop': 'spread', 'label': '来源渠道' },
-                { 'prop': 'createTime', 'label': '创建时间' },
-                { 'prop': 'lastCallTime', 'label': '最后联系时间' },
+                // { 'prop': 'phone', 'label': '电话数据' },
+                // { 'prop': 'provinceCity', 'label': '所在地区' },
+                // { 'prop': 'examItem', 'label': '所属项目' },
+                // { 'prop': 'userName', 'label': '所属坐席' },
+                // { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
+                // { 'prop': 'spread', 'label': '来源渠道' },
+                // { 'prop': 'createTime', 'label': '创建时间' },
+                // { 'prop': 'lastCallTime', 'label': '最后联系时间' },
             ],
             dataPicker: [],
             
@@ -243,8 +277,12 @@ export default {
             examItem: '',
         }
     },
-    components: {
-        CustomerNotes
+    watch:{
+        '$store.state.editFieldVisible'(val){
+            if(!val && this.$store.state.pageNum == 'YM_3'){
+                this.getAllUserClueData()
+            }
+        }
     },
     created() {
         const uuid = localStorage.getItem('userUuid');
@@ -257,6 +295,20 @@ export default {
         this.getRuleItem();
     },
     methods: {
+        setPageNum(pageNum){
+            this.form.num = pageNum
+        },
+        getRowKey(row){
+        return row.num
+        },
+        editFieldHandle(){
+            this.$store.commit('setEditFieldVisible', true)
+        },
+        tableSort(info){
+            this.form.sortSet = []
+            this.form.sortSet.push({[info.prop]: info.order === 'ascending' ? 'ASC' : 'DESC'})
+            this.getAllUserClueData()
+        },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
                 numberList: arr
@@ -279,13 +331,14 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
-                            sll.createTime = timestampToTime(Number(sll.createTime));
-                            sll.dataType = backType(sll.dataType);
-                            sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
-                            sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
-                        })
+                        // res.data.list.map(sll => {
+                        //     sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
+                        //     sll.createTime = timestampToTime(Number(sll.createTime));
+                        //     sll.dataType = backType(sll.dataType);
+                        //     sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
+                        //     sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
+                        // })
+                        this.columnList = res.data.filedList;
                         this.list = res.data.list;
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
@@ -302,13 +355,11 @@ export default {
             })
         },
         customerInfo(row) {
-            console.log(row);
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = false;
         },
         handleAddClick(row) {
-            console.log(row);
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = true;
@@ -316,7 +367,6 @@ export default {
             this.examItem = row.examItemId;
         },
         datePickerChange(value) {
-            console.log(value);
             if (value == null) {
                 this.form.startTime = '';
                 this.form.endTime = '';
@@ -329,30 +379,25 @@ export default {
             done();
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.getAllUserClueData();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.getAllUserClueData();
         },
         changeDrawer(val){
-            // console.log(val);
             this.drawer = val;
         },
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -363,11 +408,9 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.form.examItemId = item.id;
         },
         cityChange() {
-            console.log(this.form.provinceCity);
             this.form.province = this.form.provinceCity[0];
             this.form.city = this.form.provinceCity[1];
         },
@@ -385,7 +428,6 @@ export default {
                 this.$smoke_post(clueDataRelease, {
                     list: userCDARUuidArr
                 }).then(res => {
-                    console.log(res);
                     if(res.code == 200) {
                         this.$message({
                             type: 'success',
@@ -397,7 +439,6 @@ export default {
             }
         },
         phoneCopy(row) {
-            console.log(row.clueDataSUuid);
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {
