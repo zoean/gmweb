@@ -823,7 +823,8 @@ export default {
                     remarks: this.ruleForm.remarks,
                     runOutPromise: this.ruleForm.runOutPromise,
                 },
-                operateType: 1
+                operateType: 1,
+                school: this.schoolId
             }).then(res => {
                 console.log(res);
                 if(res.code == 200) {

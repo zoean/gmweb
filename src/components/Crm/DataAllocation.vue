@@ -282,6 +282,7 @@ import {
     enumByEnumNums,
     getExamBasic,
     getSchoolList,
+    popularizeUrl
 } from '../../request/api';
 import { dateList } from '../../assets/js/data';
 import { stateText, getTextByJs, quchong } from '../../assets/js/common';
@@ -444,21 +445,38 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     console.log(this.ruleFormLink);
-                    this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
-                     + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
-                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
-                    //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
-                    console.log(this.createLinkUrl);
+                    this.popularizeUrl();
                 } else {
                     console.log('error submit!!');
                     return false;
                 }
             });
         },
+        popularizeUrl() {
+            this.$smoke_post(popularizeUrl, {
+                accId: this.ruleFormLink.acc,
+                examItemsId: this.ruleFormLink.projectId,
+                ruleId: this.ruleFormLink.ruleid,
+                spreadId: this.ruleFormLink.spread,
+            }).then(res => {
+                if(res.code == 200) {
+                    this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
+                     + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
+                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
+                    //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
+                    console.log(this.createLinkUrl);
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         createLinksClick(row) {
+            this.drawerFlagLink = true;
             this.ruleFormLink.ruleid = row.id; //分配组ID
             this.ruleFormLink.ruleName = row.name; //分配组Name
-            this.drawerFlagLink = true;
             this.ruleFormLink.acc = '';
             this.ruleFormLink.spread = '';
             this.ruleFormLink.projectId = '';
