@@ -229,7 +229,9 @@ export default {
     resetAddEditPageForm(){
       this.addEditPageForm.describe = ''
       this.addEditPageForm.name = ''
-      this.$refs['addEditPageForm'].resetFields()
+      this.$nextTick(()=>{
+        this.$refs['addEditPageForm'].resetFields()
+      })
     },
     submitAddEditPage(){
       this.$refs['addEditPageForm'].validate((valid) => {
@@ -357,7 +359,9 @@ export default {
       this.addEditFieldForm.ifOpen = false
       this.addEditFieldForm.ifDef = false
       this.addEditFieldForm.ifSort = false
-      this.$refs['addEdiFieldForm'].resetFields()
+      this.$nextTick(()=>{
+        this.$refs['addEditFieldForm'].resetFields()
+      })
     }
   }
 }

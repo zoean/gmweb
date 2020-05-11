@@ -29,7 +29,7 @@ export default {
     }
   },
   watch:{
-    '$route.path': function(newVal,oldVal){
+    '$route.path': function(newVal){
       if(newVal == '/404' || newVal == '/login'){
         this.$store.dispatch('actionsSetCommonFlag', false);
       }else{
