@@ -100,7 +100,8 @@
                     ref="tableSelect"
                     v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)"
-                    :row-key="getRowKey">
+                    :row-key="getRowKey"
+                    @sort-change="tableSort">
                     <el-table-column
                       type="selection"
                       width="45">
@@ -108,9 +109,9 @@
                     <el-table-column
                       :prop="item.props"
                       :label="item.label"
-                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
                       v-for="(item, index) in columnList"
-                      :sortable="item.ifSort ? true : false"
+                      :sortable="item.ifSort ? 'custom' : false"
+                      :min-width="item.width"
                       :key="index"
                       >
                     </el-table-column>
@@ -228,13 +229,8 @@ import {
     getRuleUserStructureLimit,
     recPoolActSeat,
 } from '../../request/api';
-import { 
-    timestampToTime, 
-    backType, 
-    workingLifeText, 
-    evidencePurposeText, 
-    genderText,
-    pushPeopleFunc,
+import {  
+    pushPeopleFunc
 } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
 import { MJ_6, zuzhiUuid } from '../../assets/js/data';
@@ -259,7 +255,7 @@ export default {
                 provinceCity: [], //所在省市
                 spread: '',
                 userUuid: '',
-                num: ''
+                num: '',
             },
             list: [],
             columnList: [
@@ -325,6 +321,11 @@ export default {
         getRowKey(row){
             return row.num
         },
+        tableSort(info){
+            this.form.sortSet = []
+            this.form.sortSet.push({[info.prop]: info.order === 'ascending' ? 'ASC' : 'DESC'})
+            this.getRecoveryPoolDataList()
+        },
         editFieldHandle(){
             this.$store.commit('setEditFieldVisible', true)
         },
@@ -375,12 +376,12 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.lastCallTime = sll.lastCallTime ? timestampToTime(Number(sll.lastCallTime)) : '---'
-                            sll.createTime = sll.createTime ? timestampToTime(Number(sll.createTime)) : '---'
-                            sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
-                            sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
-                        })
+                        // res.data.list.map(sll => {
+                        //     sll.lastCallTime = sll.lastCallTime ? timestampToTime(Number(sll.lastCallTime)) : '---'
+                        //     sll.createTime = sll.createTime ? timestampToTime(Number(sll.createTime)) : '---'
+                        //     sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
+                        //     sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
+                        // })
                         this.list = res.data.list;
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
@@ -466,7 +467,7 @@ export default {
             if (!value) return true;
             return data.orgName.indexOf(value) !== -1;
         },
-        handleCheckChange(data, value){
+        handleCheckChange(){
             this.getCheckedNodes();
         },
         getCheckedNodes() {

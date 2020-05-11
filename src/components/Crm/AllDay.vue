@@ -99,13 +99,15 @@
                     v-loading="fullscreenLoading"
                     :row-class-name="tableRowClassName"
                     style="width: calc( 100vw - 3.8rem)"
-                    :row-key="getRowKey">
+                    :row-key="getRowKey"
+                    @sort-change="tableSort"
+                    >
                     <el-table-column
                       :prop="item.props"
-                      :min-width="item.props == 'lastCallTime' ? '140px' : item.props == 'name' ? '80px' : item.props == 'workingLife' ? '100px' : item.props == 'tel' ? '130px' : ''"
                       :label="item.label"
                       v-for="(item, index) in columnList"
-                      :sortable="item.ifSort ? true : false"
+                      :sortable="item.ifSort ? 'custom' : false"
+                      :min-width="item.width"
                       :key="index"
                       >
                       <template slot-scope="scope">
@@ -196,7 +198,7 @@ import {
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-import { timestampToTime, menuNumberFunc, copyData } from '../../assets/js/common';
+import { menuNumberFunc, copyData } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -230,7 +232,8 @@ export default {
                 workingLife: '', //工作年限
                 selectTime: '', //未联间隔
                 ruleNumberName: '', //分配组组名
-                num: ''
+                num: '',
+                sortSet: []
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -383,10 +386,10 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
-                            sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
-                        })
+                        // res.data.list.map(sll => {
+                        //     sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
+                        //     sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
+                        // })
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.list = res.data.list;
@@ -403,6 +406,11 @@ export default {
                     }, 300)
                 }
             })
+        },
+        tableSort(info){
+            this.form.sortSet = []
+            this.form.sortSet.push({[info.prop]: info.order === 'ascending' ? 'ASC' : 'DESC'})
+            this.getClueDataAll()
         },
         release(scope) {
             let arr = [];
@@ -534,7 +542,7 @@ export default {
                     })
                 }
             })
-        },
+        }
     }
 }
 </script>
