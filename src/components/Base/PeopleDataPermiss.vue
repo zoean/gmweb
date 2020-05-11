@@ -18,7 +18,7 @@
 
                         <el-image
                             style="width: 1rem; height: 1rem; border-radius: 50%; margin-top: .2rem;"
-                            :src="require('../../assets/images/header_img.png')">
+                            :src="this.avatar ? this.avatar : require('../../assets/images/header_img.png')">
                         </el-image>
 
                         <el-table
@@ -403,6 +403,7 @@ export default {
     data() {
         return {
             userUuid: this.$route.query.uuid,
+            avatar: '',
             userList: [
                 { attr: '姓名', attrText: '' },
                 { attr: '手机号码', attrText: '' },
@@ -511,6 +512,7 @@ export default {
                 userUuid: this.userUuid
             }).then(res => {
                 if(res.code == 200) {
+                    this.avatar = res.data.user.avatar;
                     this.userList[0].attrText = res.data.user.name;
                     this.userList[1].attrText = res.data.user.accountNumber;
                     this.userList[2].attrText = res.data.user.orgList.join(' - ');

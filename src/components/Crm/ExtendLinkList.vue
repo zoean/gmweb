@@ -11,7 +11,7 @@
 
                     <el-col :span="8">
                         <el-date-picker
-                            style="width: 90%;"
+                            style="width: 95%;"
                             v-model="dataPicker"
                             type="datetimerange"
                             range-separator="至"
@@ -23,59 +23,7 @@
 
                     <el-col :span="4">
 
-                        <el-autocomplete
-                            class="screen-li"
-                            style="width: 90%;"
-                            v-model="form.examItemText"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入考试项目"
-                            :trigger-on-focus="true"
-                            @select="handleSelect"
-                        ></el-autocomplete>
-
-                    </el-col>
-
-                    <el-col :span="4">
-                        <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
-                    </el-col>
-
-                    <el-col :span="4" class="seatData">
-                        <area-cascader type="text" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
-                    </el-col>
-
-                    <el-col :span="4">
-                        
-                        <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
-                            <el-option
-                              v-for="item in enumList['MJ-6']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
-
-                    </el-col>
-                    
-                </el-row>
-
-                <el-row class="people-screen">
-
-                    <el-col :span="4">
-                        
-                        <el-select v-model="form.dialState" placeholder="请选择是否首咨" class="screen-li">
-                            <el-option
-                              v-for="item in dialStateList"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
-
-                    </el-col>
-
-                    <el-col :span="4">
-
-                        <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                        <el-select v-model="form.ruleId" placeholder="请选择分配组" class="screen-li" clearable>
                             <el-option
                               v-for="item in ruleNumberNameList"
                               :key="item.name"
@@ -87,19 +35,59 @@
                     </el-col>
 
                     <el-col :span="4">
-                        <el-button type="primary" @click="getAllUserClueData" class="screen-li">搜 索</el-button>
+
+                        <el-autocomplete
+                            clearable
+                            class="screen-li"
+                            style="width: 90%;"
+                            v-model="form.examItemText"
+                            :fetch-suggestions="querySearch"
+                            placeholder="请输入考试方向"
+                            :trigger-on-focus="true"
+                            @select="handleSelect"
+                            @clear="autocompleteClear"
+                        ></el-autocomplete>
+
                     </el-col>
 
                     <el-col :span="4">
-                        <div style="color: #fff; user-select: none;">1</div>
+                        
+                        <el-select v-model="form.spreadId" placeholder="请选择渠道" class="screen-li" clearable>
+                            <el-option
+                              v-for="item in enumList['MJ-6']"
+                              :key="item.name"
+                              :label="item.name"
+                              :value="item.number">
+                            </el-option>
+                        </el-select>
+
                     </el-col>
 
                     <el-col :span="4">
-                        <div style="color: #fff; user-select: none;">1</div>
+
+                        <el-select v-model="form.accId" placeholder="请选择推广账号" clearable="" class="screen-li">
+                            <el-option
+                              v-for="item in enumList['MJ-7']"
+                              :key="item.name"
+                              :label="item.name"
+                              :value="item.number">
+                            </el-option>
+                        </el-select>
+
+                    </el-col>
+
+                </el-row>
+
+                <el-row class="people-screen">
+
+                    <el-col :span="4">
+
+                        <el-input v-model="form.userName" placeholder="请输入创建人姓名" class="screen-li"></el-input>
+
                     </el-col>
 
                     <el-col :span="4">
-                        <el-button type="primary" @click="TransferToGoogClick" class="screen-li">释放数据</el-button>
+                        <el-button type="primary" @click="getPopularizeUrl" class="screen-li">搜 索</el-button>
                     </el-col>
 
                 </el-row>
@@ -111,35 +99,27 @@
                     style="width: calc( 100vw - 3.8rem)">
 
                     <el-table-column
-                      type="selection"
-                      width="45">
-                    </el-table-column>
-
-                    <el-table-column
                       :prop="item.prop"
                       :label="item.label"
-                      :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
+                      :show-overflow-tooltip="item.prop == 'url' ? true : false"
+                      :width="item.prop == 'copy' ? '60px' : ''"
                       v-for="(item, index) in columnList"
                       :key="index"
                       >
-                      <template slot-scope="scope">
+
+                        <template slot-scope="scope">
                             <span>{{scope.row[item.prop]}}</span>
-                            <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
+                            <el-tooltip effect="dark" v-if="item.prop == 'copy'" content="复制链接" placement="top">
                                 <el-image
-                                    class="copy-icon-style"
-                                    @click="phoneCopy(scope.row)"
+                                    style="position: relative; left: -10px; top: 2px; cursor: pointer; width: 14px; height: 14px;"
+                                    @click="copyUrlClick(scope.row)"
                                     :src="require('../../assets/images/copy-icon.png')">
                                 </el-image>
                             </el-tooltip>
-                      </template>
+                        </template>
+
                     </el-table-column>
 
-                    <el-table-column prop="active" label="操作" width="200px;">
-                      <template slot-scope="scope">
-                          <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                          <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
-                      </template>
-                    </el-table-column>
                 </el-table>
 
                 <el-pagination
@@ -155,21 +135,6 @@
                 >
                 </el-pagination>
 
-                <CustomerNotes 
-                    v-if="drawer"
-                    @changeDrawer="changeDrawer"
-                    :followFlag='followFlag' 
-                    :drawer.sync='drawer'
-                    :userUuid='form.userUuid'
-                    :schoolId='schoolId'
-                    :examItem='examItem'
-                    :clueDataSUuid='clueDataSUuid'
-                    :comMode='comMode'
-                    :callLogUuid='callLogUuid'
-                    @fatherDataList='getAllUserClueData'
-                >
-                </CustomerNotes>
-
             </el-main>
 
         </el-container>
@@ -179,7 +144,7 @@
 
 <script>
 import { 
-    getAllUserClueData, 
+    getPopularizeUrl, 
     getExamBasic, 
     enumByEnumNums, 
     getRuleItem,
@@ -187,9 +152,7 @@ import {
     copyTel,
 } from '../../request/api';
 import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText, copyData } from '../../assets/js/common';
-import pcaa from 'area-data/pcaa';
-import { MJ_6 } from '../../assets/js/data';
-import CustomerNotes from '../Share/CustomerNotes';
+import { MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'seatData',
     data() {
@@ -199,61 +162,41 @@ export default {
                 pageSize: 10,
                 startTime: '',
                 endTime: '',
-                ruleNumberName: '',
-                tel: '',
                 total: null,
-                dialState: '',
-                examItemId: '',
-                examItemText: '',
-                province: '',
-                city: '',
-                provinceCity: [], //所在省市
-                spread: '',
-                userUuid: ''
+                accId: '', //推广账号
+                examItemsId: '', //考试方向
+                ruleId: '', //分配规则Id
+                spreadId: '', //渠道
+                userName: '', //创建人
+                // userUuid: ''
             },
             totalFlag: false,
-            dialStateList: [
-                { 'name': '首咨', 'number': 0 },
-                { 'name': '非首咨', 'number': 1 },
-            ],
             ruleNumberNameList: [], //分配组数组
             list: [],
             columnList: [
-                { 'prop': 'phone', 'label': '电话数据' },
-                { 'prop': 'provinceCity', 'label': '所在地区' },
-                { 'prop': 'examItem', 'label': '所属项目' },
-                { 'prop': 'userName', 'label': '所属坐席' },
-                { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
+                { 'prop': 'url', 'label': '链接' },
+                { 'prop': 'copy', 'label': '' },
+                { 'prop': 'userName', 'label': '创建人' },
+                { 'prop': 'acc', 'label': '推广账号' },
+                { 'prop': 'rule', 'label': '分配组' },
+                { 'prop': 'examItems', 'label': '考试方向' },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '创建时间' },
-                { 'prop': 'lastCallTime', 'label': '最后联系时间' },
             ],
             dataPicker: [],
             
             restaurants: [],
             enumList: {},
             fullscreenLoading: false,
-
-            followFlag: false,
-            drawer: false,
-            clueDataSUuid: '',
-            callLogUuid: '',
-            comMode: '',
-            schoolId: '',
-            examItem: '',
         }
     },
-    components: {
-        CustomerNotes
-    },
     created() {
-        const uuid = localStorage.getItem('userUuid');
-        this.form.userUuid = uuid;
-        this.getAllUserClueData();
+        // const uuid = localStorage.getItem('userUuid');
+        // this.form.userUuid = uuid;
+        this.getPopularizeUrl();
         this.getExamBasic();
-        let arr = [MJ_6];
+        let arr = [MJ_6, MJ_7];
         this.enumByEnumNums(arr);
-        this.pcaa = pcaa;
         this.getRuleItem();
     },
     methods: {
@@ -273,21 +216,19 @@ export default {
                 }
             })
         },
-        getAllUserClueData() {
+        getPopularizeUrl() {
             this.fullscreenLoading = true;
-            this.$smoke_post(getAllUserClueData, this.form).then(res => {
+            this.$smoke_post(getPopularizeUrl, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         res.data.list.map(sll => {
-                            sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
                             sll.createTime = timestampToTime(Number(sll.createTime));
-                            sll.dataType = backType(sll.dataType);
-                            sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
-                            sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
+                            sll.url = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
+                            + sll.ruleId + '&project=' + sll.examItemsId
+                            + '&spread=' + sll.spreadId + '&acc=' + sll.accId;
                         })
                         this.list = res.data.list;
-                        this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
                     }, 300);
                 }else{
@@ -301,19 +242,14 @@ export default {
                 }
             })
         },
-        customerInfo(row) {
+        lookUrlClick(row) {
             console.log(row);
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = false;
         },
-        handleAddClick(row) {
-            console.log(row);
-            this.drawer = true;
-            this.clueDataSUuid = row.clueDataSUuid;
-            this.followFlag = true;
-            this.comMode = '微信沟通';
-            this.examItem = row.examItemId;
+        copyUrlClick(row) {
+            copyData(row.url);
         },
         datePickerChange(value) {
             console.log(value);
@@ -325,22 +261,15 @@ export default {
                 this.form.endTime = value[1].getTime();
             }
         },
-        handleClose(done) {
-            done();
-        },
         handleCurrentChange(index) {
             console.log(index);
             this.form.currentPage = index;
-            this.getAllUserClueData();
+            this.getPopularizeUrl();
         },
         handleSizeChange(index) {
             console.log(index);
             this.form.pageSize = index;
-            this.getAllUserClueData();
-        },
-        changeDrawer(val){
-            // console.log(val);
-            this.drawer = val;
+            this.getPopularizeUrl();
         },
         getExamBasic() {
             let arr;
@@ -362,62 +291,13 @@ export default {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
             };
         },
-        handleSelect(item) {
-            console.log(item);
-            this.form.examItemId = item.id;
+        handleSelect(value) {
+            console.log(value);
+            this.form.examItemsId = value.id;
         },
-        cityChange() {
-            console.log(this.form.provinceCity);
-            this.form.province = this.form.provinceCity[0];
-            this.form.city = this.form.provinceCity[1];
-        },
-        TransferToGoogClick() {
-            let userCDARUuidArr = [];
-            this.$refs.tableSelect.selection.map(sll => {
-                userCDARUuidArr.push(sll.userCDARUuid);
-            });
-            if(userCDARUuidArr.length == 0) {
-                this.$message({
-                    type: 'error',
-                    message: '请您先勾选您要释放的数据'
-                })
-            }else{
-                this.$smoke_post(clueDataRelease, {
-                    list: userCDARUuidArr
-                }).then(res => {
-                    console.log(res);
-                    if(res.code == 200) {
-                        this.$message({
-                            type: 'success',
-                            message: '数据释放成功'
-                        })
-                        this.getAllUserClueData();
-                    }
-                })
-            }
-        },
-        phoneCopy(row) {
-            console.log(row.clueDataSUuid);
-            this.copyTel(row.clueDataSUuid);
-        },
-        copyTel(id) {
-            this.$smoke_post(copyTel, {
-                uuid: id
-            }).then(res => {
-                if(res.code == 200) {
-                    copyData(res.data);
-                    this.$message({
-                        type: 'success',
-                        message: '复制成功',
-                    });
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
-            })
-        },
+        autocompleteClear() {
+            this.form.examItemsId = '';
+        }
     },
     mounted() {
         

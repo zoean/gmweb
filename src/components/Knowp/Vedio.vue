@@ -282,7 +282,7 @@ import {
     getFileSize,
     getCatalogueKnowBasicBySubjectUuid,
 } from '../../request/api';
-import { getTextByJs, timestampToTime, formatSeconds, vedioTypeText } from '../../assets/js/common';
+import { getTextByJs, timestampToTime, formatSeconds, vedioTypeText, copyData } from '../../assets/js/common';
 import { vedioTypeArr } from '../../assets/js/data';
 export default {
     name: 'subject',
@@ -641,20 +641,11 @@ export default {
             this.getFileSize(this.vedioForm.url);
         },
         handleCopy(row) {
-            this.copyData(row.url);
-        },
-        copyData(data) {
-            let url = data;
-            let oInput = document.createElement('input');
-            oInput.value = url;
-            document.body.appendChild(oInput);
-            oInput.select(); // 选择对象;
-            document.execCommand("Copy"); // 执行浏览器复制命令
             this.$message({
               message: '复制成功',
               type: 'success'
             });
-            oInput.remove();
+            copyData(row.url);
         },
         getFileSize(url) {
             this.$smoke_post(getFileSize, {

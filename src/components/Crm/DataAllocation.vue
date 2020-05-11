@@ -285,7 +285,7 @@ import {
     popularizeUrl
 } from '../../request/api';
 import { dateList } from '../../assets/js/data';
-import { stateText, getTextByJs, quchong } from '../../assets/js/common';
+import { stateText, getTextByJs, quchong, copyData } from '../../assets/js/common';
 import { MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import Tree from '../Share/Tree';
 export default {
@@ -405,7 +405,11 @@ export default {
     },
     methods: {
         handleCopy() {
-            this.copyData(this.createLinkUrl);
+            this.$message({
+              message: '复制成功',
+              type: 'success'
+            });
+            copyData(this.createLinkUrl);
         },
         getSchoolList() {
             this.$smoke_get(getSchoolList, {}).then(res => {
@@ -418,19 +422,6 @@ export default {
                     });
                 }
             })
-        },
-        copyData(data) {
-            let url = data;
-            let oInput = document.createElement('input');
-            oInput.value = url;
-            document.body.appendChild(oInput);
-            oInput.select(); // 选择对象;
-            document.execCommand("Copy"); // 执行浏览器复制命令
-            this.$message({
-              message: '复制成功',
-              type: 'success'
-            });
-            oInput.remove();
         },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
