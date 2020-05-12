@@ -726,8 +726,11 @@ export default {
         let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
+
         this.ruleForm.classOffer = '';
+        this.ruleForm.classOffer2 = '';
         this.ruleForm.classType = '';
+        this.ruleForm.classType2 = '';
         
         this.ruleForm.comModeName = this.comMode;
 
@@ -741,9 +744,11 @@ export default {
 
         this.ruleForm.entryPerson = this.$store.state.name;
         this.ruleForm.intentionLevel = '';
+        this.ruleForm.intentionLevel2 = '';
         this.ruleForm.nextContactTime = '';
         this.ruleForm.remarks = '';
         this.ruleForm.runOutPromise = '';
+        this.ruleForm.runOutPromise2 = '';
         this.getClueDataDetails(this.clueDataSUuid);
         this.getGoodsList();
         this.getGoodsList2();
@@ -804,8 +809,6 @@ export default {
                 console.log(res);
                 if(res.code == 200) {
                     res.data.list.map(sll => {
-                        sll.comMode = smoke_MJ_4(sll.comMode);
-                        sll.intentionLevel = smoke_MJ_5(sll.intentionLevel);
                         sll.createTime = timestampToTime(Number(sll.createTime));
                         sll.nextContactTime = timestampToTime(Number(sll.nextContactTime));
                         // sll.classType = classTypeText(Number(sll.classType));
@@ -874,13 +877,17 @@ export default {
                 },
                 notes: {
                     classOffer: this.ruleForm.classOffer,
+                    classOffer2: this.ruleForm.classOffer2,
                     classType: this.ruleForm.classType,
+                    classType2: this.ruleForm.classType2,
                     comMode: this.ruleForm.comMode,
                     entryPerson: this.ruleForm.entryPerson,
                     intentionLevel: this.ruleForm.intentionLevel,
+                    intentionLevel2: this.ruleForm.intentionLevel2,
                     nextContactTime: this.ruleForm.nextContactTime,
                     remarks: this.ruleForm.remarks,
                     runOutPromise: this.ruleForm.runOutPromise,
+                    runOutPromise2: this.ruleForm.runOutPromise2,
                 },
                 operateType: 1,
                 school: this.schoolId

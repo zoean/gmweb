@@ -46,6 +46,8 @@ import know from '@/components/Knowp/Know';
 import vedio from '@/components/Knowp/Vedio';
 import contents from '@/components/Knowp/Contents';
 
+import activityA from '@/components/Operate/ActivityA';
+
 Vue.use(Router);
 
 // 重写路由
@@ -265,6 +267,13 @@ export default new Router({
             name: 'vedio',
             component: vedio
         },
+
+        {
+            path: '/operate/activityA',
+            name: 'activityA',
+            component: activityA
+        },
+
         {
             path: '/crm',
             name: 'crm',

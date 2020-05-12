@@ -244,6 +244,10 @@ export default {
                 this.$router.push({
                     path: this.$store.state.userMenuList[2].defaultUrl,
                 });
+            }else if(item == '/operate'){
+                this.$router.push({
+                    path: this.$store.state.userMenuList[3].defaultUrl,
+                });
             }
         },
         iconTitleClick() {
@@ -396,6 +400,8 @@ export default {
             this.defaultActive = '/crm';
         }else if(newVal.indexOf('knowp') != -1){
             this.defaultActive = '/knowp';
+        }else if(newVal.indexOf('operate') != -1){
+            this.defaultActive = '/operate';
         }
       }
     },
@@ -406,6 +412,8 @@ export default {
             this.defaultActive = '/crm';
         }else if(this.$route.path.indexOf('knowp') != -1){
             this.defaultActive = '/knowp';
+        }else if(this.$route.path.indexOf('operate') != -1){
+            this.defaultActive = '/operate';
         }
     }
 }
