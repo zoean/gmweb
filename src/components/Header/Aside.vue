@@ -87,20 +87,24 @@ export default {
         if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
-          console.log(this.routersFlag);
+          console.log(newVal);
           this.activeIndex = newVal;
         }else if(newVal.indexOf("/base") != -1){
           this.routersFlag = true;
-          this.activeIndex = newVal;
+          this.activeIndex = this.$store.state.userMenuList[0].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[0].includeSubsetList;
         }else if(newVal.indexOf("/crm") != -1){
           this.routersFlag = true;
+          this.activeIndex = this.$store.state.userMenuList[1].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[1].includeSubsetList;
-          this.activeIndex = newVal;
         }else if(newVal.indexOf("/knowp") != -1){
           this.routersFlag = true;
+          this.activeIndex = this.$store.state.userMenuList[2].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[2].includeSubsetList;
-          this.activeIndex = newVal;
+        }else if(newVal.indexOf("/operate") != -1){
+          this.routersFlag = true;
+          this.activeIndex = this.$store.state.userMenuList[3].defaultUrl;
+          this.userMenuList = this.$store.state.userMenuList[3].includeSubsetList;
         }else{
           this.routersFlag = true;
           this.activeIndex = newVal;
@@ -122,6 +126,9 @@ export default {
         }else if(arr[1] == 'knowp'){
           this.routersFlag = true;
           this.userMenuList = userMenuList[2].includeSubsetList;
+        }else if(arr[1] == 'operate'){
+          this.routersFlag = true;
+          this.userMenuList = userMenuList[3].includeSubsetList;
         }else{
           this.routersFlag = true;
         }
