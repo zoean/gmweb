@@ -359,7 +359,7 @@ export default {
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = true;
             this.comMode = '微信沟通';
-            this.examItem = row.examItem;
+            this.examItem = row.examItemId;
         },
         changeDrawer(val){
             // console.log(val);

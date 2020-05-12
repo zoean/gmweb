@@ -181,15 +181,7 @@
                                     <el-input-number v-model="ruleForm.classOffer" :precision="2" :step="1" :min="0" size="small" style="width: 100%;"></el-input-number>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="6">
-
-                                <el-form-item label="沟通方式" prop="comModeName">
-
-                                    <el-input v-model="ruleForm.comModeName" readonly size="small" class="borderNone"></el-input>
-
-                                </el-form-item>
-
-                            </el-col>
+                            
                             <el-col :span="6">
 
                                 <el-form-item label="意向等级" prop="intentionLevel">
@@ -206,7 +198,58 @@
                                 </el-form-item>
 
                             </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="截杀承诺" prop="runOutPromise">
+                                    <el-input v-model="ruleForm.runOutPromise" placeholder="请选择截杀承诺" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
                         </el-row>
+
+                        <el-row v-if="followFlag">
+                            <el-col :span="6">
+                                <el-form-item label="兴趣班型" prop="classType2Text">
+
+                                    <el-autocomplete
+                                        style="width: 100%;"
+                                        v-model="ruleForm.classType2Text"
+                                        :fetch-suggestions="querySearch"
+                                        placeholder="请输入兴趣班型"
+                                        :trigger-on-focus="true"
+                                        @select="handleSelect"
+                                        size="small"
+                                    ></el-autocomplete>
+
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="班型报价" prop="classOffer2">
+                                    <el-input-number v-model="ruleForm.classOffer2" :precision="2" :step="1" :min="0" size="small" style="width: 100%;"></el-input-number>
+                                </el-form-item>
+                            </el-col>
+                            
+                            <el-col :span="6">
+
+                                <el-form-item label="意向等级" prop="intentionLevel2">
+
+                                    <el-select v-model="ruleForm.intentionLevel2" placeholder="请选择意向等级" size="small">
+                                        <el-option
+                                          v-for="item in enumList['MJ-5']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="截杀承诺" prop="runOutPromise2">
+                                    <el-input v-model="ruleForm.runOutPromise2" placeholder="请选择截杀承诺" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+
                         <el-row v-if="followFlag">           
                             
                             <el-col :span="6">
@@ -228,10 +271,15 @@
                                     <el-input v-model="ruleForm.remarks" size="small"></el-input>
                                 </el-form-item>
                             </el-col>
+                            
                             <el-col :span="6">
-                                <el-form-item label="截杀承诺" prop="runOutPromise">
-                                    <el-input v-model="ruleForm.runOutPromise" size="small"></el-input>
+
+                                <el-form-item label="沟通方式" prop="comModeName">
+
+                                    <el-input v-model="ruleForm.comModeName" readonly size="small" class="borderNone"></el-input>
+
                                 </el-form-item>
+
                             </el-col>
                         </el-row>
                         
@@ -475,7 +523,7 @@ import {
     getGoodsList,
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 export default {
     name: 'customerNotes',
@@ -539,14 +587,19 @@ export default {
                 createTime: '', //入库时间
 
                 classOffer: '', //班型报价
+                classOffer2: '', //班型报价
                 classType: '', //主推班型
+                classType2: '', //兴趣班型
+                classType2Text: '', //兴趣班型Text
                 comMode: '', //沟通方式
                 comModeName: '', //沟通方式Name
                 entryPerson: '', //录入人
                 intentionLevel: '', //意向等级
+                intentionLevel2: '', //意向等级
                 nextContactTime: '', //下次联系时间  时间戳（13位）
                 remarks: '', //其他备注
                 runOutPromise: '', //截杀承诺
+                runOutPromise2: '', //截杀承诺
             },
             rules: {
                 classOffer: [
@@ -587,11 +640,15 @@ export default {
                 { 'prop': 'createTime', 'label': '创建时间' },
                 { 'prop': 'entryPerson', 'label': '录入人' },
                 { 'prop': 'comMode', 'label': '沟通方式' },
-                // { 'prop': 'classType', 'label': '主推班型' },
+                { 'prop': 'classType', 'label': '主推班型' },
                 { 'prop': 'classOffer', 'label': '班型报价（元）' },
                 { 'prop': 'intentionLevel', 'label': '意向等级' },
-                { 'prop': 'nextContactTime', 'label': '下次联系时间' },
                 { 'prop': 'runOutPromise', 'label': '截杀承诺' },
+                { 'prop': 'classType2', 'label': '兴趣班型' },
+                { 'prop': 'classOffer2', 'label': '班型报价（元）' },
+                { 'prop': 'intentionLevel2', 'label': '意向等级' },
+                { 'prop': 'runOutPromise2', 'label': '截杀承诺' },
+                { 'prop': 'nextContactTime', 'label': '下次联系时间' },
                 { 'prop': 'remarks', 'label': '其他备注' },
             ],
             notesColumnListCall: [
@@ -655,6 +712,7 @@ export default {
             tabs_active: 'first',
             classTypeList: [],
             pcaa: null, //省市数据
+            restaurants: [],
         }
     },
     created() {
@@ -688,6 +746,7 @@ export default {
         this.ruleForm.runOutPromise = '';
         this.getClueDataDetails(this.clueDataSUuid);
         this.getGoodsList();
+        this.getGoodsList2();
     },
     methods: {
         getGoodsList() {
@@ -954,6 +1013,36 @@ export default {
                     this.ruleForm.createTime = timestampToTime(Number(res.data.createTime));
                 }
             })
+        },
+        getGoodsList2() {
+            let arr;
+            this.$smoke_post(getGoodsList, {
+                itemId: 0,
+                schoolName: this.schoolId
+            }).then(res => {
+                if(res.code == 200) {
+                    arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value")); 
+                    this.restaurants = arr;
+                    this.restaurants = quchong(this.restaurants, 'value');
+                }
+            })
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            console.log(restaurants);
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelect(item) {
+            console.log(item);
+            this.ruleForm.classType2 = item.id;
+            this.ruleForm.classType2Text = item.value;
         },
     },
     mounted() {
