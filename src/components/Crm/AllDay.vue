@@ -127,7 +127,7 @@
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="active" label="操作" width="350px;">
+                    <el-table-column prop="active" label="操作" width="350px;" fixed="right">
                       <template slot-scope="scope">
                           <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                           <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
@@ -148,7 +148,7 @@
                     </el-table-column>
                     
                     <el-table-column
-                      align="right" width="60px">
+                      align="right" width="60px" fixed="right">
                       <template slot="header">
                         <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
@@ -213,13 +213,14 @@ export default {
         CustomerNotes,
         PageFieldManage
     },
-    watch:{
-        '$store.state.editFieldVisible'(val){
-            if(!val && this.$store.state.pageNum == 'YM_1'){
-                this.getClueDataAll()
-            }
-        }
-    },
+    // watch:{
+    //     '$store.state.editFieldVisible'(val){
+    //         if(!val && this.$store.state.pageNum == 'YM_1'){
+    //             this.getClueDataAll()
+    //         }
+            
+    //     }
+    // },
     data() {
         return {
             fieldNum: [],
@@ -391,10 +392,6 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        // res.data.list.map(sll => {
-                        //     sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
-                        //     sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
-                        // })
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.list = res.data.list;

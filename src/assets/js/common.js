@@ -52,6 +52,21 @@ export const timestampToTime = (timestamp) => {
     }
 }
 
+export const getCurrentDate = (seperator) => {
+    var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator + month + seperator + strDate;
+        return currentdate;
+}
+
 export const backType = (type) => {
     let str = '';
     if(type == '1'){

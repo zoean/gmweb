@@ -145,6 +145,7 @@ export default {
                 message: '字段配置成功'
             })
             this.$store.commit('setEditFieldVisible', false)
+            window.location.reload()
             // this.getClueDataAll()
           }
         })
