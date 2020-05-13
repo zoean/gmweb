@@ -148,7 +148,7 @@ export default {
       height: 100%;
       .el-submenu-smoke{
         position: relative;
-        z-index: 999999;
+        z-index: 9;
         color: #fff;
         border-radius: none;
         i{
@@ -209,7 +209,7 @@ export default {
       }
       .el-menu-vertical-demo{
         position: relative;
-        z-index: 999999;
+        z-index: 9;
         height: 100%;
         border-right: none;
         background-color: #4794FE !important;
