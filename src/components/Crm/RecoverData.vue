@@ -101,19 +101,24 @@
                     v-loading="fullscreenLoading"
                     style="width: calc( 100vw - 3.8rem)"
                     :row-key="getRowKey"
-                    @sort-change="tableSort">
+                    >
                     <el-table-column
                       type="selection"
                       width="45">
                     </el-table-column>
                     <el-table-column
                       :prop="item.props"
-                      :label="item.label"
                       v-for="(item, index) in columnList"
-                      :sortable="item.ifSort ? 'custom' : false"
                       :min-width="item.width"
                       :key="index"
                       >
+                      <template slot="header">
+                        {{item.label}}
+                        <span class="caret-wrapper" v-if="item.ifSort">
+                            <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
+                            <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
+                        </span>
+                      </template>
                     </el-table-column>
                     <el-table-column prop="active" label="操作" width="200px;">
                       <template slot-scope="scope">
@@ -321,9 +326,9 @@ export default {
         getRowKey(row){
             return row.num
         },
-        tableSort(info){
-            this.form.sortSet = []
-            this.form.sortSet.push({[info.prop]: info.order === 'ascending' ? 'ASC' : 'DESC'})
+        tableSort(type, props){
+             this.form.sortSet = []
+            this.form.sortSet.push({[props]: type === 'ascending' ? 'ASC' : 'DESC'})
             this.getRecoveryPoolDataList()
         },
         editFieldHandle(){

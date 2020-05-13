@@ -100,16 +100,20 @@
                     :row-class-name="tableRowClassName"
                     style="width: calc( 100vw - 3.8rem)"
                     :row-key="getRowKey"
-                    @sort-change="tableSort"
                     >
                     <el-table-column
                       :prop="item.props"
-                      :label="item.label"
                       v-for="(item, index) in columnList"
-                      :sortable="item.ifSort ? 'custom' : false"
                       :min-width="item.width"
                       :key="index"
                       >
+                      <template slot="header">
+                        {{item.label}}
+                        <span class="caret-wrapper" v-if="item.ifSort">
+                            <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
+                            <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
+                        </span>
+                      </template>
                       <template slot-scope="scope">
                             <span>{{scope.row[item.props]}}</span>
                             <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
@@ -119,6 +123,7 @@
                                     :src="require('../../assets/images/copy-icon.png')">
                                 </el-image>
                             </el-tooltip>
+                            
                       </template>
                     </el-table-column>
 
@@ -407,9 +412,9 @@ export default {
                 }
             })
         },
-        tableSort(info){
+        tableSort(type, props){
             this.form.sortSet = []
-            this.form.sortSet.push({[info.prop]: info.order === 'ascending' ? 'ASC' : 'DESC'})
+            this.form.sortSet.push({[props]: type === 'ascending' ? 'ASC' : 'DESC'})
             this.getClueDataAll()
         },
         release(scope) {

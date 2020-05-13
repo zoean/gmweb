@@ -42,7 +42,7 @@
                 <el-table
                     ref="multipleTable"
                     :data="upperData"
-                    style="width: calc(100vw - 3.65rem)"
+                    style="width: calc(100vw - 3.8rem)"
                     @selection-change="handleSelectionChange">
                     <el-table-column
                       type="selection"
