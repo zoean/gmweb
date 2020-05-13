@@ -48,10 +48,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/*
 .el-container{
-  height: calc( 100vh - 60px);
+   height: calc( 100vh - 60px);
 }
-
+*/
 .edit-field-icon{
   color: #5cb6ff;
   font-size: 20px;

@@ -118,12 +118,12 @@
                         <el-table
                         :data="userOrderList"
                         style="width: calc( 100vw - 4.1rem)">
-                            <el-table-column v-for="(item, index) in userOrderColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-                            <el-table-column prop="active" label="操作" width="400px;">
+                            <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
+                            <el-table-column prop="active" label="操作">
                             <template slot-scope="scope">
-                                <el-button @click="phoneOut(scope.row)" type="text">手机外拨</el-button>
-                                <el-button @click="seatOut(scope.row)" type="text">座机外拨</el-button>
-                                <el-button @click="handleAddClick(scope.row)" type="text">添加备注</el-button>
+                                <!-- <el-button @click="phoneOut(scope.row)" type="text">手机外拨</el-button>
+                                 <el-button @click="seatOut(scope.row)" type="text">座机外拨</el-button>
+                                 <el-button @click="handleAddClick(scope.row)" type="text">添加备注</el-button>-->
                                 <el-button @click="payDetail(scope.row)" type="text">支付记录</el-button>
                             </template>
                             </el-table-column>
@@ -198,7 +198,7 @@ export default {
     name: 'completed',
     filters: {
         timestampToTime: val => {
-            return val ? timestampToTime(val) : '--'
+            return val ? timestampToTime(val*1000) : '--'
         }
     },
     data() {
@@ -249,13 +249,16 @@ export default {
             userOrderTotal: 0,
             userOrderColumn: [{
                 label: '下单时间',
-                prop: 'orderTime'
+                prop: 'orderTime',
+                width: 180,
+                formatter: this.sliceTime
             },{
                 label: '姓名',
                 prop: 'name'
             },{
                 label: '电话数据',
-                prop: 'tel'
+                prop: 'tel',
+                width: 130
             },{
                 label: '订单归属',
                 prop: 'orderUserName'
@@ -264,7 +267,8 @@ export default {
                 prop: 'school'
             },{
                 label: '商品班型',
-                prop: 'commodityClass'
+                prop: 'commodityClass',
+                width: 180
             },{
                 label: '累付金额',
                 prop: 'sumMoney'
@@ -292,6 +296,9 @@ export default {
     methods: {
         parsePurchase(row){
             return this.purchaseOptions[row.purchaseStatus]
+        },
+        sliceTime(row){
+            return row.orderTime.slice(0, -2)
         },
         tabChange(tab){
             if(tab.index){

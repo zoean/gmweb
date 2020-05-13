@@ -159,14 +159,14 @@
                       </template>
                     </el-table-column>-->
 
-                    <el-table-column prop="active" label="操作" width="200px;">
+                    <el-table-column prop="active" label="操作" width="200px;" fixed="right">
                       <template slot-scope="scope">
                           <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
                       </template>
                     </el-table-column>
                     <el-table-column
-                      align="right" width="60px">
+                      align="right" width="60px" fixed="right">
                       <template slot="header">
                         <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
@@ -282,13 +282,13 @@ export default {
             examItem: '',
         }
     },
-    watch:{
-        '$store.state.editFieldVisible'(val){
-            if(!val && this.$store.state.pageNum == 'YM_3'){
-                this.getAllUserClueData()
-            }
-        }
-    },
+    // watch:{
+    //     '$store.state.editFieldVisible'(val){
+    //         if(!val && this.$store.state.pageNum == 'YM_3'){
+    //             this.getAllUserClueData()
+    //         }
+    //     }
+    // },
     created() {
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;

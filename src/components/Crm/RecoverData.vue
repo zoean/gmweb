@@ -120,14 +120,14 @@
                         </span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="active" label="操作" width="200px;">
+                    <el-table-column prop="active" label="操作" width="200px;" fixed="right">
                       <template slot-scope="scope">
                           <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                           <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
                       </template>
                     </el-table-column>
                     <el-table-column
-                      align="right" width="60px">
+                      align="right" width="60px" fixed="right">
                       <template slot="header">
                         <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
                       </template>
@@ -535,11 +535,11 @@ export default {
         filterText(val) {
             this.$refs.tree.filter(val);
         },
-        '$store.state.editFieldVisible'(val){
-            if(!val && this.$store.state.pageNum == 'YM_2'){
-                this.getRecoveryPoolDataList()
-            }
-        }
+        // '$store.state.editFieldVisible'(val){
+        //     if(!val && this.$store.state.pageNum == 'YM_2'){
+        //         this.getRecoveryPoolDataList()
+        //     }
+        // }
     },
 }
 </script>

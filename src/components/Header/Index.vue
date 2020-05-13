@@ -329,6 +329,9 @@ export default {
                     this.$store.dispatch('actionsSetUuid', res.data.uuid);
                     this.$store.dispatch('actionsSetUserMenuList', res.data.userMenuList);
                     this.$store.dispatch('actionsSetAvatar', res.data.avatar);
+                    this.$store.commit('setUserRole', res.data.roleName)
+                    this.$store.commit('setUserDepartment', res.data.orgName)
+                    this.$store.commit('setCurrentDate', res.data.time)
 
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
                     console.log(this.clueDataNumberList);

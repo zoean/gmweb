@@ -54,7 +54,6 @@ export default {
                     if(res.code == 200){
                         this.$store.dispatch('actionsSetCommonFlag', true);                        
                         localStorage.setItem("jhToken", res.data.token);
-
                         this.getUserLoginMessage();
                         setTimeout(() => {
                             this.fullscreenLoading = false;
@@ -83,6 +82,8 @@ export default {
                     localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
                     localStorage.setItem("userUuid", res.data.uuid);
+                    this.$store.commit('setUserRole', res.data.roleName)
+                    this.$store.commit('setUserDepartment', res.data.orgName)
                 }
             })
         },
