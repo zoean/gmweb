@@ -440,6 +440,7 @@ export default {
     .index-hleft{
         width: 3rem;
         min-width: 200px;
+        max-width: 256px;
         float: left;
         height: 60px;
         font-size: 18px;
@@ -458,7 +459,7 @@ export default {
     }
     .el-menu-demo{
         float: left;
-        width: calc( 100% - 300px );
+        width: calc( 100% - 400px );
         padding-left: 20px;
     }
     .el-menu.el-menu--horizontal{

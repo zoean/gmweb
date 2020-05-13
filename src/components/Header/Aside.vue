@@ -1,6 +1,6 @@
 <template>
     <div v-if="routersFlag">
-        <el-aside style="width: 3rem; min-width: 200px;">
+        <el-aside style="width: 3rem; min-width: 200px; max-width: 256px;">
             
             <el-menu
                 :default-active="activeIndex"
@@ -44,7 +44,7 @@
                 </div>
 
                 <el-image
-                  style="width: 3rem; position: absolute; bottom: 0;"
+                  style="width: 100%; position: absolute; bottom: 0;"
                   :src="require('../../assets/images/aside_backg.png')">
                 </el-image>
                 
