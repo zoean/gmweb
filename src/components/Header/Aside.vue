@@ -1,6 +1,6 @@
 <template>
     <div v-if="routersFlag">
-        <el-aside width='3rem'>
+        <el-aside style="width: 3rem; min-width: 200px;">
             
             <el-menu
                 :default-active="activeIndex"
@@ -12,7 +12,7 @@
 
                 <div v-for="(item,index) in userMenuList" :key="index">
 
-                  <el-submenu :index="`${item.url}`" v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'">
+                  <el-submenu class="el-submenu-smoke" :index="`${item.url}`" v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'">
                     <template slot="title">
                       <i :class="item.icon"></i>
                       <span>{{item.name}}</span>
@@ -23,13 +23,15 @@
                         @click="active_router(res)"
                         v-if="res.disabled && res.menuComponent != 'button'"
                       >
-                      <i :class="res.icon"></i>
-                      {{res.name}}
+                      <div class="el-menu-item-div">
+                        <i :class="res.icon"></i>
+                        {{res.name}}
+                      </div>
                       </el-menu-item>
                     </div>
                   </el-submenu>
 
-                  <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)">
+                  <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke">
                     <i :class="item.icon"></i>
                     <span slot="title">{{item.name}}</span>
                   </el-menu-item>
@@ -40,6 +42,11 @@
                   </el-menu-item> -->
 
                 </div>
+
+                <el-image
+                  style="width: 3rem; position: absolute; bottom: 0;"
+                  :src="require('../../assets/images/aside_backg.png')">
+                </el-image>
                 
             </el-menu>
 
@@ -138,10 +145,97 @@ export default {
 
 <style lang="less" scoped>
     .el-aside{
-        height: 100%;
-        .el-menu{
-            height: 100%;
-            border-top: 1px solid #e6e6e6;
+      height: 100%;
+      .el-submenu-smoke{
+        position: relative;
+        z-index: 9;
+        color: #fff;
+        border-radius: none;
+        i{
+          color: #fff;
         }
+        .el-submenu__title{
+          &:hover{
+            span{
+              color: #4794FE !important;
+            }
+            i{
+              color: #4794FE !important;
+            }
+          }
+          span{
+            color: #fff !important;
+          }
+          i{
+            color: #fff !important;
+          }
+        }
+        .el-menu-item.is-active .el-menu-item-div{
+          width: calc(3rem - 24px);
+          min-width: 176px;
+          margin-left: -16px;
+          padding-left: 16px;
+          border-radius: 50px 0 0 50px;
+          background: #fff;
+          color: #4794FE;
+          i{
+            color: #4794FE;
+          }
+        }
+        .el-menu-item{
+          background: #4794FE;
+          color: #fff;
+          padding-left: 26px;
+          i{
+            color: #fff;
+          }
+          .el-menu-item-div{
+            background: #4794FE;
+            color: #fff;
+            &:hover{
+              width: calc(3rem - 24px);
+              min-width: 176px;
+              margin-left: -16px;
+              padding-left: 16px;
+              border-radius: 50px 0 0 50px;
+              background: rgba(255, 255, 255, 0.75) !important;
+              color: #4794FE;
+              i{
+                color: #4794FE;
+              }
+            }
+          }
+        }
+      }
+      .el-menu-vertical-demo{
+        position: relative;
+        z-index: 9;
+        height: 100%;
+        border-right: none;
+        background-color: #4794FE !important;
+      }
+      .el-menu-item-smoke{
+        color: #fff;
+        border-radius: 50px 0px 0px 50px;
+        width: calc( 100% - 26px );
+        margin-left: 26px;
+        i{
+          color: #fff;
+        }
+      }
+      .el-menu-item-smoke:hover{
+        background: rgba(255, 255, 255, 0.75) !important;
+        color: #4794FE;
+        i{
+          color: #4794FE;
+        }
+      }
+      .el-menu-item-smoke.is-active{
+        background: #fff;
+        color: #4794FE;
+        i{
+          color: #4794FE;
+        }
+      }
     }
 </style>
