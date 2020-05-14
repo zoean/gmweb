@@ -173,6 +173,7 @@ export default {
         .el-menu-item.is-active .el-menu-item-div{
           width: calc(3rem - 24px);
           min-width: 176px;
+          max-width: 232px;
           margin-left: -16px;
           padding-left: 16px;
           border-radius: 50px 0 0 50px;
@@ -195,6 +196,7 @@ export default {
             &:hover{
               width: calc(3rem - 24px);
               min-width: 176px;
+              max-width: 232px;
               margin-left: -16px;
               padding-left: 16px;
               border-radius: 50px 0 0 50px;
