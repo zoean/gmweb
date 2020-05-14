@@ -1,111 +1,105 @@
 <template>
-    <div style="">
-        <el-container class="index-main">
+    <el-main class="index-main">
 
-            <el-main>
+        <div class="people-title">公司人员列表</div>
 
-                <div class="people-title">公司人员列表</div>
+        <el-row class="people-screen">
+            <el-col :span="4">
+                <el-cascader
+                    ref="cascader"
+                    class="screen-li"
+                    placeholder="请选择组织架构"
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList' }"
+                    clearable>
+                </el-cascader>
+            </el-col>
+            <el-col :span="4">
+                <el-select v-model="roleUuidText" placeholder="请选择角色" @change='handleRoleUuidChange' class="screen-li" clearable>
+                    <el-option
+                      v-for="item in roleOptions"
+                      :key="item.uuid"
+                      :label="item.name"
+                      :value="item.uuid">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="4">
+                <el-select v-model="jobStatusText" placeholder="请选择员工状态" @change='handleJobStatusChange' class="screen-li" clearable>
+                    <el-option
+                      v-for="item in jobStatusOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="5">
+                <el-date-picker
+                    clearable
+                    v-model="dataPicker"
+                    :default-time="['00:00:00', '23:59:59']"
+                    type="daterange"
+                    range-separator="至"
+                    @change="datePickerChange"
+                    start-placeholder="入职开始日期"
+                    end-placeholder="入职结束日期">
+                </el-date-picker>
+            </el-col>
+        </el-row>
 
-                <el-row class="people-screen">
-                    <el-col :span="4">
-                        <el-cascader
-                            ref="cascader"
-                            class="screen-li"
-                            placeholder="请选择组织架构"
-                            :show-all-levels=false
-                            :options="zuzhiOptions"
-                            @change='handleZuzhiChange'
-                            :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList' }"
-                            clearable>
-                        </el-cascader>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-select v-model="roleUuidText" placeholder="请选择角色" @change='handleRoleUuidChange' class="screen-li" clearable>
-                            <el-option
-                              v-for="item in roleOptions"
-                              :key="item.uuid"
-                              :label="item.name"
-                              :value="item.uuid">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-select v-model="jobStatusText" placeholder="请选择员工状态" @change='handleJobStatusChange' class="screen-li" clearable>
-                            <el-option
-                              v-for="item in jobStatusOptions"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-date-picker
-                            clearable
-                            v-model="dataPicker"
-                            :default-time="['00:00:00', '23:59:59']"
-                            type="daterange"
-                            range-separator="至"
-                            @change="datePickerChange"
-                            start-placeholder="入职开始日期"
-                            end-placeholder="入职结束日期">
-                        </el-date-picker>
-                    </el-col>
-                </el-row>
+        <el-row class="people-screen">
+            <el-col :span="4">
+                <el-input v-model="screenForm.name" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
+            </el-col>
+            <el-col :span="5">
+                <el-button type="primary" @click="smoke_search">搜 索</el-button>
+            </el-col>
+            <el-col :span="11">
+                <el-button type="primary" class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
+                <el-button v-if="exportPeople" type="primary" class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
+            </el-col>
+        </el-row>
+        
+        <el-table
+          :data="userList"
+          @sort-change="sortChange"
+          v-loading="fullscreenLoading"
+          style="width: 99.9%">
+          <el-table-column
+            :prop="item.prop"
+            :label="item.label"
+            v-for="(item, index) in columnList"
+            :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
+            :key="index"
+            >
+          </el-table-column>
+          <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss">
+            <template slot-scope="scope">
+                <el-button v-if="peopleEdit" @click="handleEditClick(scope.row)" type="text">编辑</el-button>
+                <el-button v-if="dataPermiss" @click="handlePermissClick(scope.row)" type="text">数据权限</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-                <el-row class="people-screen">
-                    <el-col :span="4">
-                        <el-input v-model="screenForm.name" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
-                    </el-col>
-                    <el-col :span="5">
-                        <el-button type="primary" @click="smoke_search">搜 索</el-button>
-                    </el-col>
-                    <el-col :span="11">
-                        <el-button type="primary" class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
-                        <el-button v-if="exportPeople" type="primary" class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
-                    </el-col>
-                </el-row>
-                
-                <el-table
-                  :data="userList"
-                  @sort-change="sortChange"
-                  v-loading="fullscreenLoading"
-                  style="width: calc( 100vw - 3.8rem)">
-                  <el-table-column
-                    :prop="item.prop"
-                    :label="item.label"
-                    v-for="(item, index) in columnList"
-                    :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
-                    :key="index"
-                    >
-                  </el-table-column>
-                  <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss">
-                    <template slot-scope="scope">
-                        <el-button v-if="peopleEdit" @click="handleEditClick(scope.row)" type="text">编辑</el-button>
-                        <el-button v-if="dataPermiss" @click="handlePermissClick(scope.row)" type="text">数据权限</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='total'
+            :page-size='screenForm.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='total'
-                    :page-size='screenForm.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
-
-            </el-main>
-
-        </el-container>
-    </div>
+    </el-main>
 </template>
 
 <script>

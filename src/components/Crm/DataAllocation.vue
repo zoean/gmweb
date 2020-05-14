@@ -1,274 +1,266 @@
 <template>
-    <div class="dataAllocation">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">分配引擎配置</div>
 
-            <el-main>
+        <el-row style="margin-bottom: 20px;" v-if="addDataAllocation">
 
-                <div class="people-title">分配引擎配置</div>
+            <el-col style="width: 140px;"><el-button style="width: 90%;" type="primary" @click="addAlloZu">添加分配组</el-button></el-col>
 
-                <el-row style="margin-bottom: 20px;" v-if="addDataAllocation">
+        </el-row>
 
-                    <el-col style="width: 140px;"><el-button style="width: 90%;" type="primary" @click="addAlloZu">添加分配组</el-button></el-col>
+        <el-table
+            :data="dataAlloList"
+            v-loading="fullscreenLoading"
+            style="width: 100%"
+        >
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              :width="item.label == '分配组' ? '190px' : ''"
+              v-for="(item, index) in columnList1"
+              :key="index"
+              >
+            </el-table-column>
 
-                </el-row>
+            <el-table-column prop="active" label="操作" width="400px">
+              <template slot-scope="scope">
+                  <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
+                  <el-popover
+                    placement="top"
+                    width="200"
+                    trigger="click"
+                    :ref="`popover-${scope.$index}`"
+                    >
+                    <p style="margin-bottom: .2rem;">确定要删除此分配组吗？</p>
+                    <div style="text-align: right; margin: 0">
+                      <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                      <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
+                    </div>
+                    <el-button v-if="delDataAllocation" slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                  </el-popover>
+                  <el-button v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">配置组员</el-button>
+                  <el-button v-if="addDataAllocationLink" @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
+                  <el-button v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" type="text"  style="margin-left: .2rem;">一键分配</el-button>
+              </template>
+            </el-table-column>
 
-                <el-table
-                    :data="dataAlloList"
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)"
-                >
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      :width="item.label == '分配组' ? '190px' : ''"
-                      v-for="(item, index) in columnList1"
-                      :key="index"
-                      >
-                    </el-table-column>
+        </el-table>
 
-                    <el-table-column prop="active" label="操作" width="400px">
-                      <template slot-scope="scope">
-                          <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
-                          <el-popover
-                            placement="top"
-                            width="200"
-                            trigger="click"
-                            :ref="`popover-${scope.$index}`"
-                            >
-                            <p style="margin-bottom: .2rem;">确定要删除此分配组吗？</p>
-                            <div style="text-align: right; margin: 0">
-                              <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                              <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
-                            </div>
-                            <el-button v-if="delDataAllocation" slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
-                          </el-popover>
-                          <el-button v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">配置组员</el-button>
-                          <el-button v-if="addDataAllocationLink" @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
-                          <el-button v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" type="text"  style="margin-left: .2rem;">一键分配</el-button>
-                      </template>
-                    </el-table-column>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
+            :total='dataAlloForm.total'
+            :page-size='dataAlloForm.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                </el-table>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawerFlag1"
+            :direction="direction"
+            size="40%"
+            :before-close="handleClose">
+            
+            <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    style="text-align: right; margin-top: 20px;"
-                    :total='dataAlloForm.total'
-                    :page-size='dataAlloForm.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                
+                    <el-form-item label="分配组名" prop="name">
+                        <el-input v-model="ruleForm.name" placeholder="请输入分配组名" size="small"></el-input>
+                    </el-form-item>
 
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawerFlag1"
-                    :direction="direction"
-                    size="40%"
-                    :before-close="handleClose">
-                    
-                    <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                    <el-form-item label="分配组描述" prop="describe">
+                        <el-input v-model="ruleForm.describe" placeholder="请输入分配组描述" size="small"></el-input>
+                    </el-form-item>
 
-                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                    <el-form-item label="分校平台" prop="schoolId">
+
+                        <el-select v-model="ruleForm.schoolId" placeholder="请选择分校平台" size="small" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
+                            <el-option
+                              v-for="item in schoolList"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                        </el-select>
                         
-                            <el-form-item label="分配组名" prop="name">
-                                <el-input v-model="ruleForm.name" placeholder="请输入分配组名" size="small"></el-input>
-                            </el-form-item>
+                    </el-form-item>
 
-                            <el-form-item label="分配组描述" prop="describe">
-                                <el-input v-model="ruleForm.describe" placeholder="请输入分配组描述" size="small"></el-input>
-                            </el-form-item>
+                    <el-form-item label="状态" prop="state">
+                      
+                        <el-radio v-model="ruleForm.state" :label="1">开启</el-radio>
+                        <el-radio v-model="ruleForm.state" :label="0">关闭</el-radio>
 
-                            <el-form-item label="分校平台" prop="schoolId">
+                    </el-form-item>
 
-                                <el-select v-model="ruleForm.schoolId" placeholder="请选择分校平台" size="small" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
-                                    <el-option
-                                      v-for="item in schoolList"
-                                      :key="item.id"
-                                      :label="item.name"
-                                      :value="item.id">
-                                    </el-option>
-                                </el-select>
-                                
-                            </el-form-item>
+                    <el-form-item label="坐席分类" prop="classType">
+                      
+                        <el-select @change="classTypeFun" v-model="ruleForm.classType" placeholder="请选择坐席分类" size="small" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
+                            <el-option
+                              v-for="item in classTypeList"
+                              :key="item.name"
+                              :label="item.name"
+                              :value="item.number">
+                            </el-option>
+                        </el-select>
 
-                            <el-form-item label="状态" prop="state">
-                              
-                                <el-radio v-model="ruleForm.state" :label="1">开启</el-radio>
-                                <el-radio v-model="ruleForm.state" :label="0">关闭</el-radio>
+                    </el-form-item>
 
-                            </el-form-item>
+                    <el-form-item label="所属考试项" prop="examItemText" v-if="ruleForm.classType">
+                      
+                        <el-autocomplete
+                            style="width: 100%;"
+                            size="small"
+                            v-model="ruleForm.examItemText"
+                            :fetch-suggestions="querySearch"
+                            placeholder="请输入考试项目"
+                            :trigger-on-focus="true"
+                            :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false"
+                            @select="handleSelectExam"
+                        ></el-autocomplete>
 
-                            <el-form-item label="坐席分类" prop="classType">
-                              
-                                <el-select @change="classTypeFun" v-model="ruleForm.classType" placeholder="请选择坐席分类" size="small" :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false">
-                                    <el-option
-                                      v-for="item in classTypeList"
-                                      :key="item.name"
-                                      :label="item.name"
-                                      :value="item.number">
-                                    </el-option>
-                                </el-select>
+                    </el-form-item>
 
-                            </el-form-item>
+                    <el-form-item label="溢出量再分配" prop="dayList">
+                      
+                        <el-select v-model="ruleForm.dayList" multiple placeholder="请选择" size="small">
+                            <el-option
+                              v-for="item in dateList"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
 
-                            <el-form-item label="所属考试项" prop="examItemText" v-if="ruleForm.classType">
-                              
-                                <el-autocomplete
-                                    style="width: 100%;"
-                                    size="small"
-                                    v-model="ruleForm.examItemText"
-                                    :fetch-suggestions="querySearch"
-                                    placeholder="请输入考试项目"
-                                    :trigger-on-focus="true"
-                                    :disabled="drawerTitle1.indexOf('编辑') != -1 ? true : false"
-                                    @select="handleSelectExam"
-                                ></el-autocomplete>
+                    </el-form-item>
 
-                            </el-form-item>
+                    <el-form-item>
 
-                            <el-form-item label="溢出量再分配" prop="dayList">
-                              
-                                <el-select v-model="ruleForm.dayList" multiple placeholder="请选择" size="small">
-                                    <el-option
-                                      v-for="item in dateList"
-                                      :key="item.value"
-                                      :label="item.label"
-                                      :value="item.value">
-                                    </el-option>
-                                </el-select>
+                        <div style="margin-top: 1rem;">
 
-                            </el-form-item>
+                            <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
 
-                            <el-form-item>
+                            <el-button @click="quxiao">取消</el-button>
 
-                                <div style="margin-top: 1rem;">
+                        </div>
+                        
+                    </el-form-item>
 
-                                    <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
+                </el-form>
 
-                                    <el-button @click="quxiao">取消</el-button>
+            </div>
 
-                                </div>
-                                
-                            </el-form-item>
+        </el-drawer>
 
-                        </el-form>
+        <el-drawer
+            :title="drawerTitle2"
+            :visible.sync="drawerFlag2"
+            :direction="direction"
+            size="50%"
+            :before-close="handleClose">
+            
+            <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
 
-                    </div>
+                <Tree @childFn="parentFn" :groupId='groupId' :schoolId='schoolId' v-if="sonRefresh" @getDataAllocationRulesList="getDataAllocationRulesList"></Tree>
 
-                </el-drawer>
+            </div>
 
-                <el-drawer
-                    :title="drawerTitle2"
-                    :visible.sync="drawerFlag2"
-                    :direction="direction"
-                    size="50%"
-                    :before-close="handleClose">
-                    
-                    <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+        </el-drawer>
 
-                        <Tree @childFn="parentFn" :groupId='groupId' :schoolId='schoolId' v-if="sonRefresh" @getDataAllocationRulesList="getDataAllocationRulesList"></Tree>
+        <el-drawer
+            :title="drawerTitleLink"
+            :visible.sync="drawerFlagLink"
+            :direction="direction"
+            :before-close="handleClose">
+            
+            <div>
 
-                    </div>
+                <el-form :model="ruleFormLink" :rules="rulesLink" ref="ruleFormLink" class="demo-ruleForm">
 
-                </el-drawer>
+                    <el-form-item label="分配组" prop="ruleid">
+                      
+                        <el-input v-model="ruleFormLink.ruleName" readonly class="borderNone" size="small"></el-input>
 
-                <el-drawer
-                    :title="drawerTitleLink"
-                    :visible.sync="drawerFlagLink"
-                    :direction="direction"
-                    :before-close="handleClose">
-                    
-                    <div>
-
-                        <el-form :model="ruleFormLink" :rules="rulesLink" ref="ruleFormLink" class="demo-ruleForm">
-
-                            <el-form-item label="分配组" prop="ruleid">
-                              
-                                <el-input v-model="ruleFormLink.ruleName" readonly class="borderNone" size="small"></el-input>
-
-                            </el-form-item>
+                    </el-form-item>
 
 
-                            <el-form-item label="考试方向" prop="projectText">
-                              
-                                <el-autocomplete
-                                    class="inline-input"
-                                    style="width: 100%;"
-                                    v-model="ruleFormLink.projectText"
-                                    :fetch-suggestions="querySearch"
-                                    placeholder="请输入内容"
-                                    :trigger-on-focus="true"
-                                    @select="handleSelect"
-                                    size="small"
-                                ></el-autocomplete>
+                    <el-form-item label="考试方向" prop="projectText">
+                      
+                        <el-autocomplete
+                            class="inline-input"
+                            style="width: 100%;"
+                            v-model="ruleFormLink.projectText"
+                            :fetch-suggestions="querySearch"
+                            placeholder="请输入内容"
+                            :trigger-on-focus="true"
+                            @select="handleSelect"
+                            size="small"
+                        ></el-autocomplete>
 
-                            </el-form-item>
+                    </el-form-item>
 
-                            <el-form-item label="来源渠道" prop="spread">
-                              
-                                <el-select v-model="ruleFormLink.spread" placeholder="请选择来源渠道" size="small">
-                                    <el-option
-                                      v-for="item in enumList['MJ-6']"
-                                      :key="item.name"
-                                      :label="item.name"
-                                      :value="item.number">
-                                    </el-option>
-                                </el-select>
+                    <el-form-item label="来源渠道" prop="spread">
+                      
+                        <el-select v-model="ruleFormLink.spread" placeholder="请选择来源渠道" size="small">
+                            <el-option
+                              v-for="item in enumList['MJ-6']"
+                              :key="item.name"
+                              :label="item.name"
+                              :value="item.number">
+                            </el-option>
+                        </el-select>
 
-                            </el-form-item>
+                    </el-form-item>
 
-                            <el-form-item label="推广账号" prop="acc">
-                              
-                                <el-select v-model="ruleFormLink.acc" placeholder="请选择推广账号" size="small">
-                                    <el-option
-                                      v-for="item in enumList['MJ-7']"
-                                      :key="item.name"
-                                      :label="item.name"
-                                      :value="item.number">
-                                    </el-option>
-                                </el-select>
+                    <el-form-item label="推广账号" prop="acc">
+                      
+                        <el-select v-model="ruleFormLink.acc" placeholder="请选择推广账号" size="small">
+                            <el-option
+                              v-for="item in enumList['MJ-7']"
+                              :key="item.name"
+                              :label="item.name"
+                              :value="item.number">
+                            </el-option>
+                        </el-select>
 
-                            </el-form-item>
+                    </el-form-item>
 
-                            <!-- <el-form-item label="jq平台账号" prop="jqadmin">
-                              
-                                <el-select v-model="ruleFormLink.jqadmin" placeholder="请选择jq平台账号" size="small">
-                                    <el-option
-                                      v-for="item in enumList['MJ-9']"
-                                      :key="item.name"
-                                      :label="item.name"
-                                      :value="item.number">
-                                    </el-option>
-                                </el-select>
+                    <!-- <el-form-item label="jq平台账号" prop="jqadmin">
+                      
+                        <el-select v-model="ruleFormLink.jqadmin" placeholder="请选择jq平台账号" size="small">
+                            <el-option
+                              v-for="item in enumList['MJ-9']"
+                              :key="item.name"
+                              :label="item.name"
+                              :value="item.number">
+                            </el-option>
+                        </el-select>
 
-                            </el-form-item> -->
+                    </el-form-item> -->
 
-                            <el-form-item>
-                                <el-button @click="quxiaoLink" size="small" style="margin-top: 20px;">取消</el-button>
-                                <el-button type="primary" @click="submitFormLink('ruleFormLink')" size="small" style="margin-top: 20px;">生成链接</el-button>
-                            </el-form-item>
+                    <el-form-item>
+                        <el-button @click="quxiaoLink" size="small" style="margin-top: 20px;">取消</el-button>
+                        <el-button type="primary" @click="submitFormLink('ruleFormLink')" size="small" style="margin-top: 20px;">生成链接</el-button>
+                    </el-form-item>
 
-                            <el-form-item v-if="this.createLinkUrl">
-                                <div style="word-wrap: break-word; word-break: normal;">{{this.createLinkUrl}}</div>
-                                <el-button type="primary" @click="handleCopy" size="small">复制链接</el-button>
-                            </el-form-item>
+                    <el-form-item v-if="this.createLinkUrl">
+                        <div style="word-wrap: break-word; word-break: normal;">{{this.createLinkUrl}}</div>
+                        <el-button type="primary" @click="handleCopy" size="small">复制链接</el-button>
+                    </el-form-item>
 
-                        </el-form>
+                </el-form>
 
-                    </div>
+            </div>
 
-                </el-drawer>
+        </el-drawer>
 
-            </el-main>
-
-        </el-container>
-        
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -700,9 +692,6 @@ export default {
             margin-bottom: .3rem;
             color: #fff;
         }
-    }
-    .timeData /deep/ .el-table .cell{
-        text-align: center !important;
     }
     /* //element-ui table的去除右侧滚动条的样式 */
     ::-webkit-scrollbar {

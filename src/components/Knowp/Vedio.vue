@@ -1,272 +1,265 @@
 <template>
-    <div style="">
-        <el-container class="index-main">
+    <el-main class="index-main">
 
-            <el-main>
+        <div class="people-title">视频资源管理</div> 
 
-                <div class="people-title">视频资源管理</div> 
+        <el-button type="primary" @click="addVedioClick" style="margin-bottom: .2rem;">添加视频资源</el-button>
+                   <el-row style="margin-bottom: 20px;">
 
-                <el-button type="primary" @click="addVedioClick" style="margin-bottom: .2rem;">添加视频资源</el-button>
-         
-                <el-row style="margin-bottom: 20px;">
+            <el-col :span="4">
+                <el-select v-model="listForm.type" @change="vedioTypeChange1" clearable placeholder="请选择类型" style="width: 90%">
+                    <el-option
+                      v-for="item in vedioTypeArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-select v-model="listForm.type" @change="vedioTypeChange1" clearable placeholder="请选择类型" style="width: 90%">
-                            <el-option
-                              v-for="item in vedioTypeArr"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
+            <el-col :span="4">
+                <el-select v-model="listForm.examDirectionUuid" @change="vedioExamChange" clearable placeholder="请选择考试项目" style="width: 90%">
+                    <el-option
+                      v-for="item in vedioOption"
+                      :key="item.uuid"
+                      :label="item.name"
+                      :value="item.uuid">
+                    </el-option>
+                </el-select>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-select v-model="listForm.examDirectionUuid" @change="vedioExamChange" clearable placeholder="请选择考试项目" style="width: 90%">
-                            <el-option
-                              v-for="item in vedioOption"
-                              :key="item.uuid"
-                              :label="item.name"
-                              :value="item.uuid">
-                            </el-option>
-                        </el-select>
-                    </el-col>
+            <el-col :span="4">
+                <el-select v-model="listForm.subjectUuidList" @focus="vedioKemuFocus1" @change="vedioSubjectChange" clearable placeholder="请选择科目" style="width: 90%">
+                    <el-option
+                      v-for="item in kemuOptions1"
+                      :key="item.uuid"
+                      :label="item.name"
+                      :value="item.uuid">
+                    </el-option>
+                </el-select>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-select v-model="listForm.subjectUuidList" @focus="vedioKemuFocus1" @change="vedioSubjectChange" clearable placeholder="请选择科目" style="width: 90%">
-                            <el-option
-                              v-for="item in kemuOptions1"
-                              :key="item.uuid"
-                              :label="item.name"
-                              :value="item.uuid">
-                            </el-option>
-                        </el-select>
-                    </el-col>
+            <el-col :span="6">
+                <el-input v-model="listForm.likeName" placeholder="请输入编号、标题、链接" style="width: 90%"></el-input>
+            </el-col>
+            <el-col :span="2">
+                <el-button type="primary" @click="subjectSearch" style="width: 90%">搜索</el-button>
+            </el-col>
 
-                    <el-col :span="6">
-                        <el-input v-model="listForm.likeName" placeholder="请输入编号、标题、链接" style="width: 90%"></el-input>
-                    </el-col>
-                    <el-col :span="2">
-                        <el-button type="primary" @click="subjectSearch" style="width: 90%">搜索</el-button>
-                    </el-col>
+        </el-row>
 
-                </el-row>
+        <el-table
+          :data="vedioList"
+          row-key="uuid"
+          default-expand-all
+          style="width: 100%">
+          <af-table-column
+            :prop="item.prop"
+            :width="item.label == '视频链接' ? '200px' : ''"
+            :label="item.label"
+            v-for="(item, index) in columnList"
+            :key="index"
+            >
+          </af-table-column>
+          <af-table-column prop="active" width="160px" fixed="right" label="操作">
+            <template slot-scope="scope">
+                <el-button size="mini" type="text" @click="handleCopy(scope.row)">复制链接</el-button>
+                <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="click"
+                  :ref="`popover-${scope.$index}`"
+                  >
+                  <p style="margin-bottom: .2rem;">确定要删除吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                    <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
+                  </div>
+                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                </el-popover>
+            </template>
+          </af-table-column>
+        </el-table>
 
-                <el-table
-                  :data="vedioList"
-                  row-key="uuid"
-                  default-expand-all
-                  style="width: calc( 100vw - 3.8rem)">
-                  <af-table-column
-                    :prop="item.prop"
-                    :width="item.label == '视频链接' ? '200px' : ''"
-                    :label="item.label"
-                    v-for="(item, index) in columnList"
-                    :key="index"
-                    >
-                  </af-table-column>
-                  <af-table-column prop="active" width="160px" fixed="right" label="操作">
-                    <template slot-scope="scope">
-                        <el-button size="mini" type="text" @click="handleCopy(scope.row)">复制链接</el-button>
-                        <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          :ref="`popover-${scope.$index}`"
-                          >
-                          <p style="margin-bottom: .2rem;">确定要删除吗？</p>
-                          <div style="text-align: right; margin: 0">
-                            <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                            <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
-                          </div>
-                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
-                        </el-popover>
-                    </template>
-                  </af-table-column>
-                </el-table>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='total'
+            :page-size='listForm.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='total'
-                    :page-size='listForm.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction"
+            size="50%"
+            :before-close="handleClose">
+
+            <el-form :model="vedioForm" :rules="rules1" ref="vedioForm" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="封面图" prop="coverUrl">
+                  
+                    <el-upload
+                        class="avatar-uploader"
+                        :data='uploadData'
+                        action="https://testgm.jhwx.com/api/knowledgeSystem/courseVideo/uploadimg"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                        <img v-if="vedioForm.coverUrl" :src="vedioForm.coverUrl" style="width: 1.6rem;">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+
+                </el-form-item>
+
+                <el-form-item label="视频标题" prop="name">
+                  <el-input v-model="vedioForm.name" placeholder="请选择视频标题"></el-input>
+                </el-form-item>
+
+                <el-form-item label="视频链接" prop="url">
+                  <el-input v-model="vedioForm.url" placeholder="请选择视频链接" @blur="videoLength"></el-input>
+                </el-form-item>
+
+                <video ref="video" v-show="false" controls='controls' :src="vedioForm.url"></video>
+
+                <el-form-item label="考试项目" prop="examDirectionUuid">
+
+                    <el-select v-model="vedioForm.examDirectionUuid" placeholder="请选择考试项目" @change='examDirectionChange' clearable>
+                        <el-option
+                            v-for="item in vedioOption"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid">
+                        </el-option>
+                    </el-select>
+
+                </el-form-item>
+
+                <el-form-item label="考试科目" prop="subjectUuid">
+
+                    <el-select v-model="vedioForm.subjectName" @focus="vedioKemuFocus2" placeholder="请选择考试科目" @change="subjectChange" clearable>
+                        <el-option
+                          v-for="item in kemuOptions2"
+                          :key="item.uuid"
+                          :label="item.name"
+                          :value="item.uuid">
+                        </el-option>
+                    </el-select>
+
+                </el-form-item>
+
+                <el-form-item label="视频类型" prop="type">
+
+                    <el-select v-model="vedioForm.type" placeholder="请选择视频类型" @change='vedioTypeChange2' clearable>
+                        <el-option
+                          v-for="item in vedioTypeArr"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+
+                </el-form-item>
+
+                <el-form-item label="主讲人" prop="speaker">
+                  <el-input v-model="vedioForm.speaker" placeholder="请输入主讲人"></el-input>
+                </el-form-item>
+
+                <el-form-item label="备注" prop="remarks">
+                  <el-input v-model="vedioForm.remarks" placeholder="请输入备注"></el-input>
+                </el-form-item>
+
+                <el-form-item label="时长" prop="length">
+                  <span>{{vedioForm.lengthText}}</span>
+                </el-form-item>
+
+                <el-form-item label="大小" prop="fileSize">
+                  <span>{{vedioForm.fileSize}} ( 单位：M )</span>
+                </el-form-item>
+
+                <el-form-item label="主关联知识点" prop="chiefKnowList">
+
+                    <el-button style="display: block; margin-bottom: 10px;" type="primary" @click="knopPointsClick('zhu')">关联知识点</el-button>
+
+                    <el-tag
+                        :key="index"
+                        v-for="(tag,index) in vedioForm.chiefKnowList"
+                        :disable-transitions="false"
+                        style="margin-right: 10px;"
+                        >
+                        {{tag.name}}
+                    </el-tag>
+
+                </el-form-item>
 
                 <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction"
-                    size="50%"
-                    :before-close="handleClose">
+                    title="关联知识点"
+                    :append-to-body="true"
+                    :before-close="handleClose"
+                    :visible.sync="drawer2">
+                    <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
 
-                    <el-form :model="vedioForm" :rules="rules1" ref="vedioForm" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="封面图" prop="coverUrl">
-                          
-                            <el-upload
-                                class="avatar-uploader"
-                                :data='uploadData'
-                                action="https://testgm.jhwx.com/api/knowledgeSystem/courseVideo/uploadimg"
-                                :show-file-list="false"
-                                :on-success="handleAvatarSuccess"
-                                :before-upload="beforeAvatarUpload">
-                                <img v-if="vedioForm.coverUrl" :src="vedioForm.coverUrl" style="width: 1.6rem;">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
+                        <div style="margin-bottom: 20px; font-size: 16px;"><span>当前科目：</span> {{vedioForm.subjectName}}</div>
 
-                        </el-form-item>
+                        <el-tree
+                            :data="treeData"
+                            show-checkbox
+                            node-key="uuid"
+                            :default-checked-keys="checkKeys"
+                            default-expand-all
+                            check-strictly
+                            ref="tree"
+                            :props="defaultProps">
+                        </el-tree>
 
-                        <el-form-item label="视频标题" prop="name">
-                          <el-input v-model="vedioForm.name" placeholder="请选择视频标题"></el-input>
-                        </el-form-item>
+                        <el-button type="primary" style="margin-top: 20px;" @click="treeYes">确定</el-button>
 
-                        <el-form-item label="视频链接" prop="url">
-                          <el-input v-model="vedioForm.url" placeholder="请选择视频链接" @blur="videoLength"></el-input>
-                        </el-form-item>
-
-                        <video ref="video" v-show="false" controls='controls' :src="vedioForm.url"></video>
-
-                        <el-form-item label="考试项目" prop="examDirectionUuid">
-
-                            <el-select v-model="vedioForm.examDirectionUuid" placeholder="请选择考试项目" @change='examDirectionChange' clearable>
-                                <el-option
-                                    v-for="item in vedioOption"
-                                    :key="item.uuid"
-                                    :label="item.name"
-                                    :value="item.uuid">
-                                </el-option>
-                            </el-select>
-
-                        </el-form-item>
-
-                        <el-form-item label="考试科目" prop="subjectUuid">
-
-                            <el-select v-model="vedioForm.subjectName" @focus="vedioKemuFocus2" placeholder="请选择考试科目" @change="subjectChange" clearable>
-                                <el-option
-                                  v-for="item in kemuOptions2"
-                                  :key="item.uuid"
-                                  :label="item.name"
-                                  :value="item.uuid">
-                                </el-option>
-                            </el-select>
-
-                        </el-form-item>
-
-                        <el-form-item label="视频类型" prop="type">
-
-                            <el-select v-model="vedioForm.type" placeholder="请选择视频类型" @change='vedioTypeChange2' clearable>
-                                <el-option
-                                  v-for="item in vedioTypeArr"
-                                  :key="item.value"
-                                  :label="item.label"
-                                  :value="item.value">
-                                </el-option>
-                            </el-select>
-
-                        </el-form-item>
-
-                        <el-form-item label="主讲人" prop="speaker">
-                          <el-input v-model="vedioForm.speaker" placeholder="请输入主讲人"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="备注" prop="remarks">
-                          <el-input v-model="vedioForm.remarks" placeholder="请输入备注"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="时长" prop="length">
-                          <span>{{vedioForm.lengthText}}</span>
-                        </el-form-item>
-
-                        <el-form-item label="大小" prop="fileSize">
-                          <span>{{vedioForm.fileSize}} ( 单位：M )</span>
-                        </el-form-item>
-
-                        <el-form-item label="主关联知识点" prop="chiefKnowList">
-
-                            <el-button style="display: block; margin-bottom: 10px;" type="primary" @click="knopPointsClick('zhu')">关联知识点</el-button>
-
-                            <el-tag
-                                :key="index"
-                                v-for="(tag,index) in vedioForm.chiefKnowList"
-                                :disable-transitions="false"
-                                style="margin-right: 10px;"
-                                >
-                                {{tag.name}}
-                            </el-tag>
-
-                        </el-form-item>
-
-                        <el-drawer
-                            title="关联知识点"
-                            :append-to-body="true"
-                            :before-close="handleClose"
-                            :visible.sync="drawer2">
-                            <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-
-                                <div style="margin-bottom: 20px; font-size: 16px;"><span>当前科目：</span> {{vedioForm.subjectName}}</div>
-
-                                <el-tree
-                                    :data="treeData"
-                                    show-checkbox
-                                    node-key="uuid"
-                                    :default-checked-keys="checkKeys"
-                                    default-expand-all
-                                    check-strictly
-                                    ref="tree"
-                                    :props="defaultProps">
-                                </el-tree>
-
-                                <el-button type="primary" style="margin-top: 20px;" @click="treeYes">确定</el-button>
-
-                            </div>
-                        </el-drawer>
-
-                        <el-form-item label="辅关联知识点" prop="describe">
-
-                            <el-button style="display: block; margin-bottom: 10px;" type="primary" @click="knopPointsClick">关联知识点</el-button>
-
-                            <el-tag
-                                :key="index"
-                                v-for="(tag,index) in vedioForm.auxiliaryKnowList"
-                                :disable-transitions="false"
-                                style="margin-right: 10px;"
-                                >
-                                {{tag.name}}
-                            </el-tag>
-
-                        </el-form-item>
-
-                        <el-form-item label="视频编号" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
-                          <span>{{vedioForm.number}}</span>
-                        </el-form-item>
-
-                        <el-form-item label="最后修改人" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
-                          <span>{{vedioForm.updateUserName}}</span>
-                        </el-form-item>
-
-                        <el-form-item label="最后修改时间" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
-                          <span>{{vedioForm.updateTime}}</span>
-                        </el-form-item>
-
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm('vedioForm')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
-
-                    </el-form>
-
+                    </div>
                 </el-drawer>
 
-            </el-main>
+                <el-form-item label="辅关联知识点" prop="describe">
 
-        </el-container>
-    </div>
+                    <el-button style="display: block; margin-bottom: 10px;" type="primary" @click="knopPointsClick">关联知识点</el-button>
+
+                    <el-tag
+                        :key="index"
+                        v-for="(tag,index) in vedioForm.auxiliaryKnowList"
+                        :disable-transitions="false"
+                        style="margin-right: 10px;"
+                        >
+                        {{tag.name}}
+                    </el-tag>
+
+                </el-form-item>
+
+                <el-form-item label="视频编号" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
+                  <span>{{vedioForm.number}}</span>
+                </el-form-item>
+
+                <el-form-item label="最后修改人" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
+                  <span>{{vedioForm.updateUserName}}</span>
+                </el-form-item>
+
+                <el-form-item label="最后修改时间" prop="fileSize" v-show="drawerTitle1 != '添加视频资源'">
+                  <span>{{vedioForm.updateTime}}</span>
+                </el-form-item>
+
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm('vedioForm')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
+
+            </el-form>
+
+        </el-drawer>
+
+    </el-main>
     
 </template>
 

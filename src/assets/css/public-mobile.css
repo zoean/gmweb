@@ -311,7 +311,17 @@ a:link,a:active,a:visited,a:hover {
     right: 10px;
 }
 
+.el-main{
+    padding: 20px 20px 20px 10px;
+}
 
+.el-menu--collapse  .el-submenu__title span{
+  display: none;
+}
+/*隐藏 > */
+.el-menu--collapse  .el-submenu__title .el-submenu__icon-arrow{
+  display: none;
+}
 
 
 

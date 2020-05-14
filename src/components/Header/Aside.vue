@@ -1,56 +1,76 @@
 <template>
-    <div v-if="routersFlag">
-        <el-aside style="width: 3rem; min-width: 200px; max-width: 256px;">
+    <div v-if="routersFlag" class="aside-all">
+      <el-menu
+        :default-active="activeIndex"
+        ref="elmenu"
+        class="el-menu-vertical-demo"
+        :default-openeds="openedsIndex"
+        :unique-opened=true
+        :collapse="iscollapse"
+        @open="handleOpen" 
+        @close="handleClose"
+        >
+
+        <div v-for="(item,index) in userMenuList" :key="index">
+
+          <el-submenu 
+            class="el-submenu-smoke" 
+            :index="`${item.url}`" 
+            v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'"
+            :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
+          >
+            <template slot="title">
+              <i :class="item.icon"></i>
+              <span>{{item.name}}</span>
+            </template>
+            <div v-for="(res,num) in item.includeSubsetList" :key="num">
+              <el-menu-item 
+                :index="`${res.url}`" 
+                @click="active_router(res)"
+                v-if="res.disabled && res.menuComponent != 'button'"
+                :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
+              >
+              <div class="el-menu-item-div">
+                <i :class="res.icon"></i>
+                {{res.name}}
+              </div>
+              </el-menu-item>
+            </div>
+          </el-submenu>
+
+          <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke" :style="iscollapse ? 'min-width: auto; width: auto;' : ''">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.name}}</span>
+          </el-menu-item>
+
+          <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.name}}</span>
+          </el-menu-item> -->
+
+        </div>
+
+        <el-image
+          style="width: 100%; position: absolute; bottom: 0;"
+          :src="require('../../assets/images/aside_backg.png')">
+        </el-image>
             
-            <el-menu
-                :default-active="activeIndex"
-                ref="elmenu"
-                class="el-menu-vertical-demo"
-                :default-openeds="openedsIndex"
-                :unique-opened=true
-                >
+      </el-menu>
 
-                <div v-for="(item,index) in userMenuList" :key="index">
+      <el-image
+        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%;"
+        v-show="iscollapse"
+        @click="open_click"
+        :src="require('../../assets/images/aside_open.png')">
+      </el-image>
 
-                  <el-submenu class="el-submenu-smoke" :index="`${item.url}`" v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'">
-                    <template slot="title">
-                      <i :class="item.icon"></i>
-                      <span>{{item.name}}</span>
-                    </template>
-                    <div v-for="(res,num) in item.includeSubsetList" :key="num">
-                      <el-menu-item 
-                        :index="`${res.url}`" 
-                        @click="active_router(res)"
-                        v-if="res.disabled && res.menuComponent != 'button'"
-                      >
-                      <div class="el-menu-item-div">
-                        <i :class="res.icon"></i>
-                        {{res.name}}
-                      </div>
-                      </el-menu-item>
-                    </div>
-                  </el-submenu>
+      <el-image
+        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%;"
+        v-show="!iscollapse"
+        @click="close_click"
+        :src="require('../../assets/images/aside_close.png')">
+      </el-image>
 
-                  <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke">
-                    <i :class="item.icon"></i>
-                    <span slot="title">{{item.name}}</span>
-                  </el-menu-item>
-
-                  <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
-                    <i :class="item.icon"></i>
-                    <span slot="title">{{item.name}}</span>
-                  </el-menu-item> -->
-
-                </div>
-
-                <el-image
-                  style="width: 100%; position: absolute; bottom: 0;"
-                  :src="require('../../assets/images/aside_backg.png')">
-                </el-image>
-                
-            </el-menu>
-
-        </el-aside>
     </div>
 </template>
 
@@ -64,25 +84,32 @@ export default {
           openedsIndex: [''],
           routersFlag: '',
           userMenuList: [],
+          iscollapse: false,
         }
     },
     created() {
       this.router_index();
     },
     methods: {
+      open_click() {
+        this.iscollapse = false;
+      },
+      close_click() {
+        this.iscollapse = true;
+      },
       active_router(index) {
         this.$store.commit('setPageNum', index.pageNum)
         this.$router.push({ path: index.url });
       },
       router_index() {
         this.activeIndex = this.$route.path;
-      }      
-      // handleOpen(key, keyPath) {
-      //     console.log(key, keyPath);
-      // },
-      // handleClose(key, keyPath) {
-      //     console.log(key, keyPath);
-      // },
+      },   
+      handleOpen(key, keyPath) {
+          console.log(key, keyPath);
+      },
+      handleClose(key, keyPath) {
+          console.log(key, keyPath);
+      },
       // getMenuDetailsSubsetByUuid() {
       //   this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
       //     console.log(res);
@@ -144,12 +171,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .el-aside{
-      height: 100%;
+    .aside-all{
+      position: relative;
+      height: calc(100vh - 60px);
       .el-submenu-smoke{
         position: relative;
         z-index: 9;
         color: #fff;
+        width: 3rem;
+        min-width: 200px;
+        max-width: 256px;
         border-radius: none;
         i{
           color: #fff;
@@ -186,7 +217,7 @@ export default {
         .el-menu-item{
           background: #4794FE;
           color: #fff;
-          padding-left: 26px;
+          padding: 0;
           i{
             color: #fff;
           }
@@ -217,10 +248,12 @@ export default {
         background-color: #4794FE !important;
       }
       .el-menu-item-smoke{
+        width: calc(3rem - 12px);
         color: #fff;
         border-radius: 50px 0px 0px 50px;
-        width: calc( 100% - 26px );
-        margin-left: 26px;
+        margin-left: 12px;
+        min-width: 188px;
+        max-width: 244px;
         i{
           color: #fff;
         }
