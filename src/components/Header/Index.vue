@@ -378,7 +378,6 @@ export default {
             })
         },
         handleClose() {
-            console.log(this.oneLogin);
             if(this.oneLogin){
                 this.centerDialogVisible = true;
             }else{
@@ -386,7 +385,6 @@ export default {
             }
         },
         tableRowClassName({row, rowIndex}) {
-            console.log(row);
             if (row.readState == '未读') {
                 return 'readState';
             }

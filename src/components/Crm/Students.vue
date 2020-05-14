@@ -11,33 +11,46 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: calc( 100vw - 3.8rem)"
+            :row-key="getRowKey">
 
             <el-table-column
-              :prop="item.prop"
-              :label="item.label"
-              :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
+              :prop="item.props"
               v-for="(item, index) in columnList"
+              :min-width="item.width"
               :key="index"
               >
+              <template slot="header">
+                {{item.label}}
+                <span class="caret-wrapper" v-if="item.ifSort">
+                    <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
+                    <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
+                </span>
+              </template>
               <template slot-scope="scope">
-                    <span>{{scope.row[item.prop]}}</span>
-                    <el-tooltip effect="dark" v-if="item.prop == 'tel'" content="复制手机号码" placement="top">
+                    <span>{{scope.row[item.props]}}</span>
+                    <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
                         <el-image
                             class="copy-icon-style"
                             @click="phoneCopy(scope.row)"
                             :src="require('../../assets/images/copy-icon.png')">
                         </el-image>
                     </el-tooltip>
+                    
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作">
+            <el-table-column prop="active" label="操作" fixed="right">
               <template slot-scope="scope">
                   <el-button @click="studentDetails(scope.row)" type="text" >学员详情</el-button>
               </template>
             </el-table-column>
-
+            <el-table-column
+              align="right" width="60px" fixed="right">
+              <template slot="header">
+                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
+              </template>
+            </el-table-column>
         </el-table>
 
         <el-drawer
@@ -371,12 +384,11 @@
                         v-if="pageshow"
                     >
                     </el-pagination>
-
                 </el-tab-pane>
-
             </el-tabs>
-
         </el-drawer>
+
+        <PageFieldManage :setPageNum="setPageNum" />
 
     </el-main>
 </template>
@@ -392,11 +404,15 @@ import {
     getSchoolList,
     copyTel,
 } from '../../request/api';
+import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'reCoverData',
+    components: {
+        PageFieldManage
+    },
     data() {
         return {
             form: {
@@ -405,7 +421,9 @@ export default {
                 sortSet: [],
                 total: 0,
                 classTeaUuid: '',
-                classUuid: '' //班级的uuid
+                classUuid: '', //班级的uuid
+                num: '',
+                sortSet: []
             },
             list: [],
             columnList: [
@@ -500,15 +518,22 @@ export default {
     },
     created() {
         this.getClassTeaClass();
-        console.log(this.$route.query.id);
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getSchoolList();
     },
     methods: { 
+        setPageNum(pageNum){
+            this.form.num = pageNum
+        },
+        getRowKey(row){
+        return row.num
+        },
+        editFieldHandle(){
+            this.$store.commit('setEditFieldVisible', true)
+        },
         timeChange() {
-            console.log(this.customerForm.examPeriod);
             this.customerForm.examPeriod = this.customerForm.examPeriod.getTime();
         },
         getSchoolList() {
@@ -524,17 +549,14 @@ export default {
             })
         },
         handleCurrentChangeCall(index) {
-            console.log(index);
             this.notesForm.currentPage = index;
             this.getClassTeaStuNotes();
         },
         handleSizeChangeCall(index) {
-            console.log(index);
             this.notesForm.pageSize = index;
             this.getClassTeaStuNotes();
         }, 
         studentDetails( row ) {
-            console.log(row);
             this.drawer = true;
             this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
             this.copyClueDataSUuid = row.clueDataSUuid;
@@ -542,7 +564,6 @@ export default {
             this.getStudentDetails(row.uuid);
         },
         cityChange() {
-            console.log(this.customerForm.provinceCity);
             this.customerForm.province = this.customerForm.provinceCity[0];
             this.customerForm.city = this.customerForm.provinceCity[1];
         },
@@ -583,7 +604,6 @@ export default {
                         this.form.classUuid = this.$route.query.classUuid;
                         this.classUuidDefault = this.$route.query.classUuid;
                     }
-                    console.log(this.classUuidDefault);
                     res.data.map(sll => {
                         sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
                     })
@@ -699,12 +719,8 @@ export default {
 
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.createTime  = timestampToTime(Number(sll.createTime));
-                            sll.classType = classTypeString(sll.classType);
-                            sll.orderType = orderTypeText(sll.orderType);
-                        })
                         this.list = res.data.list;
+                        this.columnList = res.data.filedList
                     }, 300);
 
                 }else{
@@ -724,16 +740,12 @@ export default {
             done();
         },
         handleClassTabClick(tab, event) {
-            console.log(tab);
             this.form.classUuid = tab.name;
             this.getClassTeaStudent();
         },
         handleTabClick(tab, event) {
-            console.log(tab.label);
             if(tab.label == '客户信息'){
-                console.log('客户信息');
             }else if(tab.label == '跟进记录'){
-                console.log('跟进记录');
                 this.getClassTeaStuNotes();
                 this.notesForm.currentPage = 1;
                 this.pageshow = false;//让分页隐藏
@@ -743,7 +755,6 @@ export default {
             }
         },
         phoneCopy(row) {
-            console.log(row.clueDataSUuid);
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {
@@ -776,7 +787,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 60px);
+        flex: 1;
         .people-title{
             width: 100%;
             height: 40px;
@@ -793,10 +804,10 @@ export default {
                 width: 90%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-        margin-right: .4rem;
+        .el-pagination{
+            text-align: right;
+            margin-top: .4rem;
+            margin-right: .4rem;
+        }
     }
 </style>

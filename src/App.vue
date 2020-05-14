@@ -47,12 +47,10 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
-/*
-.el-container{
-   height: calc( 100vh - 60px);
-}
-*/
 .edit-field-icon{
   color: #5cb6ff;
   font-size: 20px;
