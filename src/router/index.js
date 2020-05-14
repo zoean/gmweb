@@ -45,9 +45,11 @@ import subject from '@/components/Knowp/Subject';
 import know from '@/components/Knowp/Know';
 import vedio from '@/components/Knowp/Vedio';
 import contents from '@/components/Knowp/Contents';
-
+//运营活动
 import activityA from '@/components/Operate/ActivityA';
-
+import ActivityDetail  from '@/components/Operate/ActivityDetail'
+import partinMember from '@/components/Operate/PartinMember'
+import WinningList from '@/components/Operate/WinningList'
 Vue.use(Router);
 
 // 重写路由
@@ -270,10 +272,24 @@ export default new Router({
 
         {
             path: '/operate/activityA',
-            name: 'activityA',
+            name: 'activity',
             component: activityA
         },
-
+        {
+            path:'/operate/activityA/ActivityDetail',
+            name:'activitydetail',
+            component:ActivityDetail
+        },  
+        {
+            path:'/operate/activityA/partinMember',
+            name:'partinMember',
+            component:partinMember
+        },
+        {
+            path:'/operate/activityA/winninglist',
+            name:'WinningList',
+            component:WinningList
+        },
         {
             path: '/crm',
             name: 'crm',
