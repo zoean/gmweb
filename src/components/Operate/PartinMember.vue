@@ -1,5 +1,4 @@
 <template>
-  <div class="time">
     <el-container class="index-main">
       <el-main>
         <div class="people-title">活动参与成员</div>
@@ -31,7 +30,7 @@
             <el-button type="primary" style="width:80%">搜索</el-button>
           </el-col>
         </el-row>
-        <el-table :data="tableData" border style="width: calc( 100vw - 3.8rem)">
+        <el-table :data="tableData" border>
           >
           <el-table-column
             :prop="item.prop"
@@ -48,7 +47,6 @@
         </el-table>
       </el-main>
     </el-container>
-  </div>
 </template>
 <script>
 export default {
@@ -152,9 +150,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.time {
-  width: 100%;
-}
 .index-main {
   height: calc(100vh - 60px);
   .people-title {
@@ -172,7 +167,7 @@ export default {
     margin-bottom: 1rem;
   }
 }
-.time /deep/ .el-table .cell {
+.index-main /deep/ .el-table .cell {
   text-align: center !important;
 }
 </style>

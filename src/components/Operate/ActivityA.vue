@@ -1,5 +1,4 @@
 <template>
-  <div class="time">
     <el-container class="index-main">
       <el-main>
         <div class="people-title">活动管理</div>
@@ -41,7 +40,6 @@
         <el-table
           :data="tableData"
           border
-          style="width: calc( 100vw - 3.8rem)"
           :header-cell-style="{background:'#eef1f6',color:'#606266'}">
         >
           <el-table-column
@@ -63,7 +61,6 @@
         </el-table>
       </el-main>
     </el-container>
-  </div>
 </template>
 <script>
 export default {
@@ -197,7 +194,7 @@ export default {
     margin-bottom: 1rem;
   }
 }
-.time /deep/ .el-table .cell {
+.index-main /deep/ .el-table .cell {
   text-align: center !important;
 }
 </style>

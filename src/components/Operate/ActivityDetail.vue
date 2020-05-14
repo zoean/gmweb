@@ -1,5 +1,4 @@
 <template>
-  <div class="time">
     <el-container class="index-main">
       <el-main>
         <div class="people-title">活动管理</div>
@@ -111,7 +110,6 @@
         </el-tabs>
       </el-main>
     </el-container>
-  </div>
 </template>
 <script>
 export default {
@@ -152,9 +150,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.time {
-  width: 100%;
-}
+
 .line {
   text-align: center;
 }
