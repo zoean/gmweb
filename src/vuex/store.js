@@ -51,8 +51,7 @@ const mutations = {
         state.editFieldVisible = Boole
     },
     setUserRole(state, role){
-        console.log(role)
-        state.userRole = role.length && role.length > 1 ? role.join('/') : role
+        state.userRole = role.length && role.length > 1 ? role.join('/') : role[0] || '--'
     },
     setUserDepartment(state, dep){
         state.userDepartment = dep.length && dep.length > 1 ? dep.join('/') : dep[0] || '--'
