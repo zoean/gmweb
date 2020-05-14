@@ -1,145 +1,137 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">推广链接记录</div>
 
-            <el-main>
+        <el-row class="people-screen">
 
-                <div class="people-title">推广链接记录</div>
+            <el-col :span="8">
+                <el-date-picker
+                    style="width: 95%;"
+                    v-model="dataPicker"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChange"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                </el-date-picker>
+            </el-col>
 
-                <el-row class="people-screen">
+            <el-col :span="4">
 
-                    <el-col :span="8">
-                        <el-date-picker
-                            style="width: 95%;"
-                            v-model="dataPicker"
-                            type="datetimerange"
-                            range-separator="至"
-                            @change="datePickerChange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-col>
+                <el-select v-model="form.ruleId" placeholder="请选择分配组" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in ruleNumberNameList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.ruleNumberName">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select v-model="form.ruleId" placeholder="请选择分配组" class="screen-li" clearable>
-                            <el-option
-                              v-for="item in ruleNumberNameList"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.ruleNumberName">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
 
-                    </el-col>
+                <el-autocomplete
+                    clearable
+                    class="screen-li"
+                    style="width: 90%;"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试方向"
+                    :trigger-on-focus="true"
+                    @select="handleSelect"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-autocomplete
-                            clearable
-                            class="screen-li"
-                            style="width: 90%;"
-                            v-model="form.examItemText"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入考试方向"
-                            :trigger-on-focus="true"
-                            @select="handleSelect"
-                            @clear="autocompleteClear"
-                        ></el-autocomplete>
+            <el-col :span="4">
+                
+                <el-select v-model="form.spreadId" placeholder="请选择渠道" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-6']"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    </el-col>
+            </el-col>
 
-                    <el-col :span="4">
-                        
-                        <el-select v-model="form.spreadId" placeholder="请选择渠道" class="screen-li" clearable>
-                            <el-option
-                              v-for="item in enumList['MJ-6']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
 
-                    </el-col>
+                <el-select v-model="form.accId" placeholder="请选择推广账号" clearable="" class="screen-li">
+                    <el-option
+                      v-for="item in enumList['MJ-7']"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select v-model="form.accId" placeholder="请选择推广账号" clearable="" class="screen-li">
-                            <el-option
-                              v-for="item in enumList['MJ-7']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+        </el-row>
 
-                    </el-col>
+        <el-row class="people-screen">
 
-                </el-row>
+            <el-col :span="4">
 
-                <el-row class="people-screen">
+                <el-input v-model="form.userName" placeholder="请输入创建人姓名" class="screen-li"></el-input>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-input v-model="form.userName" placeholder="请输入创建人姓名" class="screen-li"></el-input>
+            <el-col :span="4">
+                <el-button type="primary" @click="getPopularizeUrl" class="screen-li">搜 索</el-button>
+            </el-col>
 
-                    </el-col>
+        </el-row>
 
-                    <el-col :span="4">
-                        <el-button type="primary" @click="getPopularizeUrl" class="screen-li">搜 索</el-button>
-                    </el-col>
+        <el-table
+            :data="list"
+            ref="tableSelect"
+            v-loading="fullscreenLoading"
+            style="width: 100%">
 
-                </el-row>
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              :show-overflow-tooltip="item.prop == 'url' ? true : false"
+              :width="item.prop == 'copy' ? '60px' : ''"
+              v-for="(item, index) in columnList"
+              :key="index"
+              >
 
-                <el-table
-                    :data="list"
-                    ref="tableSelect"
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)">
+                <template slot-scope="scope">
+                    <span>{{scope.row[item.prop]}}</span>
+                    <el-tooltip effect="dark" v-if="item.prop == 'copy'" content="复制链接" placement="top">
+                        <el-image
+                            style="position: relative; left: -10px; top: 2px; cursor: pointer; width: 14px; height: 14px;"
+                            @click="copyUrlClick(scope.row)"
+                            :src="require('../../assets/images/copy-icon.png')">
+                        </el-image>
+                    </el-tooltip>
+                </template>
 
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      :show-overflow-tooltip="item.prop == 'url' ? true : false"
-                      :width="item.prop == 'copy' ? '60px' : ''"
-                      v-for="(item, index) in columnList"
-                      :key="index"
-                      >
+            </el-table-column>
 
-                        <template slot-scope="scope">
-                            <span>{{scope.row[item.prop]}}</span>
-                            <el-tooltip effect="dark" v-if="item.prop == 'copy'" content="复制链接" placement="top">
-                                <el-image
-                                    style="position: relative; left: -10px; top: 2px; cursor: pointer; width: 14px; height: 14px;"
-                                    @click="copyUrlClick(scope.row)"
-                                    :src="require('../../assets/images/copy-icon.png')">
-                                </el-image>
-                            </el-tooltip>
-                        </template>
+        </el-table>
 
-                    </el-table-column>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                </el-table>
-
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    style="text-align: right; margin-top: 20px;"
-                    :total='form.total'
-                    :page-size='form.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
-
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -306,24 +298,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: calc( 100vw - 3.8rem);
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
     }

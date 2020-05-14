@@ -1,67 +1,59 @@
 <template>
-    <div class="setMembers">
+    <el-main  class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">
 
-            <el-main>
+            <i class="el-icon-arrow-left smoke-left-icon" @click="$router.push('/crm/setMembers?uuid='+$route.query.uuid)"></i>
+            <span>添加分配组员</span>
 
-                <div class="people-title">
+        </div>
 
-                    <i class="el-icon-arrow-left smoke-left-icon" @click="$router.push('/crm/setMembers?uuid='+$route.query.uuid)"></i>
-                    <span>添加分配组员</span>
+        <el-row style="margin-bottom: 20px;">
 
-                </div>
+            <el-col :span="5">
+                
+                <el-cascader
+                    ref="cascader"
+                    class="screen-li"
+                    placeholder="请选择组织架构"
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true}"
+                    clearable>
+                </el-cascader>
 
-                <el-row style="margin-bottom: 20px;">
+            </el-col>
 
-                    <el-col :span="5">
-                        
-                        <el-cascader
-                            ref="cascader"
-                            class="screen-li"
-                            placeholder="请选择组织架构"
-                            :show-all-levels=false
-                            :options="zuzhiOptions"
-                            @change='handleZuzhiChange'
-                            :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true}"
-                            clearable>
-                        </el-cascader>
+            <el-col :span="4"><el-input v-model="upperForm.name" placeholder="请输入成员姓名" class="screen-li"></el-input></el-col>
 
-                    </el-col>
+            <el-col :span="4"><el-input v-model="upperForm.jqNumber" placeholder="请输入成员JQ账号" class="screen-li"></el-input></el-col>
 
-                    <el-col :span="4"><el-input v-model="upperForm.name" placeholder="请输入成员姓名" class="screen-li"></el-input></el-col>
+            <el-col :span="3"><el-button type="primary" @click="upperFormClick">搜索</el-button></el-col>
 
-                    <el-col :span="4"><el-input v-model="upperForm.jqNumber" placeholder="请输入成员JQ账号" class="screen-li"></el-input></el-col>
+            <el-col :span="3"><el-button type="primary" @click="dataSave">确认</el-button></el-col>
 
-                    <el-col :span="3"><el-button type="primary" @click="upperFormClick">搜索</el-button></el-col>
+        </el-row>
 
-                    <el-col :span="3"><el-button type="primary" @click="dataSave">确认</el-button></el-col>
+        <el-table
+            ref="multipleTable"
+            :data="upperData"
+            style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in columnList"
+                :key="index"
+                >
+            </el-table-column>
+        </el-table>
 
-                </el-row>
-
-                <el-table
-                    ref="multipleTable"
-                    :data="upperData"
-                    style="width: calc(100vw - 3.8rem)"
-                    @selection-change="handleSelectionChange">
-                    <el-table-column
-                      type="selection"
-                      width="45">
-                    </el-table-column>
-                    <el-table-column
-                        :prop="item.prop"
-                        :label="item.label"
-                        v-for="(item, index) in columnList"
-                        :key="index"
-                        >
-                    </el-table-column>
-                </el-table>
-
-            </el-main>
-
-        </el-container>
-        
-    </div>
+    </el-main>
 </template>
 
 <script>

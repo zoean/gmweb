@@ -1,210 +1,202 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">溢出池数据管理</div>
 
-            <el-main>
+        <el-row class="people-screen">
 
-                <div class="people-title">溢出池数据管理</div>
+            <el-col :span="8">
+                <el-date-picker
+                    style="width: 90%;"
+                    v-model="dataPicker"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChange"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                </el-date-picker>
+            </el-col>
 
-                <el-row class="people-screen">
+            <el-col :span="4">
 
-                    <el-col :span="8">
-                        <el-date-picker
-                            style="width: 90%;"
-                            v-model="dataPicker"
-                            type="datetimerange"
-                            range-separator="至"
-                            @change="datePickerChange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-col>
+                <el-autocomplete
+                    class="screen-li"
+                    style="width: 90%;"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelect"
+                ></el-autocomplete>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-autocomplete
-                            class="screen-li"
-                            style="width: 90%;"
-                            v-model="form.examItemText"
-                            :fetch-suggestions="querySearch"
-                            placeholder="请输入考试项目"
-                            :trigger-on-focus="true"
-                            @select="handleSelect"
-                        ></el-autocomplete>
+            <el-col :span="4">
+                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            </el-col>
 
-                    </el-col>
+            <el-col :span="4" class="seatData">
+                <area-cascader type="text" class="screen-li smoke-cascader" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
-                    </el-col>
+            <el-col :span="4">
+                
+                <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
+                    <el-option
+                      v-for="item in enumList['MJ-6']"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4" class="seatData">
-                        <area-cascader type="text" class="screen-li smoke-cascader" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
-                    </el-col>
+            </el-col>
+            
+        </el-row>
 
-                    <el-col :span="4">
-                        
-                        <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
-                            <el-option
-                              v-for="item in enumList['MJ-6']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+        <el-row class="people-screen">
 
-                    </el-col>
-                    
-                </el-row>
+            <el-col :span="4">
 
-                <el-row class="people-screen">
+                <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                    <el-option
+                      v-for="item in ruleNumberNameList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.ruleNumberName">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
-                            <el-option
-                              v-for="item in ruleNumberNameList"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.ruleNumberName">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
+                <el-button type="primary" @click="getSpillPoolClueData" class="screen-li">搜 索</el-button>
+            </el-col>
 
-                    </el-col>
+            <el-col :span="4">
+                <div style="color: #fff; user-select: none;">1</div>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-button type="primary" @click="getSpillPoolClueData" class="screen-li">搜 索</el-button>
-                    </el-col>
+            <el-col :span="4">
+                <div style="color: #fff; user-select: none;">1</div>
+            </el-col>
 
-                    <el-col :span="4">
-                        <div style="color: #fff; user-select: none;">1</div>
-                    </el-col>
+            <el-col :span="4">
+                <el-button type="primary" @click="pushPeopleClick" class="screen-li">分配至人</el-button>
+            </el-col>
 
-                    <el-col :span="4">
-                        <div style="color: #fff; user-select: none;">1</div>
-                    </el-col>
+            <el-col :span="4">
+                <el-button type="primary" @click="pushArrClick" class="screen-li">分配至组</el-button>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-button type="primary" @click="pushPeopleClick" class="screen-li">分配至人</el-button>
-                    </el-col>
+        </el-row>
 
-                    <el-col :span="4">
-                        <el-button type="primary" @click="pushArrClick" class="screen-li">分配至组</el-button>
-                    </el-col>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction1"
+            size="40%"
+            :before-close="handleClose"
+        >
 
-                </el-row>
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction1"
-                    size="40%"
-                    :before-close="handleClose"
-                >
+                <el-col :span="10">
 
-                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+                    <el-input
+                        placeholder="输入您想查找的人员"
+                        style="margin-bottom: 10px;"
+                        v-model="filterText">
+                    </el-input>
 
-                        <el-col :span="10">
+                    <el-tree
+                        ref="tree"
+                        :data="treeData"
+                        show-checkbox
+                        style="margin-left: 0px;"
+                        node-key="orgUuid"
+                        :filter-node-method="filterNode"
+                        @check="handleCheckChange"
+                        :props="defaultProps"
+                    >
+                    </el-tree>
 
-                            <el-input
-                                placeholder="输入您想查找的人员"
-                                style="margin-bottom: 10px;"
-                                v-model="filterText">
-                            </el-input>
+                </el-col>
 
-                            <el-tree
-                                ref="tree"
-                                :data="treeData"
-                                show-checkbox
-                                style="margin-left: 0px;"
-                                node-key="orgUuid"
-                                :filter-node-method="filterNode"
-                                @check="handleCheckChange"
-                                :props="defaultProps"
-                            >
-                            </el-tree>
+                <el-col :span="13" :offset="1">
+                
+                    <el-table
+                        border
+                        :data="tableData"
+                    >
 
-                        </el-col>
+                        <el-table-column
+                            :prop="item.props"
+                            :label="item.label"
+                            v-for="(item, index) in columnListTree"
+                            :key="index">
+                        </el-table-column>
 
-                        <el-col :span="13" :offset="1">
-                        
-                            <el-table
-                                border
-                                :data="tableData"
-                            >
+                    </el-table>
 
-                                <el-table-column
-                                    :prop="item.props"
-                                    :label="item.label"
-                                    v-for="(item, index) in columnListTree"
-                                    :key="index">
-                                </el-table-column>
+                </el-col>
 
-                            </el-table>
+            </el-row>
 
-                        </el-col>
+            <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
 
-                    </el-row>
+        </el-drawer>
 
-                    <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
+        <el-drawer
+            :title="drawerTitle2"
+            :visible.sync="drawer2"
+            :direction="direction2"
+            :before-close="handleClose"
+        >
 
-                </el-drawer>
-
-                <el-drawer
-                    :title="drawerTitle2"
-                    :visible.sync="drawer2"
-                    :direction="direction2"
-                    :before-close="handleClose"
-                >
-
-                    <div class="tagName">您已选择 {{this.tableSelectList.length}} 条数据</div>
+            <div class="tagName">您已选择 {{this.tableSelectList.length}} 条数据</div>
  
-                    <el-tag 
-                        v-for="(item,index) in ruleNumberNameListAll" :key="index"
-                        style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
-                        :class="item.mainUin ? 'tagActive' : ''"
-                        @click="tagClick(item)"
-                        >{{item.name}}
-                    </el-tag>
+            <el-tag 
+                v-for="(item,index) in ruleNumberNameListAll" :key="index"
+                style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
+                :class="item.mainUin ? 'tagActive' : ''"
+                @click="tagClick(item)"
+                >{{item.name}}
+            </el-tag>
 
-                </el-drawer>
+        </el-drawer>
 
-                <el-table
-                    :data="list"
-                    ref="tableSelect"
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)">
-                    <el-table-column
-                      type="selection"
-                      width="45">
-                    </el-table-column>
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      v-for="(item, index) in columnList"
-                      :key="index"
-                      >
-                    </el-table-column>
-                </el-table>
+        <el-table
+            :data="list"
+            ref="tableSelect"
+            v-loading="fullscreenLoading"
+            style="width: 100%">
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              v-for="(item, index) in columnList"
+              :key="index"
+              >
+            </el-table-column>
+        </el-table>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='form.total'
-                    :page-size='form.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -553,50 +545,49 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
-                .smoke-cascader{
+            .smoke-cascader{
+                height: 40px !important;
+                line-height: 40px !important;
+                .area-select{
                     height: 40px !important;
                     line-height: 40px !important;
-                    .area-select{
-                        height: 40px !important;
-                        line-height: 40px !important;
-                    }
                 }
             }
         }
+        .tagName{
+            height: 40px;
+            background: #eeeeee;
+            text-align: center;
+            font-size: 14px;
+            line-height: 40px;
+            letter-spacing: 2px;
+        }
+        .tagActive{
+            color: red !important;
+        }
+        .el-pagination{
+            text-align: right;
+            margin-top: .4rem;
+        }
     }
-    .tagName{
-        height: 40px;
-        background: #eeeeee;
-        text-align: center;
-        font-size: 14px;
-        line-height: 40px;
-        letter-spacing: 2px;
-    }
-    .tagActive{
-        color: red !important;
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-    }
+    
 /* //element-ui table的去除右侧滚动条的样式 */
 ::-webkit-scrollbar {
     width: 8px;

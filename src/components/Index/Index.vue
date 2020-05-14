@@ -1,98 +1,76 @@
 <template>
     <div class="main-area">
-
-        <el-row style="width: 100%; height: 580px; margin-top: .5rem; margin-left: 11.5%; border: 1px solid #E6E6E8; border-radius:10px; background:#fff;">
-
-            <el-col :span="6" class="smoke-fff" style="height:100%; border-radius:10px 0 0 10px; border-right: 1px dashed #e6e6e8;">
-
-                <div style="padding-top: 50px; text-align: center;">
-
-                    <el-image
-                        style="width: 50px; height: 50px; border-radius: 50%;"
-                        :src="$store.state.avatar ? $store.state.avatar : require('../../assets/images/header_img.png')">
-                    </el-image>
-
-                </div>
-
-                <div style="font-size: 18px; margin-top:.2rem; text-align: center;"><span>姓名：</span><span>{{$store.state.name}}</span></div>
-                
-                <div class="left-css"><span style="float: left;">手机号：</span><span style="float: right; color:#578CBA;">{{$store.state.accountNumber}}</span></div>
-
-                <div class="left-css"><span style="float: left;">所在部门：</span><span style="float: right; color:#578CBA;">-- --</span></div>
-
-                <div class="left-css"><span style="float: left;">今日线索量：</span><span style="float: right; color:#578CBA;">0 条</span></div>
-
-                <div class="left-css"><span style="float: left;">今日拨通量：</span><span style="float: right; color:#578CBA;">0 通</span></div>
-
-                <div class="left-css"><span style="float: left;">累积销量：</span><span style="float: right; color:#578CBA;">0 单</span></div>
-
-            </el-col>
-
-            <el-col :span="18" style="height:100%;">
-
-                <el-row class="row-css">
-
-                    <el-carousel trigger="click" height="200px">
-                      <el-carousel-item v-for="item in bannerList" :key="item.url" style="background: #F7F7F7;">
-                        <img :src="item.url" alt="">
-                      </el-carousel-item>
-                    </el-carousel>
-
-                </el-row>
-
-                <el-row style="margin-top: 120px; margin-bottom: 20px; font-size: 18px; padding-left: 30px;">
-                    <span style="display:inline-block;width:12px;height:12px;background:rgba(72,143,247,1);border-radius:50%; margin-right: 5px;"></span>
-                     快捷入口
-                </el-row>
-
-                <el-row class="row-css" :gutter="30" style="padding: 0 30px;">
-
-                    <el-col :span="8" v-for="(item,index) in list1" :key="index">
-
-                        <el-card class="box-card" shadow="hover">
-
-                            <a target="_blank" @click="handleClick1(item)">
-                                <img style="width: .5rem; height: .5rem; position: relative; top: .17rem;" :src="item.url"/>
-                                <div class="name">{{item.name}}</div>
-                            </a>
-
-                        </el-card>
-
+        <el-carousel trigger="click" height="300px">
+            <el-carousel-item v-for="item in bannerList" :key="item.url" style="background: #F7F7F7;">
+                <img :src="item.url" alt="">
+            </el-carousel-item>
+        </el-carousel>
+        <el-row class="user-info" type="flex" justify="center">
+            <el-col class="user-info-content">
+                <el-row type="flex" justify="space-between">
+                    <el-col :span="12" type="flex" justify="space-between" class="user-info-left">
+                        <img class="avator" :src="$store.state.avatar ? $store.state.avatar : require('../../assets/images/header_img.png')" alt="">
+                        <section>
+                            <h2>早安，{{$store.state.name}}，祝你开心每一天！</h2>
+                            <p>{{$store.state.userRole}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.userDepartment}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.curDate}}</p>
+                        </section>
                     </el-col>
-
-                </el-row>
-
-                <el-row class="row-css" :gutter="30" style="padding: 0 30px;">
-
-                    <el-col :span="8" v-for="(item,index) in list2" :key="index">
-
-                        <el-card class="box-card" shadow="hover" @click="handleClick2(item)">
-
-                            <a target="_blank">
-                                <img style="width: .5rem; height: .5rem; position: relative; top: .17rem;" :src="item.url"/>
-                                <div class="name">{{item.name}}</div>
-                            </a>
-
-                        </el-card>
-
+                    <el-col :span="12" class="user-info-right">
+                        <dl>
+                            <dt>今日线索量</dt>
+                            <dd>
+                                <countTo :startVal='0' :endVal='556' :duration='3000'></countTo>
+                            </dd>
+                        </dl>
+                        <span class="line"></span>
+                        <dl>
+                            <dt>今日拨通量</dt>
+                            <dd>
+                                <countTo :startVal='0' :endVal='122' :duration='3000'></countTo>
+                            </dd>
+                        </dl>
+                        <span class="line"></span>
+                        <dl>
+                            <dt>累计销量</dt>
+                            <dd>
+                                <countTo :startVal='0' :endVal='66' :duration='3000'></countTo>
+                            </dd>
+                        </dl>
                     </el-col>
-
                 </el-row>
-
             </el-col>
-
         </el-row>
-
-        
+        <el-row class="express-entry">
+            <el-row class="title" type="flex" justify="flex-start">
+                <i></i>
+                <h3>快速登录入口</h3>
+            </el-row>
+            <el-row class="entry-list" type="flex" justify="center">
+                <el-col :span="8" :gutter="20" v-for="(item, index) in list1" :key="index" @click="handleClick1(item)">
+                    <a :href="item.https"><img :src="item.url" :alt="item.name" target="_blank"></a>
+                </el-col>
+            </el-row>
+            <el-row class="entry-list" type="flex" justify="center">
+                <el-col :span="8" :gutter="20" v-for="(item, index) in list2" :key="index">
+                    <a :href="item.https"><img :src="item.url" :alt="item.name"></a>
+                </el-col>
+            </el-row>
+        </el-row>
     </div>
 </template>
 
 <script>
 import { getUinOutConfigMessage, loginPlatform } from '../../request/api';
+import {getCurrentDate} from '@/assets/js/common'
+import countTo from 'vue-count-to';
 export default {
     name: 'index',
+    components: {
+        countTo
+    },
     data() {
         return {
+            currentDate: getCurrentDate('-'),
             list1: [
                { name: '京华网校商城后台', https: 'http://www.jhwx.com/admin_jhwx/', url: require('../../assets/images/inserticon01.png'), id: 1},
                { name: '胜学网校商城后台', https: 'https://www.shengxuewangxiao.com/admin_jhwx/index.php', url: require('../../assets/images/inserticon02.png'), id: 2},
@@ -104,10 +82,10 @@ export default {
                { name: '京华集团商城后台', https: 'https://www.jhwxedu.com/admin_jhwx/index.php', url: require('../../assets/images/inserticon06.png'), id: 6},
             ],
             bannerList: [
-                { url: require('../../assets/images/banner1.jpg')},
-                { url: require('../../assets/images/banner2.jpg')},
-                { url: require('../../assets/images/banner3.jpg')},
-                { url: require('../../assets/images/banner4.jpg')},
+                { url: require('../../assets/images/banner1.png')},
+                { url: require('../../assets/images/banner2.png')},
+                { url: require('../../assets/images/banner3.png')},
+                { url: require('../../assets/images/banner4.png')},
             ],
             form: {
                 accessToken: "", //主账号的token信息	
@@ -169,47 +147,105 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        width: calc( 100vw - 3.8rem );
-        .left-css{
-            font-size: 14px; width: 200px; 
-            overflow: hidden; margin: 0 auto;
-            margin-top:.2rem;
+.main-area{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0 !important;
+    .el-carousel{
+        .el-carousel-item{
+            text-align: center;
+            img{
+                height: 300px;
+            }
         }
-        .box-card {
-            width: 100%;
-            border-radius: 4px;
-            height:1rem;
-            margin-top: .2rem;
-            a{
-                display: block;
-                width: 100%;
-                height: 1rem;
-                font-size: .22rem;
-                text-align: center;
-                padding-right: .2rem;
-                cursor: pointer;
-                line-height: 1rem;
-                .name{
-                    display: inline-block;
-                    position: relative;
-                    top: 0px;
-                    left: 20px;
+    }
+    .user-info{
+        height: 136px;
+        background: #fff;
+        border-bottom: 1px solid #E9E9E9;
+        align-items: center;
+        .user-info-content{
+            width: 1194px;
+            .user-info-left{
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                .avator{
+                    width: 72px;
+                    height: 72px;
+                    border-radius: 50%;
+                    margin-right: 25px;
+                }
+                section{
+                    h2{
+                        font-size: 20px;
+                        font-weight: 100;
+                        color: #000;
+                    }
+                    p{
+                     color: #999;   
+                     margin: 12px 0;
+                    }
+                }
+                
+            }
+            .user-info-right{
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                align-items: center;
+                dl{
+                    // margin-left: 32px;
+                    dt{
+                       color: #999; 
+                    }
+                    dd{
+                        font-size: 30px;
+                        color: #000;
+                        text-align: right;
+                    }
+                }
+                span.line{
+                    border-right:1px solid #bbb;
+                    height: 40px;
+                    width: 32px;
+                    margin-right: 32px;
                 }
             }
         }
-        .row-css{
-            &:first-of-type{
-                height: 130px;
-                padding: 20px 30px;
+    }
+    .express-entry{
+        background: #fff;
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 26px 0;
+        .title{
+            width: 1022px;
+            align-items: center;
+            i{
+                width: 5px;
+                height: 18px;
+                background: #409EFF;
+                border-radius: 3px;
+                margin-right: 4px;
+            }
+            h3{
+                font-size: 18px;
+                color: #333;
+                font-weight: 100;
             }
         }
-        .small{
-            font-size: .4rem;
-            text-align: center;
-            line-height: 200px;
+        .entry-list{
+            width: 1022px; 
+            margin-top: 18px;
         }
     }
+}
 
     @media screen and (max-width: 1640px) {
         .el-carousel__item{
@@ -221,7 +257,7 @@ export default {
     @media screen and (min-width: 1920px) {
         .el-carousel__item{
             img{
-                border-radius: 8px;
+                // border-radius: 8px;
                 width: 100%;
                 height: 100%;
                 margin-left: 0rem !important;

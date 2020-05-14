@@ -1,197 +1,189 @@
 <template>
-    <div class="">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">公司人员详情</div>
 
-            <el-main>
+        <el-form ref="form" :model="formText" label-width="80px" style="width: 400px; margin: 0 auto;">
+                
+            <el-form-item label="姓名：">
+                <el-input v-model="formText.name" disabled></el-input>
+            </el-form-item>
+    
+            <el-form-item label="工号：">
+                <el-input v-model="formText.jobNumber" disabled></el-input>
+            </el-form-item>
+    
+            <el-form-item label="手机号：">
+                <el-input v-model="formText.accountNumber" disabled></el-input>
+            </el-form-item>
+    
+            <el-form-item label="在职状态：">
+                <el-input v-model="formText.jobStatus" disabled></el-input>
+            </el-form-item>
+    
+            <el-form-item label="组织部门：">
+                <el-input v-model="formText.orgUuidList" disabled></el-input>
+            </el-form-item>
+    
+            <el-form-item label="拥有角色：">
+            
+                <el-select v-model="roleArr" multiple placeholder="请选择角色" @change='handleRoleUuidChange' :disabled="!roleConfig">
+                  <el-option
+                    v-for="item in roleOptions"
+                    :key="item.uuid"
+                    :label="item.name"
+                    :value="item.uuid">
+                  </el-option>
+                </el-select>
+    
+            </el-form-item>
+    
+            <el-form-item label="关联JQ用户：">
+                <div style="margin-bottom: 20px;">
 
-                <div class="people-title">公司人员详情</div>
+                    <el-tag 
+                        v-for="(item,index) in formText.jqList" :key="index"
+                        closable
+                        style="margin-right: 10px; cursor: pointer;"
+                        :class="item.mainUin ? 'tagActive' : ''"
+                        @close="tagClose(item)"
+                        @click="tagClick(item)"
+                        >{{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
+                    </el-tag>
 
-                <el-form ref="form" :model="formText" label-width="80px" style="width: 400px; margin: 0 auto;">
-                        
-                    <el-form-item label="姓名：">
-                        <el-input v-model="formText.name" disabled></el-input>
-                    </el-form-item>
-        
-                    <el-form-item label="工号：">
-                        <el-input v-model="formText.jobNumber" disabled></el-input>
-                    </el-form-item>
-        
-                    <el-form-item label="手机号：">
-                        <el-input v-model="formText.accountNumber" disabled></el-input>
-                    </el-form-item>
-        
-                    <el-form-item label="在职状态：">
-                        <el-input v-model="formText.jobStatus" disabled></el-input>
-                    </el-form-item>
-        
-                    <el-form-item label="组织部门：">
-                        <el-input v-model="formText.orgUuidList" disabled></el-input>
-                    </el-form-item>
-        
-                    <el-form-item label="拥有角色：">
-                    
-                        <el-select v-model="roleArr" multiple placeholder="请选择角色" @change='handleRoleUuidChange' :disabled="!roleConfig">
-                          <el-option
-                            v-for="item in roleOptions"
-                            :key="item.uuid"
-                            :label="item.name"
-                            :value="item.uuid">
-                          </el-option>
+                </div>
+                <el-button type="primary" plain @click="searchJQ">查找并关联</el-button>
+                <el-button type="primary" plain @click="addJQ">创建并关联</el-button>
+            </el-form-item>
+
+            <el-form-item style="margin-top: 60px;">
+                <el-button type="primary" @click="onSubmit" style="width: 100px;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+                <el-button type="primary" style="width: 100px;" @click="$router.go(-1)">取消</el-button>
+            </el-form-item>
+    
+        </el-form>
+    
+        <el-drawer
+            title="查找并关联"
+            :visible.sync="drawerSearch"
+            :direction="direction"
+            size="55%"
+            :before-close="handleClose">
+            
+            <div style="padding: .3rem;">
+            
+                <el-row>
+                    <el-col :span="6">
+                        <el-select v-model="selectValue" placeholder="请选择JQ账号" @change="changeItem" style="width: 100%;">
+                            <el-option
+                              v-for="item in selectOptions"
+                              :key="item.type"
+                              :label="item.name"
+                              :value="item.type">
+                            </el-option>
                         </el-select>
-        
-                    </el-form-item>
-        
-                    <el-form-item label="关联JQ用户：">
-                        <div style="margin-bottom: 20px;">
+                    </el-col>
+                    <el-col :span="6" :offset="1">
+                        <el-input v-model="searchForm.name" placeholder="请输入JQ姓名"></el-input>
+                    </el-col>
+                    <el-col :span="6" :offset="1">
+                        <el-input v-model="searchForm.userName" placeholder="请输入JQ用户名"></el-input>
+                    </el-col>
+                    <el-col :span="3" :offset="1">
+                        <el-button type="primary" @click="searchBtn">搜索</el-button>
+                    </el-col>
+                </el-row>
+    
+                <div style="margin-top: 20px; height: 40px; line-height: 30px; font-size: 15px;">当前选择：
 
-                            <el-tag 
-                                v-for="(item,index) in formText.jqList" :key="index"
-                                closable
-                                style="margin-right: 10px; cursor: pointer;"
-                                :class="item.mainUin ? 'tagActive' : ''"
-                                @close="tagClose(item)"
-                                @click="tagClick(item)"
-                                >{{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
-                            </el-tag>
-
-                        </div>
-                        <el-button type="primary" plain @click="searchJQ">查找并关联</el-button>
-                        <el-button type="primary" plain @click="addJQ">创建并关联</el-button>
-                    </el-form-item>
-
-                    <el-form-item style="margin-top: 60px;">
-                        <el-button type="primary" @click="onSubmit" style="width: 100px;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
-                        <el-button type="primary" style="width: 100px;" @click="$router.go(-1)">取消</el-button>
-                    </el-form-item>
-        
-                </el-form>
-        
-                <el-drawer
-                    title="查找并关联"
-                    :visible.sync="drawerSearch"
-                    :direction="direction"
-                    size="55%"
-                    :before-close="handleClose">
-                    
-                    <div style="padding: .3rem;">
-                    
-                        <el-row>
-                            <el-col :span="6">
-                                <el-select v-model="selectValue" placeholder="请选择JQ账号" @change="changeItem" style="width: 100%;">
-                                    <el-option
-                                      v-for="item in selectOptions"
-                                      :key="item.type"
-                                      :label="item.name"
-                                      :value="item.type">
-                                    </el-option>
-                                </el-select>
-                            </el-col>
-                            <el-col :span="6" :offset="1">
-                                <el-input v-model="searchForm.name" placeholder="请输入JQ姓名"></el-input>
-                            </el-col>
-                            <el-col :span="6" :offset="1">
-                                <el-input v-model="searchForm.userName" placeholder="请输入JQ用户名"></el-input>
-                            </el-col>
-                            <el-col :span="3" :offset="1">
-                                <el-button type="primary" @click="searchBtn">搜索</el-button>
-                            </el-col>
-                        </el-row>
-        
-                        <div style="margin-top: 20px; height: 40px; line-height: 30px; font-size: 15px;">当前选择：
-
-                            <el-tag v-for="(item,index) in formText.jqList" 
-                                :key="index" closable 
-                                style="margin-right: 10px; cursor: pointer;"
-                                :class="item.mainUin ? 'tagActive' : ''" 
-                                @close="tagClose(item)"
-                                @click="tagClick(item)"
-                            >
-                                {{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
-                            </el-tag>
-                        </div>
-        
-                        <el-table
-                            :data="tableData"
-                            border
-                            highlight-current-row
-                            @current-change="handleHighLightChange"
-                            style="margin-top: .2rem;">
-        
-                            <el-table-column
-                                :prop="item.props"
-                                :label="item.label"
-                                v-for="(item, index) in columnList"
-                                :key="index">
-                            </el-table-column>
-        
-                        </el-table>
-        
-                        <el-pagination
-                            v-if="tableData.length != 0"
-                            background
-                            layout="total, prev, pager, next, jumper"
-                            :total='total'
-                            :page-size='searchForm.pageSize'
-                            :hide-on-single-page="totalFlag"
-                            @current-change="handleCurrentChange"
-                        >
-                        </el-pagination>
-        
-                        <el-row style="margin-top: .5rem;">
-                            <el-col :span="11" style="text-align: right;" :offset="1"><el-button type="primary" @click="relationNo">取消</el-button></el-col>
-                            <el-col :span="11" style="text-align: left;" :offset="1"><el-button type="primary" @click="relationYes">确定关联</el-button></el-col>
-                        </el-row>
-                        
-                    </div>
-        
-                </el-drawer>
-        
-                <el-drawer
-                    title="创建并关联"
-                    :visible.sync="drawerCreate"
-                    :direction="direction"
-                    size="40%"
-                    :before-close="handleClose"   
+                    <el-tag v-for="(item,index) in formText.jqList" 
+                        :key="index" closable 
+                        style="margin-right: 10px; cursor: pointer;"
+                        :class="item.mainUin ? 'tagActive' : ''" 
+                        @close="tagClose(item)"
+                        @click="tagClick(item)"
+                    >
+                        {{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
+                    </el-tag>
+                </div>
+    
+                <el-table
+                    :data="tableData"
+                    border
+                    highlight-current-row
+                    @current-change="handleHighLightChange"
+                    style="margin-top: .2rem;">
+    
+                    <el-table-column
+                        :prop="item.props"
+                        :label="item.label"
+                        v-for="(item, index) in columnList"
+                        :key="index">
+                    </el-table-column>
+    
+                </el-table>
+    
+                <el-pagination
+                    v-if="tableData.length != 0"
+                    background
+                    layout="total, prev, pager, next, jumper"
+                    :total='total'
+                    :page-size='searchForm.pageSize'
+                    :hide-on-single-page="totalFlag"
+                    @current-change="handleCurrentChange"
                 >
-                                
-                    <el-form :model="createForm" ref="createForm" style="width: 80%; margin: 0 auto;" :rules="rules">
-                        <!-- <el-form-item label="用户名" prop="strId"> 
-                            <el-input v-model="createForm.strId"></el-input>
-                        </el-form-item> -->
-                        <el-form-item label="JQ姓名" prop="nickname">
-                            <el-input v-model="createForm.nickname"></el-input>
-                        </el-form-item>
-                        <el-form-item label="JQ账号类型" prop="type">
-                            <el-select v-model="createForm.type" placeholder="请选择JQ账号" @change="createItem">
-                                <el-option
-                                    v-for="item in selectCreate"
-                                    :key="item.type"
-                                    :label="item.name"
-                                    :value="item.type">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="手机号码">
-                          <el-input v-model="createForm.mobile"></el-input>
-                        </el-form-item>
-                        <el-form-item label="电子邮箱">
-                          <el-input v-model="createForm.email"></el-input>
-                        </el-form-item>
-                    </el-form>
-        
-                    <el-row style="margin-top: .5rem;">
-                        <el-col :span="11" style="text-align: right;" :offset="1"><el-button type="primary" @click="createNo">取消</el-button></el-col>
-                        <el-col :span="11" style="text-align: left;" :offset="1"><el-button type="primary" @click="createYes('createForm')">创建关联</el-button></el-col>
-                    </el-row>
-        
-                </el-drawer>
+                </el-pagination>
+    
+                <el-row style="margin-top: .5rem;">
+                    <el-col :span="11" style="text-align: right;" :offset="1"><el-button type="primary" @click="relationNo">取消</el-button></el-col>
+                    <el-col :span="11" style="text-align: left;" :offset="1"><el-button type="primary" @click="relationYes">确定关联</el-button></el-col>
+                </el-row>
+                
+            </div>
+    
+        </el-drawer>
+    
+        <el-drawer
+            title="创建并关联"
+            :visible.sync="drawerCreate"
+            :direction="direction"
+            size="40%"
+            :before-close="handleClose"   
+        >
+                        
+            <el-form :model="createForm" ref="createForm" style="width: 80%; margin: 0 auto;" :rules="rules">
+                <!-- <el-form-item label="用户名" prop="strId"> 
+                    <el-input v-model="createForm.strId"></el-input>
+                </el-form-item> -->
+                <el-form-item label="JQ姓名" prop="nickname">
+                    <el-input v-model="createForm.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="JQ账号类型" prop="type">
+                    <el-select v-model="createForm.type" placeholder="请选择JQ账号" @change="createItem">
+                        <el-option
+                            v-for="item in selectCreate"
+                            :key="item.type"
+                            :label="item.name"
+                            :value="item.type">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="手机号码">
+                  <el-input v-model="createForm.mobile"></el-input>
+                </el-form-item>
+                <el-form-item label="电子邮箱">
+                  <el-input v-model="createForm.email"></el-input>
+                </el-form-item>
+            </el-form>
+    
+            <el-row style="margin-top: .5rem;">
+                <el-col :span="11" style="text-align: right;" :offset="1"><el-button type="primary" @click="createNo">取消</el-button></el-col>
+                <el-col :span="11" style="text-align: left;" :offset="1"><el-button type="primary" @click="createYes('createForm')">创建关联</el-button></el-col>
+            </el-row>
+    
+        </el-drawer>
 
-            </el-main>
-
-        </el-container>
-        
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -466,7 +458,7 @@ export default {
     .index-main{
         height: calc( 100vh - 60px);
         .people-title{
-            width: calc( 100vw - 3.8rem);
+            width: 100%;
             height: 40px;
             line-height: 40px;
             text-align: center;

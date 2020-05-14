@@ -1,155 +1,147 @@
 <template>
-    <div class="every-title">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">查看通时数据</div>
 
-            <el-main>
+        <el-row style="margin-bottom: 20px;">
 
-                <div class="people-title">查看通时数据</div>
+            <el-col :span="4">
+                <el-select v-model="form.callStyle" placeholder="请选择呼叫方式" style="width: 90%;">
+                    <el-option
+                      v-for="item in callStyleArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-input v-model="form.calledId" placeholder="请输入座席电话" style="width: 90%;"></el-input>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-input v-model="form.callerId" placeholder="请输入客户电话" style="width: 90%;"></el-input>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-select v-model="form.dealState" placeholder="请选择处理状态" style="width: 90%;">
+                    <el-option
+                      v-for="item in dealStateArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-select v-model="form.hangupSide" placeholder="请选择挂机方" style="width: 90%;">
+                    <el-option
+                      v-for="item in hangupSideArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-select v-model="form.isCalledPhone" placeholder="请选择是否接通" style="width: 90%;">
+                    <el-option
+                      v-for="item in isCalledPhoneArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+    
+        </el-row>
+    
+        <el-row>
+        
+            <el-col :span="8">
+                <el-date-picker
+                    style="width: 90%;"
+                    v-model="dataPicker"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChange"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                </el-date-picker>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-select v-model="form.pathway" placeholder="请选择呼叫途径" style="width: 90%;">
+                    <el-option
+                      v-for="item in pathwayArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+    
+            <el-col :span="4">
+                <el-input v-model="form.seatId" placeholder="请输入坐席工号" style="width: 90%;"></el-input>
+            </el-col>
+    
+            <el-col :span="8">
+                <el-button type="primary" style="width: 1.5rem;" @click="timeClick">确定</el-button>
+            </el-col>
+    
+        </el-row>
+    
+        <el-table
+            :data="tableData"
+            border
+            fit
+            v-loading="fullscreenLoading"
+            style="width: 100%; margin-top: 40px;">
+    
+            <af-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in columnList"
+                :key="index">
+            </af-table-column>
+    
+            <af-table-column
+                prop="bofang" label="录音播放"
+                fixed="right"
+                :width="columnWidth"
+                v-if="columnFlag"
+            >
+                <template slot-scope="scope">
+                    <el-button v-if="scope.row.recordFile" @click="bofangClick(scope.row)" type="text" >
+                        <audio 
+                            :src="scope.row.recordFile"
+                            controls="controls"
+                            style="height: 30px;"
+                        ></audio>
+                    </el-button>
+                </template>
+            </af-table-column>
+    
+        </el-table>
+    
+        <el-pagination
+            background
+            style="margin-top: 30px; text-align:right; margin-right: 1.2%; margin-bottom: 50px;"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='total'
+            :page-size='form.pageSize'
+            :current-page='form.currentPage'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-row style="margin-bottom: 20px;">
-
-                    <el-col :span="4">
-                        <el-select v-model="form.callStyle" placeholder="请选择呼叫方式" style="width: 90%;">
-                            <el-option
-                              v-for="item in callStyleArr"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-input v-model="form.calledId" placeholder="请输入座席电话" style="width: 90%;"></el-input>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-input v-model="form.callerId" placeholder="请输入客户电话" style="width: 90%;"></el-input>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-select v-model="form.dealState" placeholder="请选择处理状态" style="width: 90%;">
-                            <el-option
-                              v-for="item in dealStateArr"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-select v-model="form.hangupSide" placeholder="请选择挂机方" style="width: 90%;">
-                            <el-option
-                              v-for="item in hangupSideArr"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-select v-model="form.isCalledPhone" placeholder="请选择是否接通" style="width: 90%;">
-                            <el-option
-                              v-for="item in isCalledPhoneArr"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-        
-                </el-row>
-        
-                <el-row>
-                
-                    <el-col :span="8">
-                        <el-date-picker
-                            style="width: 90%;"
-                            v-model="dataPicker"
-                            type="datetimerange"
-                            range-separator="至"
-                            @change="datePickerChange"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-select v-model="form.pathway" placeholder="请选择呼叫途径" style="width: 90%;">
-                            <el-option
-                              v-for="item in pathwayArr"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-        
-                    <el-col :span="4">
-                        <el-input v-model="form.seatId" placeholder="请输入坐席工号" style="width: 90%;"></el-input>
-                    </el-col>
-        
-                    <el-col :span="8">
-                        <el-button type="primary" style="width: 1.5rem;" @click="timeClick">确定</el-button>
-                    </el-col>
-        
-                </el-row>
-        
-                <el-table
-                    :data="tableData"
-                    border
-                    fit
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem); margin-top: 40px;">
-        
-                    <af-table-column
-                        :prop="item.prop"
-                        :label="item.label"
-                        v-for="(item, index) in columnList"
-                        :key="index">
-                    </af-table-column>
-        
-                    <af-table-column
-                        prop="bofang" label="录音播放"
-                        fixed="right"
-                        :width="columnWidth"
-                        v-if="columnFlag"
-                    >
-                        <template slot-scope="scope">
-                            <el-button v-if="scope.row.recordFile" @click="bofangClick(scope.row)" type="text" >
-                                <audio 
-                                    :src="scope.row.recordFile"
-                                    controls="controls"
-                                    style="height: 30px;"
-                                ></audio>
-                            </el-button>
-                        </template>
-                    </af-table-column>
-        
-                </el-table>
-        
-                <el-pagination
-                    background
-                    style="margin-top: 30px; text-align:right; margin-right: 1.2%; margin-bottom: 50px;"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='total'
-                    :page-size='form.pageSize'
-                    :current-page='form.currentPage'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
-
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -307,7 +299,7 @@ export default {
         text-align: right;
         margin-top: .4rem;
     }
-    .every-title /deep/ .bofang-column{
+    .index-main /deep/ .bofang-column{
         padding: 0 !important;
     }
 </style>

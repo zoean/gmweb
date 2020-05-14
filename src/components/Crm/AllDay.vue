@@ -1,193 +1,188 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
         <Start></Start>
 
-        <el-container class="index-main">
+        <div class="people-title">全部客户</div>
 
-            <el-main>
+        <el-row class="people-screen">
 
-                <div class="people-title">全部客户</div>
+            <el-col :span="4">
+                <el-input v-model="form.tel" placeholder="请输入查询的手机号" class="screen-li"></el-input>
+            </el-col>
 
-                <el-row class="people-screen">
+            <el-col :span="4">
+                <el-input v-model="form.name" placeholder="请输入查询的客户姓名" class="screen-li"></el-input>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-input v-model="form.tel" placeholder="请输入查询的手机号" class="screen-li"></el-input>
-                    </el-col>
+            <el-col :span="4">
+                
+                <el-select v-model="form.dialState" placeholder="请选择是否首咨" class="screen-li">
+                    <el-option
+                      v-for="item in dialStateList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
-                        <el-input v-model="form.name" placeholder="请输入查询的客户姓名" class="screen-li"></el-input>
-                    </el-col>
+            </el-col>
 
-                    <el-col :span="4">
-                        
-                        <el-select v-model="form.dialState" placeholder="请选择是否首咨" class="screen-li">
-                            <el-option
-                              v-for="item in dialStateList"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
 
-                    </el-col>
+                <el-select v-model="form.education" placeholder="请选择最高学历" class="screen-li">
+                    <el-option
+                      v-for="item in enumList['MJ-1']"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select v-model="form.education" placeholder="请选择最高学历" class="screen-li">
-                            <el-option
-                              v-for="item in enumList['MJ-1']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
 
-                    </el-col>
+                <el-select v-model="form.workingLife" placeholder="请选择工作年限" class="screen-li">
+                    <el-option
+                      v-for="item in enumList['MJ-2']"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select v-model="form.workingLife" placeholder="请选择工作年限" class="screen-li">
-                            <el-option
-                              v-for="item in enumList['MJ-2']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+        </el-row>
 
-                    </el-col>
+        <el-row class="people-screen">
 
-                </el-row>
+            <el-col :span="4">
 
-                <el-row class="people-screen">
+                <el-select @change="selectTimeChange" v-model="form.selectTime" placeholder="请选择未联间隔" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in selectTimeList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select @change="selectTimeChange" v-model="form.selectTime" placeholder="请选择未联间隔" class="screen-li" clearable>
-                            <el-option
-                              v-for="item in selectTimeList"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
 
-                    </el-col>
+                <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                    <el-option
+                      v-for="item in ruleNumberNameList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.ruleNumberName">
+                    </el-option>
+                </el-select>
 
-                    <el-col :span="4">
+            </el-col>
 
-                        <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
-                            <el-option
-                              v-for="item in ruleNumberNameList"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.ruleNumberName">
-                            </el-option>
-                        </el-select>
+            <el-col :span="4">
+                <el-button type="primary" @click="getClueDataAll">搜 索</el-button>
+            </el-col>
 
-                    </el-col>
+        </el-row>
 
-                    <el-col :span="4">
-                        <el-button type="primary" @click="getClueDataAll">搜 索</el-button>
-                    </el-col>
-
-                </el-row>
-
-                <el-table
-                    :data="list"
-                    v-loading="fullscreenLoading"
-                    :row-class-name="tableRowClassName"
-                    style="width: calc( 100vw - 3.8rem)"
-                    :row-key="getRowKey"
-                    >
-                    <el-table-column
-                      :prop="item.props"
-                      v-for="(item, index) in columnList"
-                      :min-width="item.width"
-                      :key="index"
-                      >
-                      <template slot="header">
-                        {{item.label}}
-                        <span class="caret-wrapper" v-if="item.ifSort">
-                            <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
-                            <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
-                        </span>
-                      </template>
-                      <template slot-scope="scope">
-                            <span>{{scope.row[item.props]}}</span>
-                            <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
-                                <el-image
-                                    class="copy-icon-style"
-                                    @click="phoneCopy(scope.row)"
-                                    :src="require('../../assets/images/copy-icon.png')">
-                                </el-image>
-                            </el-tooltip>
-                            
-                      </template>
-                    </el-table-column>
-
-                    <el-table-column prop="active" label="操作" width="350px;">
-                      <template slot-scope="scope">
-                          <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
-                          <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
-                          <el-popconfirm
-                            confirmButtonText='确定'
-                            cancelButtonText='取消'
-                            icon="el-icon-info"
-                            iconColor="red"
-                            placement="top"
-                            title="确认释放该数据吗？"
-                            @onConfirm="release(scope.row)"
-                          >
-                            <el-button type="text" slot="reference">释放数据</el-button>
-                          </el-popconfirm>
-                          <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                          <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
-                      </template>
-                    </el-table-column>
+        <el-table
+            :data="list"
+            v-loading="fullscreenLoading"
+            :row-class-name="tableRowClassName"
+            style="width: 100%"
+            :row-key="getRowKey"
+            >
+            <el-table-column
+              :prop="item.props"
+              v-for="(item, index) in columnList"
+              :min-width="item.width"
+              :key="index"
+              >
+              <template slot="header">
+                {{item.label}}
+                <span class="caret-wrapper" v-if="item.ifSort">
+                    <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
+                    <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
+                </span>
+              </template>
+              <template slot-scope="scope">
+                    <span>{{scope.row[item.props]}}</span>
+                    <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
+                        <el-image
+                            class="copy-icon-style"
+                            @click="phoneCopy(scope.row)"
+                            :src="require('../../assets/images/copy-icon.png')">
+                        </el-image>
+                    </el-tooltip>
                     
-                    <el-table-column
-                      align="right" width="60px">
-                      <template slot="header">
-                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
-                      </template>
-                    </el-table-column>
-                </el-table>
+              </template>
+            </el-table-column>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    style="text-align: right; margin-top: 20px;"
-                    :total='form.total'
-                    :page-size='form.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+            <el-table-column prop="active" label="操作" width="350px;" fixed="right">
+              <template slot-scope="scope">
+                  <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
+                  <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
+                  <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    iconColor="red"
+                    placement="top"
+                    title="确认释放该数据吗？"
+                    @onConfirm="release(scope.row)"
+                  >
+                    <el-button type="text" slot="reference">释放数据</el-button>
+                  </el-popconfirm>
+                  <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
+                  <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+              </template>
+            </el-table-column>
+            
+            <el-table-column
+              align="right" width="60px" fixed="right">
+              <template slot="header">
+                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
+              </template>
+            </el-table-column>
+        </el-table>
 
-                <CustomerNotes 
-                    v-if="drawer"
-                    @changeDrawer="changeDrawer"
-                    :followFlag='followFlag' 
-                    :drawer.sync='drawer'
-                    :userUuid='form.userUuid'
-                    :schoolId='schoolId'
-                    :examItem='examItem'
-                    :clueDataSUuid='clueDataSUuid'
-                    :comMode='comMode'
-                    :callLogUuid='callLogUuid'
-                    @fatherDataList='getClueDataAll'
-                >
-                </CustomerNotes>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-            </el-main>
+        <CustomerNotes 
+            v-if="drawer"
+            @changeDrawer="changeDrawer"
+            :followFlag='followFlag' 
+            :drawer.sync='drawer'
+            :userUuid='form.userUuid'
+            :schoolId='schoolId'
+            :examItem='examItem'
+            :clueDataSUuid='clueDataSUuid'
+            :comMode='comMode'
+            :callLogUuid='callLogUuid'
+            @fatherDataList='getClueDataAll'
+        >
+        </CustomerNotes>
 
-        </el-container>
-      <PageFieldManage :setPageNum="setPageNum" />
-    </div>
+        <PageFieldManage :setPageNum="setPageNum" />
+
+    </el-main>
+    
 </template>
 
 <script>
@@ -213,13 +208,14 @@ export default {
         CustomerNotes,
         PageFieldManage
     },
-    watch:{
-        '$store.state.editFieldVisible'(val){
-            if(!val && this.$store.state.pageNum == 'YM_1'){
-                this.getClueDataAll()
-            }
-        }
-    },
+    // watch:{
+    //     '$store.state.editFieldVisible'(val){
+    //         if(!val && this.$store.state.pageNum == 'YM_1'){
+    //             this.getClueDataAll()
+    //         }
+            
+    //     }
+    // },
     data() {
         return {
             fieldNum: [],
@@ -391,10 +387,6 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        // res.data.list.map(sll => {
-                        //     sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
-                        //     sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
-                        // })
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.list = res.data.list;
@@ -553,33 +545,31 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
-            }
-            .el-button{
-              margin-left: 5px;
-            }
-            .edit-field-icon{
-              color: #5cb6ff;
-              font-size: 20px;
-              cursor: pointer;
-            }
+        }
+        .el-button{
+          margin-left: 5px;
+        }
+        .edit-field-icon{
+          color: #5cb6ff;
+          font-size: 20px;
+          cursor: pointer;
         }
     }
 </style>

@@ -1,252 +1,246 @@
 <template>
-    <div style="">
-        <el-container class="index-main">
+    <el-main class="index-main">
 
-            <el-main>
+        <div class="people-title">项目结构管理</div> 
 
-                <div class="people-title">项目结构管理</div> 
+        <el-button type="primary" @click="addclass" style="margin-bottom: .2rem;">创建一级大类</el-button>
+    
+        <el-table
+          :data="classList"
+          row-key="uuid"
+          default-expand-all
+          :indent="35"
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+          style="width: 100%">
+          <af-table-column
+            :prop="item.prop"
+            :label="item.label"
+            v-for="(item, index) in columnList"
+            :key="index"
+            :width="index == 0 ? '500' : null"
+            >
+          </af-table-column>
+          <el-table-column prop="active" label="操作" min-width="150%">
+            <template slot-scope="scope">
+                <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="click"
+                  :ref="`popover-${scope.$index}`"
+                  >
+                  <p style="margin-bottom: .2rem;">您确定要删除吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                    <el-button type="primary" size="mini" @click="deleteAll(scope)">确定</el-button>
+                  </div>
+                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                </el-popover>
+                <el-button @click="addClick(scope.row)" type="text"  style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
+                <el-button v-if="!scope.row.sortUpFlag" @click="sortNumber(scope.row, 'up')" type="text" >排序向上</el-button>
+                <el-button v-if="!scope.row.sortDownFlag" @click="sortNumber(scope.row, 'down')" type="text" >排序向下</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-                <el-button type="primary" @click="addclass" style="margin-bottom: .2rem;">创建一级大类</el-button>
-         
-                <el-table
-                  :data="classList"
-                  row-key="uuid"
-                  default-expand-all
-                  :indent="35"
-                  :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-                  style="width: calc( 100vw - 3.8rem)">
-                  <af-table-column
-                    :prop="item.prop"
-                    :label="item.label"
-                    v-for="(item, index) in columnList"
-                    :key="index"
-                    :width="index == 0 ? '500' : null"
-                    >
-                  </af-table-column>
-                  <el-table-column prop="active" label="操作" min-width="150%">
-                    <template slot-scope="scope">
-                        <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          :ref="`popover-${scope.$index}`"
-                          >
-                          <p style="margin-bottom: .2rem;">您确定要删除吗？</p>
-                          <div style="text-align: right; margin: 0">
-                            <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                            <el-button type="primary" size="mini" @click="deleteAll(scope)">确定</el-button>
-                          </div>
-                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
-                        </el-popover>
-                        <el-button @click="addClick(scope.row)" type="text"  style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
-                        <el-button v-if="!scope.row.sortUpFlag" @click="sortNumber(scope.row, 'up')" type="text" >排序向上</el-button>
-                        <el-button v-if="!scope.row.sortDownFlag" @click="sortNumber(scope.row, 'down')" type="text" >排序向下</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='total'
+            :page-size='classForm.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='total'
-                    :page-size='classForm.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction"
+            :before-close="handleClose">
 
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction"
-                    :before-close="handleClose">
+            <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="项目类名" prop="name">
+                  <el-input v-model="ruleForm1.name"></el-input>
+                </el-form-item>
 
-                    <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="项目类名" prop="name">
-                          <el-input v-model="ruleForm1.name"></el-input>
-                        </el-form-item>
+                <el-form-item label="用户开放" prop="switch1">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm1.userOpenStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="用户开放" prop="switch1">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm1.userOpenStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item label="标为重点" prop="switch2">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm1.emphasisStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="标为重点" prop="switch2">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm1.emphasisStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
 
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
+            </el-form>
 
-                    </el-form>
+        </el-drawer>
 
-                </el-drawer>
+        <el-drawer
+        :title="drawerTitle2"
+        :visible.sync="drawer2"
+        :direction="direction"
+        :before-close="handleClose"
+        size="40%"
+        >
+            <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="所属大类" prop="selectuuid">
+                    <el-select v-model="ruleForm2.selectuuid" @focus='focusOne' placeholder="请选择一级大类" @change='handleOneChange' class="screen-li" clearable>
+                        <el-option
+                            v-for="item in oneOptions"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
 
-                <el-drawer
-                :title="drawerTitle2"
-                :visible.sync="drawer2"
-                :direction="direction"
-                :before-close="handleClose"
-                size="40%"
-                >
-                    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="所属大类" prop="selectuuid">
-                            <el-select v-model="ruleForm2.selectuuid" @focus='focusOne' placeholder="请选择一级大类" @change='handleOneChange' class="screen-li" clearable>
-                                <el-option
-                                    v-for="item in oneOptions"
-                                    :key="item.uuid"
-                                    :label="item.name"
-                                    :value="item.uuid">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                <el-form-item label="二级分类" prop="classifyUuid">
+                    <el-select v-model="ruleForm2.classifyUuid" @focus="focusTwo" placeholder="请选择二级分类" @change='handleTwoChange' class="screen-li" clearable>
+                        <el-option
+                            v-for="item in twoOptions"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
 
-                        <el-form-item label="二级分类" prop="classifyUuid">
-                            <el-select v-model="ruleForm2.classifyUuid" @focus="focusTwo" placeholder="请选择二级分类" @change='handleTwoChange' class="screen-li" clearable>
-                                <el-option
-                                    v-for="item in twoOptions"
-                                    :key="item.uuid"
-                                    :label="item.name"
-                                    :value="item.uuid">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
+                <el-form-item label="考试项类名" prop="name">
+                  <el-input v-model="ruleForm2.name"></el-input>
+                </el-form-item>
 
-                        <el-form-item label="考试项类名" prop="name">
-                          <el-input v-model="ruleForm2.name"></el-input>
-                        </el-form-item>
+                <el-form-item label="创建考试品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
+                  <el-row>
+                      <el-col :span="18"><el-input v-model="categoryAll.categoryNameAdd"></el-input></el-col>
+                      <el-col :span="5" :offset="1"><el-button type="primary" @click="categoryNameAdd">确定</el-button></el-col>
+                  </el-row>
+                </el-form-item>
 
-                        <el-form-item label="创建考试品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
-                          <el-row>
-                              <el-col :span="18"><el-input v-model="categoryAll.categoryNameAdd"></el-input></el-col>
-                              <el-col :span="5" :offset="1"><el-button type="primary" @click="categoryNameAdd">确定</el-button></el-col>
-                          </el-row>
-                        </el-form-item>
+                <el-form-item label="编辑考试品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
+                  <el-row>
+                      <el-col :span="18"><el-input v-model="categoryAll.categoryNameEdit"></el-input></el-col>
+                      <el-col :span="5" :offset="1"><el-button type="primary" @click="categoryNameEdit">确定</el-button></el-col>
+                  </el-row>
+                </el-form-item>
 
-                        <el-form-item label="编辑考试品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
-                          <el-row>
-                              <el-col :span="18"><el-input v-model="categoryAll.categoryNameEdit"></el-input></el-col>
-                              <el-col :span="5" :offset="1"><el-button type="primary" @click="categoryNameEdit">确定</el-button></el-col>
-                          </el-row>
-                        </el-form-item>
+                <el-form-item label="考试项目品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
+                    <el-tag
+                        style="margin-right: .2rem; cursor: pointer;" 
+                        v-for="tag in categoryList"
+                        :key="tag.uuid"
+                        closable
+                        :disable-transitions="false"
+                        @close="tagDel(tag)"
+                        @click="tagClick(tag)"
+                        >
+                        {{tag.name}}
+                    </el-tag>
+                </el-form-item>
 
-                        <el-form-item label="考试项目品类" prop="name" v-if="drawerTitle2 != '创建考试项目'">
-                            <el-tag
-                                style="margin-right: .2rem; cursor: pointer;" 
-                                v-for="tag in categoryList"
-                                :key="tag.uuid"
-                                closable
-                                :disable-transitions="false"
-                                @close="tagDel(tag)"
-                                @click="tagClick(tag)"
-                                >
-                                {{tag.name}}
-                            </el-tag>
-                        </el-form-item>
+                <el-form-item label="用户开放" prop="switch1">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm2.userOpenStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="用户开放" prop="switch1">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm2.userOpenStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item label="标为重点" prop="switch2">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm2.emphasisStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="标为重点" prop="switch2">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm2.emphasisStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm2('ruleForm2')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
 
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm2('ruleForm2')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
+            </el-form>
 
-                    </el-form>
+        </el-drawer>
 
-                </el-drawer>
+        <el-drawer
+        :title="drawerTitle3"
+        :visible.sync="drawer3"
+        :direction="direction"
+        :before-close="handleClose"
+        >
 
-                <el-drawer
-                :title="drawerTitle3"
-                :visible.sync="drawer3"
-                :direction="direction"
-                :before-close="handleClose"
-                >
+            <el-form :model="ruleForm3" :rules="rules3" ref="ruleForm3" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="关联科目" prop="subjectUuid">
+                
+                    <el-autocomplete
+                        class="inline-input"
+                        v-model="subjectText"
+                        :fetch-suggestions="querySearch"
+                        placeholder="请输入内容"
+                        :trigger-on-focus="true"
+                        @select="handleSelect"
+                        :disabled="this.drawerTitle3 == '添加科目' ? false : true"
+                    ></el-autocomplete>
 
-                    <el-form :model="ruleForm3" :rules="rules3" ref="ruleForm3" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="关联科目" prop="subjectUuid">
-                        
-                            <el-autocomplete
-                                class="inline-input"
-                                v-model="subjectText"
-                                :fetch-suggestions="querySearch"
-                                placeholder="请输入内容"
-                                :trigger-on-focus="true"
-                                @select="handleSelect"
-                                :disabled="this.drawerTitle3 == '添加科目' ? false : true"
-                            ></el-autocomplete>
+                </el-form-item>
 
-                        </el-form-item>
+                <el-form-item label="用户开放" prop="switch1">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm3.userOpenStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="用户开放" prop="switch1">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm3.userOpenStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item label="标为重点" prop="switch2">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm3.emphasisStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="标为重点" prop="switch2">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm3.emphasisStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm3('ruleForm3')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
 
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm3('ruleForm3')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
+            </el-form>
 
-                    </el-form>
+        </el-drawer>
 
-                </el-drawer>
-
-            </el-main>
-
-        </el-container>
-    </div>
+    </el-main>
     
 </template>
 
@@ -880,4 +874,15 @@ export default {
         text-align: right;
         margin-top: .4rem;
     }
+/* //element-ui table的去除右侧滚动条的样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 1px;
+}
+    /* // 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 0px;
+    border-radius: 8px;
+}
 </style>

@@ -33,12 +33,9 @@
 
         <el-row>
             <el-col :span="20" style="height: 60px !important;">
-                <div class="index-hleft" @click="iconTitleClick">
+                <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
                 
-                <!-- <el-image style="width: 24px; height: 24px; position: relative; top: 6px;" :src="require('../../assets/images/logo.png')" fit="fit"></el-image> -->
-                <!-- <div style="display: inline-block; margin-left: 10px;">京华综合管理后台</div> -->
-
-                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="require('../../assets/images/logo_Name.png')" fit="fit"></el-image>
+                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_B.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                 </div>
 
@@ -167,7 +164,8 @@ export default {
                 { props: 'readState', label: '读取状态' },
             ],
             totalFlag: false, //当只有一页时隐藏分页
-            clueDataNumberList: []
+            clueDataNumberList: [],
+            back_Change: false,
         }
     },
     created() {
@@ -331,6 +329,9 @@ export default {
                     this.$store.dispatch('actionsSetUuid', res.data.uuid);
                     this.$store.dispatch('actionsSetUserMenuList', res.data.userMenuList);
                     this.$store.dispatch('actionsSetAvatar', res.data.avatar);
+                    this.$store.commit('setUserRole', res.data.roleName)
+                    this.$store.commit('setUserDepartment', res.data.orgName)
+                    this.$store.commit('setCurrentDate', res.data.time)
 
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
                     console.log(this.clueDataNumberList);
@@ -377,7 +378,6 @@ export default {
             })
         },
         handleClose() {
-            console.log(this.oneLogin);
             if(this.oneLogin){
                 this.centerDialogVisible = true;
             }else{
@@ -385,7 +385,6 @@ export default {
             }
         },
         tableRowClassName({row, rowIndex}) {
-            console.log(row);
             if (row.readState == '未读') {
                 return 'readState';
             }
@@ -396,24 +395,36 @@ export default {
       '$route.path': function(newVal,oldVal){
         if(newVal.indexOf('base') != -1){
             this.defaultActive = '/base';
+            this.back_Change = true;
         }else if(newVal.indexOf('crm') != -1){
             this.defaultActive = '/crm';
+            this.back_Change = true;
         }else if(newVal.indexOf('knowp') != -1){
             this.defaultActive = '/knowp';
+            this.back_Change = true;
         }else if(newVal.indexOf('operate') != -1){
             this.defaultActive = '/operate';
+            this.back_Change = true;
+        }else{
+            this.back_Change = false;
         }
       }
     },
     mounted() {
         if(this.$route.path.indexOf('base') != -1){
             this.defaultActive = '/base';
+            this.back_Change = true;
         }else if(this.$route.path.indexOf('crm') != -1){
             this.defaultActive = '/crm';
+            this.back_Change = true;
         }else if(this.$route.path.indexOf('knowp') != -1){
             this.defaultActive = '/knowp';
+            this.back_Change = true;
         }else if(this.$route.path.indexOf('operate') != -1){
             this.defaultActive = '/operate';
+            this.back_Change = true;
+        }else{
+            this.back_Change = false;
         }
     }
 }
@@ -424,16 +435,19 @@ export default {
         background: #fff;
         color: #333333;
         line-height: 60px;
-        padding: 0 .4rem;
+        padding: 0 40px 0 0;
         width: 100%;
     }
     .index-hleft{
-        width: 300px;
+        width: 3rem;
+        min-width: 200px;
+        max-width: 256px;
         float: left;
         height: 60px;
         font-size: 18px;
         letter-spacing: .04rem;
         cursor: pointer;
+        padding-left: 12px;
     }
     .el-dropdown{
         float: right;
@@ -445,8 +459,9 @@ export default {
         color: #333333;
     }
     .el-menu-demo{
-        float: right;
-        width: calc( 100% - 300px );
+        float: left;
+        width: calc( 100% - 400px );
+        padding-left: 30px;
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;
@@ -459,6 +474,9 @@ export default {
     .el-menu-item:hover{
         background-color: #fff!important;
         color: #488FF7!important;
+    }
+    .back_Change{
+        background: #3687FA;
     }
     .pagination{
         text-align: right;

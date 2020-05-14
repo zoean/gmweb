@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import { timestampToTime } from '@/assets/js/common'
 Vue.use(Vuex)
 
 const state = {
@@ -12,6 +12,9 @@ const state = {
     // oneLogin: false, //是否首次登录(true:是 false:不是)
     userMenuList: [], //用户路由表
     avatar: '', //用户头像
+    userRole: '',
+    userDepartment: '',
+    curDate: '',
     pageNum: '',//页面编号
     editFieldVisible: false,//页面字段排序dialog
 }
@@ -46,6 +49,15 @@ const mutations = {
     },
     setEditFieldVisible(state, Boole){
         state.editFieldVisible = Boole
+    },
+    setUserRole(state, role){
+        state.userRole = role.length && role.length > 1 ? role.join('/') : role[0] || '--'
+    },
+    setUserDepartment(state, dep){
+        state.userDepartment = dep.length && dep.length > 1 ? dep.join('/') : dep[0] || '--'
+    },
+    setCurrentDate(state, time){
+        state.curDate = timestampToTime(Number(time)).slice(0, 10)
     }
 }
 

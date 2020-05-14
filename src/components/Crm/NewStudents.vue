@@ -1,46 +1,38 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">新学员管理</div>
 
-            <el-main>
+        <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
+            <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
+        </el-tabs>
 
-                <div class="people-title">新学员管理</div>
+        <el-table
+            :data="list"
+            ref="tree"
+            v-loading="fullscreenLoading"
+            style="width: 100%">
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              v-for="(item, index) in columnList"
+              :key="index"
+              >
+            </el-table-column>
+            <el-table-column prop="active" label="操作">
+              <template slot-scope="scope">
+                  <el-button @click="receiveClick(scope.row)" type="text" >领取</el-button>
+              </template>
+            </el-table-column>
+        </el-table>
 
-                <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
-                    <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
-                </el-tabs>
+        <el-button type="primary" @click="classTeaGetWaitStudent('all', null)" style="margin-top: 20px;">确认领取</el-button>
 
-                <el-table
-                    :data="list"
-                    ref="tree"
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)">
-                    <el-table-column
-                      type="selection"
-                      width="45">
-                    </el-table-column>
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      v-for="(item, index) in columnList"
-                      :key="index"
-                      >
-                    </el-table-column>
-                    <el-table-column prop="active" label="操作">
-                      <template slot-scope="scope">
-                          <el-button @click="receiveClick(scope.row)" type="text" >领取</el-button>
-                      </template>
-                    </el-table-column>
-                </el-table>
-
-                <el-button type="primary" @click="classTeaGetWaitStudent('all', null)" style="margin-top: 20px;">确认领取</el-button>
-
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -175,24 +167,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
     }
