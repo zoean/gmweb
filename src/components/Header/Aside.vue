@@ -144,8 +144,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+div{
+  display: flex;
+  flex-direction: column;
     .el-aside{
-      height: 100%;
+      flex: 1;
       .el-submenu-smoke{
         position: relative;
         z-index: 9;
@@ -193,6 +196,8 @@ export default {
           .el-menu-item-div{
             background: #4794FE;
             color: #fff;
+            flex-direction: row;
+            align-items: center;
             &:hover{
               width: calc(3rem - 24px);
               min-width: 176px;
@@ -240,4 +245,6 @@ export default {
         }
       }
     }
+}
+    
 </style>

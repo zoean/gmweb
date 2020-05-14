@@ -527,8 +527,8 @@ export default {
 
 <style lang="less" scoped>
     .main-area{
+        height: calc( 100% - 60px );
         .index-main{
-           
             .people-title{
                 width: 100%;
                 height: 40px;

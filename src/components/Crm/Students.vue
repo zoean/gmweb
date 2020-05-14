@@ -792,7 +792,7 @@ export default {
 <style lang="less" scoped>
     .main-area{
         .index-main{
-            height: calc( 100vh - 60px);
+            flex: 1;
             .people-title{
                 width: 100%;
                 height: 40px;
