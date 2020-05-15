@@ -526,9 +526,13 @@ export default {
             })
         },
         handleCurrentChange(index) {
+            this.dataAlloForm.currentPage = index;
+            this.getDataAllocationRulesList();
             console.log(index);
         },
         handleSizeChange(index) {
+            this.dataAlloForm.currentPage = index;
+            this.getDataAllocationRulesList();
             console.log(index);
         },
         handleDeleteClick(scope) {

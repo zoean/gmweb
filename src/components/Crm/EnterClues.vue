@@ -213,6 +213,8 @@
 
                 <el-button type="primary" @click="downloadImport" size="small" style="width: 130px; display: inline-block;">下载导入模板</el-button>
 
+                <div style="margin-top: 20px;" v-if="validDataNumFlag">{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</div>
+
                 <el-table
                     style="margin-top: 20px;"
                     :data="importDataForm.list"
@@ -293,7 +295,7 @@ export default {
     name: 'enterClues',
     data() {
         return {
-            activeName: 'second',
+            activeName: 'first',
             ruleForm: {
                 age: "",
                 city: "",
@@ -372,7 +374,10 @@ export default {
                 examItemId: '',
                 examItemText: '',
                 list: []
-            }
+            },
+            validDataNum: '',
+            inValidDataNum: '',
+            validDataNumFlag: false,
         }
     },
     created() {
@@ -386,6 +391,8 @@ export default {
     },
     methods: {
         handleAvatarSuccess(res, file) {
+            let num1 = 0;
+            let num2 = 0;
             console.log(res);
             console.log(file);
             let str = '';
@@ -394,7 +401,19 @@ export default {
                     type: 'success',
                     message: '导入线索成功'
                 })
+                res.data.list.map(sll => {
+                    if(sll.type == 1) {
+                        num1 = num1 + 1;
+                    }else{
+                        num2 = num2 + 1;
+                    }
+                })
+                this.validDataNumFlag = true;
+                console.log(num1)
+                console.log(num2)
                 this.importDataForm.list = res.data.list;
+                this.validDataNum = num1;
+                this.inValidDataNum = num2;
             }else{
                 this.$message({
                     type: 'error',
@@ -491,6 +510,8 @@ export default {
                         message: '导入线索成功'
                     })
                     this.dialogVisible = false;
+                    this.importDataForm.list = [];
+                    this.validDataNumFlag = false;
                 }
             })
         },
