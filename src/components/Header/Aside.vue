@@ -9,6 +9,7 @@
         :collapse="iscollapse"
         @open="handleOpen" 
         @close="handleClose"
+        :collapse-transition="false"
         >
 
         <div v-for="(item,index) in userMenuList" :key="index">
