@@ -430,18 +430,7 @@ export default {
                 sortSet: []
             },
             list: [],
-            columnList: [
-                { 'prop': 'tel', 'label': '电话数据' },
-                // { 'prop': 'clueUserUuid', 'label': '所属坐席' },
-                { 'prop': 'examItemName', 'label': '考试项目' },
-                { 'prop': 'classType', 'label': '班型' },
-                // { 'prop': 'customerId', 'label': '客户id' },    
-                { 'prop': 'orderId', 'label': '订单id' },
-                // { 'prop': 'orderNum', 'label': '订单编号' },
-                { 'prop': 'orderType', 'label': '订单类型' },
-                { 'prop': 'school', 'label': '分校' },
-                { 'prop': 'createTime', 'label': '创建时间' },
-            ],
+            columnList: [],
             titleName: '',
             titleFlag: false,
             drawerTitle: '学员详情',
@@ -449,8 +438,7 @@ export default {
             direction: 'btt',
             tabs_active: 'first',
             customerForm: {
-                studentUuid: '', //学员的唯一标识	
-
+                studentUuid: '', //学员的唯一标识
                 age: '',
                 auxiliarySignUp: '', //辅助报名
                 buyState: '', //购买状态
