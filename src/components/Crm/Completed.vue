@@ -173,7 +173,37 @@
             </el-row>
         </el-dialog>
 
+<<<<<<< Updated upstream
     </el-main>
+=======
+        </el-container>
+    <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
+        <el-row v-for="(item, index) in orderDetail" :key="index">
+            <el-row type="flex" justify="start">
+                <el-col class="col-label">订单ID：</el-col>
+                <el-col>{{item.orderId}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">订单类型：</el-col>
+                <el-col>{{item.orderType || '普通单'}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">支付方式：</el-col>
+                <el-col>{{item.payTypeName}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">支付时间：</el-col>
+                <el-col>{{item.payTime | timestampToTime}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">支付金额：</el-col>
+                <el-col>{{item.moneyPaid}} 元</el-col>
+            </el-row>
+            <span class="line" v-show="orderDetail.length > 1"></span>
+        </el-row>
+    </el-dialog>
+    </div>
+>>>>>>> Stashed changes
 </template>
 
 <script>
@@ -327,7 +357,7 @@ export default {
             this.payDetailVisible = true
             this.$smoke_post(getOrderPayRecord, {orderId: row.orderId, schoolName: row.schoolId}).then(res =>{
                 if(res.code == 200){
-                    this.orderDetail = res.data[0]
+                    this.orderDetail = res.data
                 }
             })
         },
@@ -547,6 +577,12 @@ export default {
                     width: 120px;
                     text-align: right;
                 }
+            }
+            .line{
+                border-bottom: 1px solid #ccc;
+                width: 100%;
+                display: block;
+                height: 1px;
             }
         }
         

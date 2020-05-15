@@ -137,15 +137,10 @@ export default {
     -webkit-background-size: cover;
     -o-background-size: cover;
     background-position: center 0;
-    border-radius: 10px;
     position: absolute;
-    width: 10rem;
-    height: 6.4rem;
+    width: 1121px;
+    height: 721px;
     z-index: 999;
-    margin-left: -5rem;
-    left: 50%;
-    top: 50%;
-    margin-top: -3.2rem;
     .contain-model{
         width: 2.6rem;
         // height: 2.6rem;
