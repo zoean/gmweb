@@ -1,126 +1,118 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">VIP管理</div>
 
-            <el-main>
+        <el-row class="people-screen">
+            <el-col :span="5">
+                <el-input v-model="form.ruleNumberName" placeholder="请输入规则编号分配组ID" class="screen-li"></el-input>
+            </el-col>
+            <el-col :span="5">
+                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            </el-col>
+            <el-col :span="5">
+                <el-button type="primary" @click="getRecoveryPoolDataList">搜 索</el-button>
+            </el-col>
+        </el-row>
 
-                <div class="people-title">VIP管理</div>
+        <el-table
+            :data="list"
+            style="width: 100%">
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              :formatter="item.formatter"
+              v-for="(item, index) in columnList"
+              :key="index"
+              >
+            </el-table-column>
+            <el-table-column prop="active" label="操作">
+              <template slot-scope="scope">
+                  <el-button @click="customerDetails(scope.row)" type="text" >客户详情</el-button>
+              </template>
+            </el-table-column>
+        </el-table>
 
-                <el-row class="people-screen">
-                    <el-col :span="5">
-                        <el-input v-model="form.ruleNumberName" placeholder="请输入规则编号分配组ID" class="screen-li"></el-input>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
-                    </el-col>
-                    <el-col :span="5">
-                        <el-button type="primary" @click="getRecoveryPoolDataList">搜 索</el-button>
-                    </el-col>
-                </el-row>
+        <el-drawer
+            :title="drawerTitle"
+            :visible.sync="drawer"
+            :direction="direction"
+            style="line-height: 30px;"
+            :before-close="handleClose">
 
-                <el-table
-                    :data="list"
-                    style="width: calc( 100vw - 3.8rem)">
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      :formatter="item.formatter"
-                      v-for="(item, index) in columnList"
-                      :key="index"
-                      >
-                    </el-table-column>
-                    <el-table-column prop="active" label="操作">
-                      <template slot-scope="scope">
-                          <el-button @click="customerDetails(scope.row)" type="text" >客户详情</el-button>
-                      </template>
-                    </el-table-column>
-                </el-table>
+            <el-row>
 
-                <el-drawer
-                    :title="drawerTitle"
-                    :visible.sync="drawer"
-                    :direction="direction"
-                    style="line-height: 30px;"
-                    :before-close="handleClose">
+                <el-col :span="6" :offset="2">姓名：</el-col>
+                <el-col :span="16">{{ruleForm.name}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">姓名：</el-col>
-                        <el-col :span="16">{{ruleForm.name}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">年龄：</el-col>
+                <el-col :span="16">{{ruleForm.age}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">年龄：</el-col>
-                        <el-col :span="16">{{ruleForm.age}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">性别：</el-col>
+                <el-col :span="16">{{ruleForm.gender}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">性别：</el-col>
-                        <el-col :span="16">{{ruleForm.gender}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">所属省份：</el-col>
+                <el-col :span="16">{{ruleForm.province}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">所属省份：</el-col>
-                        <el-col :span="16">{{ruleForm.province}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">所属城市：</el-col>
+                <el-col :span="16">{{ruleForm.city}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">所属城市：</el-col>
-                        <el-col :span="16">{{ruleForm.city}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">电话号码2：</el-col>
+                <el-col :span="16">{{ruleForm.twoTel}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">电话号码2：</el-col>
-                        <el-col :span="16">{{ruleForm.twoTel}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">工作：</el-col>
+                <el-col :span="16">{{ruleForm.work}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">工作：</el-col>
-                        <el-col :span="16">{{ruleForm.work}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">工作年限：</el-col>
+                <el-col :span="16">{{ruleForm.workingLife}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">工作年限：</el-col>
-                        <el-col :span="16">{{ruleForm.workingLife}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">微信：</el-col>
+                <el-col :span="16">{{ruleForm.wx}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">微信：</el-col>
-                        <el-col :span="16">{{ruleForm.wx}}</el-col>
+            <el-row>
 
-                    </el-row>
+                <el-col :span="6" :offset="2">取证目的：</el-col>
+                <el-col :span="16">{{ruleForm.evidencePurpose}}</el-col>
 
-                    <el-row>
+            </el-row>
 
-                        <el-col :span="6" :offset="2">取证目的：</el-col>
-                        <el-col :span="16">{{ruleForm.evidencePurpose}}</el-col>
+        </el-drawer>
 
-                    </el-row>
-
-                </el-drawer>
-
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -213,24 +205,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
     }

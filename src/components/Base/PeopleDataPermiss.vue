@@ -1,398 +1,390 @@
 <template>
-    <div class="">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
-
-            <el-main>
-
-                <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工数据权限管理</div>
+        <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工数据权限管理</div>
 
 
-                <el-row class="tab">
+        <el-row class="tab">
 
-                    <el-col :span="6" class="tab-left">
+            <el-col :span="6" class="tab-left">
 
-                        <div class="tab-left-title">成员信息</div>
+                <div class="tab-left-title">成员信息</div>
 
-                        <div class="tab-xian"></div>
+                <div class="tab-xian"></div>
 
-                        <el-image
-                            style="width: 1rem; height: 1rem; border-radius: 50%; margin-top: .2rem;"
-                            :src="this.avatar ? this.avatar : require('../../assets/images/header_img.png')">
-                        </el-image>
+                <el-image
+                    style="width: 1rem; height: 1rem; border-radius: 50%; margin-top: .2rem;"
+                    :src="this.avatar ? this.avatar : require('../../assets/images/header_img.png')">
+                </el-image>
 
+                <el-table
+                    style="margin-top: .2rem;"
+                    :data="userList"
+                    :cell-style='cellStyle'
+                    :show-header="false"
+                    >
+                    <el-table-column
+                        :prop="item.prop"
+                        :label="item.label"
+                        v-for="(item, index) in userColumnList"
+                        :key="index"
+                        >
+                    </el-table-column>
+                </el-table>
+
+                <el-image
+                    class="tab-left-image"
+                    :src="require('../../assets/images/info-back.png')">
+                </el-image>
+
+            </el-col>
+
+            <el-col :span="18" class="tab-right">
+
+                <div class="tab-right-title">分校平台</div>
+
+                <div class="tab-xian"></div>
+
+                <el-row style="margin-bottom: 20px;">
+                
+                    <el-col :span="18">
+                    
                         <el-table
-                            style="margin-top: .2rem;"
-                            :data="userList"
-                            :cell-style='cellStyle'
+                            :data="schoolList"
                             :show-header="false"
                             >
                             <el-table-column
                                 :prop="item.prop"
                                 :label="item.label"
+                                :width="item.prop == 'attr' ? '150' : ''"
                                 v-for="(item, index) in userColumnList"
                                 :key="index"
                                 >
                             </el-table-column>
                         </el-table>
 
-                        <el-image
-                            class="tab-left-image"
-                            :src="require('../../assets/images/info-back.png')">
-                        </el-image>
-
                     </el-col>
 
-                    <el-col :span="18" class="tab-right">
-
-                        <div class="tab-right-title">分校平台</div>
-
-                        <div class="tab-xian"></div>
-
-                        <el-row style="margin-bottom: 20px;">
-                        
-                            <el-col :span="18">
-                            
-                                <el-table
-                                    :data="schoolList"
-                                    :show-header="false"
-                                    >
-                                    <el-table-column
-                                        :prop="item.prop"
-                                        :label="item.label"
-                                        :width="item.prop == 'attr' ? '150' : ''"
-                                        v-for="(item, index) in userColumnList"
-                                        :key="index"
-                                        >
-                                    </el-table-column>
-                                </el-table>
-
-                            </el-col>
-
-                            <el-col :span="5" :offset="1">
-                            
-                                <el-button type="primary" @click="editSchoolClick" style="margin-top: 4px;">修改分校</el-button>
-
-                            </el-col>
-
-                        </el-row>
-
-                        <div class="tab-right-title">坐席数据</div>
-
-                        <div class="tab-xian"></div>
-
-                        <el-row style="margin-bottom: 20px;">
-                        
-                            <el-col :span="18">
-                            
-                                <el-table
-                                    :data="seatList"
-                                    :show-header="false"
-                                    >
-                                    <el-table-column
-                                        :prop="item.prop"
-                                        :label="item.label"
-                                        :width="item.prop == 'attr' ? '150' : ''"
-                                        v-for="(item, index) in userColumnList"
-                                        :key="index"
-                                        >
-                                    </el-table-column>
-                                </el-table>
-
-                            </el-col>
-
-                            <el-col :span="5" :offset="1">
-                            
-                                <el-button type="primary" @click="editPeopleClick" style="margin-top: 4px;">修改部门与人员</el-button>
-
-                            </el-col>
-
-                        </el-row>
-
-                        <div class="tab-right-title">回收线索</div>
-
-                        <div class="tab-xian"></div>
-
-                        <el-row style="margin-bottom: 20px;">
-                        
-                            <el-col :span="18">
-                            
-                                <el-table
-                                    :data="backList"
-                                    :show-header="false"
-                                    >
-                                    <el-table-column
-                                        :prop="item.prop"
-                                        :label="item.label"
-                                        :width="item.prop == 'attr' ? '150' : ''"
-                                        v-for="(item, index) in userColumnList"
-                                        :key="index"
-                                        >
-                                    </el-table-column>
-                                </el-table>
-
-                            </el-col>
-
-                            <el-col :span="5" :offset="1">
-                            
-                                <el-button type="primary" @click="editBackClick" style="margin-top: 4px;">修改考试项</el-button>
-
-                            </el-col>
-
-                        </el-row>
-
-                        <div class="tab-right-title">分配组与溢出</div>
-
-                        <div class="tab-xian"></div>
-
-                        <el-row style="margin-bottom: 20px;">
-                        
-                            <el-col :span="18">
-                            
-                                <el-table
-                                    :data="dataSetList"
-                                    :show-header="false"
-                                    >
-                                    <el-table-column
-                                        :prop="item.prop"
-                                        :label="item.label"
-                                        :width="item.prop == 'attr' ? '150' : ''"
-                                        v-for="(item, index) in userColumnList"
-                                        :key="index"
-                                        >
-                                    </el-table-column>
-                                </el-table>
-
-                            </el-col>
-
-                            <el-col :span="5" :offset="1">
-                            
-                                <el-button type="primary" @click="editDataSetClick" style="margin-top: 4px;">修改分配组</el-button>
-
-                            </el-col>
-
-                        </el-row>
-
-                        <el-button type="primary" @click="onSubmit" class="btn-ok">保存</el-button>
+                    <el-col :span="5" :offset="1">
+                    
+                        <el-button type="primary" @click="editSchoolClick" style="margin-top: 4px;">修改分校</el-button>
 
                     </el-col>
 
                 </el-row>
 
-                <el-drawer
-                    :title="drawerTitle0"
-                    :visible.sync="drawer0"
-                    :direction="direction0"
-                    size="50%"
-                    :before-close="handleClose">
+                <div class="tab-right-title">坐席数据</div>
 
-                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
-                        <el-radio v-model="radioId" v-for="(item, index) in tableDataSchool" :label="item.name" :key="index"></el-radio>
+                <div class="tab-xian"></div>
 
-
-                    </el-row>
-
-                    <el-button type="primary" style="margin: 0 20px;" @click="addSchool">确定</el-button>
+                <el-row style="margin-bottom: 20px;">
+                
+                    <el-col :span="18">
                     
-                </el-drawer>
-
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction1"
-                    size="50%"
-                    :before-close="handleClose">
-
-                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
-
-                        <el-col :span="10">
-
-                            <el-input
-                                placeholder="输入您想查找的人员"
-                                style="margin-bottom: 10px;"
-                                v-model="filterText">
-                            </el-input>
-
-                            <el-tree
-                                ref="tree"
-                                :data="treeData"
-                                show-checkbox
-                                style="margin-left: 0px;"
-                                node-key="uuid"
-                                :check-strictly="true"
-                                :default-expanded-keys="defaultExpandedKeys"
-                                :default-checked-keys="defaultCheckedKeys"
-                                :filter-node-method="filterNode"
-                                @check="handleCheckChange"
-                                :props="defaultProps"
+                        <el-table
+                            :data="seatList"
+                            :show-header="false"
                             >
-                            </el-tree>
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '150' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
 
-                        </el-col>
+                    </el-col>
 
-                        <el-col :span="13" :offset="1">
-                        
-                            <el-table
-                                border
-                                :data="tableData"
+                    <el-col :span="5" :offset="1">
+                    
+                        <el-button type="primary" @click="editPeopleClick" style="margin-top: 4px;">修改部门与人员</el-button>
+
+                    </el-col>
+
+                </el-row>
+
+                <div class="tab-right-title">回收线索</div>
+
+                <div class="tab-xian"></div>
+
+                <el-row style="margin-bottom: 20px;">
+                
+                    <el-col :span="18">
+                    
+                        <el-table
+                            :data="backList"
+                            :show-header="false"
                             >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '150' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
 
-                                <el-table-column
-                                    :prop="item.props"
-                                    :label="item.label"
-                                    v-for="(item, index) in columnList1"
-                                    :key="index">
-                                </el-table-column>
+                    </el-col>
 
-                                <el-table-column prop="limitLimit" label="操作">
-                                    <template slot-scope="scope">
-                                        <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
-                                    </template>
-                                </el-table-column>
+                    <el-col :span="5" :offset="1">
+                    
+                        <el-button type="primary" @click="editBackClick" style="margin-top: 4px;">修改考试项</el-button>
 
-                            </el-table>
+                    </el-col>
 
-                            <el-button type="primary" style="margin: 20px 0;" @click="addPeople">确定</el-button>
+                </el-row>
 
-                        </el-col>
+                <div class="tab-right-title">分配组与溢出</div>
 
-                    </el-row>
+                <div class="tab-xian"></div>
 
-                </el-drawer>
-
-                <el-drawer
-                    :title="drawerTitle2"
-                    :visible.sync="drawer2"
-                    :direction="direction2"
-                    size="50%"
-                    :before-close="handleClose">
-
-                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
-
-                        <el-col :span="10">
-
-                            <el-input
-                                placeholder="输入您想查找的考试项"
-                                style="margin-bottom: 10px;"
-                                v-model="filterTextExam">
-                            </el-input>
-
-                            <el-tree
-                                ref="treeExam"
-                                :data="treeDataExam"
-                                show-checkbox
-                                style="margin-left: 0px;"
-                                node-key="uuid"
-                                :check-strictly="true"
-                                :default-expanded-keys="defaultExpandedKeysExam"
-                                :default-checked-keys="defaultCheckedKeysExam"
-                                :filter-node-method="filterNodeExam"
-                                @check="handleCheckChangeExam"
-                                :props="defaultPropsExam"
+                <el-row style="margin-bottom: 20px;">
+                
+                    <el-col :span="18">
+                    
+                        <el-table
+                            :data="dataSetList"
+                            :show-header="false"
                             >
-                            </el-tree>
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '150' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
 
-                        </el-col>
+                    </el-col>
 
-                        <el-col :span="13" :offset="1">
-                        
-                            <el-table
-                                border
-                                :data="tableDataExam"
-                            >
+                    <el-col :span="5" :offset="1">
+                    
+                        <el-button type="primary" @click="editDataSetClick" style="margin-top: 4px;">修改分配组</el-button>
 
-                                <el-table-column
-                                    :prop="item.props"
-                                    :label="item.label"
-                                    v-for="(item, index) in columnList1"
-                                    :key="index">
-                                </el-table-column>
+                    </el-col>
 
-                                <el-table-column prop="limitLimit" label="操作">
-                                    <template slot-scope="scope">
-                                        <el-button size="mini" type="text" @click="handleDeleteClickExam(scope.row)">移除</el-button>
-                                    </template>
-                                </el-table-column>
+                </el-row>
 
-                            </el-table>
+                <el-button type="primary" @click="onSubmit" class="btn-ok">保存</el-button>
 
-                            <el-button type="primary" style="margin: 20px 0;" @click="addExam">确定</el-button>
+            </el-col>
 
-                        </el-col>
+        </el-row>
 
-                    </el-row>
+        <el-drawer
+            :title="drawerTitle0"
+            :visible.sync="drawer0"
+            :direction="direction0"
+            size="50%"
+            :before-close="handleClose">
 
-                </el-drawer>
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+                <el-radio v-model="radioId" v-for="(item, index) in tableDataSchool" :label="item.name" :key="index"></el-radio>
 
-                <el-drawer
-                    :title="drawerTitle3"
-                    :visible.sync="drawer3"
-                    :direction="direction3"
-                    size="50%"
-                    :before-close="handleClose">
 
-                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+            </el-row>
 
-                        <el-col :span="10">
+            <el-button type="primary" style="margin: 0 20px;" @click="addSchool">确定</el-button>
+            
+        </el-drawer>
 
-                            <el-input
-                                placeholder="输入您想查找的分配组"
-                                style="margin-bottom: 10px;"
-                                v-model="filterTextSet">
-                            </el-input>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction1"
+            size="50%"
+            :before-close="handleClose">
 
-                            <el-tree
-                                ref="treeSet"
-                                :data="treeDataSet"
-                                show-checkbox
-                                style="margin-left: 0px;"
-                                node-key="uuid"
-                                :check-strictly="true"
-                                :default-expanded-keys="defaultExpandedKeysSet"
-                                :default-checked-keys="defaultCheckedKeysSet"
-                                :filter-node-method="filterNodeSet"
-                                @check="handleCheckChangeSet"
-                                :props="defaultPropsSet"
-                            >
-                            </el-tree>
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
-                        </el-col>
+                <el-col :span="10">
 
-                        <el-col :span="13" :offset="1">
-                        
-                            <el-table
-                                border
-                                :data="tableDataSet"
-                            >
+                    <el-input
+                        placeholder="输入您想查找的人员"
+                        style="margin-bottom: 10px;"
+                        v-model="filterText">
+                    </el-input>
 
-                                <el-table-column
-                                    :prop="item.props"
-                                    :label="item.label"
-                                    v-for="(item, index) in columnList1"
-                                    :key="index">
-                                </el-table-column>
+                    <el-tree
+                        ref="tree"
+                        :data="treeData"
+                        show-checkbox
+                        style="margin-left: 0px;"
+                        node-key="uuid"
+                        :check-strictly="true"
+                        :default-expanded-keys="defaultExpandedKeys"
+                        :default-checked-keys="defaultCheckedKeys"
+                        :filter-node-method="filterNode"
+                        @check="handleCheckChange"
+                        :props="defaultProps"
+                    >
+                    </el-tree>
 
-                                <el-table-column prop="limitLimit" label="操作">
-                                    <template slot-scope="scope">
-                                        <el-button size="mini" type="text" @click="handleDeleteClickSet(scope.row)">移除</el-button>
-                                    </template>
-                                </el-table-column>
+                </el-col>
 
-                            </el-table>
+                <el-col :span="13" :offset="1">
+                
+                    <el-table
+                        border
+                        :data="tableData"
+                    >
 
-                            <el-button type="primary" style="margin: 20px 0;" @click="addSet">确定</el-button>
+                        <el-table-column
+                            :prop="item.props"
+                            :label="item.label"
+                            v-for="(item, index) in columnList1"
+                            :key="index">
+                        </el-table-column>
 
-                        </el-col>
+                        <el-table-column prop="limitLimit" label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
+                            </template>
+                        </el-table-column>
 
-                    </el-row>
+                    </el-table>
 
-                </el-drawer>
+                    <el-button type="primary" style="margin: 20px 0;" @click="addPeople">确定</el-button>
 
-            </el-main>
+                </el-col>
 
-        </el-container>
-        
-    </div>
+            </el-row>
+
+        </el-drawer>
+
+        <el-drawer
+            :title="drawerTitle2"
+            :visible.sync="drawer2"
+            :direction="direction2"
+            size="50%"
+            :before-close="handleClose">
+
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                <el-col :span="10">
+
+                    <el-input
+                        placeholder="输入您想查找的考试项"
+                        style="margin-bottom: 10px;"
+                        v-model="filterTextExam">
+                    </el-input>
+
+                    <el-tree
+                        ref="treeExam"
+                        :data="treeDataExam"
+                        show-checkbox
+                        style="margin-left: 0px;"
+                        node-key="uuid"
+                        :check-strictly="true"
+                        :default-expanded-keys="defaultExpandedKeysExam"
+                        :default-checked-keys="defaultCheckedKeysExam"
+                        :filter-node-method="filterNodeExam"
+                        @check="handleCheckChangeExam"
+                        :props="defaultPropsExam"
+                    >
+                    </el-tree>
+
+                </el-col>
+
+                <el-col :span="13" :offset="1">
+                
+                    <el-table
+                        border
+                        :data="tableDataExam"
+                    >
+
+                        <el-table-column
+                            :prop="item.props"
+                            :label="item.label"
+                            v-for="(item, index) in columnList1"
+                            :key="index">
+                        </el-table-column>
+
+                        <el-table-column prop="limitLimit" label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="text" @click="handleDeleteClickExam(scope.row)">移除</el-button>
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+
+                    <el-button type="primary" style="margin: 20px 0;" @click="addExam">确定</el-button>
+
+                </el-col>
+
+            </el-row>
+
+        </el-drawer>
+
+        <el-drawer
+            :title="drawerTitle3"
+            :visible.sync="drawer3"
+            :direction="direction3"
+            size="50%"
+            :before-close="handleClose">
+
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                <el-col :span="10">
+
+                    <el-input
+                        placeholder="输入您想查找的分配组"
+                        style="margin-bottom: 10px;"
+                        v-model="filterTextSet">
+                    </el-input>
+
+                    <el-tree
+                        ref="treeSet"
+                        :data="treeDataSet"
+                        show-checkbox
+                        style="margin-left: 0px;"
+                        node-key="uuid"
+                        :check-strictly="true"
+                        :default-expanded-keys="defaultExpandedKeysSet"
+                        :default-checked-keys="defaultCheckedKeysSet"
+                        :filter-node-method="filterNodeSet"
+                        @check="handleCheckChangeSet"
+                        :props="defaultPropsSet"
+                    >
+                    </el-tree>
+
+                </el-col>
+
+                <el-col :span="13" :offset="1">
+                
+                    <el-table
+                        border
+                        :data="tableDataSet"
+                    >
+
+                        <el-table-column
+                            :prop="item.props"
+                            :label="item.label"
+                            v-for="(item, index) in columnList1"
+                            :key="index">
+                        </el-table-column>
+
+                        <el-table-column prop="limitLimit" label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="text" @click="handleDeleteClickSet(scope.row)">移除</el-button>
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+
+                    <el-button type="primary" style="margin: 20px 0;" @click="addSet">确定</el-button>
+
+                </el-col>
+
+            </el-row>
+
+        </el-drawer>
+
+    </el-main>
 </template>
 
 <script>
@@ -840,7 +832,7 @@ export default {
     .index-main{
         height: calc( 100vh - 60px);
         .people-title{
-            width: calc( 100vw - 3.8rem);
+            width: 100%;
             height: 40px;
             line-height: 40px;
             text-align: center;

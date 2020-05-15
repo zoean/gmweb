@@ -1,22 +1,14 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">录入线索</div>
 
-            <el-main>
+        <el-tabs v-model="activeName" @tab-click="handleTabsClick">
+            <el-tab-pane label="手动输入" name="first">手动输入</el-tab-pane>
+            <el-tab-pane label="模板输入" name="second">模板输入</el-tab-pane>
+        </el-tabs>
 
-                <div class="people-title">录入线索</div>
-
-                <el-tabs v-model="activeName" @tab-click="handleTabsClick">
-                    <el-tab-pane label="手动输入" name="first">手动输入</el-tab-pane>
-                    <el-tab-pane label="模板输入" name="second">模板输入</el-tab-pane>
-                </el-tabs>
-
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -47,24 +39,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: calc( 100vw - 3.8rem);
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
     }

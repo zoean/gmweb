@@ -1,73 +1,65 @@
 <template>
-    <div class="time">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">通时数据统计</div>
 
-            <el-main>
+        <el-row>
 
-                <div class="people-title">通时数据统计</div>
+            <el-col :span="4">
+                <el-cascader
+                    ref="cascader"
+                    class="screen-li"
+                    placeholder="请选择统计单元"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+            </el-col>
 
-                    <el-row>
+            <el-col :span="4">
+                
+                <el-date-picker
+                    style="width: 90%;"
+                    v-model="timeDate"
+                    type="date"
+                    @change="timeChange"
+                    placeholder="请选择日期">
+                </el-date-picker>
 
-                        <el-col :span="4">
-                            <el-cascader
-                                ref="cascader"
-                                class="screen-li"
-                                placeholder="请选择统计单元"
-                                collapse-tags
-                                :show-all-levels=false
-                                :options="zuzhiOptions"
-                                @change='handleZuzhiChange'
-                                :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
-                                clearable>
-                            </el-cascader>
-                        </el-col>
+            </el-col>
 
-                        <el-col :span="4">
-                            
-                            <el-date-picker
-                                style="width: 90%;"
-                                v-model="timeDate"
-                                type="date"
-                                @change="timeChange"
-                                placeholder="请选择日期">
-                            </el-date-picker>
+            <el-col :span="4">
+                <el-button 
+                    type="primary" 
+                    plain 
+                    style="width: 50%;"
+                    @click="countCallRecord"
+                >确定</el-button>
+            </el-col>
 
-                        </el-col>
+        </el-row>
 
-                        <el-col :span="4">
-                            <el-button 
-                                type="primary" 
-                                plain 
-                                style="width: 50%;"
-                                @click="countCallRecord"
-                            >确定</el-button>
-                        </el-col>
+        <el-table
+            :data="tableData"
+            border
+            v-loading="fullscreenLoading"
+            style="width: 100%">
 
-                    </el-row>
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in columnList"
+                :fixed="index == 0 ? 'left' : index == columnList.length-1 ? 'right' : null"
+                :width="index == 0 ? '160' : index == columnList.length-1 ? '160' : null"
+                :key="index">
+            </el-table-column>
 
-                    <el-table
-                        :data="tableData"
-                        border
-                        v-loading="fullscreenLoading"
-                        style="width: calc( 100vw - 3.8rem)">
+        </el-table>
 
-                        <el-table-column
-                            :prop="item.prop"
-                            :label="item.label"
-                            v-for="(item, index) in columnList"
-                            :fixed="index == 0 ? 'left' : index == columnList.length-1 ? 'right' : null"
-                            :width="index == 0 ? '160' : index == columnList.length-1 ? '160' : null"
-                            :key="index">
-                        </el-table-column>
-
-                    </el-table>
-
-            </el-main>
-
-        </el-container>
-        
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -185,7 +177,7 @@ export default {
             margin-bottom: 1rem;
         }
     }
-    .time /deep/ .el-table .cell{
+    .index-main /deep/ .el-table .cell{
         text-align: center !important;
     }
 </style>

@@ -3,7 +3,7 @@
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container>
       <Aside v-if="$store.state.commonFlag"></Aside>
-      <router-view/>
+      <router-view style="margin-left: 20px;"/>
     </el-container>
   </div>
 </template>

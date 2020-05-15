@@ -1,146 +1,140 @@
 <template>
-    <div style="">
-        <el-container class="index-main">
+    <el-main class="index-main">
 
-            <el-main>
+        <div class="people-title">
 
-                <div class="people-title">
+            <i class="el-icon-arrow-left smoke-left-icon" @click="$router.push('/knowp/subject')"></i>
+            <span>{{uploadData.subjectName}}知识点管理</span>
 
-                    <i class="el-icon-arrow-left smoke-left-icon" @click="$router.push('/knowp/subject')"></i>
-                    <span>{{uploadData.subjectName}}知识点管理</span>
+        </div>
 
-                </div>
+        <div style="overflow: hidden;">
 
-                <div style="overflow: hidden;">
+            <div style="float: left;">
 
-                    <div style="float: left;">
+                <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                    <el-menu-item index="1">教材目录结构</el-menu-item>
+                    <el-menu-item index="2" >知识点体系</el-menu-item>
+                </el-menu>
+            </div>
 
-                        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                            <el-menu-item index="1">教材目录结构</el-menu-item>
-                            <el-menu-item index="2" >知识点体系</el-menu-item>
-                        </el-menu>
-                    </div>
+            <div style="float: right; width:240px;">
 
-                    <div style="float: right; width:240px;">
+                <el-upload
+                    class="avatar-uploader"
+                    :data='uploadData'
+                    action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelKnow"
+                    :headers="headersObj"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload">
+                    <el-button type="primary">导入知识点</el-button>
+                </el-upload>
 
-                        <el-upload
-                            class="avatar-uploader"
-                            :data='uploadData'
-                            action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelKnow"
-                            :headers="headersObj"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                            <el-button type="primary">导入知识点</el-button>
-                        </el-upload>
+                <el-button type="primary" @click="outExcelKnow" style="position: relative; left: 124px; top: -40px;">导出知识点</el-button>
 
-                        <el-button type="primary" @click="outExcelKnow" style="position: relative; left: 124px; top: -40px;">导出知识点</el-button>
+            </div>
 
-                    </div>
+        </div>
 
-                </div>
+        <el-table
+          :data="knowsList"
+          row-key="uuid"
+          default-expand-all
+          v-loading.fullscreen.lock="fullscreenLoading"
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+          :row-class-name="tableRowClassName"
+          style="width: 100%">
+          <el-table-column
+            :prop="item.prop"
+            :label="item.label"
+            v-for="(item, index) in columnList"
+            :key="index"
+            :width="index == 1 ? '300' : null"
+            >
+          </el-table-column>
+          <el-table-column prop="active" label="操作">
+            <template slot-scope="scope">
+                <el-button v-if="scope.row.level == 3" @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="click"
+                  v-if="scope.row.level == 3"
+                  :ref="`popover-${scope.$index}`"
+                  >
+                  <p style="margin-bottom: .2rem;">确定要删除吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                    <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
+                  </div>
+                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                </el-popover>
+                <el-button v-if="scope.row.level == 2" @click="addClick(scope.row)" type="text" >添加</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-                <el-table
-                  :data="knowsList"
-                  row-key="uuid"
-                  default-expand-all
-                  v-loading.fullscreen.lock="fullscreenLoading"
-                  :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-                  :row-class-name="tableRowClassName"
-                  style="width: calc( 100vw - 3.8rem)">
-                  <el-table-column
-                    :prop="item.prop"
-                    :label="item.label"
-                    v-for="(item, index) in columnList"
-                    :key="index"
-                    :width="index == 1 ? '300' : null"
-                    >
-                  </el-table-column>
-                  <el-table-column prop="active" label="操作">
-                    <template slot-scope="scope">
-                        <el-button v-if="scope.row.level == 3" @click="editClick(scope.row)" type="text" >编辑</el-button>
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          v-if="scope.row.level == 3"
-                          :ref="`popover-${scope.$index}`"
-                          >
-                          <p style="margin-bottom: .2rem;">确定要删除吗？</p>
-                          <div style="text-align: right; margin: 0">
-                            <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                            <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
-                          </div>
-                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
-                        </el-popover>
-                        <el-button v-if="scope.row.level == 2" @click="addClick(scope.row)" type="text" >添加</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='total'
+            :page-size='knowsForm.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='total'
-                    :page-size='knowsForm.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction"
+            size="35%"
+            :before-close="handleClose">
 
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction"
-                    size="35%"
-                    :before-close="handleClose">
+            <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="序号名称" prop="sortNumberName">
+                  <el-input v-model="ruleForm1.sortNumberName"></el-input>
+                </el-form-item>
 
-                    <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="序号名称" prop="sortNumberName">
-                          <el-input v-model="ruleForm1.sortNumberName"></el-input>
-                        </el-form-item>
+                <el-form-item label="知识点名称" prop="name">
+                  <el-input v-model="ruleForm1.name"></el-input>
+                </el-form-item>
 
-                        <el-form-item label="知识点名称" prop="name">
-                          <el-input v-model="ruleForm1.name"></el-input>
-                        </el-form-item>
+                <el-form-item label="2015-2018年考试平均分值" prop="averageScore">
+                  <el-input v-model="ruleForm1.averageScore"></el-input>
+                </el-form-item>
 
-                        <el-form-item label="2015-2018年考试平均分值" prop="averageScore">
-                          <el-input v-model="ruleForm1.averageScore"></el-input>
-                        </el-form-item>
+                <el-form-item label="重要级别" prop="specialStatus">
+                    <el-radio v-model="ruleForm1.emphasisLevel" :label="1">A</el-radio>
+                    <el-radio v-model="ruleForm1.emphasisLevel" :label="2">B</el-radio>
+                    <el-radio v-model="ruleForm1.emphasisLevel" :label="3">C</el-radio>
+                    <el-radio v-model="ruleForm1.emphasisLevel" :label="4">D</el-radio>
+                </el-form-item>
 
-                        <el-form-item label="重要级别" prop="specialStatus">
-                            <el-radio v-model="ruleForm1.emphasisLevel" :label="1">A</el-radio>
-                            <el-radio v-model="ruleForm1.emphasisLevel" :label="2">B</el-radio>
-                            <el-radio v-model="ruleForm1.emphasisLevel" :label="3">C</el-radio>
-                            <el-radio v-model="ruleForm1.emphasisLevel" :label="4">D</el-radio>
-                        </el-form-item>
+                <el-form-item label="特殊标记" prop="specialStatus">
+                    <el-switch
+                        :active-value='1'
+                        :inactive-value='0'
+                        v-model="ruleForm1.specialStatus"
+                        active-color="#13ce66"
+                        inactive-color="#cccccc">
+                    </el-switch>
+                </el-form-item>
 
-                        <el-form-item label="特殊标记" prop="specialStatus">
-                            <el-switch
-                                :active-value='1'
-                                :inactive-value='0'
-                                v-model="ruleForm1.specialStatus"
-                                active-color="#13ce66"
-                                inactive-color="#cccccc">
-                            </el-switch>
-                        </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
 
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
+            </el-form>
 
-                    </el-form>
+        </el-drawer>
 
-                </el-drawer>
-
-            </el-main>
-
-        </el-container>
-    </div>
+    </el-main>
     
 </template>
 

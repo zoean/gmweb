@@ -1,400 +1,396 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
 
-            <el-main>
+        <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
+            <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
+        </el-tabs>
 
-                <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
+        <el-table
+            :data="list"
+            ref="tree"
+            v-loading="fullscreenLoading"
+            style="width: calc( 100vw - 3.8rem)"
+            :row-key="getRowKey">
 
-                <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
-                    <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
-                </el-tabs>
+            <el-table-column
+              :prop="item.props"
+              v-for="(item, index) in columnList"
+              :min-width="item.width"
+              :key="index"
+              >
+              <template slot="header">
+                {{item.label}}
+                <span class="caret-wrapper" v-if="item.ifSort">
+                    <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
+                    <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
+                </span>
+              </template>
+              <template slot-scope="scope">
+                    <span>{{scope.row[item.props]}}</span>
+                    <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
+                        <el-image
+                            class="copy-icon-style"
+                            @click="phoneCopy(scope.row)"
+                            :src="require('../../assets/images/copy-icon.png')">
+                        </el-image>
+                    </el-tooltip>
+                    
+              </template>
+            </el-table-column>
 
-                <el-table
-                    :data="list"
-                    ref="tree"
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)"
-                    :row-key="getRowKey">
+            <el-table-column prop="active" label="操作" fixed="right">
+              <template slot-scope="scope">
+                  <el-button @click="studentDetails(scope.row)" type="text" >学员详情</el-button>
+              </template>
+            </el-table-column>
+            <el-table-column
+              align="right" width="60px" fixed="right">
+              <template slot="header">
+                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
+              </template>
+            </el-table-column>
+        </el-table>
 
-                    <el-table-column
-                      :prop="item.props"
-                      v-for="(item, index) in columnList"
-                      :min-width="item.width"
-                      :key="index"
-                      >
-                      <template slot="header">
-                        {{item.label}}
-                        <span class="caret-wrapper" v-if="item.ifSort">
-                            <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
-                            <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
-                        </span>
-                      </template>
-                      <template slot-scope="scope">
-                            <span>{{scope.row[item.props]}}</span>
-                            <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
-                                <el-image
-                                    class="copy-icon-style"
-                                    @click="phoneCopy(scope.row)"
-                                    :src="require('../../assets/images/copy-icon.png')">
-                                </el-image>
-                            </el-tooltip>
+        <el-drawer
+            :title="drawerTitle"
+            :visible.sync="drawer"
+            :direction="direction"
+            size="100%"
+            :before-close="handleClose"
+        >
+
+            <el-tabs v-model="tabs_active" @tab-click="handleTabClick" type="border-card" style="width: 92%; margin: 0 auto; margin-bottom: 30px;">
+
+                <el-tab-pane label="客户信息" name="first">
+                
+                    <el-form :model="customerForm" :rules="rules" ref="customerForm" class="demo-customerForm">
+
+                        <el-row>
+                            <el-col :span="6">
+                                <el-form-item label="客户编号" prop="number">
+                                    <el-input v-model="customerForm.number" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="客户手机" prop="tel">
+                                    <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
+                                    <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                                        <el-image
+                                            style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"
+                                            @click="phoneCopyFun"
+                                            :src="require('../../assets/images/copy-icon.png')">
+                                        </el-image>
+                                    </el-tooltip>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="客户姓名" prop="name">
+                                    <el-input v-model="customerForm.name" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="客户年龄" prop="age">
+                                    <el-input v-model="customerForm.age" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
                             
-                      </template>
-                    </el-table-column>
+                        </el-row>
 
-                    <el-table-column prop="active" label="操作" fixed="right">
-                      <template slot-scope="scope">
-                          <el-button @click="studentDetails(scope.row)" type="text" >学员详情</el-button>
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      align="right" width="60px" fixed="right">
-                      <template slot="header">
-                        <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
-                      </template>
-                    </el-table-column>
-                </el-table>
+                        <el-row>
 
-                <el-drawer
-                    :title="drawerTitle"
-                    :visible.sync="drawer"
-                    :direction="direction"
-                    size="100%"
-                    :before-close="handleClose"
-                >
+                            <el-col :span="6">
+                                <el-form-item label="最高学历" prop="education">
 
-                    <el-tabs v-model="tabs_active" @tab-click="handleTabClick" type="border-card" style="width: 92%; margin: 0 auto; margin-bottom: 30px;">
+                                    <el-select v-model="customerForm.education" placeholder="请选择最高学历" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-1']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
 
-                        <el-tab-pane label="客户信息" name="first">
-                        
-                            <el-form :model="customerForm" :rules="rules" ref="customerForm" class="demo-customerForm">
+                                </el-form-item>
+                            </el-col>
 
-                                <el-row>
-                                    <el-col :span="6">
-                                        <el-form-item label="客户编号" prop="number">
-                                            <el-input v-model="customerForm.number" readonly size="small" class="borderNone"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="客户手机" prop="tel">
-                                            <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
-                                            <el-tooltip effect="dark" content="复制手机号码" placement="top">
-                                                <el-image
-                                                    style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"
-                                                    @click="phoneCopyFun"
-                                                    :src="require('../../assets/images/copy-icon.png')">
-                                                </el-image>
-                                            </el-tooltip>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="客户姓名" prop="name">
-                                            <el-input v-model="customerForm.name" size="small" ></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="6">
-                                        <el-form-item label="客户年龄" prop="age">
-                                            <el-input v-model="customerForm.age" size="small" ></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    
-                                </el-row>
+                            <el-col :span="6">
+                                <el-form-item label="毕业专业" prop="graduationMajor">
+                                    <el-input v-model="customerForm.graduationMajor" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
 
-                                <el-row>
+                            <el-col :span="6">
+                                <el-form-item label="客户工作" prop="work">
+                                    <el-input v-model="customerForm.work" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
+                            
+                            <el-col :span="6">
 
-                                    <el-col :span="6">
-                                        <el-form-item label="最高学历" prop="education">
+                                <el-form-item label="工作年限" prop="workingLife">
 
-                                            <el-select v-model="customerForm.education" placeholder="请选择最高学历" size="small" >
-                                                <el-option
-                                                  v-for="item in enumList['MJ-1']"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
+                                    <el-select v-model="customerForm.workingLife" placeholder="请选择工作年限" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-2']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
 
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="毕业专业" prop="graduationMajor">
-                                            <el-input v-model="customerForm.graduationMajor" size="small" ></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="客户工作" prop="work">
-                                            <el-input v-model="customerForm.work" size="small" ></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    
-                                    <el-col :span="6">
-
-                                        <el-form-item label="工作年限" prop="workingLife">
-
-                                            <el-select v-model="customerForm.workingLife" placeholder="请选择工作年限" size="small" >
-                                                <el-option
-                                                  v-for="item in enumList['MJ-2']"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
-
-                                        </el-form-item>
-                                        
-                                    </el-col>
-
-                                </el-row>
-
-                                <el-row>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="取证目的" prop="evidencePurpose">
-
-                                            <el-select v-model="customerForm.evidencePurpose" placeholder="请选择取证目的" size="small" >
-                                                <el-option
-                                                  v-for="item in enumList['MJ-3']"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
-
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="第二电话" prop="twoTel">
-                                            <el-input v-model="customerForm.twoTel" size="small" ></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="客户微信" prop="wx">
-                                            <el-input v-model="customerForm.wx" size="small" ></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-
-                                        <el-form-item label="客户性别" prop="gender">
-
-                                            <el-select v-model="customerForm.gender" placeholder="请选择性别" size="small" >
-                                                <el-option
-                                                  v-for="item in genderList"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
-
-                                        </el-form-item>
-
-                                    </el-col>
-
-                                </el-row>
-
-
-                                <el-row>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="所在省市" prop="provinceCity">
-                                            <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="注册平台" prop="signUpSchool">
-                                            <el-input v-model="customerForm.signUpSchool" readonly size="small" class="borderNone"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="报名时间" prop="createTime">
-                                            <el-input v-model="customerForm.createTime" readonly size="small" class="borderNone"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-                                        <el-form-item label="购买状态" prop="buyState">
-                                            <el-input v-model="customerForm.buyState" readonly size="small" class="borderNone"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-
-                                </el-row>
+                                </el-form-item>
                                 
-                                <el-row>
+                            </el-col>
 
-                                    <el-col :span="6">
-                                        <el-form-item label="所属班主任" prop="classTeaName">
-                                            <el-input v-model="customerForm.classTeaName" readonly size="small" class="borderNone"></el-input>
-                                        </el-form-item>
-                                    </el-col>
+                        </el-row>
 
-                                    <el-col :span="6">
-                                        <el-form-item label="报名班型" prop="signUpClassType">
-                                            <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
-                                        </el-form-item>
-                                    </el-col>
-                                    
-                                    <el-col :span="6">
-                                        <el-form-item label="学籍状态" prop="studentStatus">
+                        <el-row>
 
-                                            <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
-                                                <el-option
-                                                  v-for="item in enumList['MJ-10']"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
+                            <el-col :span="6">
+                                <el-form-item label="取证目的" prop="evidencePurpose">
 
-                                        </el-form-item>
-                                    </el-col>
+                                    <el-select v-model="customerForm.evidencePurpose" placeholder="请选择取证目的" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-3']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
 
-                                    <el-col :span="6">
-                                        <el-form-item label="考期" prop="examPeriod">
+                                </el-form-item>
+                            </el-col>
 
-                                            <el-date-picker
-                                                style="width: 100%;"
-                                                v-model="customerForm.examPeriod"
-                                                size="small" 
-                                                type="date"
-                                                @change="timeChange"
-                                                placeholder="请选择日期">
-                                            </el-date-picker>
+                            <el-col :span="6">
+                                <el-form-item label="第二电话" prop="twoTel">
+                                    <el-input v-model="customerForm.twoTel" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
 
-                                        </el-form-item>
-                                    </el-col>
+                            <el-col :span="6">
+                                <el-form-item label="客户微信" prop="wx">
+                                    <el-input v-model="customerForm.wx" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
 
-                                </el-row>
+                            <el-col :span="6">
 
-                                <el-row>
+                                <el-form-item label="客户性别" prop="gender">
 
-                                    <el-col :span="6">
-                                        <el-form-item label="学习状况" prop="studySituation">
+                                    <el-select v-model="customerForm.gender" placeholder="请选择性别" size="small" >
+                                        <el-option
+                                          v-for="item in genderList"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
 
-                                            <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" size="small" >
-                                                <el-option
-                                                  v-for="item in enumList['MJ-11']"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
-
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="6">
-
-                                        <el-form-item label="辅助报名" prop="auxiliarySignUp">
-
-                                            <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
-                                                <el-option
-                                                  v-for="item in auxiliarySignUpList"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
-
-                                        </el-form-item>
-
-                                    </el-col>
-
-                                </el-row>
-        
-                                <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;"></el-row>
-
-                                <el-row >
-                                    
-                                    <el-col :span="6">
-
-                                        <el-form-item label="跟进类型" prop="followUp">
-
-                                            <el-select v-model="customerForm.followUp" placeholder="请选择跟进类型" size="small" >
-                                                <el-option
-                                                  v-for="item in enumList['MJ-12']"
-                                                  :key="item.name"
-                                                  :label="item.name"
-                                                  :value="item.number">
-                                                </el-option>
-                                            </el-select>
-
-                                        </el-form-item>
-
-                                    </el-col>
-                                    
-                                </el-row>
-
-                                <el-row>
-
-                                    <el-col>
-                                        <el-form-item label="跟进内容" prop="followUpContent">
-
-                                            <el-input 
-                                                type="textarea" 
-                                                v-model="customerForm.followUpContent" 
-                                                size="small" 
-                                                show-word-limit
-                                                maxlength='100'
-                                                placeholder="请输入跟进内容"
-
-                                            ></el-input>
-
-                                        </el-form-item>
-                                    </el-col>
-
-                                </el-row>
-                                
-                                <el-form-item>
-                                  <el-button type="primary" @click="submitForm('customerForm')" size="small" style="width: 80px;">确定</el-button>
                                 </el-form-item>
 
-                            </el-form>
+                            </el-col>
 
-                        </el-tab-pane>
+                        </el-row>
 
-                        <el-tab-pane label="跟进记录" name="second">
+
+                        <el-row>
+
+                            <el-col :span="6">
+                                <el-form-item label="所在省市" prop="provinceCity">
+                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="注册平台" prop="signUpSchool">
+                                    <el-input v-model="customerForm.signUpSchool" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="报名时间" prop="createTime">
+                                    <el-input v-model="customerForm.createTime" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="购买状态" prop="buyState">
+                                    <el-input v-model="customerForm.buyState" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
                         
-                            <el-table
-                                :data="notesList"
-                                style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
-                                border
-                                >
-                                <el-table-column
-                                  :prop="item.prop"
-                                  :label="item.label"
-                                  v-for="(item, index) in notesColumnList"
-                                  :key="index"
-                                  >
-                                </el-table-column>
-                            </el-table>
+                        <el-row>
 
-                            <el-pagination
-                                background
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total='notesForm.total'
-                                :page-size='notesForm.pageSize'
-                                :page-sizes="[10, 20, 30]"
-                                :hide-on-single-page="totalFlag"
-                                @current-change="handleCurrentChangeCall"
-                                @size-change="handleSizeChangeCall"
-                                v-if="pageshow"
-                            >
-                            </el-pagination>
-                        </el-tab-pane>
-                    </el-tabs>
-                </el-drawer>
-            </el-main>
-        </el-container>
+                            <el-col :span="6">
+                                <el-form-item label="所属班主任" prop="classTeaName">
+                                    <el-input v-model="customerForm.classTeaName" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="报名班型" prop="signUpClassType">
+                                    <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            
+                            <el-col :span="6">
+                                <el-form-item label="学籍状态" prop="studentStatus">
+
+                                    <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-10']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="考期" prop="examPeriod">
+
+                                    <el-date-picker
+                                        style="width: 100%;"
+                                        v-model="customerForm.examPeriod"
+                                        size="small" 
+                                        type="date"
+                                        @change="timeChange"
+                                        placeholder="请选择日期">
+                                    </el-date-picker>
+
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
+
+                        <el-row>
+
+                            <el-col :span="6">
+                                <el-form-item label="学习状况" prop="studySituation">
+
+                                    <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-11']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+
+                                <el-form-item label="辅助报名" prop="auxiliarySignUp">
+
+                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
+                                        <el-option
+                                          v-for="item in auxiliarySignUpList"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+
+                            </el-col>
+
+                        </el-row>
+    
+                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;"></el-row>
+
+                        <el-row >
+                            
+                            <el-col :span="6">
+
+                                <el-form-item label="跟进类型" prop="followUp">
+
+                                    <el-select v-model="customerForm.followUp" placeholder="请选择跟进类型" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-12']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+
+                            </el-col>
+                            
+                        </el-row>
+
+                        <el-row>
+
+                            <el-col>
+                                <el-form-item label="跟进内容" prop="followUpContent">
+
+                                    <el-input 
+                                        type="textarea" 
+                                        v-model="customerForm.followUpContent" 
+                                        size="small" 
+                                        show-word-limit
+                                        maxlength='100'
+                                        placeholder="请输入跟进内容"
+
+                                    ></el-input>
+
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
+                        
+                        <el-form-item>
+                          <el-button type="primary" @click="submitForm('customerForm')" size="small" style="width: 80px;">确定</el-button>
+                        </el-form-item>
+
+                    </el-form>
+
+                </el-tab-pane>
+
+                <el-tab-pane label="跟进记录" name="second">
+                
+                    <el-table
+                        :data="notesList"
+                        style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
+                        border
+                        >
+                        <el-table-column
+                          :prop="item.prop"
+                          :label="item.label"
+                          v-for="(item, index) in notesColumnList"
+                          :key="index"
+                          >
+                        </el-table-column>
+                    </el-table>
+
+                    <el-pagination
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total='notesForm.total'
+                        :page-size='notesForm.pageSize'
+                        :page-sizes="[10, 20, 30]"
+                        :hide-on-single-page="totalFlag"
+                        @current-change="handleCurrentChangeCall"
+                        @size-change="handleSizeChangeCall"
+                        v-if="pageshow"
+                    >
+                    </el-pagination>
+                </el-tab-pane>
+            </el-tabs>
+        </el-drawer>
+
         <PageFieldManage :setPageNum="setPageNum" />
-    </div>
+
+    </el-main>
 </template>
 
 <script>
@@ -778,30 +774,28 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            flex: 1;
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        flex: 1;
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-        margin-right: .4rem;
+        .el-pagination{
+            text-align: right;
+            margin-top: .4rem;
+            margin-right: .4rem;
+        }
     }
 </style>

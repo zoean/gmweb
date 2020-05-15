@@ -1,183 +1,179 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
         <Start></Start>
 
-        <el-container class="index-main">
+        <div class="people-title">已成单线索管理</div>
 
-            <el-main>
-                <div class="people-title">已成单线索管理</div>
-                <el-tabs type="border-card" @tab-click="tabChange">
-                    <el-tab-pane label="学员">
+        <el-tabs type="border-card" @tab-click="tabChange">
+            <el-tab-pane label="学员">
 
-                        <el-row class="people-screen">
-                            <el-col :span="5">
-                                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
-                            </el-col>
-                            <el-col :span="5">
-                                <el-button type="primary" @click="orderCallDataList">搜 索</el-button>
-                            </el-col>
-                        </el-row>
+                <el-row class="people-screen">
+                    <el-col :span="5">
+                        <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-button type="primary" @click="orderCallDataList">搜 索</el-button>
+                    </el-col>
+                </el-row>
 
-                        <el-table
-                            :data="list"
-                            v-loading="fullscreenLoading"
-                            style="width: calc( 100vw - 4.1rem)">
+                <el-table
+                    :data="list"
+                    v-loading="fullscreenLoading"
+                    style="width: 100%">
 
-                            <el-table-column
-                            :prop="item.prop"
-                            :label="item.label"
-                            :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
-                            v-for="(item, index) in columnList"
-                            :key="index"
-                            >
-                            <template slot-scope="scope">
-                                    <span>{{scope.row[item.prop]}}</span>
-                                    <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
-                                        <el-image
-                                            class="copy-icon-style"
-                                            @click="phoneCopy(scope.row)"
-                                            :src="require('../../assets/images/copy-icon.png')">
-                                        </el-image>
-                                    </el-tooltip>
-                            </template>
-                            </el-table-column>
+                    <el-table-column
+                    :prop="item.prop"
+                    :label="item.label"
+                    :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
+                    v-for="(item, index) in columnList"
+                    :key="index"
+                    >
+                    <template slot-scope="scope">
+                            <span>{{scope.row[item.prop]}}</span>
+                            <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
+                                <el-image
+                                    class="copy-icon-style"
+                                    @click="phoneCopy(scope.row)"
+                                    :src="require('../../assets/images/copy-icon.png')">
+                                </el-image>
+                            </el-tooltip>
+                    </template>
+                    </el-table-column>
 
-                            <el-table-column prop="active" label="操作" width="400px;">
-                            <template slot-scope="scope">
-                                <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
-                                <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
-                                <!-- <el-button @click="release(scope.row)" type="text" >释放数据</el-button> -->
-                                <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                                <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
-                            </template>
-                            </el-table-column>
+                    <el-table-column prop="active" label="操作" width="400px;">
+                    <template slot-scope="scope">
+                        <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
+                        <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
+                        <!-- <el-button @click="release(scope.row)" type="text" >释放数据</el-button> -->
+                        <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
+                        <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+                    </template>
+                    </el-table-column>
 
-                        </el-table>
-                        <el-pagination
-                            background
-                            layout="total, sizes, prev, pager, next, jumper"
-                            style="text-align: right; margin-top: 20px;"
-                            :total='form.total'
-                            :page-size='form.pageSize'
-                            :page-sizes="[10, 20, 30]"
-                            :hide-on-single-page="totalFlag"
-                            @current-change="handleCurrentChange"
-                            @size-change="handleSizeChange"
-                        >
-                        </el-pagination>
-                    </el-tab-pane>
-                    <el-tab-pane label="订单">
-                        <el-row type="flex" :gutter="20">
-                            <el-col :span="6">
-                                <el-input placeholder="请输入要查询的手机号" v-model="orderForm.tel"></el-input>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-input placeholder="请输入要查询的客户姓名" v-model="orderForm.name"></el-input>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-select v-model="orderForm.commodityClassId" placeholder="请选择要查询的商品班型">
-                                    <el-option
-                                    v-for="item in commodityClassOptions"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-select v-model="orderForm.purchaseStatus" placeholder="请选择要查询的购买状态">
-                                    <el-option
-                                    v-for="(item, index) in purchaseOptions"
-                                    :key="index"
-                                    :label="item"
-                                    :value="index">
-                                    </el-option>
-                                </el-select>
-                            </el-col>
-                            
-                        </el-row>
-                        <el-row type="flex" :gutter="20">
-                            <el-col :span="10">
-                                <el-date-picker
-                                    v-model="orderForm.time"
-                                    type="daterange"
-                                    align="right"
-                                    unlink-panels
-                                    range-separator="至"
-                                    start-placeholder="开始日期"
-                                    end-placeholder="结束日期"
-                                    @change="changeTime"
-                                    value-format="timestamp">
-                                </el-date-picker>
-                            </el-col>
-                            <el-col :span="5">
-                                <el-button type="primary" @click="getUserOrderList">搜索</el-button>
-                            </el-col>
-                        </el-row>
-                        <el-table
-                        :data="userOrderList"
-                        style="width: calc( 100vw - 4.1rem)">
-                            <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-                            <el-table-column prop="active" label="操作">
-                            <template slot-scope="scope">
-                                <!-- <el-button @click="phoneOut(scope.row)" type="text">手机外拨</el-button>
-                                 <el-button @click="seatOut(scope.row)" type="text">座机外拨</el-button>
-                                 <el-button @click="handleAddClick(scope.row)" type="text">添加备注</el-button>-->
-                                <el-button @click="payDetail(scope.row)" type="text">支付记录</el-button>
-                            </template>
-                            </el-table-column>
-                        </el-table>
-                        <el-pagination
-                                @size-change="handleOrderSizeChange"
-                                @current-change="handleOrderCurrentChange"
-                                :current-page="orderForm.currentPage"
-                                :page-sizes="[10, 20, 30]"
-                                :page-size="orderForm.pageSize"
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="userOrderTotal"
-                                >
-                            </el-pagination>
-                    </el-tab-pane>
-                </el-tabs>
-
-                <CustomerNotes 
-                    v-if="drawer"
-                    @changeDrawer="changeDrawer"
-                    :followFlag='followFlag' 
-                    :drawer.sync='drawer'
-                    :userUuid='form.userUuid'
-                    :schoolId='schoolId'
-                    :examItem='examItem'
-                    :clueDataSUuid='clueDataSUuid'
-                    :comMode='comMode'
-                    :callLogUuid='callLogUuid'
-                    @fatherDataList='orderCallDataList'
+                </el-table>
+                <el-pagination
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    style="text-align: right; margin-top: 20px;"
+                    :total='form.total'
+                    :page-size='form.pageSize'
+                    :page-sizes="[10, 20, 30]"
+                    :hide-on-single-page="totalFlag"
+                    @current-change="handleCurrentChange"
+                    @size-change="handleSizeChange"
                 >
-                </CustomerNotes>
+                </el-pagination>
+            </el-tab-pane>
+            <el-tab-pane label="订单">
+                <el-row type="flex" :gutter="20">
+                    <el-col :span="6">
+                        <el-input placeholder="请输入要查询的手机号" v-model="orderForm.tel"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input placeholder="请输入要查询的客户姓名" v-model="orderForm.name"></el-input>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-select v-model="orderForm.commodityClassId" placeholder="请选择要查询的商品班型">
+                            <el-option
+                            v-for="item in commodityClassOptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-select v-model="orderForm.purchaseStatus" placeholder="请选择要查询的购买状态">
+                            <el-option
+                            v-for="(item, index) in purchaseOptions"
+                            :key="index"
+                            :label="item"
+                            :value="index">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                    
+                </el-row>
+                <el-row type="flex" :gutter="20">
+                    <el-col :span="10">
+                        <el-date-picker
+                            v-model="orderForm.time"
+                            type="daterange"
+                            align="right"
+                            unlink-panels
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            @change="changeTime"
+                            value-format="timestamp">
+                        </el-date-picker>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-button type="primary" @click="getUserOrderList">搜索</el-button>
+                    </el-col>
+                </el-row>
+                <el-table
+                :data="userOrderList"
+                style="width: 100%">
+                    <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
+                    <el-table-column prop="active" label="操作">
+                    <template slot-scope="scope">
+                        <!-- <el-button @click="phoneOut(scope.row)" type="text">手机外拨</el-button>
+                         <el-button @click="seatOut(scope.row)" type="text">座机外拨</el-button>
+                         <el-button @click="handleAddClick(scope.row)" type="text">添加备注</el-button>-->
+                        <el-button @click="payDetail(scope.row)" type="text">支付记录</el-button>
+                    </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                        @size-change="handleOrderSizeChange"
+                        @current-change="handleOrderCurrentChange"
+                        :current-page="orderForm.currentPage"
+                        :page-sizes="[10, 20, 30]"
+                        :page-size="orderForm.pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="userOrderTotal"
+                        >
+                    </el-pagination>
+            </el-tab-pane>
+        </el-tabs>
 
-            </el-main>
+        <CustomerNotes 
+            v-if="drawer"
+            @changeDrawer="changeDrawer"
+            :followFlag='followFlag' 
+            :drawer.sync='drawer'
+            :userUuid='form.userUuid'
+            :schoolId='schoolId'
+            :examItem='examItem'
+            :clueDataSUuid='clueDataSUuid'
+            :comMode='comMode'
+            :callLogUuid='callLogUuid'
+            @fatherDataList='orderCallDataList'
+        >
+        </CustomerNotes>
 
-        </el-container>
-    <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
-        <el-row type="flex" justify="start">
-            <el-col class="col-label">订单ID：</el-col>
-            <el-col>{{orderDetail.orderId}}</el-col>
-        </el-row>
-        <el-row type="flex">
-            <el-col class="col-label">支付方式：</el-col>
-            <el-col>{{orderDetail.payTypeName}}</el-col>
-        </el-row>
-        <el-row type="flex">
-            <el-col class="col-label">支付时间：</el-col>
-            <el-col>{{orderDetail.payTime | timestampToTime}}</el-col>
-        </el-row>
-        <el-row type="flex">
-            <el-col class="col-label">支付金额：</el-col>
-            <el-col>{{orderDetail.moneyPaid}} 元</el-col>
-        </el-row>
-    </el-dialog>
-    </div>
+        <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
+            <el-row type="flex" justify="start">
+                <el-col class="col-label">订单ID：</el-col>
+                <el-col>{{orderDetail.orderId}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">支付方式：</el-col>
+                <el-col>{{orderDetail.payTypeName}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">支付时间：</el-col>
+                <el-col>{{orderDetail.payTime | timestampToTime}}</el-col>
+            </el-row>
+            <el-row type="flex">
+                <el-col class="col-label">支付金额：</el-col>
+                <el-col>{{orderDetail.moneyPaid}} 元</el-col>
+            </el-row>
+        </el-dialog>
+
+    </el-main>
 </template>
 
 <script>
@@ -526,24 +522,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        height: calc( 100% - 60px );
-        .index-main{
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+           
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
         .show-pay-detail{
@@ -555,5 +549,6 @@ export default {
                 }
             }
         }
+        
     }
 </style>

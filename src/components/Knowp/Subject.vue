@@ -1,114 +1,108 @@
 <template>
-    <div style="">
-        <el-container class="index-main">
+    <el-main class="index-main">
 
-            <el-main>
+        <div class="people-title">科目管理</div> 
 
-                <div class="people-title">科目管理</div> 
+        <el-button type="primary" @click="addSubjectClick" style="margin-bottom: .2rem;">添加科目</el-button>
+    
+        <el-row style="margin-bottom: 20px;">
 
-                <el-button type="primary" @click="addSubjectClick" style="margin-bottom: .2rem;">添加科目</el-button>
-         
-                <el-row style="margin-bottom: 20px;">
+            <el-col :span="4">
+                <el-select v-model="subjectForm.uuid" @change="subjectChange" clearable placeholder="请选择考试项目" style="width: 90%">
+                    <el-option
+                      v-for="item in subjectOption"
+                      :key="item.uuid"
+                      :label="item.name"
+                      :value="item.uuid">
+                    </el-option>
+                </el-select>
+            </el-col>
 
-                    <el-col :span="4">
-                        <el-select v-model="subjectForm.uuid" @change="subjectChange" clearable placeholder="请选择考试项目" style="width: 90%">
-                            <el-option
-                              v-for="item in subjectOption"
-                              :key="item.uuid"
-                              :label="item.name"
-                              :value="item.uuid">
-                            </el-option>
-                        </el-select>
-                    </el-col>
+            <el-col :span="6">
+                <el-input v-model="subjectForm.name" placeholder="请输入科目名称" style="width: 90%"></el-input>
+            </el-col>
+            <el-col :span="2">
+                <el-button type="primary" @click="subjectSearch" style="width: 90%">搜索</el-button>
+            </el-col>
 
-                    <el-col :span="6">
-                        <el-input v-model="subjectForm.name" placeholder="请输入科目名称" style="width: 90%"></el-input>
-                    </el-col>
-                    <el-col :span="2">
-                        <el-button type="primary" @click="subjectSearch" style="width: 90%">搜索</el-button>
-                    </el-col>
+        </el-row>
 
-                </el-row>
+        <el-table
+          :data="subjectList"
+          row-key="uuid"
+          default-expand-all
+          style="width: 100%">
+          <el-table-column
+            :prop="item.prop"
+            :label="item.label"
+            v-for="(item, index) in columnList"
+            :key="index"
+            :width="index == 0 ? '100' : null"
+            >
+          </el-table-column>
+          <el-table-column prop="active" label="操作">
+            <template slot-scope="scope">
+                <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="click"
+                  :ref="`popover-${scope.$index}`"
+                  >
+                  <p style="margin-bottom: .2rem;">确定要删除吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                    <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
+                  </div>
+                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                </el-popover>
+                <el-button @click="detailsClick(scope.row)" type="text"  style="margin-left: .2rem;">详情</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
 
-                <el-table
-                  :data="subjectList"
-                  row-key="uuid"
-                  default-expand-all
-                  style="width: calc( 100vw - 3.8rem)">
-                  <el-table-column
-                    :prop="item.prop"
-                    :label="item.label"
-                    v-for="(item, index) in columnList"
-                    :key="index"
-                    :width="index == 0 ? '100' : null"
-                    >
-                  </el-table-column>
-                  <el-table-column prop="active" label="操作">
-                    <template slot-scope="scope">
-                        <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          :ref="`popover-${scope.$index}`"
-                          >
-                          <p style="margin-bottom: .2rem;">确定要删除吗？</p>
-                          <div style="text-align: right; margin: 0">
-                            <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                            <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
-                          </div>
-                          <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
-                        </el-popover>
-                        <el-button @click="detailsClick(scope.row)" type="text"  style="margin-left: .2rem;">详情</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='total'
+            :page-size='subjectForm.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total='total'
-                    :page-size='subjectForm.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction"
+            :before-close="handleClose">
 
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction"
-                    :before-close="handleClose">
+            <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="科目名称" prop="name">
+                  <el-input v-model="ruleForm1.name"></el-input>
+                </el-form-item>
 
-                    <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="科目名称" prop="name">
-                          <el-input v-model="ruleForm1.name"></el-input>
-                        </el-form-item>
+                <el-form-item label="科目ID" prop="soreNumber">
+                  <el-input v-model="ruleForm1.soreNumber"></el-input>
+                </el-form-item>
 
-                        <el-form-item label="科目ID" prop="soreNumber">
-                          <el-input v-model="ruleForm1.soreNumber"></el-input>
-                        </el-form-item>
+                <el-form-item label="科目描述" prop="describe">
+                  <el-input v-model="ruleForm1.describe"></el-input>
+                </el-form-item>
 
-                        <el-form-item label="科目描述" prop="describe">
-                          <el-input v-model="ruleForm1.describe"></el-input>
-                        </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
 
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
+            </el-form>
 
-                    </el-form>
+        </el-drawer>
 
-                </el-drawer>
-
-            </el-main>
-
-        </el-container>
-    </div>
+    </el-main>
     
 </template>
 

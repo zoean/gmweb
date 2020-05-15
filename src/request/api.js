@@ -228,6 +228,6 @@ export const getGoodsList = '/order-service/goods/getGoodsList' //主推班型
 export const readUuid = '/api/phone/stationNews/read/' //读取信息
 export const getStationNews = '/api/phone/stationNews/getStationNews' //获取消息列表
 
-
-
+//线索模板导出
+export const clueDataTem = '/api/phone/excel/clueDataTem' //线索模板导出
 

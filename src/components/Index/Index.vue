@@ -151,6 +151,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
+    margin-left: 0 !important;
     .el-carousel{
         .el-carousel-item{
             text-align: center;
@@ -256,7 +257,7 @@ export default {
     @media screen and (min-width: 1920px) {
         .el-carousel__item{
             img{
-                border-radius: 8px;
+                // border-radius: 8px;
                 width: 100%;
                 height: 100%;
                 margin-left: 0rem !important;

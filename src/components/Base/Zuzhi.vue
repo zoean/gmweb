@@ -1,38 +1,30 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">组织结构管理</div>
 
-            <el-main>
+        <el-table
+          :data="zuzhiList"
+          style="width: 100%"
+          row-key="uuid"
+          border
+          :indent='35'
+          :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+          <el-table-column
+            :prop="item.prop"
+            :label="item.label"
+            v-for="(item, index) in columnList"
+            :key="index"
+            >
+          </el-table-column>
+          <!-- <el-table-column prop="active" label="操作">
+            <template slot-scope="scope">
+                <el-button @click="handleClick(scope.row)" type="text" >查看</el-button>
+            </template>
+          </el-table-column> -->
+        </el-table>
 
-                <div class="people-title">组织结构管理</div>
-
-                <el-table
-                  :data="zuzhiList"
-                  style="width: calc( 100vw - 3.8rem)"
-                  row-key="uuid"
-                  border
-                  :indent='35'
-                  :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-                  <el-table-column
-                    :prop="item.prop"
-                    :label="item.label"
-                    v-for="(item, index) in columnList"
-                    :key="index"
-                    >
-                  </el-table-column>
-                  <!-- <el-table-column prop="active" label="操作">
-                    <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" >查看</el-button>
-                    </template>
-                  </el-table-column> -->
-                </el-table>
-
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -82,41 +74,39 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #fff;
-                margin-bottom: .3rem;
-                color: #666666;
-                font-weight: bold;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #fff;
+            margin-bottom: .3rem;
+            color: #666666;
+            font-weight: bold;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
     }
-
-    // .main-area /deep/ th{
-    //     text-align: center !important;
-    // }
-
+    .el-pagination{
+        text-align: right;
+        margin-top: .4rem;
+    }
 /* //element-ui table的去除右侧滚动条的样式 */
 ::-webkit-scrollbar {
-    width: 1px;
+    width: 8px;
     height: 1px;
 }
     /* // 滚动条的滑块 */
 ::-webkit-scrollbar-thumb {
     background-color: #a1a3a9;
     border-radius: 0px;
+    border-radius: 8px;
 }
 </style>

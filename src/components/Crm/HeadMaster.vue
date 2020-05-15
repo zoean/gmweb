@@ -1,205 +1,197 @@
 <template>
-    <div class="main-area">
+    <el-main class="index-main">
 
-        <el-container class="index-main">
+        <div class="people-title">班主任管理</div>
 
-            <el-main>
+        <el-row class="people-screen">
+            <el-col :span="5">
+                <el-button type="primary" @click="addClassClick">添加考试项-班型</el-button>
+            </el-col>
+        </el-row>
 
-                <div class="people-title">班主任管理</div>
+        <el-table
+            :data="list"
+            v-loading="fullscreenLoading"
+            style="width: 100%">
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              v-for="(item, index) in columnList1"
+              :key="index"
+              >
+            </el-table-column>
+            <el-table-column prop="active" label="操作">
+              <template slot-scope="scope">
+                  <el-button @click="addHeadTeacherClick(scope.row)" type="text" >配置班主任</el-button>
+                  <el-button @click="headTeacherListClick(scope.row)" type="text" >班主任列表</el-button>
+              </template>
+            </el-table-column>
+        </el-table>
 
-                <el-row class="people-screen">
-                    <el-col :span="5">
-                        <el-button type="primary" @click="addClassClick">添加考试项-班型</el-button>
-                    </el-col>
-                </el-row>
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
-                <el-table
-                    :data="list"
-                    v-loading="fullscreenLoading"
-                    style="width: calc( 100vw - 3.8rem)">
-                    <el-table-column
-                      :prop="item.prop"
-                      :label="item.label"
-                      v-for="(item, index) in columnList1"
-                      :key="index"
-                      >
-                    </el-table-column>
-                    <el-table-column prop="active" label="操作">
-                      <template slot-scope="scope">
-                          <el-button @click="addHeadTeacherClick(scope.row)" type="text" >配置班主任</el-button>
-                          <el-button @click="headTeacherListClick(scope.row)" type="text" >班主任列表</el-button>
-                      </template>
-                    </el-table-column>
-                </el-table>
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction1"
+            :before-close="handleClose">
 
-                <el-pagination
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    style="text-align: right; margin-top: 20px;"
-                    :total='form.total'
-                    :page-size='form.pageSize'
-                    :page-sizes="[10, 20, 30]"
-                    :hide-on-single-page="totalFlag"
-                    @current-change="handleCurrentChange"
-                    @size-change="handleSizeChange"
-                >
-                </el-pagination>
+            <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
+                
+                <el-form-item label="考试项目" prop="subjectText">
+                
+                    <el-autocomplete
+                        class="inline-input"
+                        style="width: 100%;"
+                        v-model="ruleForm1.subjectText"
+                        :fetch-suggestions="querySearch"
+                        placeholder="请输入内容"
+                        @select="handleSelect"
+                    ></el-autocomplete>
 
-                <el-drawer
-                    :title="drawerTitle1"
-                    :visible.sync="drawer1"
-                    :direction="direction1"
-                    :before-close="handleClose">
+                </el-form-item>
 
-                    <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
-                        
-                        <el-form-item label="考试项目" prop="subjectText">
-                        
-                            <el-autocomplete
-                                class="inline-input"
-                                style="width: 100%;"
-                                v-model="ruleForm1.subjectText"
-                                :fetch-suggestions="querySearch"
-                                placeholder="请输入内容"
-                                @select="handleSelect"
-                            ></el-autocomplete>
-
-                        </el-form-item>
-
-                        <el-form-item label="班型等级" prop="classType">
-                            <el-select v-model="ruleForm1.classType" placeholder="请选择班型等级">
-                                <el-option
-                                  v-for="item in classTypeList"
-                                  :key="item.value"
-                                  :label="item.label"
-                                  :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-
-                        <el-form-item>
-                          <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
-                          <el-button @click="quxiao">取消</el-button>
-                        </el-form-item>
-
-                    </el-form>
-                    
-                </el-drawer>
-
-                <el-drawer
-                    :title="drawerTitle2"
-                    :visible.sync="drawer2"
-                    :direction="direction2"
-                    :before-close="handleClose">
-
-                    <el-table
-                        :data="teacherList"
-                        v-loading="fullscreenLoadingDetails"
-                        style="width:94%; margin: 0 auto;">
-                        <el-table-column
-                          :prop="item.prop"
+                <el-form-item label="班型等级" prop="classType">
+                    <el-select v-model="ruleForm1.classType" placeholder="请选择班型等级">
+                        <el-option
+                          v-for="item in classTypeList"
+                          :key="item.value"
                           :label="item.label"
-                          v-for="(item, index) in columnList2"
-                          :key="index"
-                          >
-                        </el-table-column>
-                        <el-table-column prop="active" label="操作" width="200">
-                          <template slot-scope="scope">
-                              <el-button @click="studentsListClick(scope.row)" type="text" >学员列表</el-button>
-                              <el-button @click="studentsMoveClick(scope.row)" type="text" v-if="scope.row.studentNum != 0 && teacherList.length > 1">学员转移</el-button>
-                          </template>
-                        </el-table-column>
-                    </el-table>
-                    
-                </el-drawer>
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
 
-                <el-drawer
-                    :title="drawerTitle4"
-                    :visible.sync="drawer4"
-                    :direction="direction4"
-                    :before-close="handleClose"
-                >
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
+                  <el-button @click="quxiao">取消</el-button>
+                </el-form-item>
 
-                <div class="tagName">{{this.teacherMoveForm.className}}，共有{{this.teacherMoveForm.classLength}}名班主任</div>
+            </el-form>
+            
+        </el-drawer>
+
+        <el-drawer
+            :title="drawerTitle2"
+            :visible.sync="drawer2"
+            :direction="direction2"
+            :before-close="handleClose">
+
+            <el-table
+                :data="teacherList"
+                v-loading="fullscreenLoadingDetails"
+                style="width:94%; margin: 0 auto;">
+                <el-table-column
+                  :prop="item.prop"
+                  :label="item.label"
+                  v-for="(item, index) in columnList2"
+                  :key="index"
+                  >
+                </el-table-column>
+                <el-table-column prop="active" label="操作" width="200">
+                  <template slot-scope="scope">
+                      <el-button @click="studentsListClick(scope.row)" type="text" >学员列表</el-button>
+                      <el-button @click="studentsMoveClick(scope.row)" type="text" v-if="scope.row.studentNum != 0 && teacherList.length > 1">学员转移</el-button>
+                  </template>
+                </el-table-column>
+            </el-table>
+            
+        </el-drawer>
+
+        <el-drawer
+            :title="drawerTitle4"
+            :visible.sync="drawer4"
+            :direction="direction4"
+            :before-close="handleClose"
+        >
+
+        <div class="tagName">{{this.teacherMoveForm.className}}，共有{{this.teacherMoveForm.classLength}}名班主任</div>
  
-                <el-tag 
-                    v-for="(item,index) in teacherMoveList" :key="index"
-                    style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
-                    :class="item.mainUin ? 'tagActive' : ''"
-                    @click="tagClick(item)"
-                    >{{item.userName}}
-                </el-tag>
+        <el-tag 
+            v-for="(item,index) in teacherMoveList" :key="index"
+            style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
+            :class="item.mainUin ? 'tagActive' : ''"
+            @click="tagClick(item)"
+            >{{item.userName}}
+        </el-tag>
 
-                </el-drawer>
+        </el-drawer>
 
-                <el-drawer
-                    :title="drawerTitle3"
-                    :visible.sync="drawer3"
-                    :direction="direction3"
-                    size="50%"
-                    :before-close="handleClose">
+        <el-drawer
+            :title="drawerTitle3"
+            :visible.sync="drawer3"
+            :direction="direction3"
+            size="50%"
+            :before-close="handleClose">
 
-                    <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
-                        <el-col :span="10">
+                <el-col :span="10">
 
-                            <el-input
-                                placeholder="输入您想查找的班主任姓名"
-                                style="margin-bottom: 10px;"
-                                v-model="filterText">
-                            </el-input>
+                    <el-input
+                        placeholder="输入您想查找的班主任姓名"
+                        style="margin-bottom: 10px;"
+                        v-model="filterText">
+                    </el-input>
 
-                            <el-tree
-                                ref="tree"
-                                :data="treeData"
-                                show-checkbox
-                                style="margin-left: 0px;"
-                                node-key="orgUuid"
-                                :default-expanded-keys="defaultExpandedKeys"
-                                :default-checked-keys="defaultCheckedKeys"
-                                :filter-node-method="filterNode"
-                                @check="handleCheckChange"
-                                :props="defaultProps"
-                            >
-                            </el-tree>
+                    <el-tree
+                        ref="tree"
+                        :data="treeData"
+                        show-checkbox
+                        style="margin-left: 0px;"
+                        node-key="orgUuid"
+                        :default-expanded-keys="defaultExpandedKeys"
+                        :default-checked-keys="defaultCheckedKeys"
+                        :filter-node-method="filterNode"
+                        @check="handleCheckChange"
+                        :props="defaultProps"
+                    >
+                    </el-tree>
 
-                        </el-col>
+                </el-col>
 
-                        <el-col :span="13" :offset="1">
-                        
-                            <el-table
-                                border
-                                :data="tableData"
-                            >
+                <el-col :span="13" :offset="1">
+                
+                    <el-table
+                        border
+                        :data="tableData"
+                    >
 
-                                <el-table-column
-                                    :prop="item.props"
-                                    :label="item.label"
-                                    v-for="(item, index) in columnList3"
-                                    :key="index">
-                                </el-table-column>
+                        <el-table-column
+                            :prop="item.props"
+                            :label="item.label"
+                            v-for="(item, index) in columnList3"
+                            :key="index">
+                        </el-table-column>
 
-                                <el-table-column prop="limitLimit" label="操作">
-                                    <template slot-scope="scope">
-                                        <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
-                                    </template>
-                                </el-table-column>
+                        <el-table-column prop="limitLimit" label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
+                            </template>
+                        </el-table-column>
 
-                            </el-table>
+                    </el-table>
 
-                        </el-col>
+                </el-col>
 
-                    </el-row>
+            </el-row>
 
-                    <el-button type="primary" style="margin: 0 20px;" @click="addClassTeacher">确定</el-button>
-                    
-                </el-drawer>
+            <el-button type="primary" style="margin: 0 20px;" @click="addClassTeacher">确定</el-button>
+            
+        </el-drawer>
 
-            </el-main>
-
-        </el-container>
-
-    </div>
+    </el-main>
 </template>
 
 <script>
@@ -630,24 +622,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .main-area{
-        .index-main{
-            height: calc( 100vh - 60px);
-            .people-title{
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                text-align: center;
-                font-size: 15px;
-                background: #aaa;
-                margin-bottom: .3rem;
-                color: #fff;
-            }
-            .people-screen{
-                margin-bottom: .3rem;
-                .screen-li{
-                    width: 90%;
-                }
+    .index-main{
+        height: calc( 100vh - 60px);
+        .people-title{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 15px;
+            background: #aaa;
+            margin-bottom: .3rem;
+            color: #fff;
+        }
+        .people-screen{
+            margin-bottom: .3rem;
+            .screen-li{
+                width: 90%;
             }
         }
         .tagActive{
