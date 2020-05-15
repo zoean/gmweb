@@ -2,10 +2,7 @@
     <div>
         <div class="login-bg"></div>
         <div class="login-contain">
-            <div style="position: absolute; top: 1.2rem; left: .7rem;">
-                <el-image style="width: 2.4rem; height: .42rem;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
-                <span style="color: #666; display: inline-block; position: relative; top: -0.13rem;">v 1.0.1</span>
-            </div>
+            <el-image style="width: 2.4rem; height: .42rem; position: absolute; top: 1.2rem; left: .7rem;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
             <div class="contain-model">
 
                 <div class="contain-title">欢迎登录</div>
@@ -137,10 +134,15 @@ export default {
     -webkit-background-size: cover;
     -o-background-size: cover;
     background-position: center 0;
+    border-radius: 10px;
     position: absolute;
-    width: 1121px;
-    height: 721px;
+    width: 10rem;
+    height: 6.4rem;
     z-index: 999;
+    margin-left: -5rem;
+    left: 50%;
+    top: 50%;
+    margin-top: -3.2rem;
     .contain-model{
         width: 2.6rem;
         // height: 2.6rem;
