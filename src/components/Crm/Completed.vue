@@ -153,57 +153,32 @@
             @fatherDataList='orderCallDataList'
         >
         </CustomerNotes>
-
         <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
-            <el-row type="flex" justify="start">
-                <el-col class="col-label">订单ID：</el-col>
-                <el-col>{{orderDetail.orderId}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付方式：</el-col>
-                <el-col>{{orderDetail.payTypeName}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付时间：</el-col>
-                <el-col>{{orderDetail.payTime | timestampToTime}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付金额：</el-col>
-                <el-col>{{orderDetail.moneyPaid}} 元</el-col>
+            <el-row v-for="(item, index) in orderDetail" :key="index">
+                <el-row type="flex" justify="start">
+                    <el-col class="col-label">订单ID：</el-col>
+                    <el-col>{{item.orderId}}</el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col class="col-label">订单类型：</el-col>
+                    <el-col>{{item.orderType || '普通单'}}</el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col class="col-label">支付方式：</el-col>
+                    <el-col>{{item.payTypeName}}</el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col class="col-label">支付时间：</el-col>
+                    <el-col>{{item.payTime | timestampToTime}}</el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col class="col-label">支付金额：</el-col>
+                    <el-col>{{item.moneyPaid}} 元</el-col>
+                </el-row>
+                <span class="line" v-show="orderDetail.length > 1"></span>
             </el-row>
         </el-dialog>
-
-<<<<<<< Updated upstream
     </el-main>
-=======
-        </el-container>
-    <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
-        <el-row v-for="(item, index) in orderDetail" :key="index">
-            <el-row type="flex" justify="start">
-                <el-col class="col-label">订单ID：</el-col>
-                <el-col>{{item.orderId}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">订单类型：</el-col>
-                <el-col>{{item.orderType || '普通单'}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付方式：</el-col>
-                <el-col>{{item.payTypeName}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付时间：</el-col>
-                <el-col>{{item.payTime | timestampToTime}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付金额：</el-col>
-                <el-col>{{item.moneyPaid}} 元</el-col>
-            </el-row>
-            <span class="line" v-show="orderDetail.length > 1"></span>
-        </el-row>
-    </el-dialog>
-    </div>
->>>>>>> Stashed changes
 </template>
 
 <script>
