@@ -119,23 +119,22 @@
                     <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
                     <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <!-- <el-button @click="phoneOut(scope.row)" type="text">手机外拨</el-button>
-                         <el-button @click="seatOut(scope.row)" type="text">座机外拨</el-button>
-                         <el-button @click="handleAddClick(scope.row)" type="text">添加备注</el-button>-->
                         <el-button @click="payDetail(scope.row)" type="text">支付记录</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
-                        @size-change="handleOrderSizeChange"
-                        @current-change="handleOrderCurrentChange"
-                        :current-page="orderForm.currentPage"
-                        :page-sizes="[10, 20, 30]"
-                        :page-size="orderForm.pageSize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="userOrderTotal"
-                        >
-                    </el-pagination>
+                    background
+                    @size-change="handleOrderSizeChange"
+                    @current-change="handleOrderCurrentChange"
+                    :current-page="orderForm.currentPage"
+                    :page-sizes="[10, 20, 30]"
+                    :page-size="orderForm.pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    style="text-align: right; margin-top: 20px;"
+                    :total="userOrderTotal"
+                    >
+                </el-pagination>
             </el-tab-pane>
         </el-tabs>
 
