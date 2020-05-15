@@ -175,7 +175,6 @@ export default {
   .aside-all{
     position: relative;
     min-height: calc(100vh - 60px);
-    flex: 1;
     .el-submenu-smoke{
       position: relative;
       z-index: 9;

@@ -512,6 +512,11 @@ export default {
         this.getSchoolList();
     },
     methods: { 
+        tableSort(type, props){
+            this.form.sortSet = []
+            this.form.sortSet.push({[props]: type === 'ascending' ? 'ASC' : 'DESC'})
+            this.getClassTeaStudent()
+        },
         setPageNum(pageNum){
             this.form.num = pageNum
         },

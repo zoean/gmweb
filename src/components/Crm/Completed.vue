@@ -153,8 +153,12 @@
             @fatherDataList='orderCallDataList'
         >
         </CustomerNotes>
-        <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
-            <el-row v-for="(item, index) in orderDetail" :key="index">
+        <el-dialog width="50%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
+            <el-table :data="orderDetail">
+                <el-table-column v-for="(item, index) in paymentRecordColumn" :key="index" :label="item.label" :prop="item.prop" :formatter="item.formatter" :min-width="item.width">
+                </el-table-column>
+            </el-table>
+            <!-- <el-row v-for="(item, index) in orderDetail" :key="index">
                 <el-row type="flex" justify="start">
                     <el-col class="col-label">订单ID：</el-col>
                     <el-col>{{item.orderId}}</el-col>
@@ -176,7 +180,7 @@
                     <el-col>{{item.moneyPaid}} 元</el-col>
                 </el-row>
                 <span class="line" v-show="orderDetail.length > 1"></span>
-            </el-row>
+            </el-row> -->
         </el-dialog>
     </el-main>
 </template>
@@ -280,7 +284,28 @@ export default {
             },
             ],
             payDetailVisible: false,
-            orderDetail: {}
+            orderDetail: {},
+            paymentRecordColumn: [
+                {
+                    label: '支付时间', prop: 'payTime', width: 120, formatter: (row)=> {
+                        return row.payTime ? timestampToTime(Number(row.payTime)*1000) : '--'
+                    }
+                },
+                {
+                    label: '订单类型', prop: 'orderType'
+                },
+                {
+                    label: '支付方式', prop: 'payTypeName',
+                },
+                {
+                    label: '支付金额', prop: 'moneyPaid', formatter: (row) => {
+                        return `￥${row.moneyPaid}`
+                    }
+                },
+                {
+                    label: '订单号', prop: 'orderNo', width: 120
+                }
+            ]
         }
     },
     components: {
@@ -295,6 +320,9 @@ export default {
         this.jqStart = browserfly.noConflict();
     },
     methods: {
+        transferTime(val){
+            return val ? timestampToTime(val*1000) : '--'
+        },
         parsePurchase(row){
             return this.purchaseOptions[row.purchaseStatus]
         },
