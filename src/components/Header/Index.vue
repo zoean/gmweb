@@ -157,7 +157,7 @@ export default {
                 pageSize: 10,
                 currentPage: 1,
                 total: null,
-                readState: 0
+                readState: 0 //0是未读，1是已读
             },
             tableData: [],
             columnListTree: [

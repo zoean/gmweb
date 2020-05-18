@@ -40,7 +40,7 @@
                     <el-button v-if="delDataAllocation" slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
                   </el-popover>
                   <el-button v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">配置组员</el-button>
-                  <el-button v-if="addDataAllocationLink" @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
+                  <el-button v-if="addDataAllocationLink && !scope.row.classType" @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
                   <el-button v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" type="text"  style="margin-left: .2rem;">一键分配</el-button>
               </template>
             </el-table-column>
