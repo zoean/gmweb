@@ -50,6 +50,9 @@ import activityA from '@/components/Operate/ActivityA';
 import ActivityDetail  from '@/components/Operate/ActivityDetail'
 import partinMember from '@/components/Operate/PartinMember'
 import WinningList from '@/components/Operate/WinningList'
+import PriceList from '@/components/Operate/PriceList'
+import PriceDetail from '@/components/Operate/PriceDetail'
+import CreateActivity from '@/components/Operate/CreateActivity'
 Vue.use(Router);
 
 // 重写路由
@@ -75,8 +78,7 @@ export default new Router({
             path: '/base/people',
             name: 'people',
             component: people
-        },
-        
+        },     
         {
             path: '/base/people/default',
             name: 'peopleDefault',
@@ -276,6 +278,11 @@ export default new Router({
             component: activityA
         },
         {
+            path:'/operate/activityA/createactivity',
+            name:'CreateActivity',
+            component:CreateActivity
+        },  
+        {
             path:'/operate/activityA/ActivityDetail',
             name:'activitydetail',
             component:ActivityDetail
@@ -289,6 +296,16 @@ export default new Router({
             path:'/operate/activityA/winninglist',
             name:'WinningList',
             component:WinningList
+        },
+        {
+            path:'/operate/activityA/pricelist',
+            name:'PriceList',
+            component:PriceList
+        },
+        {
+            path:'/operate/activityA/pricedetail',
+            name:'pricedetail',
+            component:PriceDetail
         },
         {
             path: '/crm',
