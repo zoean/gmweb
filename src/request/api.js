@@ -140,6 +140,8 @@ export const getSpillPoolClueData = '/api/phone/clueData/getSpillPoolClueData'; 
 export const consumerCallDataList = '/api/phone/clueData/consumerCallDataList'; //获取用户线索列表数据    
 export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获取坐席的线索数量情况    
 export const copyTel = '/api/phone/clueData/copyTel'; //复制手机号码    
+export const entryClueData = '/api/phone/clueData/entryClueData'; //手动录入线索数据    
+export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //批量导入线索数据    
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）
@@ -228,6 +230,6 @@ export const getGoodsList = '/order-service/goods/getGoodsList' //主推班型
 export const readUuid = '/api/phone/stationNews/read/' //读取信息
 export const getStationNews = '/api/phone/stationNews/getStationNews' //获取消息列表
 
-
-
+//线索模板导出
+export const clueDataTem = '/api/phone/excel/clueDataTem' //线索模板导出
 

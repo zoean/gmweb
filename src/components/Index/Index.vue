@@ -46,13 +46,13 @@
                 <h3>快速登录入口</h3>
             </el-row>
             <el-row class="entry-list" type="flex" justify="center">
-                <el-col :span="8" :gutter="20" v-for="(item, index) in list1" :key="index" @click="handleClick1(item)">
-                    <a :href="item.https"><img :src="item.url" :alt="item.name" target="_blank"></a>
+                <el-col :span="8" :gutter="20" v-for="(item, index) in list1" :key="index">
+                    <a><img :src="item.url" :alt="item.name" target="_blank" @click="handleClick1(item)" style="cursor: pointer;"></a>
                 </el-col>
             </el-row>
             <el-row class="entry-list" type="flex" justify="center">
                 <el-col :span="8" :gutter="20" v-for="(item, index) in list2" :key="index">
-                    <a :href="item.https"><img :src="item.url" :alt="item.name"></a>
+                    <a><img :src="item.url" :alt="item.name" style="cursor: pointer;"></a>
                 </el-col>
             </el-row>
         </el-row>

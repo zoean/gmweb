@@ -119,23 +119,22 @@
                     <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
                     <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
-                        <!-- <el-button @click="phoneOut(scope.row)" type="text">手机外拨</el-button>
-                         <el-button @click="seatOut(scope.row)" type="text">座机外拨</el-button>
-                         <el-button @click="handleAddClick(scope.row)" type="text">添加备注</el-button>-->
                         <el-button @click="payDetail(scope.row)" type="text">支付记录</el-button>
                     </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
-                        @size-change="handleOrderSizeChange"
-                        @current-change="handleOrderCurrentChange"
-                        :current-page="orderForm.currentPage"
-                        :page-sizes="[10, 20, 30]"
-                        :page-size="orderForm.pageSize"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="userOrderTotal"
-                        >
-                    </el-pagination>
+                    background
+                    @size-change="handleOrderSizeChange"
+                    @current-change="handleOrderCurrentChange"
+                    :current-page="orderForm.currentPage"
+                    :page-sizes="[10, 20, 30]"
+                    :page-size="orderForm.pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    style="text-align: right; margin-top: 20px;"
+                    :total="userOrderTotal"
+                    >
+                </el-pagination>
             </el-tab-pane>
         </el-tabs>
 
@@ -153,26 +152,12 @@
             @fatherDataList='orderCallDataList'
         >
         </CustomerNotes>
-
-        <el-dialog width="32%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
-            <el-row type="flex" justify="start">
-                <el-col class="col-label">订单ID：</el-col>
-                <el-col>{{orderDetail.orderId}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付方式：</el-col>
-                <el-col>{{orderDetail.payTypeName}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付时间：</el-col>
-                <el-col>{{orderDetail.payTime | timestampToTime}}</el-col>
-            </el-row>
-            <el-row type="flex">
-                <el-col class="col-label">支付金额：</el-col>
-                <el-col>{{orderDetail.moneyPaid}} 元</el-col>
-            </el-row>
+        <el-dialog width="50%" class="show-pay-detail" :visible.sync="payDetailVisible" title="支付记录">
+            <el-table :data="orderDetail">
+                <el-table-column v-for="(item, index) in paymentRecordColumn" :key="index" :label="item.label" :prop="item.prop" :formatter="item.formatter" :min-width="item.width">
+                </el-table-column>
+            </el-table>
         </el-dialog>
-
     </el-main>
 </template>
 
@@ -275,7 +260,28 @@ export default {
             },
             ],
             payDetailVisible: false,
-            orderDetail: {}
+            orderDetail: {},
+            paymentRecordColumn: [
+                {
+                    label: '支付时间', prop: 'payTime', width: 120, formatter: (row)=> {
+                        return row.payTime ? timestampToTime(Number(row.payTime)*1000) : '--'
+                    }
+                },
+                {
+                    label: '订单类型', prop: 'orderType'
+                },
+                {
+                    label: '支付方式', prop: 'payTypeName',
+                },
+                {
+                    label: '支付金额', prop: 'moneyPaid', formatter: (row) => {
+                        return `￥${row.moneyPaid}`
+                    }
+                },
+                {
+                    label: '订单号', prop: 'orderNo', width: 120
+                }
+            ]
         }
     },
     components: {
@@ -290,11 +296,14 @@ export default {
         this.jqStart = browserfly.noConflict();
     },
     methods: {
+        transferTime(val){
+            return val ? timestampToTime(val*1000) : '--'
+        },
         parsePurchase(row){
             return this.purchaseOptions[row.purchaseStatus]
         },
         sliceTime(row){
-            return row.orderTime.slice(0, -2)
+            return row.orderTime ? timestampToTime(Number(row.orderTime)) : '--'
         },
         tabChange(tab){
             if(tab.index){
@@ -327,7 +336,7 @@ export default {
             this.payDetailVisible = true
             this.$smoke_post(getOrderPayRecord, {orderId: row.orderId, schoolName: row.schoolId}).then(res =>{
                 if(res.code == 200){
-                    this.orderDetail = res.data[0]
+                    this.orderDetail = res.data
                 }
             })
         },
@@ -547,6 +556,12 @@ export default {
                     width: 120px;
                     text-align: right;
                 }
+            }
+            .line{
+                border-bottom: 1px solid #ccc;
+                width: 100%;
+                display: block;
+                height: 1px;
             }
         }
         

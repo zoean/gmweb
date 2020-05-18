@@ -9,6 +9,7 @@
         :collapse="iscollapse"
         @open="handleOpen" 
         @close="handleClose"
+        :collapse-transition="false"
         >
 
         <div v-for="(item,index) in userMenuList" :key="index">
@@ -173,7 +174,7 @@ export default {
 <style lang="less" scoped>
   .aside-all{
     position: relative;
-    height: calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
     .el-submenu-smoke{
       position: relative;
       z-index: 9;
