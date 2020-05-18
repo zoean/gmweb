@@ -1,7 +1,7 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">活动详情</div>
+      <div class="people-title">创建活动</div>
       <el-tabs type="border-card">
         <el-tab-pane label="基础信息">
           <el-form ref="form" :model="form" label-width="150px !important" :rules="rules">
@@ -140,8 +140,8 @@ export default {
         resource: "",
         desc: "",
         newUser:"",
-        Zremind:"关闭",
-        Uremind:"关闭"
+        Zremind:"",
+        Uremind:""
       },
       imageUrl: "",
       rules: {

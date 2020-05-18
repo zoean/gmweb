@@ -1,78 +1,78 @@
 <template>
-    <el-container class="index-main">
-      <el-main>
-        <div class="people-title">中奖列表</div>
-        <el-row>
-          <el-col :span="2">
-            <el-select style="width:80%" v-model="pricetype" placeholder="全部奖品" class="screen-li">
-              <el-option
-                v-for="item in priceTypeoOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="4">
-            <el-input v-model="searchInput" placeholder="昵称, 用户ID" style="width:90%"></el-input>
-          </el-col>
-          <el-col :span="2">
-            <el-select v-model="pricestate" style="width:80%" placeholder="领奖状态">
-              <el-option
-                v-for="item in priceStateOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="2">
-            <el-button type="primary" style="width:80%">搜索</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="tableData" border >
-          >
-          <el-table-column
-            :prop="item.prop"
-            :label="item.label"
-            v-for="(item, index) in columnList"
-            :width="item.width"
-            :key="index"
-          ></el-table-column>
-          <el-table-column label="操作" prop>
-            <template slot-scope="scope">
-              <el-button type="text" @click="priceDetail(scope.row)">详情</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-dialog center title="奖品详情" :visible.sync="dialogVisible">
-          <el-form ref="form" :model="form" class="form_style">
-            <el-form-item :label="item.label" v-for="(item,index) in detailData" :key="index">
-              <div>{{item.value}}</div>
-            </el-form-item>
-            <el-form-item label="收货人">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="联系方式">
-              <el-input v-model="form.tel"></el-input>
-            </el-form-item>
-            <el-form-item label="收货地区">
-              <el-input v-model="form.region"></el-input>
-            </el-form-item>
-            <el-form-item label="具体地址">
-              <el-input v-model="form.address"></el-input>
-            </el-form-item>
-            <el-form-item label="邮件单号">
-              <el-input v-model="form.mail"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-          </div>
-        </el-dialog>
-      </el-main>
-    </el-container>
+  <el-container class="index-main">
+    <el-main>
+      <div class="people-title">中奖列表</div>
+      <el-row>
+        <el-col :span="2">
+          <el-select style="width:80%" v-model="pricetype" placeholder="全部奖品" class="screen-li">
+            <el-option
+              v-for="item in priceTypeoOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="searchInput" placeholder="昵称, 用户ID" style="width:90%"></el-input>
+        </el-col>
+        <el-col :span="2">
+          <el-select v-model="pricestate" style="width:80%" placeholder="领奖状态">
+            <el-option
+              v-for="item in priceStateOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="primary" style="width:80%">搜索</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="tableData" border>
+        >
+        <el-table-column
+          :prop="item.prop"
+          :label="item.label"
+          v-for="(item, index) in columnList"
+          :width="item.width"
+          :key="index"
+        ></el-table-column>
+        <el-table-column label="操作" prop>
+          <template slot-scope="scope">
+            <el-button type="text" @click="priceDetail(scope.row)">详情</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-dialog center title="奖品详情" :visible.sync="dialogVisible">
+        <el-form ref="form" :model="form" class="form_style">
+          <el-form-item :label="item.label" v-for="(item,index) in detailData" :key="index">
+            <div>{{item.value}}</div>
+          </el-form-item>
+          <el-form-item label="收货人">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="联系方式">
+            <el-input v-model="form.tel"></el-input>
+          </el-form-item>
+          <el-form-item label="收货地区">
+            <el-input v-model="form.region"></el-input>
+          </el-form-item>
+          <el-form-item label="具体地址">
+            <el-input v-model="form.address"></el-input>
+          </el-form-item>
+          <el-form-item label="邮件单号">
+            <el-input v-model="form.mail"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
+    </el-main>
+  </el-container>
 </template>
 <script>
 export default {
