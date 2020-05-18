@@ -115,7 +115,7 @@ export const getUpperLimitList = '/api/phone/DataAutDis/getUpperLimitList'; //�
 export const addRuleUserAndLimit = '/api/phone/DataAutDis/addRuleUserAndLimit'; //添加规则下人员和已分配上限信息
 export const getRuleUserStructureLimit = '/api/phone/DataAutDis/getRuleUserStructureLimit'; //获取规则下人员结构和已分配上限信息
 export const getRuleUserLimit = '/api/phone/DataAutDis/getRuleUserLimit'; //获取规则下人员分配上限信息
-export const getRuleItem = '/api/phone/DataAutDis/getRuleItem'; //获取分配组项列表
+export const getRuleItem = '/api/phone/DataAutDis/getRuleItem?type='; //获取分配组项列表
 export const getRuleItemAuth = '/api/phone/DataAutDis/getRuleItemAuth'; //获取分配组项列表（带权限）
 export const getSchoolList = '/api/phone/DataAutDis/getSchoolList'; //获取分校集合
 export const getPopularizeUrl = '/api/phone/DataAutDis/getPopularizeUrl'; //获取推广链接
@@ -229,6 +229,7 @@ export const getGoodsList = '/order-service/goods/getGoodsList' //主推班型
 //站内消息
 export const readUuid = '/api/phone/stationNews/read/' //读取信息
 export const getStationNews = '/api/phone/stationNews/getStationNews' //获取消息列表
+export const noReadNum = '/api/phone/stationNews/noReadNum' //获取未读消息数量
 
 //线索模板导出
 export const clueDataTem = '/api/phone/excel/clueDataTem' //线索模板导出

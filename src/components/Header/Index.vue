@@ -132,7 +132,8 @@ import {
     updateUserPassword,
     readUuid,
     getStationNews,
-    getClueDataNumber
+    getClueDataNumber,
+    noReadNum
 } from '../../request/api';
 import { getTextByJs, timestampToTime, menuNumberFunc } from '../../assets/js/common';
 import { pass_word } from '../../assets/js/data';
@@ -156,6 +157,7 @@ export default {
                 pageSize: 10,
                 currentPage: 1,
                 total: null,
+                readState: 0
             },
             tableData: [],
             columnListTree: [
@@ -169,8 +171,8 @@ export default {
         }
     },
     created() {
-        this.getStationNews();
         this.getClueDataNumber();
+        this.noReadNum();
     },
     methods: {
         handleSizeChange(index) {
@@ -200,30 +202,38 @@ export default {
                             path: '/crm/myStudents/newStudents'
                         })
                     }
+
+                    this.noReadNum();
+
+                }
+            })
+        },
+        noReadNum() {
+            this.$smoke_post(noReadNum, {}).then(res => {
+                if(res.code == 200) {
+                    this.notReadNumValue = res.data;
                 }
             })
         },
         getStationNews() {
-            let num = 0;
             this.$smoke_post(getStationNews, this.newsForm).then(res => {
                 if(res.code == 200) {
                     res.data.list.map(sll => {
                         sll.createTime = timestampToTime(Number(sll.createTime));
                         if(sll.readState == 0) {
                             sll.readState = '未读';
-                            num++;
                         }else{
                             sll.readState = '已读';
                         }
                     })
                     this.tableData = res.data.list;
                     this.newsForm.total = res.data.total;
-                    this.notReadNumValue = num;
                 }
             })
         },
         badgeClick() {
             this.drawer = true;
+            this.getStationNews();
         },
         handleCloseDrawer(done) {
             done();
@@ -364,7 +374,7 @@ export default {
                                     type: 'success',
                                     offset: 60
                                 });
-                                that.getStationNews();
+                                that.noReadNum();
                             }
                         };
 

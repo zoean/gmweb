@@ -125,9 +125,9 @@
                             @select="handleSelectExam"
                         ></el-autocomplete>
 
-                    </el-form-item>
+                    </el-form-item >
 
-                    <el-form-item label="溢出量再分配" prop="dayList">
+                    <!-- <el-form-item label="溢出量再分配" prop="dayList">
                       
                         <el-select v-model="ruleForm.dayList" multiple placeholder="请选择" size="small">
                             <el-option
@@ -138,7 +138,7 @@
                             </el-option>
                         </el-select>
 
-                    </el-form-item>
+                    </el-form-item> -->
 
                     <el-form-item>
 
@@ -307,7 +307,7 @@ export default {
             drawerFlag1: false,
             direction: 'rtl',
             ruleForm: {
-                dayList: [], //溢出量再分配
+                // dayList: [], //溢出量再分配
                 name: '', //分配组名
                 describe: '', //分配组描述
                 state: 1, //分配组状态（1：开启 0：关闭）
@@ -574,8 +574,11 @@ export default {
                     this.ruleForm.name = res.data.name;
                     this.ruleForm.describe = res.data.describe;
                     this.ruleForm.state = res.data.state;
-                    this.ruleForm.dayList = res.data.dayList;
+                    // this.ruleForm.dayList = res.data.dayList;
                     this.ruleForm.uuid = res.data.uuid;
+                    this.ruleForm.classType = res.data.classType;
+                    this.ruleForm.examItemId = res.data.examItemId;
+                    this.ruleForm.examItemText = res.data.examItem;
                 }
             })
         },
