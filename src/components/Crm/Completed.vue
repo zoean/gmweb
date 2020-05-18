@@ -116,7 +116,19 @@
                 <el-table
                 :data="userOrderList"
                 style="width: 100%">
-                    <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
+                    <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter">
+                    <template slot-scope="scope">
+                        <span>{{scope.row[item.prop]}}</span>
+                        <el-tooltip v-if="item.prop=='tel'" effect="dark" content="复制手机号码" placement="top">
+                            <el-image
+                                class="copy-icon-style"
+                                @click="phoneCopy(scope.row)"
+                                :src="require('../../assets/images/copy-icon.png')">
+                            </el-image>
+                        </el-tooltip>
+                    </template>
+                    
+                    </el-table-column>
                     <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
                         <el-button @click="payDetail(scope.row)" type="text">支付记录</el-button>
