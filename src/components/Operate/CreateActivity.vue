@@ -89,7 +89,6 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
-                :auto-upload="false"
               >
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -114,12 +113,14 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="活动图文">
+            <EditorBar v-model="detail" :isClear="isClear" @change="change"></EditorBar>
         </el-tab-pane>
       </el-tabs>
     </el-main>
   </el-container>
 </template>
 <script>
+import EditorBar from "../../components/Share/wangEnduit"
 export default {
   name: "CreateActivity",
   data() {
@@ -143,7 +144,9 @@ export default {
         Zremind:"",
         Uremind:""
       },
+      isClear: false,  
       imageUrl: "",
+      detail:"",
       rules: {
         official: [{ required: true, message: "请选择公众号", trigger: "change" }],
         name: [{ required: true, message: "请输入活动名称", trigger: "blur" }],
@@ -157,7 +160,7 @@ export default {
   methods: {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(file.raw);
+      console.log(this.imageUrl);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -173,7 +176,13 @@ export default {
     },
     onSubmit() {
       this.$refs["form"].validate(valid => {});
+    },
+    change(){
+      
     }
+  },
+  components:{
+    EditorBar
   }
 };
 </script>
