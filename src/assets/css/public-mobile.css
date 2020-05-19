@@ -323,9 +323,14 @@ a:link,a:active,a:visited,a:hover {
   display: none;
 }
 
+.el-table .error-row {
+    background: #F56C6C;
+    color: #fff;
+}
 
-
-
+.el-table .error-row:hover{
+    color: #606266;
+}
 
 
 

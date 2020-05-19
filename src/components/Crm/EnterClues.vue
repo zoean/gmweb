@@ -213,11 +213,17 @@
 
                 <el-button type="primary" @click="downloadImport" size="small" style="width: 130px; display: inline-block;">下载导入模板</el-button>
 
-                <div style="margin-top: 20px;" v-if="validDataNumFlag">{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</div>
+                <div style="margin-top: 20px;" v-if="validDataNumFlag">
+                    <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
+                    <span>（ </span>
+                    <span style="display: inline-block; width:20px; height: 10px;background: #F56C6C;"></span>
+                    <span> ）</span>
+                </div>
 
                 <el-table
                     style="margin-top: 20px;"
                     :data="importDataForm.list"
+                    :row-class-name="tableRowClassName"
                     >
                     <el-table-column
                       :prop="item.prop"
@@ -390,6 +396,14 @@ export default {
         this.headersObj.Authorization = jhToken;
     },
     methods: {
+        tableRowClassName({row, rowIndex}) {
+            console.log(row);
+            if (row.type == 2) {
+                return 'error-row';
+            }else{
+                return '';
+            }
+        },
         handleAvatarSuccess(res, file) {
             let num1 = 0;
             let num2 = 0;
