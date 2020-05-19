@@ -277,7 +277,7 @@ import {
     popularizeUrl
 } from '../../request/api';
 import { dateList } from '../../assets/js/data';
-import { stateText, getTextByJs, quchong, copyData } from '../../assets/js/common';
+import { stateText, getTextByJs, quchong, copyData, removeEvery } from '../../assets/js/common';
 import { MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import Tree from '../Share/Tree';
 export default {
@@ -420,6 +420,13 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })

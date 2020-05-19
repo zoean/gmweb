@@ -259,7 +259,7 @@
                                         style="width: 100%;"
                                         v-model="customerForm.examPeriod"
                                         size="small" 
-                                        type="date"
+                                        type="month"
                                         @change="timeChange"
                                         placeholder="请选择日期">
                                     </el-date-picker>
@@ -405,7 +405,7 @@ import {
     copyTel,
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData } from '../../assets/js/common';
+import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -521,7 +521,7 @@ export default {
             this.form.num = pageNum
         },
         getRowKey(row){
-        return row.num
+            return row.num
         },
         editFieldHandle(){
             this.$store.commit('setEditFieldVisible', true)
@@ -565,6 +565,13 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })
@@ -629,7 +636,7 @@ export default {
                     this.customerForm.classTeaName = res.data.classTeaName;
                     this.customerForm.createTime = timestampToTime(Number(res.data.createTime));
                     this.customerForm.education = res.data.education == 0 || res.data.education == null ? '' : String(res.data.education);
-                    this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 ? '' : String(res.data.evidencePurpose)
+                    this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 || res.data.evidencePurpose == null ? '' : String(res.data.evidencePurpose)
                     this.customerForm.examPeriod = res.data.examPeriod == "" ? date.getTime() : Number(res.data.examPeriod);
                     this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
                     this.customerForm.graduationMajor = res.data.graduationMajor;
@@ -648,7 +655,7 @@ export default {
                     this.customerForm.tel = res.data.tel;
                     this.customerForm.twoTel = res.data.twoTel;
                     this.customerForm.work = res.data.work;
-                    this.customerForm.workingLife = res.data.workingLife == 0 ? '' : String(res.data.workingLife);
+                    this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
                 }
             })
@@ -730,6 +737,7 @@ export default {
             })
         },
         handleClose(done) {
+            this.getClassTeaStudent();
             done();
         },
         handleClassTabClick(tab, event) {

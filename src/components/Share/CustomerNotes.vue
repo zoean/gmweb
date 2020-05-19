@@ -47,18 +47,33 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户姓名" prop="name">
-                                    <el-input v-model="ruleForm.name" size="small"></el-input>
+                                    <el-input v-model="ruleForm.name" size="small" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
-                                    <el-input-number v-model="ruleForm.age" :precision="0" :step="1" :min="1" :max="150" size="small" style="width: 100%;"></el-input-number>
+                                    <el-input-number 
+                                        v-model="ruleForm.age" 
+                                        :precision="0" 
+                                        :step="1" 
+                                        :min="1" 
+                                        :max="150" 
+                                        size="small" 
+                                        style="width: 100%;"
+                                        v-if="!routePathFlag"
+                                    ></el-input-number>
+                                    <el-input v-model="ruleForm.age" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''" v-if="routePathFlag"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="最高学历" prop="education">
 
-                                    <el-select v-model="ruleForm.education" placeholder="请选择最高学历" size="small">
+                                    <el-select 
+                                        v-model="ruleForm.education" 
+                                        placeholder="请选择最高学历" 
+                                        size="small"
+                                        :disabled="routePathFlag"
+                                    >
                                         <el-option
                                           v-for="item in enumList['MJ-1']"
                                           :key="item.name"
@@ -71,7 +86,11 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="所在省市" prop="provinceCity">
-                                    <area-cascader type="text" placeholder="请选择地区" v-model="ruleForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+
+                                    <area-cascader type="text" placeholder="请选择地区" v-model="ruleForm.provinceCity" @change="cityChange" :data="pcaa" v-if="!routePathFlag"></area-cascader>
+
+                                    <el-input v-model="ruleForm.provinceCity" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''" v-if="routePathFlag"></el-input>
+
                                 </el-form-item>
                             </el-col>
   
@@ -81,13 +100,18 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户工作" prop="work">
-                                    <el-input v-model="ruleForm.work" size="small"></el-input>
+                                    <el-input v-model="ruleForm.work" size="small" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="取证目的" prop="evidencePurpose">
 
-                                    <el-select v-model="ruleForm.evidencePurpose" placeholder="请选择取证目的" size="small">
+                                    <el-select 
+                                        v-model="ruleForm.evidencePurpose" 
+                                        placeholder="请选择取证目的" 
+                                        size="small"
+                                        :disabled="routePathFlag"
+                                    >
                                         <el-option
                                           v-for="item in enumList['MJ-3']"
                                           :key="item.name"
@@ -103,7 +127,12 @@
 
                                 <el-form-item label="工作年限" prop="workingLife">
 
-                                    <el-select v-model="ruleForm.workingLife" placeholder="请选择工作年限" size="small">
+                                    <el-select 
+                                        v-model="ruleForm.workingLife" 
+                                        placeholder="请选择工作年限" 
+                                        size="small"
+                                        :disabled="routePathFlag"
+                                    >
                                         <el-option
                                           v-for="item in enumList['MJ-2']"
                                           :key="item.name"
@@ -118,7 +147,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="第二电话" prop="twoTel">
-                                    <el-input v-model="ruleForm.twoTel" size="small"></el-input>
+                                    <el-input v-model="ruleForm.twoTel" size="small" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''"></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -128,7 +157,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户微信" prop="wx">
-                                    <el-input v-model="ruleForm.wx" size="small"></el-input>
+                                    <el-input v-model="ruleForm.wx" size="small" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''"></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -136,7 +165,12 @@
 
                                 <el-form-item label="客户性别" prop="gender">
 
-                                    <el-select v-model="ruleForm.gender" placeholder="请选择性别" size="small">
+                                    <el-select 
+                                        v-model="ruleForm.gender" 
+                                        placeholder="请选择性别" 
+                                        size="small"
+                                        :disabled="routePathFlag"
+                                    >
                                         <el-option
                                           v-for="item in genderList"
                                           :key="item.name"
@@ -523,7 +557,7 @@ import {
     getGoodsList,
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 export default {
     name: 'customerNotes',
@@ -713,6 +747,7 @@ export default {
             classTypeList: [],
             pcaa: null, //省市数据
             restaurants: [],
+            routePathFlag: false,
         }
     },
     created() {
@@ -752,6 +787,9 @@ export default {
         this.getClueDataDetails(this.clueDataSUuid);
         this.getGoodsList();
         this.getGoodsList2();
+        if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("recoverData") != -1){
+            this.routePathFlag = true;
+        }
     },
     methods: {
         getGoodsList() {
@@ -782,6 +820,13 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })

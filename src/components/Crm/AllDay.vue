@@ -198,7 +198,7 @@ import {
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-import { menuNumberFunc, copyData } from '../../assets/js/common';
+import { menuNumberFunc, copyData, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -334,7 +334,9 @@ export default {
             }
         },
         getRuleItem() {
-            this.$smoke_get(getRuleItem, {}).then(res => {
+            this.$smoke_get(getRuleItem, {
+                type: ''
+            }).then(res => {
                 if(res.code == 200){
                     this.ruleNumberNameList = res.data;
                 }
@@ -345,6 +347,20 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })

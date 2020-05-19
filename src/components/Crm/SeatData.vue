@@ -158,7 +158,7 @@
             <el-table-column prop="active" label="操作" width="200px;" fixed="right">
               <template slot-scope="scope">
                   <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                  <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+                  <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->
               </template>
             </el-table-column>
             <el-table-column
@@ -212,7 +212,7 @@ import {
     copyTel,
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { copyData } from '../../assets/js/common';
+import { copyData, removeEvery } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
 import { MJ_6 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
@@ -313,12 +313,21 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })
         },
         getRuleItem() {
-            this.$smoke_get(getRuleItem, {}).then(res => {
+            this.$smoke_get(getRuleItem, {
+                type: ''
+            }).then(res => {
                 if(res.code == 200){
                     this.ruleNumberNameList = res.data;
                 }

@@ -143,7 +143,7 @@ import {
     clueDataRelease,
     copyTel,
 } from '../../request/api';
-import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText, copyData } from '../../assets/js/common';
+import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText, copyData, removeEvery } from '../../assets/js/common';
 import { MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'seatData',
@@ -197,12 +197,21 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })
         },
         getRuleItem() {
-            this.$smoke_get(getRuleItem, {}).then(res => {
+            this.$smoke_get(getRuleItem, {
+                type: ''
+            }).then(res => {
                 if(res.code == 200){
                     this.ruleNumberNameList = res.data;
                 }

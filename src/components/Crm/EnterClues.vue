@@ -295,7 +295,7 @@ import {
     clueDataTem,
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6 } from '../../assets/js/data';
 export default {
     name: 'enterClues',
@@ -436,7 +436,9 @@ export default {
             }
         },
         getRuleItem() {
-            this.$smoke_get(getRuleItem, {}).then(res => {
+            this.$smoke_get(getRuleItem, {
+                type: 0
+            }).then(res => {
                 if(res.code == 200){
                     this.ruleNumberNameList = res.data;
                 }
@@ -450,6 +452,13 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
+                    for (var i in res.data) {
+                        res.data[i].map(sll => {
+                            if(sll.enable == 0) {
+                                res.data[i] = removeEvery(sll, res.data[i]);
+                            }
+                        })
+                    }
                     this.enumList = res.data;
                 }
             })
