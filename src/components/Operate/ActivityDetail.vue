@@ -114,14 +114,17 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="活动图文">
+          <EditorBar v-model="detail" :isClear="isClear" @change="change"></EditorBar>
         </el-tab-pane>
       </el-tabs>
     </el-main>
   </el-container>
 </template>
 <script>
+import EditorBar from "../../components/Share/wangEnduit"
 export default {
   name: "CreateActivity",
+  components:{EditorBar},
   data() {
     return {
       form: {
@@ -151,8 +154,13 @@ export default {
         activityTime:[{type: 'date', required: true, message: '请选择日期', trigger: 'change'}],
         distributionTime:[{type: 'date', required: true, message: '请选择日期', trigger: 'change'}],
         newUser:[{ required: true, message: "请选择是否开启", trigger: "change" }]
-      }
+      },
+        test:'',  
+        isClear: false,  
+        detail:"" 
     };
+  },
+  created() {
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -173,7 +181,10 @@ export default {
     },
     onSubmit() {
       this.$refs["form"].validate(valid => {});
-    }
+    },
+    change(val) {  
+      console.log(val)  
+    },  
   }
 };
 </script>
