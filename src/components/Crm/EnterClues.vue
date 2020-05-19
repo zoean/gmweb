@@ -213,6 +213,8 @@
 
                 <el-button type="primary" @click="downloadImport" size="small" style="width: 130px; display: inline-block;">下载导入模板</el-button>
 
+                <el-button type="primary" @click="clearImport" size="small" style="width: 130px; display: inline-block;">清除导入线索</el-button>
+
                 <div style="margin-top: 20px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
                     <span>（ </span>
@@ -523,7 +525,14 @@ export default {
             });
         },
         upImport() {
-            this.dialogVisible = true;
+            if(this.importDataForm.list.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '亲，请您先导入线索数据'
+                })
+            }else{
+                this.dialogVisible = true;
+            }
         },
         bulkImportClueData() {
             this.$smoke_post(bulkImportClueData, this.importDataForm).then(res => {
@@ -559,6 +568,9 @@ export default {
             // console.log(href);
             window.open(href, '_blank');
         },
+        clearImport() {
+            this.importDataForm.list = [];
+        },
         beforeAvatarUpload(file) {
             console.log(file);
         },
@@ -578,9 +590,9 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #aaa;
+            background: #fff;
             margin-bottom: .3rem;
-            color: #fff;
+            color: #666666;
         }
         .people-screen{
             margin-bottom: .3rem;

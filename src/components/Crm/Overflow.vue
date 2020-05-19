@@ -170,7 +170,7 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%;">
             <el-table-column
               type="selection"
               width="45">
@@ -562,9 +562,9 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #aaa;
+            background: #fff;
             margin-bottom: .3rem;
-            color: #fff;
+            color: #666666;
         }
         .people-screen{
             margin-bottom: .3rem;

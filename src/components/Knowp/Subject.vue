@@ -298,9 +298,9 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #aaa;
+            background: #fff;
             margin-bottom: .3rem;
-            color: #fff;
+            color: #666666;
         }
         .people-screen{
             margin-bottom: .3rem;

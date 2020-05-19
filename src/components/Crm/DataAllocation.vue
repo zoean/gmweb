@@ -702,9 +702,9 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #aaa;
+            background: #fff;
             margin-bottom: .3rem;
-            color: #fff;
+            color: #666666;
         }
     }
     /* //element-ui table的去除右侧滚动条的样式 */
