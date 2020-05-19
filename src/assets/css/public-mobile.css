@@ -332,10 +332,12 @@ a:link,a:active,a:visited,a:hover {
     color: #606266;
 }
 
-
-
-
-
+.el-submenu__icon-arrow{
+    color: #fff !important;
+}
+.el-submenu .el-submenu__title:hover .el-submenu__icon-arrow{
+    color: #4794FE !important;
+}
 
 
 

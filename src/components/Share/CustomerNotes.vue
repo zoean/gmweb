@@ -330,7 +330,6 @@
                     <el-table
                         :data="notesList"
                         style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
-                        border
                         >
                         <el-table-column
                           :prop="item.prop"
@@ -366,7 +365,6 @@
                     <el-table
                         :data="notesCallList"
                         style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
-                        border
                         >
                         <el-table-column
                           :prop="item.prop"
