@@ -99,7 +99,7 @@
                   :key="index"
                   >
                 </el-table-column>
-                <el-table-column prop="active" label="操作" width="200">
+                <el-table-column prop="active" label="操作">
                   <template slot-scope="scope">
                       <el-button @click="studentsListClick(scope.row)" type="text" >学员列表</el-button>
                       <el-button @click="studentsMoveClick(scope.row)" type="text" v-if="scope.row.studentNum != 0 && teacherList.length > 1">学员转移</el-button>

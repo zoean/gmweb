@@ -116,7 +116,7 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="active" label="操作" width="200px;" fixed="right">
+            <el-table-column prop="active" label="操作" fixed="right">
               <template slot-scope="scope">
                   <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                   <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->

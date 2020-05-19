@@ -123,7 +123,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="350px;" fixed="right">
+            <el-table-column prop="active" label="操作" fixed="right" min-width="340">
               <template slot-scope="scope">
                   <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                   <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>

@@ -183,9 +183,6 @@ export default {
       min-width: 200px;
       max-width: 256px;
       border-radius: none;
-      i{
-        color: #fff;
-      }
       .el-submenu__title{
         &:hover{
           span{
@@ -276,5 +273,4 @@ export default {
       }
     }
   }
-    
 </style>

@@ -23,7 +23,7 @@
               >
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="400px">
+            <el-table-column prop="active" label="操作" min-width="170" fixed="right">
               <template slot-scope="scope">
                   <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
                   <el-popover
