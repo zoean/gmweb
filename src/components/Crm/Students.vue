@@ -554,6 +554,8 @@ export default {
             this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
             this.copyClueDataSUuid = row.clueDataSUuid;
             this.tabs_active = 'first';
+            this.customerForm.followUp = '';
+            this.customerForm.followUpContent = '';
             this.getStudentDetails(row.uuid);
         },
         cityChange() {

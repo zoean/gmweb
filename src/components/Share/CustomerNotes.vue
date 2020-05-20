@@ -338,11 +338,11 @@
                           :key="index"
                           >
                         </el-table-column>
-                        <el-table-column prop="active" label="操作">
+                        <!-- <el-table-column prop="active" label="操作">
                           <template slot-scope="scope">
                               <el-button @click="notesDetails(scope.row)" type="text" >备注详情</el-button>
                           </template>
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
 
                     <el-pagination
@@ -801,8 +801,17 @@ export default {
             })
         },
         handleCloseDrawer(done) {
-            done();
-            this.$emit('fatherDataList');
+            console.log(this.ruleForm.callLogUuid); //判断是否是通话弹出
+            if(this.ruleForm.callLogUuid) {
+                this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                    this.$emit('fatherDataList');
+                })
+                .catch(_ => {});
+            }else {
+                done();
+            }
         },
         handleCloseDrawerDetails(done) {
             this.notesForm.currentPage = 1;
@@ -826,6 +835,7 @@ export default {
                         })
                     }
                     this.enumList = res.data;
+                    console.log(this.enumList);
                 }
             })
         },

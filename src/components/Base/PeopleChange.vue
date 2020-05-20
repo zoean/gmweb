@@ -70,7 +70,27 @@
             size="55%"
             :before-close="handleClose">
             
-            <div style="padding: .3rem;">
+            <div style="padding:0 .3rem; margin-bottom: 20px;">
+
+                <div style="height: 52px; background: #fff; border-bottom: 1px dashed #ccc; padding-top: 6px; position: fixed; z-index: 99; width: 100%;">
+
+                    <div>当前选择：
+
+                        <el-tag v-for="(item,index) in formText.jqList" 
+                            :key="index" closable 
+                            style="margin-right: 10px; cursor: pointer;"
+                            :class="item.mainUin ? 'tagActive' : ''" 
+                            @close="tagClose(item)"
+                            @click="tagClick(item)"
+                        >
+                            {{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
+                        </el-tag>
+
+                    </div>
+
+                </div>
+
+                <div style="height: 60px; width: 100%;"></div>
             
                 <el-row>
                     <el-col :span="6">
@@ -94,31 +114,21 @@
                     </el-col>
                 </el-row>
     
-                <div style="margin-top: 20px; height: 40px; line-height: 30px; font-size: 15px;">当前选择：
-
-                    <el-tag v-for="(item,index) in formText.jqList" 
-                        :key="index" closable 
-                        style="margin-right: 10px; cursor: pointer;"
-                        :class="item.mainUin ? 'tagActive' : ''" 
-                        @close="tagClose(item)"
-                        @click="tagClick(item)"
-                    >
-                        {{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
-                    </el-tag>
-                </div>
-    
                 <el-table
                     :data="tableData"
-                    border
-                    highlight-current-row
-                    @current-change="handleHighLightChange"
-                    style="margin-top: .2rem;">
+                    style="width: 96%; margin: 0 auto; margin-top: .2rem;">
     
                     <el-table-column
                         :prop="item.props"
                         :label="item.label"
                         v-for="(item, index) in columnList"
                         :key="index">
+                    </el-table-column>
+
+                    <el-table-column prop="active" label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="text" @click="checkMain(scope.row)">选择jq账号</el-button>
+                        </template>
                     </el-table-column>
     
                 </el-table>
@@ -215,7 +225,7 @@ export default {
             tableData: [],
             columnList: [
                 { props: 'jqName', label: 'jq的姓名'},
-                { props: 'uin', label: 'jq的唯一标识'},
+                // { props: 'uin', label: 'jq的唯一标识'},
                 { props: 'jqUserName', label: 'jq的用户名'},
             ],
             fullscreenLoading: false,
@@ -287,30 +297,6 @@ export default {
                 this.roleOptions = quchong(res.data, 'uuid');
             })
         },
-        handleHighLightChange(val) {
-            console.log(this.accountType);
-            let flag = false;
-            val.platformNumber = this.accountType;
-            if(this.formText.jqList.length == 0){
-                val.mainUin = true;
-                this.formText.jqList.push(val);
-            }else{
-                val.mainUin = false;
-                this.formText.jqList.map(sll => {
-                    if(val.platformNumber == sll.platformNumber){
-                        sll.jqName = val.jqName;
-                        sll.jqUserName = val.jqUserName;
-                        sll.uin = val.uin;
-                        flag = true;
-                    }
-                })
-                if(!flag){
-                    this.formText.jqList.push(val);
-                }
-            }
-            this.formText.jqList = [...new Set(this.formText.jqList)];
-            console.log(this.formText.jqList);
-        },
         handleCurrentChange(index) {
             console.log(index);
             this.searchForm.currentPage = index;
@@ -332,6 +318,48 @@ export default {
                     this.roleArr.push(sll.uuid);
                 })
                 this.formText.jqList = res.data.jqList;
+            })
+        },
+        checkMain(row) {
+
+            this.$nextTick(() => {
+
+                let smoke_obj = {};
+
+                let smoke_jqList = this.formText.jqList;
+
+                let flag = false;
+
+                smoke_obj.jqName = row.jqName;
+                smoke_obj.jqUserName = row.jqUserName;
+                smoke_obj.uin = row.uin;
+                smoke_obj.platformNumber = this.accountType;
+
+                if(smoke_jqList.length == 0){
+                    smoke_obj.mainUin = true;
+                    smoke_jqList.push(smoke_obj);
+                }else{
+                    smoke_obj.mainUin = false;
+                    smoke_jqList.map(sll => {
+                        if(smoke_obj.platformNumber == sll.platformNumber){
+                            sll.jqName = smoke_obj.jqName;
+                            sll.jqUserName = smoke_obj.jqUserName;
+                            sll.uin = smoke_obj.uin;
+                            flag = true;
+                        }
+                    })
+                    if(!flag){
+                        smoke_jqList.push(smoke_obj);
+                    }
+                }
+
+                this.formText.jqList = [...new Set(smoke_jqList)];
+
+                this.$message({
+                    type: 'success',
+                    message: '选择jq账号成功'
+                })
+                
             })
         },
         onSubmit() {

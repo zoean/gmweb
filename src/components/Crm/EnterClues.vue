@@ -569,7 +569,15 @@ export default {
             window.open(href, '_blank');
         },
         clearImport() {
-            this.importDataForm.list = [];
+            if(this.importDataForm.list.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '亲，请您先导入线索数据'
+                })
+            }else{
+                this.importDataForm.list = [];
+                this.validDataNumFlag = false;
+            }
         },
         beforeAvatarUpload(file) {
             console.log(file);
