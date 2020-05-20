@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
-
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
         </el-tabs>
@@ -60,6 +57,7 @@
             size="100%"
             :before-close="handleClose"
         >
+            <span class="bullets"></span>
 
             <el-tabs v-model="tabs_active" @tab-click="handleTabClick" type="border-card" style="width: 92%; margin: 0 auto; margin-bottom: 30px;">
 

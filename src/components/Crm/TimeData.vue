@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">通时数据统计</div>
-
         <el-row>
 
             <el-col :span="4">

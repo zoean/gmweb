@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">后台角色管理</div>
-
         <el-button type="primary" @click="add_role" style="margin-bottom: .2rem;">新建角色</el-button>
 
         <el-table
@@ -46,7 +43,7 @@
             :visible.sync="drawer"
             :direction="direction"
             :before-close="handleClose">
-
+            <span class="bullets"></span>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                 
                 <el-form-item label="角色名称" prop="name">
@@ -71,7 +68,7 @@
             :visible.sync="drawerMenu"
             :direction="direction"
             :before-close="handleClose">
-
+            <span class="bullets"></span>
             <el-tree
               :data="treeData"
               show-checkbox
@@ -93,6 +90,7 @@
             :before-close="handleClose"
             size="40%"
             >
+            <span class="bullets"></span>
 
             <el-row style="margin: .2rem; height: .6rem; background: #aaa; line-height: .6rem; text-align: center; color: #fff;">
                 <el-col :span="18"><div>{{ruleForm.name}}现有{{rolePeopleList.length}}人</div></el-col>
@@ -117,6 +115,7 @@
               :visible.sync="innerDrawer"
               size="30%"
               >
+            <span class="bullets"></span>
               
               <div style="padding: .3rem; padding-top: 0; font-size: 14px;">
                   <div>一、按搜索添加成员</div>

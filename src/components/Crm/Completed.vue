@@ -2,9 +2,6 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <div class="people-title">已成单线索管理</div>
-
         <el-tabs type="border-card" @tab-click="tabChange">
             <el-tab-pane label="学员">
 
@@ -41,7 +38,7 @@
                     </template>
                     </el-table-column>
 
-                    <el-table-column prop="active" label="操作" width="400px;">
+                    <el-table-column prop="active" label="操作" min-width="160" fixed="right">
                     <template slot-scope="scope">
                         <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                         <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
@@ -116,7 +113,7 @@
                 <el-table
                 :data="userOrderList"
                 style="width: 100%">
-                    <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter">
+                    <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index">
                     <template slot-scope="scope">
                         <span>{{scope.row[item.prop]}}</span>
                         <el-tooltip v-if="item.prop=='tel'" effect="dark" content="复制手机号码" placement="top">
@@ -189,11 +186,6 @@ import { timestampToTime, copyData } from '../../assets/js/common';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'completed',
-    filters: {
-        timestampToTime: val => {
-            return val ? timestampToTime(val*1000) : '--'
-        }
-    },
     data() {
         return {
             form: {
@@ -243,8 +235,7 @@ export default {
             userOrderColumn: [{
                 label: '下单时间',
                 prop: 'orderTime',
-                width: 180,
-                formatter: this.sliceTime
+                width: 180
             },{
                 label: '姓名',
                 prop: 'name'
@@ -267,8 +258,7 @@ export default {
                 prop: 'sumMoney'
             },{
                 label: '购买状态',
-                prop: 'purchaseStatus',
-                formatter: this.parsePurchase
+                prop: 'purchaseStatus'
             },
             ],
             payDetailVisible: false,
@@ -308,14 +298,8 @@ export default {
         this.jqStart = browserfly.noConflict();
     },
     methods: {
-        transferTime(val){
-            return val ? timestampToTime(val*1000) : '--'
-        },
         parsePurchase(row){
             return this.purchaseOptions[row.purchaseStatus]
-        },
-        sliceTime(row){
-            return row.orderTime ? timestampToTime(Number(row.orderTime)) : '--'
         },
         tabChange(tab){
             if(tab.index){
@@ -339,6 +323,10 @@ export default {
         getUserOrderList(){
             this.$smoke_post(userOrderDataList, this.orderForm).then(res => {
                 if(res.code == 200){
+                    res.data.list.map(sll => {
+                        sll.orderTime = timestampToTime(Number(sll.orderTime));
+                        sll.purchaseStatus = this.purchaseOptions[sll.purchaseStatus]
+                    })
                     this.userOrderList = res.data.list
                     this.userOrderTotal = res.data.total
                 }

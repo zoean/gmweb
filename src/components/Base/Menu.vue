@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">菜单管理</div>
-
         <el-button type="primary" @click="add_menu" style="margin-bottom: .2rem;">新建菜单</el-button>
 
         <el-table
@@ -47,7 +44,7 @@
             :visible.sync="drawer"
             :direction="direction"
             :before-close="handleClose">
-
+            <span class="bullets"></span>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                 
                 <el-form-item label="菜单名称" prop="name">

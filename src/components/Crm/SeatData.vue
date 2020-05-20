@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">坐席数据管理</div>
-
         <el-row class="people-screen">
 
             <el-col :span="8">
@@ -83,19 +80,13 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getAllUserClueData" class="screen-li">搜 索</el-button>
+                <el-button type="primary" @click="getAllUserClueData">搜 索</el-button>
             </el-col>
-
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="4">
-                <el-button type="primary" @click="TransferToGoogClick" class="screen-li">释放数据</el-button>
+            <el-col :span="12">
+                <el-row type="flex" justify="end">
+                    <el-button type="primary" @click="TransferToGoogClick">释放数据</el-button>
+                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                </el-row>
             </el-col>
 
         </el-row>
@@ -155,16 +146,10 @@
               </template>
             </el-table-column>-->
 
-            <el-table-column prop="active" label="操作" width="200px;" fixed="right">
+            <el-table-column prop="active" label="操作" fixed="right">
               <template slot-scope="scope">
                   <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                   <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->
-              </template>
-            </el-table-column>
-            <el-table-column
-              align="right" width="60px" fixed="right">
-              <template slot="header">
-                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
               </template>
             </el-table-column>
         </el-table>

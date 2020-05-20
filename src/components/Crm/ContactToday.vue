@@ -2,9 +2,6 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <div class="people-title">今日联系</div>
-
         <el-row class="people-screen">
             <el-col :span="5">
                 <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
@@ -38,7 +35,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="400px;">
+            <el-table-column prop="active" label="操作"  min-width="230" fixed="right">
               <template slot-scope="scope">
                   <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                   <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>

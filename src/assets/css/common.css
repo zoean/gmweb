@@ -1,0 +1,12 @@
+.el-drawer #el-drawer__title span {
+  color: #000;
+}
+.el-drawer .bullets {
+  width: 5px;
+  height: 16px;
+  border-radius: 30%;
+  position: absolute;
+  background: #409EFF;
+  left: 8px;
+  top: 24px;
+}

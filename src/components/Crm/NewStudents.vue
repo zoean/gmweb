@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">新学员管理</div>
-
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
         </el-tabs>

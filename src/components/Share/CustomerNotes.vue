@@ -8,6 +8,7 @@
             :direction="direction"
             size="100%"
             :before-close="handleCloseDrawer">
+            <span class="bullets"></span>
 
             <el-tabs v-model="tabs_active" @tab-click="handleTabClick" type="border-card" style="width: 92%; margin: 0 auto; margin-bottom: 30px;">
 
@@ -421,6 +422,7 @@
                 :before-close="handleCloseDrawerDetails"
                 style="line-height: 30px;"
                 :visible.sync="drawerDetails">
+            <span class="bullets"></span>
 
                 <el-row>
 

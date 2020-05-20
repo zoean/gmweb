@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">查看通时数据</div>
-
         <el-row style="margin-bottom: 20px;">
 
             <el-col :span="4">
@@ -89,7 +86,7 @@
             </el-col>
     
             <el-col :span="8">
-                <el-button type="primary" style="width: 1.5rem;" @click="timeClick">确定</el-button>
+                <el-button type="primary" @click="timeClick">确定</el-button>
             </el-col>
     
         </el-row>

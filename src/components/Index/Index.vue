@@ -185,7 +185,7 @@ export default {
                         color: #000;
                     }
                     p{
-                     color: #999;   
+                     color: #666;   
                      margin: 12px 0;
                     }
                 }
@@ -199,7 +199,7 @@ export default {
                 dl{
                     // margin-left: 32px;
                     dt{
-                       color: #999; 
+                       color: #666; 
                     }
                     dd{
                         font-size: 30px;

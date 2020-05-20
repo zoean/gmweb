@@ -1,6 +1,5 @@
 <template>
   <el-main class="index-main">
-      <div class="people-title">页面字段管理</div>
       <div class="search-area">
         <el-button type="primary" @click="addPageHandle">新增页面</el-button>
         <el-input placeholder="请输入搜索项"></el-input>
@@ -89,6 +88,7 @@
     direction="rtl"
     size="50%"
     >
+    <span class="bullets"></span>
     <el-button type="primary" @click.native.prevent="addFieldHandle" class="ml20">添加字段</el-button>
     <el-table :data="pageFieldList" class="ml20">
       <el-table-column v-for="(item, index) in pageFieldListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">

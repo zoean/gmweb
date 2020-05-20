@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">VIP管理</div>
-
         <el-row class="people-screen">
             <el-col :span="5">
                 <el-input v-model="form.ruleNumberName" placeholder="请输入规则编号分配组ID" class="screen-li"></el-input>
@@ -39,6 +36,7 @@
             :direction="direction"
             style="line-height: 30px;"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row>
 

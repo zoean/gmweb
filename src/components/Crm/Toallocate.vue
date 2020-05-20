@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">可领取公池数据</div>
-
         <el-row class="people-screen">
             <el-col :span="5">
                 <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
@@ -41,6 +38,7 @@
             :direction="direction"
             style="line-height: 30px;"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row>
 
