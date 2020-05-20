@@ -75,8 +75,8 @@
             :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
             :key="index"
             >
-            <template v-if="item.prop=='jobStatus'">
-                <p class="job-status">
+            <template v-if="peopleTableFlag">
+                <p class="job-status" v-if="item.prop == 'jobStatus'">
                     <span v-if="userList[index][item.prop] == '在职'" class="on-job"></span>
                     <span v-else class="quit"></span>
                     {{userList[index][item.prop]}}
@@ -159,6 +159,7 @@ export default {
             peopleEdit: null,
             dataPermiss: null,
             exportPeople: null,
+            peopleTableFlag: false
         }
     },
     created() {
@@ -307,6 +308,7 @@ export default {
                             data.hiredDate = data.hiredDate.split(" ")[0];
                         })
                         this.userList = res.data.list;
+                        this.peopleTableFlag = true;
                     }, 300);
                 }else{
                     setTimeout(() => {
