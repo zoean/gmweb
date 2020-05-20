@@ -59,13 +59,19 @@
       },
       seteditor() {
         this.editor = new E(this.$refs.toolbar, this.$refs.editor)
+        this.editor.customConfig.showLinkImg = false
         this.editor.customConfig.uploadImgShowBase64 = false // base 64 存储图片
-        this.editor.customConfig.uploadImgServer = 'https://jsonplaceholder.typicode.com/posts/'// 配置服务器端地址
+        this.editor.customConfig.uploadImgServer = 'http://testgm.jhwx.com/upload-service/upload/file'// 配置服务器端地址
         this.editor.customConfig.uploadImgHeaders = { }// 自定义 header
         this.editor.customConfig.uploadFileName = 'file' // 后端接受上传文件的参数名
         this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024 // 将图片大小限制为 2M
-        this.editor.customConfig.uploadImgMaxLength = 6 // 限制一次最多上传 3 张图片
+        this.editor.customConfig.uploadImgMaxLength = 3// 限制一次最多上传 3 张图片
         this.editor.customConfig.uploadImgTimeout = 3 * 60 * 1000 // 设置超时时间
+        this.editor.customConfig.uploadImgParams = {
+        // 如果版本 <=v3.1.0 ，属性值会自动进行 encode ，此处无需 encode
+        // 如果版本 >=v3.1.1 ，属性值不会自动 encode ，如有需要自己手动 encode
+            fileType: 'img'
+        }
 
         // 配置菜单
         this.editor.customConfig.menus = [
@@ -114,10 +120,10 @@
              //循环插入图片
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
-              let url = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589865046884&di=8594e0e3ddbda15024e2cafe35af6f69&imgtype=0&src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20181223%2F20%2F1545567668-wtadReSbWc.png"
+              console.log(result)
+              let url = "http://testfile.jhwx.com/default/img/20200520/68daa5e155ee41629780149943fe3bf0.png" + result.fileUrl
               insertImg(url)
-            // }
-            console.log(result)
+            // } 
           }
         }
         this.editor.customConfig.onchange = (html) => {
