@@ -2,9 +2,6 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <div class="people-title">三日未联</div>
-
         <el-row class="people-screen">
             <el-col :span="5">
                 <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>

@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">项目结构管理</div> 
-
         <el-button type="primary" @click="addclass" style="margin-bottom: .2rem;">创建一级大类</el-button>
     
         <el-table
@@ -60,6 +57,7 @@
             :visible.sync="drawer1"
             :direction="direction"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 
@@ -103,6 +101,7 @@
         :before-close="handleClose"
         size="40%"
         >
+            <span class="bullets"></span>
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 
                 <el-form-item label="所属大类" prop="selectuuid">
@@ -194,6 +193,7 @@
         :direction="direction"
         :before-close="handleClose"
         >
+            <span class="bullets"></span>
 
             <el-form :model="ruleForm3" :rules="rules3" ref="ruleForm3" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 

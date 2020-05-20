@@ -2,9 +2,6 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <div class="people-title">已成单线索管理</div>
-
         <el-tabs type="border-card" @tab-click="tabChange">
             <el-tab-pane label="学员">
 

@@ -2,9 +2,6 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <div class="people-title">全部客户</div>
-
         <el-row class="people-screen">
 
             <el-col :span="4">
@@ -87,7 +84,11 @@
             <el-col :span="4">
                 <el-button type="primary" @click="getClueDataAll">搜 索</el-button>
             </el-col>
-
+            <el-col :span="12">
+                <el-row type="flex" justify="end">
+                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                </el-row>
+            </el-col>
         </el-row>
 
         <el-table
@@ -140,13 +141,6 @@
                   </el-popconfirm>
                   <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
                   <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
-              </template>
-            </el-table-column>
-            
-            <el-table-column
-              align="right" width="60px" fixed="right">
-              <template slot="header">
-                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
               </template>
             </el-table-column>
         </el-table>

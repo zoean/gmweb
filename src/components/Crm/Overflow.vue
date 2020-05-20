@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">溢出池数据管理</div>
-
         <el-row class="people-screen">
 
             <el-col :span="8">
@@ -70,7 +67,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getSpillPoolClueData" class="screen-li">搜 索</el-button>
+                <el-button type="primary" @click="getSpillPoolClueData">搜 索</el-button>
             </el-col>
 
             <el-col :span="4">
@@ -98,6 +95,7 @@
             size="40%"
             :before-close="handleClose"
         >
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
@@ -153,6 +151,7 @@
             :direction="direction2"
             :before-close="handleClose"
         >
+            <span class="bullets"></span>
 
             <div class="tagName">您已选择 {{this.tableSelectList.length}} 条数据</div>
  

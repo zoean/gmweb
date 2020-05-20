@@ -181,6 +181,7 @@
             :direction="direction0"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
                 <el-radio v-model="radioId" v-for="(item, index) in tableDataSchool" :label="item.name" :key="index"></el-radio>
@@ -198,6 +199,7 @@
             :direction="direction1"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
@@ -262,6 +264,7 @@
             :direction="direction2"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
@@ -326,6 +329,7 @@
             :direction="direction3"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 

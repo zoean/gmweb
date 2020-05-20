@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">回收池数据管理</div>
-
         <el-row class="people-screen">
 
             <el-col :span="8">
@@ -70,23 +67,13 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getRecoveryPoolDataList" class="screen-li">搜 索</el-button>
+                <el-button type="primary" @click="getRecoveryPoolDataList">搜 索</el-button>
             </el-col>
-
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="4">
-                <el-button type="primary" @click="pushPeopleClick" class="screen-li">分配至人</el-button>
+            <el-col :span="16">
+                <el-row type="flex" justify="end">
+                    <el-button type="primary" @click="pushPeopleClick">分配至人</el-button>
+                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                </el-row>
             </el-col>
 
         </el-row>
@@ -122,12 +109,6 @@
                   <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->
               </template>
             </el-table-column>
-            <el-table-column
-              align="right" width="60px" fixed="right">
-              <template slot="header">
-                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
-              </template>
-            </el-table-column>
         </el-table>
 
         <el-pagination
@@ -149,6 +130,7 @@
             size="40%"
             :before-close="handleClose"
         >
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 

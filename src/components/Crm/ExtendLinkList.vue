@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">推广链接记录</div>
-
         <el-row class="people-screen">
 
             <el-col :span="8">
@@ -83,7 +80,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getPopularizeUrl" class="screen-li">搜 索</el-button>
+                <el-button type="primary" @click="getPopularizeUrl">搜 索</el-button>
             </el-col>
 
         </el-row>

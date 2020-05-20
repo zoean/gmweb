@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">组织结构管理</div>
-
         <el-table
           :data="zuzhiList"
           style="width: 100%"

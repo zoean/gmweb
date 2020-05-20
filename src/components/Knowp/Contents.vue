@@ -93,6 +93,7 @@
             :visible.sync="drawer1"
             :direction="direction"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 

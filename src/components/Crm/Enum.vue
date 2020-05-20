@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">枚举类型管理</div>
-
         <el-row class="people-screen">
 
             <el-col :span="3" v-if="addEnums">
@@ -85,6 +82,7 @@
             :direction="direction"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row class="people-screen">
 

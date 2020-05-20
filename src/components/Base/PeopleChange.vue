@@ -1,75 +1,72 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">公司人员详情</div>
-
-        <el-form ref="form" :model="formText" label-width="80px" style="width: 400px; margin: 0 auto;">
+        <div class="people-detail">
+            <el-form ref="form" :model="formText" label-width="80px" style="width: 470px; margin: 0 auto;">
+                    
+                <el-form-item label="姓名：">
+                    <el-input v-model="formText.name" disabled></el-input>
+                </el-form-item>
+        
+                <el-form-item label="工号：">
+                    <el-input v-model="formText.jobNumber" disabled></el-input>
+                </el-form-item>
+        
+                <el-form-item label="手机号：">
+                    <el-input v-model="formText.accountNumber" disabled></el-input>
+                </el-form-item>
+        
+                <el-form-item label="在职状态：">
+                    <el-input v-model="formText.jobStatus" disabled></el-input>
+                </el-form-item>
+        
+                <el-form-item label="组织部门：">
+                    <el-input v-model="formText.orgUuidList" disabled></el-input>
+                </el-form-item>
+        
+                <el-form-item label="拥有角色：">
                 
-            <el-form-item label="姓名：">
-                <el-input v-model="formText.name" disabled></el-input>
-            </el-form-item>
-    
-            <el-form-item label="工号：">
-                <el-input v-model="formText.jobNumber" disabled></el-input>
-            </el-form-item>
-    
-            <el-form-item label="手机号：">
-                <el-input v-model="formText.accountNumber" disabled></el-input>
-            </el-form-item>
-    
-            <el-form-item label="在职状态：">
-                <el-input v-model="formText.jobStatus" disabled></el-input>
-            </el-form-item>
-    
-            <el-form-item label="组织部门：">
-                <el-input v-model="formText.orgUuidList" disabled></el-input>
-            </el-form-item>
-    
-            <el-form-item label="拥有角色：">
-            
-                <el-select v-model="roleArr" multiple placeholder="请选择角色" @change='handleRoleUuidChange' :disabled="!roleConfig">
-                  <el-option
-                    v-for="item in roleOptions"
-                    :key="item.uuid"
-                    :label="item.name"
-                    :value="item.uuid">
-                  </el-option>
-                </el-select>
-    
-            </el-form-item>
-    
-            <el-form-item label="关联JQ用户：">
-                <div style="margin-bottom: 20px;">
+                    <el-select v-model="roleArr" multiple placeholder="请选择角色" @change='handleRoleUuidChange' :disabled="!roleConfig">
+                    <el-option
+                        v-for="item in roleOptions"
+                        :key="item.uuid"
+                        :label="item.name"
+                        :value="item.uuid">
+                    </el-option>
+                    </el-select>
+        
+                </el-form-item>
+        
+                <el-form-item label="关联JQ用户：">
+                    <div style="margin-bottom: 20px;">
 
-                    <el-tag 
-                        v-for="(item,index) in formText.jqList" :key="index"
-                        closable
-                        style="margin-right: 10px; cursor: pointer;"
-                        :class="item.mainUin ? 'tagActive' : ''"
-                        @close="tagClose(item)"
-                        @click="tagClick(item)"
-                        >{{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
-                    </el-tag>
+                        <el-tag 
+                            v-for="(item,index) in formText.jqList" :key="index"
+                            closable
+                            style="margin-right: 10px; cursor: pointer;"
+                            :class="item.mainUin ? 'tagActive' : ''"
+                            @close="tagClose(item)"
+                            @click="tagClick(item)"
+                            >{{item.jqName}} <span v-if="item.mainUin">（主账号）</span> 
+                        </el-tag>
 
-                </div>
-                <el-button type="primary" plain @click="searchJQ">查找并关联</el-button>
-                <el-button type="primary" plain @click="addJQ">创建并关联</el-button>
-            </el-form-item>
-
-            <el-form-item style="margin-top: 60px;">
-                <el-button type="primary" @click="onSubmit" style="width: 100px;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
-                <el-button type="primary" style="width: 100px;" @click="$router.go(-1)">取消</el-button>
-            </el-form-item>
-    
-        </el-form>
-    
+                    </div>
+                    <el-button type="primary" plain @click="searchJQ">查找并关联</el-button>
+                    <el-button type="primary" plain @click="addJQ">创建并关联</el-button>
+                </el-form-item>
+        
+            </el-form>
+        </div>
+        <el-row type="flex" justify="center">
+            <el-button type="primary" @click="onSubmit" style="width: 100px;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+            <el-button type="primary" style="width: 100px;" @click="$router.go(-1)">取消</el-button>
+        </el-row>
         <el-drawer
             title="查找并关联"
             :visible.sync="drawerSearch"
             :direction="direction"
             size="55%"
             :before-close="handleClose">
-            
+            <span class="bullets"></span>
             <div style="padding: .3rem;">
             
                 <el-row>
@@ -150,7 +147,7 @@
             size="40%"
             :before-close="handleClose"   
         >
-                        
+            <span class="bullets"></span>                        
             <el-form :model="createForm" ref="createForm" style="width: 80%; margin: 0 auto;" :rules="rules">
                 <!-- <el-form-item label="用户名" prop="strId"> 
                     <el-input v-model="createForm.strId"></el-input>
@@ -468,6 +465,11 @@ export default {
             color: #666666;
             font-weight: bold;
         }
+        .people-detail{
+            background: #fff;
+            padding: 70px 0 40px 0;
+            margin-bottom: 40px;
+        }
         .people-screen{
             margin-bottom: .3rem;
             .screen-li{
@@ -479,11 +481,7 @@ export default {
         text-align: right;
         margin-top: .4rem;
     }
-
-    .index-main /deep/ .el-select{
-        width: 300px;
-    }
     .tagActive{
-        color: red !important;
+        // color: red !important;
     }
 </style>

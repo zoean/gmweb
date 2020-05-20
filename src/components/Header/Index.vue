@@ -4,19 +4,18 @@
         <el-dialog
             title="设置密码"
             :visible.sync="centerDialogVisible"
-            width="30%"
+            width="40%"
             :show-close="centerDialogVisible"
             :before-close="handleClose"
+            class="reset-password"
             center>
-            <div style="height: .6rem; line-height: .6rem;">
-                <span style="margin-left: 72px;">姓名</span>
-                <span style="margin-left: 20px;">{{$store.state.name}}</span>
-            </div>
-            <div style="margin-bottom: .2rem; height: .6rem; line-height: .6rem;">
-                <span style="margin-left: 56px;">手机号</span>
-                <span style="margin-left: 20px;">{{$store.state.accountNumber}}</span>
-            </div>
             <el-form :model="form">
+                <el-form-item label="姓名" :label-width="formLabelWidth">
+                    <el-input :value="$store.state.name" style="width: 80%;" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="手机号" :label-width="formLabelWidth">
+                    <el-input :value="$store.state.accountNumber" style="width: 80%;" disabled></el-input>
+                </el-form-item>
               <el-form-item label="原密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password1" autocomplete="off" type="password" style="width: 80%;"></el-input>
               </el-form-item>
@@ -26,8 +25,8 @@
             </el-form>
 
             <span slot="footer" class="dialog-footer">
-              <el-button @click="dialog_cancel" v-if="!oneLogin">取 消</el-button>
               <el-button type="primary" @click="dialoghold">保 存</el-button>
+              <el-button @click="dialog_cancel" v-if="!oneLogin">取 消</el-button>
             </span>
         </el-dialog>
 
@@ -84,6 +83,7 @@
             :direction="direction"
             :before-close="handleCloseDrawer"
         >
+            <span class="bullets"></span>
 
             <el-table
                 border
@@ -447,6 +447,13 @@ export default {
         line-height: 60px;
         padding: 0 40px 0 0;
         width: 100%;
+        .reset-password{
+            /deep/ .el-dialog{
+               .el-dialog__body{
+                    padding: 0 !important;
+                }
+            }
+        }
     }
     .index-hleft{
         width: 3rem;

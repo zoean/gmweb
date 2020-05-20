@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">班主任管理</div>
-
         <el-row class="people-screen">
             <el-col :span="5">
                 <el-button type="primary" @click="addClassClick">添加考试项-班型</el-button>
@@ -46,6 +43,7 @@
             :visible.sync="drawer1"
             :direction="direction1"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 
@@ -87,6 +85,7 @@
             :visible.sync="drawer2"
             :direction="direction2"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-table
                 :data="teacherList"
@@ -115,6 +114,7 @@
             :direction="direction4"
             :before-close="handleClose"
         >
+            <span class="bullets"></span>
 
         <div class="tagName">{{this.teacherMoveForm.className}}，共有{{this.teacherMoveForm.classLength}}名班主任</div>
  
@@ -134,6 +134,7 @@
             :direction="direction3"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 

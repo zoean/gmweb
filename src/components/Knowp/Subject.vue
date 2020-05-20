@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">科目管理</div> 
-
         <el-button type="primary" @click="addSubjectClick" style="margin-bottom: .2rem;">添加科目</el-button>
     
         <el-row style="margin-bottom: 20px;">
@@ -78,6 +75,7 @@
             :visible.sync="drawer1"
             :direction="direction"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 

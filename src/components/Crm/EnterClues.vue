@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">录入线索</div>
-
         <el-tabs v-model="activeName" @tab-click="handleTabsClick">
 
             <el-tab-pane label="手动录入" name="first">

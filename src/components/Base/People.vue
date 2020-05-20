@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">公司人员列表</div>
-
         <el-row class="people-screen">
             <el-col :span="4">
                 <el-cascader
@@ -78,6 +75,13 @@
             :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
             :key="index"
             >
+            <template v-if="item.prop=='jobStatus'">
+                <p class="job-status">
+                    <span v-if="userList[index][item.prop] == '在职'" class="on-job"></span>
+                    <span v-else class="quit"></span>
+                    {{userList[index][item.prop]}}
+                </p>
+            </template>
           </el-table-column>
           <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss">
             <template slot-scope="scope">
@@ -382,6 +386,29 @@ export default {
             margin-bottom: .3rem;
             .screen-li{
                 width: 90%;
+            }
+        }
+        /deep/ .el-table{
+            .el-table__body{
+                .job-status{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    span{
+                        width:5px;
+                        height: 5px;
+                        display:inline-block; 
+                        border-radius: 50%; 
+                        margin-right: 10px;
+                    }
+                    span.on-job{                        
+                        background: #35CE8F; 
+                    }
+                    span.quit{
+                        background: #FF4D4F;
+                    }
+                }
             }
         }
     }

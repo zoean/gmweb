@@ -20,6 +20,7 @@
             :visible.sync="drawer"
             :direction="direction"
             :before-close="handleClose">
+            <span class="bullets"></span>
             
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
                 

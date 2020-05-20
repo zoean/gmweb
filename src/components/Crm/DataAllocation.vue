@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">分配引擎配置</div>
-
         <el-row style="margin-bottom: 20px;" v-if="addDataAllocation">
 
             <el-col style="width: 140px;"><el-button style="width: 90%;" type="primary" @click="addAlloZu">添加分配组</el-button></el-col>
@@ -66,6 +63,7 @@
             :direction="direction"
             size="40%"
             :before-close="handleClose">
+            <span class="bullets"></span>
             
             <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
 
@@ -164,6 +162,7 @@
             :direction="direction"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
             
             <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
 
@@ -178,6 +177,7 @@
             :visible.sync="drawerFlagLink"
             :direction="direction"
             :before-close="handleClose">
+            <span class="bullets"></span>
             
             <div>
 

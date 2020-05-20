@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">视频资源管理</div> 
-
         <el-button type="primary" @click="addVedioClick" style="margin-bottom: .2rem;">添加视频资源</el-button>
                    <el-row style="margin-bottom: 20px;">
 
@@ -100,6 +97,7 @@
             :direction="direction"
             size="50%"
             :before-close="handleClose">
+            <span class="bullets"></span>
 
             <el-form :model="vedioForm" :rules="rules1" ref="vedioForm" style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
                 
@@ -203,6 +201,7 @@
                     :append-to-body="true"
                     :before-close="handleClose"
                     :visible.sync="drawer2">
+            <span class="bullets"></span>
                     <div style="border: 1px dashed #ccc; padding: .4rem; margin: .2rem;">
 
                         <div style="margin-bottom: 20px; font-size: 16px;"><span>当前科目：</span> {{vedioForm.subjectName}}</div>
