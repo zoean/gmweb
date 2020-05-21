@@ -47,7 +47,7 @@
 
                 <el-row style="margin-bottom: 20px;">
                 
-                    <el-col :span="18">
+                    <el-col style="position: relative;">
                     
                         <el-table
                             :data="schoolList"
@@ -65,11 +65,7 @@
 
                     </el-col>
 
-                    <el-col :span="5" :offset="1">
-                    
-                        <el-button type="primary" @click="editSchoolClick" style="margin-top: 4px;">修改分校</el-button>
-
-                    </el-col>
+                    <el-button plain size="small" @click="editSchoolClick" style="position: absolute; right: 40px; top: -44px;">修改分校</el-button>
 
                 </el-row>
 
@@ -79,7 +75,7 @@
 
                 <el-row style="margin-bottom: 20px;">
                 
-                    <el-col :span="18">
+                    <el-col style="position: relative;">
                     
                         <el-table
                             :data="seatList"
@@ -97,11 +93,7 @@
 
                     </el-col>
 
-                    <el-col :span="5" :offset="1">
-                    
-                        <el-button type="primary" @click="editPeopleClick" style="margin-top: 4px;">修改部门与人员</el-button>
-
-                    </el-col>
+                    <el-button plain size="small" @click="editPeopleClick" style="position: absolute; right: 40px; top: -44px;">修改部门与人员</el-button>
 
                 </el-row>
 
@@ -111,7 +103,7 @@
 
                 <el-row style="margin-bottom: 20px;">
                 
-                    <el-col :span="18">
+                    <el-col style="position: relative;">
                     
                         <el-table
                             :data="backList"
@@ -129,11 +121,7 @@
 
                     </el-col>
 
-                    <el-col :span="5" :offset="1">
-                    
-                        <el-button type="primary" @click="editBackClick" style="margin-top: 4px;">修改考试项</el-button>
-
-                    </el-col>
+                    <el-button plain size="small" @click="editBackClick" style="position: absolute; right: 40px; top: -44px;">修改考试项</el-button>
 
                 </el-row>
 
@@ -143,7 +131,7 @@
 
                 <el-row style="margin-bottom: 20px;">
                 
-                    <el-col :span="18">
+                    <el-col style="position: relative;">
                     
                         <el-table
                             :data="dataSetList"
@@ -161,15 +149,11 @@
 
                     </el-col>
 
-                    <el-col :span="5" :offset="1">
-                    
-                        <el-button type="primary" @click="editDataSetClick" style="margin-top: 4px;">修改分配组</el-button>
-
-                    </el-col>
+                    <el-button plain size="small" @click="editDataSetClick" style="position: absolute; right: 40px; top: -44px;">修改分配组</el-button>
 
                 </el-row>
 
-                <el-button type="primary" @click="onSubmit" class="btn-ok">保存</el-button>
+                <el-button type="primary" size="small" @click="onSubmit" class="btn-ok">保存</el-button>
 
             </el-col>
 
@@ -834,14 +818,14 @@ export default {
     // }
 
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #fff;
+            background: #F7F7F7;
             margin-bottom: .3rem;
             color: #666666;
             font-weight: bold;
@@ -865,6 +849,7 @@ export default {
                 min-height: 100%;
                 text-align: center;
                 position: relative;
+                border: 1px solid #E9E9E9;
                 .tab-left-title{
                     height: 54px;
                     line-height: 54px;
@@ -884,6 +869,7 @@ export default {
                 min-height: 100%;
                 width: calc( 75% - 20px);
                 margin-left: 20px;
+                border: 1px solid #E9E9E9;
                 .tab-right-title{
                     height: 54px;
                     line-height: 54px;

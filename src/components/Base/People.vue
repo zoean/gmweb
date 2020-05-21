@@ -372,7 +372,7 @@ export default {
         // background: grey;
     }
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

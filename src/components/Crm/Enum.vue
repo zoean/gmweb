@@ -11,7 +11,7 @@
             </el-col>
 
             <el-col :span="5">
-                <el-button type="primary" @click="getEnumList">搜 索</el-button>
+                <el-button type="primary" @click="getEnumList">查 询</el-button>
             </el-col>
 
         </el-row>
@@ -416,7 +416,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

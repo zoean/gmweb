@@ -4,7 +4,7 @@
 
             <el-col :span="8">
                 <el-date-picker
-                    style="width: 90%;"
+                    style="width: 95%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -38,7 +38,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
+                <el-select v-model="form.spread" placeholder="请选择渠道">
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -67,7 +67,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getSpillPoolClueData">搜 索</el-button>
+                <el-button type="primary" @click="getSpillPoolClueData">查 询</el-button>
             </el-col>
 
             <el-col :span="4">
@@ -78,12 +78,13 @@
                 <div style="color: #fff; user-select: none;">1</div>
             </el-col>
 
-            <el-col :span="4">
-                <el-button type="primary" @click="pushPeopleClick" class="screen-li">分配至人</el-button>
+            <el-col :span="3">
+                <div style="color: #fff; user-select: none;">1</div>
             </el-col>
 
-            <el-col :span="4">
-                <el-button type="primary" @click="pushArrClick" class="screen-li">分配至组</el-button>
+            <el-col :span="5">
+                <el-button type="primary" @click="pushArrClick" style="float: right;">分配至组</el-button>
+                <el-button type="primary" @click="pushPeopleClick" style="float: right; margin-right: 20px;">分配至人</el-button>
             </el-col>
 
         </el-row>
@@ -554,7 +555,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
@@ -595,16 +596,4 @@ export default {
             margin-top: .4rem;
         }
     }
-    
-/* //element-ui table的去除右侧滚动条的样式 */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 1px;
-}
-    /* // 滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-    background-color: #a1a3a9;
-    border-radius: 0px;
-    border-radius: 8px;
-}
 </style>

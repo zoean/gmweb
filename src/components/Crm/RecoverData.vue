@@ -4,7 +4,7 @@
 
             <el-col :span="8">
                 <el-date-picker
-                    style="width: 90%;"
+                    style="width: 95%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -38,7 +38,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
+                <el-select v-model="form.spread" placeholder="请选择渠道">
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -67,12 +67,12 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getRecoveryPoolDataList">搜 索</el-button>
+                <el-button type="primary" @click="getRecoveryPoolDataList">查 询</el-button>
             </el-col>
             <el-col :span="16">
                 <el-row type="flex" justify="end">
-                    <el-button type="primary" @click="pushPeopleClick">分配至人</el-button>
-                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                    <el-button plain @click="pushPeopleClick">分配至人</el-button>
+                    <el-button plain @click="editFieldHandle">表头管理</el-button>
                 </el-row>
             </el-col>
 
@@ -532,7 +532,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

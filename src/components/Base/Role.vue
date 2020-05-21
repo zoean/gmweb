@@ -76,6 +76,7 @@
               default-expand-all
               :default-checked-keys="checkedKeys"
               ref="tree"
+              :indent='40'
               :props="defaultProps">
             </el-tree>
 
@@ -493,7 +494,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

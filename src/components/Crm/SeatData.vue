@@ -4,7 +4,7 @@
 
             <el-col :span="8">
                 <el-date-picker
-                    style="width: 90%;"
+                    style="width: 95%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -17,7 +17,6 @@
             <el-col :span="4">
 
                 <el-autocomplete
-                    class="screen-li"
                     style="width: 90%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
@@ -38,7 +37,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
+                <el-select v-model="form.spread" placeholder="请选择渠道">
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -80,12 +79,12 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getAllUserClueData">搜 索</el-button>
+                <el-button type="primary" @click="getAllUserClueData">查 询</el-button>
             </el-col>
             <el-col :span="12">
                 <el-row type="flex" justify="end">
-                    <el-button type="primary" @click="TransferToGoogClick">释放数据</el-button>
-                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                    <el-button plain @click="TransferToGoogClick">释放数据</el-button>
+                    <el-button plain @click="editFieldHandle">表头管理</el-button>
                 </el-row>
             </el-col>
 
@@ -461,7 +460,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

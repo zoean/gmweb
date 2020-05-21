@@ -11,7 +11,7 @@
                 <el-input v-model="form.name" placeholder="请输入渠道名称" class="screen-li"></el-input>
             </el-col>
             <el-col :span="5">
-                <el-button type="primary" @click="channelGetList">搜 索</el-button>
+                <el-button type="primary" @click="channelGetList">查 询</el-button>
             </el-col>
         </el-row>
 
@@ -215,7 +215,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
