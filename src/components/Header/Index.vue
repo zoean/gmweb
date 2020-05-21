@@ -1,6 +1,5 @@
 <template>
-    <el-header class="" style="height: 60px;">
-
+    <el-header style="height: 60px;">
         <el-dialog
             title="设置密码"
             :visible.sync="centerDialogVisible"
@@ -452,6 +451,16 @@ export default {
                .el-dialog__body{
                     padding: 0 !important;
                 }
+            }
+        }
+        /deep/.el-drawer{
+            .el-drawer__header{
+                line-height: 22px;
+            }
+        }
+        /deep/ .el-table{
+            .el-table__header{
+                line-height: 22px;
             }
         }
     }

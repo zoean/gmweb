@@ -24,7 +24,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="22">
+        <el-col :span="21">
           <el-input
             placeholder="输入领奖说明;中奖者领奖时看到的文案说明"
             type="textarea"
@@ -32,7 +32,7 @@
             style="marginBottom:.5rem"
           ></el-input>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="3">
           <el-button type="primary" style="width:100%;height:.5rem">提交中奖文案</el-button>
         </el-col>
       </el-row>
@@ -155,7 +155,7 @@ export default {
   }
 }
 .index-main/deep/ .el-textarea__inner {
-  min-height: 0.5rem !important;
+  max-height: 0.5rem !important;
 }
 .index-main /deep/ .el-table .cell {
   text-align: center !important;
