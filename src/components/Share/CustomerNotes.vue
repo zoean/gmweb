@@ -245,7 +245,6 @@
                                 <el-form-item label="兴趣班型" prop="classType2Text">
 
                                     <el-autocomplete
-                                        style="width: 100%;"
                                         v-model="ruleForm.classType2Text"
                                         :fetch-suggestions="querySearch"
                                         placeholder="请输入兴趣班型"
@@ -1122,11 +1121,18 @@ export default {
     },
 }
 </script>
-
+<style lang="less">
+.el-autocomplete-suggestion{
+    width: 300px !important;
+}
+</style>
 <style lang="less" scoped>
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-        margin-right: .4rem;
-    }
+.el-pagination{
+    text-align: right;
+    margin-top: .4rem;
+    margin-right: .4rem;
+}
+/deep/ .el-autocomplete{
+    width: 200px;
+}
 </style>
