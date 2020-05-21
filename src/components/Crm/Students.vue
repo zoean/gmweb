@@ -800,7 +800,7 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: .3rem;
+            margin-bottom: 16px;
             .screen-li{
                 width: 90%;
             }

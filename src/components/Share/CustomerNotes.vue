@@ -192,7 +192,7 @@
 
                         </el-row>
         
-                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;"></el-row>
+                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
 
                         <el-row style="font-size: 14px; font-weight: bold; margin-bottom: 20px;" v-if="followFlag">跟进信息：</el-row>
 
@@ -319,7 +319,7 @@
                         </el-row>
                         
                         <el-form-item>
-                          <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;">确定</el-button>
+                          <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
                         </el-form-item>
 
                     </el-form>
@@ -330,7 +330,7 @@
                     
                     <el-table
                         :data="notesList"
-                        style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
+                        style="margin: 0 auto; margin-bottom: 30px;"
                         >
                         <el-table-column
                           :prop="item.prop"
@@ -365,7 +365,7 @@
                     
                     <el-table
                         :data="notesCallList"
-                        style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
+                        style="margin: 0 auto; margin-bottom: 30px;"
                         >
                         <el-table-column
                           :prop="item.prop"
@@ -675,11 +675,11 @@ export default {
                 { 'prop': 'entryPerson', 'label': '录入人' },
                 { 'prop': 'comMode', 'label': '沟通方式' },
                 { 'prop': 'classType', 'label': '主推班型' },
-                { 'prop': 'classOffer', 'label': '班型报价（元）' },
+                { 'prop': 'classOffer', 'label': '班型报价 (元)' },
                 { 'prop': 'intentionLevel', 'label': '意向等级' },
                 { 'prop': 'runOutPromise', 'label': '截杀承诺' },
                 { 'prop': 'classType2', 'label': '兴趣班型' },
-                { 'prop': 'classOffer2', 'label': '班型报价（元）' },
+                { 'prop': 'classOffer2', 'label': '班型报价 (元)' },
                 { 'prop': 'intentionLevel2', 'label': '意向等级' },
                 { 'prop': 'runOutPromise2', 'label': '截杀承诺' },
                 { 'prop': 'nextContactTime', 'label': '下次联系时间' },
@@ -813,6 +813,7 @@ export default {
                 .catch(_ => {});
             }else {
                 done();
+                this.$emit('fatherDataList');
             }
         },
         handleCloseDrawerDetails(done) {

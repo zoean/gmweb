@@ -147,7 +147,9 @@ export default {
       }
     },
     mounted() {
+        // const userMenuList = this.$store.state.userMenuList;
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
+        console.log(userMenuList);
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){
           this.openedsIndex = [];
@@ -174,7 +176,7 @@ export default {
 <style lang="less" scoped>
   .aside-all{
     position: relative;
-    min-height: calc(100vh - 60px);
+    min-height: calc(100vh - 140px);
     .el-submenu-smoke{
       position: relative;
       z-index: 9;

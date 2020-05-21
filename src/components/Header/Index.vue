@@ -478,7 +478,7 @@ export default {
     .el-menu-demo{
         float: left;
         width: calc( 100% - 400px );
-        padding-left: 30px;
+        padding-left: 20px;
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;

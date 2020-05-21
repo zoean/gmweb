@@ -64,7 +64,7 @@
             title="查找并关联"
             :visible.sync="drawerSearch"
             :direction="direction"
-            size="55%"
+            size="35%"
             :before-close="handleClose">
             
             <div style="padding:0 .3rem; margin-bottom: 20px;">
@@ -483,7 +483,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 60px);
+        height: calc( 100vh - 140px);
         .people-title{
             width: 100%;
             height: 40px;
@@ -501,7 +501,7 @@ export default {
             margin-bottom: 40px;
         }
         .people-screen{
-            margin-bottom: .3rem;
+            margin-bottom: 16px;
             .screen-li{
                 width: 90%;
             }

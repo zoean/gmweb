@@ -53,7 +53,7 @@ export default {
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },
                 // { 'prop': 'customerId', 'label': '客户id' },    
-                { 'prop': 'orderId', 'label': '订单id' },
+                // { 'prop': 'orderId', 'label': '订单id' },
                 // { 'prop': 'orderNum', 'label': '订单编号' },
                 { 'prop': 'orderType', 'label': '订单类型' },
                 { 'prop': 'school', 'label': '分校' },
@@ -165,7 +165,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 60px);
+        height: calc( 100vh - 140px);
         .people-title{
             width: 100%;
             height: 40px;
@@ -177,7 +177,7 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: .3rem;
+            margin-bottom: 16px;
             .screen-li{
                 width: 90%;
             }

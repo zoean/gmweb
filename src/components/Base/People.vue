@@ -55,11 +55,11 @@
                 <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
             </el-col>
             <el-col :span="5">
-                <el-button type="primary" @click="smoke_search">搜 索</el-button>
+                <el-button type="primary" @click="smoke_search">查 询</el-button>
             </el-col>
             <el-col :span="11">
-                <el-button type="primary" class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
-                <el-button v-if="exportPeople" type="primary" class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
+                <el-button plain class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
+                <el-button v-if="exportPeople" plain class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
             </el-col>
         </el-row>
         
@@ -372,7 +372,7 @@ export default {
         // background: grey;
     }
     .index-main{
-        height: calc( 100vh - 60px);
+        height: calc( 100vh - 140px);
         .people-title{
             width: 100%;
             height: 40px;
@@ -385,7 +385,7 @@ export default {
             font-weight: bold;
         }
         .people-screen{
-            margin-bottom: .3rem;
+            margin-bottom: 16px;
             .screen-li{
                 width: 90%;
             }

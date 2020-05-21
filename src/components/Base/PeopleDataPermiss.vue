@@ -834,7 +834,7 @@ export default {
     // }
 
     .index-main{
-        height: calc( 100vh - 60px);
+        height: calc( 100vh - 140px);
         .people-title{
             width: 100%;
             height: 40px;

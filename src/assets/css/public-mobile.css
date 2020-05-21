@@ -312,7 +312,9 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-main{
-    padding: 20px 20px 20px 10px;
+    padding: 20px;
+    background: #fff;
+    margin: 20px;
 }
 
 .el-menu--collapse  .el-submenu__title span{
@@ -338,6 +340,25 @@ a:link,a:active,a:visited,a:hover {
 .el-submenu .el-submenu__title:hover .el-submenu__icon-arrow{
     color: #4794FE !important;
 }
+
+.el-table td, .el-table th{
+    padding: 6px 0 !important;
+}
+
+.el-table .cell{
+    min-height: 32px;
+    line-height: 32px;
+}
+
+.el-table thead tr .is-leaf{
+    background: #FAFAFA !important;
+}
+
+.el-table thead{
+    color: #333;
+}
+
+
 
 
 

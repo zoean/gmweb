@@ -20,7 +20,7 @@
               >
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" min-width="170" fixed="right">
+            <el-table-column prop="active" label="操作" min-width="270" fixed="right">
               <template slot-scope="scope">
                   <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
                   <el-popover
@@ -695,7 +695,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 60px);
+        height: calc( 100vh - 140px);
         .people-title{
             width: 100%;
             height: 40px;
