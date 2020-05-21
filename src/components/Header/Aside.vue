@@ -5,7 +5,6 @@
         ref="elmenu"
         class="el-menu-vertical-demo"
         :default-openeds="openedsIndex"
-        :unique-opened=true
         :collapse="iscollapse"
         @open="handleOpen" 
         @close="handleClose"
@@ -101,6 +100,7 @@ export default {
       active_router(index) {
         this.$store.commit('setPageNum', index.pageNum)
         this.$router.push({ path: index.url });
+        this.activeIndex = index.url;
       },
       router_index() {
         this.activeIndex = this.$route.path;
@@ -122,7 +122,6 @@ export default {
         if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
-          console.log(newVal);
           this.activeIndex = newVal;
         }else if(newVal.indexOf("/base") != -1){
           this.routersFlag = true;

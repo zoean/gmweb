@@ -380,7 +380,7 @@
                             v-if="columnFlag"
                         >
                             <template slot-scope="scope">
-                                <el-button v-if="scope.row.recordUrl" @click="bofangClick(scope.row)" type="text" >
+                                <el-button v-if="scope.row.recordUrl" type="text" >
                                     <audio 
                                         :src="scope.row.recordUrl"
                                         controls="controls"
@@ -802,7 +802,6 @@ export default {
             })
         },
         handleCloseDrawer(done) {
-            console.log(this.ruleForm.callLogUuid); //判断是否是通话弹出
             if(this.ruleForm.callLogUuid) {
                 this.$confirm('确认关闭？')
                 .then(_ => {
@@ -836,12 +835,10 @@ export default {
                         })
                     }
                     this.enumList = res.data;
-                    console.log(this.enumList);
                 }
             })
         },
-        handleTabClick(tab, event) {
-            console.log(tab.label);
+        handleTabClick(tab) {
             if(tab.label == '跟进记录'){
                 this.getClueDataNotes();
                 this.notesForm.currentPage = 1;
@@ -860,7 +857,6 @@ export default {
         },
         getClueDataNotes() {
             this.$smoke_post(getClueDataNotes, this.notesForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     res.data.list.map(sll => {
                         sll.createTime = timestampToTime(Number(sll.createTime));
@@ -873,41 +869,33 @@ export default {
             }) 
         },
         cityChange() {
-            console.log(this.ruleForm.provinceCity);
             this.ruleForm.province = this.ruleForm.provinceCity[0];
             this.ruleForm.city = this.ruleForm.provinceCity[1];
         },
         pickerTimeChange(value) {
-            console.log(value.getTime());
             this.ruleForm.nextContactTime = value.getTime();
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.notesForm.currentPage = index;
             this.getClueDataNotes();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.notesForm.pageSize = index;
             this.getClueDataNotes();
         },
         handleCurrentChangeCall(index) {
-            console.log(index);
             this.notesCallForm.currentPage = index;
             this.getClueCallLog();
         },
         handleSizeChangeCall(index) {
-            console.log(index);
             this.notesCallForm.pageSize = index;
             this.getClueCallLog();
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.ruleForm);
                 this.addClueDataNotes();
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -946,7 +934,6 @@ export default {
                 operateType: 1,
                 school: this.schoolId
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',
@@ -964,7 +951,6 @@ export default {
         },
         getClueCallLog() {
             this.$smoke_post(getClueCallLog, this.notesCallForm).then(res => {
-                console.log(res);
                 this.columnFlag = false;
                 if(res.code == 200) {
                     res.data.list.map(sll => {
@@ -995,7 +981,6 @@ export default {
             this.$smoke_post(getClueDataNotesDetails, {
                 uuid: id
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.notesDetailsForm.form.age = res.data.form.age;
                     this.notesDetailsForm.form.ageOld = res.data.form.ageOld;
@@ -1043,12 +1028,8 @@ export default {
             })
         },
         notesDetails(row) {
-            console.log(row);
             this.drawerDetails = true;
             this.getClueDataNotesDetails(row.uuid);
-        },
-        bofangClick(row) {
-            console.log(row);
         },
         getClueDataDetails(id) {
             this.$smoke_post(getClueDataDetails, {
@@ -1090,7 +1071,6 @@ export default {
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -1101,7 +1081,6 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.ruleForm.classType2 = item.id;
             this.ruleForm.classType2Text = item.value;
         },
