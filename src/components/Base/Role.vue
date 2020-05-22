@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-button type="primary" @click="add_role" style="margin-bottom: .2rem;">新建角色</el-button>
+        <el-button type="primary" size="small" @click="add_role" style="margin-bottom: .2rem;">新建角色</el-button>
 
         <el-table
           :data="roleList"
@@ -69,8 +69,18 @@
             :direction="direction"
             :before-close="handleClose">
             <span class="bullets"></span>
+
+            <div style="height: 52px; background: #FAFAFA; border-bottom: 1px dashed #ccc; padding: 10px 0 0 38px; position: fixed; z-index: 99; width: 100%;">
+
+                    <el-button type="primary" size="small" @click="treeYes">保 存</el-button>
+
+                </div>
+
+            <div style="height: 60px; width: 100%;"></div>
+
             <el-tree
               :data="treeData"
+              style="padding-bottom:20px;"
               show-checkbox
               node-key="uuid"
               default-expand-all
@@ -79,8 +89,6 @@
               :indent='40'
               :props="defaultProps">
             </el-tree>
-
-            <el-button type="primary" @click="treeYes" style="width: 1.6rem; margin-left: .35rem; margin-top: 1rem;">保存</el-button>
 
         </el-drawer>
 
@@ -504,7 +512,7 @@ export default {
             background: #fff;
             margin-bottom: .3rem;
             color: #666666;
-            font-weight: bold;
+            font-weight: 700;
         }
         .people-screen{
             margin-bottom: 16px;

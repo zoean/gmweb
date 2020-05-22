@@ -65,7 +65,7 @@
 
                     </el-col>
 
-                    <el-button plain size="small" @click="editSchoolClick" style="position: absolute; right: 40px; top: -44px;">修改分校</el-button>
+                    <el-button plain size="small" @click="editSchoolClick" style="position: absolute; right: 40px; top: -44px; width: 116px;">修改分校</el-button>
 
                 </el-row>
 
@@ -121,7 +121,7 @@
 
                     </el-col>
 
-                    <el-button plain size="small" @click="editBackClick" style="position: absolute; right: 40px; top: -44px;">修改考试项</el-button>
+                    <el-button plain size="small" @click="editBackClick" style="position: absolute; right: 40px; top: -44px; width: 116px;">修改考试项</el-button>
 
                 </el-row>
 
@@ -149,11 +149,16 @@
 
                     </el-col>
 
-                    <el-button plain size="small" @click="editDataSetClick" style="position: absolute; right: 40px; top: -44px;">修改分配组</el-button>
+                    <el-button plain size="small" @click="editDataSetClick" style="position: absolute; right: 40px; top: -44px; width: 116px;">修改分配组</el-button>
 
                 </el-row>
 
-                <el-button type="primary" size="small" @click="onSubmit" class="btn-ok">保存</el-button>
+                <div style="text-align: center;">
+
+                    <el-button type="primary" size="small" @click="onSubmit">保存</el-button>
+                    <el-button plain size="small" @click="goback">取消</el-button>
+
+                </div>
 
             </el-col>
 
@@ -828,7 +833,6 @@ export default {
             background: #F7F7F7;
             margin-bottom: .3rem;
             color: #666666;
-            font-weight: bold;
             position: relative;
             i{
                 position: absolute;
@@ -854,7 +858,6 @@ export default {
                     height: 54px;
                     line-height: 54px;
                     font-size: 15px;
-                    font-weight: bold;
                 }
                 .tab-left-image{
                     width: 100%;
@@ -875,7 +878,7 @@ export default {
                     line-height: 54px;
                     font-size: 15px;
                     padding-left: 10px;
-                    font-weight: bold;
+                    color: #333;
                 }
             }
         }
@@ -884,14 +887,6 @@ export default {
             line-height: 40px; 
             color: green; 
             font-size: 14px;
-        }
-        .btn-ok{
-            width: 120px;
-            position: relative;
-            left: 50%;
-            margin-left: -60px;
-            margin-top: 20px;
-            margin-bottom: 20px;
         }
     }
     .el-pagination{

@@ -10,13 +10,13 @@
             :before-close="handleCloseDrawer">
             <span class="bullets"></span>
 
-            <el-tabs v-model="tabs_active" @tab-click="handleTabClick" type="border-card" style="width: 92%; margin: 0 auto; margin-bottom: 30px;">
+            <el-tabs v-model="tabs_active" @tab-click="handleTabClick" style="width: 94%; margin: 0 auto; margin-bottom: 30px; padding: 20px 30px; border: 1px dashed #ccc;">
 
                 <el-tab-pane label="客户信息" name="first">
 
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
 
-                        <el-row style="font-size: 14px; font-weight: bold; margin-bottom: 20px;">客户信息：</el-row>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px; margin-top: 20px;">客户信息：</el-row>
                 
                         <el-row>
                             <el-col :span="6">
@@ -194,7 +194,7 @@
         
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
 
-                        <el-row style="font-size: 14px; font-weight: bold; margin-bottom: 20px;" v-if="followFlag">跟进信息：</el-row>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">跟进信息：</el-row>
 
                         <el-row v-if="followFlag">
                             <el-col :span="6">
@@ -245,6 +245,7 @@
                                 <el-form-item label="兴趣班型" prop="classType2Text">
 
                                     <el-autocomplete
+                                        style="width: 100%;"
                                         v-model="ruleForm.classType2Text"
                                         :fetch-suggestions="querySearch"
                                         placeholder="请输入兴趣班型"
@@ -300,11 +301,6 @@
 
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="其他备注" prop="remarks">
-                                    <el-input v-model="ruleForm.remarks" size="small"></el-input>
-                                </el-form-item>
-                            </el-col>
                             
                             <el-col :span="6">
 
@@ -316,9 +312,30 @@
 
                             </el-col>
                         </el-row>
+
+                        <el-row>
+
+                            <el-col :span="18">
+                                <el-form-item label="其他备注" prop="remarks">
+
+                                    <el-input 
+                                        type="textarea" 
+                                        v-model="ruleForm.remarks" 
+                                        size="small" 
+                                        show-word-limit
+                                        maxlength='100'
+                                        placeholder="请输入其他备注"
+
+                                    ></el-input>
+
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
                         
-                        <el-form-item>
+                        <el-form-item style="text-align: center;">
                           <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
+                          <el-button @click="quxiao" plain size="small" style="width: 100px;">取消</el-button>
                         </el-form-item>
 
                     </el-form>
@@ -800,6 +817,9 @@ export default {
                     this.classTypeList = res.data;
                 }
             })
+        },
+        quxiao() {
+            this.$emit('fatherDataList');
         },
         handleCloseDrawer(done) {
             if(this.ruleForm.callLogUuid) {

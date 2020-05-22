@@ -4,6 +4,7 @@
 
             <el-col :span="8">
                 <el-date-picker
+                    size="small"
                     style="width: 95%;"
                     v-model="dataPicker"
                     type="datetimerange"
@@ -17,6 +18,7 @@
             <el-col :span="4">
 
                 <el-autocomplete
+                    size="small"
                     style="width: 90%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
@@ -28,16 +30,16 @@
             </el-col>
 
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4" class="seatData">
-                <area-cascader type="text" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" placeholder="请选择渠道">
+                <el-select v-model="form.spread" size="small" placeholder="请选择渠道">
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -54,7 +56,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.dialState" placeholder="请选择是否首咨" class="screen-li">
+                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li">
                     <el-option
                       v-for="item in dialStateList"
                       :key="item.name"
@@ -67,7 +69,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -79,12 +81,12 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getAllUserClueData">查 询</el-button>
+                <el-button type="primary" size="small" @click="getAllUserClueData">查 询</el-button>
             </el-col>
             <el-col :span="12">
                 <el-row type="flex" justify="end">
-                    <el-button plain @click="TransferToGoogClick">释放数据</el-button>
-                    <el-button plain @click="editFieldHandle">表头管理</el-button>
+                    <el-button plain @click="TransferToGoogClick" size="small">释放数据</el-button>
+                    <el-button plain @click="editFieldHandle" size="small">表头管理</el-button>
                 </el-row>
             </el-col>
 

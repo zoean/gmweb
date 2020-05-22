@@ -2,7 +2,7 @@
     <el-main class="index-main">
         <el-row class="people-screen">
             <el-col :span="5">
-                <el-button type="primary" @click="addClassClick">添加考试项-班型</el-button>
+                <el-button type="primary" size="small" @click="addClassClick">添加考试项-班型</el-button>
             </el-col>
         </el-row>
 
@@ -84,6 +84,7 @@
             :title="drawerTitle2"
             :visible.sync="drawer2"
             :direction="direction2"
+            size="40%"
             :before-close="handleClose">
             <span class="bullets"></span>
 
@@ -116,7 +117,7 @@
         >
             <span class="bullets"></span>
 
-        <div class="tagName">{{this.teacherMoveForm.className}}，共有{{this.teacherMoveForm.classLength}}名班主任</div>
+        <div class="tagName">{{this.teacherMoveForm.className}}，共有<span style="color: #409EFF;"> {{this.teacherMoveForm.classLength}} </span>名班主任</div>
  
         <el-tag 
             v-for="(item,index) in teacherMoveList" :key="index"
@@ -136,6 +137,8 @@
             :before-close="handleClose">
             <span class="bullets"></span>
 
+            <el-button type="primary" style="margin: 0 20px;" size="small" @click="addClassTeacher">确定</el-button>
+
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
                 <el-col :span="10">
@@ -143,6 +146,7 @@
                     <el-input
                         placeholder="输入您想查找的班主任姓名"
                         style="margin-bottom: 10px;"
+                        size="small"
                         v-model="filterText">
                     </el-input>
 
@@ -165,7 +169,6 @@
                 <el-col :span="13" :offset="1">
                 
                     <el-table
-                        border
                         :data="tableData"
                     >
 
@@ -178,7 +181,7 @@
 
                         <el-table-column prop="limitLimit" label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
+                                <el-button type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
                             </template>
                         </el-table-column>
 
@@ -187,8 +190,6 @@
                 </el-col>
 
             </el-row>
-
-            <el-button type="primary" style="margin: 0 20px;" @click="addClassTeacher">确定</el-button>
             
         </el-drawer>
 
@@ -646,7 +647,7 @@ export default {
         }
         .tagName{
             height: 40px;
-            background: #eeeeee;
+            background: #FAFAFA;
             text-align: center;
             font-size: 14px;
             line-height: 40px;

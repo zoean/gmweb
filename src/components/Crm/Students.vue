@@ -59,11 +59,11 @@
         >
             <span class="bullets"></span>
 
-            <el-tabs v-model="tabs_active" @tab-click="handleTabClick" type="border-card" style="width: 92%; margin: 0 auto; margin-bottom: 30px;">
+            <el-tabs v-model="tabs_active" @tab-click="handleTabClick" style="width: 94%; margin: 0 auto; margin-bottom: 30px; padding: 20px 30px; border: 1px dashed #ccc;">
 
                 <el-tab-pane label="客户信息" name="first">
                 
-                    <el-form :model="customerForm" :rules="rules" ref="customerForm" class="demo-customerForm">
+                    <el-form :model="customerForm" :rules="rules" ref="customerForm">
 
                         <el-row>
                             <el-col :span="6">
@@ -328,7 +328,7 @@
 
                         <el-row>
 
-                            <el-col>
+                            <el-col :span="18">
                                 <el-form-item label="跟进内容" prop="followUpContent">
 
                                     <el-input 
@@ -346,8 +346,9 @@
 
                         </el-row>
                         
-                        <el-form-item>
+                        <el-form-item style="text-align: center;">
                           <el-button type="primary" @click="submitForm('customerForm')" size="small" style="width: 80px;">确定</el-button>
+                          <el-button plain size="small" style="width: 80px;" @click="quxiao">取消</el-button>
                         </el-form-item>
 
                     </el-form>
@@ -358,8 +359,7 @@
                 
                     <el-table
                         :data="notesList"
-                        style="width: 94%; margin: 0 auto; margin-bottom: 30px;"
-                        border
+                        style="width: 100%; margin-top: 10px; margin-bottom: 30px;"
                         >
                         <el-table-column
                           :prop="item.prop"
@@ -778,6 +778,9 @@ export default {
         },
         phoneCopyFun() {
             this.copyTel(this.copyClueDataSUuid);
+        },
+        quxiao() {
+            this.drawer = false;
         }
     },
     mounted() {

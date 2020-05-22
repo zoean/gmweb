@@ -1,37 +1,40 @@
 <template>
     <el-main class="index-main">
+        
+        <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工信息编辑</div>
+
         <div class="people-detail">
             <el-form ref="form" :model="formText" label-width="80px" style="width: 470px; margin: 0 auto;">
                     
                 <el-form-item label="姓名：">
-                    <el-input v-model="formText.name" disabled></el-input>
+                    <el-input v-model="formText.name" size="small" disabled></el-input>
                 </el-form-item>
         
                 <el-form-item label="工号：">
-                    <el-input v-model="formText.jobNumber" disabled></el-input>
+                    <el-input v-model="formText.jobNumber" size="small" disabled></el-input>
                 </el-form-item>
         
                 <el-form-item label="手机号：">
-                    <el-input v-model="formText.accountNumber" disabled></el-input>
+                    <el-input v-model="formText.accountNumber" size="small" disabled></el-input>
                 </el-form-item>
         
                 <el-form-item label="在职状态：">
-                    <el-input v-model="formText.jobStatus" disabled></el-input>
+                    <el-input v-model="formText.jobStatus" size="small" disabled></el-input>
                 </el-form-item>
         
                 <el-form-item label="组织部门：">
-                    <el-input v-model="formText.orgUuidList" disabled></el-input>
+                    <el-input v-model="formText.orgUuidList" size="small" disabled></el-input>
                 </el-form-item>
         
                 <el-form-item label="拥有角色：">
                 
-                    <el-select v-model="roleArr" multiple placeholder="请选择角色" @change='handleRoleUuidChange' :disabled="!roleConfig">
-                    <el-option
-                        v-for="item in roleOptions"
-                        :key="item.uuid"
-                        :label="item.name"
-                        :value="item.uuid">
-                    </el-option>
+                    <el-select v-model="roleArr" multiple placeholder="请选择角色" size="small" @change='handleRoleUuidChange' :disabled="!roleConfig">
+                        <el-option
+                            v-for="item in roleOptions"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid">
+                        </el-option>
                     </el-select>
         
                 </el-form-item>
@@ -50,15 +53,15 @@
                         </el-tag>
 
                     </div>
-                    <el-button type="primary" plain @click="searchJQ">查找并关联</el-button>
-                    <el-button type="primary" plain @click="addJQ">创建并关联</el-button>
+                    <el-button size="small" plain @click="searchJQ">查找并关联</el-button>
+                    <el-button size="small" plain @click="addJQ">创建并关联</el-button>
                 </el-form-item>
         
             </el-form>
         </div>
-        <el-row type="flex" justify="center">
-            <el-button type="primary" @click="onSubmit" style="width: 100px;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
-            <el-button type="primary" style="width: 100px;" @click="$router.go(-1)">取消</el-button>
+        <el-row type="flex" justify="center" style="margin-left: -36px;">
+            <el-button type="primary" size="small" @click="onSubmit" style="width: 92px;" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+            <el-button size="small" plain style="width: 92px;" @click="$router.go(-1)">取消</el-button>
         </el-row>
         <el-drawer
             title="查找并关联"
@@ -473,7 +476,10 @@ export default {
                 }
             });
             
-        }
+        },
+        goback(){
+            this.$router.go(-1);
+        },
     },
     mounted() {
         
@@ -490,14 +496,19 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #fff;
+            background: #F7F7F7;
             margin-bottom: .3rem;
             color: #666666;
-            font-weight: bold;
+            position: relative;
+            i{
+                position: absolute;
+                left: 10px;
+                top: 13px;
+                cursor: pointer;
+            }
         }
         .people-detail{
             background: #fff;
-            padding: 70px 0 40px 0;
             margin-bottom: 40px;
         }
         .people-screen{

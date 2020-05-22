@@ -3,6 +3,7 @@
         <el-row class="people-screen">
             <el-col :span="4">
                 <el-cascader
+                    size="small"
                     ref="cascader"
                     class="screen-li"
                     placeholder="请选择组织架构"
@@ -14,7 +15,7 @@
                 </el-cascader>
             </el-col>
             <el-col :span="4">
-                <el-select v-model="roleUuidText" placeholder="请选择角色" @change='handleRoleUuidChange' class="screen-li" clearable>
+                <el-select v-model="roleUuidText" placeholder="请选择角色" size="small" @change='handleRoleUuidChange' class="screen-li" clearable>
                     <el-option
                       v-for="item in roleOptions"
                       :key="item.uuid"
@@ -24,7 +25,7 @@
                 </el-select>
             </el-col>
             <el-col :span="4">
-                <el-select v-model="jobStatusText" placeholder="请选择员工状态" @change='handleJobStatusChange' class="screen-li" clearable>
+                <el-select v-model="jobStatusText" placeholder="请选择员工状态" size="small" @change='handleJobStatusChange' class="screen-li" clearable>
                     <el-option
                       v-for="item in jobStatusOptions"
                       :key="item.value"
@@ -36,6 +37,7 @@
             <el-col :span="5">
                 <el-date-picker
                     clearable
+                    size="small"
                     v-model="dataPicker"
                     :default-time="['00:00:00', '23:59:59']"
                     type="daterange"
@@ -49,17 +51,17 @@
 
         <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="screenForm.name" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
+                <el-input v-model="screenForm.name" size="small" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
             </el-col>
             <el-col :span="4">
-                <el-input v-model="screenForm.accountNumber" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
+                <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
             </el-col>
             <el-col :span="5">
-                <el-button type="primary" @click="smoke_search">查 询</el-button>
+                <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
             </el-col>
             <el-col :span="11">
-                <el-button plain class='smoke-fr' @click="smoke_clear">清 空 条 件</el-button>
-                <el-button v-if="exportPeople" plain class='smoke-fr' style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
+                <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button>
+                <el-button v-if="exportPeople" plain class='smoke-fr' size="small" style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
             </el-col>
         </el-row>
         
@@ -382,7 +384,7 @@ export default {
             background: #fff;
             margin-bottom: .3rem;
             color: #666666;
-            font-weight: bold;
+            font-weight: 700;
         }
         .people-screen{
             margin-bottom: 16px;

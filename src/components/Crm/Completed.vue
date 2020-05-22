@@ -2,15 +2,15 @@
     <el-main class="index-main">
 
         <Start></Start>
-        <el-tabs type="border-card" @tab-click="tabChange">
+        <el-tabs @tab-click="tabChange">
             <el-tab-pane label="学员">
 
                 <el-row class="people-screen">
-                    <el-col :span="5">
-                        <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                    <el-col :span="4">
+                        <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
                     </el-col>
-                    <el-col :span="5">
-                        <el-button type="primary" @click="orderCallDataList">查 询</el-button>
+                    <el-col :span="4">
+                        <el-button type="primary" size="small" @click="orderCallDataList">查 询</el-button>
                     </el-col>
                 </el-row>
 
@@ -64,14 +64,14 @@
             </el-tab-pane>
             <el-tab-pane label="订单">
                 <el-row type="flex" :gutter="20">
-                    <el-col :span="6">
-                        <el-input placeholder="请输入要查询的手机号" v-model="orderForm.tel"></el-input>
+                    <el-col :span="4">
+                        <el-input placeholder="请输入要查询的手机号" size="small" v-model="orderForm.tel"></el-input>
                     </el-col>
-                    <el-col :span="6">
-                        <el-input placeholder="请输入要查询的客户姓名" v-model="orderForm.name"></el-input>
+                    <el-col :span="4">
+                        <el-input placeholder="请输入要查询的客户姓名" size="small" v-model="orderForm.name"></el-input>
                     </el-col>
-                    <el-col :span="6">
-                        <el-select v-model="orderForm.commodityClassId" placeholder="请选择要查询的商品班型">
+                    <el-col :span="4">
+                        <el-select v-model="orderForm.commodityClassId" size="small" placeholder="请选择要查询的商品班型">
                             <el-option
                             v-for="item in commodityClassOptions"
                             :key="item.id"
@@ -80,8 +80,8 @@
                             </el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="6">
-                        <el-select v-model="orderForm.purchaseStatus" placeholder="请选择要查询的购买状态">
+                    <el-col :span="4">
+                        <el-select v-model="orderForm.purchaseStatus" size="small" placeholder="请选择要查询的购买状态">
                             <el-option
                             v-for="(item, index) in purchaseOptions"
                             :key="index"
@@ -92,9 +92,11 @@
                     </el-col>
                     
                 </el-row>
-                <el-row type="flex" :gutter="20">
-                    <el-col :span="10">
+                <el-row type="flex" :gutter="20" style="margin-top: 16px;">
+                    <el-col :span="8">
                         <el-date-picker
+                            style="width: 100%;"
+                            size="small"
                             v-model="orderForm.time"
                             type="daterange"
                             align="right"
@@ -106,13 +108,13 @@
                             value-format="timestamp">
                         </el-date-picker>
                     </el-col>
-                    <el-col :span="5">
-                        <el-button type="primary" @click="getUserOrderList">搜索</el-button>
+                    <el-col :span="4">
+                        <el-button type="primary" size="small" @click="getUserOrderList">搜索</el-button>
                     </el-col>
                 </el-row>
                 <el-table
                 :data="userOrderList"
-                style="width: 100%">
+                style="width: 100%; margin-top: 16px;">
                     <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index">
                     <template slot-scope="scope">
                         <span>{{scope.row[item.prop]}}</span>

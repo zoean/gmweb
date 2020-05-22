@@ -2,13 +2,13 @@
     <el-main class="index-main">
         <el-row class="people-screen">
             <el-col :span="5">
-                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
             <el-col :span="2">
-                <el-button type="primary" @click="getUserRPCDList">查 询</el-button>
+                <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
             </el-col>
-            <el-col :span="5">
-                <el-button type="primary" @click="obtainRPCD">确认领取</el-button>
+            <el-col :span="17">
+                <el-button type="primary" size="small" @click="obtainRPCD" style="float: right;">确认领取</el-button>
             </el-col>
         </el-row>
 

@@ -19,7 +19,7 @@ body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, input, textarea, select, p, dl, d
     box-sizing: border-box;
 }
 body {
-    font: 12px/1.5 'Microsoft YaHei','宋体', Tahoma, Arial, sans-serif;
+    font: 12px/1.5 Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #555;
     background-color: #F7F7F7;
 }
@@ -164,11 +164,11 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-table .dialState {
-    color: orange;
+    color: #E6A23C;
 }
 
 .el-table .readState {
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .el-notification {white-space:pre !important; width: auto !important; }
@@ -200,6 +200,7 @@ a:link,a:active,a:visited,a:hover {
     text-align: right !important;
     padding-right: 20px !important;
     width: 120px !important;
+    color: #333;
 }
 .el-form-item__content{
     margin-left: 120px !important;
@@ -228,6 +229,7 @@ a:link,a:active,a:visited,a:hover {
 
 .inputNum{
     width: 80px !important;
+    /* color: #409EFF; */
 }
 
 .el-select{
@@ -261,18 +263,18 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .seatData .area-select .area-selected-trigger{
-    padding: 4px 20px 7px 12px !important;
+    /* padding: 4px 20px 7px 12px !important; */
 }
 .seatData{
-    height: 40px !important;
+    /* height: 40px !important; */
 }
 .seatData .area-cascader-wrap{
-    height: 40px !important;
+    /* height: 40px !important; */
 }
 .seatData .area-cascader-wrap .area-select{
     position: relative;
     top: 0px;
-    height: 40px !important;
+    /* height: 40px !important; */
 }
 
 .el-form-item__error{
@@ -326,12 +328,8 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-table .error-row {
-    background: #F56C6C;
-    color: #fff;
-}
-
-.el-table .error-row:hover{
-    color: #606266;
+    background: #fff;
+    color: #F56C6C;
 }
 
 .el-submenu__icon-arrow{
@@ -354,8 +352,9 @@ a:link,a:active,a:visited,a:hover {
     background: #FAFAFA !important;
 }
 
-.el-table thead{
+.el-table thead tr th{
     color: #333;
+    font-weight: 500 !important;
 }
 
 

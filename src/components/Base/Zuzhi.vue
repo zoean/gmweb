@@ -81,7 +81,7 @@ export default {
             background: #fff;
             margin-bottom: .3rem;
             color: #666666;
-            font-weight: bold;
+            font-weight: 700;
         }
         .people-screen{
             margin-bottom: 16px;

@@ -5,6 +5,7 @@
             <el-col :span="4">
                 <el-cascader
                     ref="cascader"
+                    size="small"
                     class="screen-li"
                     placeholder="请选择统计单元"
                     collapse-tags
@@ -20,6 +21,7 @@
                 
                 <el-date-picker
                     style="width: 90%;"
+                    size="small"
                     v-model="timeDate"
                     type="date"
                     @change="timeChange"
@@ -31,19 +33,17 @@
             <el-col :span="4">
                 <el-button 
                     type="primary" 
-                    plain 
-                    style="width: 50%;"
+                    size="small"
                     @click="countCallRecord"
-                >确定</el-button>
+                >查询</el-button>
             </el-col>
 
         </el-row>
 
         <el-table
             :data="tableData"
-            border
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%; margin-top: 20px;">
 
             <el-table-column
                 :prop="item.prop"
@@ -171,7 +171,6 @@ export default {
         }
         .screen-li{
             width: 90%;
-            margin-bottom: 1rem;
         }
     }
     .index-main /deep/ .el-table .cell{
