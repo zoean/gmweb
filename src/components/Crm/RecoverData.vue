@@ -4,7 +4,8 @@
 
             <el-col :span="8">
                 <el-date-picker
-                    style="width: 90%;"
+                    size="small"
+                    style="width: 95%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -17,6 +18,7 @@
             <el-col :span="4">
 
                 <el-autocomplete
+                    size="small"
                     class="screen-li"
                     style="width: 90%;"
                     v-model="form.examItemText"
@@ -29,16 +31,16 @@
             </el-col>
 
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4" class="seatData">
-                <area-cascader type="text" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
+                <el-select v-model="form.spread" size="small" placeholder="请选择渠道">
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -55,7 +57,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -67,12 +69,12 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getRecoveryPoolDataList">搜 索</el-button>
+                <el-button type="primary" @click="getRecoveryPoolDataList" size="small">查 询</el-button>
             </el-col>
             <el-col :span="16">
                 <el-row type="flex" justify="end">
-                    <el-button type="primary" @click="pushPeopleClick">分配至人</el-button>
-                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                    <el-button plain @click="pushPeopleClick" size="small">分配至人</el-button>
+                    <el-button plain @click="editFieldHandle" size="small">表头管理</el-button>
                 </el-row>
             </el-col>
 
@@ -176,7 +178,12 @@
 
             </el-row>
 
-            <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
+            <div style="text-align: center;">
+
+                <el-button type="primary" style="margin-left: 20px;" size="small" @click="addPeople">确定</el-button>
+                <el-button plain size="small" @click="quxiao">取消</el-button>
+
+            </div>
 
         </el-drawer>
 
@@ -516,6 +523,9 @@ export default {
                 })
             }
         },
+        quxiao() {
+            this.drawer1 = false;
+        }
     },
     watch: {
         filterText(val) {
@@ -532,7 +542,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

@@ -32,7 +32,6 @@
             <el-col :span="11" :offset="1">
 
                 <el-table
-                    border
                     :data="tableData"
                 >
 

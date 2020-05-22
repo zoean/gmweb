@@ -4,10 +4,10 @@
         <Start></Start>
         <el-row class="people-screen">
             <el-col :span="5">
-                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
             <el-col :span="5">
-                <el-button type="primary" @click="threeDaysNoCallDataList">搜 索</el-button>
+                <el-button type="primary" size="small" @click="threeDaysNoCallDataList">查 询</el-button>
             </el-col>
         </el-row>
 
@@ -35,7 +35,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" min-width="230" fixed="right">
+            <el-table-column prop="active" label="操作" min-width="250" fixed="right">
               <template slot-scope="scope">
                   <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
                   <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
@@ -334,7 +334,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

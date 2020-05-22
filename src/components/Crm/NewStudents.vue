@@ -1,5 +1,10 @@
 <template>
     <el-main class="index-main">
+
+        <el-row>
+            <el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)" style="float: right;">确认领取</el-button>
+        </el-row>
+
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
         </el-tabs>
@@ -26,8 +31,6 @@
               </template>
             </el-table-column>
         </el-table>
-
-        <el-button type="primary" @click="classTeaGetWaitStudent('all', null)" style="margin-top: 20px;">确认领取</el-button>
 
     </el-main>
 </template>
@@ -165,7 +168,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

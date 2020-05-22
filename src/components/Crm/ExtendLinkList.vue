@@ -5,6 +5,7 @@
             <el-col :span="8">
                 <el-date-picker
                     style="width: 95%;"
+                    size="small"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -16,7 +17,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleId" placeholder="请选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleId" size="small" placeholder="请选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -31,6 +32,7 @@
 
                 <el-autocomplete
                     clearable
+                    size="small"
                     class="screen-li"
                     style="width: 90%;"
                     v-model="form.examItemText"
@@ -45,7 +47,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spreadId" placeholder="请选择渠道" class="screen-li" clearable>
+                <el-select v-model="form.spreadId" size="small" placeholder="请选择渠道" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -58,7 +60,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.accId" placeholder="请选择推广账号" clearable="" class="screen-li">
+                <el-select v-model="form.accId" size="small" placeholder="请选择推广账号" clearable="">
                     <el-option
                       v-for="item in enumList['MJ-7']"
                       :key="item.name"
@@ -75,12 +77,12 @@
 
             <el-col :span="4">
 
-                <el-input v-model="form.userName" placeholder="请输入创建人姓名" class="screen-li"></el-input>
+                <el-input v-model="form.userName" size="small" placeholder="请输入创建人姓名" class="screen-li"></el-input>
 
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getPopularizeUrl">搜 索</el-button>
+                <el-button type="primary" size="small" @click="getPopularizeUrl">查 询</el-button>
             </el-col>
 
         </el-row>
@@ -305,7 +307,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

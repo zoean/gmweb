@@ -2,16 +2,16 @@
     <el-main class="index-main">
         <el-row class="people-screen">
 
-            <el-col :span="3" v-if="addEnums">
-                <el-button type="primary" @click="addEnumClick">新增枚举</el-button>
+            <el-col :span="5">
+                <el-input v-model="form.name" placeholder="请输入名称" size="small" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="5">
-                <el-input v-model="form.name" placeholder="请输入名称" class="screen-li"></el-input>
+                <el-button type="primary" size="small" @click="getEnumList">查 询</el-button>
             </el-col>
 
-            <el-col :span="5">
-                <el-button type="primary" @click="getEnumList">搜 索</el-button>
+            <el-col :span="14" v-if="addEnums">
+                <el-button type="primary" @click="addEnumClick" size="small" style="float: right;">新增枚举</el-button>
             </el-col>
 
         </el-row>
@@ -48,19 +48,20 @@
         >
         </el-pagination>
 
-        <el-dialog :title="enumTitle" :visible.sync="enumFlag">
+        <el-dialog width="30%" :title="enumTitle" :visible.sync="enumFlag">
           <el-form :model="enumForm">
 
             <el-form-item label="枚举名称" :label-width="formLabelWidth">
-                <el-input v-model="enumForm.name" autocomplete="off"></el-input>
+                <el-input v-model="enumForm.name" autocomplete="off" size="small"></el-input>
             </el-form-item>
 
             <el-form-item label="枚举描述" :label-width="formLabelWidth">
-                <el-input v-model="enumForm.describe" autocomplete="off"></el-input>
+                <el-input v-model="enumForm.describe" autocomplete="off" size="small"></el-input>
             </el-form-item>
 
             <el-form-item label="枚举开启状态" :label-width="formLabelWidth">
                 <el-switch
+                    size="small"
                     :active-value='1'
                     :inactive-value='0'
                     v-model="enumForm.enable"
@@ -71,8 +72,8 @@
             
           </el-form>
           <div slot="footer" class="dialog-footer">
-            <el-button @click="enumFlag = false">取 消</el-button>
-            <el-button type="primary" @click="enumFormOk">确 定</el-button>
+            <el-button type="primary" @click="enumFormOk" size="small">确 定</el-button>
+            <el-button @click="enumFlag = false" size="small" plain>取 消</el-button>
           </div>
         </el-dialog>
 
@@ -87,16 +88,16 @@
             <el-row class="people-screen">
 
                 <el-col :span="3" style="margin-left: 22px;" v-if="addEnumsDetails">
-                    <el-button type="primary" @click="addEnumItemClick">新增枚举项</el-button>
+                    <el-button type="primary" @click="addEnumItemClick" size="small">新增枚举项</el-button>
                 </el-col>
 
             </el-row>
 
-            <el-dialog :title="enumItemTitle" :visible.sync="enumItemFlag" :append-to-body='true'>
+            <el-dialog width="30%" :title="enumItemTitle" :visible.sync="enumItemFlag" :append-to-body='true'>
               <el-form :model="enumItemForm">
 
                 <el-form-item label="枚举项名称" :label-width="formLabelWidth">
-                    <el-input v-model="enumItemForm.name" autocomplete="off"></el-input>
+                    <el-input v-model="enumItemForm.name" autocomplete="off" size="small"></el-input>
                 </el-form-item>
 
                 <el-form-item label="枚举项开启状态" :label-width="formLabelWidth">
@@ -105,20 +106,20 @@
                         :inactive-value='0'
                         v-model="enumItemForm.enable"
                         active-color="#13ce66"
+                        size="small"
                         inactive-color="#cccccc">
                     </el-switch>
                 </el-form-item>
 
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="enumItemFlag = false">取 消</el-button>
-                <el-button type="primary" @click="enumItemFormOk">确 定</el-button>
+                <el-button type="primary" @click="enumItemFormOk" size="small">确 定</el-button>
+                <el-button @click="enumItemFlag = false" size="small" plain>取 消</el-button>
               </div>
             </el-dialog>
 
             <el-table
                 :data="enumItemList"
-                border
                 ref="enumItemTree"
                 v-loading="fullscreenLoadingDetails"
                 style="width: 94%; margin: 0 auto; margin-top: 20px;">
@@ -131,7 +132,7 @@
                 </el-table-column>
                 <el-table-column prop="active" label="操作" v-if="editEnumsDetails">
                   <template slot-scope="scope">
-                      <el-button @click="editEnumItemClick(scope.row)" type="text" >修改</el-button>
+                      <el-button @click="editEnumItemClick(scope.row)" type="text">修改</el-button>
                   </template>
                 </el-table-column>
             </el-table>
@@ -416,7 +417,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

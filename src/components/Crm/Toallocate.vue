@@ -2,10 +2,13 @@
     <el-main class="index-main">
         <el-row class="people-screen">
             <el-col :span="5">
-                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
-            <el-col :span="5">
-                <el-button type="primary" @click="getUserRPCDList">搜 索</el-button>
+            <el-col :span="2">
+                <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
+            </el-col>
+            <el-col :span="17">
+                <el-button type="primary" size="small" @click="obtainRPCD" style="float: right;">确认领取</el-button>
             </el-col>
         </el-row>
 
@@ -111,8 +114,6 @@
             </el-row>
 
         </el-drawer>
-
-        <el-button type="primary" @click="obtainRPCD" style="margin-top: 20px;">确认领取</el-button>
 
     </el-main>
 </template>
@@ -277,7 +278,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

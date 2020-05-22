@@ -1,10 +1,20 @@
 <template>
   <el-main class="index-main">
-      <div class="search-area">
-        <el-button type="primary" @click="addPageHandle">新增页面</el-button>
-        <el-input placeholder="请输入搜索项"></el-input>
-        <el-button  type="primary">搜索</el-button>
-      </div>
+      <el-row class="search-area">
+
+          <el-col :span="5">
+              <el-input placeholder="请输入搜索项" size="small" class="screen-li"></el-input>
+          </el-col>
+
+          <el-col :span="5">
+              <el-button type="primary" size="small">查 询</el-button>
+          </el-col>
+
+          <el-col :span="14">
+              <el-button type="primary" size="small" @click="addPageHandle" style="float: right;">新增页面</el-button>
+          </el-col>
+
+      </el-row>
       <el-table :data="pageManageList.list">
         <el-table-column v-for="(item, index) in pageManageListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">
         </el-table-column> 
@@ -23,42 +33,43 @@
           </template>
     </el-table-column>
       </el-table>
-      <el-dialog :visible.sync="addEditPageVisible" :title="addEditPageType == 'add' ? '添加页面' : '编辑页面'" :close-on-click-modal="false">
+      <el-dialog width="30%" :visible.sync="addEditPageVisible" :title="addEditPageType == 'add' ? '添加页面' : '编辑页面'" :close-on-click-modal="false">
     <el-form ref="addEditPageForm" :model="addEditPageForm" :rules="addEditPageRules">
       <el-form-item label="页面名称" prop="name">
-        <el-input v-model="addEditPageForm.name" placeholder="请输入页面名称"></el-input>
+        <el-input v-model="addEditPageForm.name" size="small" placeholder="请输入页面名称"></el-input>
       </el-form-item>
       <el-form-item label="页面描述" prop="describe">
-        <el-input v-model="addEditPageForm.describe" placeholder="请输入页面描述"></el-input>
+        <el-input v-model="addEditPageForm.describe" size="small" placeholder="请输入页面描述"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="addEditPageVisible = false">取 消</el-button>
-      <el-button type="primary" @click="submitAddEditPage">确 定</el-button>
+      <el-button size="small" type="primary" @click="submitAddEditPage">确 定</el-button>
+      <el-button size="small" plain @click="addEditPageVisible = false">取 消</el-button>
     </span>
   </el-dialog>
   
-  <el-dialog :visible.sync="addEditFieldVisible" :title="addEditFieldType == 'add' ? '添加字段' : '编辑字段'" :close-on-click-modal="false">
+  <el-dialog width="30%" :visible.sync="addEditFieldVisible" :title="addEditFieldType == 'add' ? '添加字段' : '编辑字段'" :close-on-click-modal="false">
     <el-form ref="addEditFieldForm" :model="addEditFieldForm" :rules="addEditFieldRules">
       <el-form-item label="字段名称" prop="label">
-        <el-input v-model="addEditFieldForm.label" placeholder="请输入字段名称"></el-input>
+        <el-input v-model="addEditFieldForm.label" size="small" placeholder="请输入字段名称"></el-input>
       </el-form-item>
       <el-form-item label="字段描述" prop="describe">
-        <el-input v-model="addEditFieldForm.describe" placeholder="请输入字段描述"></el-input>
+        <el-input v-model="addEditFieldForm.describe" size="small" placeholder="请输入字段描述"></el-input>
       </el-form-item>
       <el-form-item label="字段props" prop="props">
-        <el-input v-model="addEditFieldForm.props" placeholder="请输入字段props"></el-input>
+        <el-input v-model="addEditFieldForm.props" size="small" placeholder="请输入字段props"></el-input>
       </el-form-item>      
       <el-form-item label="sql字段key" prop="sqlField">
-        <el-input v-model="addEditFieldForm.sqlField" placeholder="请输入sql字段key"></el-input>
+        <el-input v-model="addEditFieldForm.sqlField" size="small" placeholder="请输入sql字段key"></el-input>
       </el-form-item>      
       <el-form-item label="表头字段宽度" prop="width">
-        <el-input v-model="addEditFieldForm.width" placeholder="请输入表头字段宽度"></el-input>
+        <el-input v-model="addEditFieldForm.width" size="small" placeholder="请输入表头字段宽度"></el-input>
       </el-form-item>        
       <el-form-item label="是否默认" prop="ifDef">
         <el-switch
           v-model="addEditFieldForm.ifDef"
           active-color="#13ce66"
+          size="small"
           inactive-color="#ff4949">
         </el-switch>
       </el-form-item>               
@@ -66,6 +77,7 @@
         <el-switch
           v-model="addEditFieldForm.ifOpen"
           active-color="#13ce66"
+          size="small"
           inactive-color="#ff4949">
         </el-switch>
       </el-form-item>        
@@ -73,13 +85,14 @@
         <el-switch
           v-model="addEditFieldForm.ifSort"
           active-color="#13ce66"
+          size="small"
           inactive-color="#ff4949">
         </el-switch>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="addEditFieldVisible = false">取 消</el-button>
-      <el-button type="primary" @click="submitAddEditField">确 定</el-button>
+      <el-button type="primary" @click="submitAddEditField" size="small">确 定</el-button>
+      <el-button @click="addEditFieldVisible = false" size="small" plain>取 消</el-button>
     </span>
   </el-dialog>
   <el-drawer
@@ -89,7 +102,7 @@
     size="50%"
     >
     <span class="bullets"></span>
-    <el-button type="primary" @click.native.prevent="addFieldHandle" class="ml20">添加字段</el-button>
+    <el-button type="primary" @click.native.prevent="addFieldHandle" class="ml20" size="small">添加字段</el-button>
     <el-table :data="pageFieldList" class="ml20">
       <el-table-column v-for="(item, index) in pageFieldListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">
       </el-table-column>

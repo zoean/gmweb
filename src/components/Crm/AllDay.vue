@@ -5,16 +5,16 @@
         <el-row class="people-screen">
 
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入查询的手机号" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4">
-                <el-input v-model="form.name" placeholder="请输入查询的客户姓名" class="screen-li"></el-input>
+                <el-input v-model="form.name" size="small" placeholder="请输入查询的客户姓名" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4">
                 
-                <el-select v-model="form.dialState" placeholder="请选择是否首咨" class="screen-li">
+                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li">
                     <el-option
                       v-for="item in dialStateList"
                       :key="item.name"
@@ -27,7 +27,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.education" placeholder="请选择最高学历" class="screen-li">
+                <el-select v-model="form.education" size="small" placeholder="请选择最高学历" class="screen-li">
                     <el-option
                       v-for="item in enumList['MJ-1']"
                       :key="item.name"
@@ -40,7 +40,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.workingLife" placeholder="请选择工作年限" class="screen-li">
+                <el-select v-model="form.workingLife" size="small" placeholder="请选择工作年限" class="screen-li">
                     <el-option
                       v-for="item in enumList['MJ-2']"
                       :key="item.name"
@@ -57,7 +57,7 @@
 
             <el-col :span="4">
 
-                <el-select @change="selectTimeChange" v-model="form.selectTime" placeholder="请选择未联间隔" class="screen-li" clearable>
+                <el-select @change="selectTimeChange" size="small" v-model="form.selectTime" placeholder="请选择未联间隔" class="screen-li" clearable>
                     <el-option
                       v-for="item in selectTimeList"
                       :key="item.name"
@@ -70,7 +70,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -82,11 +82,11 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getClueDataAll">搜 索</el-button>
+                <el-button type="primary" size="small" @click="getClueDataAll">查 询</el-button>
             </el-col>
             <el-col :span="12">
                 <el-row type="flex" justify="end">
-                    <el-button type="primary" plain @click="editFieldHandle">表头管理</el-button>
+                    <el-button plain size="small" @click="editFieldHandle">表头管理</el-button>
                 </el-row>
             </el-col>
         </el-row>
@@ -560,7 +560,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

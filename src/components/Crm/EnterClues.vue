@@ -184,11 +184,9 @@
 
                 </el-row>
 
-                <el-row>
+                <el-row style="text-align: center; margin-top: 20px;">
 
-                    <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;">保存</el-button>
-                    </el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;">保存</el-button>
 
                 </el-row>
 
@@ -205,12 +203,14 @@
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
-                    <el-button type="primary" size="small" style="width: 120px;">导入线索</el-button>
+                    <el-button plain size="small" style="width: 120px;">导入线索</el-button>
                 </el-upload>
 
-                <el-button type="primary" @click="downloadImport" size="small" style="width: 130px; display: inline-block;">下载导入模板</el-button>
+                <el-button plain @click="downloadImport" size="small" style="width: 130px; display: inline-block;">下载导入模板</el-button>
 
-                <el-button type="primary" @click="clearImport" size="small" style="width: 130px; display: inline-block;">清除导入线索</el-button>
+                <el-button plain @click="clearImport" size="small" style="width: 130px; display: inline-block;">清除导入线索</el-button>
+
+                <el-button type="primary" @click="upImport" size="small" style="width: 120px; display: inline-block; float: right;">确定导入</el-button>
 
                 <div style="margin-top: 20px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
@@ -234,8 +234,6 @@
                     
                 </el-table>
 
-                <el-button type="primary" @click="upImport" size="small" style="width: 120px; display: inline-block; margin-top: 20px;">确定导入</el-button>
-
                 <el-dialog
                     title="请选择考试项和分配组"
                     :visible.sync="dialogVisible"
@@ -249,6 +247,7 @@
                             <el-autocomplete
                                 class="inline-input"
                                 style="width: 100%;"
+                                size="small"
                                 v-model="importDataForm.examItemText"
                                 :fetch-suggestions="querySearch"
                                 placeholder="请选择考试项"
@@ -257,7 +256,7 @@
 
                         </el-form-item>
 
-                        <el-form-item label="选择分配组" prop="clueRuleNumber">
+                        <el-form-item label="选择分配组" size="small" prop="clueRuleNumber">
 
                             <el-select v-model="importDataForm.clueRuleNumber" placeholder="请选择分配组">
                                 <el-option
@@ -273,8 +272,8 @@
                     </el-form>
 
                     <span slot="footer" class="dialog-footer">
-                      <el-button @click="dialogVisible = false">取 消</el-button>
-                      <el-button type="primary" @click="importDataSubmitForm('importDataForm')">确 定</el-button>
+                      <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+                      <el-button type="primary" @click="importDataSubmitForm('importDataForm')" size="small">确 定</el-button>
                     </span>
                 </el-dialog>
 
@@ -588,7 +587,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;

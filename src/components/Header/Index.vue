@@ -542,7 +542,7 @@ export default {
 <style lang="less" scoped>
     .el-header{
         background: #fff;
-        color: #333333;
+        color: #333;
         line-height: 60px;
         padding: 0 40px 0 0;
         width: 100%;
@@ -582,12 +582,13 @@ export default {
         font-size: 16px;
         text-align: right;
         cursor: pointer;
-        color: #333333;
+        color: #333;
     }
     .el-menu-demo{
         float: left;
         width: calc( 100% - 400px );
         padding-left: 20px;
+        font-weight: 500 !important;
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;

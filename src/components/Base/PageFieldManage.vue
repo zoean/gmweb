@@ -10,8 +10,8 @@
       <el-table-column v-for="(item,index) in curFieldColumn" :key="index" :prop="item.prop" :label="item.label"></el-table-column>
     </el-table>
     <span slot="footer" class="dialog-footer">
-        <el-button @click="cancleEditField">取 消</el-button>
-        <el-button type="primary" @click="editFieldSubmit">确 定</el-button>
+        <el-button @click="cancleEditField" size="small">取 消</el-button>
+        <el-button type="primary" @click="editFieldSubmit" size="small">确 定</el-button>
     </span>
   </el-dialog>
 </div>

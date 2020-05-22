@@ -4,7 +4,8 @@
 
             <el-col :span="8">
                 <el-date-picker
-                    style="width: 90%;"
+                    size="small"
+                    style="width: 95%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -17,6 +18,7 @@
             <el-col :span="4">
 
                 <el-autocomplete
+                    size="small"
                     class="screen-li"
                     style="width: 90%;"
                     v-model="form.examItemText"
@@ -29,16 +31,16 @@
             </el-col>
 
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4" class="seatData">
-                <area-cascader type="text" class="screen-li smoke-cascader" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" placeholder="请选择渠道" class="screen-li">
+                <el-select v-model="form.spread" size="small" placeholder="请选择渠道">
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -55,7 +57,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -67,7 +69,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getSpillPoolClueData">搜 索</el-button>
+                <el-button type="primary" size="small" @click="getSpillPoolClueData">查 询</el-button>
             </el-col>
 
             <el-col :span="4">
@@ -78,12 +80,13 @@
                 <div style="color: #fff; user-select: none;">1</div>
             </el-col>
 
-            <el-col :span="4">
-                <el-button type="primary" @click="pushPeopleClick" class="screen-li">分配至人</el-button>
+            <el-col :span="3">
+                <div style="color: #fff; user-select: none;">1</div>
             </el-col>
 
-            <el-col :span="4">
-                <el-button type="primary" @click="pushArrClick" class="screen-li">分配至组</el-button>
+            <el-col :span="5">
+                <el-button plain size="small" @click="pushArrClick" style="float: right;">分配至组</el-button>
+                <el-button plain size="small" @click="pushPeopleClick" style="float: right; margin-right: 20px;">分配至人</el-button>
             </el-col>
 
         </el-row>
@@ -141,7 +144,12 @@
 
             </el-row>
 
-            <el-button type="primary" style="margin: 0 20px;" @click="addPeople">确定</el-button>
+            <div style="text-align: center;">
+
+                <el-button type="primary" style="margin-left: 20px;" size="small" @click="addPeople">确定</el-button>
+                <el-button plain size="small" @click="quxiao">取消</el-button>
+
+            </div>
 
         </el-drawer>
 
@@ -153,7 +161,7 @@
         >
             <span class="bullets"></span>
 
-            <div class="tagName">您已选择 {{this.tableSelectList.length}} 条数据</div>
+            <div class="tagName">您已选择<span style="color: #409EFF"> {{this.tableSelectList.length}} </span>条数据</div>
  
             <el-tag 
                 v-for="(item,index) in ruleNumberNameListAll" :key="index"
@@ -540,6 +548,9 @@ export default {
                 })
             }
         },
+        quxiao() {
+            this.drawer1 = false;
+        }
     },
     mounted() {
         
@@ -554,7 +565,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
@@ -581,7 +592,7 @@ export default {
         }
         .tagName{
             height: 40px;
-            background: #eeeeee;
+            background: #FAFAFA;
             text-align: center;
             font-size: 14px;
             line-height: 40px;
@@ -595,16 +606,4 @@ export default {
             margin-top: .4rem;
         }
     }
-    
-/* //element-ui table的去除右侧滚动条的样式 */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 1px;
-}
-    /* // 滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-    background-color: #a1a3a9;
-    border-radius: 0px;
-    border-radius: 8px;
-}
 </style>

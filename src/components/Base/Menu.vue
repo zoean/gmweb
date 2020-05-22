@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-button type="primary" @click="add_menu" style="margin-bottom: .2rem;">新建菜单</el-button>
+        <el-button type="primary" @click="add_menu" size="small" style="margin-bottom: .2rem;">新建菜单</el-button>
 
         <el-table
           :data="menuList"
@@ -292,7 +292,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: calc( 100vh - 140px);
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
@@ -302,7 +302,7 @@ export default {
             background: #fff;
             margin-bottom: .3rem;
             color: #666666;
-            font-weight: bold;
+            font-weight: 700;
         }
         .people-screen{
             margin-bottom: 16px;
