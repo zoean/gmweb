@@ -56,9 +56,31 @@ export default {
       }
     }
   },
+  mounted(){
+    if(this.unNormalPage.includes(this.$route.path)){
+      this.isNormalPage = false
+      this.widthClass = 'sidebar-no'
+      this.paddingClass = 'noheader-padding'
+    }else{
+      this.isNormalPage = true
+      this.paddingClass = 'header-padding'
+      if(this.sideBarOpen){
+        this.widthClass = 'sidebar-open'
+      }else{
+        this.widthClass = 'sidebar-close'
+      }
+    }
+  },
   methods: {
     toggleSidebar(){
       this.sideBarOpen = !this.sideBarOpen
+      if(this.sideBarOpen){
+        this.widthClass = 'sidebar-open'
+      }else{
+        this.widthClass = 'sidebar-close'
+      }
+      
+    console.log(this.widthClass)
     }
   }
 }
