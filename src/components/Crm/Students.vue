@@ -1,9 +1,11 @@
 <template>
     <el-main class="index-main">
+        <el-row type="flex" justify="end">
+            <el-button plain size="small" @click="editFieldHandle">表头管理</el-button>
+        </el-row>
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
         </el-tabs>
-
         <el-table
             :data="list"
             ref="tree"
