@@ -2,8 +2,10 @@
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container>
-      <Aside v-if="$store.state.commonFlag"></Aside>
-      <router-view/>
+      <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar"></Aside>
+      <div :class="['main-wrap', sideBarOpen ? 'sidebar-open' : 'sidebar-close']">
+        <router-view/>
+      </div>
     </el-container>
   </div>
 </template>
@@ -18,7 +20,7 @@ export default {
   },
   data() {
     return{
-      
+      sideBarOpen: true
     }
   },
   created() {
@@ -38,6 +40,9 @@ export default {
     }
   },
   methods: {
+    toggleSidebar(){
+      this.sideBarOpen = !this.sideBarOpen
+    }
   }
 }
 </script>
@@ -50,6 +55,20 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
+}
+.el-container{
+  padding-top: 60px;
+  position: relative;
+}
+.main-wrap{
+  position: absolute;
+  right: 0
+}
+.sidebar-open{
+  width: calc( 100vw - 260px );
+}
+.sidebar-close{
+  width: calc( 100vw - 64px );
 }
 .edit-field-icon{
   color: #5cb6ff;

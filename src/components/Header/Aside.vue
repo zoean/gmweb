@@ -78,6 +78,11 @@
 import { getMenuDetailsSubsetByUuid } from '../../request/api';
 export default {
     name: '',
+    props:{
+      toggleSidebar:{
+        type: Function
+      }
+    },
     data() {
         return {
           activeIndex: '',
@@ -93,9 +98,11 @@ export default {
     methods: {
       open_click() {
         this.iscollapse = false;
+        this.toggleSidebar()
       },
       close_click() {
         this.iscollapse = true;
+        this.toggleSidebar()
       },
       active_router(index) {
         this.$store.commit('setPageNum', index.pageNum)
@@ -174,8 +181,11 @@ export default {
 
 <style lang="less" scoped>
   .aside-all{
-    position: relative;
-    min-height: calc(100vh - 140px);
+    position: fixed;
+    z-index: 999;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex: 1;
     .el-submenu-smoke{
       position: relative;
       z-index: 9;
@@ -244,7 +254,6 @@ export default {
     .el-menu-vertical-demo{
       position: relative;
       z-index: 9;
-      height: 100%;
       border-right: none;
       background-color: #4794FE !important;
     }

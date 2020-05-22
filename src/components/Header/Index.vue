@@ -62,8 +62,8 @@
                     placement="bottom"
                     width="400"
                     trigger="click">
-                    <el-tabs v-model="activeName">
-                        <el-tab-pane :label="`未读 (${unReadList.length})`" name="first">
+                    <el-tabs v-model="activeName" @tab-click="tabClickHandle">
+                        <el-tab-pane :label="`未读 (${notReadNumValue})`" name="first">
                             <dl v-for="(item, index) in unReadList" :key="index">
                                 <dt title="点击查看消息内容" @click="handleLookClick(item)"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
@@ -73,11 +73,10 @@
                         </el-tab-pane>
                         <el-tab-pane label="已读" name="second">
                             <dl v-for="(item, index) in fullReadList" :key="index">
-                                <dt title="点击查看消息内容" @click="handleLookClick(item)"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
+                                <dt title="点击查看消息内容" @click="item.fold = !item.fold"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
                             </dl>
                             <dl v-if="!fullReadList.length"><dt class="no-data">暂无已读消息</dt></dl>
-                            <dl v-if="newsForm.pageCount > newsForm.currentPage"><dt class="more-data" @click="getMoreMsg(1)">点击查看更多</dt></dl>
                         </el-tab-pane>
                     </el-tabs>
                     <el-badge slot="reference" :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
@@ -98,52 +97,6 @@
     
             </el-col>
         </el-row>
-
-        <el-drawer 
-            :title="drawerTitle"
-            size="50%"
-            :visible.sync="drawer"
-            :direction="direction"
-            :before-close="handleCloseDrawer"
-        >
-            <span class="bullets"></span>
-
-            <el-table
-                border
-                :row-class-name="tableRowClassName"
-                style="margin: 22px; width: 90%;"
-                :data="tableData"
-            >
-
-                <el-table-column
-                    :prop="item.props"
-                    :label="item.label"
-                    v-for="(item, index) in columnListTree"
-                    :key="index">
-                </el-table-column>
-
-                <el-table-column prop="active" label="操作">
-                    <template slot-scope="scope">
-                        <el-button type="text" @click="handleLookClick(scope.row)">查看</el-button>
-                    </template>
-                </el-table-column>
-
-            </el-table>
-
-            <el-pagination
-                background
-                class="pagination"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total='newsForm.total'
-                :page-size='newsForm.pageSize'
-                :page-sizes="[10, 20, 30]"
-                :hide-on-single-page="totalFlag"
-                @current-change="handleCurrentChange"
-                @size-change="handleSizeChange"
-            >
-            </el-pagination>
-
-        </el-drawer>
         
     </el-header>
 </template>
@@ -178,7 +131,7 @@ export default {
             direction: 'rtl',
             notReadNumValue: 0,
             newsForm: {
-                pageSize: 10,
+                pageSize: 1000,
                 currentPage: 1,
                 pageCount: 0,
                 readState: 0 //0是未读，1是已读
@@ -202,16 +155,11 @@ export default {
         this.noReadNum();
     },
     methods: {
+        tabClickHandle(tab){
+            this.getStationNews(tab.index)
+        },
         maxSlice(msg){
             return msg.length > this.maxLength ? `${msg.slice(0, this.maxLength)}...` : msg
-        },
-        handleSizeChange(index) {
-            this.newsForm.pageSize = index;
-            this.getStationNews();
-        },
-        handleCurrentChange(index) {
-            this.newsForm.currentPage = index;
-            this.getStationNews();
         },
         handleLookClick(row) {
             row.fold = !row.fold
@@ -244,33 +192,37 @@ export default {
                 }
             })
         },
-        getStationNews() {
+        getStationNews(readState) {
             this.unReadList = []
             this.fullReadList = []
+            this.newsForm.readState = readState
             this.$smoke_post(getStationNews, this.newsForm).then(res => {
                 if(res.code == 200) {
                     res.data.list.map(sll => {
                         sll.createTime = timestampToTime(Number(sll.createTime));
                         sll.type = sll.type == 1 ? '【首咨】' : '【新学员】'
                         sll.fold = true
-                        if(sll.readState == 0) {
-                            sll.readState = '未读';
-                            this.unReadList.push(sll)
-                        }else{
-                            sll.readState = '已读';
-                            this.fullReadList.push(sll)
-                        }
+                        // if(sll.readState == 0) {
+                        //     sll.readState = '未读';
+                        //     this.unReadList.push(sll)
+                        // }else{
+                        //     sll.readState = '已读';
+                        //     this.fullReadList.push(sll)
+                        // }
                     })
-                    this.newsForm.pageCount = this.newsForm.total % this.newsForm.pageSize == 0 ? this.newsForm.total / this.newsForm.pageSize : this.newsForm.total / this.newsForm.pageSize + 1
-                    this.tableData = res.data.list;
+                    if(this.newsForm.readState == 0){ //未读
+                      this.unReadList =  res.data.list
+                    }else{
+                        this.fullReadList = res.data.list
+                    }
+                    // this.newsForm.pageCount = this.newsForm.total % this.newsForm.pageSize == 0 ? this.newsForm.total / this.newsForm.pageSize : this.newsForm.total / this.newsForm.pageSize + 1
+                    // this.tableData = res.data.list;
                     this.newsForm.total = res.data.total;
                 }
             })
         },
         badgeClick() {
-            // this.drawer = true;
-            this.newsForm.currentPage = 1
-            this.getStationNews();
+            this.getStationNews(0);
         },
         handleCloseDrawer(done) {
             done();
@@ -436,9 +388,8 @@ export default {
             return '';
         },
         getMoreMsg(readState){
-            this.newsForm.currentPage == this.newsForm.currentPage < this.newsForm.pageCount ? this.newsForm.currentPage++ : '1'
             this.newsForm.readState = readState
-            this.getStationNews()
+            this.getStationNews(0)
         }
     },
     watch:{
@@ -546,6 +497,8 @@ export default {
         line-height: 60px;
         padding: 0 40px 0 0;
         width: 100%;
+        position: fixed;
+        z-index: 999;
         .reset-password{
             /deep/ .el-dialog{
                .el-dialog__body{

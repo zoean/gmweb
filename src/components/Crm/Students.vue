@@ -44,12 +44,6 @@
                   <el-button @click="studentDetails(scope.row)" type="text" >学员详情</el-button>
               </template>
             </el-table-column>
-            <el-table-column
-              align="right" width="60px" fixed="right">
-              <template slot="header">
-                <i class="el-icon-edit edit-field-icon" @click="editFieldHandle"></i>
-              </template>
-            </el-table-column>
         </el-table>
 
         <el-drawer
