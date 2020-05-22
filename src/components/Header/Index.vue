@@ -58,9 +58,33 @@
 
             <el-col :span="4">
                 <span style="position: absolute; right: 154px; font-size: 14px;">v 1.0.1</span>
-                <el-badge :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
+                <el-popover
+                    placement="bottom"
+                    width="400"
+                    trigger="click">
+                    <el-tabs v-model="activeName">
+                        <el-tab-pane :label="`未读 (${unReadList.length})`" name="first">
+                            <dl v-for="(item, index) in unReadList" :key="index">
+                                <dt title="点击查看消息内容" @click="handleLookClick(item)"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
+                                <dd>{{item.createTime}}</dd>
+                            </dl>
+                            <dl v-if="!unReadList.length"><dt class="no-data">暂无未读消息</dt></dl>
+                            <dl v-if="newsForm.pageCount > newsForm.currentPage"><dt class="more-data" @click="getMoreMsg(0)">点击查看更多</dt></dl>
+                        </el-tab-pane>
+                        <el-tab-pane label="已读" name="second">
+                            <dl v-for="(item, index) in fullReadList" :key="index">
+                                <dt title="点击查看消息内容" @click="handleLookClick(item)"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
+                                <dd>{{item.createTime}}</dd>
+                            </dl>
+                            <dl v-if="!fullReadList.length"><dt class="no-data">暂无已读消息</dt></dl>
+                            <dl v-if="newsForm.pageCount > newsForm.currentPage"><dt class="more-data" @click="getMoreMsg(1)">点击查看更多</dt></dl>
+                        </el-tab-pane>
+                    </el-tabs>
+                    <el-badge slot="reference" :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
                     <i class="el-icon-bell" style="font-size: 18px;"></i>
                 </el-badge>
+                    
+                </el-popover>
                 <el-dropdown>
                     <div class="el-dropdown-link index-hright">
                         {{$store.state.name}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -140,6 +164,7 @@ export default {
     name: '',
     data() {
         return {
+            activeName: 'first',
             centerDialogVisible: false,
             form: {
                 password1: '',
@@ -151,11 +176,11 @@ export default {
             drawer: false,
             drawerTitle: '消息列表',
             direction: 'rtl',
-            notReadNumValue: null,
+            notReadNumValue: 0,
             newsForm: {
                 pageSize: 10,
                 currentPage: 1,
-                total: null,
+                pageCount: 0,
                 readState: 0 //0是未读，1是已读
             },
             tableData: [],
@@ -167,6 +192,9 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             clueDataNumberList: [],
             back_Change: false,
+            unReadList: [],
+            fullReadList: [],
+            maxLength: 16
         }
     },
     created() {
@@ -174,17 +202,19 @@ export default {
         this.noReadNum();
     },
     methods: {
+        maxSlice(msg){
+            return msg.length > this.maxLength ? `${msg.slice(0, this.maxLength)}...` : msg
+        },
         handleSizeChange(index) {
-            console.log(index);
             this.newsForm.pageSize = index;
             this.getStationNews();
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.newsForm.currentPage = index;
             this.getStationNews();
         },
         handleLookClick(row) {
+            row.fold = !row.fold
             this.$smoke_get(readUuid + row.uuid, {}).then(res => {
                 if(res.code == 200) {
                     this.$message({
@@ -215,23 +245,31 @@ export default {
             })
         },
         getStationNews() {
+            this.unReadList = []
+            this.fullReadList = []
             this.$smoke_post(getStationNews, this.newsForm).then(res => {
                 if(res.code == 200) {
                     res.data.list.map(sll => {
                         sll.createTime = timestampToTime(Number(sll.createTime));
+                        sll.type = sll.type == 1 ? '【首咨】' : '【新学员】'
+                        sll.fold = true
                         if(sll.readState == 0) {
                             sll.readState = '未读';
+                            this.unReadList.push(sll)
                         }else{
                             sll.readState = '已读';
+                            this.fullReadList.push(sll)
                         }
                     })
+                    this.newsForm.pageCount = this.newsForm.total % this.newsForm.pageSize == 0 ? this.newsForm.total / this.newsForm.pageSize : this.newsForm.total / this.newsForm.pageSize + 1
                     this.tableData = res.data.list;
                     this.newsForm.total = res.data.total;
                 }
             })
         },
         badgeClick() {
-            this.drawer = true;
+            // this.drawer = true;
+            this.newsForm.currentPage = 1
             this.getStationNews();
         },
         handleCloseDrawer(done) {
@@ -262,11 +300,9 @@ export default {
             this.defaultActive = '';
         },
         change_password(){
-            console.log("change_password");
             this.centerDialogVisible = true;
         },
         userInfo() {
-            console.log("userInfo");
             alert('暂未开发');
             // this.$router.push({path: '/base/people/default'});
         },
@@ -393,12 +429,17 @@ export default {
                 this.centerDialogVisible = false;
             }
         },
-        tableRowClassName({row, rowIndex}) {
+        tableRowClassName({row}) {
             if (row.readState == '未读') {
                 return 'readState';
             }
             return '';
         },
+        getMoreMsg(readState){
+            this.newsForm.currentPage == this.newsForm.currentPage < this.newsForm.pageCount ? this.newsForm.currentPage++ : '1'
+            this.newsForm.readState = readState
+            this.getStationNews()
+        }
     },
     watch:{
       '$route.path': function(newVal,oldVal){
@@ -438,7 +479,66 @@ export default {
     }
 }
 </script>
-
+<style lang="less">
+.el-popover{
+    padding: 0 !important;
+    
+    .el-tabs{
+        .el-tabs__header{
+            margin: 0;
+        }
+        .el-tabs__content{
+            height: 270px;
+            overflow-y: scroll;
+        }
+        .el-tabs__nav{
+            width: 100%;
+            .el-tabs__active-bar{
+                width: 50% !important;
+            }
+            .el-tabs__item{
+                text-align: center;
+            }
+        }
+        .el-tabs__item{
+            width: 50%;
+        }
+        .el-tab-pane{
+            dl{
+                display: flex;
+                flex-direction: column;
+                padding: 15px 20px;
+                border-bottom: 1px solid #e8e8e8;
+                dt{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    cursor: pointer;
+                    span{
+                        width: 5px;
+                        height: 5px;
+                        background: #409EFF;
+                        border-radius: 50%;
+                        margin:12px 10px 0 0;
+                    }
+                }
+                dt.no-data, dt.more-data{
+                    justify-content: center;
+                    display: block;
+                    text-align: center;
+                }
+                dt.more-data{
+                    color: #409EFF;
+                }
+                dd{
+                    color:#999;
+                    padding-left: 15px;
+                }
+            }
+        }
+    }
+}
+</style>
 <style lang="less" scoped>
     .el-header{
         background: #fff;
