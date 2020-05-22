@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
-    <el-container>
+    <el-container :class="paddingClass">
       <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar"></Aside>
-      <div :class="['main-wrap', sideBarOpen ? 'sidebar-open' : 'sidebar-close']">
+      <div :class="[isNormalPage ? 'main-wrap' : '', widthClass]">
         <router-view/>
       </div>
     </el-container>
@@ -20,7 +20,11 @@ export default {
   },
   data() {
     return{
-      sideBarOpen: true
+      sideBarOpen: true,
+      isNormalPage: false,
+      unNormalPage: ['/login', '/'],
+      widthClass: 'sidebar-open',
+      paddingClass: ''
     }
   },
   created() {
@@ -36,6 +40,19 @@ export default {
         this.$store.dispatch('actionsSetCommonFlag', false);
       }else{
         this.$store.dispatch('actionsSetCommonFlag', true);
+      }
+      if(this.unNormalPage.includes(this.$route.path)){
+        this.isNormalPage = false
+        this.widthClass = 'sidebar-no'
+        this.paddingClass = 'noheader-padding'
+      }else{
+        this.isNormalPage = true
+        this.paddingClass = 'header-padding'
+        if(this.sideBarOpen){
+          this.widthClass = 'sidebar-open'
+        }else{
+          this.widthClass = 'sidebar-close'
+        }
       }
     }
   },
@@ -57,18 +74,31 @@ export default {
   height: 100vh;
 }
 .el-container{
-  padding-top: 60px;
   position: relative;
+}
+.header-padding{
+  padding-top: 60px;
+}
+.noheader-padding{
+  padding-top: 0;
 }
 .main-wrap{
   position: absolute;
   right: 0
+}
+.sidebar-no,.sidebar-open,.sidebar-close{
+}
+.sidebar-no{
+  width: 100%;
 }
 .sidebar-open{
   width: calc( 100vw - 260px );
 }
 .sidebar-close{
   width: calc( 100vw - 64px );
+}
+.noheader-padding{
+  padding-top: 0;
 }
 .edit-field-icon{
   color: #5cb6ff;

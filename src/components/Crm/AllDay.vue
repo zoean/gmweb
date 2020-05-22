@@ -97,7 +97,6 @@
             :row-class-name="tableRowClassName"
             style="width: 100%"
             :row-key="getRowKey"
-            border
             >
             <el-table-column
               :prop="item.props"

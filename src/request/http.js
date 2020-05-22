@@ -1,5 +1,7 @@
 import axios from 'axios';
-
+import {
+  Message
+} from 'element-ui'
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "https://testgm.jhwx.com" : "/smoke_api";
 
@@ -17,6 +19,10 @@ axios.interceptors.request.use(
       return config;
     },
     error => {
+      Message({
+        message: '服务返回错误，请重试',
+        type: 'error'
+      })
       return Promise.reject(error);
     }
 );
