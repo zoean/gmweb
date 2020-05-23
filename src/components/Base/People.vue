@@ -77,7 +77,7 @@
             :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
             :key="index"
             >
-            <template v-if="peopleTableFlag">
+            <template v-if="peopleTableFlag && userList.length">
                 <p class="job-status" v-if="item.prop == 'jobStatus'">
                     <span v-if="userList[index][item.prop] == '在职'" class="on-job"></span>
                     <span v-else class="quit"></span>
