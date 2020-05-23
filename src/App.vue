@@ -93,7 +93,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
 .el-container{
   position: relative;

@@ -1,71 +1,67 @@
 <template>
     <div v-if="routersFlag" class="aside-all">
-      <el-menu
-        :default-active="activeIndex"
-        ref="elmenu"
-        class="el-menu-vertical-demo"
-        :default-openeds="openedsIndex"
-        :collapse="iscollapse"
-        @open="handleOpen" 
-        @close="handleClose"
-        :collapse-transition="false"
-        >
-
-        <div v-for="(item,index) in userMenuList" :key="index">
-
-          <el-submenu 
-            class="el-submenu-smoke" 
-            :index="`${item.url}`" 
-            v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'"
-            :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
+      <el-scrollbar wrap-class="scrollbar-wrapper">
+        <el-menu
+          :default-active="activeIndex"
+          ref="elmenu"
+          class="el-menu-vertical-demo"
+          :default-openeds="openedsIndex"
+          :collapse="iscollapse"
+          @open="handleOpen" 
+          @close="handleClose"
+          :collapse-transition="false"
           >
-            <template slot="title">
-              <i :class="item.icon"></i>
-              <span>{{item.name}}</span>
-            </template>
-            <div v-for="(res,num) in item.includeSubsetList" :key="num">
-              <el-menu-item 
-                :index="`${res.url}`" 
-                @click="active_router(res)"
-                v-if="res.disabled && res.menuComponent != 'button'"
-                :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
-              >
-              <div class="el-menu-item-div">
-                <i :class="res.icon"></i>
-                {{res.name}}
+
+          <div v-for="(item,index) in userMenuList" :key="index">
+
+            <el-submenu 
+              class="el-submenu-smoke" 
+              :index="`${item.url}`" 
+              v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'"
+              :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
+            >
+              <template slot="title">
+                <i :class="item.icon"></i>
+                <span>{{item.name}}</span>
+              </template>
+              <div v-for="(res,num) in item.includeSubsetList" :key="num">
+                <el-menu-item 
+                  :index="`${res.url}`" 
+                  @click="active_router(res)"
+                  v-if="res.disabled && res.menuComponent != 'button'"
+                  :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
+                >
+                <div class="el-menu-item-div">
+                  <i :class="res.icon"></i>
+                  {{res.name}}
+                </div>
+                </el-menu-item>
               </div>
-              </el-menu-item>
-            </div>
-          </el-submenu>
+            </el-submenu>
 
-          <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke" :style="iscollapse ? 'min-width: auto; width: auto;' : ''">
-            <i :class="item.icon"></i>
-            <span slot="title">{{item.name}}</span>
-          </el-menu-item>
+            <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke" :style="iscollapse ? 'min-width: auto; width: auto;' : ''">
+              <i :class="item.icon"></i>
+              <span slot="title">{{item.name}}</span>
+            </el-menu-item>
 
-          <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
-            <i :class="item.icon"></i>
-            <span slot="title">{{item.name}}</span>
-          </el-menu-item> -->
+            <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
+              <i :class="item.icon"></i>
+              <span slot="title">{{item.name}}</span>
+            </el-menu-item> -->
 
-        </div>
-
-        <el-image
-          style="width: 100%; position: absolute; bottom: 0;"
-          :src="require('../../assets/images/aside_backg.png')">
-        </el-image>
-            
-      </el-menu>
-
+          </div>
+              
+        </el-menu>
+      </el-scrollbar>
       <el-image
-        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%;"
+        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%; cursor: pointer;"
         v-show="iscollapse"
         @click="open_click"
         :src="require('../../assets/images/aside_open.png')">
       </el-image>
 
       <el-image
-        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%;"
+        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%; cursor: pointer;"
         v-show="!iscollapse"
         @click="close_click"
         :src="require('../../assets/images/aside_close.png')">
@@ -186,6 +182,19 @@ export default {
     min-height: calc(100vh - 60px);
     display: flex;
     flex: 1;
+    height: 100%;
+    background: url('../../assets/images/aside_backg.png') left bottom no-repeat #4794FE;
+    .scrollbar-wrapper {
+      overflow-x: hidden !important;
+    }
+
+    .el-scrollbar__bar.is-vertical {
+      right: 0px;
+    }
+
+    .el-scrollbar {
+      height: 100%;
+    }
     .el-submenu-smoke{
       position: relative;
       z-index: 9;
