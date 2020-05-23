@@ -142,7 +142,7 @@ export default {
     margin-left: -5rem;
     left: 50%;
     top: 50%;
-    margin-top: 1rem;
+    margin-top: 1.3rem;
     .contain-model{
         width: 2.6rem;
         height: 2.6rem;
