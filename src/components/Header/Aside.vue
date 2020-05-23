@@ -10,6 +10,7 @@
           @open="handleOpen" 
           @close="handleClose"
           :collapse-transition="false"
+          :unique-opened="true"
           >
 
           <div v-for="(item,index) in userMenuList" :key="index">
@@ -179,7 +180,7 @@ export default {
   .aside-all{
     position: fixed;
     z-index: 999;
-    min-height: calc(100vh - 60px);
+    // min-height: calc(100vh - 60px);
     display: flex;
     flex: 1;
     height: 100%;
@@ -193,7 +194,7 @@ export default {
     }
 
     .el-scrollbar {
-      height: 100%;
+      // height: 100%;
     }
     .el-submenu-smoke{
       position: relative;
