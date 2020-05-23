@@ -228,7 +228,6 @@ export default {
             done();
         },
         handleSelect(item) {
-            console.log(item);
             if(item == '/base'){
                 this.$router.push({
                     path: this.$store.state.userMenuList[0].defaultUrl,

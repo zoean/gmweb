@@ -3,7 +3,7 @@
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container :class="paddingClass">
       <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar"></Aside>
-      <div :class="[isNormalPage ? 'main-wrap' : '', widthClass]">
+      <div :class="[widthClass]">
         <router-view/>
       </div>
     </el-container>
@@ -103,20 +103,18 @@ export default {
 .noheader-padding{
   padding-top: 0;
 }
-.main-wrap{
-  position: absolute;
-  right: 0
-}
-.sidebar-no,.sidebar-open,.sidebar-close{
-}
 .sidebar-no{
   width: 100%;
 }
 .sidebar-open{
   width: calc( 100vw - 260px );
+  position: absolute;
+  left: 240px
 }
 .sidebar-close{
-  width: calc( 100vw - 64px );
+  width: calc( 100vw - 84px );
+  position: absolute;
+  left: 64px
 }
 .noheader-padding{
   padding-top: 0;
