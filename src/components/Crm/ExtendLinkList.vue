@@ -224,8 +224,7 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.list.map(sll => {
                             sll.createTime = timestampToTime(Number(sll.createTime));
-                            sll.url = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
-                            + sll.ruleId + '&project=' + sll.examItemsId
+                            sll.url = '?ruleid=' + sll.ruleId + '&project=' + sll.examItemsId
                             + '&spread=' + sll.spreadId + '&acc=' + sll.accId;
                         })
                         this.list = res.data.list;

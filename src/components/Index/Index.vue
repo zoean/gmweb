@@ -52,7 +52,7 @@
             </el-row>
             <el-row class="entry-list" type="flex" justify="center">
                 <el-col :span="8" :gutter="20" v-for="(item, index) in list2" :key="index">
-                    <a><img :src="item.url" :alt="item.name" style="cursor: pointer;"></a>
+                    <a><img :src="item.url" :alt="item.name" target="_blank" @click="handleClick2(item)" style="cursor: pointer;"></a>
                 </el-col>
             </el-row>
         </el-row>
@@ -74,12 +74,12 @@ export default {
             list1: [
                { name: '京华网校商城后台', https: 'http://www.jhwx.com/admin_jhwx/', url: require('../../assets/images/inserticon01.png'), id: 1},
                { name: '胜学网校商城后台', https: 'https://www.shengxuewangxiao.com/admin_jhwx/index.php', url: require('../../assets/images/inserticon02.png'), id: 2},
-               { name: '京华教育课程后台', https: 'https://cssc.jhwx.com', url: require('../../assets/images/inserticon03.png'), id: 3},
+               { name: '京华集团商城后台', https: 'https://www.jhwxedu.com/admin_jhwx/index.php', url: require('../../assets/images/inserticon06.png'), id: 3},
             ],
             list2: [
                { name: '京华教育题库后台', https: 'http://kaoshi.jhwx.com/index.php', url: require('../../assets/images/inserticon04.png'), id: 4},
                { name: '京华教育JQ后台', https: 'http://office.jhwx.com/vip/index.do', url: require('../../assets/images/inserticon05.png'), id: 5},
-               { name: '京华集团商城后台', https: 'https://www.jhwxedu.com/admin_jhwx/index.php', url: require('../../assets/images/inserticon06.png'), id: 6},
+               { name: '京华教育课程后台', https: 'https://cssc.jhwx.com', url: require('../../assets/images/inserticon03.png'), id: 6},
             ],
             bannerList: [
                 { url: require('../../assets/images/banner1.png')},
@@ -116,23 +116,26 @@ export default {
             })
         },
         handleClick1(item) {
-            if(item.id == 1){
-                this.loginPlatform(item.id);
-            }else{
-                const href = item.https;
-                window.open(href, '_blank');
-            }
+            this.loginPlatform(item.id);
         },
         handleClick2() {
             const href = item.https;
             window.open(href, '_blank');
         },
         loginPlatform(id) {
+            let href = '';
             this.$smoke_post(loginPlatform, {
                 loginPlatformType: id
             }).then(res => {
                 if(res.code == 200){
-                    const href = 'https://test.jhwx.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                    if(id == 1) {
+                        href = 'https://www.jhwx.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                    }else if(id == 2) {
+                        href = 'https://www.shengxuewangxiao.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                    }else if(id == 3) {
+                        href = 'https://www.jhwxedu.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                    }
+                    
                     if(res.data.loginPlatform){
                         window.open(href, '_blank');
                     }

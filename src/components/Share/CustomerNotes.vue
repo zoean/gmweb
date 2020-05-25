@@ -313,7 +313,7 @@
                             </el-col>
                         </el-row>
 
-                        <el-row>
+                        <el-row v-if="!routePathFlag">
 
                             <el-col :span="18">
                                 <el-form-item label="其他备注" prop="remarks">
@@ -335,7 +335,7 @@
                         
                         <el-form-item style="text-align: center;">
                           <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
-                          <el-button @click="quxiao" plain size="small" style="width: 100px;">取消</el-button>
+                          <el-button @click="quxiao" plain size="small" style="width: 100px;" v-if="!routePathFlag">取消</el-button>
                         </el-form-item>
 
                     </el-form>

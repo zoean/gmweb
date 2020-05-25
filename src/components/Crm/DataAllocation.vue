@@ -442,8 +442,7 @@ export default {
                 spreadId: this.ruleFormLink.spread,
             }).then(res => {
                 if(res.code == 200) {
-                    this.createLinkUrl = 'https://test.jhwx.com/zt/jk_jh360/?ruleid='
-                     + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
+                    this.createLinkUrl = '?ruleid=' + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
                      + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
                     //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
                     console.log(this.createLinkUrl);
