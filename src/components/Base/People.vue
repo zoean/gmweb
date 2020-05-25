@@ -77,12 +77,19 @@
             :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
             :key="index"
             >
-            <template v-if="peopleTableFlag && userList.length">
-                <p class="job-status" v-if="item.prop == 'jobStatus'">
-                    <span v-if="userList[index][item.prop] == '在职'" class="on-job"></span>
-                    <span v-else class="quit"></span>
-                    {{userList[index][item.prop]}}
-                </p>
+            <template slot-scope="scope">
+                <div>
+
+                    <p class="job-status" v-if="item.prop == 'jobStatus'">
+                        <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
+                        <span v-else class="quit"></span>
+                        <!-- {{userList[index][item.prop]}} -->
+                        {{scope.row[item.prop]}}
+                    </p>
+
+                    <p v-else>{{scope.row[item.prop]}}</p>
+
+                </div>
             </template>
           </el-table-column>
           <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss">
@@ -161,7 +168,6 @@ export default {
             peopleEdit: null,
             dataPermiss: null,
             exportPeople: null,
-            peopleTableFlag: false
         }
     },
     created() {
@@ -310,7 +316,7 @@ export default {
                             data.hiredDate = data.hiredDate.split(" ")[0];
                         })
                         this.userList = res.data.list;
-                        this.peopleTableFlag = true;
+                        console.log('list---', this.userList)
                     }, 300);
                 }else{
                     setTimeout(() => {

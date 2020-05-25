@@ -850,7 +850,7 @@ export default {
             }
             .tab-left{
                 background: #fff;
-                min-height: 100%;
+                min-height: calc( 100vh - 240px);
                 text-align: center;
                 position: relative;
                 border: 1px solid #E9E9E9;
@@ -869,7 +869,7 @@ export default {
             }
             .tab-right{
                 background: #fff;
-                min-height: 100%;
+                min-height: calc( 100vh - 240px);
                 width: calc( 75% - 20px);
                 margin-left: 20px;
                 border: 1px solid #E9E9E9;

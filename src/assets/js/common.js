@@ -20,7 +20,7 @@ export const getTextByState = (state) => {
     let str = '';
     if(state == 1){
         str = '在职';
-    }else{
+    }else if(state == 0){
         str = '离职';
     }
     return str;
