@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="icon" href="<%= BASE_URL %>assets/favicon.ico">
     <title>京华综合管理后台</title>
   </head>
   <body>
@@ -44,20 +44,20 @@
     scriptNode.setAttribute("type", "text/javascript");
      
     if(getBrowser()=="IE"){
-      linkNode.setAttribute("href","<%= BASE_URL %>index-ie.css");
-      scriptNode.setAttribute("src", "<%= BASE_URL %>index-ie.js");
+      linkNode.setAttribute("href","<%= BASE_URL %>assets/index-ie.css");
+      scriptNode.setAttribute("src", "<%= BASE_URL %>assets/index-ie.js");
     }else if(getBrowser()=="Firefox"){
-      linkNode.setAttribute("href","<%= BASE_URL %>index-firefox.css");
-      scriptNode.setAttribute("src", "<%= BASE_URL %>index-firefox.js");
+      linkNode.setAttribute("href","<%= BASE_URL %>assets/index-firefox.css");
+      scriptNode.setAttribute("src", "<%= BASE_URL %>assets/index-firefox.js");
     }else if(getBrowser()=="Opera"){
-      linkNode.setAttribute("href","<%= BASE_URL %>index-opera.css");
-      scriptNode.setAttribute("src", "<%= BASE_URL %>index-opera.js");
+      linkNode.setAttribute("href","<%= BASE_URL %>assets/index-opera.css");
+      scriptNode.setAttribute("src", "<%= BASE_URL %>assets/index-opera.js");
     }else if(getBrowser()=="Chrome"){
-      linkNode.setAttribute("href","<%= BASE_URL %>index-chrome.css");
-      scriptNode.setAttribute("src", "<%= BASE_URL %>index-chrome.js");
+      linkNode.setAttribute("href","<%= BASE_URL %>assets/index-chrome.css");
+      scriptNode.setAttribute("src", "<%= BASE_URL %>assets/index-chrome.js");
     }else if(getBrowser()=="Safari"){
-      linkNode.setAttribute("href","<%= BASE_URL %>index-safari.css");
-      scriptNode.setAttribute("src", "<%= BASE_URL %>index-safari.js");
+      linkNode.setAttribute("href","<%= BASE_URL %>assets/index-safari.css");
+      scriptNode.setAttribute("src", "<%= BASE_URL %>assets/index-safari.js");
     }
     document.head.appendChild(linkNode);
     document.head.appendChild(scriptNode);
