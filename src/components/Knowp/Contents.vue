@@ -24,7 +24,7 @@
                 <el-upload
                     class="avatar-uploader"
                     :data='uploadData'
-                    action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelSubject"
+                    action="https://gm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelSubject"
                     :headers="headersObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
@@ -193,7 +193,7 @@ export default {
     },
     methods: {
         outExcelSubject() {
-            const href = 'https://testgm.jhwx.com' + outExcelSubject + '?subjectUuid=' + this.$route.query.id;
+            const href = 'https://gm.jhwx.com' + outExcelSubject + '?subjectUuid=' + this.$route.query.id;
             window.open(href, '_blank');
         },
         handleAvatarSuccess(res, file) {
