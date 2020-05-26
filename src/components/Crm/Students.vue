@@ -46,6 +46,18 @@
             </el-table-column>
         </el-table>
 
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
+
         <el-drawer
             :title="drawerTitle"
             :visible.sync="drawer"
@@ -413,7 +425,7 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 sortSet: [],
-                total: 0,
+                total: null,
                 classTeaUuid: '',
                 classUuid: '', //班级的uuid
                 num: '',
@@ -716,7 +728,8 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         this.list = res.data.list;
-                        this.columnList = res.data.filedList
+                        this.columnList = res.data.filedList;
+                        this.form.total = res.data.total;
                     }, 300);
 
                 }else{
@@ -738,6 +751,8 @@ export default {
         },
         handleClassTabClick(tab, event) {
             this.form.classUuid = tab.name;
+            this.form.currentPage = 1;
+            this.form.pageSize = 10;
             this.getClassTeaStudent();
         },
         handleTabClick(tab, event) {
@@ -777,7 +792,15 @@ export default {
         },
         quxiao() {
             this.drawer = false;
-        }
+        },
+        handleCurrentChange(index) {
+            this.form.currentPage = index;
+            this.getWaitStudentList();
+        },
+        handleSizeChange(index) {
+            this.form.pageSize = index;
+            this.getWaitStudentList();
+        },
     },
     mounted() {
         

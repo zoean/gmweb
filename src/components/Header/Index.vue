@@ -3,6 +3,7 @@
         <el-dialog
             title="设置密码"
             :visible.sync="centerDialogVisible"
+            :modal-append-to-body='false'
             width="40%"
             :show-close="centerDialogVisible"
             :before-close="handleClose"
@@ -33,7 +34,7 @@
             <el-col :span="20" style="height: 60px !important;">
                 <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
                 
-                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_B.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                 </div>
 
@@ -541,6 +542,7 @@ export default {
         width: calc( 100% - 400px );
         padding-left: 20px;
         font-weight: 500 !important;
+        // border-left: 1px solid #eeeeee;
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;
@@ -555,7 +557,8 @@ export default {
         color: #488FF7!important;
     }
     .back_Change{
-        background: #3687FA;
+        // background: #3687FA;
+        background: #fff;
     }
     .pagination{
         text-align: right;

@@ -257,7 +257,7 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 sortSet: [],
-                total: 0,
+                total: null,
                 uuid: '', //班级的唯一标识
             },
             teacherList: [],

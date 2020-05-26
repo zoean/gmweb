@@ -126,7 +126,7 @@ export default {
                 ruleNumberName: '', //规则编号分配组ID
                 sortSet: [],
                 tel: "", //手机号
-                total: 0
+                total: null
             },
             list: [],
             columnList: [

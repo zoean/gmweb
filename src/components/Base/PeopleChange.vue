@@ -32,6 +32,7 @@
                         <el-option
                             v-for="item in roleOptions"
                             :key="item.uuid"
+                            :disabled="item.disabled"
                             :label="item.name"
                             :value="item.uuid">
                         </el-option>
@@ -222,7 +223,7 @@ export default {
                 pageSize: 10, //每页显示条目个数
                 userName: '', //jq的用户名	
             },
-            total: 0, //总条目数
+            total: null, //总条目数
             totalFlag: false, //当只有一页时隐藏分页
             tableData: [],
             columnList: [
@@ -295,7 +296,30 @@ export default {
         getRoleList() {
             this.$smoke_get(getRoleList, {}).then(res => {
                 console.log(res);
-                res.data.push({name: '超级管理员', uuid: superManageUuid});
+                console.log(res);
+                var roleArrFlag = this.roleArr.some(item => {
+                    if(item == superManageUuid){
+                        return true
+                    }else {
+                        return false
+                    }
+                })
+                var resDataFlag = res.data.some(item => {
+                    if(item.name == '超级管理员'){
+                        return true
+                    }else {
+                        return false
+                    }
+                })
+                console.log(roleArrFlag);
+                console.log(resDataFlag);
+                if(roleArrFlag && resDataFlag) {
+                    console.log(222);
+                    res.data.push({name: '超级管理员', uuid: superManageUuid});
+                }else {
+                    console.log(2222222);
+                    res.data.push({name: '超级管理员', uuid: superManageUuid, disabled: true});
+                }
                 this.roleOptions = quchong(res.data, 'uuid');
             })
         },

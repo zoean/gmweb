@@ -24,6 +24,8 @@
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
                     :trigger-on-focus="true"
+                    clearable
+                    @clear="autocompleteClear"
                     @select="handleSelect"
                 ></el-autocomplete>
 
@@ -39,7 +41,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" size="small" placeholder="请选择渠道">
+                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -56,7 +58,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li">
+                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li" clearable>
                     <el-option
                       v-for="item in dialStateList"
                       :key="item.name"
@@ -69,7 +71,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -119,13 +121,13 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
+                    <!-- <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
                         <el-image
                             class="copy-icon-style"
                             @click="phoneCopy(scope.row)"
                             :src="require('../../assets/images/copy-icon.png')">
                         </el-image>
-                    </el-tooltip>
+                    </el-tooltip> -->
               </template>
             </el-table-column>
             <!--<el-table-column
@@ -403,6 +405,9 @@ export default {
         },
         handleSelect(item) {
             this.form.examItemId = item.id;
+        },
+        autocompleteClear() {
+            this.form.examItemId = '';
         },
         cityChange() {
             this.form.province = this.form.provinceCity[0];

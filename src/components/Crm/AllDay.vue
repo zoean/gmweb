@@ -14,7 +14,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li">
+                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li" clearable>
                     <el-option
                       v-for="item in dialStateList"
                       :key="item.name"
@@ -27,7 +27,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.education" size="small" placeholder="请选择最高学历" class="screen-li">
+                <el-select v-model="form.education" size="small" placeholder="请选择最高学历" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-1']"
                       :key="item.name"
@@ -40,7 +40,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.workingLife" size="small" placeholder="请选择工作年限" class="screen-li">
+                <el-select v-model="form.workingLife" size="small" placeholder="请选择工作年限" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-2']"
                       :key="item.name"
@@ -70,7 +70,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"

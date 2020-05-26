@@ -332,11 +332,15 @@ a:link,a:active,a:visited,a:hover {
     color: #F56C6C;
 }
 
-.el-submenu__icon-arrow{
+/* .el-submenu__icon-arrow{
     color: #fff !important;
 }
 .el-submenu .el-submenu__title:hover .el-submenu__icon-arrow{
     color: #4794FE !important;
+} */
+
+.el-scrollbar__bar {
+  z-index: 100 !important;
 }
 
 .el-table td, .el-table th{

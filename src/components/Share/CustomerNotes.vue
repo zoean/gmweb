@@ -313,7 +313,7 @@
                             </el-col>
                         </el-row>
 
-                        <el-row v-if="!routePathFlag">
+                        <el-row v-if="!routePathFlag && followFlag">
 
                             <el-col :span="18">
                                 <el-form-item label="其他备注" prop="remarks">

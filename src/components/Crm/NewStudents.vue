@@ -32,6 +32,18 @@
             </el-table-column>
         </el-table>
 
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :page-sizes="[10, 20, 30]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
+
     </el-main>
 </template>
 
@@ -46,9 +58,10 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 sortSet: [],
-                total: 0,
+                total: null,
                 classUuid: '',
             },
+            totalFlag: false,
             list: [],
             columnList: [
                 { 'prop': 'tel', 'label': '电话数据' },
@@ -117,12 +130,15 @@ export default {
                         sll.orderType = orderTypeText(sll.orderType);
                     })
                     this.list = res.data.list;
+                    this.form.total = res.data.total;
                 }
             })
         },
         handleClassTabClick(tab, event) {
             console.log(tab);
             this.form.classUuid = tab.name;
+            this.form.currentPage = 1;
+            this.form.pageSize = 10;
             this.getWaitStudentList();
         },
         classTeaGetWaitStudent(type, id) {
@@ -158,7 +174,15 @@ export default {
                     }
                 })
             }
-        }
+        },
+        handleCurrentChange(index) {
+            this.form.currentPage = index;
+            this.getWaitStudentList();
+        },
+        handleSizeChange(index) {
+            this.form.pageSize = index;
+            this.getWaitStudentList();
+        },
     },
     mounted() {
         
@@ -184,6 +208,10 @@ export default {
             .screen-li{
                 width: 90%;
             }
+        }
+        .el-pagination{
+            text-align: right;
+            margin-top: .4rem;
         }
     }
 </style>

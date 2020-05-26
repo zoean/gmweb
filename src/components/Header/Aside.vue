@@ -185,7 +185,8 @@ export default {
     display: flex;
     flex: 1;
     height: 100%;
-    background: url('../../assets/images/aside_backg.png') left bottom no-repeat #4794FE;
+    // background: url('../../assets/images/aside_backg.png') left bottom no-repeat #4794FE;
+    background: #fff;
     .scrollbar-wrapper {
       overflow-x: hidden !important;
     }
@@ -205,22 +206,23 @@ export default {
       min-width: 200px;
       max-width: 256px;
       border-radius: none;
-      .el-submenu__title{
-        &:hover{
-          span{
-            color: #4794FE !important;
-          }
-          i{
-            color: #4794FE !important;
-          }
-        }
-        span{
-          color: #fff !important;
-        }
-        i{
-          color: #fff !important;
-        }
-      }
+      background: #fff;
+      // .el-submenu__title{
+      //   &:hover{
+      //     span{
+      //       color: #4794FE !important;
+      //     }
+      //     i{
+      //       color: #4794FE !important;
+      //     }
+      //   }
+      //   span{
+      //     color: #fff !important;
+      //   }
+      //   i{
+      //     color: #fff !important;
+      //   }
+      // }
       .el-menu-item.is-active .el-menu-item-div{
         width: calc(3rem - 24px);
         min-width: 176px;
@@ -228,66 +230,54 @@ export default {
         margin-left: -16px;
         padding-left: 16px;
         border-radius: 50px 0 0 50px;
-        background: #fff;
-        color: #4794FE;
-        i{
-          color: #4794FE;
-        }
+        background: #F2F3F7;
       }
+
       .el-menu-item{
-        background: #4794FE;
-        color: #fff;
-        padding: 0;
-        i{
-          color: #fff;
-        }
-        .el-menu-item-div{
-          background: #4794FE;
-          color: #fff;
-          flex-direction: row;
-          align-items: center;
-          &:hover{
-            width: calc(3rem - 24px);
-            min-width: 176px;
-            max-width: 232px;
-            margin-left: -16px;
-            padding-left: 16px;
-            border-radius: 50px 0 0 50px;
-            background: rgba(255, 255, 255, 0.75) !important;
-            color: #4794FE;
-            i{
+          background: #fff;
+          .el-menu-item-div{
+            background: #fff;
+            flex-direction: row;
+            align-items: center;
+            &:hover{
+              width: calc(3rem - 24px);
+              min-width: 176px;
+              max-width: 232px;
+              margin-left: -16px;
+              padding-left: 16px;
+              border-radius: 50px 0 0 50px;
+              background: #F2F3F7 !important;
               color: #4794FE;
+              i{
+                color: #4794FE;
+              }
             }
           }
         }
-      }
+
     }
     .el-menu-vertical-demo{
       position: relative;
       z-index: 9;
       border-right: none;
-      background-color: #4794FE !important;
+      background-color: #fff !important;
     }
     .el-menu-item-smoke{
       width: calc(3rem - 12px);
-      color: #fff;
       border-radius: 50px 0px 0px 50px;
       margin-left: 12px;
       min-width: 188px;
       max-width: 244px;
-      i{
-        color: #fff;
-      }
     }
     .el-menu-item-smoke:hover{
-      background: rgba(255, 255, 255, 0.75) !important;
+      background: #F2F3F7 !important;
       color: #4794FE;
       i{
         color: #4794FE;
       }
     }
     .el-menu-item-smoke.is-active{
-      background: #fff;
+      background: #F2F3F7;
       color: #4794FE;
       i{
         color: #4794FE;

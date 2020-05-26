@@ -118,7 +118,7 @@ export default {
         handleClick1(item) {
             this.loginPlatform(item.id);
         },
-        handleClick2() {
+        handleClick2(item) {
             const href = item.https;
             window.open(href, '_blank');
         },

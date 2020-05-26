@@ -18,6 +18,7 @@
             <el-col :span="4">
 
                 <el-autocomplete
+                    clearable
                     size="small"
                     class="screen-li"
                     style="width: 90%;"
@@ -26,6 +27,7 @@
                     placeholder="请输入考试项目"
                     :trigger-on-focus="true"
                     @select="handleSelect"
+                    @clear="autocompleteClear"
                 ></el-autocomplete>
 
             </el-col>
@@ -40,7 +42,7 @@
 
             <el-col :span="4">
                 
-                <el-select v-model="form.spread" size="small" placeholder="请选择渠道">
+                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
@@ -57,7 +59,7 @@
 
             <el-col :span="4">
 
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li">
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -418,8 +420,10 @@ export default {
             };
         },
         handleSelect(item) {
-            
             this.form.examItemId = item.id;
+        },
+        autocompleteClear() {
+            this.form.examItemId = '';
         },
         cityChange() {
             

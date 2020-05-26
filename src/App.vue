@@ -87,6 +87,15 @@ export default {
 </script>
 
 <style>
+
+@media screen and (min-width: 1640px) {
+  .sidebar-open{
+    width: calc( 100vw - 260px );
+    position: absolute;
+    left: 256px !important;
+  }
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

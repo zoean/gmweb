@@ -65,13 +65,13 @@
             <el-tab-pane label="订单">
                 <el-row type="flex" :gutter="20">
                     <el-col :span="4">
-                        <el-input placeholder="请输入要查询的手机号" size="small" v-model="orderForm.tel"></el-input>
+                        <el-input placeholder="请输入手机号" size="small" v-model="orderForm.tel"></el-input>
                     </el-col>
                     <el-col :span="4">
-                        <el-input placeholder="请输入要查询的客户姓名" size="small" v-model="orderForm.name"></el-input>
+                        <el-input placeholder="请输入客户姓名" size="small" v-model="orderForm.name"></el-input>
                     </el-col>
                     <el-col :span="4">
-                        <el-select v-model="orderForm.commodityClassId" size="small" placeholder="请选择要查询的商品班型">
+                        <el-select v-model="orderForm.commodityClassId" size="small" placeholder="请选择商品班型" clearable>
                             <el-option
                             v-for="item in commodityClassOptions"
                             :key="item.id"
@@ -81,7 +81,7 @@
                         </el-select>
                     </el-col>
                     <el-col :span="4">
-                        <el-select v-model="orderForm.purchaseStatus" size="small" placeholder="请选择要查询的购买状态">
+                        <el-select v-model="orderForm.purchaseStatus" size="small" placeholder="请选择购买状态" clearable>
                             <el-option
                             v-for="(item, index) in purchaseOptions"
                             :key="index"
@@ -233,7 +233,7 @@ export default {
             commodityClassOptions: [],
             purchaseOptions: ['已交全款', '已交定金', '已交尾款'],
             userOrderList: [],
-            userOrderTotal: 0,
+            userOrderTotal: null,
             userOrderColumn: [{
                 label: '下单时间',
                 prop: 'orderTime',

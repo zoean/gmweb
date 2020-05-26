@@ -60,8 +60,8 @@
                 <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
             </el-col>
             <el-col :span="11">
-                <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button>
-                <el-button v-if="exportPeople" plain class='smoke-fr' size="small" style="margin-right: 20px;" @click="export_Staff">导出员工</el-button>
+                <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->
+                <el-button v-if="exportPeople" plain class='smoke-fr' size="small" @click="export_Staff">导出员工</el-button>
             </el-col>
         </el-row>
         
