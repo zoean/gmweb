@@ -217,7 +217,7 @@ export default {
             if(this.screenForm.orgUuidList[0] == undefined){
                 this.screenForm.orgUuidList[0] = '';
             }
-            const href = 'https://gm.jhwx.com' + exportUserDetailedList +
+            const href = 'https://testgm.jhwx.com' + exportUserDetailedList +
             '?jobStatus=' + this.screenForm.jobStatus +
             '&accountNumber=' + this.screenForm.accountNumber + 
             '&name=' + this.screenForm.name + 
