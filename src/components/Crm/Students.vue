@@ -39,9 +39,9 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right">
+            <el-table-column prop="active" label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                  <el-button @click="studentDetails(scope.row)" type="text" >学员详情</el-button>
+                <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
               </template>
             </el-table-column>
         </el-table>

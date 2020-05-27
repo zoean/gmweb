@@ -1,3 +1,7 @@
+export function isExternal(path) {
+    return /^(https?:|mailto:|tel:)/.test(path)
+}
+
 export const getTextByJs = (arr) => {
     let str = "";
     for (var i = 0; i < arr.length; i++) {

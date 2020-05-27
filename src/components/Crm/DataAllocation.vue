@@ -20,9 +20,9 @@
               >
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" min-width="270" fixed="right">
-              <template slot-scope="scope">
-                  <el-button v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
+            <el-table-column prop="active" label="操作" width="140" fixed="right">
+              <template slot-scope="scope">              
+                    <svg-icon v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" icon-title="修改" icon-class="edit" />
                   <el-popover
                     placement="top"
                     width="200"
@@ -34,11 +34,12 @@
                       <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                       <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
                     </div>
-                    <el-button v-if="delDataAllocation" slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                    <svg-icon v-if="delDataAllocation" slot="reference" icon-title="删除" icon-class="del" />
                   </el-popover>
-                  <el-button v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" type="text"  style="margin-left: .2rem;">配置组员</el-button>
-                  <el-button v-if="addDataAllocationLink && !scope.row.classType" @click="createLinksClick(scope.row)" type="text"  style="margin-left: .2rem;">生成推广链接</el-button>
-                  <el-button v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" type="text"  style="margin-left: .2rem;">一键分配</el-button>
+                    <svg-icon v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" icon-title="配置组员" icon-class="members" />
+                    <svg-icon v-if="addDataAllocationLink && !scope.row.classType" @click="createLinksClick(scope.row)" icon-title="生成推广链接" icon-class="generatlinks" />
+                    
+                    <svg-icon v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" icon-title="一键分配" icon-class="distribute" />
               </template>
             </el-table-column>
 

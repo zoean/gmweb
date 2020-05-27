@@ -53,7 +53,7 @@
 
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen" type="flex" align="middle">
 
             <el-col :span="4">
 
@@ -86,11 +86,10 @@
             </el-col>
             <el-col :span="12">
                 <el-row type="flex" justify="end">
-                    <el-button plain size="small" @click="editFieldHandle">表头管理</el-button>
+                    <svg-icon @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
         </el-row>
-
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
@@ -124,10 +123,10 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" min-width="340">
-              <template slot-scope="scope">
-                  <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
-                  <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
+            <el-table-column prop="active" label="操作" fixed="right" width="140">
+                <template slot-scope="scope">
+                <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
+                <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
                   <el-popconfirm
                     confirmButtonText='确定'
                     cancelButtonText='取消'
@@ -137,10 +136,10 @@
                     title="确认释放该数据吗？"
                     @onConfirm="release(scope.row)"
                   >
-                    <el-button type="text" slot="reference">释放数据</el-button>
+                <svg-icon slot="reference" icon-title="释放数据" icon-class="release" />
                   </el-popconfirm>
-                  <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                  <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+                    <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                    <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
               </template>
             </el-table-column>
         </el-table>
@@ -402,7 +401,6 @@ export default {
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
                         this.$nextTick(() => {
-                            console.log(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
                         })

@@ -231,9 +231,9 @@
                             :key="index">
                         </el-table-column>
 
-                        <el-table-column prop="limitLimit" label="操作">
-                            <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
+                        <el-table-column prop="limitLimit" label="操作" width="50">
+                            <template slot-scope="scope">                            
+                                <svg-icon @click="handleDeleteClick(scope.row)" icon-title="移除" icon-class="del" />
                             </template>
                         </el-table-column>
 
@@ -298,7 +298,7 @@
 
                         <el-table-column prop="limitLimit" label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClickExam(scope.row)">移除</el-button>
+                                <svg-icon @click="handleDeleteClickExam(scope.row)" icon-title="移除" icon-class="del" />
                             </template>
                         </el-table-column>
 
@@ -363,7 +363,7 @@
 
                         <el-table-column prop="limitLimit" label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClickSet(scope.row)">移除</el-button>
+                                <svg-icon @click="handleDeleteClickSet(scope.row)" icon-title="移除" icon-class="del" />
                             </template>
                         </el-table-column>
 

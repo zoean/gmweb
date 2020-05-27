@@ -55,7 +55,7 @@
             
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen" type="flex" align="middle">
 
             <el-col :span="4">
 
@@ -75,8 +75,8 @@
             </el-col>
             <el-col :span="16">
                 <el-row type="flex" justify="end">
-                    <el-button plain @click="pushPeopleClick" size="small">分配至人</el-button>
-                    <el-button plain @click="editFieldHandle" size="small">表头管理</el-button>
+                    <svg-icon @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
+                    <svg-icon @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
 
@@ -109,7 +109,7 @@
             </el-table-column>
             <el-table-column prop="active" label="操作" fixed="right">
               <template slot-scope="scope">
-                  <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
+                <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
                   <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->
               </template>
             </el-table-column>

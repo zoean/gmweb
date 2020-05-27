@@ -18,18 +18,12 @@
       <el-table :data="pageManageList.list">
         <el-table-column v-for="(item, index) in pageManageListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">
         </el-table-column> 
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="70">
           <template slot-scope="scope">
-            <el-button
-              @click.native.prevent="getCurPageField(scope.$index, scope.row)"
-              type="text">
-              查看详情
-            </el-button>
-            <el-button
-              @click.native.prevent="editPageHandle(scope.$index, scope.row)"
-              type="text">
-              修改
-            </el-button>
+          
+            <svg-icon @click.native.prevent="getCurPageField(scope.$index, scope.row)" icon-title="查看详情" icon-class="detail" />
+            
+            <svg-icon @click.native.prevent="editPageHandle(scope.$index, scope.row)" icon-title="修改" icon-class="edit" />
           </template>
     </el-table-column>
       </el-table>
@@ -106,13 +100,9 @@
     <el-table :data="pageFieldList" class="ml20">
       <el-table-column v-for="(item, index) in pageFieldListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="70">
           <template slot-scope="scope">
-            <el-button
-              @click.native.prevent="editFieldHandle(scope.$index, scope.row)"
-              type="text">
-              修改
-            </el-button>
+            <svg-icon @click.native.prevent="editFieldHandle(scope.$index, scope.row)" icon-title="修改" icon-class="edit" />
           </template>
     </el-table-column>
     </el-table>

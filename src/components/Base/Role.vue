@@ -13,25 +13,23 @@
             :key="index"
           >
           </el-table-column>
-          <el-table-column prop="active" label="操作">
+          <el-table-column prop="active" label="操作" width="95">
             <template slot-scope="scope">
-                <el-button @click="handleUpdataClick(scope.row)" type="text" >修改</el-button>
+                <svg-icon @click="handleUpdataClick(scope.row)" icon-title="修改" icon-class="edit" />
                 <el-popover
                   placement="top"
                   width="200"
                   trigger="click"
                   :ref="`popover-${scope.$index}`"
                   >
-                  <p style="margin-bottom: .2rem;">确定要删除此角色吗？</p>
+                  <p>确定要删除此角色吗？</p>
                   <div style="text-align: right; margin: 0">
                     <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                     <el-button type="primary" size="mini" @click="handleDeleteClick(scope)">确定</el-button>
                   </div>
-                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                  <svg-icon slot="reference" icon-title="删除" icon-class="del" />
                 </el-popover>
-
-                <el-button @click="handleMenuClick(scope.row)" type="text"  style="margin-left: .2rem;">配置菜单</el-button>
-
+                <svg-icon @click="handleMenuClick(scope.row)" icon-title="配置菜单" icon-class="config" />
                 <!-- <el-button @click="handlePeopleClick(scope.row)" type="text" style="margin-left: .2rem;">配置人员</el-button> -->
 
             </template>

@@ -10,3 +10,10 @@
   left: 8px;
   top: 24px;
 }
+.el-popover p{
+  padding: 5px;
+}
+.svg-icon{
+  margin-right: 10px;
+  cursor: pointer;
+}

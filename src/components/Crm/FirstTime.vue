@@ -35,10 +35,10 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" min-width="250" fixed="right">
+            <el-table-column prop="active" label="操作" width="140" fixed="right">
               <template slot-scope="scope">
-                  <el-button @click="phoneOut(scope.row)" type="text" >手机外拨</el-button>
-                  <el-button @click="seatOut(scope.row)" type="text" >座机外拨</el-button>
+                <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
+                <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
                   <el-popconfirm
                     confirmButtonText='确定'
                     cancelButtonText='取消'
@@ -48,10 +48,10 @@
                     title="确认释放该数据吗？"
                     @onConfirm="release(scope.row)"
                   >
-                    <el-button type="text" slot="reference">释放数据</el-button>
+                <svg-icon slot="reference" icon-title="释放数据" icon-class="release" />
                   </el-popconfirm>
-                  <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                  <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button>
+                    <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                    <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
               </template>
             </el-table-column>
 
