@@ -313,12 +313,12 @@ export default {
         handleCurrentChange(index) {
             console.log(index);
             this.form.currentPage = index;
-            this.getClueDataAll();
+            this.getClassList();
         },
         handleSizeChange(index) {
             console.log(index);
             this.form.pageSize = index;
-            this.getClueDataAll();
+            this.getClassList();
         }, 
         addClassClick() {
             this.drawer1 = true;

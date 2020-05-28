@@ -17,9 +17,9 @@
             :width="index == 0 ? '500' : null"
             >
           </af-table-column>
-          <el-table-column prop="active" label="操作" min-width="150%">
+          <el-table-column prop="active" label="操作" width="140">
             <template slot-scope="scope">
-                <el-button v-if="scope.row.level == '考试项目'" @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <svg-icon v-if="scope.row.level == '考试项目'" @click="editClick(scope.row)" icon-title="编辑" icon-class="edit" />
                 <el-popover
                   placement="top"
                   width="200"
@@ -31,11 +31,14 @@
                     <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                     <el-button type="primary" size="mini" @click="deleteAll(scope)">确定</el-button>
                   </div>
-                  <el-button v-if="scope.row.level == '考试项目'" slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                  <svg-icon v-if="scope.row.level == '考试项目'" slot="reference" @click="editClick(scope.row)" icon-title="删除" icon-class="del" />
                 </el-popover>
-                <el-button v-if="scope.row.level == '考试项目'" @click="addClick(scope.row)" type="text"  style="margin-left: .2rem;">{{scope.row.level == '科目' ? '科目章节' : '添加'}}</el-button>
-                <el-button v-if="!scope.row.sortUpFlag && scope.row.level == '考试项目'" @click="sortNumber(scope.row, 'up')" type="text" >排序向上</el-button>
-                <el-button v-if="!scope.row.sortDownFlag && scope.row.level == '考试项目'" @click="sortNumber(scope.row, 'down')" type="text" >排序向下</el-button>
+
+                <svg-icon v-if="scope.row.level == '考试项目'" slot="reference" @click="addClick(scope.row)" :icon-title="scope.row.level == '科目' ? '科目章节' : '添加'" :icon-class="scope.row.level == '科目' ? 'addnotes' : 'add'" />
+
+                <svg-icon v-if="!scope.row.sortUpFlag && scope.row.level == '考试项目'" @click="sortNumber(scope.row, 'up')" icon-class="up" icon-title="排序向上" />
+
+                <svg-icon icon-class="down" v-if="!scope.row.sortDownFlag && scope.row.level == '考试项目'" @click="sortNumber(scope.row, 'down')" icon-title="排序向下" />
             </template>
           </el-table-column>
         </el-table>
