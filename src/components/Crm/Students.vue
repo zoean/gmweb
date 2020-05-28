@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
         <el-row type="flex" justify="end">
-            <el-button plain size="small" @click="editFieldHandle">表头管理</el-button>
+            <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
         </el-row>
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
@@ -432,7 +432,9 @@ export default {
                 sortSet: []
             },
             list: [],
-            columnList: [],
+            columnList: [{
+                label: '班型'
+            }],
             titleName: '',
             titleFlag: false,
             drawerTitle: '学员详情',

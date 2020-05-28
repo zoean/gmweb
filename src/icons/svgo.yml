@@ -18,6 +18,6 @@ plugins:
 
 - removeAttrs:
     attrs:
-#      - 'fill'
+      - 'fill'
       - 'fill-rule'
       - 'xmlns'

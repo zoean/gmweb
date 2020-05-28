@@ -88,8 +88,8 @@
 
             <el-col :span="5">
             <el-row type="flex" justify="end">
-                <svg-icon @click="pushArrClick" icon-title="分配至组" icon-class="togroup" />
-                <svg-icon @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
+                <svg-icon class="border-icon" @click="pushArrClick" icon-title="分配至组" icon-class="togroup" />
+                <svg-icon class="border-icon" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
             </el-row>
             </el-col>
 

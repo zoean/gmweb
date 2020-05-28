@@ -62,7 +62,7 @@
             <el-col :span="11">
                 <el-row type="flex" justify="end">
                     <el-col>
-                    <svg-icon v-if="exportPeople" class='smoke-fr' @click="export_Staff" icon-title="导出员工" icon-class="export" />
+                    <svg-icon v-if="exportPeople" class='smoke-fr border-icon' @click="export_Staff" icon-title="导出员工" icon-class="export" />
                     </el-col>
                 </el-row>
                 <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->               
@@ -183,6 +183,15 @@ export default {
         this.peopleEdit = buttonMap.peopleEdit;
         this.dataPermiss = buttonMap.dataPermiss;
         this.exportPeople = buttonMap.exportPeople;
+
+        this.screenForm.accountNumber = this.$route.params.accountNumber
+        this.screenForm.jobStatus = this.$route.params.jobStatus
+        this.screenForm.name = this.$route.params.name
+        this.screenForm.orgUuidList = this.$route.params.orgUuidList
+        this.screenForm.roleUuid = this.$route.params.roleUuid
+        this.screenForm.sortSet = this.$route.params.sortSet
+        this.screenForm.startHiredDate = this.$route.params.startHiredDate
+        this.screenForm.endHiredDate = this.$route.params.endHiredDate
     },
     methods: {
         sortChange(data) {
@@ -234,6 +243,14 @@ export default {
                 path: '/base/people/change',
                 query: {
                     uuid: row.uuid,
+                    accountNumber: this.screenForm.accountNumber, //账号（手机号）
+                    jobStatus: this.screenForm.jobStatus, // 状态选择value
+                    name: this.screenForm.name, //姓名
+                    orgUuidList: this.screenForm.orgUuidList, //组织唯一标识集合
+                    roleUuid: this.screenForm.roleUuid, //角色唯一标识
+                    sortSet: this.screenForm.sortSet, //排序集合
+                    startHiredDate: this.screenForm.startHiredDate,
+                    endHiredDate: this.screenForm.endHiredDate,
                 }
             })
         },
@@ -241,7 +258,15 @@ export default {
             this.$router.push({
                 path: '/base/people/permiss',
                 query: {
-                    uuid: row.uuid
+                    uuid: row.uuid,
+                    accountNumber: this.screenForm.accountNumber, //账号（手机号）
+                    jobStatus: this.screenForm.jobStatus, // 状态选择value
+                    name: this.screenForm.name, //姓名
+                    orgUuidList: this.screenForm.orgUuidList, //组织唯一标识集合
+                    roleUuid: this.screenForm.roleUuid, //角色唯一标识
+                    sortSet: this.screenForm.sortSet, //排序集合
+                    startHiredDate: this.screenForm.startHiredDate,
+                    endHiredDate: this.screenForm.endHiredDate,                    
                 }
             })
         },

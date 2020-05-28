@@ -86,7 +86,7 @@
             </el-col>
             <el-col :span="12">
                 <el-row type="flex" justify="end">
-                    <svg-icon @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                    <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
         </el-row>
@@ -243,14 +243,7 @@ export default {
             ],
             list: [],
             columnList: [
-                // { 'prop': 'tel', 'label': '电话数据' },
-                // { 'prop': 'name', 'label': '姓名' },
-                // { 'prop': 'education', 'label': '学历' },
-                // { 'prop': 'workingLife', 'label': '工作年限' },
-                // { 'prop': 'lastCallTime', 'label': '最后联系时间' },
-                // // { 'prop': 'dataType', 'label': '下次联系时间' },
-                // { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
-                // { 'prop': 'school', 'label': '注册平台' },
+                {'label': '全部客户' }
             ],
             initOptions: {},
             jqStart: null,

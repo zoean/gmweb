@@ -387,6 +387,7 @@ export default {
     name: 'peopleDataPermiss',
     data() {
         return {
+            parentForm: {},
             userUuid: this.$route.query.uuid,
             avatar: '',
             userList: [
@@ -466,6 +467,14 @@ export default {
         }
     },
     created() {
+        this.parentForm.accountNumber = this.$route.query.accountNumber
+        this.parentForm.jobStatus = this.$route.query.jobStatus
+        this.parentForm.name = this.$route.query.name
+        this.parentForm.orgUuidList = this.$route.query.orgUuidList
+        this.parentForm.roleUuid = this.$route.query.roleUuid
+        this.parentForm.sortSet = this.$route.query.sortSet
+        this.parentForm.startHiredDate = this.$route.query.startHiredDate
+        this.parentForm.endHiredDate = this.$route.query.endHiredDate
         if((this.$route.query.uuid == '') || (this.$route.query.uuid == undefined)){
             this.$router.push({ path: '/' });
         }else{
@@ -474,7 +483,10 @@ export default {
     },
     methods: {
         goback(){
-            this.$router.go(-1);
+            this.$router.push({
+                name: 'people',
+                params: this.parentForm
+            });
         },
         getPermission() {
             let keysArr = [];

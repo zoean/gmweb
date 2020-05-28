@@ -75,8 +75,8 @@
             </el-col>
             <el-col :span="16">
                 <el-row type="flex" justify="end">
-                    <svg-icon @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
-                    <svg-icon @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                    <svg-icon class="border-icon" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
+                    <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
 
