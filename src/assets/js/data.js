@@ -101,3 +101,27 @@ export const zuzhiUuid = '2a39b4c564494c58a0b15512a62e7014';
 
 //人员详情角色 超级管理员的 uuid
 export const superManageUuid = '383799112b0d47a7a3341bce77f8b776';
+
+//websock
+export const websockHttp = 'wss://testwebsocket.jhwx.com/websocket/msg/';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

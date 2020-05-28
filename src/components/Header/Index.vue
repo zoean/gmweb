@@ -113,7 +113,7 @@ import {
     noReadNum
 } from '../../request/api';
 import { getTextByJs, timestampToTime, menuNumberFunc } from '../../assets/js/common';
-import { pass_word } from '../../assets/js/data';
+import { pass_word, websockHttp } from '../../assets/js/data';
 export default {
     name: '',
     data() {
@@ -340,7 +340,7 @@ export default {
 
                         console.log("您的浏览器支持 WebSocket!");
 
-                        var http = 'wss://testwebsocket.jhwx.com' + '/websocket/msg/' + res.data.uuid;
+                        var http = websockHttp + res.data.uuid;
 
                         var ws = new WebSocket(http);
 
