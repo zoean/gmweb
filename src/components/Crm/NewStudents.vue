@@ -25,9 +25,9 @@
               :key="index"
               >
             </el-table-column>
-            <el-table-column prop="active" label="操作">
+            <el-table-column prop="active" label="操作" width="50">
               <template slot-scope="scope">
-                  <el-button @click="receiveClick(scope.row)" type="text" >领取</el-button>
+                <svg-icon @click="receiveClick(scope.row)" icon-title="领取" icon-class="collect" />
               </template>
             </el-table-column>
         </el-table>

@@ -55,7 +55,7 @@
             
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen" type="flex" align="middle">
 
             <el-col :span="4">
 
@@ -87,8 +87,10 @@
             </el-col>
 
             <el-col :span="5">
-                <el-button plain size="small" @click="pushArrClick" style="float: right;">分配至组</el-button>
-                <el-button plain size="small" @click="pushPeopleClick" style="float: right; margin-right: 20px;">分配至人</el-button>
+            <el-row type="flex" justify="end">
+                <svg-icon class="border-icon" @click="pushArrClick" icon-title="分配至组" icon-class="togroup" />
+                <svg-icon class="border-icon" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
+            </el-row>
             </el-col>
 
         </el-row>

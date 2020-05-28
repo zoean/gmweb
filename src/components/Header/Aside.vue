@@ -22,8 +22,8 @@
               :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
             >
               <template slot="title">
-                <i :class="item.icon"></i>
-                <span>{{item.name}}</span>
+                <svg-icon :icon-class="item.icon" />
+                <span class="menu-titles">{{item.name}}</span>
               </template>
               <div v-for="(res,num) in item.includeSubsetList" :key="num">
                 <el-menu-item 
@@ -34,15 +34,15 @@
                 >
                 <div class="el-menu-item-div">
                   <i :class="res.icon"></i>
-                  {{res.name}}
+                  <span class="menu-titles">{{res.name}}</span>
                 </div>
                 </el-menu-item>
               </div>
             </el-submenu>
 
             <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke" :style="iscollapse ? 'min-width: auto; width: auto;' : ''">
-              <i :class="item.icon"></i>
-              <span slot="title">{{item.name}}</span>
+              <svg-icon :icon-class="item.icon" />
+              <span class="menu-titles" slot="title">{{item.name}}</span>
             </el-menu-item>
 
             <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
@@ -176,7 +176,6 @@ export default {
     }
 }
 </script>
-
 <style lang="less" scoped>
   .aside-all{
     position: fixed;
@@ -207,22 +206,23 @@ export default {
       max-width: 256px;
       border-radius: none;
       background: #fff;
-      // .el-submenu__title{
-      //   &:hover{
-      //     span{
-      //       color: #4794FE !important;
-      //     }
-      //     i{
-      //       color: #4794FE !important;
-      //     }
-      //   }
-      //   span{
-      //     color: #fff !important;
-      //   }
-      //   i{
-      //     color: #fff !important;
-      //   }
-      // }
+      .el-submenu__title{
+        svg{
+          color:#909399
+        }
+      }
+      span.menu-titles{
+        color: #303133;
+      }
+      .el-menu-item{
+        &:hover{
+          color:#4794FE;
+          i,span.menu-titles{
+            color: #4794FE;
+          }
+        }
+      }
+      
       .el-menu-item.is-active .el-menu-item-div{
         width: calc(3rem - 24px);
         min-width: 176px;
@@ -231,10 +231,15 @@ export default {
         padding-left: 16px;
         border-radius: 50px 0 0 50px;
         background: #F2F3F7;
+        color:#4794FE;
+        span.menu-titles{
+          color: #4794FE;
+        }
       }
 
-      .el-menu-item{
-          background: #fff;
+     .el-menu-item{
+        background: #fff;
+        color: #303133;
           .el-menu-item-div{
             background: #fff;
             flex-direction: row;
@@ -248,9 +253,7 @@ export default {
               border-radius: 50px 0 0 50px;
               background: #F2F3F7 !important;
               color: #4794FE;
-              i{
-                color: #4794FE;
-              }
+              
             }
           }
         }
@@ -268,18 +271,24 @@ export default {
       margin-left: 12px;
       min-width: 188px;
       max-width: 244px;
+      svg{
+        color:#909399
+      }
     }
     .el-menu-item-smoke:hover{
       background: #F2F3F7 !important;
       color: #4794FE;
-      i{
+      i,svg{
         color: #4794FE;
       }
     }
     .el-menu-item-smoke.is-active{
       background: #F2F3F7;
       color: #4794FE;
-      i{
+      i,svg{
+        color: #4794FE;
+      }
+      span.menu-titles{
         color: #4794FE;
       }
     }

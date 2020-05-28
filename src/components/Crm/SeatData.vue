@@ -54,7 +54,7 @@
             
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen" type="flex" align="middle">
 
             <el-col :span="4">
                 
@@ -87,8 +87,8 @@
             </el-col>
             <el-col :span="12">
                 <el-row type="flex" justify="end">
-                    <el-button plain @click="TransferToGoogClick" size="small">释放数据</el-button>
-                    <el-button plain @click="editFieldHandle" size="small">表头管理</el-button>
+                    <svg-icon class="border-icon" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
+                    <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
 
@@ -130,29 +130,10 @@
                     </el-tooltip> -->
               </template>
             </el-table-column>
-            <!--<el-table-column
-              :prop="item.prop"
-              :label="item.label"
-              :width="item.label == '最后联系时间' ? '110px ': item.label == '电话数据' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
-              v-for="(item, index) in columnList"
-              :key="index"
-              >
-              <template slot-scope="scope">
-                    <span>{{scope.row[item.prop]}}</span>
-                    <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
-                        <el-image
-                            class="copy-icon-style"
-                            @click="phoneCopy(scope.row)"
-                            :src="require('../../assets/images/copy-icon.png')">
-                        </el-image>
-                    </el-tooltip>
-              </template>
-            </el-table-column>-->
 
-            <el-table-column prop="active" label="操作" fixed="right">
+            <el-table-column prop="active" label="操作" fixed="right" width="50">
               <template slot-scope="scope">
-                  <el-button @click="customerInfo(scope.row)" type="text" >客户信息</el-button>
-                  <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->
+                <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
             </el-table-column>
         </el-table>
@@ -240,14 +221,7 @@ export default {
             ruleNumberNameList: [], //分配组数组
             list: [],
             columnList: [
-                // { 'prop': 'phone', 'label': '电话数据' },
-                // { 'prop': 'provinceCity', 'label': '所在地区' },
-                // { 'prop': 'examItem', 'label': '所属项目' },
-                // { 'prop': 'userName', 'label': '所属坐席' },
-                // { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
-                // { 'prop': 'spread', 'label': '来源渠道' },
-                // { 'prop': 'createTime', 'label': '创建时间' },
-                // { 'prop': 'lastCallTime', 'label': '最后联系时间' },
+                { 'label': '坐席数据' }
             ],
             dataPicker: [],
             

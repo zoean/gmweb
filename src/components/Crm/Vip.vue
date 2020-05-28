@@ -23,9 +23,9 @@
               :key="index"
               >
             </el-table-column>
-            <el-table-column prop="active" label="操作">
+            <el-table-column prop="active" label="操作" width="50">
               <template slot-scope="scope">
-                  <el-button @click="customerDetails(scope.row)" type="text" >客户详情</el-button>
+                <svg-icon @click="customerDetails(scope.row)" icon-title="客户详情" icon-class="detail" />
               </template>
             </el-table-column>
         </el-table>

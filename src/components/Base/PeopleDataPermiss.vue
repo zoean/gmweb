@@ -231,9 +231,9 @@
                             :key="index">
                         </el-table-column>
 
-                        <el-table-column prop="limitLimit" label="操作">
-                            <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClick(scope.row)">移除</el-button>
+                        <el-table-column prop="limitLimit" label="操作" width="50">
+                            <template slot-scope="scope">                            
+                                <svg-icon @click="handleDeleteClick(scope.row)" icon-title="移除" icon-class="del" />
                             </template>
                         </el-table-column>
 
@@ -298,7 +298,7 @@
 
                         <el-table-column prop="limitLimit" label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClickExam(scope.row)">移除</el-button>
+                                <svg-icon @click="handleDeleteClickExam(scope.row)" icon-title="移除" icon-class="del" />
                             </template>
                         </el-table-column>
 
@@ -363,7 +363,7 @@
 
                         <el-table-column prop="limitLimit" label="操作">
                             <template slot-scope="scope">
-                                <el-button size="mini" type="text" @click="handleDeleteClickSet(scope.row)">移除</el-button>
+                                <svg-icon @click="handleDeleteClickSet(scope.row)" icon-title="移除" icon-class="del" />
                             </template>
                         </el-table-column>
 
@@ -387,6 +387,7 @@ export default {
     name: 'peopleDataPermiss',
     data() {
         return {
+            parentForm: {},
             userUuid: this.$route.query.uuid,
             avatar: '',
             userList: [
@@ -466,6 +467,14 @@ export default {
         }
     },
     created() {
+        this.parentForm.accountNumber = this.$route.query.accountNumber
+        this.parentForm.jobStatus = this.$route.query.jobStatus
+        this.parentForm.name = this.$route.query.name
+        this.parentForm.orgUuidList = this.$route.query.orgUuidList
+        this.parentForm.roleUuid = this.$route.query.roleUuid
+        this.parentForm.sortSet = this.$route.query.sortSet
+        this.parentForm.startHiredDate = this.$route.query.startHiredDate
+        this.parentForm.endHiredDate = this.$route.query.endHiredDate
         if((this.$route.query.uuid == '') || (this.$route.query.uuid == undefined)){
             this.$router.push({ path: '/' });
         }else{
@@ -474,7 +483,10 @@ export default {
     },
     methods: {
         goback(){
-            this.$router.go(-1);
+            this.$router.push({
+                name: 'people',
+                params: this.parentForm
+            });
         },
         getPermission() {
             let keysArr = [];

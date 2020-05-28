@@ -10,3 +10,15 @@
   left: 8px;
   top: 24px;
 }
+.el-popover p{
+  padding: 5px;
+}
+
+.el-table svg{
+  color:#4E9BFF
+}
+
+.svg-icon{
+  margin-right: 10px;
+  cursor: pointer;
+}

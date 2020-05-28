@@ -49,7 +49,7 @@
             </el-col>
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen" type="flex" align="middle">
             <el-col :span="4">
                 <el-input v-model="screenForm.name" size="small" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
             </el-col>
@@ -60,8 +60,13 @@
                 <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
             </el-col>
             <el-col :span="11">
-                <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->
-                <el-button v-if="exportPeople" plain class='smoke-fr' size="small" @click="export_Staff">导出员工</el-button>
+                <el-row type="flex" justify="end">
+                    <el-col>
+                    <svg-icon v-if="exportPeople" class='smoke-fr border-icon' @click="export_Staff" icon-title="导出员工" icon-class="export" />
+                    </el-col>
+                </el-row>
+                <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->               
+                 
             </el-col>
         </el-row>
         
@@ -92,10 +97,10 @@
                 </div>
             </template>
           </el-table-column>
-          <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss">
+          <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
             <template slot-scope="scope">
-                <el-button v-if="peopleEdit" @click="handleEditClick(scope.row)" type="text">编辑</el-button>
-                <el-button v-if="dataPermiss" @click="handlePermissClick(scope.row)" type="text">数据权限</el-button>
+                <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
+                <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
             </template>
           </el-table-column>
         </el-table>
@@ -175,14 +180,21 @@ export default {
         this.getRoleList();
         this.getOrgSubsetByUuid();
         let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
-        console.log(buttonMap);
         this.peopleEdit = buttonMap.peopleEdit;
         this.dataPermiss = buttonMap.dataPermiss;
         this.exportPeople = buttonMap.exportPeople;
+
+        this.screenForm.accountNumber = this.$route.params.accountNumber
+        this.screenForm.jobStatus = this.$route.params.jobStatus
+        this.screenForm.name = this.$route.params.name
+        this.screenForm.orgUuidList = this.$route.params.orgUuidList
+        this.screenForm.roleUuid = this.$route.params.roleUuid
+        this.screenForm.sortSet = this.$route.params.sortSet
+        this.screenForm.startHiredDate = this.$route.params.startHiredDate
+        this.screenForm.endHiredDate = this.$route.params.endHiredDate
     },
     methods: {
         sortChange(data) {
-            console.log(data);
             this.screenForm.sortSet = [];
             const id = sortTextNum(data.prop);
             if(data.order == "descending"){
@@ -194,7 +206,6 @@ export default {
             this.getUserDetailedList();
         },
         datePickerChange(value) {
-            console.log(value);
             if (value == null) {
                 this.screenForm.startHiredDate = '';
                 this.screenForm.endHiredDate = '';
@@ -204,8 +215,6 @@ export default {
             }
         },
         export_Staff() {
-            // console.log(this.screenForm.orgUuidList);
-
             let str = '';
 
             this.screenForm.sortSet.map(sll => {
@@ -226,39 +235,22 @@ export default {
             '&endHiredDate=' + this.screenForm.endHiredDate + 
             '&sortSet=' + str + 
             '&orgUuidList=' + this.screenForm.orgUuidList[0];
-            console.log(href);
-
-            // this.$smoke_get(exportUserDetailedList, {
-            //     jobStatus: this.screenForm.jobStatus,
-            //     accountNumber: this.screenForm.accountNumber,
-            //     name: this.screenForm.name,
-            //     roleUuid: this.screenForm.roleUuid,
-            //     startHiredDate: this.screenForm.startHiredDate,
-            //     endHiredDate: this.screenForm.endHiredDate,
-            //     sortSet: str,
-            //     orgUuidList: this.screenForm.orgUuidList[0],
-            //     responseType: 'blob'
-            // }).then(res => {
-            //     const blob = new Blob([res.data], { type: 'application/ms-excel;charset=utf-8' });
-            //     let url = window.URL.createObjectURL(blob);
-            //     let link = document.createElement('a');
-            //     link.style.display = 'none';
-            //     link.href = url;
-            //     link.download = '员工管理.xlsx'; 
-            //     document.body.appendChild(link);
-            //     link.click();  //a标签自动触发点击事件
-            //     document.body.removeChild(link);
-            // })
-
             window.open(href, '_blank');
 
         },
         handleEditClick(row) {
-            console.log(row);
             this.$router.push({
                 path: '/base/people/change',
                 query: {
-                    uuid: row.uuid
+                    uuid: row.uuid,
+                    accountNumber: this.screenForm.accountNumber, //账号（手机号）
+                    jobStatus: this.screenForm.jobStatus, // 状态选择value
+                    name: this.screenForm.name, //姓名
+                    orgUuidList: this.screenForm.orgUuidList, //组织唯一标识集合
+                    roleUuid: this.screenForm.roleUuid, //角色唯一标识
+                    sortSet: this.screenForm.sortSet, //排序集合
+                    startHiredDate: this.screenForm.startHiredDate,
+                    endHiredDate: this.screenForm.endHiredDate,
                 }
             })
         },
@@ -266,36 +258,38 @@ export default {
             this.$router.push({
                 path: '/base/people/permiss',
                 query: {
-                    uuid: row.uuid
+                    uuid: row.uuid,
+                    accountNumber: this.screenForm.accountNumber, //账号（手机号）
+                    jobStatus: this.screenForm.jobStatus, // 状态选择value
+                    name: this.screenForm.name, //姓名
+                    orgUuidList: this.screenForm.orgUuidList, //组织唯一标识集合
+                    roleUuid: this.screenForm.roleUuid, //角色唯一标识
+                    sortSet: this.screenForm.sortSet, //排序集合
+                    startHiredDate: this.screenForm.startHiredDate,
+                    endHiredDate: this.screenForm.endHiredDate,                    
                 }
             })
         },
         handleRoleUuidChange(value) {
-            console.log(value);
             this.screenForm.roleUuid = value;
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         },
         handleJobStatusChange(value) {
-            console.log(value);
             this.screenForm.jobStatus = value;
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.screenForm.pageSize = index;
             this.getUserDetailedList();
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.screenForm.currentPage = index;
             this.getUserDetailedList();
         },
         handleZuzhiChange(arr) {
-            // console.log(arr.slice(-1));
             arr = arr.slice(-1);
-            // console.log(arr);
             this.screenForm.orgUuidList = arr;
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
@@ -303,7 +297,6 @@ export default {
         getUserDetailedList() {
             this.fullscreenLoading = true;
             this.$smoke_post(getUserDetailedList,this.screenForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -316,7 +309,6 @@ export default {
                             data.hiredDate = data.hiredDate.split(" ")[0];
                         })
                         this.userList = res.data.list;
-                        console.log('list---', this.userList)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -331,7 +323,6 @@ export default {
         },
         getRoleList() {
             this.$smoke_get(getRoleList, {}).then(res => {
-                console.log(res);
                 this.roleOptions = res.data;
             })
         },
@@ -339,7 +330,6 @@ export default {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: ""
             }).then(res => {
-                console.log(res);
                 this.zuzhiOptions = res.data;
             })
         },

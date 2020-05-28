@@ -134,6 +134,7 @@ export default {
                         href = 'https://www.shengxuewangxiao.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 3) {
                         href = 'https://www.jhwxedu.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+
                     }
                     
                     if(res.data.loginPlatform){

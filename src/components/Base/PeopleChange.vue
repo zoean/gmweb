@@ -208,6 +208,7 @@ export default {
     data() {
         return {
             uuid: this.$route.query.uuid,
+            parentForm: {},
             form: {},
             formText: {},
             drawerCreate: false,
@@ -259,7 +260,15 @@ export default {
         }
     },
     created() {
-        console.log(this.$route.query.uuid);
+        this.parentForm.accountNumber = this.$route.query.accountNumber
+        this.parentForm.jobStatus = this.$route.query.jobStatus
+        this.parentForm.name = this.$route.query.name
+        this.parentForm.orgUuidList = this.$route.query.orgUuidList
+        this.parentForm.roleUuid = this.$route.query.roleUuid
+        this.parentForm.sortSet = this.$route.query.sortSet
+        this.parentForm.startHiredDate = this.$route.query.startHiredDate
+        this.parentForm.endHiredDate = this.$route.query.endHiredDate
+
         if((this.$route.query.uuid == '') || (this.$route.query.uuid == undefined)){
             this.$router.push({ path: '/' });
         }else{
@@ -268,12 +277,9 @@ export default {
         this.getRoleList();
         let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
         this.roleConfig = buttonMap.roleConfig;
-        console.log(this.roleConfig);
     },
     methods: {
         tagClose(item) {
-            console.log(this.formText.jqList);
-            console.log(item);
             this.formText.jqList.map((res,index) => {
                 if(res.uin == item.uin){
                     this.formText.jqList.splice(index,1);
@@ -502,7 +508,11 @@ export default {
             
         },
         goback(){
-            this.$router.go(-1);
+            this.$router.push({
+                name: 'people',
+                params: this.parentForm
+            });
+            
         },
     },
     mounted() {

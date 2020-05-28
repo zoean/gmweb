@@ -28,10 +28,10 @@
               :key="index"
               >
             </el-table-column>
-            <el-table-column prop="active" label="操作">
+            <el-table-column prop="active" label="操作" width="70">
               <template slot-scope="scope">
-                  <el-button @click="customerDetails(scope.row)" type="text" >查看详情</el-button>
-                  <el-button v-if="editEnums" @click="editEnumClick(scope.row)" type="text" >修改</el-button>
+                <svg-icon @click="customerDetails(scope.row)" icon-title="查看详情" icon-class="detail" />
+                <svg-icon v-if="editEnums" @click="editEnumClick(scope.row)" icon-title="修改" icon-class="edit" />
               </template>
             </el-table-column>
         </el-table>
@@ -130,9 +130,9 @@
                   :key="index"
                   >
                 </el-table-column>
-                <el-table-column prop="active" label="操作" v-if="editEnumsDetails">
+                <el-table-column prop="active" label="操作" v-if="editEnumsDetails" width="50">
                   <template slot-scope="scope">
-                      <el-button @click="editEnumItemClick(scope.row)" type="text">修改</el-button>
+                    <svg-icon @click="editEnumItemClick(scope.row)" icon-title="修改" icon-class="edit" />
                   </template>
                 </el-table-column>
             </el-table>

@@ -17,10 +17,10 @@
               :key="index"
               >
             </el-table-column>
-            <el-table-column prop="active" label="操作">
+            <el-table-column prop="active" label="操作" width="70">
               <template slot-scope="scope">
-                  <el-button @click="addHeadTeacherClick(scope.row)" type="text" >配置班主任</el-button>
-                  <el-button @click="headTeacherListClick(scope.row)" type="text" >班主任列表</el-button>
+              <svg-icon @click="addHeadTeacherClick(scope.row)" icon-title="配置班主任" icon-class="config" />
+              <svg-icon @click="headTeacherListClick(scope.row)" icon-title="班主任列表" icon-class="list" />
               </template>
             </el-table-column>
         </el-table>
