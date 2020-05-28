@@ -28,13 +28,7 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
-                        <el-image
-                            class="copy-icon-style"
-                            @click="phoneCopy(scope.row)"
-                            :src="require('../../assets/images/copy-icon.png')">
-                        </el-image>
-                    </el-tooltip>
+                    <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
                     
               </template>
             </el-table-column>
@@ -362,9 +356,14 @@
                     </el-form>
 
                 </el-tab-pane>
-
+                <el-tab-pane label="订单记录" name="third">
+                    <el-table :data="orderList">
+                        <el-table-column v-for="(item, index) in orderListColumn" :label="item.label" :prop="item.prop" :key="index" 
+              :show-overflow-tooltip="true" :width="item.width" :formatter="item.formatter"></el-table-column>
+                    </el-table>
+                </el-tab-pane>
                 <el-tab-pane label="跟进记录" name="second">
-                
+
                     <el-table
                         :data="notesList"
                         style="width: 100%; margin-top: 10px; margin-bottom: 30px;"
@@ -409,6 +408,7 @@ import {
     enumByEnumNums,
     getSchoolList,
     copyTel,
+    getOrderList
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery } from '../../assets/js/common';
@@ -421,6 +421,7 @@ export default {
     },
     data() {
         return {
+            getOrderForm: {},
             form: {
                 currentPage: 1,
                 pageSize: 10,
@@ -510,6 +511,28 @@ export default {
             schoolList: [],
             fullscreenLoading: false,
             copyClueDataSUuid: '', //学员详情copy手机号时用的clueDataSUuid
+            orderList: [],
+            orderListColumn: [{
+                prop: 'goodsName', label:"商品名称", width: 150
+            },{
+                prop: 'orderNo', label:"订单号"
+            },{
+                prop: 'refer', label:"订单来源"
+            },{
+                prop: 'orderType', label:"订单类型"
+            },{
+                prop: 'addTime', label:"下单时间", formatter: (row, column, cellValue) =>{
+                    return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
+                }
+            },{
+                prop: 'hasDelivery', label:"是否发货", formatter: (row, column, cellValue) =>{
+                    return cellValue ? '是' : '否'
+                }
+            },{
+                prop: 'shippingId', label:"快递号", formatter: (row, column, cellValue) => {
+                    return cellValue ? cellValue : '--'
+                }
+            }]
         }
     },
     created() {
@@ -520,6 +543,13 @@ export default {
         this.getSchoolList();
     },
     methods: { 
+        geOrderRecord(){
+            this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
+                if(res.data){
+                    this.orderList = res.data
+                }
+            })
+        },
         tableSort(type, props){
             this.form.sortSet = []
             this.form.sortSet.push({[props]: type === 'ascending' ? 'ASC' : 'DESC'})
@@ -565,6 +595,9 @@ export default {
             this.customerForm.followUp = '';
             this.customerForm.followUpContent = '';
             this.getStudentDetails(row.uuid);
+            this.getOrderForm.userId = row.customerId
+            this.getOrderForm.itemId = row.examItemId
+            this.getOrderForm.classType = row.classType
         },
         cityChange() {
             this.customerForm.province = this.customerForm.provinceCity[0];
@@ -726,7 +759,6 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(getClassTeaStudent, this.form).then(res => {
                 if(res.code == 200) {
-
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         this.list = res.data.list;
@@ -757,8 +789,9 @@ export default {
             this.form.pageSize = 10;
             this.getClassTeaStudent();
         },
-        handleTabClick(tab, event) {
-            if(tab.label == '客户信息'){
+        handleTabClick(tab) {
+            if(tab.label == '订单记录'){
+                this.geOrderRecord()
             }else if(tab.label == '跟进记录'){
                 this.getClassTeaStuNotes();
                 this.notesForm.currentPage = 1;

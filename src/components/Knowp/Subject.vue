@@ -37,9 +37,9 @@
             :width="index == 0 ? '100' : null"
             >
           </el-table-column>
-          <el-table-column prop="active" label="操作">
+          <el-table-column prop="active" label="操作" width="95">
             <template slot-scope="scope">
-                <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <svg-icon @click="editClick(scope.row)" icon-title="编辑" icon-class="edit" />
                 <el-popover
                   placement="top"
                   width="200"
@@ -51,9 +51,9 @@
                     <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                     <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
                   </div>
-                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                  <svg-icon slot="reference" icon-title="删除" icon-class="del" />
                 </el-popover>
-                <el-button @click="detailsClick(scope.row)" type="text"  style="margin-left: .2rem;">详情</el-button>
+                <svg-icon @click="detailsClick(scope.row)" icon-title="详情" icon-class="detail" />
             </template>
           </el-table-column>
         </el-table>

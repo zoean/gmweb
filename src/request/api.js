@@ -210,6 +210,7 @@ export const getClassTeaClass = '/api/phone/classTeacher/getClassTeaClass'; //�
 export const getWaitStudentList = '/api/phone/classTeacher/getWaitStudentList'; //获取待分配学员订单列表
 export const classTeaGetWaitStudent = '/api/phone/classTeacher/classTeaGetWaitStudent'; //班主任获取待分配的学员
 export const getClassTeaStudent = '/api/phone/classTeacher/getClassTeaStudent'; //班主任学员列表
+export const getOrderList = '/order-service/order/getOrderList'
 
 //学员信息
 export const getStudentDetails = '/api/phone/student/getStudentDetails'; //获取学员详情

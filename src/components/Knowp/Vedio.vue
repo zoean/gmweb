@@ -58,10 +58,10 @@
             :key="index"
             >
           </af-table-column>
-          <af-table-column prop="active" width="160px" fixed="right" label="操作">
+          <af-table-column prop="active" width="95" fixed="right" label="操作">
             <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleCopy(scope.row)">复制链接</el-button>
-                <el-button @click="editClick(scope.row)" type="text" >编辑</el-button>
+                <svg-icon @click="handleCopy(scope.row)" icon-class="copy" icon-title="复制链接" />
+                <svg-icon @click="editClick(scope.row)" icon-class="edit" icon-title="编辑" />
                 <el-popover
                   placement="top"
                   width="200"
@@ -73,7 +73,7 @@
                     <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                     <el-button type="primary" size="mini" @click="deleteClick(scope)">确定</el-button>
                   </div>
-                  <el-button slot="reference" type="text"  style="margin-left: .2rem;">删除</el-button>
+                  <svg-icon slot="reference" icon-title="删除" icon-class="del" />
                 </el-popover>
             </template>
           </af-table-column>

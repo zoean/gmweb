@@ -28,13 +28,7 @@
                     >
                     <template slot-scope="scope">
                             <span>{{scope.row[item.prop]}}</span>
-                            <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
-                                <el-image
-                                    class="copy-icon-style"
-                                    @click="phoneCopy(scope.row)"
-                                    :src="require('../../assets/images/copy-icon.png')">
-                                </el-image>
-                            </el-tooltip>
+                            <svg-icon class="copy-tel" v-if="item.prop == 'phone'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
                     </template>
                     </el-table-column>
 
