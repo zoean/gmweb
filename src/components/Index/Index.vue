@@ -129,11 +129,11 @@ export default {
             }).then(res => {
                 if(res.code == 200){
                     if(id == 1) {
-                        href = 'https://www.jhwx.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                        href = 'https://www.jhwx.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 2) {
-                        href = 'https://www.shengxuewangxiao.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                        href = 'https://www.shengxuewangxiao.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 3) {
-                        href = 'https://www.jhwxedu.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform;
+                        href = 'https://www.jhwxedu.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }
                     
                     if(res.data.loginPlatform){
