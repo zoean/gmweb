@@ -65,7 +65,7 @@ export default {
             list: [],
             columnList: [
                 // { 'prop': 'tel', 'label': '姓名' },
-                { 'prop': 'tel', 'label': '电话数据' },
+                { 'prop': 'tel', 'label': '手机号码' },
                 // { 'prop': 'clueUserUuid', 'label': '所属坐席' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },

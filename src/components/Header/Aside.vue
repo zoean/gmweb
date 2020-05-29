@@ -179,7 +179,7 @@ export default {
 <style lang="less" scoped>
   .aside-all{
     position: fixed;
-    z-index: 999;
+    z-index: 99;
     // min-height: calc(100vh - 60px);
     display: flex;
     flex: 1;

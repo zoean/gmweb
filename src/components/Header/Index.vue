@@ -61,6 +61,7 @@
                 <span style="position: absolute; right: 154px; font-size: 14px;">v 1.0.1</span>
                 <el-popover
                     placement="bottom"
+                    popper-class="message_popover"
                     width="400"
                     trigger="click">
                     <el-tabs v-model="activeName" @tab-click="tabClickHandle">
@@ -341,7 +342,7 @@ export default {
                         console.log("您的浏览器支持 WebSocket!");
 
 
-                        var http = 'wss://websocket.jhwx.com' + '/websocket/msg/' + res.data.uuid;
+                        var http = websockHttp + res.data.uuid;
 
                         var ws = new WebSocket(http);
 
@@ -432,7 +433,7 @@ export default {
 }
 </script>
 <style lang="less">
-.el-popover{
+.message_popover{
     padding: 0 !important;
     
     .el-tabs{

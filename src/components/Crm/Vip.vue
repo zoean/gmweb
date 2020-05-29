@@ -130,14 +130,14 @@ export default {
             },
             list: [],
             columnList: [
-                { 'prop': 'tel', 'label': '电话数据' },
+                { 'prop': 'tel', 'label': '手机号码' },
                 { 'prop': 'ruleNumberName', 'label': '地区归属' },
-                { 'prop': 'callLastTime', 'label': '最后联系时间'},
+                { 'prop': 'callLastTime', 'label': '最近一次联系时间'},
                 // { 'prop': 'phone', 'label': '所属坐席' },
                 // { 'prop': 'phone', 'label': '通话次数' },
                 // { 'prop': 'phone', 'label': '来源渠道' },
                 // { 'prop': 'phone', 'label': '入库时间' },
-                // { 'prop': 'phone', 'label': '最后联系时间' },
+                // { 'prop': 'phone', 'label': '最近一次联系时间' },
             ],
             ruleForm: {
                 age: '',

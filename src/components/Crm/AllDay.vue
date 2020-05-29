@@ -112,7 +112,7 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
+                    <span><svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
                     
               </template>
             </el-table-column>
@@ -237,7 +237,7 @@ export default {
             ],
             list: [],
             columnList: [
-                {'label': '全部客户' }
+                {'label': '' }
             ],
             initOptions: {},
             jqStart: null,
