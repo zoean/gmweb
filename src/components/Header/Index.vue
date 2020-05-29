@@ -341,7 +341,7 @@ export default {
                         console.log("您的浏览器支持 WebSocket!");
 
 
-                        var http = 'wss://websocket.jhwx.com' + '/websocket/msg/' + res.data.uuid;
+                        var http = websockHttp + res.data.uuid;
 
                         var ws = new WebSocket(http);
 
