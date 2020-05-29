@@ -19,21 +19,24 @@
                         <dl>
                             <dt>今日线索量</dt>
                             <dd>
-                                <countTo :startVal='0' :endVal='556' :duration='3000'></countTo>
+                                <countTo v-if="seatDataVolume.newData > 0" :startVal='0' :endVal='seatDataVolume.newData' :duration='3000'></countTo>
+                                <p v-else>{{seatDataVolume.newData}}</p>
                             </dd>
                         </dl>
                         <span class="line"></span>
                         <dl>
                             <dt>今日拨通量</dt>
                             <dd>
-                                <countTo :startVal='0' :endVal='122' :duration='3000'></countTo>
+                                <countTo v-if="seatDataVolume.dlal > 0" :startVal='0' :endVal='seatDataVolume.dlal' :duration='3000'></countTo>
+                                <p v-else>{{seatDataVolume.dlal}}</p>
                             </dd>
                         </dl>
                         <span class="line"></span>
                         <dl>
                             <dt>累计销量</dt>
                             <dd>
-                                <countTo :startVal='0' :endVal='66' :duration='3000'></countTo>
+                                <countTo v-if="seatDataVolume.order > 0" :startVal='0' :endVal='seatDataVolume.order' :duration='3000'></countTo>
+                                <p v-else>{{seatDataVolume.order}}</p>
                             </dd>
                         </dl>
                     </el-col>
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-import { getUinOutConfigMessage, loginPlatform } from '../../request/api';
+import { getUinOutConfigMessage, loginPlatform, getSeatDataVolume } from '../../request/api';
 import {getCurrentDate} from '@/assets/js/common'
 import countTo from 'vue-count-to';
 export default {
@@ -93,13 +96,22 @@ export default {
                 appId: "", //appId
                 serverUrl: "", //初始化地址
                 uin: "" //坐席号
-            }
+            },
+            seatDataVolume:{}
         }
     },
     created() {
         this.getUinOutConfigMessage();
+        this.getSeatDataVolume();
     },
     methods: {
+        getSeatDataVolume(){
+            this.$smoke_get(getSeatDataVolume).then(res => {
+                this.seatDataVolume.newData = Number(res.data.newData) || 0
+                this.seatDataVolume.dlal = Number(res.data.dlal) || 0
+                this.seatDataVolume.order = Number(res.data.order) || 0
+            })
+        },
         getUinOutConfigMessage() {
             this.$smoke_post(getUinOutConfigMessage, {
                 userUuid: localStorage.getItem('userUuid')

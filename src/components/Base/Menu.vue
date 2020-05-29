@@ -167,14 +167,12 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.ruleForm);
                 if(this.drawerTitle == '新建菜单'){
                     this.addMenu();
                 }else{
                     this.updateMenu();
                 }
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -189,11 +187,9 @@ export default {
             this.ruleForm.level = '';
         },
         handleDeleteClick(scope) {
-            // console.log(scope.row.uuid);
             this.$smoke_post(deleteMenu, {
                 uuid: scope.row.uuid
             }).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     scope._self.$refs[`popover-${scope.$index}`].doClose();
                     this.$message({
@@ -211,7 +207,6 @@ export default {
             this.resetForm();
         },
         handleAddClick(row) {
-            console.log(row);
             this.drawer = true;
             this.drawerTitle = '新建菜单';
             this.resetForm();
@@ -221,7 +216,6 @@ export default {
             done();
         },
         handleUpdataClick(row) {
-            console.log(row);
             this.drawer = true;
             this.drawerTitle = '修改菜单';
             this.ruleForm.name = row.name;
@@ -245,7 +239,6 @@ export default {
             this.$smoke_post(getMenuDetailsSubsetByUuid, {
                 uuid: ""
             }).then(res => {
-                console.log(res.data);
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -265,7 +258,6 @@ export default {
         },
         addMenu() {
             this.$smoke_post(addMenu, this.ruleForm).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
@@ -275,7 +267,6 @@ export default {
         },
         updateMenu() {
             this.$smoke_post(updateMenu, this.ruleForm).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();

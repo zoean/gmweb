@@ -313,7 +313,7 @@
 
                                 <el-form-item label="跟进类型" prop="followUp">
 
-                                    <el-select v-model="customerForm.followUp" placeholder="请选择跟进类型" size="small" >
+                                    <el-select v-model="customerForm.followUp" placeholder="请选择跟进类型" size="small">
                                         <el-option
                                           v-for="item in enumList['MJ-12']"
                                           :key="item.name"
@@ -325,7 +325,9 @@
                                 </el-form-item>
 
                             </el-col>
-                            
+                            <el-col :span="6">
+                                <el-form-item label="延长服务期" placeholder="请选择时长"></el-form-item>
+                            </el-col>
                         </el-row>
 
                         <el-row>
@@ -501,7 +503,7 @@ export default {
             },
             notesList: [],
             notesColumnList: [
-                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'createTime', 'label': '创建时间', width: 250 },
                 { 'prop': 'entryPerson', 'label': '跟进人' },
                 { 'prop': 'followUp', 'label': '跟进类型' },
                 { 'prop': 'followUpContent', 'label': '跟进内容' },

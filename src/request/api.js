@@ -1,5 +1,6 @@
 
 // 基础模块接口
+export const getSeatDataVolume = '/api/phone/clueData/getSeatDataVolume'
 export const getUserDetailedList = '/api/basicApp/getUserDetailedList'; //获取员工详情信息集合
 export const getUserLoginMessage = '/api/basicApp/getUserLoginMessage'; //获取员工信息
 export const getOrgUserBasic = '/api/basicApp/getOrgUserBasic'; //获取组织对应的员工信息

@@ -15,9 +15,11 @@ plugins:
   # - name:
   #     param1: 1
   #     param2: 2
-
 - removeAttrs:
     attrs:
       - 'fill'
       - 'fill-rule'
       - 'xmlns'
+      - 'class'
+      - 'width'
+      - 'height'

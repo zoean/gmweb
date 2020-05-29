@@ -7,8 +7,6 @@
           class="el-menu-vertical-demo"
           :default-openeds="openedsIndex"
           :collapse="iscollapse"
-          @open="handleOpen" 
-          @close="handleClose"
           :collapse-transition="false"
           :unique-opened="false"
           >
@@ -108,18 +106,7 @@ export default {
       },
       router_index() {
         this.activeIndex = this.$route.path;
-      },   
-      handleOpen(key, keyPath) {
-          console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-          console.log(key, keyPath);
-      },
-      // getMenuDetailsSubsetByUuid() {
-      //   this.$smoke_post(getMenuDetailsSubsetByUuid, {}).then(res => {
-      //     console.log(res);
-      //   })
-      // }
+      }
     },
     watch:{
       '$route.path': function(newVal){
@@ -208,7 +195,8 @@ export default {
       background: #fff;
       .el-submenu__title{
         svg{
-          color:#909399
+          color:#909399;
+          font-size: 18px;
         }
       }
       span.menu-titles{
@@ -272,7 +260,8 @@ export default {
       min-width: 188px;
       max-width: 244px;
       svg{
-        color:#909399
+        color:#909399;
+        font-size: 18px;
       }
     }
     .el-menu-item-smoke:hover{
