@@ -410,7 +410,14 @@ export default {
             })
         },
         handleClose(done) {
-            done();
+            if(this.drawer3) {
+                this.json = null;
+                this.treeData = [];
+                this.tableData = [];
+                done();
+            }else{
+                done();
+            }
         },
         headTeacherListClick( scope ) {
             console.log(scope);

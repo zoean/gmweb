@@ -131,14 +131,14 @@ export default {
             },
             list: [],
             columnList: [
-                { 'prop': 'tel', 'label': '电话数据' },
+                { 'prop': 'tel', 'label': '手机号码' },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目' },
                 // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
-                { 'prop': 'lastCallTime', 'label': '最后联系时间' },
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间' },
             ],
             ruleForm: {
                 age: '',

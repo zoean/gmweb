@@ -738,7 +738,7 @@ export default {
                 },
                 notCustomerForm: {      //不可修改的线索内容
                     belongingSeat: "",  //所属坐席
-                    callLastTime: "",  //最后联系时间
+                    callLastTime: "",  //最近一次联系时间
                     createTime: "",  //创建时间
                     number: "",  //线索编号
                     tel: ""  //手机号码

@@ -221,7 +221,7 @@ export default {
             ruleNumberNameList: [], //分配组数组
             list: [],
             columnList: [
-                { 'label': '坐席数据' }
+                { 'label': '' }
             ],
             dataPicker: [],
             

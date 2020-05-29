@@ -30,13 +30,13 @@ export const columnListYes = [
 ]
 
 export const columnListNo = [
-    { 'prop': 'orgName', 'label': '电话数据' },
+    { 'prop': 'orgName', 'label': '手机号码' },
     { 'prop': 'day', 'label': '地区归属' },
     { 'prop': 'totalPassTime', 'label': '姓名' },
     { 'prop': 'totalPassTime', 'label': '性别' },
     { 'prop': 'totalPassTime', 'label': '级别' },
     { 'prop': 'totalPassTime', 'label': '拨通 / 拨打' },
-    { 'prop': 'totalPassTime', 'label': '最后联系时间' },
+    { 'prop': 'totalPassTime', 'label': '最近一次联系时间' },
     { 'prop': 'totalPassTime', 'label': '最近备注' },
 ]
 
