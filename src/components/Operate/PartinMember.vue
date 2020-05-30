@@ -1,96 +1,55 @@
 <template>
-    <el-container class="index-main">
-      <el-main>
-        <div class="people-title">活动参与成员</div>
-        <el-row>
-          <el-col :span="2">
-            <el-select style="width:80%" v-model="peopletype" placeholder='用户' class="screen-li">
-              <el-option
-                v-for="item in peopleoTypeOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="4">
-            <el-input v-model="searchInput" placeholder="昵称, 用户ID" style="width:90%"></el-input>
-          </el-col>
-          <el-col :span="2">
-            <el-select v-model="channeltype" placeholder='全部渠道' style="width:80%">
-              <el-option
-                v-for="item in peopleoFromOption"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="2">
-            <el-button type="primary" style="width:80%">搜索</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="tableData" border>
-          >
-          <el-table-column
-            :prop="item.prop"
-            :label="item.label"
-            v-for="(item, index) in columnList"
-            :width="item.width"
-            :key="index"
-          ></el-table-column>
-          <el-table-column label="操作" prop>
-            <template slot-scope="scope">
-              <el-button @click="sub(scope.row)" type="text">下级</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-main>
-    </el-container>
+  <el-container class="index-main">
+    <el-main>
+      <div class="people-title">活动参与成员</div>
+      <el-row>
+        <el-col :span="4">
+          <el-input
+            class="screen-li"
+            v-model="searchInput"
+            placeholder="昵称, 用户ID"
+            style="width:90%"
+          ></el-input>
+        </el-col>
+        <el-col :span="2">
+          <el-button @click="searchbtn" type="primary" style="width:80%">搜索</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="tableData" border>
+        >
+        <el-table-column prop="openId" label="用户ID"></el-table-column>
+        <el-table-column prop="headimgUrl" label="头像">
+          <template slot-scope="scope">
+            <img style="width:50px;height:50px" :src="scope.row.headimgUrl" />
+          </template>
+        </el-table-column>
+        <el-table-column
+          :prop="item.prop"
+          :label="item.label"
+          v-for="(item, index) in columnList"
+          :width="item.width"
+          :key="index"
+        ></el-table-column>
+      </el-table>
+      <el-pagination
+        :total="total"
+        background
+        :page-size="pageSize"
+        layout="total,prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+      ></el-pagination>
+    </el-main>
+  </el-container>
 </template>
 <script>
+import { wechatActivityUserList } from "@/request/operateApi.js";
 export default {
-  name:'partinMember',
+  name: "partinMember",
   data() {
     return {
       searchInput: "",
-      peopletype: "", //人群类型
-      channeltype: "",
-      peopleoTypeOption: [
-        {
-          value: "选项1",
-          label: "用户"
-        },
-        {
-          value: "选项2",
-          label: "推荐人"
-        }
-      ],
-      peopleoFromOption: [
-        {
-          value: "选项1",
-          label: "全部渠道"
-        },
-        {
-          value: "选项2",
-          label: "渠道一"
-        },
-        {
-          value: "选项3",
-          label: "渠道二"
-        }
-      ],
       columnList: [
-        {
-          label: "用户ID",
-          prop: "userId",
-          width: 125
-        },
-        {
-          label: "头像",
-          prop: "headPortrait",
-          width: 125
-        },
         {
           label: "昵称",
           prop: "nickName",
@@ -98,52 +57,68 @@ export default {
         },
         {
           label: "推荐人",
-          prop: "Recommended",
-          width: 125
-        },
-        {
-          label: "渠道",
-          prop: "Channel",
+          prop: "recNickName",
           width: 125
         },
         {
           label: "关注时间",
-          prop: "followTime"
+          prop: "subscribeTime"
         },
         {
           label: "关注状态",
-          prop: "followState",
+          prop: "subscribe",
           width: 125
         },
         {
           label: "推荐关注数",
-          prop: "followPeople",
+          prop: "recNum",
           width: 125
         },
         {
           label: "净增关注数",
-          prop: "growthFollow",
+          prop: "incNum",
           width: 125
         }
       ],
-      tableData: [
-        {
-          userId: "yh0001",
-          headPortrait: "11",
-          nickName: "海绵宝宝",
-          Recommended: "jhwx",
-          Channel: "渠道一",
-          followTime: "2020-05-01 18：00：30",
-          followState: "已关注",
-          followPeople: 1000,
-          growthFollow: 900
-        }
-      ]
+      tableData: [],
+      total: 0, //总数
+      pageSize: 10, //一页显示几条
+      currentPage: 1, //当前页数
     };
   },
+  created() {
+    this.getDatalist();
+  },
   methods: {
-    sub() {
-      //下级
+    getDatalist(nickName = "") {
+      this.$smoke_post(wechatActivityUserList, {
+        activityId: this.$route.query.activityId,
+        nickName,
+        pageSize: this.pageSize,
+        currentPage: this.currentPage
+      }).then(res => {
+
+        if (res.code === 200) {
+                  console.log(res);
+          this.total = res.data.total
+          //0-未关注，1-已关注，2-已取关
+          let arr = ["未关注", "已关注", "已取关"];
+          this.tableData = res.data.list.map(item => {
+            item.subscribe = arr[item.subscribe];
+            return item;
+          });
+        }
+      });
+    },
+    searchbtn() {
+      this.getDatalist(this.searchInput);
+    },
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+      this.getDatalist()
+    },
+    handleSizeChange(pageSiz) {
+      this.pageSiz = pageSiz;
     }
   }
 };
@@ -169,5 +144,9 @@ export default {
 }
 .index-main /deep/ .el-table .cell {
   text-align: center !important;
+}
+/deep/ .el-pagination {
+  float: right;
+  margin-top: 0.2rem;
 }
 </style>

@@ -4,7 +4,7 @@
     </div>
     <div ref="editor" class="text">
     </div>
-     <el-button @click="submit">提交</el-button>
+     <!-- <el-button @click="submit">提交</el-button> -->
   </div>
 </template>
 
@@ -50,13 +50,12 @@
     },
     mounted() {
       this.seteditor()
-      console.log(this.editor)
       this.editor.txt.html(this.value)
     },
     methods: {
-      submit(){
-          console.log(this.info_)
-      },
+      // submit(){
+      //     console.log(this.info_)
+      // },
       seteditor() {
         this.editor = new E(this.$refs.toolbar, this.$refs.editor)
         this.editor.customConfig.showLinkImg = false
@@ -114,14 +113,13 @@
           },
           customInsert: (insertImg, result, editor) => {
             // 图片上传成功，插入图片的回调
-            //result为上传图片成功的时候返回的数据，这里我打印了一下发现后台返回的是data：[{url:"路径的形式"},...]
             // console.log(result.data[0].url)
             //insertImg()为插入图片的函数
              //循环插入图片
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
-              console.log(result)
-              let url = "http://testfile.jhwx.com/default/img/20200520/68daa5e155ee41629780149943fe3bf0.png" + result.fileUrl
+              console.log()
+              let url = "http://testfile.jhwx.com/" + result.data.fileUrl
               insertImg(url)
             // } 
           }

@@ -24,7 +24,7 @@
           </el-select>
         </el-col>
         <el-col :span="6">
-          <el-input v-model="activitySearch" placeholder="活动名称" style="width:90%"></el-input>
+          <el-input v-model.trim="activitySearch" placeholder="活动名称" style="width:90%"></el-input>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" style="width: 50%;" @click="searchactivity">搜索</el-button>
@@ -56,108 +56,139 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" >
+      <el-pagination
+      :total="total"
+      background
+      :page-size="pageSize"
+      layout="total,prev, pager, next, jumper"
+      :hide-on-single-page="totalFlag"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
+      ></el-pagination>
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
         <span>您确定要删除吗</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="readlyTrue">确 定</el-button>
         </span>
       </el-dialog>
     </el-main>
   </el-container>
 </template>
 <script>
+import { wechatActivity, wechatActivityDelete } from "@/request/operateApi.js";
 export default {
   name: "activityA",
   data() {
     return {
       activityState: [
         {
-          value: "选项1",
+          value: 1,
           label: "未开始"
         },
         {
-          value: "选项2",
+          value: 2,
           label: "进行中"
         },
         {
-          value: "选项3",
+          value: 3,
           label: "派奖中"
         },
         {
-          value: "选项4",
+          value: 4,
           label: "已结束"
         }
       ],
-      options: [],
+      options: [
+        {
+          label: "测试号",
+          value: "wx5684c1cd32a4fe6a"
+        }
+      ],
       columnList: [
         {
           label: "活动ID",
-          prop: "activityid",
+          prop: "activityId",
           width: 100
         },
         {
           label: "应用公众号",
-          prop: "application",
+          prop: "wxName",
           width: 100
         },
         {
           label: "活动名称",
-          prop: "activityname"
+          prop: "activityName"
         },
         {
           label: "关键词",
-          prop: "antistop",
+          prop: "triggerWord",
           width: 100
         },
         {
           label: "活动时间段",
-          prop: "activitytime"
+          prop: "activityTime"
         },
         {
           label: "参与人数",
-          prop: "people",
+          prop: "userCount",
           width: 100
         },
         {
           label: "取关人数",
-          prop: "unfollow",
+          prop: "unSubCount",
           width: 100
         },
         {
           label: "净增人数",
-          prop: "additions",
+          prop: "subCount",
           width: 100
         },
         {
           label: "活动状态",
-          prop: "activitystate",
+          prop: "activityStatus",
           width: 100
         }
       ],
-      tableData: [
-        {
-          activityid: "111",
-          application: "京华网校",
-          activityname: "五一活动大促销",
-          antistop: "1",
-          activitytime: "2020-05-01--2020-05-01",
-          people: 1000,
-          unfollow: 10,
-          additions: 900,
-          activitystate: "开启"
-        }
-      ],
-      activitySearch: "",
+      tableData: [],
+      activitySearch: "", //活动名称
       applicationValue: "", //select 公众号
-      stateValue: "" ,//select 状态
-      dialogVisible:false
+      stateValue: "", //select 状态1-未开始，2-进行中，3-派奖中，4-已结束
+      dialogVisible: false,
+      currentDelactivityId: "",
+      total:0,//总数
+      pageSize:10,//一页显示几条
+      currentPage:1,//当前页数
+      totalFlag: false, //当只有一页时隐藏分页
     };
   },
-  created() {},
+  created() {
+    this.getListData()
+  },
   methods: {
+    getListData() {
+      this.$smoke_get(wechatActivity,{pageSize:this.pageSize,currentPage:this.currentPage}).then(res => {
+        //获取活动列表
+        if (res.code === 200) {
+          this.tableData = this.settabelList(res.data.list);
+          this.total = res.data.total
+          console.log(res.data.total)
+        }
+      });
+    },
     searchactivity() {
       //搜索活动
+      this.$smoke_get(wechatActivity, {
+        processStatus: this.stateValue,
+        appId: this.applicationValue,
+        activityName: this.activitySearch
+      }).then(res => {
+        if (res.code === 200) {
+          if (res.data.list.length) {
+            this.tableData = this.settabelList(res.data.list);
+          }
+        }
+      });
     },
     createactivity() {
       //创建活动
@@ -165,37 +196,69 @@ export default {
     },
     edit(row) {
       //修改
-      console.log(row);
       this.$router.push({
         path: "/operate/activityA/ActivityDetail",
-        query: { id: row.activityid }
+        query: { activityId: row.activityId }
       });
     },
     partinuser(row) {
       //参与用户
       this.$router.push({
         path: "/operate/activityA/partinMember",
-        query: { id: row.activityid }
+        query: { activityId: row.activityId }
       });
     },
     prize(row) {
       //奖品
       this.$router.push({
         path: "/operate/activityA/winninglist",
-        query: { id: row.activityid }
+        query: { activityId: row.activityId }
       });
     },
     prizemanage(row) {
       //中奖管理
       this.$router.push({
         path: "/operate/activityA/pricelist",
-        query: { id: row.activityid }
+        query: { activityId: row.activityId }
       });
     },
-    delate() {
-      this.dialogVisible=true
+    delate(row) {
+      this.dialogVisible = true;
+      this.currentDelactivityId = row.activityId;
       //删除
-    }
+    },
+    settabelList(arr) {
+      //处理表格
+      return arr.map(item => {
+        if (item.activityStatus == 0) {
+          item.activityStatus = "关闭";
+        } else if (item.activityStatus == 1) {
+          item.activityStatus = "开启";
+        }
+        item.activityTime = item.activityStartTime + "-" + item.activityEndTime;
+        return item;
+      });
+    },
+    readlyTrue() {
+      //是否要删除
+      this.$smoke_get(wechatActivityDelete, {
+        activityId: this.currentDelactivityId
+      }).then(res => {
+        if(res.code === 200){
+            this.dialogVisible = false;
+            this.getListData()
+        }
+
+      });
+    },
+    handleCurrentChange(currentPage){
+        this.currentPage = currentPage
+        this.getListData()
+    },
+    handleSizeChange(pageSiz){
+      this.pageSiz = pageSiz
+
+    },
   },
   mounted() {}
 };
@@ -221,5 +284,9 @@ export default {
 }
 .index-main /deep/ .el-table .cell {
   text-align: center !important;
+}
+/deep/ .el-pagination{
+  float:right;
+  margin-top: .2rem;
 }
 </style>
