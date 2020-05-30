@@ -30,6 +30,30 @@
             </span>
         </el-dialog>
 
+        <el-dialog
+            title="设置工作手机"
+            :visible.sync="phoneDialogVisible"
+            :modal-append-to-body='false'
+            width="40%"
+            :show-close="phoneDialogVisible"
+            :before-close="handleCloseDrawer"
+            class="reset-phone"
+            center>
+            <el-form :model="form_phone" :rules="rules" ref="form_phone">
+                <el-form-item label="姓名" :label-width="formLabelWidth">
+                    <el-input :value="$store.state.name" style="width: 80%;" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
+                    <el-input :value="form_phone.phone" style="width: 80%;" @input="input_change($event)"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="dialoghold_phone('form_phone')">保 存</el-button>
+              <el-button @click="dialog_cancel_phone">取 消</el-button>
+            </span>
+        </el-dialog>
+
         <el-row>
             <el-col :span="20" style="height: 60px !important;">
                 <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
@@ -93,6 +117,7 @@
                     <el-dropdown-menu slot="dropdown">
                       <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
                       <el-dropdown-item @click.native="change_password">修改密码</el-dropdown-item>
+                      <el-dropdown-item @click.native="change_phone">修改工作手机</el-dropdown-item>
                       <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -111,7 +136,9 @@ import {
     readUuid,
     getStationNews,
     getClueDataNumber,
-    noReadNum
+    noReadNum,
+    getProfile,
+    upProfile
 } from '../../request/api';
 import { getTextByJs, timestampToTime, menuNumberFunc } from '../../assets/js/common';
 import { pass_word, websockHttp } from '../../assets/js/data';
@@ -124,6 +151,14 @@ export default {
             form: {
                 password1: '',
                 password2: '',
+            },
+            form_phone: {
+                phone: '',
+            },
+            rules: {
+                phone: [
+                  { pattern:/^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/, message: "请输入合法手机号", trigger: "blur" }
+                ],
             },
             formLabelWidth: '120px',
             defaultActive: '',
@@ -149,7 +184,8 @@ export default {
             back_Change: false,
             unReadList: [],
             fullReadList: [],
-            maxLength: 16
+            maxLength: 16,
+            phoneDialogVisible: false,
         }
     },
     created() {
@@ -157,6 +193,10 @@ export default {
         this.noReadNum();
     },
     methods: {
+        input_change(e) {
+            this.form_phone.phone = e;
+            this.$forceUpdate();
+        },
         tabClickHandle(tab){
             this.getStationNews(tab.index)
         },
@@ -255,6 +295,10 @@ export default {
         change_password(){
             this.centerDialogVisible = true;
         },
+        change_phone() {
+            this.phoneDialogVisible = true;
+            this.getProfile();
+        },
         userInfo() {
             alert('暂未开发');
             // this.$router.push({path: '/base/people/default'});
@@ -271,6 +315,9 @@ export default {
         },
         dialog_cancel() {
             this.centerDialogVisible = false;
+        },
+        dialog_cancel_phone() {
+            this.phoneDialogVisible = false;
         },
         // 保存密码接口
         dialoghold() {
@@ -297,6 +344,42 @@ export default {
                     });
                 });
             }
+        },
+        dialoghold_phone(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                console.log(this.form_phone);
+                this.upProfile();
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
+        },
+        getProfile() {
+            this.$smoke_get(getProfile, {}).then(res => {
+                if(res.code == 200) {
+                    this.form_phone.phone = res.data.workTel;
+                }
+            })
+        },
+        upProfile() {
+            this.$smoke_post(upProfile, {
+                workTel: this.form_phone.phone
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功'
+                    });
+                    this.phoneDialogVisible = false;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    });
+                }
+            })
         },
         getClueDataNumber() {
             let arr = [];
@@ -502,6 +585,13 @@ export default {
         position: fixed;
         z-index: 999;
         .reset-password{
+            /deep/ .el-dialog{
+               .el-dialog__body{
+                    padding: 0 !important;
+                }
+            }
+        }
+        .reset-phone{
             /deep/ .el-dialog{
                .el-dialog__body{
                     padding: 0 !important;

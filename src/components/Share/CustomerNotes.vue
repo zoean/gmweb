@@ -617,7 +617,7 @@ export default {
             direction: 'btt',
             tabs_active: 'first',
             ruleForm: {
-                callLogUuid: this.callLogUuid, //拨打记录唯一标识
+                callLogUuid: this.callLogUuid, //通话记录唯一标识
                 clueDataSUuid: this.clueDataSUuid, //线索数据的唯一标识
 
                 age: '',

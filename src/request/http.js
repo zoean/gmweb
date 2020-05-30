@@ -3,7 +3,7 @@ import {
   Message
 } from 'element-ui'
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "https://gm.jhwx.com" : "/smoke_api";
+axios.defaults.baseURL = process.env.NODE_ENV === "production" ? "https://testgm.jhwx.com" : "/smoke_api";
 
 //http request 拦截器
 axios.interceptors.request.use(

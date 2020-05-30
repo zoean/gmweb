@@ -36,8 +36,10 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="50">
+            <el-table-column prop="active" label="操作" fixed="right" width="100">
               <template slot-scope="scope">
+                <svg-icon @click="phoneOutTea(scope.row)" icon-title="手机外拨" icon-class="takephone" />
+                <svg-icon @click="seatOutTea(scope.row)" icon-title="座机外拨" icon-class="landline" />
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
               </template>
             </el-table-column>
@@ -389,12 +391,60 @@
                         :page-size='notesForm.pageSize'
                         :page-sizes="[10, 20, 30]"
                         :hide-on-single-page="totalFlag"
+                        @current-change="handleCurrentChangeFollow"
+                        @size-change="handleSizeChangeFollow"
+                        v-if="pageshow"
+                    >
+                    </el-pagination>
+                </el-tab-pane>
+
+                <el-tab-pane label="通话记录" name="four">
+
+                    <el-table
+                        :data="notesCallList"
+                        style="margin: 0 auto; margin-bottom: 30px;"
+                        >
+                        <el-table-column
+                          :prop="item.prop"
+                          :label="item.label"
+                          v-for="(item, index) in notesColumnListCall"
+                          :key="index"
+                          >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="recordUrl" label="录音播放"
+                            :width="columnWidth"
+                            v-if="columnFlag"
+                        >
+                            <template slot-scope="scope">
+                                <el-button v-if="scope.row.recordUrl" type="text" >
+                                    <audio 
+                                        :src="scope.row.recordUrl"
+                                        controls="controls"
+                                        style="height: 30px;"
+                                    ></audio>
+                                </el-button>
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+
+                    <el-pagination
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total='notesCallForm.total'
+                        :page-size='notesCallForm.pageSize'
+                        :page-sizes="[10, 20, 30]"
+                        :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
                         v-if="pageshow"
                     >
                     </el-pagination>
+
                 </el-tab-pane>
+
             </el-tabs>
         </el-drawer>
 
@@ -413,7 +463,10 @@ import {
     enumByEnumNums,
     getSchoolList,
     copyTel,
-    getOrderList
+    getOrderList,
+    phoneOutTea,
+    seatOutTea,
+    getClueCallLog
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery } from '../../assets/js/common';
@@ -511,6 +564,25 @@ export default {
                 { 'prop': 'followUp', 'label': '跟进类型' },
                 { 'prop': 'followUpContent', 'label': '跟进内容' },
             ],
+            notesCallList: [],
+            notesColumnListCall: [
+                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'seatName', 'label': '所属坐席' },
+                { 'prop': 'isCalledPhone', 'label': '是否接通' },
+                { 'prop': 'callStyle', 'label': '呼叫方式' },
+                { 'prop': 'duration', 'label': '通话时长(秒)' },
+                { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
+                { 'prop': 'recordUrl', 'label': '录音地址' },
+            ],
+            notesCallForm: {
+                clueDataSUuid: '',
+                currentPage: 1,
+                pageSize: 10,
+                userUuid: "",
+                total: null, //总条目数
+            },
+            columnWidth: 90,
+            columnFlag: false,
             totalFlag: false, //当只有一页时隐藏分页
             pageshow: true, //分页重新渲染
             schoolList: [],
@@ -537,7 +609,9 @@ export default {
                 prop: 'shippingId', label:"快递号", formatter: (row, column, cellValue) => {
                     return cellValue ? cellValue : '--'
                 }
-            }]
+            }],
+            initOptions: {},
+            callLogUuid: ''
         }
     },
     created() {
@@ -546,8 +620,76 @@ export default {
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getSchoolList();
+        const initOptions = localStorage.getItem('initOptions');
+        this.initOptions = JSON.parse(initOptions);
     },
     methods: { 
+        phoneOutTea( scope ) {
+            if(this.initOptions != undefined){
+                this.$smoke_post(phoneOutTea, {
+                    adminUin: this.initOptions.adminUin,
+                    uin: this.initOptions.uin,
+                    uuid: scope.uuid,
+                }).then(res => {
+                    if(res.code == 200){
+                        if(res.data.result){
+                            this.drawer = true;
+                            this.studentDetails(scope);
+                            this.callLogUuid = res.data.callLogUuid;
+                            this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '目前服务线路忙，请稍后重试'
+                            })
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请联系主管配置jq账号'
+                })
+            }
+        },
+        seatOutTea( scope ) {
+            if(this.initOptions != undefined){
+                this.$smoke_post(seatOutTea, {
+                    adminUin: this.initOptions.adminUin,
+                    uin: this.initOptions.uin,
+                    uuid: scope.uuid,
+                }).then(res => {
+                    if(res.code == 200){
+                        if(res.data.result){
+                            this.drawer = true;
+                            this.studentDetails(scope);
+                            this.callLogUuid = res.data.callLogUuid;
+                            this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '目前服务线路忙，请稍后重试'
+                            })
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请联系主管配置jq账号'
+                })
+            }
+        },
         geOrderRecord(){
             this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
                 if(res.data){
@@ -584,18 +726,55 @@ export default {
                 }
             })
         },
-        handleCurrentChangeCall(index) {
+        handleCurrentChangeFollow(index) {
             this.notesForm.currentPage = index;
             this.getClassTeaStuNotes();
         },
-        handleSizeChangeCall(index) {
+        handleSizeChangeFollow(index) {
             this.notesForm.pageSize = index;
             this.getClassTeaStuNotes();
+        }, 
+        getClueCallLog() {
+            this.$smoke_post(getClueCallLog, this.notesCallForm).then(res => {
+                this.columnFlag = false;
+                if(res.code == 200) {
+                    res.data.list.map(sll => {
+                        sll.createTime = timestampToTime(Number(sll.createTime));
+                        if(sll.isCalledPhone == null) {
+                            sll.isCalledPhone = '';
+                        }else if(sll.isCalledPhone == 1) {
+                            sll.isCalledPhone = '接通';
+                        }else{
+                            sll.isCalledPhone = '未接通';
+                        }
+                        if(sll.callStyle == 1) {
+                            sll.callStyle = '呼叫中心';
+                        }else if(sll.callStyle == 2) {
+                            sll.callStyle = '工作手机';
+                        }
+                        if(sll.recordUrl){
+                            this.columnWidth = 314;
+                            this.columnFlag = true;
+                        }
+                    })
+                    this.notesCallList = res.data.list;
+                    this.notesCallForm.total = res.data.total;
+                }
+            }) 
+        },
+        handleCurrentChangeCall(index) {
+            this.notesCallForm.currentPage = index;
+            this.getClueCallLog();
+        },
+        handleSizeChangeCall(index) {
+            this.notesCallForm.pageSize = index;
+            this.getClueCallLog();
         }, 
         studentDetails( row ) {
             this.drawer = true;
             this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
             this.copyClueDataSUuid = row.clueDataSUuid;
+            this.notesCallForm.clueDataSUuid = row.clueDataSUuid;
             this.tabs_active = 'first';
             this.customerForm.followUp = '';
             this.customerForm.followUpContent = '';
@@ -732,7 +911,8 @@ export default {
                     followUp: this.customerForm.followUp,
                     followUpContent: this.customerForm.followUpContent
                 },
-                studentUuid: this.customerForm.studentUuid
+                studentUuid: this.customerForm.studentUuid,
+                callLogUuid: this.callLogUuid,
             }).then(res => {
                 if(res.code == 200) {
                     this.$message({
@@ -800,6 +980,14 @@ export default {
             }else if(tab.label == '跟进记录'){
                 this.getClassTeaStuNotes();
                 this.notesForm.currentPage = 1;
+                this.pageshow = false;//让分页隐藏
+                this.$nextTick(() => {//重新渲染分页
+                    this.pageshow = true;
+                });
+            }else if(tab.label == '通话记录'){
+                console.log(222);
+                this.getClueCallLog();
+                this.notesCallForm.currentPage = 1;
                 this.pageshow = false;//让分页隐藏
                 this.$nextTick(() => {//重新渲染分页
                     this.pageshow = true;

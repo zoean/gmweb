@@ -31,6 +31,8 @@ export const getMenuSubsetByUuid = '/api/menu/getMenuSubsetByUuid'; //查询菜�
 export const getMenuDetailsSubsetByUuid = '/api/menu/getMenuDetailsSubsetByUuid'; //查询菜单详情信息（包含子集）
 export const updateMenu = '/api/menu/updateMenu'; //修改菜单
 export const itemList = '/api/phone/pageFieldsMag/itemList'; //页面枚举列表
+export const getProfile = '/api/user/getProfile'; //获取个人资料
+export const upProfile = '/api/user/upProfile'; //获取个人资料
 
 // JQ接口
 export const phoneUserList = '/api/phone/phoneUserList'; //获取jq的员工信息
@@ -149,6 +151,8 @@ export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取
 export const getUinOutConfigMessage = '/api/phone/outbound/getUinOutConfigMessage'; //获取坐席外呼配置信息
 export const phoneOut = '/api/phone/outbound/phoneOut'; //手机外呼
 export const seatOut = '/api/phone/outbound/seatOut'; //坐席外呼
+export const phoneOutTea = '/api/phone/outbound/phoneOutTea'; //手机外呼（班主任）
+export const seatOutTea = '/api/phone/outbound/seatOutTea'; //坐席外呼（班主任）
 
 //Excel导入和导出
 export const outExcelKnow = '/api/knowledgeSystem/knowExcel/outExcelKnow'; //知识点目录导出
@@ -193,7 +197,7 @@ export const updateField = '/api/phone/pageFieldsMag/updatePageField';//更新�
 export const getField = '/api/phone/pageFieldsMag/pageFieldList';//字段列表
 export const getFieldDetail = '/api/phone/pageFieldsMag/pageFieldDetails'//获取字段详情;
 
-//拨打记录
+//通话记录
 export const getClueCallLog = '/api/phone/callLog/getClueCallLog'; //获取线索数据的通话记录
 
 //班主任管理
