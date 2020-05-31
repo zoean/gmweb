@@ -58,15 +58,7 @@
       </el-form-item>      
       <el-form-item label="表头字段宽度" prop="width">
         <el-input v-model="addEditFieldForm.width" size="small" placeholder="请输入表头字段宽度"></el-input>
-      </el-form-item>        
-      <el-form-item label="是否默认" prop="ifDef">
-        <el-switch
-          v-model="addEditFieldForm.ifDef"
-          active-color="#13ce66"
-          size="small"
-          inactive-color="#ff4949">
-        </el-switch>
-      </el-form-item>               
+      </el-form-item>  
       <el-form-item label="是否开启" prop="ifOpen">
         <el-switch
           v-model="addEditFieldForm.ifOpen"
@@ -74,7 +66,23 @@
           size="small"
           inactive-color="#ff4949">
         </el-switch>
-      </el-form-item>        
+      </el-form-item>          
+      <el-form-item label="是否固定" prop="ifFixed">
+        <el-switch
+          v-model="addEditFieldForm.ifFixed"
+          active-color="#13ce66"
+          size="small"
+          inactive-color="#ff4949">
+        </el-switch>
+      </el-form-item>   
+      <el-form-item label="是否默认" prop="ifDef">
+        <el-switch
+          v-model="addEditFieldForm.ifDef"
+          active-color="#13ce66"
+          size="small"
+          inactive-color="#ff4949">
+        </el-switch>
+      </el-form-item>
       <el-form-item label="是否排序" prop="ifSort">
         <el-switch
           v-model="addEditFieldForm.ifSort"
@@ -156,6 +164,7 @@ export default {
         ifOpen: false,
         ifDef: false,
         ifSort: false,
+        ifFixed: false,
         pageUuid: '',
         width: 80
       },
@@ -194,10 +203,13 @@ export default {
           'prop':'props', 'label': '字段props'
         },
         {
-          'prop':'ifDef', 'label': '是否默认', formatter: this.statusFormatter
+          'prop':'ifOpen', 'label': '是否开启', formatter: this.statusFormatter
         },
         {
-          'prop':'ifOpen', 'label': '是否开启', formatter: this.statusFormatter
+          'prop': 'ifFixed', 'label': '是否固定', formatter: this.statusFormatter
+        },
+        {
+          'prop':'ifDef', 'label': '是否默认', formatter: this.statusFormatter
         },
         {
           'prop':'ifSort', 'label': '是否排序', formatter: this.statusFormatter

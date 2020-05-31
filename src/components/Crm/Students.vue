@@ -1,8 +1,5 @@
 <template>
     <el-main class="index-main">
-
-        <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
-
         <el-row type="flex" justify="end">
             <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
         </el-row>
@@ -15,7 +12,6 @@
             v-loading="fullscreenLoading"
             style="width: calc( 100vw - 3.8rem)"
             :row-key="getRowKey">
-
             <el-table-column
               :prop="item.props"
               v-for="(item, index) in columnList"
@@ -30,7 +26,7 @@
                 </span>
               </template>
               <template slot-scope="scope">
-                    <span>{{scope.row[item.props]}}</span>
+                    <span>{{scope.row[item.props] || '--'}}</span>
                     <!-- <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /> -->
                     
               </template>
@@ -329,9 +325,6 @@
 
                                 </el-form-item>
 
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="延长服务期" placeholder="请选择时长"></el-form-item>
                             </el-col>
                         </el-row>
 

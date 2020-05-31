@@ -41,7 +41,6 @@
             :modal-append-to-body='false'
             width="40%"
             :show-close="phoneDialogVisible"
-            :before-close="handleCloseDrawer"
             class="reset-phone"
             center>
             <el-form :model="form_phone" :rules="rules" ref="form_phone">
@@ -104,7 +103,7 @@
                         </el-tab-pane>
                         <el-tab-pane label="已读" name="second">
                             <dl v-for="(item, index) in fullReadList" :key="index">
-                                <dt title="点击查看消息内容" @click="item.fold = !item.fold"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
+                                <dt title="点击查看消息内容" @click="item.fold = !item.fold">{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
                             </dl>
                             <dl v-if="!fullReadList.length"><dt class="no-data">暂无已读消息</dt></dl>
@@ -173,8 +172,6 @@ export default {
             formLabelWidth: '120px',
             defaultActive: '',
             oneLogin: null,
-            drawer: false,
-            drawerTitle: '消息列表',
             direction: 'rtl',
             notReadNumValue: 0,
             newsForm: {
@@ -272,19 +269,17 @@ export default {
                         type: 'success',
                         message: '查看成功'
                     })
-                    this.drawer = false;
-                    if(row.type == 1) {
+                    if(row.type == '【首咨】') {
                         this.$router.push({
                             path: '/crm/myClient/firstTime'
                         })
-                    }else{
+                    }else if(row.type == '【新学员】'){
                         this.$router.push({
                             path: '/crm/myStudents/newStudents'
                         })
                     }
-
                     this.noReadNum();
-
+                    // this.getStationNews(this.newsForm.readState)
                 }
             })
         },
@@ -326,9 +321,6 @@ export default {
         },
         badgeClick() {
             this.getStationNews(0);
-        },
-        handleCloseDrawer(done) {
-            done();
         },
         handleSelect(item) {
             if(item == '/base'){
@@ -620,7 +612,7 @@ export default {
                         height: 5px;
                         background: #409EFF;
                         border-radius: 50%;
-                        margin:12px 10px 0 0;
+                        margin:12px 0 0 0;
                     }
                 }
                 dt.no-data, dt.more-data{
@@ -661,11 +653,6 @@ export default {
                .el-dialog__body{
                     padding: 0 !important;
                 }
-            }
-        }
-        /deep/.el-drawer{
-            .el-drawer__header{
-                line-height: 22px;
             }
         }
         /deep/ .el-table{

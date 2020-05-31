@@ -19,7 +19,7 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
-              :width="item.label == '最近一次联系时间' ? '110px ': item.label == '手机号码' ? '130px': item.label == '拨通 / 拨打' ? '100px' : ''"
+              :width="item.width"
               v-for="(item, index) in columnList"
               :key="index"
               >
@@ -98,11 +98,11 @@ export default {
             totalFlag: false,
             list: [],
             columnList: [
-                { 'prop': 'phone', 'label': '手机号码' },
+                { 'prop': 'phone', 'label': '手机号码', width: 150 },
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间' },
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', width: 230 },
                 // { 'prop': 'dataType', 'label': '下次联系时间' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
                 { 'prop': 'school', 'label': '注册平台' },
