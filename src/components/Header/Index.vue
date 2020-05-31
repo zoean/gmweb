@@ -93,15 +93,14 @@
                                 <dt title="点击查看消息内容" @click="handleLookClick(item)"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
                             </dl>
-                            <dl v-if="!unReadList.length"><dt class="no-data">暂无未读消息</dt></dl>
-                            <dl v-if="newsForm.pageCount > newsForm.currentPage"><dt class="more-data" @click="getMoreMsg(0)">点击查看更多</dt></dl>
+                            <dl v-if="!unReadList.length" class="no-data"><dt class="no-data">暂无未读消息</dt></dl>
                         </el-tab-pane>
                         <el-tab-pane label="已读" name="second">
                             <dl v-for="(item, index) in fullReadList" :key="index">
                                 <dt title="点击查看消息内容" @click="item.fold = !item.fold">{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
                             </dl>
-                            <dl v-if="!fullReadList.length"><dt class="no-data">暂无已读消息</dt></dl>
+                            <dl v-if="!fullReadList.length" class="no-data"><dt class="no-data">暂无已读消息</dt></dl>
                         </el-tab-pane>
                     </el-tabs>
                     <el-badge slot="reference" :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
@@ -463,10 +462,6 @@ export default {
                 return 'readState';
             }
             return '';
-        },
-        getMoreMsg(readState){
-            this.newsForm.readState = readState
-            this.getStationNews(0)
         }
     },
     watch:{
@@ -550,19 +545,19 @@ export default {
                         margin:12px 0 0 0;
                     }
                 }
-                dt.no-data, dt.more-data{
-                    justify-content: center;
-                    display: block;
-                    text-align: center;
-                }
-                dt.more-data{
-                    color: #409EFF;
-                }
                 dd{
                     color:#999;
                     padding-left: 15px;
                 }
             }
+            dl.no-data{
+                border: none;
+            }
+            dl.no-data dt{
+                    justify-content: center;
+                    display: block;
+                    text-align: center;
+                }
         }
     }
 }
