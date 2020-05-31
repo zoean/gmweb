@@ -1,5 +1,6 @@
 <template>
     <el-main class="index-main">
+        <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
         <el-row type="flex" justify="end">
             <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
         </el-row>
