@@ -146,12 +146,12 @@ export default {
         handleCurrentChange(index) {
             console.log(index);
             this.form.currentPage = index;
-            this.getClueDataAll();
+            this.firstConDataList();
         },
         handleSizeChange(index) {
             console.log(index);
             this.form.pageSize = index;
-            this.getClueDataAll();
+            this.firstConDataList();
         },
         //客户信息
         customerInfo(row) {

@@ -145,11 +145,11 @@ export default {
     methods: {
         handleCurrentChange(index) {
             this.form.currentPage = index;
-            this.getClueDataAll();
+            this.todayCallDataList();
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
-            this.getClueDataAll();
+            this.todayCallDataList();
         },
         //客户信息
         customerInfo(row) {

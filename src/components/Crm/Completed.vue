@@ -58,16 +58,11 @@
             </el-tab-pane>
             <el-tab-pane label="订单">
                 <el-row type="flex" :gutter="20">
+                    
                     <el-col :span="4">
-                        <el-input placeholder="请输入手机号" size="small" v-model="orderForm.tel"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-input placeholder="请输入客户姓名" size="small" v-model="orderForm.name"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-select v-model="orderForm.commodityClassId" size="small" placeholder="请选择商品班型" clearable>
+                        <el-select v-model="orderForm.classType" size="small" placeholder="请选择商品班型" clearable>
                             <el-option
-                            v-for="item in commodityClassOptions"
+                            v-for="item in classTypeList"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
@@ -75,7 +70,7 @@
                         </el-select>
                     </el-col>
                     <el-col :span="4">
-                        <el-select v-model="orderForm.purchaseStatus" size="small" placeholder="请选择购买状态" clearable>
+                        <el-select v-model="orderForm.orderType" size="small" placeholder="请选择购买状态" clearable>
                             <el-option
                             v-for="(item, index) in purchaseOptions"
                             :key="index"
@@ -84,9 +79,7 @@
                             </el-option>
                         </el-select>
                     </el-col>
-                    
-                </el-row>
-                <el-row type="flex" :gutter="20" style="margin-top: 16px;">
+
                     <el-col :span="8">
                         <el-date-picker
                             style="width: 100%;"
@@ -102,10 +95,13 @@
                             value-format="timestamp">
                         </el-date-picker>
                     </el-col>
+
                     <el-col :span="4">
-                        <el-button type="primary" size="small" @click="getUserOrderList">搜索</el-button>
+                        <el-button type="primary" size="small" @click="getOrderList4Teacher">搜索</el-button>
                     </el-col>
+                    
                 </el-row>
+                
                 <el-table
                 :data="userOrderList"
                 style="width: 100%; margin-top: 16px;">
@@ -128,18 +124,7 @@
                     </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination
-                    background
-                    @size-change="handleOrderSizeChange"
-                    @current-change="handleOrderCurrentChange"
-                    :current-page="orderForm.currentPage"
-                    :page-sizes="[10, 20, 30]"
-                    :page-size="orderForm.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    style="text-align: right; margin-top: 20px;"
-                    :total="userOrderTotal"
-                    >
-                </el-pagination>
+                
             </el-tab-pane>
         </el-tabs>
 
@@ -173,9 +158,9 @@ import {
     seatOut,
     clueDataRelease,  
     copyTel,
-    userOrderDataList,
-    getGoodsList,
-    getOrderPayRecord
+    getOrderList4Teacher,
+    getOrderPayRecord,
+    getOrderCustomer
 } from '../../request/api';
 import Start from '../../components/Share/Start';
 import { timestampToTime, copyData } from '../../assets/js/common';
@@ -215,46 +200,40 @@ export default {
             examItem: '',
             fullscreenLoading: false,
             orderForm: {
-                pageSize: 10,
-                currentPage: 1,
-                tel: '',
-                name: '',
-                commodityClassId: '',
-                purchaseStatus: '',
+                userIds: [],
+                orderType: '',
+                classType: '',
                 startTime: '',
                 endTime: ''
             },
-            commodityClassOptions: [],
+            classTypeList: [
+                { name: '普通班', number: 0},
+                { name: '高端班', number: 1},
+            ],
             purchaseOptions: ['已交全款', '已交定金', '已交尾款'],
             userOrderList: [],
             userOrderTotal: null,
             userOrderColumn: [{
-                label: '下单时间',
-                prop: 'orderTime',
-                width: 180
+                label: '商品名称',
+                prop: 'goodsName',
+                width: 300
             },{
                 label: '姓名',
-                prop: 'name'
+                prop: 'userName'
             },{
                 label: '手机号码',
-                prop: 'tel',
+                prop: 'phone',
                 width: 130
             },{
-                label: '订单归属',
-                prop: 'orderUserName'
-            },{
                 label: '下单平台',
-                prop: 'school'
-            },{
-                label: '商品班型',
-                prop: 'commodityClass',
-                width: 180
+                prop: 'schoolName'
             },{
                 label: '累付金额',
-                prop: 'sumMoney'
+                prop: 'moneyPaidTotal'
             },{
-                label: '购买状态',
-                prop: 'purchaseStatus'
+                label: '下单时间',
+                prop: 'addTime',
+                width: 180
             },
             ],
             payDetailVisible: false,
@@ -277,7 +256,7 @@ export default {
                     }
                 },
                 {
-                    label: '订单号', prop: 'orderNo', width: 120
+                    label: '订单号', prop: 'orderNo', width: 150
                 }
             ]
         }
@@ -292,63 +271,61 @@ export default {
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         this.jqStart = browserfly.noConflict();
+        this.getOrderCustomer();
     },
     methods: {
+        getOrderCustomer() {
+            this.$smoke_get(getOrderCustomer, {}).then(res => {
+                if(res.code == 200) {
+                    this.orderForm.userIds = res.data;
+                }
+            })
+        },
         parsePurchase(row){
-            return this.purchaseOptions[row.purchaseStatus]
+            return this.purchaseOptions[row.orderType]
         },
         tabChange(tab){
-            if(tab.index){
-               this.getUserOrderList();
-                this.initCommodityClass() 
+            if(tab.index == '1'){
+               this.getOrderList4Teacher();
             }else{
                 this.orderCallDataList();
             }
-        },
-        initCommodityClass(){
-            this.$smoke_post(getGoodsList, {itemId: 15, schoolName: 'jhwx'}).then(res => {
-                if(res.code == 200){
-                    this.commodityClassOptions = res.data
-                }
-            })
         },
         changeTime(val){
             this.orderForm.startTime = val[0]
             this.orderForm.endTime = val[1]
         },
-        getUserOrderList(){
-            this.$smoke_post(userOrderDataList, this.orderForm).then(res => {
+        getOrderList4Teacher(){
+            this.$smoke_post(getOrderList4Teacher, this.orderForm).then(res => {
                 if(res.code == 200){
-                    res.data.list.map(sll => {
-                        sll.orderTime = timestampToTime(Number(sll.orderTime));
-                        sll.purchaseStatus = this.purchaseOptions[sll.purchaseStatus]
+                    res.data.orderList.map(sll => {
+                        sll.addTime = timestampToTime(Number(sll.addTime * 1000));
                     })
-                    this.userOrderList = res.data.list
-                    this.userOrderTotal = res.data.total
+                    this.userOrderList = res.data.orderList
                 }
             })
         },
         payDetail(row){
             this.payDetailVisible = true
-            this.$smoke_post(getOrderPayRecord, {orderId: row.orderId, schoolName: row.schoolId}).then(res =>{
+            this.$smoke_post(getOrderPayRecord, {orderId: row.orderId, schoolName: row.schoolName}).then(res =>{
                 if(res.code == 200){
                     this.orderDetail = res.data
                 }
             })
         },
-        handleOrderSizeChange(size){
-            this.orderForm.pageSize = size
-        },
-        handleOrderCurrentChange(page){
-            this.orderForm.currentPage = page
-        },
+        // handleOrderSizeChange(size){
+        //     this.orderForm.pageSize = size
+        // },
+        // handleOrderCurrentChange(page){
+        //     this.orderForm.currentPage = page
+        // },
         handleCurrentChange(index) {
             this.form.currentPage = index;
-            this.getClueDataAll();
+            this.orderCallDataList();
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
-            this.getClueDataAll();
+            this.orderCallDataList();
         },
         //客户信息
         customerInfo(row) {

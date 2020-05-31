@@ -31,7 +31,7 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
+                    <!-- <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /> -->
                     
               </template>
             </el-table-column>
@@ -1023,11 +1023,11 @@ export default {
         },
         handleCurrentChange(index) {
             this.form.currentPage = index;
-            this.getWaitStudentList();
+            this.getClassTeaStudent();
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
-            this.getWaitStudentList();
+            this.getClassTeaStudent();
         },
     },
     mounted() {
@@ -1046,7 +1046,7 @@ export default {
             text-align: center;
             font-size: 15px;
             background: #F2F3F7;
-            margin-bottom: .3rem;
+            margin-bottom: 10px;
             color: #666666;
         }
         .people-screen{

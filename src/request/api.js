@@ -33,6 +33,7 @@ export const updateMenu = '/api/menu/updateMenu'; //修改菜单
 export const itemList = '/api/phone/pageFieldsMag/itemList'; //页面枚举列表
 export const getProfile = '/api/user/getProfile'; //获取个人资料
 export const upProfile = '/api/user/upProfile'; //获取个人资料
+export const sendDingVerCode = '/api/user/sendDingVerCode'; //发送钉钉验证码
 
 // JQ接口
 export const phoneUserList = '/api/phone/phoneUserList'; //获取jq的员工信息
@@ -145,6 +146,7 @@ export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获�
 export const copyTel = '/api/phone/clueData/copyTel'; //复制手机号码    
 export const entryClueData = '/api/phone/clueData/entryClueData'; //手动录入线索数据    
 export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //批量导入线索数据    
+export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户    
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）
@@ -215,7 +217,8 @@ export const getClassTeaClass = '/api/phone/classTeacher/getClassTeaClass'; //�
 export const getWaitStudentList = '/api/phone/classTeacher/getWaitStudentList'; //获取待分配学员订单列表
 export const classTeaGetWaitStudent = '/api/phone/classTeacher/classTeaGetWaitStudent'; //班主任获取待分配的学员
 export const getClassTeaStudent = '/api/phone/classTeacher/getClassTeaStudent'; //班主任学员列表
-export const getOrderList = '/order-service/order/getOrderList'
+export const getOrderList = '/order-service/order/getOrderList' //获取用户订单列表
+export const getOrderList4Teacher = '/order-service/order/getOrderList4Teacher' //获取坐席订单列表
 
 //学员信息
 export const getStudentDetails = '/api/phone/student/getStudentDetails'; //获取学员详情

@@ -16,11 +16,16 @@
                 <el-form-item label="手机号" :label-width="formLabelWidth">
                     <el-input :value="$store.state.accountNumber" style="width: 80%;" disabled></el-input>
                 </el-form-item>
+                
               <el-form-item label="原密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password1" autocomplete="off" type="password" style="width: 80%;"></el-input>
               </el-form-item>
               <el-form-item label="新密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password2" autocomplete="off" type="password" style="width: 80%;"></el-input>
+              </el-form-item>
+              <el-form-item label="验证码" :label-width="formLabelWidth">
+                <el-input :value="form.verCode" style="width: 40%;" @input="input_change_ma($event)"></el-input>
+                <el-button style="display: inline-block; width: 28%; height: 100%; margin-left: 12%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
               </el-form-item>
             </el-form>
 
@@ -138,7 +143,8 @@ import {
     getClueDataNumber,
     noReadNum,
     getProfile,
-    upProfile
+    upProfile,
+    sendDingVerCode
 } from '../../request/api';
 import { getTextByJs, timestampToTime, menuNumberFunc } from '../../assets/js/common';
 import { pass_word, websockHttp } from '../../assets/js/data';
@@ -151,13 +157,17 @@ export default {
             form: {
                 password1: '',
                 password2: '',
+                verCode: '',
             },
+            form_rule_flag: false,
+            form_rule_name: '获取验证码',
+            timer:null,
             form_phone: {
                 phone: '',
             },
             rules: {
                 phone: [
-                  { pattern:/^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/, message: "请输入合法手机号", trigger: "blur" }
+                  { pattern:/^1[34578]\d{9}$/, message: "请输入合法手机号", trigger: "blur" }
                 ],
             },
             formLabelWidth: '120px',
@@ -193,8 +203,59 @@ export default {
         this.noReadNum();
     },
     methods: {
+        sendDingVerCode() {
+            let num = 60;
+            this.$smoke_get(sendDingVerCode, {}).then(res => {
+                if(res.code == 200) {
+                    if(res.data == 0) {
+                        this.$message({
+                            type: 'success',
+                            message: '获取验证码成功'
+                        })
+                        this.timer = setInterval(() => {
+                            num--;
+                            if(num <= 0){
+                                clearInterval(this.timer);
+                                this.form_rule_name = '获取验证码';
+                                this.form_rule_flag = false;
+                            }else{
+                                this.form_rule_name = num + 's';
+                                this.form_rule_flag = true;
+                            }
+                        },1000)
+                        
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '亲，一分钟以后再获取'
+                        })
+                        this.timer = setInterval(() => {
+                            num--;
+                            if(num <= 0){
+                                clearInterval(this.timer);
+                                this.form_rule_name = '获取验证码';
+                                this.form_rule_flag = false;
+                            }else{
+                                this.form_rule_name = num + 's';
+                                this.form_rule_flag = true;
+                            }
+                        },1000)
+                    }
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: '获取验证码失败'
+                    })
+                    this.form_rule_flag = false;
+                }
+            })
+        },
         input_change(e) {
             this.form_phone.phone = e;
+            this.$forceUpdate();
+        },
+        input_change_ma(e) {
+            this.form.verCode = e;
             this.$forceUpdate();
         },
         tabClickHandle(tab){
@@ -297,6 +358,9 @@ export default {
         },
         change_phone() {
             this.phoneDialogVisible = true;
+            this.$nextTick(() => {
+              this.$refs['form_phone'].resetFields();
+            }) 
             this.getProfile();
         },
         userInfo() {
@@ -330,7 +394,8 @@ export default {
             }else{
                 this.$smoke_post(updateUserPassword,{
                     oldPassword: this.form.password1,
-                    newPassword: this.form.password2
+                    newPassword: this.form.password2,
+                    verCode: this.form.verCode
                 }).then(res => {
                     if(res.code == 200){
                         type = 'success';
