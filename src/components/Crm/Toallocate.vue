@@ -26,6 +26,7 @@
               :label="item.label"
               v-for="(item, index) in columnList"
               :key="index"
+              :width="item.width"
               >
             </el-table-column>
             <!-- <el-table-column prop="active" label="操作">
@@ -131,14 +132,14 @@ export default {
             },
             list: [],
             columnList: [
-                { 'prop': 'tel', 'label': '手机号码' },
+                { 'prop': 'tel', 'label': '手机号码', 'width': 150 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目' },
                 // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间' },
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'width': 230 },
             ],
             ruleForm: {
                 age: '',

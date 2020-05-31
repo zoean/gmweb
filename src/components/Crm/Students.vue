@@ -330,9 +330,6 @@
                                 </el-form-item>
 
                             </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="延长服务期" placeholder="请选择时长"></el-form-item>
-                            </el-col>
                         </el-row>
 
                         <el-row>
