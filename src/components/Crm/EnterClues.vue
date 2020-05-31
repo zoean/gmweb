@@ -198,7 +198,7 @@
 
                 <el-upload
                     style="width: 130px; display: inline-block;"
-                    action="https://testgm.jhwx.com/api/phone/excel/readExcelClueData"
+                    action="https://gm.jhwx.com/api/phone/excel/readExcelClueData"
                     :headers="headersObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
@@ -560,7 +560,7 @@ export default {
             })
         },
         downloadImport() {
-            const href = 'https://testgm.jhwx.com' + clueDataTem
+            const href = 'https://gm.jhwx.com' + clueDataTem
             // console.log(href);
             window.open(href, '_blank');
         },
