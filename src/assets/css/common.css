@@ -13,7 +13,15 @@
 .el-popover p{
   padding: 5px;
 }
-
+.el-tooltip__popper.is-dark{
+  opacity: 0.65;
+}
+.el-tooltip__popper[x-placement^=bottom] .popper__arrow{
+  opacity: 0.95;
+}
+.el-tooltip__popper{
+  padding: 5px;
+}
 .el-table svg{
   color:#4E9BFF
 }
