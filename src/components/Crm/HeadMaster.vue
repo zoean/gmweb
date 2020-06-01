@@ -414,6 +414,7 @@ export default {
         handleClose(done) {
             if(this.drawer3) {
                 this.json = null;
+                this.filterText = '';
                 this.treeData = [];
                 this.tableData = [];
                 done();
