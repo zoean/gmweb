@@ -158,41 +158,45 @@ export default {
         classTeaGetWaitStudent(type, id) {
             console.log(this.$refs.tree.selection);
             let arr = [];
-            if(type == 'click') {
-                arr.push(id);
-            }else{
+
+            if(type == 'all') {
                 this.$refs.tree.selection.map(sll => {
                     arr.push(sll.uuid);
                 })
-            }
-            if(arr.length == 0) {
-                this.$message({
-                    type: 'error',
-                    message: '请您先勾选您要领取的学员'
-                });
+                if(arr.length == 0) {
+                    this.$message({
+                        type: 'error',
+                        message: '请您先勾选您要领取的学员'
+                    });
+                }else{
+                    this.$confirm('确认领取？')
+                    .then(_ => {
+                      this.requestClassTeaGetWaitStudent(arr);
+                    })
+                    .catch(_ => {});
+                }
             }else{
-
-                this.$confirm('确认领取？')
-                .then(_ => {
-                  this.$smoke_post(classTeaGetWaitStudent, {
-                    uuidList: arr,
-                  }).then(res => {
-                      if(res.code == 200) {
-                          this.$message({
-                              type: 'success',
-                              message: '成功领取' + res.data.length + '条'
-                          });
-                          this.getWaitStudentList();
-                      }else{
-                          this.$message({
-                              type: 'error',
-                              message: res.msg
-                          });
-                      }
-                  })
-                })
-                .catch(_ => {});
+                arr.push(id);
+                this.requestClassTeaGetWaitStudent(arr);
             }
+        },
+        requestClassTeaGetWaitStudent(arr) {
+            this.$smoke_post(classTeaGetWaitStudent, {
+                uuidList: arr,
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '成功领取' + res.data.length + '条'
+                    });
+                    this.getWaitStudentList();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    });
+                }
+            })
         },
         handleCurrentChange(index) {
             this.form.currentPage = index;
