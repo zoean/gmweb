@@ -1090,7 +1090,7 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #F2F3F7;
+            background: #F7F7F7;
             margin-bottom: 10px;
             color: #666666;
         }
