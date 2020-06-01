@@ -27,19 +27,18 @@
             </el-table-column>
             <el-table-column prop="active" label="操作" width="50">
               <template slot-scope="scope">
-                <el-popover
-                  placement="top"
-                  width="200"
-                  trigger="click"
-                  :ref="`popover-${scope.$index}`"
+                  
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    placement="top"
+                    title="确认领取此学员吗？"
+                    :hideIcon='true'
+                    @onConfirm="receiveClick(scope.row)"
                   >
-                  <p>确认领取此学员吗？</p>
-                  <div style="text-align: right; margin: 0">
-                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                    <el-button type="primary" size="mini" @click="receiveClick(scope.row)">确定</el-button>
-                  </div>
-                  <svg-icon slot="reference" icon-title="领取" icon-class="collect" />
-                </el-popover>
+                    <svg-icon slot="reference" icon-title="领取" icon-class="collect" />
+                </el-popconfirm>
                 
               </template>
             </el-table-column>
