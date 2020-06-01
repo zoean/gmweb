@@ -44,6 +44,7 @@
                     placement="top"
                     title="确认拨打该学员电话吗？"
                     :hideIcon='true'
+                    v-if="!$route.query.id"
                     @onConfirm="phoneOutTea(scope.row)"
                   >
                     <svg-icon slot="reference" icon-title="手机外拨" icon-class="takephone" />
@@ -56,6 +57,7 @@
                     placement="top"
                     title="确认拨打该学员电话吗？"
                     :hideIcon='true'
+                    v-if="!$route.query.id"
                     @onConfirm="seatOutTea(scope.row)"
                   >
                     <svg-icon slot="reference" icon-title="座机外拨" icon-class="landline" />
@@ -1066,7 +1068,16 @@ export default {
     },
     mounted() {
         
-    }
+    },
+    watch:{
+      '$route': function(){
+        console.log(this.$route.query.id);
+        if(this.$route.query.id == undefined) {
+            this.form.classTeaUuid = '';
+            this.getClassTeaClass();
+        }
+      }
+    },
 }
 </script>
 
