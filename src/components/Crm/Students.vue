@@ -9,6 +9,7 @@
         </el-tabs>
         <el-table
             :data="list"
+            :key="Math.random()" 
             ref="tree"
             v-loading="fullscreenLoading"
             style="width: calc( 100vw - 3.8rem)"

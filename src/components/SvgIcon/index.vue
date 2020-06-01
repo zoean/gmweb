@@ -1,6 +1,6 @@
 <template>
   <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners" />
-  <el-tooltip v-else-if="svgTitle != ''" class="item" effect="dark" :content="svgTitle" placement="bottom" :open-delay=500>
+  <el-tooltip v-else-if="svgTitle != ''" class="item" effect="dark" :hide-after=400 :content="svgTitle" placement="bottom" :open-delay=500>
     <svg :class="svgClass" aria-hidden="true" v-on="$listeners">
       <use :xlink:href="iconName" />
     </svg>
