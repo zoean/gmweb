@@ -64,7 +64,7 @@ export default {
             totalFlag: false,
             list: [],
             columnList: [
-                // { 'prop': 'tel', 'label': '姓名' },
+                { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'tel', 'label': '手机号码' },
                 // { 'prop': 'clueUserUuid', 'label': '所属坐席' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
@@ -73,7 +73,7 @@ export default {
                 // { 'prop': 'orderId', 'label': '订单id' },
                 // { 'prop': 'orderNum', 'label': '订单编号' },
                 // { 'prop': 'orderType', 'label': '订单类型' },
-                // { 'prop': 'school', 'label': '分校' },
+                { 'prop': 'school', 'label': '分校' },
                 { 'prop': 'createTime', 'label': '报名时间' },
             ],
             tabsList: [],
