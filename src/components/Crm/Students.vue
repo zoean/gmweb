@@ -9,6 +9,7 @@
         </el-tabs>
         <el-table
             :data="list"
+            :key="Math.random()" 
             ref="tree"
             v-loading="fullscreenLoading"
             style="width: calc( 100vw - 3.8rem)"
@@ -35,8 +36,34 @@
 
             <el-table-column prop="active" label="操作" fixed="right" width="100">
               <template slot-scope="scope">
-                <svg-icon @click="phoneOutTea(scope.row)" icon-title="手机外拨" icon-class="takephone" />
-                <svg-icon @click="seatOutTea(scope.row)" icon-title="座机外拨" icon-class="landline" />
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="click"
+                  :ref="`popover-${scope.$index}`"
+                  >
+                  <p>确认拨打该学员电话吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                    <el-button type="primary" size="mini" @click="phoneOutTea(scope.row)">确定</el-button>
+                  </div>
+                  <svg-icon slot="reference" icon-title="手机外拨" icon-class="takephone" />
+                </el-popover>
+
+                <el-popover
+                  placement="top"
+                  width="200"
+                  trigger="click"
+                  :ref="`popover-${scope.$index}`"
+                  >
+                  <p>确认拨打该学员电话吗？</p>
+                  <div style="text-align: right; margin: 0">
+                    <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                    <el-button type="primary" size="mini" @click="seatOutTea(scope.row)">确定</el-button>
+                  </div>
+                  <svg-icon slot="reference" icon-title="座机外拨" icon-class="landline" />
+                </el-popover>
+
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
               </template>
             </el-table-column>
@@ -527,10 +554,10 @@ export default {
             },
             rules: {
                 followUp: [
-                  { required: true, message: '请选择跟进类型', trigger: 'blur' }
+                  { required: true, message: '请选择跟进类型', trigger: 'change' }
                 ],
                 followUpContent: [
-                  { required: true, message: '请输入跟进内容', trigger: 'blur' }
+                  { required: true, message: '请输入跟进内容', trigger: ['blur', 'change'] }
                 ],
             },
             tabsList: [],
@@ -726,6 +753,7 @@ export default {
         },
         handleSizeChangeFollow(index) {
             this.notesForm.pageSize = index;
+            this.notesForm.currentPage = 1;
             this.getClassTeaStuNotes();
         }, 
         getClueCallLog() {
@@ -762,6 +790,7 @@ export default {
         },
         handleSizeChangeCall(index) {
             this.notesCallForm.pageSize = index;
+            this.notesCallForm.currentPage = 1;
             this.getClueCallLog();
         }, 
         studentDetails( row ) {
@@ -800,7 +829,11 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                this.addClassTeaStuNotes();
+                this.$confirm('确认保存修改内容吗？')
+                .then(_ => {
+                  this.addClassTeaStuNotes();
+                })
+                .catch(_ => {});
               } else {
                 console.log('error submit!!');
                 return false;
@@ -1021,6 +1054,7 @@ export default {
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
+            this.form.currentPage = 1;
             this.getClassTeaStudent();
         },
     },

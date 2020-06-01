@@ -59,3 +59,5 @@ el-autocomplete的一个坑，el-autocomplete显示的时候必须有value字段
 this.$nextTick(() => {
   this.$refs['ruleForm'].resetFields();
 })    重置表单
+
+给el-table新增:key="Math.random()"参数，可以重新渲染表格
