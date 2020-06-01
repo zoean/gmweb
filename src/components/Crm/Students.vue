@@ -989,8 +989,17 @@ export default {
             })
         },
         handleClose(done) {
-            this.getClassTeaStudent();
-            done();
+            if(this.callLogUuid) {
+                this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                    this.getClassTeaStudent();
+                })
+                .catch(_ => {});
+            }else {
+                done();
+                this.getClassTeaStudent();
+            }
         },
         handleClassTabClick(tab, event) {
             this.form.classUuid = tab.name;
