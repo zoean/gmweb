@@ -318,6 +318,7 @@ export default {
         handleSizeChange(index) {
             console.log(index);
             this.form.pageSize = index;
+            this.form.currentPage = 1;
             this.getClassList();
         }, 
         addClassClick() {
@@ -587,15 +588,19 @@ export default {
             });
         },
         tagClick(item) {
-            this.teacherMoveList.map((res,index) => {
+            this.$confirm('确认转移学员吗？')
+            .then(_ => {
+              this.teacherMoveList.map((res,index) => {
                 if(res.userUuid == item.userUuid){
                     res.mainUin = true;
                     this.$forceUpdate();
                 }else{
                     res.mainUin = false;
                 }
+              })
+              this.transferOfficer(item.userUuid);
             })
-            this.transferOfficer(item.userUuid);
+            .catch(_ => {});
         },
         transferOfficer(id) {
             this.$smoke_post(transferOfficer, {
@@ -650,7 +655,7 @@ export default {
             }
         }
         .tagActive{
-            color: red !important;
+            // color: red !important;
         }
         .tagName{
             height: 40px;
