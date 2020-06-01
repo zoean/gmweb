@@ -32,6 +32,7 @@
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="dialoghold">保 存</el-button>
               <el-button @click="dialog_cancel" v-if="!oneLogin">取 消</el-button>
+              <el-button @click="dialog_cancel_back" v-if="oneLogin">返回登录页</el-button>
             </span>
         </el-dialog>
 
@@ -253,6 +254,9 @@ export default {
         input_change_ma(e) {
             this.form.verCode = e;
             this.$forceUpdate();
+        },
+        dialog_cancel_back() {
+            this.logout();
         },
         tabClickHandle(tab){
             this.getStationNews(tab.index)

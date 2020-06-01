@@ -78,13 +78,13 @@
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
-                                    <el-tooltip effect="dark" content="复制手机号码" placement="top">
+                                    <!-- <el-tooltip effect="dark" content="复制手机号码" placement="top">
                                         <el-image
                                             style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"
                                             @click="phoneCopyFun"
                                             :src="require('../../assets/images/copy-icon.png')">
                                         </el-image>
-                                    </el-tooltip>
+                                    </el-tooltip> -->
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
@@ -217,9 +217,24 @@
                                 </el-form-item>
                             </el-col>
 
-                            <el-col :span="6">
+                            <!-- <el-col :span="6">
                                 <el-form-item label="购买状态" prop="buyState">
                                     <el-input v-model="customerForm.buyState" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col> -->
+
+                            <el-col :span="6">
+                                <el-form-item label="学习状况" prop="studySituation">
+
+                                    <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-11']"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
                                 </el-form-item>
                             </el-col>
 
@@ -272,21 +287,6 @@
                         </el-row>
 
                         <el-row>
-
-                            <el-col :span="6">
-                                <el-form-item label="学习状况" prop="studySituation">
-
-                                    <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" size="small" >
-                                        <el-option
-                                          v-for="item in enumList['MJ-11']"
-                                          :key="item.name"
-                                          :label="item.name"
-                                          :value="item.number">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-                            </el-col>
 
                             <el-col :span="6">
 
