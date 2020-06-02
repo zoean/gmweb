@@ -12,6 +12,7 @@
         <el-table
             :data="list"
             ref="tree"
+            :key="Math.random()"
             v-loading="fullscreenLoading"
             @sort-change="sortChange"
             style="width: 100%">
