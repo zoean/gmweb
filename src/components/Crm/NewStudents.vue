@@ -13,6 +13,7 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
+            @sort-change="sortChange"
             style="width: 100%">
             <el-table-column
               type="selection"
@@ -22,6 +23,7 @@
               :prop="item.prop"
               :label="item.label"
               v-for="(item, index) in columnList"
+              :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
               >
             </el-table-column>
@@ -61,7 +63,7 @@
 
 <script>
 import { getWaitStudentList, classTeaGetWaitStudent, getClassTeaClass } from '../../request/api';
-import { timestampToTime, classTypeString, orderTypeText } from '../../assets/js/common';
+import { timestampToTime, classTypeString, orderTypeText, sortTextNum } from '../../assets/js/common';
 export default {
     name: 'newStudents',
     data() {
@@ -91,12 +93,29 @@ export default {
             tabsList: [],
             classUuidDefault: '',
             fullscreenLoading: false,
+            sortSetList: [
+                {'createTime': ''},
+                {'school': ''},
+            ],
+            handleCurrentUuid: ''
         }
     },
     created() {
         this.getClassTeaClass();
     },
     methods: {
+        sortChange(data) {
+            this.form.sortSet = [];
+            const id = sortTextNum(data.prop);
+            if(data.order == "descending"){
+                this.sortSetList[id][data.prop] = 'DESC';
+            }else if(data.order == "ascending"){
+                this.sortSetList[id][data.prop] = 'ASC';
+            }
+            this.form.sortSet.push(this.sortSetList[id]);
+            this.classUuidDefault = this.handleCurrentUuid;
+            this.getWaitStudentList();
+        },
         receiveClick( scope ) {
             console.log(scope);
             this.classTeaGetWaitStudent('click', scope.uuid)
@@ -112,12 +131,12 @@ export default {
                         this.fullscreenLoading = false;
                         if(res.data.length != 0) {
                             res.data.map(sll => {
-                            sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
+                                sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
                             })
                             this.tabsList = res.data;
-                            this.getWaitStudentList();
                             this.form.classUuid = res.data[0].uuid;
                             this.classUuidDefault = res.data[0].uuid;
+                            this.getWaitStudentList();
                         }
                     }, 300);
 
@@ -149,7 +168,7 @@ export default {
         },
         handleClassTabClick(tab, event) {
             console.log(tab);
-            this.form.classUuid = tab.name;
+            this.handleCurrentUuid = this.form.classUuid = tab.name;
             this.form.currentPage = 1;
             this.form.pageSize = 10;
             this.getWaitStudentList();

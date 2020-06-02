@@ -380,6 +380,12 @@ export const sortTextNum = (text) => {
         case 'jobNumber':
             str = 0;
             break;
+        case 'createTime':
+            str = 0;
+            break;
+        case 'school':
+            str = 1;
+            break;
         case 'name':
             str = 1;
             break;
