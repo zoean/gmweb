@@ -3,7 +3,7 @@
         <el-upload
             class="avatar-uploader"
             :data='uploadData'
-            action="https://gm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelSubject"
+            action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelSubject"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">
