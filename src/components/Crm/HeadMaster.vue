@@ -21,7 +21,7 @@
 
             </el-col>
 
-            <el-col :span="4" style="margin-right: 10px;">
+            <el-col :span="4" style="margin-left: 20px;">
                 <el-button type="primary" size="small" @click="getClassList">查 询</el-button>
             </el-col>
 
