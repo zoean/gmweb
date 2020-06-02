@@ -9,6 +9,7 @@
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
+            :key="Math.random()" 
             style="width: 100%">
             <el-table-column
               :prop="item.prop"
@@ -55,13 +56,14 @@
                         v-model="ruleForm1.subjectText"
                         :fetch-suggestions="querySearch"
                         placeholder="请输入内容"
+                        size="small"
                         @select="handleSelect"
                     ></el-autocomplete>
 
                 </el-form-item>
 
                 <el-form-item label="班型等级" prop="classType">
-                    <el-select v-model="ruleForm1.classType" placeholder="请选择班型等级">
+                    <el-select v-model="ruleForm1.classType" placeholder="请选择班型等级" size="small">
                         <el-option
                           v-for="item in classTypeList"
                           :key="item.value"
@@ -72,8 +74,8 @@
                 </el-form-item>
 
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm1('ruleForm1')">确定</el-button>
-                  <el-button @click="quxiao">取消</el-button>
+                  <el-button type="primary" @click="submitForm1('ruleForm1')" size="small">确定</el-button>
+                  <el-button @click="quxiao" size="small">取消</el-button>
                 </el-form-item>
 
             </el-form>
@@ -106,6 +108,19 @@
                   </template>
                 </el-table-column>
             </el-table>
+
+            <el-pagination
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                style="text-align: right; margin-top: 20px;"
+                :total='teacherForm.total'
+                :page-size='teacherForm.pageSize'
+                :page-sizes="[10, 20, 30]"
+                :hide-on-single-page="totalFlag"
+                @current-change="handleCurrentChangeTeacher"
+                @size-change="handleSizeChangeTeacher"
+            >
+            </el-pagination>
             
         </el-drawer>
 
@@ -318,13 +333,28 @@ export default {
         handleSizeChange(index) {
             console.log(index);
             this.form.pageSize = index;
+            this.form.currentPage = 1;
             this.getClassList();
+        }, 
+        handleCurrentChangeTeacher(index) {
+            console.log(index);
+            this.teacherForm.currentPage = index;
+            this.getClassTeacherList();
+        },
+        handleSizeChangeTeacher(index) {
+            console.log(index);
+            this.teacherForm.pageSize = index;
+            this.teacherForm.currentPage = 1;
+            this.getClassTeacherList();
         }, 
         addClassClick() {
             this.drawer1 = true;
             this.ruleForm1.classType = '';
             this.ruleForm1.subjectText = '';
             this.ruleForm1.examItemUuid = '';
+            this.$nextTick(() => {
+                this.$refs['ruleForm1'].resetFields();
+            })
         },
         addClass() {
             this.$smoke_post(addClass, this.ruleForm1).then(res => {
@@ -412,6 +442,7 @@ export default {
         handleClose(done) {
             if(this.drawer3) {
                 this.json = null;
+                this.filterText = '';
                 this.treeData = [];
                 this.tableData = [];
                 done();
@@ -447,6 +478,7 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoadingDetails = false;
                         this.teacherList = res.data.list;
+                        this.teacherForm.total = res.data.total;
                     }, 300);
 
                 }else{
@@ -587,15 +619,19 @@ export default {
             });
         },
         tagClick(item) {
-            this.teacherMoveList.map((res,index) => {
+            this.$confirm('确认转移学员吗？')
+            .then(_ => {
+              this.teacherMoveList.map((res,index) => {
                 if(res.userUuid == item.userUuid){
                     res.mainUin = true;
                     this.$forceUpdate();
                 }else{
                     res.mainUin = false;
                 }
+              })
+              this.transferOfficer(item.userUuid);
             })
-            this.transferOfficer(item.userUuid);
+            .catch(_ => {});
         },
         transferOfficer(id) {
             this.$smoke_post(transferOfficer, {
@@ -650,7 +686,7 @@ export default {
             }
         }
         .tagActive{
-            color: red !important;
+            // color: red !important;
         }
         .tagName{
             height: 40px;

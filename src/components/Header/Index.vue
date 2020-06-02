@@ -25,9 +25,15 @@
               </el-form-item>
               <el-form-item label="验证码" :label-width="formLabelWidth">
                 <el-input :value="form.verCode" style="width: 40%;" @input="input_change_ma($event)"></el-input>
-                <el-button style="display: inline-block; width: 28%; height: 100%; margin-left: 12%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
+                <el-button style="display: inline-block; max-width: 150px; float: right; margin-right: 20%; width: 34%; height: 100%; margin-left: 6%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
+              </el-form-item>
+
+              <el-form-item label="" :label-width="formLabelWidth">
+                <div style="font-size: 12px; float: right; margin-right: 20%;">@：获取验证码后，请去钉钉查看</div>
               </el-form-item>
             </el-form>
+
+            
 
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="dialoghold">保 存</el-button>
@@ -60,7 +66,7 @@
         </el-dialog>
 
         <el-row>
-            <el-col :span="20" style="height: 60px !important;">
+            <el-col :span="18" style="height: 60px !important;">
                 <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
                 
                 <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
@@ -86,8 +92,20 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <span style="position: absolute; right: 154px; font-size: 14px;">v 1.0.1</span>
+            <el-col :span="6">
+                
+                <el-dropdown>
+                    <div class="el-dropdown-link index-hright">
+                        {{$store.state.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </div>
+                    <el-dropdown-menu slot="dropdown">
+                      <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
+                      <el-dropdown-item @click.native="change_password">修改密码</el-dropdown-item>
+                      <el-dropdown-item @click.native="change_phone">修改工作手机</el-dropdown-item>
+                      <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+
                 <el-popover
                     placement="bottom"
                     popper-class="message_popover"
@@ -109,22 +127,13 @@
                             <dl v-if="!fullReadList.length" class="no-data"><dt class="no-data">暂无已读消息</dt></dl>
                         </el-tab-pane>
                     </el-tabs>
-                    <el-badge slot="reference" :value="notReadNumValue" style="position: absolute; top: 4px; right: 110px; cursor: pointer;" @click.native="badgeClick">
+                    <el-badge slot="reference" :value="notReadNumValue" style="float: right; margin-right: 30px;" @click.native="badgeClick">
                     <i class="el-icon-bell" style="font-size: 18px;"></i>
                 </el-badge>
                     
                 </el-popover>
-                <el-dropdown>
-                    <div class="el-dropdown-link index-hright">
-                        {{$store.state.name}}<i class="el-icon-arrow-down el-icon--right"></i>
-                    </div>
-                    <el-dropdown-menu slot="dropdown">
-                      <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
-                      <el-dropdown-item @click.native="change_password">修改密码</el-dropdown-item>
-                      <el-dropdown-item @click.native="change_phone">修改工作手机</el-dropdown-item>
-                      <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+
+                <span style="float: right; margin-right: 14px; font-size: 14px;">v 1.0.1</span>
     
             </el-col>
         </el-row>
@@ -159,7 +168,7 @@ export default {
                 verCode: '',
             },
             form_rule_flag: false,
-            form_rule_name: '获取验证码',
+            form_rule_name: '获取钉钉验证码',
             timer:null,
             form_phone: {
                 phone: '',
@@ -207,13 +216,13 @@ export default {
                     if(res.data == 0) {
                         this.$message({
                             type: 'success',
-                            message: '获取验证码成功'
+                            message: '获取钉钉验证码成功'
                         })
                         this.timer = setInterval(() => {
                             num--;
                             if(num <= 0){
                                 clearInterval(this.timer);
-                                this.form_rule_name = '获取验证码';
+                                this.form_rule_name = '获取钉钉验证码';
                                 this.form_rule_flag = false;
                             }else{
                                 this.form_rule_name = num + 's';
@@ -230,7 +239,7 @@ export default {
                             num--;
                             if(num <= 0){
                                 clearInterval(this.timer);
-                                this.form_rule_name = '获取验证码';
+                                this.form_rule_name = '获取钉钉验证码';
                                 this.form_rule_flag = false;
                             }else{
                                 this.form_rule_name = num + 's';
@@ -241,7 +250,7 @@ export default {
                 }else{
                     this.$message({
                         type: 'error',
-                        message: '获取验证码失败'
+                        message: '获取钉钉验证码失败'
                     })
                     this.form_rule_flag = false;
                 }

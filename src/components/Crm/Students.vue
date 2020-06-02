@@ -9,6 +9,7 @@
         </el-tabs>
         <el-table
             :data="list"
+            :key="Math.random()" 
             ref="tree"
             v-loading="fullscreenLoading"
             style="width: calc( 100vw - 3.8rem)"
@@ -35,8 +36,33 @@
 
             <el-table-column prop="active" label="操作" fixed="right" width="100">
               <template slot-scope="scope">
-                <svg-icon @click="phoneOutTea(scope.row)" icon-title="手机外拨" icon-class="takephone" />
-                <svg-icon @click="seatOutTea(scope.row)" icon-title="座机外拨" icon-class="landline" />
+
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    placement="top"
+                    title="确认拨打该学员电话吗？"
+                    :hideIcon='true'
+                    v-if="!$route.query.id"
+                    @onConfirm="phoneOutTea(scope.row)"
+                  >
+                    <svg-icon slot="reference" icon-title="手机外拨" icon-class="takephone" />
+                </el-popconfirm>
+
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    placement="top"
+                    title="确认拨打该学员电话吗？"
+                    :hideIcon='true'
+                    v-if="!$route.query.id"
+                    @onConfirm="seatOutTea(scope.row)"
+                  >
+                    <svg-icon slot="reference" icon-title="座机外拨" icon-class="landline" />
+                </el-popconfirm>
+
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
               </template>
             </el-table-column>
@@ -527,10 +553,10 @@ export default {
             },
             rules: {
                 followUp: [
-                  { required: true, message: '请选择跟进类型', trigger: 'blur' }
+                  { required: true, message: '请选择跟进类型', trigger: 'change' }
                 ],
                 followUpContent: [
-                  { required: true, message: '请输入跟进内容', trigger: 'blur' }
+                  { required: true, message: '请输入跟进内容', trigger: ['blur', 'change'] }
                 ],
             },
             tabsList: [],
@@ -561,7 +587,7 @@ export default {
             notesCallList: [],
             notesColumnListCall: [
                 { 'prop': 'createTime', 'label': '创建时间' },
-                { 'prop': 'seatName', 'label': '所属坐席' },
+                { 'prop': 'seatName', 'label': '跟进人' },
                 { 'prop': 'isCalledPhone', 'label': '是否接通' },
                 { 'prop': 'callStyle', 'label': '呼叫方式' },
                 { 'prop': 'duration', 'label': '通话时长(秒)' },
@@ -726,6 +752,7 @@ export default {
         },
         handleSizeChangeFollow(index) {
             this.notesForm.pageSize = index;
+            this.notesForm.currentPage = 1;
             this.getClassTeaStuNotes();
         }, 
         getClueCallLog() {
@@ -762,6 +789,7 @@ export default {
         },
         handleSizeChangeCall(index) {
             this.notesCallForm.pageSize = index;
+            this.notesCallForm.currentPage = 1;
             this.getClueCallLog();
         }, 
         studentDetails( row ) {
@@ -800,7 +828,11 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                this.addClassTeaStuNotes();
+                this.$confirm('确认保存修改内容吗？')
+                .then(_ => {
+                  this.addClassTeaStuNotes();
+                })
+                .catch(_ => {});
               } else {
                 console.log('error submit!!');
                 return false;
@@ -959,8 +991,17 @@ export default {
             })
         },
         handleClose(done) {
-            this.getClassTeaStudent();
-            done();
+            if(this.callLogUuid) {
+                this.$confirm('确认关闭？')
+                .then(_ => {
+                    done();
+                    this.getClassTeaStudent();
+                })
+                .catch(_ => {});
+            }else {
+                done();
+                this.getClassTeaStudent();
+            }
         },
         handleClassTabClick(tab, event) {
             this.form.classUuid = tab.name;
@@ -1021,12 +1062,22 @@ export default {
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
+            this.form.currentPage = 1;
             this.getClassTeaStudent();
         },
     },
     mounted() {
         
-    }
+    },
+    watch:{
+      '$route': function(){
+        console.log(this.$route.query.id);
+        if(this.$route.query.id == undefined) {
+            this.form.classTeaUuid = '';
+            this.getClassTeaClass();
+        }
+      }
+    },
 }
 </script>
 
@@ -1039,7 +1090,7 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #F2F3F7;
+            background: #F7F7F7;
             margin-bottom: 10px;
             color: #666666;
         }
