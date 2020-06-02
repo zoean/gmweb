@@ -106,7 +106,7 @@
                     <el-upload
                         class="avatar-uploader"
                         :data='uploadData'
-                        action="https://testgm.jhwx.com/api/knowledgeSystem/courseVideo/uploadimg"
+                        action="https://gm.jhwx.com/api/knowledgeSystem/courseVideo/uploadimg"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
