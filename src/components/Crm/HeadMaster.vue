@@ -32,6 +32,7 @@
             style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page='form.currentPage'
             :page-sizes="[10, 20, 30]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
@@ -115,6 +116,7 @@
                 style="text-align: right; margin-top: 20px;"
                 :total='teacherForm.total'
                 :page-size='teacherForm.pageSize'
+                :current-page='teacherForm.currentPage'
                 :page-sizes="[10, 20, 30]"
                 :hide-on-single-page="totalFlag"
                 @current-change="handleCurrentChangeTeacher"
