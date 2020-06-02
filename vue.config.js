@@ -33,7 +33,7 @@ module.exports = {
         host: "0.0.0.0",
         proxy: {//配置跨域
             '/smoke_api': {
-                target: 'https://testgm.jhwx.com',
+                target: 'https://gm.jhwx.com',
                 ws: false,
                 changOrigin: true,//允许跨域
                 pathRewrite: {
