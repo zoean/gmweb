@@ -1,9 +1,29 @@
 <template>
     <el-main class="index-main">
         <el-row class="people-screen">
-            <el-col :span="5">
+            <el-col :span="4" style="float: right; text-align: right;">
                 <el-button type="primary" size="small" @click="addClassClick">添加考试项-班型</el-button>
             </el-col>
+
+            <el-col :span="4">
+
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelectExam"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
+
+            </el-col>
+
+            <el-col :span="4" style="margin-right: 10px;">
+                <el-button type="primary" size="small" @click="getClassList">查 询</el-button>
+            </el-col>
+
         </el-row>
 
         <el-table
@@ -241,7 +261,9 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 sortSet: [],
-                total: null
+                total: null,
+                examItem: '',
+                examItemText: '',
             },
             totalFlag: false,
             list: [],
@@ -419,6 +441,15 @@ export default {
             console.log(item);
             this.ruleForm1.examItemUuid = item.id;
             this.ruleForm1.subjectText = item.value;
+        },
+        handleSelectExam(item) {
+            console.log(item);
+            this.form.examItem = item.id;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.form.examItem = '';
+            this.form.examItemText = '';
         },
         getClassList() {
             this.fullscreenLoading = true;
