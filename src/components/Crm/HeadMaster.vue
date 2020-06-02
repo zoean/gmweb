@@ -32,6 +32,7 @@
             style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page='form.currentPage'
             :page-sizes="[10, 20, 30]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
@@ -115,6 +116,7 @@
                 style="text-align: right; margin-top: 20px;"
                 :total='teacherForm.total'
                 :page-size='teacherForm.pageSize'
+                :current-page='teacherForm.currentPage'
                 :page-sizes="[10, 20, 30]"
                 :hide-on-single-page="totalFlag"
                 @current-change="handleCurrentChangeTeacher"
@@ -152,7 +154,13 @@
             :before-close="handleClose">
             <span class="bullets"></span>
 
-            <el-button type="primary" style="margin: 0 20px;" size="small" @click="addClassTeacher">确定</el-button>
+            <div style="height: 52px; background: #FAFAFA; border-bottom: 1px dashed #ccc; padding: 10px 0 0 40px; position: fixed; z-index: 99; width: 100%;">
+
+                <el-button type="primary" size="small" @click="addClassTeacher">保 存</el-button>
+
+            </div>
+
+            <div style="height: 60px; width: 100%;"></div>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
@@ -282,7 +290,7 @@ export default {
                 { 'prop': 'studentNum', 'label': '学员数量' },
             ],
 
-            drawerTitle3: '配置班主任',
+            drawerTitle3: '',
             drawer3: false,
             direction3: 'rtl',
             name_input: '',
@@ -441,11 +449,17 @@ export default {
         },
         handleClose(done) {
             if(this.drawer3) {
-                this.json = null;
-                this.filterText = '';
-                this.treeData = [];
-                this.tableData = [];
-                done();
+
+                this.$confirm('确认关闭？')
+                .then(_ => {
+                    this.json = null;
+                    this.filterText = '';
+                    this.treeData = [];
+                    this.tableData = [];
+                    done();
+                })
+                .catch(_ => {});
+                
             }else{
                 done();
             }
@@ -456,7 +470,7 @@ export default {
             this.teacherForm.uuid = scope.uuid;
             this.addTeacherForm.classUuid = scope.uuid;
             this.teacherMoveForm.className = scope.examItem + ' - ' + scope.classType;
-            this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任'; //一级消防工程师 - 普通班 - 班主任
+            this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任列表'; //一级消防工程师 - 普通班 - 班主任列表
             this.getClassTeacherList();
         },
         studentsListClick(scope) {
@@ -496,6 +510,7 @@ export default {
             console.log(scope);
             this.drawer3 = true;
             this.addTeacherForm.classUuid = scope.uuid;
+            this.drawerTitle3 = scope.examItem + ' - ' + scope.classType + ' - 配置班主任'; //一级消防工程师 - 普通班 - 配置班主任
             // console.log(this.addTeacherForm.classUuid);
             this.getOrgStrAndClassTch(scope.uuid);
         },

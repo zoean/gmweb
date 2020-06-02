@@ -73,6 +73,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page='form.currentPage'
             :page-sizes="[10, 20, 30]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
@@ -409,6 +410,7 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
+                        :current-page='notesForm.currentPage'
                         :page-sizes="[10, 20, 30]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
@@ -455,6 +457,7 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
+                        :current-page='notesCallForm.currentPage'
                         :page-sizes="[10, 20, 30]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"

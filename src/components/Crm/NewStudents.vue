@@ -52,6 +52,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page='form.currentPage'
             :page-sizes="[10, 20, 30]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
