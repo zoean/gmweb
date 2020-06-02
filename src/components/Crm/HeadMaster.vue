@@ -10,6 +10,7 @@
                 <el-autocomplete
                     clearable
                     size="small"
+                    ref="autocomplete"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
@@ -280,7 +281,7 @@ export default {
             },
             rules1: {
                 classType: [
-                    { required: true, message: '请选择班型等级', trigger: 'blur'}
+                    { required: true, message: '请选择班型等级', trigger: 'change'}
                 ],
                 subjectText: [
                     { required: true, message: '请选择考试项目', trigger: 'change'}
@@ -448,8 +449,13 @@ export default {
             this.form.examItemText = item.value;
         },
         autocompleteClear() {
-            this.form.examItem = '';
-            this.form.examItemText = '';
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItem = '';
+                this.$refs.autocomplete.focus();
+            })
         },
         getClassList() {
             this.fullscreenLoading = true;
