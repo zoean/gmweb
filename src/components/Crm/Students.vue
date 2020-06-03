@@ -1,9 +1,21 @@
 <template>
     <el-main class="index-main">
         <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
-        <el-row type="flex" justify="end">
-            <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+        
+        <el-row style="margin-bottom: 6px;">
+
+            <el-col :span="4" style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
+            
+            <el-col :span="4">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-button type="primary" size="small" @click="getClassTeaStudent">查 询</el-button>
+            </el-col>
+
         </el-row>
+
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
         </el-tabs>
@@ -511,7 +523,8 @@ export default {
                 classTeaUuid: '',
                 classUuid: '', //班级的uuid
                 num: '',
-                sortSet: []
+                sortSet: [],
+                tel: ''
             },
             list: [],
             columnList: [{
@@ -1094,7 +1107,7 @@ export default {
             text-align: center;
             font-size: 15px;
             background: #F7F7F7;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             color: #666666;
         }
         .people-screen{

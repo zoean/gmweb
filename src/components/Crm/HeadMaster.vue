@@ -11,6 +11,7 @@
                     clearable
                     size="small"
                     ref="autocomplete"
+                    style="width: 100%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
