@@ -598,6 +598,10 @@ export default {
                         type: 'success',
                         message: '配置成功'
                     })
+                    this.json = null;
+                    this.filterText = '';
+                    this.treeData = [];
+                    this.tableData = [];
                     this.drawer3 = false;
                     this.getClassList();
                 }else{

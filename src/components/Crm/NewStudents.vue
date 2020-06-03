@@ -83,7 +83,7 @@ export default {
             form: {
                 currentPage: 1,
                 pageSize: 10,
-                sortSet: [],
+                sortSet: [{'createTime': 'DESC'},],
                 total: null,
                 classUuid: '',
                 tel: ''
