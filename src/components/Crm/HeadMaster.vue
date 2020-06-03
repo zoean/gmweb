@@ -11,6 +11,7 @@
                     clearable
                     size="small"
                     ref="autocomplete"
+                    style="width: 100%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
@@ -21,7 +22,7 @@
 
             </el-col>
 
-            <el-col :span="4" style="margin-right: 10px;">
+            <el-col :span="4" style="margin-left: 20px;">
                 <el-button type="primary" size="small" @click="getClassList">查 询</el-button>
             </el-col>
 

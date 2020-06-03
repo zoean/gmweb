@@ -1,8 +1,18 @@
 <template>
     <el-main class="index-main">
 
-        <el-row>
-            <el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)" style="float: right;">确认领取</el-button>
+        <el-row style="margin-bottom: 10px;">
+
+            <el-col :span="4" style="float: right; text-align: right;"><el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
+            
+            <el-col :span="4">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-button type="primary" size="small" @click="getWaitStudentList">查 询</el-button>
+            </el-col>
+
         </el-row>
 
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
@@ -76,6 +86,7 @@ export default {
                 sortSet: [],
                 total: null,
                 classUuid: '',
+                tel: ''
             },
             totalFlag: false,
             list: [],
