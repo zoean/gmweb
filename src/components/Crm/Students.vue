@@ -44,7 +44,7 @@
                 </span>
               </template>
               <template slot-scope="scope">
-                    <span>{{scope.row[item.props] || '--'}}</span>
+                    <span>{{scope.row[item.props] || '- -'}}</span>
                     <!-- <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /> -->
                     
               </template>
@@ -341,9 +341,9 @@
 
                         </el-row>
     
-                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;"></el-row>
+                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;" v-if="!$route.query.id"></el-row>
 
-                        <el-row >
+                        <el-row v-if="!$route.query.id">
                             
                             <el-col :span="6">
 
@@ -363,7 +363,7 @@
                             </el-col>
                         </el-row>
 
-                        <el-row>
+                        <el-row v-if="!$route.query.id">
 
                             <el-col :span="18">
                                 <el-form-item label="跟进内容" prop="followUpContent">
@@ -383,7 +383,7 @@
 
                         </el-row>
                         
-                        <el-form-item style="text-align: center;">
+                        <el-form-item style="text-align: center;" v-if="!$route.query.id">
                           <el-button type="primary" @click="submitForm('customerForm')" size="small" style="width: 80px;">确定</el-button>
                           <el-button plain size="small" style="width: 80px;" @click="quxiao">取消</el-button>
                         </el-form-item>
@@ -401,7 +401,7 @@
 
                     <el-table
                         :data="notesList"
-                        style="width: 100%; margin-top: 10px; margin-bottom: 30px;"
+                        style="width: 100%; margin-bottom: 30px;"
                         >
                         <el-table-column
                           :prop="item.prop"
