@@ -50,11 +50,19 @@
             <el-input v-model="form.awardUrl"></el-input>
           </el-col>
         </el-form-item>
+        <el-form-item label="选择分校" v-if="radio1 === '优惠券'">
+          <el-col :span="10">
+            <el-select v-model="form.schoolName" @change="getCouponList(form.schoolName)">
+              <el-option label="京华网校" value="jhwx"></el-option>
+              <el-option label="胜学网校" value="shengxuewangxiao"></el-option>
+              <el-option label="集团网校" value="jhwxedu"></el-option>
+            </el-select>
+          </el-col>
+        </el-form-item>
         <el-form-item label="选择优惠券" v-if="radio1 === '优惠券'">
           <el-col :span="10">
-            <el-select v-model="form.coupon">
-              <el-option label="优惠券1" value="0"></el-option>
-              <el-option label="优惠券2" value="1"></el-option>
+            <el-select v-model="form.couponsId">
+              <el-option v-for="(item, index) in couponList" :label="item.couponName" :value="item.couponId"></el-option>
             </el-select>
           </el-col>
         </el-form-item>
@@ -83,7 +91,7 @@
   </el-container>
 </template>
 <script>
-import { wechatActivityAwardGet,wechatActivityAwardSEdit,wechatActivityAwardAdd } from "@/request/operateApi.js";
+import { wechatActivityAwardGet,wechatActivityAwardSEdit,wechatActivityAwardAdd, getCouponList } from "@/request/operateApi.js";
 export default {
   name: "pricedetail",
   data() {
@@ -94,6 +102,7 @@ export default {
       imageUrl: "",
       pppss: { fileType: "img" }, //上传图片携带参数
       radioButton: ["优惠券", "实物邮寄", "自定义链接"],
+      couponList: [],
       form: {
         awardStatus: "", //奖励开启状态(0-关闭，1-开启)
         awardName: "", //奖励名称
@@ -138,6 +147,13 @@ export default {
     }
   },
   methods: {
+    getCouponList(schoolName){
+    this.$smoke_post(getCouponList, {schoolName}).then(res => {
+      if(res.code == 200){
+        this.couponList = res.data
+      }
+    })
+    },
     changeCR() {
         this.form = {
         awardStatus: "", //奖励开启状态(0-关闭，1-开启)
