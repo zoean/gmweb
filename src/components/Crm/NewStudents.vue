@@ -10,6 +10,10 @@
             </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
                 <el-button type="primary" size="small" @click="getWaitStudentList">查 询</el-button>
             </el-col>
 
@@ -87,7 +91,8 @@ export default {
                 sortSet: [{'createTime': 'DESC'},],
                 total: null,
                 classUuid: '',
-                tel: ''
+                tel: '',
+                name: ''
             },
             totalFlag: false,
             list: [],
