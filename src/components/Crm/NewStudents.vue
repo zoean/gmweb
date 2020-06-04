@@ -283,12 +283,6 @@
                         <el-row>
 
                             <el-col :span="6">
-                                <el-form-item label="所属班主任" prop="classTeaName">
-                                    <el-input v-model="customerForm.classTeaName" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-
-                            <el-col :span="6">
                                 <el-form-item label="报名班型" prop="signUpClassType">
                                     <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
