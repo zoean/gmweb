@@ -214,9 +214,9 @@
 
                 <div style="margin-top: 20px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
-                    <span>（ </span>
+                    <span> (</span>
                     <span style="display: inline-block; width:20px; height: 10px;background: #F56C6C;"></span>
-                    <span> ）</span>
+                    <span>) </span>
                 </div>
 
                 <el-table
