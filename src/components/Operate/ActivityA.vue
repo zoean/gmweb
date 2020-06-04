@@ -50,8 +50,8 @@
           <template slot-scope="scope">
             <el-button @click="edit(scope.row)" type="text">修改</el-button>
             <el-button @click="partinuser(scope.row)" type="text">参与用户</el-button>
-            <el-button @click="prize(scope.row)" type="text">奖品</el-button>
-            <el-button @click="prizemanage(scope.row)" type="text">中奖管理</el-button>
+            <el-button @click="prizemanage(scope.row)" type="text">奖品</el-button>
+            <el-button @click="prize(scope.row)" type="text">中奖管理</el-button>
             <el-button @click="delate(scope.row)" type="text">删除</el-button>
           </template>
         </el-table-column>
