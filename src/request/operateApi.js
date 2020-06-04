@@ -14,3 +14,4 @@ export const wechatActivityAwardUserDetail = '/api/phone/wechatActivity/award/us
 export const wechatActivityAwardUpdateUser = '/api/phone/wechatActivity/award/updateUser'//中奖列表用户修改接口
 export const wechatActivityAwardPost =  '/api/phone/wechatActivity/award/post'//中奖列表用户派送接口
 export const wechatActivityUserList = '/api/phone/wechatActivity/userList'//参与用户列表接口
+export const getCouponList = '/order-service/coupon/getCouponList' //通过分校获取优惠券
