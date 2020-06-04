@@ -81,8 +81,8 @@ export default {
             ],
             list2: [
                { name: '京华教育题库后台', https: 'http://kaoshi.jhwx.com/index.php', url: require('../../assets/images/inserticon04.png'), id: 4},
-               { name: '京华教育JQ后台', https: 'http://office.jhwx.com/vip/index.do', url: require('../../assets/images/inserticon05.png'), id: 5},
-               { name: '京华教育课程后台', https: 'https://cssc.jhwx.com', url: require('../../assets/images/inserticon03.png'), id: 6},
+               { name: '京华教育课程后台', https: 'https://cssc.jhwx.com', url: require('../../assets/images/inserticon03.png'), id: 5},
+               { name: '京华教育JQ后台', https: 'http://office.jhwx.com/vip/index.do', url: require('../../assets/images/inserticon05.png'), id: 6},
             ],
             bannerList: [
                 { url: require('../../assets/images/banner1.png')},
@@ -131,8 +131,12 @@ export default {
             this.loginPlatform(item.id);
         },
         handleClick2(item) {
-            const href = item.https;
-            window.open(href, '_blank');
+            if(item.id == 6) {
+                const href = item.https;
+                window.open(href, '_blank');
+            }else{
+                this.loginPlatform(item.id);
+            }
         },
         loginPlatform(id) {
             let href = '';
@@ -146,7 +150,10 @@ export default {
                         href = 'https://www.shengxuewangxiao.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 3) {
                         href = 'https://www.jhwxedu.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
-
+                    }else if(id == 4) {
+                        href = 'https://www.jhwx.com/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                    }else if(id == 5) {
+                        href = 'https://www.jhwx.com/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }
                     
                     if(res.data.loginPlatform){

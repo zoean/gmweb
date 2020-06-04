@@ -198,7 +198,7 @@
 
                 <el-upload
                     style="width: 130px; display: inline-block;"
-                    action="https://gm.jhwx.com/api/phone/excel/readExcelClueData"
+                    action="https://testgm.jhwx.com/api/phone/excel/readExcelClueData"
                     :headers="headersObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
@@ -214,9 +214,9 @@
 
                 <div style="margin-top: 20px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
-                    <span>（ </span>
+                    <span> (</span>
                     <span style="display: inline-block; width:20px; height: 10px;background: #F56C6C;"></span>
-                    <span> ）</span>
+                    <span>) </span>
                 </div>
 
                 <el-table
@@ -560,7 +560,7 @@ export default {
             })
         },
         downloadImport() {
-            const href = 'https://gm.jhwx.com' + clueDataTem
+            const href = 'https://testgm.jhwx.com' + clueDataTem
             // console.log(href);
             window.open(href, '_blank');
         },

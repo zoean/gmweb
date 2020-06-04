@@ -1,9 +1,25 @@
 <template>
     <el-main class="index-main">
         <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
-        <el-row type="flex" justify="end">
-            <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+        
+        <el-row style="margin-bottom: 6px;">
+
+            <el-col :span="4" style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
+            
+            <el-col :span="4">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-button type="primary" size="small" @click="getClassTeaStudent">查 询</el-button>
+            </el-col>
+
         </el-row>
+
         <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
             <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
         </el-tabs>
@@ -73,6 +89,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page='form.currentPage'
             :page-sizes="[10, 20, 30]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
@@ -97,11 +114,6 @@
 
                         <el-row>
                             <el-col :span="6">
-                                <el-form-item label="客户编号" prop="number">
-                                    <el-input v-model="customerForm.number" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
                                     <!-- <el-tooltip effect="dark" content="复制手机号码" placement="top">
@@ -121,6 +133,12 @@
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
                                     <el-input v-model="customerForm.age" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="第二电话" prop="twoTel">
+                                    <el-input v-model="customerForm.twoTel" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -192,9 +210,20 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="第二电话" prop="twoTel">
-                                    <el-input v-model="customerForm.twoTel" size="small" ></el-input>
+
+                                <el-form-item label="辅助报名" prop="auxiliarySignUp">
+
+                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
+                                        <el-option
+                                          v-for="item in auxiliarySignUpList"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
                                 </el-form-item>
+
                             </el-col>
 
                             <el-col :span="6">
@@ -311,27 +340,6 @@
                             </el-col>
 
                         </el-row>
-
-                        <el-row>
-
-                            <el-col :span="6">
-
-                                <el-form-item label="辅助报名" prop="auxiliarySignUp">
-
-                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
-                                        <el-option
-                                          v-for="item in auxiliarySignUpList"
-                                          :key="item.name"
-                                          :label="item.name"
-                                          :value="item.number">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-
-                            </el-col>
-
-                        </el-row>
     
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;"></el-row>
 
@@ -409,6 +417,7 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
+                        :current-page='notesForm.currentPage'
                         :page-sizes="[10, 20, 30]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
@@ -455,6 +464,7 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
+                        :current-page='notesCallForm.currentPage'
                         :page-sizes="[10, 20, 30]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
@@ -508,7 +518,9 @@ export default {
                 classTeaUuid: '',
                 classUuid: '', //班级的uuid
                 num: '',
-                sortSet: []
+                sortSet: [],
+                tel: '',
+                name: ''
             },
             list: [],
             columnList: [{
@@ -858,7 +870,7 @@ export default {
                         this.classUuidDefault = this.$route.query.classUuid;
                     }
                     res.data.map(sll => {
-                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
+                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
                     })
                     this.tabsList = res.data;
                     this.getClassTeaStudent();
@@ -1091,7 +1103,7 @@ export default {
             text-align: center;
             font-size: 15px;
             background: #F7F7F7;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             color: #666666;
         }
         .people-screen{

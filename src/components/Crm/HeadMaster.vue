@@ -1,9 +1,31 @@
 <template>
     <el-main class="index-main">
         <el-row class="people-screen">
-            <el-col :span="5">
+            <el-col :span="4" style="float: right; text-align: right;">
                 <el-button type="primary" size="small" @click="addClassClick">添加考试项-班型</el-button>
             </el-col>
+
+            <el-col :span="4">
+
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    ref="autocomplete"
+                    style="width: 100%;"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelectExam"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
+
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-button type="primary" size="small" @click="getClassList">查 询</el-button>
+            </el-col>
+
         </el-row>
 
         <el-table
@@ -32,6 +54,7 @@
             style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page='form.currentPage'
             :page-sizes="[10, 20, 30]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
@@ -115,6 +138,7 @@
                 style="text-align: right; margin-top: 20px;"
                 :total='teacherForm.total'
                 :page-size='teacherForm.pageSize'
+                :current-page='teacherForm.currentPage'
                 :page-sizes="[10, 20, 30]"
                 :hide-on-single-page="totalFlag"
                 @current-change="handleCurrentChangeTeacher"
@@ -152,7 +176,13 @@
             :before-close="handleClose">
             <span class="bullets"></span>
 
-            <el-button type="primary" style="margin: 0 20px;" size="small" @click="addClassTeacher">确定</el-button>
+            <div style="height: 52px; background: #FAFAFA; border-bottom: 1px dashed #ccc; padding: 10px 0 0 40px; position: fixed; z-index: 99; width: 100%;">
+
+                <el-button type="primary" size="small" @click="addClassTeacher">保 存</el-button>
+
+            </div>
+
+            <div style="height: 60px; width: 100%;"></div>
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
@@ -233,7 +263,9 @@ export default {
                 currentPage: 1,
                 pageSize: 10,
                 sortSet: [],
-                total: null
+                total: null,
+                examItem: '',
+                examItemText: '',
             },
             totalFlag: false,
             list: [],
@@ -250,7 +282,7 @@ export default {
             },
             rules1: {
                 classType: [
-                    { required: true, message: '请选择班型等级', trigger: 'blur'}
+                    { required: true, message: '请选择班型等级', trigger: 'change'}
                 ],
                 subjectText: [
                     { required: true, message: '请选择考试项目', trigger: 'change'}
@@ -282,7 +314,7 @@ export default {
                 { 'prop': 'studentNum', 'label': '学员数量' },
             ],
 
-            drawerTitle3: '配置班主任',
+            drawerTitle3: '',
             drawer3: false,
             direction3: 'rtl',
             name_input: '',
@@ -412,6 +444,20 @@ export default {
             this.ruleForm1.examItemUuid = item.id;
             this.ruleForm1.subjectText = item.value;
         },
+        handleSelectExam(item) {
+            console.log(item);
+            this.form.examItem = item.id;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItem = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
         getClassList() {
             this.fullscreenLoading = true;
             this.$smoke_post(getClassList, this.form).then(res => {
@@ -441,11 +487,13 @@ export default {
         },
         handleClose(done) {
             if(this.drawer3) {
+
                 this.json = null;
                 this.filterText = '';
                 this.treeData = [];
                 this.tableData = [];
                 done();
+                
             }else{
                 done();
             }
@@ -456,7 +504,7 @@ export default {
             this.teacherForm.uuid = scope.uuid;
             this.addTeacherForm.classUuid = scope.uuid;
             this.teacherMoveForm.className = scope.examItem + ' - ' + scope.classType;
-            this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任'; //一级消防工程师 - 普通班 - 班主任
+            this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任列表'; //一级消防工程师 - 普通班 - 班主任列表
             this.getClassTeacherList();
         },
         studentsListClick(scope) {
@@ -496,6 +544,7 @@ export default {
             console.log(scope);
             this.drawer3 = true;
             this.addTeacherForm.classUuid = scope.uuid;
+            this.drawerTitle3 = scope.examItem + ' - ' + scope.classType + ' - 配置班主任'; //一级消防工程师 - 普通班 - 配置班主任
             // console.log(this.addTeacherForm.classUuid);
             this.getOrgStrAndClassTch(scope.uuid);
         },
@@ -545,6 +594,10 @@ export default {
                         type: 'success',
                         message: '配置成功'
                     })
+                    this.json = null;
+                    this.filterText = '';
+                    this.treeData = [];
+                    this.tableData = [];
                     this.drawer3 = false;
                     this.getClassList();
                 }else{

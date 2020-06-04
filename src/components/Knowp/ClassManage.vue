@@ -34,7 +34,7 @@
                   <svg-icon v-if="scope.row.level == '考试项目'" slot="reference" @click="editClick(scope.row)" icon-title="删除" icon-class="del" />
                 </el-popover>
 
-                <svg-icon v-if="scope.row.level == '考试项目'" slot="reference" @click="addClick(scope.row)" :icon-title="scope.row.level == '科目' ? '科目章节' : '添加'" :icon-class="scope.row.level == '科目' ? 'addnotes' : 'add'" />
+                <svg-icon v-if="scope.row.level == '二级分类'" slot="reference" @click="addClick(scope.row)" :icon-title="scope.row.level == '科目' ? '科目章节' : '添加'" :icon-class="scope.row.level == '科目' ? 'addnotes' : 'add'" />
 
                 <svg-icon v-if="!scope.row.sortUpFlag && scope.row.level == '考试项目'" @click="sortNumber(scope.row, 'up')" icon-class="up" icon-title="排序向上" />
 
