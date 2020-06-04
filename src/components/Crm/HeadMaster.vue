@@ -488,15 +488,11 @@ export default {
         handleClose(done) {
             if(this.drawer3) {
 
-                this.$confirm('确认关闭？')
-                .then(_ => {
-                    this.json = null;
-                    this.filterText = '';
-                    this.treeData = [];
-                    this.tableData = [];
-                    done();
-                })
-                .catch(_ => {});
+                this.json = null;
+                this.filterText = '';
+                this.treeData = [];
+                this.tableData = [];
+                done();
                 
             }else{
                 done();

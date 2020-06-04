@@ -110,11 +110,6 @@
 
                         <el-row>
                             <el-col :span="6">
-                                <el-form-item label="客户编号" prop="number">
-                                    <el-input v-model="customerForm.number" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
                                     <!-- <el-tooltip effect="dark" content="复制手机号码" placement="top">
@@ -134,6 +129,12 @@
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
                                     <el-input v-model="customerForm.age" size="small" ></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="第二电话" prop="twoTel">
+                                    <el-input v-model="customerForm.twoTel" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -205,9 +206,20 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="第二电话" prop="twoTel">
-                                    <el-input v-model="customerForm.twoTel" size="small" ></el-input>
+
+                                <el-form-item label="辅助报名" prop="auxiliarySignUp">
+
+                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
+                                        <el-option
+                                          v-for="item in auxiliarySignUpList"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
                                 </el-form-item>
+
                             </el-col>
 
                             <el-col :span="6">
@@ -321,27 +333,6 @@
                                     </el-date-picker>
 
                                 </el-form-item>
-                            </el-col>
-
-                        </el-row>
-
-                        <el-row>
-
-                            <el-col :span="6">
-
-                                <el-form-item label="辅助报名" prop="auxiliarySignUp">
-
-                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
-                                        <el-option
-                                          v-for="item in auxiliarySignUpList"
-                                          :key="item.name"
-                                          :label="item.name"
-                                          :value="item.number">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-
                             </el-col>
 
                         </el-row>
@@ -874,7 +865,7 @@ export default {
                         this.classUuidDefault = this.$route.query.classUuid;
                     }
                     res.data.map(sll => {
-                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
+                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
                     })
                     this.tabsList = res.data;
                     this.getClassTeaStudent();

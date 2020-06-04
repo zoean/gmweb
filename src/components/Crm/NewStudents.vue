@@ -33,6 +33,7 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
+              :width="item.prop == 'seatName' ? '250px' : item.prop == 'createTime' ? '180px' : ''"
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
@@ -74,7 +75,7 @@
 </template>
 
 <script>
-import { getWaitStudentList, classTeaGetWaitStudent, getClassTeaClass } from '../../request/api';
+import { getWaitStudentList, classTeaGetWaitStudent, getClassTeaClassWait } from '../../request/api';
 import { timestampToTime, classTypeString, orderTypeText, sortTextNum } from '../../assets/js/common';
 export default {
     name: 'newStudents',
@@ -101,6 +102,7 @@ export default {
                 // { 'prop': 'orderNum', 'label': '订单编号' },
                 // { 'prop': 'orderType', 'label': '订单类型' },
                 { 'prop': 'school', 'label': '分校' },
+                { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
             ],
             tabsList: [],
@@ -114,7 +116,7 @@ export default {
         }
     },
     created() {
-        this.getClassTeaClass();
+        this.getClassTeaClassWait();
     },
     methods: {
         sortChange(data) {
@@ -133,9 +135,9 @@ export default {
             console.log(scope);
             this.classTeaGetWaitStudent('click', scope.uuid)
         },
-        getClassTeaClass() {
+        getClassTeaClassWait() {
             this.fullscreenLoading = true;
-            this.$smoke_get(getClassTeaClass,{
+            this.$smoke_get(getClassTeaClassWait,{
                 classTeaUuid: ''
             }).then(res => {
                 if(res.code == 200) {
@@ -144,7 +146,7 @@ export default {
                         this.fullscreenLoading = false;
                         if(res.data.length != 0) {
                             res.data.map(sll => {
-                                sll.text = sll.examItem + ' - ' + classTypeString(sll.classType);
+                                sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
                             })
                             this.tabsList = res.data;
                             this.form.classUuid = res.data[0].uuid;
@@ -173,6 +175,7 @@ export default {
                         sll.createTime  = timestampToTime(Number(sll.createTime));
                         sll.classType = classTypeString(sll.classType);
                         sll.orderType = orderTypeText(sll.orderType);
+                        sll.seatName = sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName;
                     })
                     this.list = res.data.list;
                     this.form.total = res.data.total;
