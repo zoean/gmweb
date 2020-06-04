@@ -41,13 +41,16 @@ export const columnListNo = [
 ]
 
 export const everyTimeList = [
-    { 'prop': 'calledId', 'label': '座席电话' },
-    { 'prop': 'insertTime', 'label': '电话开始呼叫时间' },
     { 'prop': 'callerId', 'label': '客户电话' },
     { 'prop': 'callerArea', 'label': '客户归属' },
+    { 'prop': 'calledId', 'label': '拨打人电话' },
+    { 'prop': 'seatName', 'label': '拨打人姓名' },
+    { 'prop': 'seatOrgName', 'label': '拨打人部门' },
+    { 'prop': 'callStyle', 'label': '拨打方式' },
+    { 'prop': 'insertTime', 'label': '拨打时间' },
     { 'prop': 'isCalledPhone', 'label': '是否接通' },
     { 'prop': 'duration', 'label': '通话时长（秒）' },
-    { 'prop': 'dealState', 'label': '处理状态' },
+    // { 'prop': 'dealState', 'label': '处理状态' },
     { 'prop': 'resume', 'label': '通话备注' },
     // { 'prop': 'areaId', 'label': '号码归属' },
     // { 'prop': 'callStyle', 'label': '呼叫方式' },

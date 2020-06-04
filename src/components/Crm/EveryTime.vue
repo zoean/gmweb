@@ -3,7 +3,7 @@
         <el-row style="margin-bottom: 20px;">
 
             <el-col :span="4">
-                <el-select v-model="form.callStyle" size="small" placeholder="请选择呼叫方式" style="width: 90%;">
+                <el-select v-model="form.callStyle" size="small" placeholder="请选择呼叫方式" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in callStyleArr"
                       :key="item.value"
@@ -14,15 +14,15 @@
             </el-col>
     
             <el-col :span="4">
-                <el-input v-model="form.calledId" size="small" placeholder="请输入座席电话" style="width: 90%;"></el-input>
+                <el-input v-model="form.calledId" size="small" placeholder="请输入拨打人电话" style="width: 90%;" clearable></el-input>
             </el-col>
     
             <el-col :span="4">
-                <el-input v-model="form.callerId" size="small" placeholder="请输入客户电话" style="width: 90%;"></el-input>
+                <el-input v-model="form.callerId" size="small" placeholder="请输入客户电话" style="width: 90%;" clearable></el-input>
             </el-col>
     
             <el-col :span="4">
-                <el-select v-model="form.dealState" size="small" placeholder="请选择处理状态" style="width: 90%;">
+                <el-select v-model="form.dealState" size="small" placeholder="请选择处理状态" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in dealStateArr"
                       :key="item.value"
@@ -33,7 +33,7 @@
             </el-col>
     
             <el-col :span="4">
-                <el-select v-model="form.hangupSide" size="small" placeholder="请选择挂机方" style="width: 90%;">
+                <el-select v-model="form.hangupSide" size="small" placeholder="请选择挂机方" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in hangupSideArr"
                       :key="item.value"
@@ -44,7 +44,7 @@
             </el-col>
     
             <el-col :span="4">
-                <el-select v-model="form.isCalledPhone" size="small" placeholder="请选择是否接通" style="width: 90%;">
+                <el-select v-model="form.isCalledPhone" size="small" placeholder="请选择是否接通" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in isCalledPhoneArr"
                       :key="item.value"
@@ -60,6 +60,7 @@
         
             <el-col :span="8">
                 <el-date-picker
+                    clearable
                     style="width: 95%;"
                     size="small"
                     v-model="dataPicker"
@@ -72,7 +73,7 @@
             </el-col>
     
             <el-col :span="4">
-                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 90%;">
+                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in pathwayArr"
                       :key="item.value"
@@ -83,7 +84,7 @@
             </el-col>
     
             <el-col :span="4">
-                <el-input v-model="form.seatId" size="small" placeholder="请输入坐席工号" style="width: 90%;"></el-input>
+                <el-input v-model="form.seatId" size="small" placeholder="请输入坐席工号" style="width: 90%;" clearable></el-input>
             </el-col>
     
             <el-col :span="8">
@@ -221,6 +222,7 @@ export default {
 
                             sll.insertDbTime = timestampToTime(sll.insertDbTime);
                             sll.insertTime = timestampToTime(sll.insertTime);
+                            sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
                             if(sll.recordFile){
                                 this.columnWidth = 330;
                                 this.columnFlag = true;
