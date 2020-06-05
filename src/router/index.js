@@ -33,6 +33,7 @@ import enums from '@/components/Crm/Enum';
 import extendLinkList from '@/components/Crm/ExtendLinkList';
 import enterClues from '@/components/Crm/EnterClues';
 import students from '@/components/Crm/Students';
+import agreeMentDetails from '@/components/Crm/AgreeMentDetails';
 import newStudents from '@/components/Crm/NewStudents';
 import registered from '@/components/Crm/Registered';
 import headMaster from '@/components/Crm/HeadMaster';
@@ -109,7 +110,6 @@ export default new Router({
             name: 'zuzhi',
             component: zuzhi
         },
-
 
         {
             path: '/crm/dataStatistics/timeData',
@@ -211,6 +211,12 @@ export default new Router({
             path: '/crm/myStudents/newStudents',
             name: 'newStudents',
             component: newStudents
+        },
+
+        {
+            path: '/crm/myStudents/agreeMentDetails',
+            name: 'agreeMentDetails',
+            component: agreeMentDetails
         },
 
         {

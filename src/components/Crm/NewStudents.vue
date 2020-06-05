@@ -330,6 +330,16 @@
 
                             </el-col>
 
+                            <el-col :span="6" style="margin-top: 10px;">
+
+                                <label class="el-form-item__label">协议信息</label>
+
+                                <span style="height: 40px; line-height: 40px;">{{agreementList.length}}</span>个
+
+                                <span style="height: 40px; line-height: 40px; cursor: pointer;" @click="lookAgreement">查看</span>
+
+                            </el-col>
+
                         </el-row>
 
                     </el-form>
@@ -422,6 +432,30 @@
             </el-tabs>
         </el-drawer>
 
+        <el-dialog width="40%" title="协议列表" :visible.sync="agreeFlag">
+          
+          <el-table
+            :data="agreementList"
+            >
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in agreeColumnList"
+                :key="index">
+            </el-table-column>
+
+            <el-table-column prop="limitLimit" label="操作" width="50">
+                <template slot-scope="scope">                            
+                    <el-button type="text" size="small" @click="lookAgreeLink(scope.row.agrId)">查看</el-button>
+                </template>
+            </el-table-column>
+          </el-table>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="agreeFlag = false" size="small" plain>取 消</el-button>
+          </div>
+        </el-dialog>
+
     </el-main>
 </template>
 
@@ -437,6 +471,7 @@ import {
     getSchoolList,
     enumByEnumNums
 } from '../../request/api';
+import axios from 'axios'
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
@@ -588,6 +623,11 @@ export default {
                     return cellValue ? cellValue : '--'
                 }
             }],
+            agreementList: [],
+            agreeColumnList: [
+                { 'prop': 'agrName', 'label': '协议名称' },  
+            ],
+            agreeFlag: false,
         }
     },
     created() {
@@ -598,6 +638,26 @@ export default {
         this.getSchoolList();
     },
     methods: {
+        GetAgreementList(id) {
+            let that = this;
+            let url = "https://testapp.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':20964}";
+            var ajaxObj = new XMLHttpRequest();
+            ajaxObj.open('get', url)
+            ajaxObj.send();
+            ajaxObj.onreadystatechange = function () {
+            // 为了保证 数据 完整返回，我们一般会判断 两个值
+                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
+                    // 数据是保存在 异步对象的 属性中
+                    let res = JSON.parse(ajaxObj.responseText);
+                    console.log(res.data.agreementList);
+                    that.$nextTick(() => {
+                        that.agreementList = res.data.agreementList;
+                    })
+                }
+            }
+        },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
                 numberList: arr
@@ -763,6 +823,7 @@ export default {
             this.customerForm.followUpContent = '';
             this.customerForm.seatName = row.seatName;
             this.getStudentDetails(row.uuid);
+            this.GetAgreementList(row.customerId);
             console.log(row);
             this.getOrderForm.userId = row.customerId;
             this.getOrderForm.itemId = row.examItemId;
@@ -906,6 +967,18 @@ export default {
         timeChange() {
             this.customerForm.examPeriod = this.customerForm.examPeriod.getTime();
         },
+        lookAgreement() {
+            this.agreeFlag = true;
+        },
+        lookAgreeLink(id) {
+            const { href } = this.$router.resolve({
+                name: "agreeMentDetails",
+                query: {
+                    id: id
+                }
+            })
+            window.open(href, '_blank');
+        }
     },
     mounted() {
         
