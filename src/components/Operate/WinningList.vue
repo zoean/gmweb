@@ -294,9 +294,9 @@ export default {
 </script>
 <style lang="less">
 .el-form{
-  .el-form-item__label{
-    width: 150px !important;
-  }
+  // .el-form-item__label{
+  //   width: 150px !important;
+  // }
   .form-tip{
     font-size: 14px;
     color: #bbb;
