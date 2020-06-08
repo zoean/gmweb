@@ -336,7 +336,7 @@
 
                                 <span style="height: 40px; line-height: 40px;">{{agreementList.length}}</span>个
 
-                                <span style="height: 40px; line-height: 40px; cursor: pointer;" @click="lookAgreement">查看</span>
+                                <span style="height: 40px; line-height: 40px; cursor: pointer; color: #409EFF;" @click="lookAgreement">查看</span>
 
                             </el-col>
 
@@ -359,6 +359,7 @@
                         >
                         <el-table-column
                           :prop="item.prop"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           :label="item.label"
                           v-for="(item, index) in notesColumnList"
                           :key="index"
@@ -390,6 +391,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           v-for="(item, index) in notesColumnListCall"
                           :key="index"
                           >
@@ -567,20 +569,20 @@ export default {
             pcaa: null, //省市数据
             notesList: [],
             notesColumnList: [
-                { 'prop': 'createTime', 'label': '创建时间', width: 250 },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'entryPerson', 'label': '跟进人' },
                 { 'prop': 'followUp', 'label': '跟进类型' },
                 { 'prop': 'followUpContent', 'label': '跟进内容' },
             ],
             notesCallList: [],
             notesColumnListCall: [
-                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'seatName', 'label': '跟进人' },
                 { 'prop': 'isCalledPhone', 'label': '是否接通' },
                 { 'prop': 'callStyle', 'label': '呼叫方式' },
                 { 'prop': 'duration', 'label': '通话时长(秒)' },
                 { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
-                { 'prop': 'recordUrl', 'label': '录音地址' },
+                // { 'prop': 'recordUrl', 'label': '录音地址' },
             ],
             notesCallForm: {
                 clueDataSUuid: '',
@@ -640,7 +642,7 @@ export default {
     methods: {
         GetAgreementList(id) {
             let that = this;
-            let url = "https://testapp.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':20964}";
+            let url = "https://testapp.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
             var ajaxObj = new XMLHttpRequest();
             ajaxObj.open('get', url)
             ajaxObj.send();
