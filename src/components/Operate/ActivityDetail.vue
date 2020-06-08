@@ -75,9 +75,7 @@
               </el-col>
             </el-form-item>
             <el-form-item label="触发文案">
-              <el-col :span="7">
-                <el-input type="textarea" v-model="form.triggerText"></el-input>
-              </el-col>
+                <el-input type="textarea" row="5" v-model="form.triggerText"></el-input>
             </el-form-item>
             <el-form-item label="触发图片" class="chufaimg">
               <el-upload

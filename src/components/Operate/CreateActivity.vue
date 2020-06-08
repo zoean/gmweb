@@ -43,28 +43,29 @@
             <el-form-item label="活动时间" prop="activityTime">
               <el-col :span="7">
                 <el-date-picker
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                  style="width:100%"
-                  v-model="activityTimes"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                ></el-date-picker>
+                v-model="activityTimes"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+                :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
               </el-col>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
               <el-col :span="7">
                 <el-date-picker
-                  style="width:100%"
-                  value-format="yyyy-MM-dd"
                   v-model="receiveTimes"
-                  type="daterange"
+                  type="datetimerange"
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
                   :picker-options="pickerOptions"
+                  :default-time="['00:00:00', '23:59:59']"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  format="yyyy-MM-dd HH:mm:ss"
                 ></el-date-picker>
               </el-col>
             </el-form-item>
@@ -77,9 +78,7 @@
               </el-col>
             </el-form-item>
             <el-form-item label="触发文案">
-              <el-col :span="7">
-                <el-input type="textarea" v-model="form.triggerText"></el-input>
-              </el-col>
+                <el-input type="textarea" row="5" v-model="form.triggerText"></el-input>
             </el-form-item>
             <el-form-item label="触发图片">
               <el-upload
@@ -122,9 +121,6 @@ export default {
   data() {
     return {
       pickerOptions: {
-        disabledDate(v) {
-          return v.getTime() < new Date().getTime() - 86400000;
-        }
       },
       form: {
         appId: "", //公账号APPID
