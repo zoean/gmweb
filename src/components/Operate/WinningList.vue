@@ -221,14 +221,14 @@ export default {
     },
     formatStatus(row, column, cellValue){
       switch(cellValue){
+        case '0':
+          return '未领取'
+          break
         case '1':
-          return '优惠券'
+          return '申领中'
           break
         case '2':
-          return '实物邮寄'
-          break
-        case '3':
-          return '自定义链接'
+          return '已领取'
           break
       }
     },
@@ -292,7 +292,18 @@ export default {
   }
 };
 </script>
+<style lang="less">
+.el-form{
+  .el-form-item__label{
+    width: 150px !important;
+  }
+  .form-tip{
+    font-size: 14px;
+    color: #bbb;
+  }
+}
 
+</style>
 <style lang="less" scoped>
 .index-main {
   height: calc(100vh - 60px);

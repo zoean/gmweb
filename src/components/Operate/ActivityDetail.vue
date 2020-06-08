@@ -6,8 +6,9 @@
         <el-tab-pane label="基础信息">
           <el-form ref="form" :model="form" label-width="150px !important" :rules="rules">
             <el-form-item label="应用公众号" prop="appId">
-              <el-col :span="7">
-                <el-select v-model="form.appId" placeholder="请选择公众号">
+              <el-row :gutter="10">
+                <el-col :span="7">
+                <el-select v-model="form.appId" placeholder="请选择公众号" disabled>
                   <el-option
                     :key="index"
                     v-for=" (item,index) in application"
@@ -15,30 +16,42 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-              </el-col>
+                </el-col>
+                <el-col class="form-tip" :span="15">初次选定后，之后不可更改</el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="活动名称" prop="activityName">
               <el-col :span="7">
                 <el-input v-model.trim="form.activityName"></el-input>
               </el-col>
             </el-form-item>
-            <el-form-item label="活动简约封面">
-              <el-upload
-                class="avatar-uploader"
-                action="https://testgm.jhwx.com/upload-service/upload/file"
-                :show-file-list="false"
-                :data="pppss"
-                :on-success="handleAvatarSuccessicon"
-                :before-upload="beforeAvatarUpload"
-              >
-                <img v-if="imageUrl2" :src="imageUrl2" class="avatar" />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
+            <el-form-item label="活动简约封面" prop="imageUrl2">
+              <el-row :gutter="10">
+                <el-col :span="7">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="https://testgm.jhwx.com/upload-service/upload/file"
+                    :show-file-list="false"
+                    :data="pppss"
+                    :on-success="handleAvatarSuccessicon"
+                    :before-upload="beforeAvatarUpload"
+                  >
+                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  </el-upload>
+                </el-col>
+                <el-col class="form-tip" :span="15">用户分享活动链接等情况使用。封面尺寸要求：300px*300px</el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="关键词" prop="triggerWord">
-              <el-col :span="7">
-                <el-input v-model.trim="form.triggerWord"></el-input>
-              </el-col>
+              <el-row :gutter="10">
+                <el-col :span="7">
+                  <el-input v-model.trim="form.triggerWord"></el-input>
+                </el-col>
+                <el-col class="form-tip" :span="15">
+                  多个可以用逗号分隔开
+                </el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="活动时间" prop="activityTime">
               <el-date-picker
@@ -64,20 +77,35 @@
                   value-format="yyyy-MM-dd HH:mm:ss"
                   format="yyyy-MM-dd HH:mm:ss"
                 ></el-date-picker>
-              </el-col>
             </el-form-item>
             <el-form-item label="新用户触发" prop="newUserTrigger">
+            <el-row :gutter="10">
               <el-col :span="7">
                 <el-select v-model="form.newUserTrigger">
                   <el-option label="启用" value="0"></el-option>
                   <el-option label="不启用" value="1"></el-option>
                 </el-select>
               </el-col>
+              <el-col class="form-tip" :span="15">新用户初进公众号，直接发送文案与海报</el-col>
+            </el-row>
             </el-form-item>
             <el-form-item label="触发文案">
-                <el-input type="textarea" row="5" v-model="form.triggerText"></el-input>
+              <el-row>
+                <el-col :span="16">
+                  <el-row>
+                    <el-col><el-input type="textarea" row="5" v-model="form.triggerText"></el-input></el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col class="form-tip">
+                      用户在公众号发关键字，则会收到此内容消息,不填写则不发送消息给用户
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>  
             </el-form-item>
             <el-form-item label="触发图片" class="chufaimg">
+            <el-row :gutter="10">
+              <el-col :span="7">
               <el-upload
                 ref="upload"
                 class="avatar-uploader"
@@ -90,12 +118,20 @@
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+              </el-col>
+              <el-col class="form-tip" :span="15">用户在公众号发关键字，则会收到此内容海报,不上传则不发送海报图给用户。海报尺寸要求：750px*1334px</el-col>
+            </el-row>
             </el-form-item>
             <el-form-item label="用户中奖提醒推荐人">
+            <el-row :gutter="10">
+              <el-col :span="7">
               <el-radio-group v-model="awardNotice" label-width="100px">
                 <el-radio-button label="开启"></el-radio-button>
                 <el-radio-button label="关闭" border></el-radio-button>
               </el-radio-group>
+              </el-col>
+              <el-col class="form-tip" :span="15">提醒暂时为固定形式内容</el-col>
+            </el-row>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -149,6 +185,18 @@ export default {
         appId: [{ required: true, message: "请选择公众号", trigger: "change" }],
         activityName: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
+        ],
+        imageUrl2: [
+          { required: true, message: "请上传活动封面", trigger: "blur" }
+        ],
+        triggerWord:[
+          { required: true, message: "请输入关键词", trigger: "blur" }
+        ],
+        activityTime: [
+          { required: true, message: "请选择活动时间", trigger: "blur" }
+        ],
+        receiveTime: [
+          { required: true, message: "请选择派奖时间", trigger: "blur" }
         ],
         newUserTrigger: [
           { required: true, message: "请选择是否开启", trigger: "change" }
