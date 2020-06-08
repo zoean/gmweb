@@ -43,6 +43,7 @@
           :label="item.label"
           v-for="(item, index) in columnList"
           :width="item.width"
+          :formatter="item.formatter"
           :key="index"
         ></el-table-column>
         <el-table-column label="操作" prop>
@@ -80,24 +81,26 @@
           <el-form-item label="中奖时间">
             <div>{{form.awardTime}}</div>
           </el-form-item>
-          <el-form-item label="收货人"  prop="receiveUserName">
-            <el-input v-model="form.receiveUserName"></el-input>
-          </el-form-item>
-          <el-form-item label="联系方式"  prop="receiveUserMobile">
-            <el-input v-model="form.receiveUserMobile"></el-input>
-          </el-form-item>
-          <el-form-item label="收货地区" prop="receiveUserAddress">
-            <el-input v-model="form.receiveUserAddress"></el-input>
-          </el-form-item>
-          <el-form-item label="具体地址" prop="receiveUserAddressDetail">
-            <el-input v-model="form.receiveUserAddressDetail"></el-input>
-          </el-form-item>
-          <el-form-item label="快递公司" prop="postCompany">
-            <el-input v-model="form.postCompany"></el-input>
-          </el-form-item>
-          <el-form-item label="邮件单号" prop="trackNumber">
-            <el-input v-model="form.trackNumber"></el-input>
-          </el-form-item>
+          <div v-if="form.awardType == 2">
+            <el-form-item label="收货人"  prop="receiveUserName">
+              <el-input v-model="form.receiveUserName"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式"  prop="receiveUserMobile">
+              <el-input v-model="form.receiveUserMobile"></el-input>
+            </el-form-item>
+            <el-form-item label="收货地区" prop="receiveUserAddress">
+              <el-input v-model="form.receiveUserAddress"></el-input>
+            </el-form-item>
+            <el-form-item label="具体地址" prop="receiveUserAddressDetail">
+              <el-input v-model="form.receiveUserAddressDetail"></el-input>
+            </el-form-item>
+            <el-form-item label="快递公司" prop="postCompany">
+              <el-input v-model="form.postCompany"></el-input>
+            </el-form-item>
+            <el-form-item label="邮件单号" prop="trackNumber">
+              <el-input v-model="form.trackNumber"></el-input>
+            </el-form-item>
+          </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -158,7 +161,8 @@ export default {
         {
           label: "状态",
           prop: "receiveStatus",
-          width: 125
+          width: 125,
+          formatter: this.formatStatus
         },
         {
           label: "领取时间",
@@ -214,6 +218,19 @@ export default {
     priceDetail(row) {
       this.getAwardUserDetail(row.awardUserId);
       this.dialogVisible = true;
+    },
+    formatStatus(row, column, cellValue){
+      switch(cellValue){
+        case '1':
+          return '优惠券'
+          break
+        case '2':
+          return '实物邮寄'
+          break
+        case '3':
+          return '自定义链接'
+          break
+      }
     },
     getlistData(awardId = "", receiveStatus = "", nickName = "") {
       this.$smoke_get(wechatActivityAwardUserList, {

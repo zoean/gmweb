@@ -46,8 +46,8 @@
                 v-model="activityTimes"
                 type="datetimerange"
                 range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 format="yyyy-MM-dd HH:mm:ss"
                 :default-time="['00:00:00', '23:59:59']">
@@ -60,8 +60,8 @@
                   v-model="receiveTimes"
                   type="datetimerange"
                   range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
                   :picker-options="pickerOptions"
                   :default-time="['00:00:00', '23:59:59']"
                   value-format="yyyy-MM-dd HH:mm:ss"
@@ -72,8 +72,8 @@
             <el-form-item label="新用户触发" prop="newUserTrigger">
               <el-col :span="7">
                 <el-select v-model="form.newUserTrigger">
-                  <el-option label="启用" value="0"></el-option>
-                  <el-option label="不启用" value="1"></el-option>
+                  <el-option label="启用" value="1"></el-option>
+                  <el-option label="不启用" value="0"></el-option>
                 </el-select>
               </el-col>
             </el-form-item>
