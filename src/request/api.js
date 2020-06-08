@@ -212,6 +212,7 @@ export const delVerClassTeacher = '/api/phone/classTeacher/delVerClassTeacher'; 
 export const getClassTeaOptionByClassUuid = '/api/phone/classTeacher/getClassTeaOptionByClassUuid'; //获取班级下的班主任选项
 export const transferOfficer = '/api/phone/classTeacher/transferOfficer'; //转学员
 export const getClassTeaClass = '/api/phone/classTeacher/getClassTeaClass'; //获取班主任的班级列表
+export const getClassTeaClassWait = '/api/phone/classTeacher/getClassTeaClassWait'; //获取班主任的班级列表(待领取)
 
 //学员管理
 export const getWaitStudentList = '/api/phone/classTeacher/getWaitStudentList'; //获取待分配学员订单列表

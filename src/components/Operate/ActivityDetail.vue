@@ -25,7 +25,7 @@
             <el-form-item label="活动简约封面">
               <el-upload
                 class="avatar-uploader"
-                action="http://gm.jhwx.com/upload-service/upload/file"
+                action="https://gm.jhwx.com/upload-service/upload/file"
                 :show-file-list="false"
                 :data="pppss"
                 :on-success="handleAvatarSuccessicon"
@@ -41,30 +41,28 @@
               </el-col>
             </el-form-item>
             <el-form-item label="活动时间" prop="activityTime">
-              <el-col :span="7">
-                <el-date-picker
-                  :picker-options="pickerOptions"
-                  value-format="yyyy-MM-dd"
-                  style="width:100%"
-                  v-model="activityTimes"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                ></el-date-picker>
-              </el-col>
+              <el-date-picker
+                v-model="activityTimes"
+                type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+                :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
-              <el-col :span="7">
                 <el-date-picker
-                  style="width:100%"
-                  value-format="yyyy-MM-dd"
                   v-model="receiveTimes"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  type="datetimerange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
                   :picker-options="pickerOptions"
+                  :default-time="['00:00:00', '23:59:59']"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  format="yyyy-MM-dd HH:mm:ss"
                 ></el-date-picker>
               </el-col>
             </el-form-item>
@@ -85,7 +83,7 @@
               <el-upload
                 ref="upload"
                 class="avatar-uploader"
-                action="http://gm.jhwx.com/upload-service/upload/file"
+                action="https://gm.jhwx.com/upload-service/upload/file"
                 :show-file-list="false"
                 :data="pppss"
                 :on-success="handleAvatarSuccess"

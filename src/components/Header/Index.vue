@@ -111,23 +111,23 @@
                     popper-class="message_popover"
                     width="400"
                     trigger="click">
-                    <el-tabs v-model="activeName" @tab-click="tabClickHandle">
+                    <el-tabs v-model="activeName" @tab-click="tabClickHandle" v-loading="fullscreenLoading">
                         <el-tab-pane :label="`未读 (${notReadNumValue})`" name="first">
                             <dl v-for="(item, index) in unReadList" :key="index">
                                 <dt title="点击查看消息内容" @click="handleLookClick(item)"><span></span>{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
                             </dl>
-                            <dl v-if="!unReadList.length" class="no-data"><dt class="no-data">暂无未读消息</dt></dl>
+                            <dl v-if="!unReadList.length && !fullscreenLoading" class="no-data"><dt class="no-data">暂无未读消息</dt></dl>
                         </el-tab-pane>
                         <el-tab-pane label="已读" name="second">
                             <dl v-for="(item, index) in fullReadList" :key="index">
                                 <dt title="点击查看消息内容" @click="item.fold = !item.fold">{{`${item.type}${ item.fold ? maxSlice(item.msg) : item.msg}`}}</dt>
                                 <dd>{{item.createTime}}</dd>
                             </dl>
-                            <dl v-if="!fullReadList.length" class="no-data"><dt class="no-data">暂无已读消息</dt></dl>
+                            <dl v-if="!fullReadList.length && !fullscreenLoading" class="no-data"><dt class="no-data">暂无已读消息</dt></dl>
                         </el-tab-pane>
                     </el-tabs>
-                    <el-badge slot="reference" :value="notReadNumValue" style="float: right; margin-right: 30px;" @click.native="badgeClick">
+                    <el-badge slot="reference" :value="notReadNumValue" style="float: right; margin-right: 30px; cursor: pointer;" @click.native="badgeClick">
                     <i class="el-icon-bell" style="font-size: 18px;"></i>
                 </el-badge>
                     
@@ -175,7 +175,7 @@ export default {
             },
             rules: {
                 phone: [
-                  { pattern:/^1[34578]\d{9}$/, message: "请输入合法手机号", trigger: "blur" }
+                  { pattern:/^1\d{10}$/, message: "请输入合法手机号", trigger: "blur" }
                 ],
             },
             formLabelWidth: '120px',
@@ -202,6 +202,7 @@ export default {
             fullReadList: [],
             maxLength: 16,
             phoneDialogVisible: false,
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -268,7 +269,8 @@ export default {
             this.logout();
         },
         tabClickHandle(tab){
-            this.getStationNews(tab.index)
+            this.getStationNews(tab.index);
+            this.fullscreenLoading = true;
         },
         maxSlice(msg){
             return msg.length > this.maxLength ? `${msg.slice(0, this.maxLength)}...` : msg
@@ -303,6 +305,7 @@ export default {
             })
         },
         getStationNews(readState) {
+            this.fullscreenLoading = true;
             this.unReadList = []
             this.fullReadList = []
             this.newsForm.readState = readState
@@ -328,6 +331,7 @@ export default {
                     // this.newsForm.pageCount = this.newsForm.total % this.newsForm.pageSize == 0 ? this.newsForm.total / this.newsForm.pageSize : this.newsForm.total / this.newsForm.pageSize + 1
                     // this.tableData = res.data.list;
                     this.newsForm.total = res.data.total;
+                    this.fullscreenLoading = false;
                 }
             })
         },
