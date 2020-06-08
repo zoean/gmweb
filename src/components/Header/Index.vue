@@ -175,7 +175,7 @@ export default {
             },
             rules: {
                 phone: [
-                  { pattern:/^1[34578]\d{9}$/, message: "请输入合法手机号", trigger: "blur" }
+                  { pattern:/^1\d{10}$/, message: "请输入合法手机号", trigger: "blur" }
                 ],
             },
             formLabelWidth: '120px',

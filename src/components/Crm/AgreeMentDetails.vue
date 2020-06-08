@@ -1,6 +1,16 @@
 <template>
   
+  <div style="width: 900;">
 
+    <div style="width: 50%;">
+      1111
+    </div>
+
+    <div class="agree-right">
+      2222
+    </div>
+
+  </div>
 
 </template>
 
@@ -9,7 +19,7 @@ export default {
   name: 'agreeMentDetails',
   data() {
     return {
-
+      agreementDetail: {}
     }
   },
   created() {
@@ -29,18 +39,48 @@ export default {
               // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
               // 数据是保存在 异步对象的 属性中
               let res = JSON.parse(ajaxObj.responseText);
-              console.log(res.data);
-              
+              console.log(res.data.agreementDetail);
+              this.agreementDetail = res.data.agreementDetail;
+              const div = document.createElement('div');
+              div.id = 'div-agree';
+              div.innerHTML = res.data.agreementDetail.agrBody;
+              document.getElementById("el-container").appendChild(div);
           }
       }
     }
   },
   mounted() {
-
+    
   }
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
+
+  #div-agree {
+    position: relative;
+    top: -40px;
+    width: 900px;
+    margin: 0 auto;
+    
+    p {
+      line-height: 200%;
+      font-size: 16px!important;
+      font-family: '微软雅黑'!important;
+      strong {
+        font-weight: bold;
+      }
+      span {
+        line-height: 200%;
+        font-size: 16px!important;
+        font-family: '微软雅黑'!important;
+        strong {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+
 
 </style>

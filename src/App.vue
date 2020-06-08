@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
-    <el-container :class="paddingClass">
+    <el-container :class="paddingClass" id="el-container">
       <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar"></Aside>
       <div :class="[widthClass]">
         <router-view/>
