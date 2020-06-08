@@ -62,7 +62,7 @@
         <el-form-item label="选择优惠券" v-if="radio1 === '优惠券'">
           <el-col :span="10">
             <el-select v-model="form.couponsId">
-              <el-option v-for="(item, index) in couponList" :label="item.couponName" :value="item.couponId"></el-option>
+              <el-option v-for="(item, index) in couponList" :label="item.couponName" :value="item.couponId">{{item.couponName}}</el-option>
             </el-select>
           </el-col>
         </el-form-item>
@@ -130,17 +130,16 @@ export default {
         : (this.radio1 = "自定义链接");
       let newradioButton = this.radioButton.filter(v => v === this.radio1);
       this.radioButton = newradioButton;
-      this.$smoke_get(wechatActivityAwardGet, { awardId }).then(
-        res => {
+      this.$smoke_get(wechatActivityAwardGet, { awardId }).then(res => {
           if (res.code === 200) {
             this.imageUrl = res.data.pictureUrl;
             res.data.awardStatus === "0"
               ? (res.data.awardStatus = "关闭")
-              : (res.data.awardStatus = "开启");
+              : (res.data.awardStatus = "开启")
             let receiveVerify = res.data.receiveVerify;
             // receiveVerify = receiveVerify === "0" ? '验证码验证手机且不可跳过' :(receiveVerify === "1" ? '验证码验证手机但可跳过':'无需验证码验证手机')
-            console.log(receiveVerify);
             this.form = res.data;
+            this.getCouponList(this.form.schoolName)
           }
         }
       );
@@ -150,7 +149,7 @@ export default {
     getCouponList(schoolName){
     this.$smoke_post(getCouponList, {schoolName}).then(res => {
       if(res.code == 200){
-        this.couponList = res.data
+        this.couponList = res.data ? res.data : []
       }
     })
     },
