@@ -7,7 +7,7 @@ const production = process.env.NODE_ENV === "development"
 module.exports = {
   
     //基本根url配置项
-    publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
+    publicPath: process.env.NODE_ENV === "production" ? "./" : "./",
     
 
     //build构建后生成的文件夹
