@@ -1,5 +1,5 @@
 <template>
-    <el-main class="index-main">
+    <el-main class="index-main newStudents">
 
         <el-row style="margin-bottom: 10px;">
 
@@ -1011,5 +1011,10 @@ export default {
             text-align: right;
             margin-top: .4rem;
         }
+    }
+    
+    .newStudents /deep/ div.el-dialog__body{
+        height: 50vh;
+        overflow: auto;
     }
 </style>
