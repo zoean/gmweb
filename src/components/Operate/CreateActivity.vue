@@ -116,7 +116,7 @@
                 <el-upload
                   ref="upload"
                   class="avatar-uploader"
-                  action="http://testgm.jhwx.com/upload-service/upload/file"
+                  action="https://testgm.jhwx.com/upload-service/upload/file"
                   :show-file-list="false"
                   :data="pppss"
                   :on-success="handleAvatarSuccess"
