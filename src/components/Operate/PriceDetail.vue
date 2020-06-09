@@ -52,7 +52,7 @@
         </el-form-item>
         <el-form-item label="选择分校" v-if="radio1 === '优惠券'">
           <el-col :span="10">
-            <el-select v-model="form.schoolName" @change="getCouponList(form.schoolName)">
+            <el-select v-model="form.schoolName" @change="getCouponList(form.schoolName)" disabled>
               <el-option label="京华网校" value="jhwx"></el-option>
               <el-option label="胜学网校" value="shengxuewangxiao"></el-option>
               <el-option label="集团网校" value="jhwxedu"></el-option>
@@ -114,6 +114,7 @@ export default {
         pictureUrl: "", //奖品图片
         membersMaxL:'',
         membersMin:'',
+        schoolName: 'jhwx'
       },
     };
   },
