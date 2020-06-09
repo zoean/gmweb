@@ -167,7 +167,7 @@ export default {
       form: {
         appId: "", //公账号APPID
         activityName: "", //活动名称   
-        newUserTrigger: "", //新用户是否触发（0-否，1-是）
+        newUserTrigger: "1", //新用户是否触发（0-否，1-是）
         triggerText: "", //触发文案
         activityPage: "", //活动简约封面
         activityContent: "", //	活动图文信息
