@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import index from '@/components/Index/Index';
 import four from '@/components/Index/Four';
 import login from '@/components/Index/Login';
+import forget from '@/components/Index/Forget';
 
 import menu from '@/components/Base/Menu';
 import people from '@/components/Base/People';
@@ -63,7 +64,7 @@ Router.prototype.push = function push(location) {
 }
 
 export default new Router({
-    // mode: 'history',
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -74,6 +75,11 @@ export default new Router({
             path: '/login',
             name: 'login',
             component: login
+        },
+        {
+            path: '/forget',
+            name: 'forget',
+            component: forget
         },
         {
             path: '/base/people',

@@ -14,6 +14,10 @@
             </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
                 <el-button type="primary" size="small" @click="getWaitStudentList">查 询</el-button>
             </el-col>
 
@@ -35,6 +39,7 @@
               width="45">
             </el-table-column>
             <el-table-column
+              :show-overflow-tooltip="true"
               :prop="item.prop"
               :label="item.label"
               :width="item.prop == 'seatName' ? '250px' : item.prop == 'createTime' ? '180px' : ''"
@@ -44,7 +49,10 @@
               >
 
               <template slot-scope="scope">
-                <span>{{scope.row[item.prop] || '- -'}}</span>
+                <el-tooltip effect="dark" v-if="item.prop == 'seatName'" :content="scope.row.orgNameListText" placement="top">
+                    <span>{{scope.row[item.prop] || '- -'}}</span>
+                </el-tooltip>
+                <span v-else>{{scope.row[item.prop] || '- -'}}</span>
               </template>
 
             </el-table-column>
@@ -453,9 +461,6 @@
             </el-table-column>
           </el-table>
 
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="agreeFlag = false" size="small" plain>取 消</el-button>
-          </div>
         </el-dialog>
 
     </el-main>
@@ -475,7 +480,7 @@ import {
 } from '../../request/api';
 import axios from 'axios'
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery } from '../../assets/js/common';
+import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -489,7 +494,8 @@ export default {
                 total: null,
                 classUuid: '',
                 tel: '',
-                name: ''
+                name: '',
+                stuId: '',
             },
             totalFlag: false,
             list: [],
@@ -705,23 +711,52 @@ export default {
             this.classTeaGetWaitStudent('click', scope.uuid)
         },
         getClassTeaClassWait() {
-            this.fullscreenLoading = true;
             this.$smoke_get(getClassTeaClassWait,{
                 classTeaUuid: ''
             }).then(res => {
                 if(res.code == 200) {
 
+                    if(res.data.length != 0) {
+                        res.data.map(sll => {
+                            sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
+                        })
+                        this.tabsList = res.data;
+                        this.form.classUuid = res.data[0].uuid;
+                        this.classUuidDefault = res.data[0].uuid;
+                        this.getWaitStudentList();
+                    }
+
+                }else{
+
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+
+                }
+            })
+        },
+        getWaitStudentList() {
+            this.fullscreenLoading = true;
+            this.$smoke_post(getWaitStudentList, this.form).then(res => {
+                if(res.code == 200) {
+
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        if(res.data.length != 0) {
-                            res.data.map(sll => {
-                                sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
-                            })
-                            this.tabsList = res.data;
-                            this.form.classUuid = res.data[0].uuid;
-                            this.classUuidDefault = res.data[0].uuid;
-                            this.getWaitStudentList();
-                        }
+                        res.data.list.map(sll => {
+                            sll.createTime  = timestampToTime(Number(sll.createTime));
+                            sll.classType = classTypeString(sll.classType);
+                            sll.orderType = orderTypeText(sll.orderType);
+                            if(sll.seatOrgName && sll.seatName) {
+                                sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
+                            }else{
+                                sll.seatName = '';
+                            }
+
+                            sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
+                        })
+                        this.list = res.data.list;
+                        this.form.total = res.data.total;
                     }, 300);
 
                 }else{
@@ -734,24 +769,6 @@ export default {
                         })
                     }, 300)
 
-                }
-            })
-        },
-        getWaitStudentList() {
-            this.$smoke_post(getWaitStudentList, this.form).then(res => {
-                if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.createTime  = timestampToTime(Number(sll.createTime));
-                        sll.classType = classTypeString(sll.classType);
-                        sll.orderType = orderTypeText(sll.orderType);
-                        if(sll.seatOrgName && sll.seatName) {
-                            sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
-                        }else{
-                            sll.seatName = '';
-                        }
-                    })
-                    this.list = res.data.list;
-                    this.form.total = res.data.total;
                 }
             })
         },
@@ -960,7 +977,7 @@ export default {
         }, 
         handleClose(done) {
             done();
-            this.getClassTeaClassWait();
+            this.getWaitStudentList();
         },
         cityChange() {
             this.customerForm.province = this.customerForm.provinceCity[0];

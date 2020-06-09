@@ -13,6 +13,10 @@
             <el-col :span="4" style="margin-left: 20px;">
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
             </el-col>
+            
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
+            </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
                 <el-button type="primary" size="small" @click="getClassTeaStudent">查 询</el-button>
@@ -521,9 +525,6 @@
             </el-table-column>
           </el-table>
 
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="agreeFlag = false" size="small" plain>取 消</el-button>
-          </div>
         </el-dialog>
 
         <PageFieldManage :setPageNum="setPageNum" />
