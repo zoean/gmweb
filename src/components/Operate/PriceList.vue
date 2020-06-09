@@ -1,7 +1,7 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">奖品列表</div>
+      <div class="people-title">奖品列表<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-row>
         <el-col :span="4">
           <el-input v-model="awardName" placeholder="奖品名称" style="width:90%;marginBottom:.2rem"></el-input>
@@ -131,7 +131,6 @@ export default {
   },
   methods: {
     priceEdit(row) {
-      console.log(row)
       this.$router.push({
         path: "/operate/activityA/pricedetail",
         query: { activityId: row.activityId, priceType: row.awardType,awardId:row.awardId }
@@ -219,6 +218,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
 }
 .index-main/deep/ .el-textarea__inner {

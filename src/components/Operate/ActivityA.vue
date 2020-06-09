@@ -27,10 +27,10 @@
           <el-input v-model.trim="activitySearch" placeholder="活动名称" style="width:90%"></el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" style="width: 50%;" @click="searchactivity">搜索</el-button>
+          <el-button type="primary" @click="searchactivity">搜索</el-button>
         </el-col>
-        <el-col :span="4" style="float:right">
-          <el-button type="primary" style="width: 50%;float:right" @click="createactivity">创建活动</el-button>
+        <el-col :span="6">
+          <el-button style="float: right" type="primary" @click="createactivity">创建活动</el-button>
         </el-col>
       </el-row>
       <el-table
