@@ -59,7 +59,7 @@
             <el-form-item label="活动时间" prop="activityTime">
               <el-col :span="7">
                 <el-date-picker
-                v-model="activityTimes"
+                v-model="form.activityTime"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始时间"
@@ -73,7 +73,7 @@
             <el-form-item label="派奖时间" prop="receiveTime">
               <el-col :span="7">
                 <el-date-picker
-                  v-model="receiveTimes"
+                  v-model="form.receiveTime"
                   type="datetimerange"
                   range-separator="至"
                   start-placeholder="开始时间"
@@ -181,8 +181,8 @@ export default {
       },
       application: [{ label: "测试号", value: "wx5684c1cd32a4fe6a" }],
       isClear: false,
-      activityTimes: "", //活动时间
-      receiveTimes: "", //派奖时间
+      activityTime: "", //活动时间
+      receiveTime: "", //派奖时间
       imageUrl: "",
       imageUrl2: "",
       detail: "",
@@ -191,9 +191,9 @@ export default {
         activityName: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
         ],
-        imageUrl2: [
-          { required: true, message: "请上传活动封面", trigger: "blur" }
-        ],
+        // imageUrl2: [
+        //   { required: true, message: "请上传活动封面", trigger: "blur" }
+        // ],
         triggerWord:[
           { required: true, message: "请输入关键词", trigger: "blur" }
         ],
@@ -248,22 +248,21 @@ export default {
     onSubmit() {
       this.$refs["form"].validate(valid => {
         if(valid){
-                if(this.awardNotice === '开启'){
-                     this.form.awardNotice = '1'
-                }else if(this.awardNotice === '关闭'){
-                     this.form.awardNotice = '0'
-                }
-                
-             this.form.activityStartTime = this.activityTimes[0]
-             this.form.activityEndTime = this.activityTimes[1]
-             this.form.receiveStartTime = this.receiveTimes[0]
-             this.form.receiveEndTime = this.receiveTimes[1]
-             this.$smoke_post(wechatActivityAdd,this.form).then(res=>{
-                 if(res.code === 200){
-                    this.form = this.copyForm
-                    this.$router.push('/operate/activityA')
-                 }
-            })
+          if(this.awardNotice === '开启'){
+                this.form.awardNotice = '1'
+          }else if(this.awardNotice === '关闭'){
+                this.form.awardNotice = '0'
+          }
+          this.form.activityStartTime = this.form.activityTime[0]
+          this.form.activityEndTime = this.form.activityTime[1]
+          this.form.receiveStartTime = this.form.receiveTime[0]
+          this.form.receiveEndTime = this.form.receiveTime[1]
+          this.$smoke_post(wechatActivityAdd,this.form).then(res=>{
+              if(res.code === 200){
+                this.form = this.copyForm
+                this.$router.push('/operate/activityA')
+              }
+          })
         }
       });
     },
