@@ -1,5 +1,5 @@
 <template>
-    <el-main class="index-main">
+    <el-main class="index-main newStudents">
 
         <el-row style="margin-bottom: 10px;">
 
@@ -11,6 +11,10 @@
 
             <el-col :span="4" style="margin-left: 20px;">
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
@@ -35,6 +39,7 @@
               width="45">
             </el-table-column>
             <el-table-column
+              :show-overflow-tooltip="true"
               :prop="item.prop"
               :label="item.label"
               :width="item.prop == 'seatName' ? '250px' : item.prop == 'createTime' ? '180px' : ''"
@@ -44,7 +49,10 @@
               >
 
               <template slot-scope="scope">
-                <span>{{scope.row[item.prop] || '- -'}}</span>
+                <el-tooltip effect="dark" v-if="item.prop == 'seatName'" :content="scope.row.orgNameListText" placement="top">
+                    <span>{{scope.row[item.prop] || '- -'}}</span>
+                </el-tooltip>
+                <span v-else>{{scope.row[item.prop] || '- -'}}</span>
               </template>
 
             </el-table-column>
@@ -330,6 +338,16 @@
 
                             </el-col>
 
+                            <el-col :span="6" style="margin-top: 10px;">
+
+                                <label class="el-form-item__label">协议信息</label>
+
+                                <span style="height: 40px; line-height: 40px;">{{agreementList.length}}</span>个
+
+                                <span style="height: 40px; line-height: 40px; cursor: pointer; color: #409EFF;" @click="lookAgreement">查看</span>
+
+                            </el-col>
+
                         </el-row>
 
                     </el-form>
@@ -349,6 +367,7 @@
                         >
                         <el-table-column
                           :prop="item.prop"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           :label="item.label"
                           v-for="(item, index) in notesColumnList"
                           :key="index"
@@ -380,6 +399,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           v-for="(item, index) in notesColumnListCall"
                           :key="index"
                           >
@@ -422,6 +442,27 @@
             </el-tabs>
         </el-drawer>
 
+        <el-dialog width="40%" title="协议列表" :visible.sync="agreeFlag">
+          
+          <el-table
+            :data="agreementList"
+            >
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in agreeColumnList"
+                :key="index">
+            </el-table-column>
+
+            <el-table-column prop="limitLimit" label="操作" width="50">
+                <template slot-scope="scope">                            
+                    <el-button type="text" size="small" @click="lookAgreeLink(scope.row.agrId)">查看</el-button>
+                </template>
+            </el-table-column>
+          </el-table>
+
+        </el-dialog>
+
     </el-main>
 </template>
 
@@ -437,8 +478,9 @@ import {
     getSchoolList,
     enumByEnumNums
 } from '../../request/api';
+import axios from 'axios'
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery } from '../../assets/js/common';
+import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -452,7 +494,8 @@ export default {
                 total: null,
                 classUuid: '',
                 tel: '',
-                name: ''
+                name: '',
+                stuId: '',
             },
             totalFlag: false,
             list: [],
@@ -532,20 +575,20 @@ export default {
             pcaa: null, //省市数据
             notesList: [],
             notesColumnList: [
-                { 'prop': 'createTime', 'label': '创建时间', width: 250 },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'entryPerson', 'label': '跟进人' },
                 { 'prop': 'followUp', 'label': '跟进类型' },
                 { 'prop': 'followUpContent', 'label': '跟进内容' },
             ],
             notesCallList: [],
             notesColumnListCall: [
-                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'seatName', 'label': '跟进人' },
                 { 'prop': 'isCalledPhone', 'label': '是否接通' },
                 { 'prop': 'callStyle', 'label': '呼叫方式' },
                 { 'prop': 'duration', 'label': '通话时长(秒)' },
                 { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
-                { 'prop': 'recordUrl', 'label': '录音地址' },
+                // { 'prop': 'recordUrl', 'label': '录音地址' },
             ],
             notesCallForm: {
                 clueDataSUuid: '',
@@ -588,6 +631,11 @@ export default {
                     return cellValue ? cellValue : '--'
                 }
             }],
+            agreementList: [],
+            agreeColumnList: [
+                { 'prop': 'agrName', 'label': '协议名称' },  
+            ],
+            agreeFlag: false,
         }
     },
     created() {
@@ -598,6 +646,26 @@ export default {
         this.getSchoolList();
     },
     methods: {
+        GetAgreementList(id) {
+            let that = this;
+            let url = "https://app.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
+            var ajaxObj = new XMLHttpRequest();
+            ajaxObj.open('get', url)
+            ajaxObj.send();
+            ajaxObj.onreadystatechange = function () {
+            // 为了保证 数据 完整返回，我们一般会判断 两个值
+                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
+                    // 数据是保存在 异步对象的 属性中
+                    let res = JSON.parse(ajaxObj.responseText);
+                    console.log(res.data.agreementList);
+                    that.$nextTick(() => {
+                        that.agreementList = res.data.agreementList;
+                    })
+                }
+            }
+        },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
                 numberList: arr
@@ -643,23 +711,52 @@ export default {
             this.classTeaGetWaitStudent('click', scope.uuid)
         },
         getClassTeaClassWait() {
-            this.fullscreenLoading = true;
             this.$smoke_get(getClassTeaClassWait,{
                 classTeaUuid: ''
             }).then(res => {
                 if(res.code == 200) {
 
+                    if(res.data.length != 0) {
+                        res.data.map(sll => {
+                            sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
+                        })
+                        this.tabsList = res.data;
+                        this.form.classUuid = res.data[0].uuid;
+                        this.classUuidDefault = res.data[0].uuid;
+                        this.getWaitStudentList();
+                    }
+
+                }else{
+
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+
+                }
+            })
+        },
+        getWaitStudentList() {
+            this.fullscreenLoading = true;
+            this.$smoke_post(getWaitStudentList, this.form).then(res => {
+                if(res.code == 200) {
+
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        if(res.data.length != 0) {
-                            res.data.map(sll => {
-                                sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
-                            })
-                            this.tabsList = res.data;
-                            this.form.classUuid = res.data[0].uuid;
-                            this.classUuidDefault = res.data[0].uuid;
-                            this.getWaitStudentList();
-                        }
+                        res.data.list.map(sll => {
+                            sll.createTime  = timestampToTime(Number(sll.createTime));
+                            sll.classType = classTypeString(sll.classType);
+                            sll.orderType = orderTypeText(sll.orderType);
+                            if(sll.seatOrgName && sll.seatName) {
+                                sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
+                            }else{
+                                sll.seatName = '';
+                            }
+
+                            sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
+                        })
+                        this.list = res.data.list;
+                        this.form.total = res.data.total;
                     }, 300);
 
                 }else{
@@ -672,24 +769,6 @@ export default {
                         })
                     }, 300)
 
-                }
-            })
-        },
-        getWaitStudentList() {
-            this.$smoke_post(getWaitStudentList, this.form).then(res => {
-                if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.createTime  = timestampToTime(Number(sll.createTime));
-                        sll.classType = classTypeString(sll.classType);
-                        sll.orderType = orderTypeText(sll.orderType);
-                        if(sll.seatOrgName && sll.seatName) {
-                            sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
-                        }else{
-                            sll.seatName = '';
-                        }
-                    })
-                    this.list = res.data.list;
-                    this.form.total = res.data.total;
                 }
             })
         },
@@ -763,6 +842,7 @@ export default {
             this.customerForm.followUpContent = '';
             this.customerForm.seatName = row.seatName;
             this.getStudentDetails(row.uuid);
+            this.GetAgreementList(row.customerId);
             console.log(row);
             this.getOrderForm.userId = row.customerId;
             this.getOrderForm.itemId = row.examItemId;
@@ -897,7 +977,7 @@ export default {
         }, 
         handleClose(done) {
             done();
-            this.getClassTeaClassWait();
+            this.getWaitStudentList();
         },
         cityChange() {
             this.customerForm.province = this.customerForm.provinceCity[0];
@@ -906,6 +986,18 @@ export default {
         timeChange() {
             this.customerForm.examPeriod = this.customerForm.examPeriod.getTime();
         },
+        lookAgreement() {
+            this.agreeFlag = true;
+        },
+        lookAgreeLink(id) {
+            const { href } = this.$router.resolve({
+                name: "agreeMentDetails",
+                query: {
+                    id: id
+                }
+            })
+            window.open(href, '_blank');
+        }
     },
     mounted() {
         
@@ -936,5 +1028,10 @@ export default {
             text-align: right;
             margin-top: .4rem;
         }
+    }
+    
+    .newStudents /deep/ div.el-dialog__body{
+        height: 50vh;
+        overflow: auto;
     }
 </style>

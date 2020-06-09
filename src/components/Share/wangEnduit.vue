@@ -4,12 +4,13 @@
     </div>
     <div ref="editor" class="text">
     </div>
-     <!-- <el-button @click="submit">提交</el-button> -->
+    <!--<el-button @click="submit">提交</el-button>-->
   </div>
 </template>
 
 <script>
   import E from 'wangeditor'
+  import {wechatActivityEdit} from '@/request/operateApi.js'
   export default {
     name: 'editoritem',
     data() {
@@ -53,9 +54,12 @@
       this.editor.txt.html(this.value)
     },
     methods: {
-      // submit(){
-      //     console.log(this.info_)
-      // },
+      //submit(){
+        //console.log(this.info_)
+        //this.$smoke_post(wechatActivityEdit, {activityContent: this.info_}).then(res => {
+        //console.log('info--------------', res)
+        //})
+      //},
       seteditor() {
         this.editor = new E(this.$refs.toolbar, this.$refs.editor)
         this.editor.customConfig.showLinkImg = false
@@ -134,19 +138,23 @@
     }
   }
 </script>
-
+<style>
+.w-e-text{
+  min-height: 500px !important;    
+  }
+</style>
 <style lang="css" scoped>
   .editor {
     width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 0;
+    min-height: 500px;
   }
   .toolbar {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
   }
   .text {
-    border: 1px solid #ccc;
-    min-height: 500px;
+    border: 1px solid #ddd;
   }
 </style>

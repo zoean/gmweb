@@ -502,6 +502,8 @@ export default {
             console.log(scope);
             this.drawer2 = true;
             this.teacherForm.uuid = scope.uuid;
+            this.teacherForm.pageSize = 10;
+            this.teacherForm.currentPage = 1;
             this.addTeacherForm.classUuid = scope.uuid;
             this.teacherMoveForm.className = scope.examItem + ' - ' + scope.classType;
             this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任列表'; //一级消防工程师 - 普通班 - 班主任列表

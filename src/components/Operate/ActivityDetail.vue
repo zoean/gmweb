@@ -6,8 +6,9 @@
         <el-tab-pane label="基础信息">
           <el-form ref="form" :model="form" label-width="150px !important" :rules="rules">
             <el-form-item label="应用公众号" prop="appId">
-              <el-col :span="7">
-                <el-select v-model="form.appId" placeholder="请选择公众号">
+              <el-row :gutter="10">
+                <el-col :span="7">
+                <el-select v-model="form.appId" placeholder="请选择公众号" disabled>
                   <el-option
                     :key="index"
                     v-for=" (item,index) in application"
@@ -15,71 +16,96 @@
                     :value="item.value"
                   ></el-option>
                 </el-select>
-              </el-col>
+                </el-col>
+                <el-col class="form-tip" :span="15">初次选定后，之后不可更改</el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="活动名称" prop="activityName">
               <el-col :span="7">
                 <el-input v-model.trim="form.activityName"></el-input>
               </el-col>
             </el-form-item>
-            <el-form-item label="活动简约封面">
-              <el-upload
-                class="avatar-uploader"
-                action="https://gm.jhwx.com/upload-service/upload/file"
-                :show-file-list="false"
-                :data="pppss"
-                :on-success="handleAvatarSuccessicon"
-                :before-upload="beforeAvatarUpload"
-              >
-                <img v-if="imageUrl2" :src="imageUrl2" class="avatar" />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
+            <el-form-item label="活动简约封面" prop="imageUrl2">
+              <el-row :gutter="10">
+                <el-col :span="7">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="https://gm.jhwx.com/upload-service/upload/file"
+                    :show-file-list="false"
+                    :data="pppss"
+                    :on-success="handleAvatarSuccessicon"
+                    :before-upload="beforeAvatarUpload"
+                  >
+                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  </el-upload>
+                </el-col>
+                <el-col class="form-tip" :span="15">用户分享活动链接等情况使用。封面尺寸要求：300px*300px</el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="关键词" prop="triggerWord">
-              <el-col :span="7">
-                <el-input v-model.trim="form.triggerWord"></el-input>
-              </el-col>
+              <el-row :gutter="10">
+                <el-col :span="7">
+                  <el-input v-model.trim="form.triggerWord"></el-input>
+                </el-col>
+                <el-col class="form-tip" :span="15">
+                  多个可以用逗号分隔开
+                </el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="活动时间" prop="activityTime">
               <el-date-picker
-                v-model="activityTimes"
+                v-model="activityTime"
                 type="datetimerange"
                 range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 format="yyyy-MM-dd HH:mm:ss"
-                :default-time="['00:00:00', '23:59:59']">
+                :default-time="['00:00:00', '23:59:59']" @blur="changeTime">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
-                <el-date-picker
-                  v-model="receiveTimes"
-                  type="datetimerange"
+              <el-date-picker
+                v-model="receiveTime"
+                type="datetimerange"
                 range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                  :picker-options="pickerOptions"
-                  :default-time="['00:00:00', '23:59:59']"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  format="yyyy-MM-dd HH:mm:ss"
-                ></el-date-picker>
-              </el-col>
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                :picker-options="pickerOptions"
+                :default-time="['00:00:00', '23:59:59']"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="新用户触发" prop="newUserTrigger">
+            <el-row :gutter="10">
               <el-col :span="7">
                 <el-select v-model="form.newUserTrigger">
                   <el-option label="启用" value="0"></el-option>
                   <el-option label="不启用" value="1"></el-option>
                 </el-select>
               </el-col>
+              <el-col class="form-tip" :span="15">新用户初进公众号，直接发送文案与海报</el-col>
+            </el-row>
             </el-form-item>
             <el-form-item label="触发文案">
-              <el-col :span="7">
-                <el-input type="textarea" v-model="form.triggerText"></el-input>
-              </el-col>
+              <el-row>
+                <el-col :span="16">
+                  <el-row>
+                    <el-col><el-input type="textarea" row="5" v-model="form.triggerText"></el-input></el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col class="form-tip">
+                      用户在公众号发关键字，则会收到此内容消息,不填写则不发送消息给用户
+                    </el-col>
+                  </el-row>
+                </el-col>
+              </el-row>  
             </el-form-item>
             <el-form-item label="触发图片" class="chufaimg">
+            <el-row :gutter="10">
+              <el-col :span="7">
               <el-upload
                 ref="upload"
                 class="avatar-uploader"
@@ -92,12 +118,20 @@
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+              </el-col>
+              <el-col class="form-tip" :span="15">用户在公众号发关键字，则会收到此内容海报,不上传则不发送海报图给用户。海报尺寸要求：750px*1334px</el-col>
+            </el-row>
             </el-form-item>
             <el-form-item label="用户中奖提醒推荐人">
+            <el-row :gutter="10">
+              <el-col :span="7">
               <el-radio-group v-model="awardNotice" label-width="100px">
                 <el-radio-button label="开启"></el-radio-button>
                 <el-radio-button label="关闭" border></el-radio-button>
               </el-radio-group>
+              </el-col>
+              <el-col class="form-tip" :span="15">提醒暂时为固定形式内容</el-col>
+            </el-row>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -120,9 +154,9 @@ export default {
   data() {
     return {
       pickerOptions: {
-        disabledDate(v) {
-          return v.getTime() < new Date().getTime() - 86400000;
-        }
+        // disabledDate(v) {
+        //   return v.getTime() < new Date().getTime() - 86400000;
+        // }
       },
       form: {
         appId: "", //公账号APPID
@@ -138,12 +172,12 @@ export default {
         receiveStartTime: "", //派奖开始时间
         receiveEndTime: "",
         triggerWord: "" ,//关键字
-        activityId:""
+        activityId:"",
       },
+      activityTime: [],
+      receiveTime: [],
       application: [{ label: "测试号", value: "wx5684c1cd32a4fe6a" }],
       isClear: false,
-      activityTimes: "", //活动时间
-      receiveTimes: "", //派奖时间
       imageUrl: "",
       imageUrl2: "",
       detail: "",
@@ -152,6 +186,18 @@ export default {
         activityName: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
         ],
+        // imageUrl2: [
+        //   { required: true, message: "请上传活动封面", trigger: "blur" }
+        // ],
+        triggerWord:[
+          { required: true, message: "请输入关键词", trigger: "blur" }
+        ],
+        // activityTime: [
+        //   { required: true, message: "请选择活动时间", trigger: "blur" }
+        // ],
+        // receiveTime: [
+        //   { required: true, message: "请选择派奖时间", trigger: "blur" }
+        // ],
         newUserTrigger: [
           { required: true, message: "请选择是否开启", trigger: "change" }
         ]
@@ -167,15 +213,15 @@ export default {
       activityId: this.$route.query.activityId
     }).then(res => {
       let data = res.data;
-      this.activityTimes = [data.activityStartTime, data.activityEndTime];
-      this.receiveTimes = [data.receiveStartTime, data.receiveEndTime];
+      this.$nextTick(()=> {
+        this.activityTime = [data.activityStartTime, data.activityEndTime];
+        this.receiveTime = [data.receiveStartTime, data.receiveEndTime];
+      })      
       if (data.awardNotice === "1") {
         this.awardNotice = '开启';
       } else if (data.awardNotice === "0") {
-        console.log(this.awardNotice)
         this.awardNotice = '关闭';
       }
-      console.log(data)
       this.imageUrl = data.triggerPicture
       this.imageUrl2 = data.activityPage
       data.activityId = Number(this.$route.query.activityId)
@@ -183,6 +229,9 @@ export default {
     });
   },
   methods: {
+    changeTime(val){
+      console.log(val)
+    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
@@ -219,11 +268,10 @@ export default {
           } else if (this.awardNotice === "关闭") {
             this.form.awardNotice = '0';
           }
-          this.form.activityStartTime = this.activityTimes[0];
-          this.form.activityEndTime = this.activityTimes[1];
-          this.form.receiveStartTime = this.receiveTimes[0];
-          this.form.receiveEndTime = this.receiveTimes[1];
-          console.log(this.form)
+          this.form.activityStartTime = this.activityTime[0];
+          this.form.activityEndTime = this.activityTime[1];
+          this.form.receiveStartTime = this.receiveTime[0];
+          this.form.receiveEndTime = this.receiveTime[1];
           this.$smoke_post(wechatActivityEdit, this.form).then(res => {
             if (res.code === 200) {           
               this.$router.push("/operate/activityA");
@@ -264,6 +312,9 @@ export default {
 }
 /deep/ .el-form .el-form-item {
   padding-bottom: 10px;
+  .el-textarea__inner{
+    min-height: 140px !important;
+  }
 }
 /deep/.avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;

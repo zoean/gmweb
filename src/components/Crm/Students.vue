@@ -1,5 +1,5 @@
 <template>
-    <el-main class="index-main">
+    <el-main class="index-main students">
         <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
         
         <el-row style="margin-bottom: 6px;">
@@ -12,6 +12,10 @@
 
             <el-col :span="4" style="margin-left: 20px;">
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            </el-col>
+            
+            <el-col :span="4" style="margin-left: 20px;">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
@@ -340,6 +344,28 @@
                             </el-col>
 
                         </el-row>
+
+                        <el-row>
+
+                            <el-col :span="12">
+
+                                <el-form-item label="成单坐席" prop="seatName">
+                                    <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+
+                            </el-col>
+
+                            <el-col :span="6" style="margin-top: 10px;">
+
+                                <label class="el-form-item__label">协议信息</label>
+
+                                <span style="height: 40px; line-height: 40px;">{{agreementList.length}}</span>个
+
+                                <span style="height: 40px; line-height: 40px; cursor: pointer; color: #409EFF;" @click="lookAgreement">查看</span>
+
+                            </el-col>
+
+                        </el-row>
     
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;" v-if="!$route.query.id"></el-row>
 
@@ -406,6 +432,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           v-for="(item, index) in notesColumnList"
                           :key="index"
                           >
@@ -436,6 +463,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           v-for="(item, index) in notesColumnListCall"
                           :key="index"
                           >
@@ -477,6 +505,27 @@
 
             </el-tabs>
         </el-drawer>
+
+        <el-dialog width="40%" title="协议列表" :visible.sync="agreeFlag">
+          
+          <el-table
+            :data="agreementList"
+            >
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in agreeColumnList"
+                :key="index">
+            </el-table-column>
+
+            <el-table-column prop="limitLimit" label="操作" width="50">
+                <template slot-scope="scope">                            
+                    <el-button type="text" size="small" @click="lookAgreeLink(scope.row.agrId)">查看</el-button>
+                </template>
+            </el-table-column>
+          </el-table>
+
+        </el-dialog>
 
         <PageFieldManage :setPageNum="setPageNum" />
 
@@ -559,6 +608,7 @@ export default {
                 work: "",
                 workingLife: '', //工作年限
                 wx: "",
+                seatName: '',
                 
                 followUp: '', //跟进类型
                 followUpContent: '' //跟进内容
@@ -591,20 +641,20 @@ export default {
             },
             notesList: [],
             notesColumnList: [
-                { 'prop': 'createTime', 'label': '创建时间', width: 250 },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'entryPerson', 'label': '跟进人' },
                 { 'prop': 'followUp', 'label': '跟进类型' },
                 { 'prop': 'followUpContent', 'label': '跟进内容' },
             ],
             notesCallList: [],
             notesColumnListCall: [
-                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'seatName', 'label': '跟进人' },
                 { 'prop': 'isCalledPhone', 'label': '是否接通' },
                 { 'prop': 'callStyle', 'label': '呼叫方式' },
                 { 'prop': 'duration', 'label': '通话时长(秒)' },
                 { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
-                { 'prop': 'recordUrl', 'label': '录音地址' },
+                // { 'prop': 'recordUrl', 'label': '录音地址' },
             ],
             notesCallForm: {
                 clueDataSUuid: '',
@@ -643,7 +693,12 @@ export default {
                 }
             }],
             initOptions: {},
-            callLogUuid: ''
+            callLogUuid: '',
+            agreementList: [],
+            agreeColumnList: [
+                { 'prop': 'agrName', 'label': '协议名称' },  
+            ],
+            agreeFlag: false,
         }
     },
     created() {
@@ -656,6 +711,26 @@ export default {
         this.initOptions = JSON.parse(initOptions);
     },
     methods: { 
+        GetAgreementList(id) {
+            let that = this;
+            let url = "https://app.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
+            var ajaxObj = new XMLHttpRequest();
+            ajaxObj.open('get', url)
+            ajaxObj.send();
+            ajaxObj.onreadystatechange = function () {
+            // 为了保证 数据 完整返回，我们一般会判断 两个值
+                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
+                    // 数据是保存在 异步对象的 属性中
+                    let res = JSON.parse(ajaxObj.responseText);
+                    console.log(res.data.agreementList);
+                    that.$nextTick(() => {
+                        that.agreementList = res.data.agreementList;
+                    })
+                }
+            }
+        },
         phoneOutTea( scope ) {
             if(this.initOptions != undefined){
                 this.$smoke_post(phoneOutTea, {
@@ -813,6 +888,7 @@ export default {
             this.customerForm.followUp = '';
             this.customerForm.followUpContent = '';
             this.getStudentDetails(row.uuid);
+            this.GetAgreementList(row.customerId);
             this.getOrderForm.userId = row.customerId
             this.getOrderForm.itemId = row.examItemId
             this.getOrderForm.classType = row.classType
@@ -922,6 +998,11 @@ export default {
                     this.customerForm.work = res.data.work;
                     this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
+                    if(res.data.seatOrgName && res.data.seatName) {
+                        this.customerForm.seatName = res.data.seatPOrgName? res.data.seatPOrgName + ' ' + res.data.seatOrgName + ' ' + res.data.seatName : res.data.seatOrgName + ' ' + res.data.seatName;
+                    }else{
+                        this.customerForm.seatName = '';
+                    }
                 }
             })
         },
@@ -1077,6 +1158,18 @@ export default {
             this.form.currentPage = 1;
             this.getClassTeaStudent();
         },
+        lookAgreement() {
+            this.agreeFlag = true;
+        },
+        lookAgreeLink(id) {
+            const { href } = this.$router.resolve({
+                name: "agreeMentDetails",
+                query: {
+                    id: id
+                }
+            })
+            window.open(href, '_blank');
+        }
     },
     mounted() {
         
@@ -1117,5 +1210,10 @@ export default {
             margin-top: .4rem;
             margin-right: .4rem;
         }
+    }
+
+    .students /deep/ div.el-dialog__body{
+        height: 50vh;
+        overflow: auto;
     }
 </style>

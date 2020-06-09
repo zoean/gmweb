@@ -20,7 +20,7 @@
                             <dt>今日线索量</dt>
                             <dd>
                                 <countTo v-if="seatDataVolume.newData > 0" :startVal='0' :endVal='seatDataVolume.newData' :duration='3000'></countTo>
-                                <p v-else>{{seatDataVolume.newData}}</p>
+                                <p v-else>{{seatDataVolume.newData || 0}}</p>
                             </dd>
                         </dl>
                         <span class="line"></span>
@@ -28,7 +28,7 @@
                             <dt>今日拨通量</dt>
                             <dd>
                                 <countTo v-if="seatDataVolume.dlal > 0" :startVal='0' :endVal='seatDataVolume.dlal' :duration='3000'></countTo>
-                                <p v-else>{{seatDataVolume.dlal}}</p>
+                                <p v-else>{{seatDataVolume.dlal || 0}}</p>
                             </dd>
                         </dl>
                         <span class="line"></span>
@@ -36,7 +36,7 @@
                             <dt>累计销量</dt>
                             <dd>
                                 <countTo v-if="seatDataVolume.order > 0" :startVal='0' :endVal='seatDataVolume.order' :duration='3000'></countTo>
-                                <p v-else>{{seatDataVolume.order}}</p>
+                                <p v-else>{{seatDataVolume.order || 0}}</p>
                             </dd>
                         </dl>
                     </el-col>
