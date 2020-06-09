@@ -55,28 +55,28 @@
             </el-form-item>
             <el-form-item label="活动时间" prop="activityTime">
               <el-date-picker
-                v-model="activityTimes"
+                v-model="activityTime"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 format="yyyy-MM-dd HH:mm:ss"
-                :default-time="['00:00:00', '23:59:59']">
+                :default-time="['00:00:00', '23:59:59']" @blur="changeTime">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
-                <el-date-picker
-                  v-model="receiveTimes"
-                  type="datetimerange"
+              <el-date-picker
+                v-model="receiveTime"
+                type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                  :picker-options="pickerOptions"
-                  :default-time="['00:00:00', '23:59:59']"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  format="yyyy-MM-dd HH:mm:ss"
-                ></el-date-picker>
+                :picker-options="pickerOptions"
+                :default-time="['00:00:00', '23:59:59']"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="新用户触发" prop="newUserTrigger">
             <el-row :gutter="10">
@@ -154,9 +154,9 @@ export default {
   data() {
     return {
       pickerOptions: {
-        disabledDate(v) {
-          return v.getTime() < new Date().getTime() - 86400000;
-        }
+        // disabledDate(v) {
+        //   return v.getTime() < new Date().getTime() - 86400000;
+        // }
       },
       form: {
         appId: "", //公账号APPID
@@ -172,12 +172,12 @@ export default {
         receiveStartTime: "", //派奖开始时间
         receiveEndTime: "",
         triggerWord: "" ,//关键字
-        activityId:""
+        activityId:"",
       },
+      activityTime: [],
+      receiveTime: [],
       application: [{ label: "测试号", value: "wx5684c1cd32a4fe6a" }],
       isClear: false,
-      activityTimes: "", //活动时间
-      receiveTimes: "", //派奖时间
       imageUrl: "",
       imageUrl2: "",
       detail: "",
@@ -186,18 +186,18 @@ export default {
         activityName: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
         ],
-        imageUrl2: [
-          { required: true, message: "请上传活动封面", trigger: "blur" }
-        ],
+        // imageUrl2: [
+        //   { required: true, message: "请上传活动封面", trigger: "blur" }
+        // ],
         triggerWord:[
           { required: true, message: "请输入关键词", trigger: "blur" }
         ],
-        activityTime: [
-          { required: true, message: "请选择活动时间", trigger: "blur" }
-        ],
-        receiveTime: [
-          { required: true, message: "请选择派奖时间", trigger: "blur" }
-        ],
+        // activityTime: [
+        //   { required: true, message: "请选择活动时间", trigger: "blur" }
+        // ],
+        // receiveTime: [
+        //   { required: true, message: "请选择派奖时间", trigger: "blur" }
+        // ],
         newUserTrigger: [
           { required: true, message: "请选择是否开启", trigger: "change" }
         ]
@@ -213,15 +213,15 @@ export default {
       activityId: this.$route.query.activityId
     }).then(res => {
       let data = res.data;
-      this.activityTimes = [data.activityStartTime, data.activityEndTime];
-      this.receiveTimes = [data.receiveStartTime, data.receiveEndTime];
+      this.$nextTick(()=> {
+        this.activityTime = [data.activityStartTime, data.activityEndTime];
+        this.receiveTime = [data.receiveStartTime, data.receiveEndTime];
+      })      
       if (data.awardNotice === "1") {
         this.awardNotice = '开启';
       } else if (data.awardNotice === "0") {
-        console.log(this.awardNotice)
         this.awardNotice = '关闭';
       }
-      console.log(data)
       this.imageUrl = data.triggerPicture
       this.imageUrl2 = data.activityPage
       data.activityId = Number(this.$route.query.activityId)
@@ -229,6 +229,9 @@ export default {
     });
   },
   methods: {
+    changeTime(val){
+      console.log(val)
+    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
@@ -265,11 +268,10 @@ export default {
           } else if (this.awardNotice === "关闭") {
             this.form.awardNotice = '0';
           }
-          this.form.activityStartTime = this.activityTimes[0];
-          this.form.activityEndTime = this.activityTimes[1];
-          this.form.receiveStartTime = this.receiveTimes[0];
-          this.form.receiveEndTime = this.receiveTimes[1];
-          console.log(this.form)
+          this.form.activityStartTime = this.activityTime[0];
+          this.form.activityEndTime = this.activityTime[1];
+          this.form.receiveStartTime = this.receiveTime[0];
+          this.form.receiveEndTime = this.receiveTime[1];
           this.$smoke_post(wechatActivityEdit, this.form).then(res => {
             if (res.code === 200) {           
               this.$router.push("/operate/activityA");
@@ -310,6 +312,9 @@ export default {
 }
 /deep/ .el-form .el-form-item {
   padding-bottom: 10px;
+  .el-textarea__inner{
+    min-height: 140px !important;
+  }
 }
 /deep/.avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
