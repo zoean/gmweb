@@ -55,19 +55,19 @@
             </el-form-item>
             <el-form-item label="活动时间" prop="activityTime">
               <el-date-picker
-                v-model="form.activityTime"
+                v-model="activityTime"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 format="yyyy-MM-dd HH:mm:ss"
-                :default-time="['00:00:00', '23:59:59']">
+                :default-time="['00:00:00', '23:59:59']" @blur="changeTime">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
               <el-date-picker
-                v-model="form.receiveTime"
+                v-model="receiveTime"
                 type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始时间"
@@ -154,9 +154,9 @@ export default {
   data() {
     return {
       pickerOptions: {
-        disabledDate(v) {
-          return v.getTime() < new Date().getTime() - 86400000;
-        }
+        // disabledDate(v) {
+        //   return v.getTime() < new Date().getTime() - 86400000;
+        // }
       },
       form: {
         appId: "", //公账号APPID
@@ -172,8 +172,10 @@ export default {
         receiveStartTime: "", //派奖开始时间
         receiveEndTime: "",
         triggerWord: "" ,//关键字
-        activityId:""
+        activityId:"",
       },
+      activityTime: [],
+      receiveTime: [],
       application: [{ label: "测试号", value: "wx5684c1cd32a4fe6a" }],
       isClear: false,
       imageUrl: "",
@@ -190,12 +192,12 @@ export default {
         triggerWord:[
           { required: true, message: "请输入关键词", trigger: "blur" }
         ],
-        activityTime: [
-          { required: true, message: "请选择活动时间", trigger: "blur" }
-        ],
-        receiveTime: [
-          { required: true, message: "请选择派奖时间", trigger: "blur" }
-        ],
+        // activityTime: [
+        //   { required: true, message: "请选择活动时间", trigger: "blur" }
+        // ],
+        // receiveTime: [
+        //   { required: true, message: "请选择派奖时间", trigger: "blur" }
+        // ],
         newUserTrigger: [
           { required: true, message: "请选择是否开启", trigger: "change" }
         ]
@@ -212,8 +214,8 @@ export default {
     }).then(res => {
       let data = res.data;
       this.$nextTick(()=> {
-        this.form.activityTime = [data.activityStartTime, data.activityEndTime];
-        this.form.receiveTime = [data.receiveStartTime, data.receiveEndTime];
+        this.activityTime = [data.activityStartTime, data.activityEndTime];
+        this.receiveTime = [data.receiveStartTime, data.receiveEndTime];
       })      
       if (data.awardNotice === "1") {
         this.awardNotice = '开启';
@@ -227,6 +229,9 @@ export default {
     });
   },
   methods: {
+    changeTime(val){
+      console.log(val)
+    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
@@ -263,11 +268,10 @@ export default {
           } else if (this.awardNotice === "关闭") {
             this.form.awardNotice = '0';
           }
-          this.form.activityStartTime = this.form.activityTime[0];
-          this.form.activityEndTime = this.form.activityTime[1];
-          this.form.receiveStartTime = this.form.receiveTime[0];
-          this.form.receiveEndTime = this.form.receiveTime[1];
-          console.log(this.form)
+          this.form.activityStartTime = this.activityTime[0];
+          this.form.activityEndTime = this.activityTime[1];
+          this.form.receiveStartTime = this.receiveTime[0];
+          this.form.receiveEndTime = this.receiveTime[1];
           this.$smoke_post(wechatActivityEdit, this.form).then(res => {
             if (res.code === 200) {           
               this.$router.push("/operate/activityA");
