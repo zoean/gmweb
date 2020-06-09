@@ -66,17 +66,17 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
-                <el-date-picker
-                  v-model="form.receiveTime"
-                  type="datetimerange"
+              <el-date-picker
+                v-model="form.receiveTime"
+                type="datetimerange"
                 range-separator="至"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                  :picker-options="pickerOptions"
-                  :default-time="['00:00:00', '23:59:59']"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  format="yyyy-MM-dd HH:mm:ss"
-                ></el-date-picker>
+                :picker-options="pickerOptions"
+                :default-time="['00:00:00', '23:59:59']"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="新用户触发" prop="newUserTrigger">
             <el-row :gutter="10">
@@ -211,15 +211,15 @@ export default {
       activityId: this.$route.query.activityId
     }).then(res => {
       let data = res.data;
-      this.form.activityTime = [data.activityStartTime, data.activityEndTime];
-      this.form.receiveTime = [data.receiveStartTime, data.receiveEndTime];
+      this.$nextTick(()=> {
+        this.form.activityTime = [data.activityStartTime, data.activityEndTime];
+        this.form.receiveTime = [data.receiveStartTime, data.receiveEndTime];
+      })      
       if (data.awardNotice === "1") {
         this.awardNotice = '开启';
       } else if (data.awardNotice === "0") {
-        console.log(this.awardNotice)
         this.awardNotice = '关闭';
       }
-      console.log(data)
       this.imageUrl = data.triggerPicture
       this.imageUrl2 = data.activityPage
       data.activityId = Number(this.$route.query.activityId)
