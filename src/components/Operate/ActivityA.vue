@@ -172,7 +172,6 @@ export default {
         if (res.code === 200) {
           this.tableData = this.settabelList(res.data.list);
           this.total = res.data.total
-          console.log(res.data.total)
         }
       });
     },
