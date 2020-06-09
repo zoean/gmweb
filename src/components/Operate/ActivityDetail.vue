@@ -312,6 +312,9 @@ export default {
 }
 /deep/ .el-form .el-form-item {
   padding-bottom: 10px;
+  .el-textarea__inner{
+    min-height: 140px !important;
+  }
 }
 /deep/.avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
