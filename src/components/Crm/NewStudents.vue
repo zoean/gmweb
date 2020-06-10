@@ -39,10 +39,9 @@
               width="45">
             </el-table-column>
             <el-table-column
-              :show-overflow-tooltip="true"
               :prop="item.prop"
               :label="item.label"
-              :width="item.prop == 'seatName' ? '250px' : item.prop == 'createTime' ? '180px' : ''"
+              :width="item.prop == 'seatName' ? '320px' : item.prop == 'createTime' ? '180px' : ''"
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
