@@ -82,8 +82,8 @@
             <el-row :gutter="10">
               <el-col :span="7">
                 <el-select v-model="form.newUserTrigger">
-                  <el-option label="启用" value="0"></el-option>
-                  <el-option label="不启用" value="1"></el-option>
+                  <el-option label="启用" value="1"></el-option>
+                  <el-option label="不启用" value="0"></el-option>
                 </el-select>
               </el-col>
               <el-col class="form-tip" :span="15">新用户初进公众号，直接发送文案与海报</el-col>
