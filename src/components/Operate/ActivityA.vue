@@ -183,9 +183,7 @@ export default {
         activityName: this.activitySearch
       }).then(res => {
         if (res.code === 200) {
-          if (res.data.list.length) {
-            this.tableData = this.settabelList(res.data.list);
-          }
+          this.tableData = this.settabelList(res.data.list);
         }
       });
     },
@@ -283,7 +281,7 @@ export default {
   }
   .screen-li {
     width: 90%;
-    margin-bottom: 1rem;
+    margin-bottom: .3rem;
   }
 }
 .index-main /deep/ .el-table .cell {
