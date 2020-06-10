@@ -143,16 +143,14 @@ export default {
         query:{activityId:this.$route.query.activityId}
       });
     },
-    getlistData(awardName='',awardType='') {//获取数据
+    getlistData(awardName,awardType) {//获取数据
       this.$smoke_get(wechatActivityAwardLlist, {
         activityId: this.$route.query.activityId,
         pageSize: this.pageSize,
         currentPage: this.currentPage,
-        awardName,
-        awardType
+        awardName: awardName || '',
+        awardType: awardType || ''
       }).then(res => {
-        console.log(res)
-
         if (res.code === 200) {
          this.awardInstruction = res.data.awardExplain&&res.data.awardExplain.awardInstruction
          this.total = res.data.total
@@ -172,10 +170,11 @@ export default {
     },
     handleCurrentChange(currentPage) {//改变当前页码
       this.currentPage = currentPage;
-      this.getListData();
+      this.getlistData();
     },
     handleSizeChange(pageSiz) {//改变一页显示数量
       this.pageSiz = pageSiz;
+      this.getlistData();
     },
     ProcessingData(data){//处理一下返回的数据
         this.tableData =  data.list.map(item=>{
