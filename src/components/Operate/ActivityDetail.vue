@@ -1,10 +1,10 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">活动详情</div>
+      <div class="people-title">活动详情<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-tabs type="border-card">
         <el-tab-pane label="基础信息">
-          <el-form ref="form" :model="form" label-width="150px !important" :rules="rules">
+          <el-form ref="form" :model="form" label-width="180px !important" :rules="rules">
             <el-form-item label="应用公众号" prop="appId">
               <el-row :gutter="10">
                 <el-col :span="7">
@@ -82,8 +82,8 @@
             <el-row :gutter="10">
               <el-col :span="7">
                 <el-select v-model="form.newUserTrigger">
-                  <el-option label="启用" value="0"></el-option>
-                  <el-option label="不启用" value="1"></el-option>
+                  <el-option label="启用" value="1"></el-option>
+                  <el-option label="不启用" value="0"></el-option>
                 </el-select>
               </el-col>
               <el-col class="form-tip" :span="15">新用户初进公众号，直接发送文案与海报</el-col>
@@ -308,6 +308,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
 }
 /deep/ .el-form .el-form-item {

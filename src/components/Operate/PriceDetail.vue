@@ -1,7 +1,7 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">奖品详情</div>
+      <div class="people-title">奖品详情<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-radio-group v-model="radio1" @change="changeCR">
         <el-radio-button v-for="(item,index) in radioButton" :key="index" :label="item"></el-radio-button>
       </el-radio-group>
@@ -119,6 +119,7 @@ export default {
     };
   },
   created() {
+    this.getCouponList(this.form.schoolName)
     let Id = this.$route.query.activityId;
     let priceType = this.$route.query.priceType;
     let awardId = this.$route.query.awardId;
@@ -140,7 +141,6 @@ export default {
             let receiveVerify = res.data.receiveVerify;
             // receiveVerify = receiveVerify === "0" ? '验证码验证手机且不可跳过' :(receiveVerify === "1" ? '验证码验证手机但可跳过':'无需验证码验证手机')
             this.form = res.data;
-            this.getCouponList(this.form.schoolName)
           }
         }
       );
@@ -235,6 +235,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
 }
 /deep/.avatar-uploader .el-upload {
