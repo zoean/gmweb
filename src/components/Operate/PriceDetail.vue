@@ -119,6 +119,7 @@ export default {
     };
   },
   created() {
+    this.getCouponList(this.form.schoolName)
     let Id = this.$route.query.activityId;
     let priceType = this.$route.query.priceType;
     let awardId = this.$route.query.awardId;
@@ -140,7 +141,6 @@ export default {
             let receiveVerify = res.data.receiveVerify;
             // receiveVerify = receiveVerify === "0" ? '验证码验证手机且不可跳过' :(receiveVerify === "1" ? '验证码验证手机但可跳过':'无需验证码验证手机')
             this.form = res.data;
-            this.getCouponList(this.form.schoolName)
           }
         }
       );
