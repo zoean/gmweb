@@ -19,7 +19,7 @@
             </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
-                <el-button type="primary" size="small" @click="getClassTeaStudent">查 询</el-button>
+                <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
             </el-col>
 
         </el-row>
@@ -48,7 +48,12 @@
                 </span>
               </template>
               <template slot-scope="scope">
-                    <span>{{scope.row[item.props] || '- -'}}</span>
+
+                    <el-tooltip effect="dark" v-if="item.props == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
+                      <span>{{scope.row[item.props] || '- -'}}</span>
+                    </el-tooltip>
+                    <span v-else>{{scope.row[item.props] || '- -'}}</span>
+
                     <!-- <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /> -->
                     
               </template>
@@ -548,7 +553,7 @@ import {
     getClueCallLog
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery } from '../../assets/js/common';
+import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -1059,15 +1064,32 @@ export default {
                 }
             })
         },
+        getClassTeaStudentClick() {
+            this.form.currentPage = 1;
+            this.getClassTeaStudent();
+        },
         getClassTeaStudent() {
             this.fullscreenLoading = true;
             this.$smoke_post(getClassTeaStudent, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.createTime  = timestampToTime(Number(sll.createTime));
+                            sll.classType = classTypeString(sll.classType);
+                            sll.orderType = orderTypeText(sll.orderType);
+                            if(sll.seatOrgName && sll.seatName) {
+                                sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
+                            }else{
+                                sll.seatName = '';
+                            }
+
+                            sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
+                        })
                         this.list = res.data.list;
                         this.columnList = res.data.filedList;
                         this.form.total = res.data.total;
+                        
                     }, 300);
 
                 }else{

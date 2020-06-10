@@ -18,7 +18,7 @@
             </el-col>
 
             <el-col :span="4" style="margin-left: 20px;">
-                <el-button type="primary" size="small" @click="getWaitStudentList">查 询</el-button>
+                <el-button type="primary" size="small" @click="getWaitStudentListClick">查 询</el-button>
             </el-col>
 
         </el-row>
@@ -41,14 +41,14 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
-              :width="item.prop == 'seatName' ? '320px' : item.prop == 'createTime' ? '180px' : ''"
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
               >
 
               <template slot-scope="scope">
-                <el-tooltip effect="dark" v-if="item.prop == 'seatName'" :content="scope.row.orgNameListText" placement="top">
+                <el-tooltip effect="dark" v-if="item.prop == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
                     <span>{{scope.row[item.prop] || '- -'}}</span>
                 </el-tooltip>
                 <span v-else>{{scope.row[item.prop] || '- -'}}</span>
@@ -734,6 +734,10 @@ export default {
 
                 }
             })
+        },
+        getWaitStudentListClick() {
+            this.form.currentPage = 1;
+            this.getWaitStudentList();
         },
         getWaitStudentList() {
             this.fullscreenLoading = true;
