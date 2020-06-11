@@ -35,34 +35,35 @@
                 <el-input v-model="form.teaName" placeholder="请输入班主任姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
-            <el-col :span="4">
-                <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
-            </el-col>
-            
         </el-row>
 
         <el-row class="people-screen" type="flex" align="middle">
 
-            <el-col :span="4">
+            <el-col :span="8">
 
-                <!-- <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in ruleNumberNameList"
-                      :key="item.name"
-                      :label="item.name"
-                      :value="item.ruleNumberName">
-                    </el-option>
-                </el-select> -->
+                <el-cascader
+                    ref="cascader"
+                    size="small"
+                    style="width: 95%;"
+                    placeholder="请搜索或者选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="2">
 
-                
+                <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="16">
+            <el-col :span="14">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -525,6 +526,7 @@ import {
     getClassTeaStuNotes,
     getClueCallLog,
     getSchoolList,
+    getOrgSubsetByUuid
 } from '../../request/api';
 import { 
     timestampToTime, 
@@ -532,7 +534,7 @@ import {
     classTypeString,
     getTextByJs,
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'allStudents',
@@ -546,9 +548,10 @@ export default {
                 examItemText: '',
                 name: '',
                 teaName: '',
+                seatOrgList: [],
                 sortSet: [],
                 tel: "", //手机号
-                total: null
+                total: null,
             },
             list: [],
             totalFlag: false,
@@ -572,6 +575,7 @@ export default {
             teacherMoveList: [],
             teaStuList: [],
 
+            zuzhiOptions: [],
 
             customerForm: {
                 studentUuid: '', //学员的唯一标识
@@ -696,8 +700,31 @@ export default {
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getSchoolList();
+        this.getOrgSubsetByUuid();
     },
     methods: {
+        handleZuzhiChange(arr) {
+            let brr = [];
+            // console.log(arr);
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            // console.log(brr);
+            this.form.seatOrgList = brr;
+            console.log(this.form.seatOrgList);
+        },
+        getOrgSubsetByUuid() {
+            this.$smoke_post(getOrgSubsetByUuid, {
+                uuid: showid
+            }).then(res => {
+                console.log(res);
+                this.zuzhiOptions = res.data;
+            })
+        },
         GetAgreementList(id) {
             let that = this;
             let url = "https://testapp.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
@@ -1074,7 +1101,7 @@ export default {
     },
     mounted() {
         
-    }
+    },
 }
 </script>
 

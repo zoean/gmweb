@@ -7,18 +7,40 @@
             <el-col :span="4" style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
             
             <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            <el-col :span="4">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
             </el-col>
             
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
+        </el-row>
+
+        <el-row style="margin-bottom: 10px;">
+
+            <el-col :span="8">
+
+                <el-cascader
+                    ref="cascader"
+                    size="small"
+                    style="width: 95%;"
+                    placeholder="请搜索或者选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+
+            </el-col>
+
+            <el-col :span="4">
                 <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
             </el-col>
 
@@ -550,11 +572,12 @@ import {
     getOrderList,
     phoneOutTea,
     seatOutTea,
-    getClueCallLog
+    getClueCallLog,
+    getOrgSubsetByUuid
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'reCoverData',
@@ -570,6 +593,7 @@ export default {
                 sortSet: [],
                 total: null,
                 classTeaUuid: '',
+                seatOrgList: [],
                 classUuid: '', //班级的uuid
                 num: '',
                 sortSet: [],
@@ -586,6 +610,9 @@ export default {
             drawer: false,
             direction: 'btt',
             tabs_active: 'first',
+
+            zuzhiOptions: [],
+
             customerForm: {
                 studentUuid: '', //学员的唯一标识
                 age: '',
@@ -714,8 +741,31 @@ export default {
         this.getSchoolList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
+        this.getOrgSubsetByUuid();
     },
     methods: { 
+        handleZuzhiChange(arr) {
+            let brr = [];
+            // console.log(arr);
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            // console.log(brr);
+            this.form.seatOrgList = brr;
+            console.log(this.form.seatOrgList);
+        },
+        getOrgSubsetByUuid() {
+            this.$smoke_post(getOrgSubsetByUuid, {
+                uuid: showid
+            }).then(res => {
+                console.log(res);
+                this.zuzhiOptions = res.data;
+            })
+        },
         GetAgreementList(id) {
             let that = this;
             let url = "https://testapp.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";

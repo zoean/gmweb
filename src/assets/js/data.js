@@ -108,7 +108,8 @@ export const superManageUuid = '383799112b0d47a7a3341bce77f8b776';
 //websock
 export const websockHttp = 'wss://testwebsocket.jhwx.com/websocket/msg/';
 
-
+//销售部组织id
+export const showid = '544230511a59461c8ed6c82ce2355e17';
 
 
 
