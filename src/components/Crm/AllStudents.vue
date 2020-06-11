@@ -785,7 +785,7 @@ export default {
                 this.$refs.autocomplete.$children
                     .find(c => c.$el.className.includes('el-input'))
                     .blur();
-                this.form.examItem = '';
+                this.form.examItemId = '';
                 this.$refs.autocomplete.focus();
             })
         },
