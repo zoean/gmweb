@@ -39,13 +39,14 @@
 
         <el-row class="people-screen" type="flex" align="middle">
 
-            <el-col :span="8">
+            <el-col :span="5">
 
                 <el-cascader
+                    class="smoke-cascader1"
                     ref="cascader"
                     size="small"
-                    style="width: 95%;"
-                    placeholder="请搜索或者选择坐席组织架构"
+                    style="width: 90%;"
+                    placeholder="请搜索或选择坐席组织架构"
                     collapse-tags
                     :show-all-levels='true'
                     :options="zuzhiOptions"
@@ -57,19 +58,17 @@
 
             </el-col>
 
-            <el-col :span="8">
-
+            <el-col :span="5">
+                
                 <el-date-picker
+                  style="width: 90%;"
                   v-model="dataPicker"
-                  type="daterange"
+                  type="date"
                   align="right"
-                  unlink-panels
                   size="small"
                   clearable
-                  range-separator="至"
                   @change="datePickerChange"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  placeholder="请选择最后联系时间"
                   :picker-options="pickerOptions">
                 </el-date-picker>
 
@@ -81,7 +80,7 @@
 
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="12">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -598,40 +597,39 @@ export default {
             zuzhiOptions: [],
             dataPicker: [],
             pickerOptions: {
+              disabledDate(time) {
+                return time.getTime() > Date.now();
+              },
               shortcuts: [{
-                text: '三日未联',
+                text: '3日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 2);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
                   picker.$emit('pick', [start, end]);
                 }
               }, {
-                text: '七日未联',
+                text: '7日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 6);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
                   picker.$emit('pick', [start, end]);
                 }
               }, {
-                text: '十五日未联',
+                text: '15日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 14);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
                   picker.$emit('pick', [start, end]);
                 }
               }, {
-                text: '三十日未联',
+                text: '30日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 29);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
                   picker.$emit('pick', [start, end]);
                 }
               }]
@@ -764,12 +762,15 @@ export default {
     },
     methods: {
         datePickerChange(value) {
-            if (value == null) {
-                this.form.startTime = '';
-                this.form.endTime = '';
-            }else{
-                this.form.startTime = value[0].getTime();
+            // console.log(Array.isArray(value));
+            // console.log(value);
+            if(Array.isArray(value)){ //选择时间段回来的是数组 (判断数组)
                 this.form.endTime = value[1].getTime();
+                this.dataPicker = value[1];
+            }else if(value != null) { //选择时间回来的是对象obj
+                this.form.endTime = new Date().getTime();
+            }else{
+                this.form.endTime = '';
             }
         },
         handleZuzhiChange(arr) {

@@ -3,8 +3,6 @@
         <!-- <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div> -->
         
         <el-row style="margin-bottom: 6px;">
-
-            <el-col :span="4" style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
             
             <el-col :span="4">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
@@ -18,31 +16,27 @@
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="8">
-
+            <el-col :span="5">
+                
                 <el-date-picker
+                  class="smoke-cascader"
+                  style="width: 90%;"
                   v-model="dataPicker"
-                  type="daterange"
+                  type="date"
                   align="right"
-                  unlink-panels
                   size="small"
                   clearable
-                  range-separator="至"
                   @change="datePickerChange"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
+                  placeholder="请选择最后联系时间"
                   :picker-options="pickerOptions">
                 </el-date-picker>
 
             </el-col>
 
-        </el-row>
-
-        <el-row style="margin-bottom: 10px;">
-
-            <el-col :span="8">
+            <el-col :span="5">
 
                 <el-cascader
+                    class="smoke-cascader"
                     ref="cascader"
                     size="small"
                     style="width: 95%;"
@@ -58,9 +52,15 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="2">
                 <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
             </el-col>
+
+        </el-row>
+
+        <el-row style="margin-bottom: 10px;">
+
+            <el-col style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
 
         </el-row>
 
@@ -632,42 +632,38 @@ export default {
             tabs_active: 'first',
 
             zuzhiOptions: [],
-            dataPicker: [],
+            dataPicker: '',
             pickerOptions: {
               shortcuts: [{
-                text: '三日未联',
+                text: '3日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 2);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
                   picker.$emit('pick', [start, end]);
                 }
               }, {
-                text: '七日未联',
+                text: '7日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 6);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
                   picker.$emit('pick', [start, end]);
                 }
               }, {
-                text: '十五日未联',
+                text: '15日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 14);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
                   picker.$emit('pick', [start, end]);
                 }
               }, {
-                text: '三十日未联',
+                text: '30日未联',
                 onClick(picker) {
                   const end = new Date();
                   const start = new Date();
-                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 29);
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
                   picker.$emit('pick', [start, end]);
                 }
               }]
@@ -805,12 +801,15 @@ export default {
     },
     methods: { 
         datePickerChange(value) {
-            if (value == null) {
-                this.form.startTime = '';
-                this.form.endTime = '';
-            }else{
-                this.form.startTime = value[0].getTime();
+            // console.log(Array.isArray(value));
+            // console.log(value);
+            if(Array.isArray(value)){
                 this.form.endTime = value[1].getTime();
+                this.dataPicker = value[1];
+            }else if(value != null) {
+                this.form.endTime = new Date().getTime();
+            }else{
+                this.form.endTime = '';
             }
         },
         handleZuzhiChange(arr) {

@@ -17,13 +17,10 @@
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
-        </el-row>
-
-        <el-row style="margin-bottom: 10px;">
-
-            <el-col :span="8">
+            <el-col :span="5" class="">
 
                 <el-cascader
+                    class="smoke-cascader"
                     ref="cascader"
                     size="small"
                     style="width: 95%;"
@@ -39,7 +36,7 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-button type="primary" size="small" @click="getWaitStudentListClick">查 询</el-button>
             </el-col>
 
@@ -1081,7 +1078,7 @@ export default {
             margin-top: .4rem;
         }
     }
-    
+
     .newStudents /deep/ div.el-dialog__body{
         height: 50vh;
         overflow: auto;
