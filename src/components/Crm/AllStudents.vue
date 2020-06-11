@@ -595,7 +595,7 @@ export default {
             teaStuList: [],
 
             zuzhiOptions: [],
-            dataPicker: [],
+            dataPicker: '',
             pickerOptions: {
               disabledDate(time) {
                 return time.getTime() > Date.now();
@@ -763,12 +763,12 @@ export default {
     methods: {
         datePickerChange(value) {
             // console.log(Array.isArray(value));
-            // console.log(value);
+            console.log(value);
             if(Array.isArray(value)){ //选择时间段回来的是数组 (判断数组)
                 this.form.endTime = value[1].getTime();
                 this.dataPicker = value[1];
             }else if(value != null) { //选择时间回来的是对象obj
-                this.form.endTime = new Date().getTime();
+                this.form.endTime = value.getTime();
             }else{
                 this.form.endTime = '';
             }
@@ -1118,10 +1118,10 @@ export default {
                         }else{
                             sll.isCalledPhone = '未接通';
                         }
-                        if(sll.callStyle == 1) {
-                            sll.callStyle = '呼叫中心';
-                        }else if(sll.callStyle == 2) {
-                            sll.callStyle = '工作手机';
+                        if(sll.callStyle == 3) {
+                            sll.callStyle = '外呼电话';
+                        }else if(sll.callStyle == 4) {
+                            sll.callStyle = '直线呼入';
                         }
                         if(sll.recordUrl){
                             this.columnWidth = 314;

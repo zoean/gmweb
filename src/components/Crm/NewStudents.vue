@@ -991,10 +991,10 @@ export default {
                         }else{
                             sll.isCalledPhone = '未接通';
                         }
-                        if(sll.callStyle == 1) {
-                            sll.callStyle = '呼叫中心';
-                        }else if(sll.callStyle == 2) {
-                            sll.callStyle = '工作手机';
+                        if(sll.callStyle == 3) {
+                            sll.callStyle = '外呼电话';
+                        }else if(sll.callStyle == 4) {
+                            sll.callStyle = '直线呼入';
                         }
                         if(sll.recordUrl){
                             this.columnWidth = 314;
