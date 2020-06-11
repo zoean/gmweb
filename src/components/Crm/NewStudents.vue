@@ -6,19 +6,38 @@
             <el-col :span="4" style="float: right; text-align: right;"><el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
             
             <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            <el-col :span="4">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-button type="primary" size="small" @click="getWaitStudentList">查 询</el-button>
+            <el-col :span="5" class="">
+
+                <el-cascader
+                    class="smoke-cascader"
+                    ref="cascader"
+                    size="small"
+                    style="width: 95%;"
+                    placeholder="请搜索或者选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+
+            </el-col>
+
+            <el-col :span="3">
+                <el-button type="primary" size="small" @click="getWaitStudentListClick">查 询</el-button>
             </el-col>
 
         </el-row>
@@ -39,17 +58,16 @@
               width="45">
             </el-table-column>
             <el-table-column
-              :show-overflow-tooltip="true"
               :prop="item.prop"
               :label="item.label"
-              :width="item.prop == 'seatName' ? '250px' : item.prop == 'createTime' ? '180px' : ''"
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
               >
 
               <template slot-scope="scope">
-                <el-tooltip effect="dark" v-if="item.prop == 'seatName'" :content="scope.row.orgNameListText" placement="top">
+                <el-tooltip effect="dark" v-if="item.prop == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
                     <span>{{scope.row[item.prop] || '- -'}}</span>
                 </el-tooltip>
                 <span v-else>{{scope.row[item.prop] || '- -'}}</span>
@@ -476,12 +494,13 @@ import {
     getClassTeaStuNotes,
     getClueCallLog,
     getSchoolList,
-    enumByEnumNums
+    enumByEnumNums,
+    getOrgSubsetByUuid
 } from '../../request/api';
 import axios from 'axios'
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'newStudents',
@@ -493,6 +512,7 @@ export default {
                 sortSet: [],
                 total: null,
                 classUuid: '',
+                seatOrgList: [],
                 tel: '',
                 name: '',
                 stuId: '',
@@ -521,6 +541,8 @@ export default {
                 {'school': ''},
             ],
             handleCurrentUuid: '',
+
+            zuzhiOptions: [],
 
             customerForm: {
                 studentUuid: '', //学员的唯一标识
@@ -644,8 +666,31 @@ export default {
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getSchoolList();
+        this.getOrgSubsetByUuid();
     },
     methods: {
+        handleZuzhiChange(arr) {
+            let brr = [];
+            // console.log(arr);
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            // console.log(brr);
+            this.form.seatOrgList = brr;
+            console.log(this.form.seatOrgList);
+        },
+        getOrgSubsetByUuid() {
+            this.$smoke_post(getOrgSubsetByUuid, {
+                uuid: showid
+            }).then(res => {
+                console.log(res);
+                this.zuzhiOptions = res.data;
+            })
+        },
         GetAgreementList(id) {
             let that = this;
             let url = "https://app.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
@@ -735,6 +780,10 @@ export default {
 
                 }
             })
+        },
+        getWaitStudentListClick() {
+            this.form.currentPage = 1;
+            this.getWaitStudentList();
         },
         getWaitStudentList() {
             this.fullscreenLoading = true;
@@ -942,10 +991,10 @@ export default {
                         }else{
                             sll.isCalledPhone = '未接通';
                         }
-                        if(sll.callStyle == 1) {
-                            sll.callStyle = '呼叫中心';
-                        }else if(sll.callStyle == 2) {
-                            sll.callStyle = '工作手机';
+                        if(sll.callStyle == 3) {
+                            sll.callStyle = '外呼电话';
+                        }else if(sll.callStyle == 4) {
+                            sll.callStyle = '直线呼入';
                         }
                         if(sll.recordUrl){
                             this.columnWidth = 314;
@@ -1029,7 +1078,7 @@ export default {
             margin-top: .4rem;
         }
     }
-    
+
     .newStudents /deep/ div.el-dialog__body{
         height: 50vh;
         overflow: auto;

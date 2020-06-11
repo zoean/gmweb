@@ -22,7 +22,7 @@
     },
     model: {
       prop: 'value',
-      event: 'change'
+      event: 'onblur'
     },
     props: {
       value: {
@@ -32,6 +32,10 @@
       isClear: {
         type: Boolean,
         default: false
+      },
+      saveContent: {
+        type: Function,
+        default: null
       }
     },
     watch: {
@@ -107,7 +111,6 @@
           },
           success: (xhr, editor, result) => {
             // 图片上传成功回调
-            console.log(result)
           },
           timeout: (xhr, editor) => {
             // 网络超时的回调
@@ -122,15 +125,14 @@
              //循环插入图片
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
-              console.log()
               let url = "http://testfile.jhwx.com/" + result.data.fileUrl
               insertImg(url)
             // } 
           }
         }
-        this.editor.customConfig.onchange = (html) => {
+        this.editor.customConfig.onblur  = (html) => {
           this.info_ = html // 绑定当前逐渐地值
-          this.$emit('change', this.info_) // 将内容同步到父组件中
+          this.$emit('saveContent', html) // 将内容同步到父组件中
         }
         // 创建富文本编辑器
         this.editor.create()

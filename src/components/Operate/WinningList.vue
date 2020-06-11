@@ -1,7 +1,7 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">中奖列表</div>
+      <div class="people-title">中奖列表<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-row>
         <el-col :span="3">
           <el-select style="width:80%" v-model="pricetype" placeholder="全部奖品" class="screen-li">
@@ -316,6 +316,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
   .screen-li {
     width: 90%;

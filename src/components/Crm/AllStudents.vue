@@ -1,25 +1,66 @@
 <template>
-    <el-main class="index-main students">
-        <!-- <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div> -->
-        
-        <el-row style="margin-bottom: 6px;">
-            
+    <el-main class="index-main allStudents">
+        <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
+                <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    class="screen-li"
+                    ref="autocomplete"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelect"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
+            </el-col>
+            <el-col :span="4">
+                <el-select v-model="form.classType" placeholder="请选择班型等级" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in classTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="form.teaName" placeholder="请输入班主任姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
-            </el-col>
-            
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+        </el-row>
+
+        <el-row class="people-screen" type="flex" align="middle">
+
+            <el-col :span="5">
+
+                <el-cascader
+                    class="smoke-cascader1"
+                    ref="cascader"
+                    size="small"
+                    style="width: 90%;"
+                    placeholder="请搜索或选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels='true'
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+
             </el-col>
 
             <el-col :span="5">
                 
                 <el-date-picker
-                  class="smoke-cascader"
                   style="width: 90%;"
                   v-model="dataPicker"
                   type="date"
@@ -33,102 +74,51 @@
 
             </el-col>
 
-            <el-col :span="5">
-
-                <el-cascader
-                    class="smoke-cascader"
-                    ref="cascader"
-                    size="small"
-                    style="width: 95%;"
-                    placeholder="请搜索或者选择坐席组织架构"
-                    collapse-tags
-                    :show-all-levels=false
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
-                    clearable>
-                </el-cascader>
-
-            </el-col>
-
             <el-col :span="2">
-                <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
+
+                <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
+
+            </el-col>
+
+            <el-col :span="12">
+                <el-row type="flex" justify="end">
+                    <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
+                </el-row>
             </el-col>
 
         </el-row>
 
-        <el-row style="margin-bottom: 10px;">
-
-            <el-col style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
-
-        </el-row>
-
-        <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
-            <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
-        </el-tabs>
         <el-table
             :data="list"
-            :key="Math.random()" 
-            ref="tree"
+            ref="tableSelect"
+            :key="Math.random()"
             v-loading="fullscreenLoading"
-            style="width: calc( 100vw - 3.8rem)"
-            :row-key="getRowKey">
+            style="width: 100%">
             <el-table-column
-              :prop="item.props"
+              type="selection"
+              width="45">
+            </el-table-column>
+            <el-table-column
+              :prop="item.prop"
+              :label="item.label"
+              :formatter="item.formatter"
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
               v-for="(item, index) in columnList"
-              :min-width="item.width"
               :key="index"
               >
-              <template slot="header">
-                {{item.label}}
-                <span class="caret-wrapper" v-if="item.ifSort">
-                    <i class="sort-caret ascending" @click="tableSort('ascending', item.props)"></i>
-                    <i class="sort-caret descending" @click="tableSort('descending', item.props)"></i>
-                </span>
-              </template>
+
               <template slot-scope="scope">
-
-                    <el-tooltip effect="dark" v-if="item.props == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
-                      <span>{{scope.row[item.props] || '- -'}}</span>
-                    </el-tooltip>
-                    <span v-else>{{scope.row[item.props] || '- -'}}</span>
-
-                    <!-- <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /> -->
-                    
+                <el-tooltip effect="dark" v-if="item.prop == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
+                    <span style="cursor: default">{{scope.row[item.prop] || '- -'}}</span>
+                </el-tooltip>
+                <span v-else>{{scope.row[item.prop] || '- -'}}</span>
               </template>
+
             </el-table-column>
-
-            <el-table-column prop="active" label="操作" fixed="right" width="100">
+            <el-table-column prop="active" label="操作" width="80">
               <template slot-scope="scope">
-
-                <el-popconfirm
-                    confirmButtonText='确定'
-                    cancelButtonText='取消'
-                    icon="el-icon-info"
-                    placement="top"
-                    title="确认拨打该学员电话吗？"
-                    :hideIcon='true'
-                    v-if="!$route.query.id"
-                    @onConfirm="phoneOutTea(scope.row)"
-                  >
-                    <svg-icon slot="reference" icon-title="手机外拨" icon-class="takephone" />
-                </el-popconfirm>
-
-                <el-popconfirm
-                    confirmButtonText='确定'
-                    cancelButtonText='取消'
-                    icon="el-icon-info"
-                    placement="top"
-                    title="确认拨打该学员电话吗？"
-                    :hideIcon='true'
-                    v-if="!$route.query.id"
-                    @onConfirm="seatOutTea(scope.row)"
-                  >
-                    <svg-icon slot="reference" icon-title="座机外拨" icon-class="landline" />
-                </el-popconfirm>
-
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
+                <svg-icon @click="moveStudentOne(scope.row)" icon-title="转移学员" icon-class="move" />
               </template>
             </el-table-column>
         </el-table>
@@ -136,6 +126,7 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -145,6 +136,24 @@
             @size-change="handleSizeChange"
         >
         </el-pagination>
+
+        <el-drawer
+            title="选择转移接受方"
+            :visible.sync="drawerMove"
+            :direction="directionMove"
+            :before-close="handleClose"
+        >
+            <span class="bullets"></span>
+
+        <el-tag 
+            v-for="(item,index) in teacherMoveList" :key="index"
+            style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
+            @click="tagClick(item)"
+            >{{item.classTeacherName}}
+        </el-tag>
+
+        </el-drawer>
+
 
         <el-drawer
             :title="drawerTitle"
@@ -347,12 +356,6 @@
                         <el-row>
 
                             <el-col :span="6">
-                                <el-form-item label="所属班主任" prop="classTeaName">
-                                    <el-input v-model="customerForm.classTeaName" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-
-                            <el-col :span="6">
                                 <el-form-item label="报名班型" prop="signUpClassType">
                                     <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
@@ -411,53 +414,6 @@
                             </el-col>
 
                         </el-row>
-    
-                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;" v-if="!$route.query.id"></el-row>
-
-                        <el-row v-if="!$route.query.id">
-                            
-                            <el-col :span="6">
-
-                                <el-form-item label="跟进类型" prop="followUp">
-
-                                    <el-select v-model="customerForm.followUp" placeholder="请选择跟进类型" size="small">
-                                        <el-option
-                                          v-for="item in enumList['MJ-12']"
-                                          :key="item.name"
-                                          :label="item.name"
-                                          :value="item.number">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-
-                            </el-col>
-                        </el-row>
-
-                        <el-row v-if="!$route.query.id">
-
-                            <el-col :span="18">
-                                <el-form-item label="跟进内容" prop="followUpContent">
-
-                                    <el-input 
-                                        type="textarea" 
-                                        v-model="customerForm.followUpContent" 
-                                        size="small" 
-                                        show-word-limit
-                                        maxlength='100'
-                                        placeholder="请输入跟进内容"
-
-                                    ></el-input>
-
-                                </el-form-item>
-                            </el-col>
-
-                        </el-row>
-                        
-                        <el-form-item style="text-align: center;" v-if="!$route.query.id">
-                          <el-button type="primary" @click="submitForm('customerForm')" size="small" style="width: 80px;">确定</el-button>
-                          <el-button plain size="small" style="width: 80px;" @click="quxiao">取消</el-button>
-                        </el-form-item>
 
                     </el-form>
 
@@ -476,8 +432,8 @@
                         >
                         <el-table-column
                           :prop="item.prop"
-                          :label="item.label"
                           :width="item.prop == 'createTime' ? '250px' : ''"
+                          :label="item.label"
                           v-for="(item, index) in notesColumnList"
                           :key="index"
                           >
@@ -572,64 +528,71 @@
 
         </el-dialog>
 
-        <PageFieldManage :setPageNum="setPageNum" />
-
     </el-main>
 </template>
 
 <script>
 import { 
-    getClassTeaStudent, 
-    getStudentDetails, 
-    addClassTeaStuNotes, 
-    getClassTeaStuNotes, 
-    getClassTeaClass,
+    getSupStuList,
+    getExamBasic,
+    getTransferStuCTList,
+    transferStu,
+    getStudentDetails,
     enumByEnumNums,
-    getSchoolList,
-    copyTel,
     getOrderList,
-    phoneOutTea,
-    seatOutTea,
+    getClassTeaStuNotes,
     getClueCallLog,
+    getSchoolList,
     getOrgSubsetByUuid
 } from '../../request/api';
-import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
+import { 
+    timestampToTime, 
+    genderText,
+    classTypeString,
+    getTextByJs,
+} from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
-    name: 'reCoverData',
-    components: {
-        PageFieldManage
-    },
+    name: 'allStudents',
     data() {
         return {
-            getOrderForm: {},
             form: {
                 currentPage: 1,
                 pageSize: 10,
-                sortSet: [],
-                total: null,
-                classTeaUuid: '',
-                seatOrgList: [],
-                classUuid: '', //班级的uuid
-                num: '',
-                sortSet: [],
-                tel: '',
+                classType: '',
+                examItemId: '',
+                examItemText: '',
                 name: '',
+                teaName: '',
+                seatOrgList: [],
+                sortSet: [],
+                tel: "", //手机号
+                total: null,
                 startTime: '',
                 endTime: '',
             },
             list: [],
-            columnList: [{
-                label: '班型'
-            }],
-            titleName: '',
-            titleFlag: false,
-            drawerTitle: '学员详情',
-            drawer: false,
-            direction: 'btt',
-            tabs_active: 'first',
+            totalFlag: false,
+            columnList: [
+                { 'prop': 'name', 'label': '姓名' },
+                { 'prop': 'tel', 'label': '手机号码' },
+                { 'prop': 'examItemName', 'label': '考试项目' },
+                { 'prop': 'classType', 'label': '班型' },
+                { 'prop': 'school', 'label': '分校' },
+                { 'prop': 'classTea', 'label': '班主任' },
+                { 'prop': 'seatName', 'label': '成单坐席' },
+            ],
+            drawerMove: false,
+            directionMove: 'rtl',
+            restaurants: [],
+            classTypeList: [
+                { value: 0, label: '普通班' },
+                { value: 1, label: '高端班' },
+            ],
+            fullscreenLoading: false,
+            teacherMoveList: [],
+            teaStuList: [],
 
             zuzhiOptions: [],
             dataPicker: '',
@@ -700,18 +663,17 @@ export default {
                 workingLife: '', //工作年限
                 wx: "",
                 seatName: '',
-                
-                followUp: '', //跟进类型
-                followUpContent: '' //跟进内容
             },
+
             rules: {
-                followUp: [
-                  { required: true, message: '请选择跟进类型', trigger: 'change' }
-                ],
-                followUpContent: [
-                  { required: true, message: '请输入跟进内容', trigger: ['blur', 'change'] }
-                ],
+                
             },
+            getOrderForm: {},
+            drawerTitle: '学员详情',
+            drawer: false,
+            direction: 'btt',
+            tabs_active: 'first',
+            
             tabsList: [],
             classUuidDefault: '',
             genderList: [
@@ -724,12 +686,6 @@ export default {
             ],
             enumList: {},
             pcaa: null, //省市数据
-            notesForm: {
-                currentPage: 1,
-                pageSize: 10,
-                studentUuid: '',
-                total: null,
-            },
             notesList: [],
             notesColumnList: [
                 { 'prop': 'createTime', 'label': '创建时间'},
@@ -754,12 +710,17 @@ export default {
                 userUuid: "",
                 total: null, //总条目数
             },
+            pcaa: null, //省市数据
+            notesForm: {
+                currentPage: 1,
+                pageSize: 10,
+                studentUuid: '',
+                total: null,
+            },
             columnWidth: 90,
             columnFlag: false,
-            totalFlag: false, //当只有一页时隐藏分页
             pageshow: true, //分页重新渲染
             schoolList: [],
-            fullscreenLoading: false,
             copyClueDataSUuid: '', //学员详情copy手机号时用的clueDataSUuid
             orderList: [],
             orderListColumn: [{
@@ -783,8 +744,6 @@ export default {
                     return cellValue ? cellValue : '--'
                 }
             }],
-            initOptions: {},
-            callLogUuid: '',
             agreementList: [],
             agreeColumnList: [
                 { 'prop': 'agrName', 'label': '协议名称' },  
@@ -793,23 +752,22 @@ export default {
         }
     },
     created() {
-        this.getClassTeaClass();
+        this.getSupStuList();
+        this.getExamBasic();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getSchoolList();
-        const initOptions = localStorage.getItem('initOptions');
-        this.initOptions = JSON.parse(initOptions);
         this.getOrgSubsetByUuid();
     },
-    methods: { 
+    methods: {
         datePickerChange(value) {
             // console.log(Array.isArray(value));
             console.log(value);
-            if(Array.isArray(value)){
+            if(Array.isArray(value)){ //选择时间段回来的是数组 (判断数组)
                 this.form.endTime = value[1].getTime();
                 this.dataPicker = value[1];
-            }else if(value != null) {
+            }else if(value != null) { //选择时间回来的是对象obj
                 this.form.endTime = value.getTime();
             }else{
                 this.form.endTime = '';
@@ -857,172 +815,6 @@ export default {
                 }
             }
         },
-        phoneOutTea( scope ) {
-            if(this.initOptions != undefined){
-                this.$smoke_post(phoneOutTea, {
-                    adminUin: this.initOptions.adminUin,
-                    uin: this.initOptions.uin,
-                    uuid: scope.uuid,
-                }).then(res => {
-                    if(res.code == 200){
-                        if(res.data.result){
-                            this.drawer = true;
-                            this.studentDetails(scope);
-                            this.callLogUuid = res.data.callLogUuid;
-                            this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '目前服务线路忙，请稍后重试'
-                            })
-                        }
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }
-                })
-            }else{
-                this.$message({
-                    type: 'error',
-                    message: '请联系主管配置jq账号'
-                })
-            }
-        },
-        seatOutTea( scope ) {
-            if(this.initOptions != undefined){
-                this.$smoke_post(seatOutTea, {
-                    adminUin: this.initOptions.adminUin,
-                    uin: this.initOptions.uin,
-                    uuid: scope.uuid,
-                }).then(res => {
-                    if(res.code == 200){
-                        if(res.data.result){
-                            this.drawer = true;
-                            this.studentDetails(scope);
-                            this.callLogUuid = res.data.callLogUuid;
-                            this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '目前服务线路忙，请稍后重试'
-                            })
-                        }
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }
-                })
-            }else{
-                this.$message({
-                    type: 'error',
-                    message: '请联系主管配置jq账号'
-                })
-            }
-        },
-        geOrderRecord(){
-            this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
-                if(res.data){
-                    this.orderList = res.data
-                }
-            })
-        },
-        tableSort(type, props){
-            this.form.sortSet = []
-            this.form.sortSet.push({[props]: type === 'ascending' ? 'ASC' : 'DESC'})
-            this.getClassTeaStudent()
-        },
-        setPageNum(pageNum){
-            this.form.num = pageNum
-        },
-        getRowKey(row){
-            return row.num
-        },
-        editFieldHandle(){
-            this.$store.commit('setEditFieldVisible', true)
-        },
-        timeChange() {
-            this.customerForm.examPeriod = this.customerForm.examPeriod.getTime();
-        },
-        getSchoolList() {
-            this.$smoke_get(getSchoolList, {}).then(res => {
-                if(res.code == 200){
-                    this.schoolList = res.data;
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg, 
-                    });
-                }
-            })
-        },
-        handleCurrentChangeFollow(index) {
-            this.notesForm.currentPage = index;
-            this.getClassTeaStuNotes();
-        },
-        handleSizeChangeFollow(index) {
-            this.notesForm.pageSize = index;
-            this.notesForm.currentPage = 1;
-            this.getClassTeaStuNotes();
-        }, 
-        getClueCallLog() {
-            this.$smoke_post(getClueCallLog, this.notesCallForm).then(res => {
-                this.columnFlag = false;
-                if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.createTime = timestampToTime(Number(sll.createTime));
-                        if(sll.isCalledPhone == null) {
-                            sll.isCalledPhone = '';
-                        }else if(sll.isCalledPhone == 1) {
-                            sll.isCalledPhone = '接通';
-                        }else{
-                            sll.isCalledPhone = '未接通';
-                        }
-                        if(sll.callStyle == 3) {
-                            sll.callStyle = '外呼电话';
-                        }else if(sll.callStyle == 4) {
-                            sll.callStyle = '直线呼入';
-                        }
-                        if(sll.recordUrl){
-                            this.columnWidth = 314;
-                            this.columnFlag = true;
-                        }
-                    })
-                    this.notesCallList = res.data.list;
-                    this.notesCallForm.total = res.data.total;
-                }
-            }) 
-        },
-        handleCurrentChangeCall(index) {
-            this.notesCallForm.currentPage = index;
-            this.getClueCallLog();
-        },
-        handleSizeChangeCall(index) {
-            this.notesCallForm.pageSize = index;
-            this.notesCallForm.currentPage = 1;
-            this.getClueCallLog();
-        }, 
-        studentDetails( row ) {
-            this.drawer = true;
-            this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
-            this.copyClueDataSUuid = row.clueDataSUuid;
-            this.notesCallForm.clueDataSUuid = row.clueDataSUuid;
-            this.tabs_active = 'first';
-            this.customerForm.followUp = '';
-            this.customerForm.followUpContent = '';
-            this.getStudentDetails(row.uuid);
-            this.GetAgreementList(row.customerId);
-            this.getOrderForm.userId = row.customerId
-            this.getOrderForm.itemId = row.examItemId
-            this.getOrderForm.classType = row.classType
-        },
-        cityChange() {
-            this.customerForm.province = this.customerForm.provinceCity[0];
-            this.customerForm.city = this.customerForm.provinceCity[1];
-        },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
                 numberList: arr
@@ -1039,50 +831,198 @@ export default {
                 }
             })
         },
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-              if (valid) {
-                this.$confirm('确认保存修改内容吗？')
-                .then(_ => {
-                  this.addClassTeaStuNotes();
-                })
-                .catch(_ => {});
-              } else {
-                console.log('error submit!!');
-                return false;
-              }
-            });
+        getSchoolList() {
+            this.$smoke_get(getSchoolList, {}).then(res => {
+                if(res.code == 200){
+                    this.schoolList = res.data;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg, 
+                    });
+                }
+            })
         },
-        getClassTeaClass() {
-            this.$smoke_get(getClassTeaClass,{
-                classTeaUuid: this.$route.query.id || ''
+        handleCurrentChange(index) {
+            this.form.currentPage = index;
+            this.getSupStuList();
+        },
+        handleSizeChange(index) {
+            this.form.pageSize = index;
+            this.form.currentPage = 1;
+            this.getSupStuList();
+        }, 
+        getExamBasic() {
+            let arr;
+            this.$smoke_get(getExamBasic, {}).then(res => {
+                console.log(res);
+                arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
+                this.restaurants = arr;
+            })
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            console.log(restaurants);
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelect(item) {
+            console.log(item);
+            this.form.examItemId = item.id;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
+        getSupStuListClick() {
+            this.form.currentPage = 1;
+            this.getSupStuList();
+        },
+        getSupStuList() {
+            this.fullscreenLoading = true;
+            this.$smoke_post(getSupStuList, this.form).then(res => {
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.classType = classTypeString(sll.classType);
+                            if(sll.seatOrgName && sll.seatName) {
+                                sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
+                            }else{
+                                sll.seatName = '';
+                            }
+                            sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
+                        })
+                        this.list = res.data.list;
+                        this.form.total = res.data.total;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
+            })
+        },
+        handleClose(done) {
+            this.teaStuList = [];
+            done();
+        },
+        moveStudents(type, id) {
+            let arr = [];
+            let brr = [];
+            let rowClassType;
+
+            this.$refs.tableSelect.selection.map(sll => {
+                if(sll.classType == '高端班') {
+                    rowClassType = 1;
+                }else{
+                    rowClassType = 0;
+                }
+                arr.push({classType: rowClassType, examItemId: sll.examItemId});
+                brr.push({teaUuid: sll.classTeaUuid, uuid: sll.uuid});
+            })
+            if(arr.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要转移的学员'
+                });
+            }else{
+                this.drawerMove = true;
+                console.log(arr);
+                this.getTransferStuCTList(arr);
+                this.teaStuList = brr;
+            }
+        },
+        moveStudentOne(row) {
+            let arr = [];
+            let brr = [];
+            let rowClassType;
+            if(row.classType == '高端班') {
+                rowClassType = 1;
+            }else{
+                rowClassType = 0;
+            }
+            arr.push({classType: rowClassType, examItemId: row.examItemId});
+            brr.push({teaUuid: row.classTeaUuid, uuid: row.uuid});
+            this.teaStuList = brr;
+            this.drawerMove = true;
+            this.getTransferStuCTList(arr);
+        },
+        getTransferStuCTList(arr) {
+            this.$smoke_post(getTransferStuCTList, {
+                list: arr
             }).then(res => {
                 if(res.code == 200) {
-                    if(this.$route.query.id == undefined){
-                        this.titleFlag = false;
-                        if(res.data.length) {
-                            this.form.classUuid = res.data[0].uuid;
-                            this.classUuidDefault = res.data[0].uuid;
-                        }
-                    }else{
-                        this.titleFlag = true;
-                        this.form.classTeaUuid = this.$route.query.id;
-                        this.titleName = '班主任 - ' + this.$route.query.name + ' - 服务学员'
-                        this.form.classUuid = this.$route.query.classUuid;
-                        this.classUuidDefault = this.$route.query.classUuid;
-                    }
-                    res.data.map(sll => {
-                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
-                    })
-                    this.tabsList = res.data;
-                    this.getClassTeaStudent();
+                    this.teacherMoveList = res.data;
+                }
+            })
+        },
+        tagClick(item) {
+            this.$confirm('确认转移学员吗？')
+            .then(_ => {
+              this.transferStu(item.classTeacherUuid);
+            })
+            .catch(_ => {});
+        },
+        transferStu(classTeacherUuid) {
+            this.$smoke_post(transferStu, {
+                teaStuList: this.teaStuList,
+                teaUuid: classTeacherUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '转移成功'
+                    });
+                    setTimeout(() => {
+                        this.drawerMove = false;
+                        this.getSupStuList();
+                    },300)
                 }else{
                     this.$message({
                         type: 'error',
                         message: res.msg
-                    })
+                    });
+                    setTimeout(() => {
+                        this.drawerMove = false;
+                        this.getSupStuList();
+                    },300)
                 }
             })
+        },
+
+
+        studentDetails( row ) {
+            this.drawer = true;
+            this.customerForm.studentUuid = this.notesForm.studentUuid = row.stuUuid;
+            this.copyClueDataSUuid = row.clueDataSUuid;
+            this.notesCallForm.clueDataSUuid = row.clueDataSUuid;
+            this.tabs_active = 'first';
+            this.customerForm.followUp = '';
+            this.customerForm.followUpContent = '';
+            this.customerForm.seatName = row.seatName;
+            this.getStudentDetails(row.stuUuid);
+            this.GetAgreementList(row.customerId);
+            console.log(row);
+            this.getOrderForm.userId = row.customerId;
+            this.getOrderForm.itemId = row.examItemId;
+            this.getOrderForm.classType = row.classType == '普通班' ? 0 : 1;
         },
         getStudentDetails(id) {
             const date = new Date;
@@ -1124,126 +1064,8 @@ export default {
                     this.customerForm.work = res.data.work;
                     this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
-                    if(res.data.seatOrgName && res.data.seatName) {
-                        this.customerForm.seatName = res.data.seatPOrgName? res.data.seatPOrgName + ' ' + res.data.seatOrgName + ' ' + res.data.seatName : res.data.seatOrgName + ' ' + res.data.seatName;
-                    }else{
-                        this.customerForm.seatName = '';
-                    }
                 }
             })
-        },
-        addClassTeaStuNotes() {
-            this.$smoke_post(addClassTeaStuNotes, {
-                customerForm: {
-                    age: this.customerForm.age,
-                    auxiliarySignUp: this.customerForm.auxiliarySignUp,
-                    city: this.customerForm.city,
-                    education: this.customerForm.education,
-                    evidencePurpose: this.customerForm.evidencePurpose,
-                    examPeriod: this.customerForm.examPeriod,
-                    gender: this.customerForm.gender,
-                    graduationMajor: this.customerForm.graduationMajor,
-                    name: this.customerForm.name,
-                    province: this.customerForm.province,
-                    studentStatus: this.customerForm.studentStatus,
-                    studySituation: this.customerForm.studySituation,
-                    twoTel: this.customerForm.twoTel,
-                    work: this.customerForm.work,
-                    workingLife: this.customerForm.workingLife,
-                    wx: this.customerForm.wx
-                },
-                notes: {
-                    followUp: this.customerForm.followUp,
-                    followUpContent: this.customerForm.followUpContent
-                },
-                studentUuid: this.customerForm.studentUuid,
-                callLogUuid: this.callLogUuid,
-            }).then(res => {
-                if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '添加备注成功',
-                    })
-                    this.tabs_active = 'second';
-                    this.getClassTeaStuNotes();
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: '添加备注失败',
-                    })
-                }
-            })
-        },
-        getClassTeaStuNotes() {
-            this.$smoke_post(getClassTeaStuNotes, this.notesForm).then(res => {
-                if(res.code == 200) {
-                    res.data.list.map(sll => {
-                        sll.createTime  = timestampToTime(Number(sll.createTime));
-                    })
-                    this.notesList = res.data.list;
-                    this.notesForm.total = res.data.total;
-                }
-            })
-        },
-        getClassTeaStudentClick() {
-            this.form.currentPage = 1;
-            this.getClassTeaStudent();
-        },
-        getClassTeaStudent() {
-            this.fullscreenLoading = true;
-            this.$smoke_post(getClassTeaStudent, this.form).then(res => {
-                if(res.code == 200) {
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.createTime  = timestampToTime(Number(sll.createTime));
-                            sll.classType = classTypeString(sll.classType);
-                            sll.orderType = orderTypeText(sll.orderType);
-                            if(sll.seatOrgName && sll.seatName) {
-                                sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
-                            }else{
-                                sll.seatName = '';
-                            }
-
-                            sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
-                        })
-                        this.list = res.data.list;
-                        this.columnList = res.data.filedList;
-                        this.form.total = res.data.total;
-                        
-                    }, 300);
-
-                }else{
-
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }, 300)
-
-                }
-            })
-        },
-        handleClose(done) {
-            if(this.callLogUuid) {
-                this.$confirm('确认关闭？')
-                .then(_ => {
-                    done();
-                    this.getClassTeaStudent();
-                })
-                .catch(_ => {});
-            }else {
-                done();
-                this.getClassTeaStudent();
-            }
-        },
-        handleClassTabClick(tab, event) {
-            this.form.classUuid = tab.name;
-            this.form.currentPage = 1;
-            this.form.pageSize = 10;
-            this.getClassTeaStudent();
         },
         handleTabClick(tab) {
             if(tab.label == '订单记录'){
@@ -1265,41 +1087,76 @@ export default {
                 });
             }
         },
-        phoneCopy(row) {
-            this.copyTel(row.clueDataSUuid);
-        },
-        copyTel(id) {
-            this.$smoke_post(copyTel, {
-                uuid: id
-            }).then(res => {
-                if(res.code == 200) {
-                    copyData(res.data);
-                    this.$message({
-                        type: 'success',
-                        message: '复制成功',
-                    });
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
+        geOrderRecord(){
+            this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
+                if(res.data){
+                    this.orderList = res.data
                 }
             })
         },
-        phoneCopyFun() {
-            this.copyTel(this.copyClueDataSUuid);
+        getClassTeaStuNotes() {
+            this.$smoke_post(getClassTeaStuNotes, this.notesForm).then(res => {
+                if(res.code == 200) {
+                    res.data.list.map(sll => {
+                        sll.createTime  = timestampToTime(Number(sll.createTime));
+                    })
+                    this.notesList = res.data.list;
+                    this.notesForm.total = res.data.total;
+                }
+            })
         },
-        quxiao() {
-            this.drawer = false;
+        getClueCallLog() {
+            this.$smoke_post(getClueCallLog, this.notesCallForm).then(res => {
+                this.columnFlag = false;
+                if(res.code == 200) {
+                    res.data.list.map(sll => {
+                        sll.createTime = timestampToTime(Number(sll.createTime));
+                        if(sll.isCalledPhone == null) {
+                            sll.isCalledPhone = '';
+                        }else if(sll.isCalledPhone == 1) {
+                            sll.isCalledPhone = '接通';
+                        }else{
+                            sll.isCalledPhone = '未接通';
+                        }
+                        if(sll.callStyle == 3) {
+                            sll.callStyle = '外呼电话';
+                        }else if(sll.callStyle == 4) {
+                            sll.callStyle = '直线呼入';
+                        }
+                        if(sll.recordUrl){
+                            this.columnWidth = 314;
+                            this.columnFlag = true;
+                        }
+                    })
+                    this.notesCallList = res.data.list;
+                    this.notesCallForm.total = res.data.total;
+                }
+            }) 
         },
-        handleCurrentChange(index) {
-            this.form.currentPage = index;
-            this.getClassTeaStudent();
+        handleCurrentChangeFollow(index) {
+            this.notesForm.currentPage = index;
+            this.getClassTeaStuNotes();
         },
-        handleSizeChange(index) {
-            this.form.pageSize = index;
-            this.form.currentPage = 1;
-            this.getClassTeaStudent();
+        handleSizeChangeFollow(index) {
+            this.notesForm.pageSize = index;
+            this.notesForm.currentPage = 1;
+            this.getClassTeaStuNotes();
+        }, 
+        handleCurrentChangeCall(index) {
+            this.notesCallForm.currentPage = index;
+            this.getClueCallLog();
+        },
+        handleSizeChangeCall(index) {
+            this.notesCallForm.pageSize = index;
+            this.notesCallForm.currentPage = 1;
+            this.getClueCallLog();
+        }, 
+        cityChange() {
+            this.customerForm.province = this.customerForm.provinceCity[0];
+            this.customerForm.city = this.customerForm.provinceCity[1];
+        },
+        timeChange() {
+            this.customerForm.examPeriod = this.customerForm.examPeriod.getTime();
         },
         lookAgreement() {
             this.agreeFlag = true;
@@ -1317,29 +1174,20 @@ export default {
     mounted() {
         
     },
-    watch:{
-      '$route': function(){
-        console.log(this.$route.query.id);
-        if(this.$route.query.id == undefined) {
-            this.form.classTeaUuid = '';
-            this.getClassTeaClass();
-        }
-      }
-    },
 }
 </script>
 
 <style lang="less" scoped>
     .index-main{
-        flex: 1;
+        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #F7F7F7;
-            margin-bottom: 20px;
+            background: #fff;
+            margin-bottom: .3rem;
             color: #666666;
         }
         .people-screen{
@@ -1351,11 +1199,10 @@ export default {
         .el-pagination{
             text-align: right;
             margin-top: .4rem;
-            margin-right: .4rem;
         }
     }
 
-    .students /deep/ div.el-dialog__body{
+    .allStudents /deep/ div.el-dialog__body{
         height: 50vh;
         overflow: auto;
     }

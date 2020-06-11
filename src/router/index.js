@@ -38,7 +38,7 @@ import agreeMentDetails from '@/components/Crm/AgreeMentDetails';
 import newStudents from '@/components/Crm/NewStudents';
 import registered from '@/components/Crm/Registered';
 import headMaster from '@/components/Crm/HeadMaster';
-import vip from '@/components/Crm/Vip';
+import allStudents from '@/components/Crm/AllStudents';
 import fieldManagement from '@/components/Crm/FieldManagement';
 
 import knowp from '@/components/Knowp/Index';
@@ -232,9 +232,9 @@ export default new Router({
         },
 
         {
-            path: '/crm/eduAdmin/vip',
-            name: 'vip',
-            component: vip
+            path: '/crm/eduAdmin/allStudents',
+            name: 'allStudents',
+            component: allStudents
         },
 
         {

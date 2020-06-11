@@ -1,10 +1,10 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">创建活动</div>
+      <div class="people-title">创建活动<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-tabs type="border-card">
         <el-tab-pane label="基础信息">
-          <el-form ref="form" :model="form" :rules="rules">
+          <el-form ref="form" :model="form" :rules="rules" label-width="180px !important">
             <el-form-item label="应用公众号" prop="appId">
               <el-row :gutter="10">
                 <el-col :span="7">
@@ -149,7 +149,7 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="活动图文">
-          <EditorBar :value="form.activityContent" :isClear="isClear" @change="change"></EditorBar>
+          <EditorBar :value="form.activityContent" :isClear="isClear" @saveContent="saveContent"></EditorBar>
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -189,7 +189,8 @@ export default {
       rules: {
         appId: [{ required: true, message: "请选择公众号", trigger: "change" }],
         activityName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" }
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 3, max: 30, message: '长度在3-30个字符', trigger: 'blur'}
         ],
         // imageUrl2: [
         //   { required: true, message: "请上传活动封面", trigger: "blur" }
@@ -266,8 +267,8 @@ export default {
         }
       });
     },
-    change(value) {
-      this.form.activityContent = value
+    saveContent(val){
+      this.form.activityContent = val
     }
   },
   components: {
@@ -292,6 +293,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
 }
 /deep/ .el-form .el-form-item {

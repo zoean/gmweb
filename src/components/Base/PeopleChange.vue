@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
         
-        <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工信息编辑</div>
+        <div class="people-title"><i class="el-icon-back" title="返回" @click="goback"></i>员工信息编辑</div>
 
         <div class="people-detail">
             <el-form ref="form" :model="formText" label-width="80px" style="width: 470px; margin: 0 auto;">

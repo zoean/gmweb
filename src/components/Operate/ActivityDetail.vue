@@ -1,10 +1,10 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">活动详情</div>
+      <div class="people-title">活动详情<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-tabs type="border-card">
         <el-tab-pane label="基础信息">
-          <el-form ref="form" :model="form" label-width="150px !important" :rules="rules">
+          <el-form ref="form" :model="form" label-width="180px !important" :rules="rules">
             <el-form-item label="应用公众号" prop="appId">
               <el-row :gutter="10">
                 <el-col :span="7">
@@ -62,7 +62,7 @@
                 end-placeholder="结束时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 format="yyyy-MM-dd HH:mm:ss"
-                :default-time="['00:00:00', '23:59:59']" @blur="changeTime">
+                :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
@@ -82,8 +82,8 @@
             <el-row :gutter="10">
               <el-col :span="7">
                 <el-select v-model="form.newUserTrigger">
-                  <el-option label="启用" value="0"></el-option>
-                  <el-option label="不启用" value="1"></el-option>
+                  <el-option label="启用" value="1"></el-option>
+                  <el-option label="不启用" value="0"></el-option>
                 </el-select>
               </el-col>
               <el-col class="form-tip" :span="15">新用户初进公众号，直接发送文案与海报</el-col>
@@ -140,7 +140,7 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="活动图文">
-          <EditorBar :value="form.activityContent" :isClear="isClear" @change="change"></EditorBar>
+          <EditorBar :value="form.activityContent" :isClear="isClear" @saveContent="saveContent"></EditorBar>
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -184,7 +184,8 @@ export default {
       rules: {
         appId: [{ required: true, message: "请选择公众号", trigger: "change" }],
         activityName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" }
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 3, max: 30, message: '长度在3-30个字符', trigger: 'blur'}
         ],
         // imageUrl2: [
         //   { required: true, message: "请上传活动封面", trigger: "blur" }
@@ -229,9 +230,6 @@ export default {
     });
   },
   methods: {
-    changeTime(val){
-      console.log(val)
-    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
@@ -281,10 +279,8 @@ export default {
         }
       });
     },
-    change(value) {
-      console.log(value)
-      this.form.activityContent = value
-
+    saveContent(val){
+      this.form.activityContent = val
     }
   },
   components: {
@@ -308,6 +304,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
 }
 /deep/ .el-form .el-form-item {

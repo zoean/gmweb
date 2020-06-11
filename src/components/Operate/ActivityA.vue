@@ -4,7 +4,7 @@
       <div class="people-title">活动管理</div>
       <el-row>
         <el-col :span="4">
-          <el-select class="screen-li" v-model="stateValue" placeholder="不限状态">
+          <el-select class="screen-li" v-model="stateValue" placeholder="不限状态" clearable>
             <el-option
               v-for="item in activityState"
               :key="item.value"
@@ -14,7 +14,7 @@
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select v-model="applicationValue" placeholder="不限公众号" style="width:90%">
+          <el-select v-model="applicationValue" placeholder="不限公众号" style="width:90%" clearable>
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -27,10 +27,10 @@
           <el-input v-model.trim="activitySearch" placeholder="活动名称" style="width:90%"></el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" style="width: 50%;" @click="searchactivity">搜索</el-button>
+          <el-button type="primary" @click="searchactivity">搜索</el-button>
         </el-col>
-        <el-col :span="4" style="float:right">
-          <el-button type="primary" style="width: 50%;float:right" @click="createactivity">创建活动</el-button>
+        <el-col :span="6">
+          <el-button style="float: right" type="primary" @click="createactivity">创建活动</el-button>
         </el-col>
       </el-row>
       <el-table
@@ -183,9 +183,7 @@ export default {
         activityName: this.activitySearch
       }).then(res => {
         if (res.code === 200) {
-          if (res.data.list.length) {
-            this.tableData = this.settabelList(res.data.list);
-          }
+          this.tableData = this.settabelList(res.data.list);
         }
       });
     },
@@ -283,7 +281,7 @@ export default {
   }
   .screen-li {
     width: 90%;
-    margin-bottom: 1rem;
+    margin-bottom: .3rem;
   }
 }
 .index-main /deep/ .el-table .cell {
