@@ -62,7 +62,7 @@
                 end-placeholder="结束时间"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 format="yyyy-MM-dd HH:mm:ss"
-                :default-time="['00:00:00', '23:59:59']" @blur="changeTime">
+                :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="派奖时间" prop="receiveTime">
@@ -140,7 +140,7 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="活动图文">
-          <EditorBar :value="form.activityContent" :isClear="isClear" @change="change"></EditorBar>
+          <EditorBar :value="form.activityContent" :isClear="isClear" @saveContent="saveContent"></EditorBar>
         </el-tab-pane>
       </el-tabs>
     </el-main>
@@ -184,7 +184,8 @@ export default {
       rules: {
         appId: [{ required: true, message: "请选择公众号", trigger: "change" }],
         activityName: [
-          { required: true, message: "请输入活动名称", trigger: "blur" }
+          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { min: 3, max: 30, message: '长度在3-30个字符', trigger: 'blur'}
         ],
         // imageUrl2: [
         //   { required: true, message: "请上传活动封面", trigger: "blur" }
@@ -229,9 +230,6 @@ export default {
     });
   },
   methods: {
-    changeTime(val){
-      console.log(val)
-    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
@@ -281,10 +279,8 @@ export default {
         }
       });
     },
-    change(value) {
-      console.log(value)
-      this.form.activityContent = value
-
+    saveContent(val){
+      this.form.activityContent = val
     }
   },
   components: {
