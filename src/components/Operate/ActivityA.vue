@@ -4,7 +4,7 @@
       <div class="people-title">活动管理</div>
       <el-row>
         <el-col :span="4">
-          <el-select class="screen-li" v-model="stateValue" placeholder="不限状态">
+          <el-select class="screen-li" v-model="stateValue" placeholder="不限状态" clearable>
             <el-option
               v-for="item in activityState"
               :key="item.value"
@@ -14,7 +14,7 @@
           </el-select>
         </el-col>
         <el-col :span="4">
-          <el-select v-model="applicationValue" placeholder="不限公众号" style="width:90%">
+          <el-select v-model="applicationValue" placeholder="不限公众号" style="width:90%" clearable>
             <el-option
               v-for="item in options"
               :key="item.value"
