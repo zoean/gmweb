@@ -47,7 +47,7 @@
                     style="width: 95%;"
                     placeholder="请搜索或者选择坐席组织架构"
                     collapse-tags
-                    :show-all-levels=false
+                    :show-all-levels='true'
                     :options="zuzhiOptions"
                     @change='handleZuzhiChange'
                     filterable
@@ -57,13 +57,31 @@
 
             </el-col>
 
+            <el-col :span="8">
+
+                <el-date-picker
+                  v-model="dataPicker"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  size="small"
+                  clearable
+                  range-separator="至"
+                  @change="datePickerChange"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+
+            </el-col>
+
             <el-col :span="2">
 
                 <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="14">
+            <el-col :span="6">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -552,6 +570,8 @@ export default {
                 sortSet: [],
                 tel: "", //手机号
                 total: null,
+                startTime: '',
+                endTime: '',
             },
             list: [],
             totalFlag: false,
@@ -576,6 +596,46 @@ export default {
             teaStuList: [],
 
             zuzhiOptions: [],
+            dataPicker: [],
+            pickerOptions: {
+              shortcuts: [{
+                text: '三日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 2);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '七日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 6);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '十五日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 14);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '三十日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 29);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
 
             customerForm: {
                 studentUuid: '', //学员的唯一标识
@@ -703,6 +763,15 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
+        datePickerChange(value) {
+            if (value == null) {
+                this.form.startTime = '';
+                this.form.endTime = '';
+            }else{
+                this.form.startTime = value[0].getTime();
+                this.form.endTime = value[1].getTime();
+            }
+        },
         handleZuzhiChange(arr) {
             let brr = [];
             // console.log(arr);
@@ -922,6 +991,7 @@ export default {
                     });
                     setTimeout(() => {
                         this.drawerMove = false;
+                        this.getSupStuList();
                     },300)
                 }else{
                     this.$message({
@@ -930,6 +1000,7 @@ export default {
                     });
                     setTimeout(() => {
                         this.drawerMove = false;
+                        this.getSupStuList();
                     },300)
                 }
             })

@@ -18,6 +18,24 @@
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
+            <el-col :span="8">
+
+                <el-date-picker
+                  v-model="dataPicker"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  size="small"
+                  clearable
+                  range-separator="至"
+                  @change="datePickerChange"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+
+            </el-col>
+
         </el-row>
 
         <el-row style="margin-bottom: 10px;">
@@ -598,7 +616,9 @@ export default {
                 num: '',
                 sortSet: [],
                 tel: '',
-                name: ''
+                name: '',
+                startTime: '',
+                endTime: '',
             },
             list: [],
             columnList: [{
@@ -612,6 +632,46 @@ export default {
             tabs_active: 'first',
 
             zuzhiOptions: [],
+            dataPicker: [],
+            pickerOptions: {
+              shortcuts: [{
+                text: '三日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 2);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '七日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 6);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '十五日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 14);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '三十日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  end.setTime(start.getTime() + 3600 * 1000 * 24 * 29);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
 
             customerForm: {
                 studentUuid: '', //学员的唯一标识
@@ -744,6 +804,15 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: { 
+        datePickerChange(value) {
+            if (value == null) {
+                this.form.startTime = '';
+                this.form.endTime = '';
+            }else{
+                this.form.startTime = value[0].getTime();
+                this.form.endTime = value[1].getTime();
+            }
+        },
         handleZuzhiChange(arr) {
             let brr = [];
             // console.log(arr);
