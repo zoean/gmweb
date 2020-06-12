@@ -5,10 +5,10 @@
     <div style="text-align: center; font-size: 16px;">忘记密码</div>
       
     <el-form-item label="手机号" :label-width="formLabelWidth" prop="accountNumber">
-      <el-input v-model="ruleForm.accountNumber" autocomplete="off" placeholder="请输入手机号" style="width: 80%;" size="small"></el-input>
+      <el-input v-model="ruleForm.accountNumber" :readonly="readonlyFlag" @focus="readonlyFlag = false" placeholder="请输入手机号" style="width: 80%;" size="small"></el-input>
     </el-form-item>
     <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPassword">
-      <el-input v-model="ruleForm.newPassword" autocomplete="off" placeholder="请输入新密码" type="password" style="width: 80%;" size="small"></el-input>
+      <el-input v-model="ruleForm.newPassword" @input="input_change_password($event)" placeholder="请输入新密码" type="password" style="width: 80%;" size="small"></el-input>
     </el-form-item>
     <el-form-item label="验证码" :label-width="formLabelWidth" prop="verCode">
       <el-input :value="ruleForm.verCode" style="width: 40%;" placeholder="请输入验证码" size="small" @input="input_change($event)"></el-input>
@@ -30,7 +30,7 @@
 
 <script>
 import { forgetPassword, sendDingVerCode } from '../../request/api';
-import { phone_vailData } from '../../assets/js/data';
+import { phone_vailData, pass_word } from '../../assets/js/data';
 export default {
   name: 'forget',
   data() {
@@ -46,7 +46,7 @@ export default {
             { pattern: phone_vailData, required: true, message: '请输入手机号', trigger: 'blur' },
           ],
           newPassword: [
-            { required: true, message: '请输入新密码', trigger: 'blur' }
+            { pattern: pass_word, required: true, message: '密码必须由6-12位数字或字母组成', trigger: 'blur' }
           ],
           verCode: [
             { required: true, message: '请输入验证码', trigger: 'blur' }
@@ -55,12 +55,17 @@ export default {
         form_rule_flag: false,
         form_rule_name: '获取钉钉验证码',
         timer:null,
+        readonlyFlag: true
     }
   },
   created() {
     
   },
   methods: {
+    input_change_password(e) {
+      this.ruleForm.newPassword = e;
+      this.$forceUpdate();
+    },
     input_change(e) {
       this.ruleForm.verCode = e;
       this.$forceUpdate();
