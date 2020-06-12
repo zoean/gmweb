@@ -11,7 +11,7 @@
                 <el-input class="lock" v-model="password" size="medium" placeholder="请输入密码" show-password prefix-icon="el-icon-lock"></el-input>
                 <el-button type="primary" class="login-btn" size="medium" @click="login" v-loading.fullscreen.lock="fullscreenLoading">登录</el-button>
 
-                <!-- <div class="contain-forget" @click="forget_password">忘记密码</div> -->
+                <div class="contain-forget" @click="forget_password">忘记密码</div>
 
             </div>
         </div>

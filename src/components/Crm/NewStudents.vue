@@ -13,10 +13,6 @@
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
-            </el-col>
-
             <el-col :span="5" class="">
 
                 <el-cascader
@@ -34,6 +30,10 @@
                     clearable>
                 </el-cascader>
 
+            </el-col>
+
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
             <el-col :span="3">

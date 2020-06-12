@@ -12,6 +12,25 @@
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
             </el-col>
             
+            <el-col :span="5">
+
+                <el-cascader
+                    class="smoke-cascader"
+                    ref="cascader"
+                    size="small"
+                    style="width: 95%;"
+                    placeholder="请搜索或者选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+
+            </el-col>
+
             <el-col :span="4">
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
@@ -30,25 +49,6 @@
                   placeholder="请选择最后联系时间"
                   :picker-options="pickerOptions">
                 </el-date-picker>
-
-            </el-col>
-
-            <el-col :span="5">
-
-                <el-cascader
-                    class="smoke-cascader"
-                    ref="cascader"
-                    size="small"
-                    style="width: 95%;"
-                    placeholder="请搜索或者选择坐席组织架构"
-                    collapse-tags
-                    :show-all-levels=false
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
-                    clearable>
-                </el-cascader>
 
             </el-col>
 
