@@ -234,7 +234,7 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
         this.form.triggerPicture =
-          "http://testfile.jhwx.com/" + res.data.fileUrl;
+          "http://file.jhwx.com/" + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }
@@ -242,7 +242,7 @@ export default {
     handleAvatarSuccessicon(res, file) {
       this.imageUrl2 = URL.createObjectURL(file.raw);
       if (res.code === 0) {
-        this.form.activityPage = "http://testfile.jhwx.com/" + res.data.fileUrl;
+        this.form.activityPage = "http://file.jhwx.com/" + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }

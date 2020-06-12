@@ -223,13 +223,13 @@ export default {
       switch(cellValue){
         case '0':
           return '未领取'
-          break
+          break;
         case '1':
           return '申领中'
-          break
+          break;
         case '2':
           return '已领取'
-          break
+          break;
       }
     },
     getlistData(awardId = "", receiveStatus = "", nickName = "") {
@@ -272,22 +272,42 @@ export default {
       this.getlistData(this.pricetype, this.pricestate, this.nickName);
     },
     awardUpdate(){
-      this.$smoke_post(wechatActivityAwardUpdateUser,this.form).then(
-        res=>{
-          if(res.code === 200){
-             this.dialogVisible = false
-          }
+      this.$refs['form'].validate((valid) => {
+        if(valid){
+          this.$smoke_post(wechatActivityAwardUpdateUser,this.form).then(
+            res=>{
+              if(res.code === 200){
+                this.dialogVisible = false
+              }
+            }
+          )
+        }else{
+          this.$message({
+            showClose: true,
+            message: '请按要求输入',
+            type: 'error'
+          });
         }
-      )
+      })
+      
       
     },
     awardPost(){//立即派发
-       this.$smoke_post(wechatActivityAwardPost,this.form).then(res=>{
-         if(res.code === 200){
-             this.form.sendStatus = '1'
-         }
-         
-       })
+      this.$refs['form'].validate((valid) => {
+        if(valid){
+          this.$smoke_post(wechatActivityAwardPost,this.form).then(res=>{
+            if(res.code === 200){
+                this.form.sendStatus = '1'
+            }
+          })
+        }else{
+          this.$message({
+            showClose: true,
+            message: '请按要求输入',
+            type: 'error'
+          });
+        }
+      })
     }
   }
 };

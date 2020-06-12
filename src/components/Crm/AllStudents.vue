@@ -420,8 +420,13 @@
                 </el-tab-pane>
                 <el-tab-pane label="订单记录" name="third">
                     <el-table :data="orderList">
-                        <el-table-column v-for="(item, index) in orderListColumn" :label="item.label" :prop="item.prop" :key="index" 
-              :show-overflow-tooltip="true" :width="item.width" :formatter="item.formatter"></el-table-column>
+                        <af-table-column 
+                            v-for="(item, index) in orderListColumn" 
+                            :label="item.label" 
+                            :prop="item.prop" 
+                            :key="index" 
+                            :formatter="item.formatter"
+                        ></af-table-column>
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="跟进记录" name="second">
@@ -501,6 +506,23 @@
                         v-if="pageshow"
                     >
                     </el-pagination>
+
+                </el-tab-pane>
+
+                <el-tab-pane label="课程列表" name="five">
+
+                    <div v-if="courseListsFlag">
+
+                        <div :data="courseLists" v-for="(baby, haha) in courseLists" :key="haha">
+                            <div style="background: #FAFAFA; height: 40px; font-size: 14px; line-height: 40px; padding-left: 20px;">{{baby.categoryName}}</div>
+                            <div v-for="(item, index) in baby.courseList">
+                                <div style="padding-left: 50px; border-bottom: 1px solid #F1F1F1; height: 40px; font-size: 14px; line-height: 40px;">{{item.courseName}}</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div v-else style="text-align: center; margin-top: 20px; font-size: 14px; color: #909399;">暂无课程</div>
 
                 </el-tab-pane>
 
@@ -724,9 +746,11 @@ export default {
             copyClueDataSUuid: '', //学员详情copy手机号时用的clueDataSUuid
             orderList: [],
             orderListColumn: [{
-                prop: 'goodsName', label:"商品名称", width: 150
+                prop: 'goodsName', label:"商品名称"
             },{
                 prop: 'orderNo', label:"订单号"
+            },{
+                prop: 'payMoney', label:"支付金额"
             },{
                 prop: 'refer', label:"订单来源"
             },{
@@ -735,6 +759,12 @@ export default {
                 prop: 'addTime', label:"下单时间", formatter: (row, column, cellValue) =>{
                     return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
                 }
+            },{
+                prop: 'payTime', label:"支付时间", formatter: (row, column, cellValue) =>{
+                    return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
+                }
+            },{
+                prop: 'userInfo', label:"收货地址"
             },{
                 prop: 'hasDelivery', label:"是否发货", formatter: (row, column, cellValue) =>{
                     return cellValue ? '是' : '否'
@@ -749,6 +779,9 @@ export default {
                 { 'prop': 'agrName', 'label': '协议名称' },  
             ],
             agreeFlag: false,
+
+            courseLists: [],
+            courseListsFlag: null
         }
     },
     created() {
@@ -812,6 +845,32 @@ export default {
                     that.$nextTick(() => {
                         that.agreementList = res.data.agreementList;
                     })
+                }
+            }
+        },
+        GetCourseList4Teacher(id) {
+            let that = this;
+            var ajaxObj = new XMLHttpRequest();
+            let url = "https://app.jhwx.com/lovestudy/api/study/GetCourseList4Teacher";
+            ajaxObj.open('post', url)
+            ajaxObj.setRequestHeader("Content-type", "application/json");
+            ajaxObj.send(JSON.stringify({userId: id}));
+            ajaxObj.onreadystatechange = function () {
+            // 为了保证 数据 完整返回，我们一般会判断 两个值
+                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
+                    // 数据是保存在 异步对象的 属性中
+                    let res = JSON.parse(ajaxObj.responseText);
+                    if(res.status == 0 && res.data) {
+                        console.log(res.data);
+                        that.$nextTick(() => {
+                            that.courseLists = res.data.courseList;
+                            that.courseListsFlag = true;
+                        })
+                    }else{
+                        that.courseListsFlag = false;
+                    }
                 }
             }
         },
@@ -1021,8 +1080,8 @@ export default {
             this.GetAgreementList(row.customerId);
             console.log(row);
             this.getOrderForm.userId = row.customerId;
-            this.getOrderForm.itemId = row.examItemId;
-            this.getOrderForm.classType = row.classType == '普通班' ? 0 : 1;
+            this.getOrderForm.itemId = '';
+            this.getOrderForm.classType = '';
         },
         getStudentDetails(id) {
             const date = new Date;
@@ -1085,12 +1144,17 @@ export default {
                 this.$nextTick(() => {//重新渲染分页
                     this.pageshow = true;
                 });
+            }else if(tab.label == '课程列表') {
+                this.GetCourseList4Teacher(this.getOrderForm.userId);
             }
         },
         geOrderRecord(){
             this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
                 if(res.data){
-                    this.orderList = res.data
+                    res.data.map(sll => {
+                        sll.userInfo = sll.userName + ' / '  + sll.phone + ' / ' +  sll.location + sll.address ;
+                    })
+                    this.orderList = res.data;
                 }
             })
         },
