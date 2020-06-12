@@ -223,13 +223,13 @@ export default {
       switch(cellValue){
         case '0':
           return '未领取'
-          break
+          break;
         case '1':
           return '申领中'
-          break
+          break;
         case '2':
           return '已领取'
-          break
+          break;
       }
     },
     getlistData(awardId = "", receiveStatus = "", nickName = "") {
