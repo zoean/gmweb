@@ -5,33 +5,40 @@
       <el-radio-group v-model="radio1" @change="changeCR">
         <el-radio-button v-for="(item,index) in radioButton" :key="index" :label="item"></el-radio-button>
       </el-radio-group>
-      <el-form ref="form" :model="form">
-        <el-form-item label="奖品状态">
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="奖品状态" prop="awardStatus">
           <el-radio-group v-model="form.awardStatus">
             <el-radio-button label="开启"></el-radio-button>
             <el-radio-button label="关闭"></el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="奖品图片">
-          <el-upload
-            ref="upload"
-            class="avatar-uploader"
-            action="https://testgm.jhwx.com/upload-service/upload/file"
-            :show-file-list="false"
-            :data="pppss"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+        <el-form-item label="奖品图片" prop="pictureUrl">
+          <el-row :gutter="10">
+            <el-col :span="7">
+              <el-upload
+                ref="upload"
+                class="avatar-uploader"
+                action="https://testgm.jhwx.com/upload-service/upload/file"
+                :show-file-list="false"
+                :data="pppss"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+              >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-col>
+            <el-col class="form-tip" :span="15">尺寸要求：216px*144px</el-col>
+          </el-row>
+          
         </el-form-item>
-        <el-form-item label="奖品名称">
+        <el-form-item label="奖品名称" prop="awardName">
           <el-col :span="10">
             <el-input v-model="form.awardName"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="任务人数">
+        <el-form-item label="任务人数" prop="membersMin">
+          <el-row :gutter="10">
           <el-col :span="4">
             <el-input placeholder="必填" v-model="form.membersMin"></el-input>
           </el-col>
@@ -39,8 +46,10 @@
           <el-col :span="4">
             <el-input v-model="form.membersMax" placeholder="若不填则无上限"></el-input>
           </el-col>
+          <el-col class="form-tip" :span="12">任务人数区间下限必填，上限非必填</el-col>
+          </el-row>
         </el-form-item>
-        <el-form-item label="市场价格">
+        <el-form-item label="市场价格" prop="valuationPrice">
           <el-col :span="10">
             <el-input v-model="form.valuationPrice"></el-input>
           </el-col>
@@ -59,26 +68,32 @@
             </el-select>
           </el-col>
         </el-form-item>
-        <el-form-item label="选择优惠券" v-if="radio1 === '优惠券'">
-          <el-col :span="10">
-            <el-select v-model="form.couponsId">
-              <el-option v-for="(item, index) in couponList" :label="item.couponName" :value="item.couponId">{{item.couponName}}</el-option>
-            </el-select>
-          </el-col>
+        <el-form-item label="选择优惠券" v-if="radio1 === '优惠券'" prop="couponsId">
+          <el-row>
+            <el-col :span="10">
+              <el-select v-model="form.couponsId">
+                <el-option v-for="(item, index) in couponList" :label="item.couponName" :value="item.couponId" :key="index">{{item.couponName}}</el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+          <el-row><el-col class="form-tip">须先在分校商城后台配置红色；暂时仅支持三种类型：按用户发送，线上发放的红包，绑定商品的红包</el-col></el-row>
         </el-form-item>
         <el-form-item label="领取验证">
           <el-col :span="10">
-            <el-select v-model="form.receiveVerify">
+            <el-select v-model="form.receiveVerify" :disabled="radio1 == '优惠券'">
               <el-option label="验证码验证手机且不可跳过" value="0"></el-option>
               <el-option label="验证码验证手机但可跳过" value="1"></el-option>
               <el-option label="无需验证码验证手机" value="2"></el-option>
             </el-select>
           </el-col>
         </el-form-item>
-        <el-form-item label="领取时告知">
-          <el-col :span="10">
-            <el-input v-model="form.awardTip"></el-input>
-          </el-col>
+        <el-form-item label="领取时告知" prop="awardTip">
+          <el-row :gutter="10">
+            <el-col :span="10" :gutter="10">
+              <el-input v-model="form.awardTip"></el-input>
+            </el-col>
+            <el-col :span="12" class="form-tip">上限10个字符</el-col>
+          </el-row>
         </el-form-item>
       </el-form>
       <el-row>
@@ -104,10 +119,10 @@ export default {
       radioButton: ["优惠券", "实物邮寄", "自定义链接"],
       couponList: [],
       form: {
-        awardStatus: "", //奖励开启状态(0-关闭，1-开启)
+        awardStatus: "开启", //奖励开启状态(0-关闭，1-开启)
         awardName: "", //奖励名称
         couponsId: "", //	优惠券ID
-        receiveVerify: "", //领取手机号验证
+        receiveVerify: "0", //领取手机号验证
         valuationPrice: "", //市场价格
         awardUrl: "", //领取跳转地址
         awardTip: "", //领奖时告知,
@@ -116,6 +131,23 @@ export default {
         membersMin:'',
         schoolName: 'jhwx'
       },
+      rules: {
+        pictureUrl: [{
+          required: true, message: "请上传奖品图片", trigger: "blur"
+        }],
+        awardName: [{
+          required: true, message: "请输入奖品名称", trigger: "blur"
+        }],
+        membersMin: [{
+          required: true, message: "请输入任务人数", trigger: "blur"
+        }],
+        couponsId: [{
+          required: this.radio1 === '优惠券' ? true : false, message: "请选择优惠券", trigger: "blur"
+        }],
+        awardTip: [{
+          required: false, max: 10, trigger: "blur"
+        }]
+      }
     };
   },
   created() {
@@ -156,10 +188,10 @@ export default {
     },
     changeCR() {
         this.form = {
-        awardStatus: "", //奖励开启状态(0-关闭，1-开启)
+        awardStatus: '开启', //奖励开启状态(0-关闭，1-开启)
         awardName: "", //奖励名称
         couponsId: "", //	优惠券ID
-        receiveVerify: "", //领取手机号验证
+        receiveVerify: "0", //领取手机号验证
         valuationPrice: "", //市场价格
         awardUrl: "", //领取跳转地址
         awardTip: "", //领奖时告知,
@@ -178,7 +210,6 @@ export default {
         this.form.awardId = awardId
         this.form.awardType = priceType
         this.form.awardStatus = this.form.awardStatus === "开启" ? "1" : "0"
-        console.log(this.form)
         this.$smoke_post(wechatActivityAwardSEdit,this.form).then(res=>{
           if(res.code === 200){
             this.$router.go(-1)
@@ -188,10 +219,8 @@ export default {
         this.form.activityId = this.$route.query.activityId
         this.form.awardType = this.radio1 === '优惠券' ? '1' :(this.radio1 === '实物邮寄'? '2' : (this.radio1 === '自定义链接' ? '3' : ''))
         this.form.awardStatus = this.form.awardStatus === "开启" ? "1" : "0"
-                    console.log(this.form.awardType)
         this.$smoke_post(wechatActivityAwardAdd,this.form).then(res=>{
 
-          console.log(res)
             if(res.code === 200){
               this.$router.go(-1)
             }
