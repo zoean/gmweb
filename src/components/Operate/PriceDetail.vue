@@ -201,32 +201,43 @@ export default {
       }
     },
     addWinning() {
-      // console.log(this.$refs["form"].resetFields());
-        let Id = this.$route.query.activityId;
-        let priceType = this.$route.query.priceType;
-        let awardId = this.$route.query.awardId;
-      if(priceType&& Id && awardId){//这个是修改页面
-        this.form.activityId = Id
-        this.form.awardId = awardId
-        this.form.awardType = priceType
-        this.form.awardStatus = this.form.awardStatus === "开启" ? "1" : "0"
-        this.$smoke_post(wechatActivityAwardSEdit,this.form).then(res=>{
-          if(res.code === 200){
-            this.$router.go(-1)
-          }
-        })
-      }else{//新建页面
-        this.form.activityId = this.$route.query.activityId
-        this.form.awardType = this.radio1 === '优惠券' ? '1' :(this.radio1 === '实物邮寄'? '2' : (this.radio1 === '自定义链接' ? '3' : ''))
-        this.form.awardStatus = this.form.awardStatus === "开启" ? "1" : "0"
-        this.$smoke_post(wechatActivityAwardAdd,this.form).then(res=>{
+      this.$refs['form'].validate((valid) => {
+        if(valid){
+          let Id = this.$route.query.activityId;
+            let priceType = this.$route.query.priceType;
+            let awardId = this.$route.query.awardId;
+          if(priceType&& Id && awardId){//这个是修改页面
+            this.form.activityId = Id
+            this.form.awardId = awardId
+            this.form.awardType = priceType
+            this.form.awardStatus = this.form.awardStatus === "开启" ? "1" : "0"
+            this.$smoke_post(wechatActivityAwardSEdit,this.form).then(res=>{
+              if(res.code === 200){
+                this.$router.go(-1)
+              }
+            })
+          }else{//新建页面
+            this.form.activityId = this.$route.query.activityId
+            this.form.awardType = this.radio1 === '优惠券' ? '1' :(this.radio1 === '实物邮寄'? '2' : (this.radio1 === '自定义链接' ? '3' : ''))
+            this.form.awardStatus = this.form.awardStatus === "开启" ? "1" : "0"
+            this.$smoke_post(wechatActivityAwardAdd,this.form).then(res=>{
 
-            if(res.code === 200){
-              this.$router.go(-1)
-            }
-        })
-         
-      }
+                if(res.code === 200){
+                  this.$router.go(-1)
+                }
+            })
+            
+          }
+        }else{
+          this.$message({
+            showClose: true,
+            message: '请按要求输入',
+            type: 'error'
+          });
+        }
+      })
+      // console.log(this.$refs["form"].resetFields());
+        
 
     },
     handleAvatarSuccess(res, file) {
