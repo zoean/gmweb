@@ -243,7 +243,7 @@ export default {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
-        this.form.pictureUrl = "http://file.jhwx.com/" + res.data.fileUrl;
+        this.form.pictureUrl = "https://file.jhwx.com/" + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }

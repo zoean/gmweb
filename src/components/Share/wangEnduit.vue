@@ -125,7 +125,7 @@
              //循环插入图片
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
-              let url = "http://file.jhwx.com/" + result.data.fileUrl
+              let url = "https://file.jhwx.com/" + result.data.fileUrl
               insertImg(url)
             // } 
           }
