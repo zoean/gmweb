@@ -39,6 +39,10 @@
 
         <el-row class="people-screen" type="flex" align="middle">
 
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            </el-col>
+
             <el-col :span="5">
 
                 <el-cascader
@@ -565,7 +569,9 @@ import {
     getClassTeaStuNotes,
     getClueCallLog,
     getSchoolList,
-    getOrgSubsetByUuid
+    getOrgSubsetByUuid,
+    GetAgreementList,
+    GetCourseList4Teacher
 } from '../../request/api';
 import { 
     timestampToTime, 
@@ -591,6 +597,7 @@ export default {
                 sortSet: [],
                 tel: "", //手机号
                 total: null,
+                stuId: '',
                 startTime: '',
                 endTime: '',
             },
@@ -829,50 +836,27 @@ export default {
             })
         },
         GetAgreementList(id) {
-            let that = this;
-            let url = "https://testapp.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
-            var ajaxObj = new XMLHttpRequest();
-            ajaxObj.open('get', url)
-            ajaxObj.send();
-            ajaxObj.onreadystatechange = function () {
-            // 为了保证 数据 完整返回，我们一般会判断 两个值
-                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-                    // 数据是保存在 异步对象的 属性中
-                    let res = JSON.parse(ajaxObj.responseText);
-                    console.log(res.data.agreementList);
-                    that.$nextTick(() => {
-                        that.agreementList = res.data.agreementList;
-                    })
-                }
-            }
+
+            this.$smoke_get(GetAgreementList, {
+                param: {userId: id}
+            }).then(res => {
+                this.agreementList = res.data.agreementList;
+            })
+            
         },
         GetCourseList4Teacher(id) {
-            let that = this;
-            var ajaxObj = new XMLHttpRequest();
-            let url = "https://testapp.jhwx.com/lovestudy/api/study/GetCourseList4Teacher";
-            ajaxObj.open('post', url)
-            ajaxObj.setRequestHeader("Content-type", "application/json");
-            ajaxObj.send(JSON.stringify({userId: id}));
-            ajaxObj.onreadystatechange = function () {
-            // 为了保证 数据 完整返回，我们一般会判断 两个值
-                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-                    // 数据是保存在 异步对象的 属性中
-                    let res = JSON.parse(ajaxObj.responseText);
-                    if(res.status == 0 && res.data) {
-                        console.log(res.data);
-                        that.$nextTick(() => {
-                            that.courseLists = res.data.courseList;
-                            that.courseListsFlag = true;
-                        })
-                    }else{
-                        that.courseListsFlag = false;
-                    }
+
+            this.$smoke_post(GetCourseList4Teacher, {
+                userId: id
+            }).then (res => {
+                if(res.status == 0 && res.data) {
+                    this.courseLists = res.data.courseList;
+                    this.courseListsFlag = true;
+                }else{
+                    this.courseListsFlag = false;
                 }
-            }
+            })
+            
         },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {

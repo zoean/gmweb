@@ -24,7 +24,7 @@
                 <el-upload
                     class="avatar-uploader"
                     :data='uploadData'
-                    action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelSubject"
+                    :action="readExcelSubject"
                     :headers="headersObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
@@ -139,7 +139,7 @@ import {
 
     outExcelKnow,
     outExcelSubject,
-    readExcelSubject
+    readExcelSubject,
 } from '../../request/api';
 export default {
     name: 'index',
@@ -181,6 +181,7 @@ export default {
                 Authorization: ''
             },
             fullscreenLoading: false,
+            readExcelSubject: readExcelSubject
         }
     },
     created() {
@@ -193,7 +194,7 @@ export default {
     },
     methods: {
         outExcelSubject() {
-            const href = 'https://testgm.jhwx.com' + outExcelSubject + '?subjectUuid=' + this.$route.query.id;
+            const href = outExcelSubject + '?subjectUuid=' + this.$route.query.id;
             window.open(href, '_blank');
         },
         handleAvatarSuccess(res, file) {

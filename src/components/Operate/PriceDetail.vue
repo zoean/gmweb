@@ -18,7 +18,7 @@
               <el-upload
                 ref="upload"
                 class="avatar-uploader"
-                action="https://testgm.jhwx.com/upload-service/upload/file"
+                :action="uploadFile"
                 :show-file-list="false"
                 :data="pppss"
                 :on-success="handleAvatarSuccess"
@@ -107,10 +107,12 @@
 </template>
 <script>
 import { wechatActivityAwardGet,wechatActivityAwardSEdit,wechatActivityAwardAdd, getCouponList } from "@/request/operateApi.js";
+import { uploadFile } from '../../request/api';
 export default {
   name: "pricedetail",
   data() {
     return {
+      uploadFile: uploadFile,
       radio1: "优惠券",
       currentRadio: "",
       detailId: "",
@@ -243,7 +245,7 @@ export default {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
-        this.form.pictureUrl = "http://testfile.jhwx.com/" + res.data.fileUrl;
+        this.form.pictureUrl = process.env.VUE_APP_FILE_JHWX + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }

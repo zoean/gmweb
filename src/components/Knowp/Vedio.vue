@@ -106,7 +106,7 @@
                     <el-upload
                         class="avatar-uploader"
                         :data='uploadData'
-                        action="https://testgm.jhwx.com/api/knowledgeSystem/courseVideo/uploadimg"
+                        :action="uploadimg"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
@@ -273,6 +273,7 @@ import {
     getExamBasic,
     getFileSize,
     getCatalogueKnowBasicBySubjectUuid,
+    uploadimg
 } from '../../request/api';
 import { getTextByJs, timestampToTime, formatSeconds, vedioTypeText, copyData } from '../../assets/js/common';
 import { vedioTypeArr } from '../../assets/js/data';
@@ -343,6 +344,7 @@ export default {
             },
             checkKeys: [], //关联知识点选中数组
             treeType: '', //区别关联知识点的主辅
+            uploadimg: uploadimg
         }
     },
     created() {

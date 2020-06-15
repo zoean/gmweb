@@ -198,7 +198,7 @@
 
                 <el-upload
                     style="width: 130px; display: inline-block;"
-                    action="https://testgm.jhwx.com/api/phone/excel/readExcelClueData"
+                    :action="readExcelClueData"
                     :headers="headersObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
@@ -291,6 +291,7 @@ import {
     getExamBasic,
     getRuleItem,
     clueDataTem,
+    readExcelClueData
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery } from '../../assets/js/common';
@@ -382,6 +383,7 @@ export default {
             validDataNum: '',
             inValidDataNum: '',
             validDataNumFlag: false,
+            readExcelClueData: readExcelClueData
         }
     },
     created() {
@@ -560,7 +562,7 @@ export default {
             })
         },
         downloadImport() {
-            const href = 'https://testgm.jhwx.com' + clueDataTem
+            const href = clueDataTem;
             // console.log(href);
             window.open(href, '_blank');
         },

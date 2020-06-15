@@ -23,7 +23,7 @@
                 <el-upload
                     class="avatar-uploader"
                     :data='uploadData'
-                    action="https://testgm.jhwx.com/api/knowledgeSystem/knowExcel/readExcelKnow"
+                    :action="readExcelKnow"
                     :headers="headersObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
@@ -146,7 +146,8 @@ import {
     deleteKnowledgePoints,
     updateKnowledgePoints,
     getKnowledgePointsByUuid,
-    outExcelKnow
+    outExcelKnow,
+    readExcelKnow
 } from '../../request/api';
 import {
     emphasisLevelByText
@@ -194,6 +195,7 @@ export default {
                 Authorization: ''
             },
             fullscreenLoading: false,
+            readExcelKnow: readExcelKnow
         }
     },
     created() {
@@ -205,7 +207,7 @@ export default {
     },
     methods: {
         outExcelKnow() {
-            const href = 'https://testgm.jhwx.com' + outExcelKnow + '?subjectUuid=' + this.$route.query.id;
+            const href = outExcelKnow + '?subjectUuid=' + this.$route.query.id;
             window.open(href, '_blank');
         },
         handleAvatarSuccess(res, file) {

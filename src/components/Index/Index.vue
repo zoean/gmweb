@@ -145,15 +145,15 @@ export default {
             }).then(res => {
                 if(res.code == 200){
                     if(id == 1) {
-                        href = 'https://www.jhwx.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/onelogin/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 2) {
-                        href = 'https://www.shengxuewangxiao.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/sx_api/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 3) {
-                        href = 'https://www.jhwxedu.com/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/edu_api/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 4) {
-                        href = 'https://www.jhwx.com/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/onelogin/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 5) {
-                        href = 'https://www.jhwx.com/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/onelogin/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }
                     
                     if(res.data.loginPlatform){

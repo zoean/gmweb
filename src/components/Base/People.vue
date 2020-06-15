@@ -215,26 +215,27 @@ export default {
             }
         },
         export_Staff() {
-            let str = '';
+            // let str = '';
 
-            this.screenForm.sortSet.map(sll => {
-                for(var key in sll){
-                    str = key + '-' + sll[key]
-                }
-            })
+            // this.screenForm.sortSet.map(sll => {
+            //     for(var key in sll){
+            //         str = key + '-' + sll[key]
+            //     }
+            // })
 
-            if(this.screenForm.orgUuidList[0] == undefined){
-                this.screenForm.orgUuidList[0] = '';
-            }
-            const href = 'https://testgm.jhwx.com' + exportUserDetailedList +
+            // if(this.screenForm.orgUuidList[0] == undefined){
+            //     this.screenForm.orgUuidList[0] = '';
+            // }
+            let href = exportUserDetailedList +
             '?jobStatus=' + this.screenForm.jobStatus +
             '&accountNumber=' + this.screenForm.accountNumber + 
             '&name=' + this.screenForm.name + 
             '&roleUuid=' + this.screenForm.roleUuid + 
             '&startHiredDate=' + this.screenForm.startHiredDate +
-            '&endHiredDate=' + this.screenForm.endHiredDate + 
-            '&sortSet=' + str + 
-            '&orgUuidList=' + this.screenForm.orgUuidList[0];
+            '&endHiredDate=' + this.screenForm.endHiredDate
+            // + '&sortSet=' + str + 
+            // '&orgUuidList=' + this.screenForm.orgUuidList[0];
+            // console.log(href);
             window.open(href, '_blank');
 
         },
