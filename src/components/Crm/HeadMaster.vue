@@ -43,7 +43,7 @@
             <el-table-column prop="active" label="操作" width="70">
               <template slot-scope="scope">
               <svg-icon @click="addHeadTeacherClick(scope.row)" icon-title="配置班主任" icon-class="config" />
-              <svg-icon @click="headTeacherListClick(scope.row)" icon-title="班主任列表" icon-class="list" />
+              <!-- <svg-icon @click="headTeacherListClick(scope.row)" icon-title="班主任列表" icon-class="list" /> -->
               </template>
             </el-table-column>
         </el-table>
@@ -105,7 +105,7 @@
             
         </el-drawer>
 
-        <el-drawer
+        <!-- <el-drawer
             :title="drawerTitle2"
             :visible.sync="drawer2"
             :direction="direction2"
@@ -146,9 +146,9 @@
             >
             </el-pagination>
             
-        </el-drawer>
+        </el-drawer> -->
 
-        <el-drawer
+        <!-- <el-drawer
             :title="drawerTitle4"
             :visible.sync="drawer4"
             :direction="direction4"
@@ -166,7 +166,7 @@
             >{{item.userName}}
         </el-tag>
 
-        </el-drawer>
+        </el-drawer> -->
 
         <el-drawer
             :title="drawerTitle3"
@@ -498,48 +498,50 @@ export default {
                 done();
             }
         },
-        headTeacherListClick( scope ) {
-            console.log(scope);
-            this.drawer2 = true;
-            this.teacherForm.uuid = scope.uuid;
-            this.addTeacherForm.classUuid = scope.uuid;
-            this.teacherMoveForm.className = scope.examItem + ' - ' + scope.classType;
-            this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任列表'; //一级消防工程师 - 普通班 - 班主任列表
-            this.getClassTeacherList();
-        },
-        studentsListClick(scope) {
-            console.log(scope);
-            this.$router.push({
-                path: '/crm/myStudents/students',
-                query: {
-                    id: scope.classTeacherUuid,
-                    name: scope.classTeacherName,
-                    classUuid: this.teacherForm.uuid
-                }
-            })
-        },
-        getClassTeacherList() {
-            this.fullscreenLoadingDetails = true;
-            this.$smoke_post(getClassTeacherList, this.teacherForm).then(res => {
-                if(res.code == 200) {
+        // headTeacherListClick( scope ) {
+        //     console.log(scope);
+        //     this.drawer2 = true;
+        //     this.teacherForm.uuid = scope.uuid;
+        //     this.teacherForm.pageSize = 10;
+        //     this.teacherForm.currentPage = 1;
+        //     this.addTeacherForm.classUuid = scope.uuid;
+        //     this.teacherMoveForm.className = scope.examItem + ' - ' + scope.classType;
+        //     this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任列表'; //一级消防工程师 - 普通班 - 班主任列表
+        //     this.getClassTeacherList();
+        // },
+        // studentsListClick(scope) {
+        //     console.log(scope);
+        //     this.$router.push({
+        //         path: '/crm/myStudents/students',
+        //         query: {
+        //             id: scope.classTeacherUuid,
+        //             name: scope.classTeacherName,
+        //             classUuid: this.teacherForm.uuid
+        //         }
+        //     })
+        // },
+        // getClassTeacherList() {
+        //     this.fullscreenLoadingDetails = true;
+        //     this.$smoke_post(getClassTeacherList, this.teacherForm).then(res => {
+        //         if(res.code == 200) {
 
-                    setTimeout(() => {
-                        this.fullscreenLoadingDetails = false;
-                        this.teacherList = res.data.list;
-                        this.teacherForm.total = res.data.total;
-                    }, 300);
+        //             setTimeout(() => {
+        //                 this.fullscreenLoadingDetails = false;
+        //                 this.teacherList = res.data.list;
+        //                 this.teacherForm.total = res.data.total;
+        //             }, 300);
 
-                }else{
-                    setTimeout(() => {
-                        this.fullscreenLoadingDetails = false;
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }, 300)
-                }
-            })
-        },
+        //         }else{
+        //             setTimeout(() => {
+        //                 this.fullscreenLoadingDetails = false;
+        //                 this.$message({
+        //                     type: 'error',
+        //                     message: res.msg
+        //                 })
+        //             }, 300)
+        //         }
+        //     })
+        // },
         addHeadTeacherClick(scope) {
             console.log(scope);
             this.drawer3 = true;
@@ -650,63 +652,63 @@ export default {
             if (!value) return true;
             return data.orgName.indexOf(value) !== -1;
         },
-        studentsMoveClick(row) {
-            this.drawer4 = true;
-            this.getClassTeaOptionByClassUuid();
-            this.teacherMoveForm.classUserUuid = row.classTeacherUuid;
-        },
-        getClassTeaOptionByClassUuid() {
-            this.$smoke_post(getClassTeaOptionByClassUuid, {
-                uuid: this.teacherForm.uuid
-            }).then(res => {
-                if(res.code == 200) {
-                    this.teacherMoveForm.classLength = res.data.length;
-                    res.data.map((sll,index) => {
-                        if(sll.userUuid == this.teacherMoveForm.classUserUuid){
-                            res.data = removeEvery(sll, res.data);
-                        }
-                    })
-                    console.log(res.data);
-                    this.teacherMoveList = res.data;
-                }
-            });
-        },
-        tagClick(item) {
-            this.$confirm('确认转移学员吗？')
-            .then(_ => {
-              this.teacherMoveList.map((res,index) => {
-                if(res.userUuid == item.userUuid){
-                    res.mainUin = true;
-                    this.$forceUpdate();
-                }else{
-                    res.mainUin = false;
-                }
-              })
-              this.transferOfficer(item.userUuid);
-            })
-            .catch(_ => {});
-        },
-        transferOfficer(id) {
-            this.$smoke_post(transferOfficer, {
-                classTeaUuid: this.teacherMoveForm.classUserUuid, //班主任唯一标识
-                receiveClassTeaUuid: id, //接收的班主任唯一标识
-                classUuid: this.teacherForm.uuid
-            }).then(res => {
-                if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '转移学员成功'
-                    })
-                    this.drawer4 = false;
-                    this.getClassTeacherList();
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
-            })
-        }
+        // studentsMoveClick(row) {
+        //     this.drawer4 = true;
+        //     this.getClassTeaOptionByClassUuid();
+        //     this.teacherMoveForm.classUserUuid = row.classTeacherUuid;
+        // },
+        // getClassTeaOptionByClassUuid() {
+        //     this.$smoke_post(getClassTeaOptionByClassUuid, {
+        //         uuid: this.teacherForm.uuid
+        //     }).then(res => {
+        //         if(res.code == 200) {
+        //             this.teacherMoveForm.classLength = res.data.length;
+        //             res.data.map((sll,index) => {
+        //                 if(sll.userUuid == this.teacherMoveForm.classUserUuid){
+        //                     res.data = removeEvery(sll, res.data);
+        //                 }
+        //             })
+        //             console.log(res.data);
+        //             this.teacherMoveList = res.data;
+        //         }
+        //     });
+        // },
+        // tagClick(item) {
+        //     this.$confirm('确认转移学员吗？')
+        //     .then(_ => {
+        //       this.teacherMoveList.map((res,index) => {
+        //         if(res.userUuid == item.userUuid){
+        //             res.mainUin = true;
+        //             this.$forceUpdate();
+        //         }else{
+        //             res.mainUin = false;
+        //         }
+        //       })
+        //       this.transferOfficer(item.userUuid);
+        //     })
+        //     .catch(_ => {});
+        // },
+        // transferOfficer(id) {
+        //     this.$smoke_post(transferOfficer, {
+        //         classTeaUuid: this.teacherMoveForm.classUserUuid, //班主任唯一标识
+        //         receiveClassTeaUuid: id, //接收的班主任唯一标识
+        //         classUuid: this.teacherForm.uuid
+        //     }).then(res => {
+        //         if(res.code == 200) {
+        //             this.$message({
+        //                 type: 'success',
+        //                 message: '转移学员成功'
+        //             })
+        //             this.drawer4 = false;
+        //             this.getClassTeacherList();
+        //         }else{
+        //             this.$message({
+        //                 type: 'error',
+        //                 message: res.msg
+        //             })
+        //         }
+        //     })
+        // }
     },
     mounted() {
         

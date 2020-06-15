@@ -1,22 +1,66 @@
 <template>
-    <el-main class="index-main">
-        <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div>
+    <el-main class="index-main students">
+        <!-- <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div> -->
         
         <el-row style="margin-bottom: 6px;">
-
-            <el-col :span="4" style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
             
             <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            <el-col :span="4">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
+            </el-col>
+            
+            <el-col :span="5">
+
+                <el-cascader
+                    class="smoke-cascader"
+                    ref="cascader"
+                    size="small"
+                    style="width: 95%;"
+                    placeholder="请搜索或者选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+
             </el-col>
 
-            <el-col :span="4" style="margin-left: 20px;">
-                <el-button type="primary" size="small" @click="getClassTeaStudent">查 询</el-button>
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
+
+            <el-col :span="5">
+                
+                <el-date-picker
+                  class="smoke-cascader"
+                  style="width: 90%;"
+                  v-model="dataPicker"
+                  type="date"
+                  align="right"
+                  size="small"
+                  clearable
+                  @change="datePickerChange"
+                  placeholder="请选择最后联系时间"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+
+            </el-col>
+
+            <el-col :span="2">
+                <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
+            </el-col>
+
+        </el-row>
+
+        <el-row style="margin-bottom: 10px;">
+
+            <el-col style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
 
         </el-row>
 
@@ -44,7 +88,12 @@
                 </span>
               </template>
               <template slot-scope="scope">
-                    <span>{{scope.row[item.props] || '- -'}}</span>
+
+                    <el-tooltip effect="dark" v-if="item.props == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
+                      <span>{{scope.row[item.props] || '- -'}}</span>
+                    </el-tooltip>
+                    <span v-else>{{scope.row[item.props] || '- -'}}</span>
+
                     <!-- <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /> -->
                     
               </template>
@@ -340,6 +389,28 @@
                             </el-col>
 
                         </el-row>
+
+                        <el-row>
+
+                            <el-col :span="12">
+
+                                <el-form-item label="成单坐席" prop="seatName">
+                                    <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+
+                            </el-col>
+
+                            <el-col :span="6" style="margin-top: 10px;">
+
+                                <label class="el-form-item__label">协议信息</label>
+
+                                <span style="height: 40px; line-height: 40px;">{{agreementList.length}}</span>个
+
+                                <span style="height: 40px; line-height: 40px; cursor: pointer; color: #409EFF;" @click="lookAgreement">查看</span>
+
+                            </el-col>
+
+                        </el-row>
     
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;" v-if="!$route.query.id"></el-row>
 
@@ -393,8 +464,13 @@
                 </el-tab-pane>
                 <el-tab-pane label="订单记录" name="third">
                     <el-table :data="orderList">
-                        <el-table-column v-for="(item, index) in orderListColumn" :label="item.label" :prop="item.prop" :key="index" 
-              :show-overflow-tooltip="true" :width="item.width" :formatter="item.formatter"></el-table-column>
+                        <af-table-column 
+                            v-for="(item, index) in orderListColumn" 
+                            :label="item.label" 
+                            :prop="item.prop" 
+                            :key="index" 
+                            :formatter="item.formatter"
+                        ></af-table-column>
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="跟进记录" name="second">
@@ -406,6 +482,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           v-for="(item, index) in notesColumnList"
                           :key="index"
                           >
@@ -436,6 +513,7 @@
                         <el-table-column
                           :prop="item.prop"
                           :label="item.label"
+                          :width="item.prop == 'createTime' ? '250px' : ''"
                           v-for="(item, index) in notesColumnListCall"
                           :key="index"
                           >
@@ -475,8 +553,46 @@
 
                 </el-tab-pane>
 
+                <el-tab-pane label="课程列表" name="five">
+
+                    <div v-if="courseListsFlag">
+
+                        <div :data="courseLists" v-for="(baby, haha) in courseLists" :key="haha">
+                            <div style="background: #FAFAFA; height: 40px; font-size: 14px; line-height: 40px; padding-left: 20px;">{{baby.categoryName}}</div>
+                            <div v-for="(item, index) in baby.courseList">
+                                <div style="padding-left: 50px; border-bottom: 1px solid #F1F1F1; height: 40px; font-size: 14px; line-height: 40px;">{{item.courseName}}</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div v-else style="text-align: center; margin-top: 20px; font-size: 14px; color: #909399;">暂无课程</div>
+
+                </el-tab-pane>
+
             </el-tabs>
         </el-drawer>
+
+        <el-dialog width="40%" title="协议列表" :visible.sync="agreeFlag">
+          
+          <el-table
+            :data="agreementList"
+            >
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in agreeColumnList"
+                :key="index">
+            </el-table-column>
+
+            <el-table-column prop="limitLimit" label="操作" width="50">
+                <template slot-scope="scope">                            
+                    <el-button type="text" size="small" @click="lookAgreeLink(scope.row.agrId)">查看</el-button>
+                </template>
+            </el-table-column>
+          </el-table>
+
+        </el-dialog>
 
         <PageFieldManage :setPageNum="setPageNum" />
 
@@ -496,12 +612,14 @@ import {
     getOrderList,
     phoneOutTea,
     seatOutTea,
-    getClueCallLog
+    getClueCallLog,
+    getOrgSubsetByUuid
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12 } from '../../assets/js/data';
+import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
+import axios from 'axios';
 export default {
     name: 'reCoverData',
     components: {
@@ -516,11 +634,14 @@ export default {
                 sortSet: [],
                 total: null,
                 classTeaUuid: '',
+                seatOrgList: [],
                 classUuid: '', //班级的uuid
                 num: '',
                 sortSet: [],
                 tel: '',
-                name: ''
+                name: '',
+                startTime: '',
+                endTime: '',
             },
             list: [],
             columnList: [{
@@ -532,6 +653,48 @@ export default {
             drawer: false,
             direction: 'btt',
             tabs_active: 'first',
+
+            zuzhiOptions: [],
+            dataPicker: '',
+            pickerOptions: {
+              disabledDate(time) {
+                return time.getTime() > Date.now();
+              },
+              shortcuts: [{
+                text: '3日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '7日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '15日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '30日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
+
             customerForm: {
                 studentUuid: '', //学员的唯一标识
                 age: '',
@@ -559,6 +722,7 @@ export default {
                 work: "",
                 workingLife: '', //工作年限
                 wx: "",
+                seatName: '',
                 
                 followUp: '', //跟进类型
                 followUpContent: '' //跟进内容
@@ -591,20 +755,20 @@ export default {
             },
             notesList: [],
             notesColumnList: [
-                { 'prop': 'createTime', 'label': '创建时间', width: 250 },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'entryPerson', 'label': '跟进人' },
                 { 'prop': 'followUp', 'label': '跟进类型' },
                 { 'prop': 'followUpContent', 'label': '跟进内容' },
             ],
             notesCallList: [],
             notesColumnListCall: [
-                { 'prop': 'createTime', 'label': '创建时间' },
+                { 'prop': 'createTime', 'label': '创建时间'},
                 { 'prop': 'seatName', 'label': '跟进人' },
                 { 'prop': 'isCalledPhone', 'label': '是否接通' },
                 { 'prop': 'callStyle', 'label': '呼叫方式' },
                 { 'prop': 'duration', 'label': '通话时长(秒)' },
                 { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
-                { 'prop': 'recordUrl', 'label': '录音地址' },
+                // { 'prop': 'recordUrl', 'label': '录音地址' },
             ],
             notesCallForm: {
                 clueDataSUuid: '',
@@ -622,9 +786,11 @@ export default {
             copyClueDataSUuid: '', //学员详情copy手机号时用的clueDataSUuid
             orderList: [],
             orderListColumn: [{
-                prop: 'goodsName', label:"商品名称", width: 150
+                prop: 'goodsName', label:"商品名称"
             },{
                 prop: 'orderNo', label:"订单号"
+            },{
+                prop: 'payMoney', label:"支付金额"
             },{
                 prop: 'refer', label:"订单来源"
             },{
@@ -633,6 +799,12 @@ export default {
                 prop: 'addTime', label:"下单时间", formatter: (row, column, cellValue) =>{
                     return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
                 }
+            },{
+                prop: 'payTime', label:"支付时间", formatter: (row, column, cellValue) =>{
+                    return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
+                }
+            },{
+                prop: 'userInfo', label:"收货地址"
             },{
                 prop: 'hasDelivery', label:"是否发货", formatter: (row, column, cellValue) =>{
                     return cellValue ? '是' : '否'
@@ -643,7 +815,15 @@ export default {
                 }
             }],
             initOptions: {},
-            callLogUuid: ''
+            callLogUuid: '',
+            agreementList: [],
+            agreeColumnList: [
+                { 'prop': 'agrName', 'label': '协议名称' },  
+            ],
+            agreeFlag: false,
+
+            courseLists: [],
+            courseListsFlag: null,
         }
     },
     created() {
@@ -654,8 +834,89 @@ export default {
         this.getSchoolList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
+        this.getOrgSubsetByUuid();
     },
     methods: { 
+        datePickerChange(value) {
+            // console.log(Array.isArray(value));
+            console.log(value);
+            if(Array.isArray(value)){
+                this.form.endTime = value[1].getTime();
+                this.dataPicker = value[1];
+            }else if(value != null) {
+                this.form.endTime = value.getTime();
+            }else{
+                this.form.endTime = '';
+            }
+        },
+        handleZuzhiChange(arr) {
+            let brr = [];
+            // console.log(arr);
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            // console.log(brr);
+            this.form.seatOrgList = brr;
+            console.log(this.form.seatOrgList);
+        },
+        getOrgSubsetByUuid() {
+            this.$smoke_post(getOrgSubsetByUuid, {
+                uuid: showid
+            }).then(res => {
+                console.log(res);
+                this.zuzhiOptions = res.data;
+            })
+        },
+        GetAgreementList(id) {
+            let that = this;
+            let url = "https://app.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
+            var ajaxObj = new XMLHttpRequest();
+            ajaxObj.open('get', url)
+            ajaxObj.send();
+            ajaxObj.onreadystatechange = function () {
+            // 为了保证 数据 完整返回，我们一般会判断 两个值
+                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
+                    // 数据是保存在 异步对象的 属性中
+                    let res = JSON.parse(ajaxObj.responseText);
+                    console.log(res.data.agreementList);
+                    that.$nextTick(() => {
+                        that.agreementList = res.data.agreementList;
+                    })
+                }
+            }
+        },
+        GetCourseList4Teacher(id) {
+            let that = this;
+            var ajaxObj = new XMLHttpRequest();
+            let url = "https://app.jhwx.com/lovestudy/api/study/GetCourseList4Teacher";
+            ajaxObj.open('post', url)
+            ajaxObj.setRequestHeader("Content-type", "application/json");
+            ajaxObj.send(JSON.stringify({userId: id}));
+            ajaxObj.onreadystatechange = function () {
+            // 为了保证 数据 完整返回，我们一般会判断 两个值
+                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
+                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
+                    // 数据是保存在 异步对象的 属性中
+                    let res = JSON.parse(ajaxObj.responseText);
+                    if(res.status == 0 && res.data) {
+                        console.log(res.data);
+                        that.$nextTick(() => {
+                            that.courseLists = res.data.courseList;
+                            that.courseListsFlag = true;
+                        })
+                    }else{
+                        that.courseListsFlag = false;
+                    }
+                }
+            }
+        },
         phoneOutTea( scope ) {
             if(this.initOptions != undefined){
                 this.$smoke_post(phoneOutTea, {
@@ -725,7 +986,10 @@ export default {
         geOrderRecord(){
             this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
                 if(res.data){
-                    this.orderList = res.data
+                    res.data.map(sll => {
+                        sll.userInfo = sll.userName + ' / '  + sll.phone + ' / ' +  sll.location + sll.address ;
+                    })
+                    this.orderList = res.data;
                 }
             })
         },
@@ -780,10 +1044,10 @@ export default {
                         }else{
                             sll.isCalledPhone = '未接通';
                         }
-                        if(sll.callStyle == 1) {
-                            sll.callStyle = '呼叫中心';
-                        }else if(sll.callStyle == 2) {
-                            sll.callStyle = '工作手机';
+                        if(sll.callStyle == 3) {
+                            sll.callStyle = '外呼电话';
+                        }else if(sll.callStyle == 4) {
+                            sll.callStyle = '直线呼入';
                         }
                         if(sll.recordUrl){
                             this.columnWidth = 314;
@@ -813,9 +1077,10 @@ export default {
             this.customerForm.followUp = '';
             this.customerForm.followUpContent = '';
             this.getStudentDetails(row.uuid);
+            this.GetAgreementList(row.customerId);
             this.getOrderForm.userId = row.customerId
-            this.getOrderForm.itemId = row.examItemId
-            this.getOrderForm.classType = row.classType
+            this.getOrderForm.itemId = ''
+            this.getOrderForm.classType = ''
         },
         cityChange() {
             this.customerForm.province = this.customerForm.provinceCity[0];
@@ -922,6 +1187,11 @@ export default {
                     this.customerForm.work = res.data.work;
                     this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
+                    if(res.data.seatOrgName && res.data.seatName) {
+                        this.customerForm.seatName = res.data.seatPOrgName? res.data.seatPOrgName + ' ' + res.data.seatOrgName + ' ' + res.data.seatName : res.data.seatOrgName + ' ' + res.data.seatName;
+                    }else{
+                        this.customerForm.seatName = '';
+                    }
                 }
             })
         },
@@ -978,15 +1248,32 @@ export default {
                 }
             })
         },
+        getClassTeaStudentClick() {
+            this.form.currentPage = 1;
+            this.getClassTeaStudent();
+        },
         getClassTeaStudent() {
             this.fullscreenLoading = true;
             this.$smoke_post(getClassTeaStudent, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.createTime  = timestampToTime(Number(sll.createTime));
+                            sll.classType = classTypeString(sll.classType);
+                            sll.orderType = orderTypeText(sll.orderType);
+                            if(sll.seatOrgName && sll.seatName) {
+                                sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
+                            }else{
+                                sll.seatName = '';
+                            }
+
+                            sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
+                        })
                         this.list = res.data.list;
                         this.columnList = res.data.filedList;
                         this.form.total = res.data.total;
+                        
                     }, 300);
 
                 }else{
@@ -1039,6 +1326,9 @@ export default {
                 this.$nextTick(() => {//重新渲染分页
                     this.pageshow = true;
                 });
+            }else if(tab.label == '课程列表') {
+                this.courseLists = [];
+                this.GetCourseList4Teacher(this.getOrderForm.userId);
             }
         },
         phoneCopy(row) {
@@ -1077,6 +1367,18 @@ export default {
             this.form.currentPage = 1;
             this.getClassTeaStudent();
         },
+        lookAgreement() {
+            this.agreeFlag = true;
+        },
+        lookAgreeLink(id) {
+            const { href } = this.$router.resolve({
+                name: "agreeMentDetails",
+                query: {
+                    id: id
+                }
+            })
+            window.open(href, '_blank');
+        }
     },
     mounted() {
         
@@ -1117,5 +1419,10 @@ export default {
             margin-top: .4rem;
             margin-right: .4rem;
         }
+    }
+
+    .students /deep/ div.el-dialog__body{
+        height: 50vh;
+        overflow: auto;
     }
 </style>

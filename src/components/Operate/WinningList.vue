@@ -1,7 +1,7 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">中奖列表</div>
+      <div class="people-title">中奖列表<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-row>
         <el-col :span="3">
           <el-select style="width:80%" v-model="pricetype" placeholder="全部奖品" class="screen-li">
@@ -43,6 +43,7 @@
           :label="item.label"
           v-for="(item, index) in columnList"
           :width="item.width"
+          :formatter="item.formatter"
           :key="index"
         ></el-table-column>
         <el-table-column label="操作" prop>
@@ -80,24 +81,26 @@
           <el-form-item label="中奖时间">
             <div>{{form.awardTime}}</div>
           </el-form-item>
-          <el-form-item label="收货人"  prop="receiveUserName">
-            <el-input v-model="form.receiveUserName"></el-input>
-          </el-form-item>
-          <el-form-item label="联系方式"  prop="receiveUserMobile">
-            <el-input v-model="form.receiveUserMobile"></el-input>
-          </el-form-item>
-          <el-form-item label="收货地区" prop="receiveUserAddress">
-            <el-input v-model="form.receiveUserAddress"></el-input>
-          </el-form-item>
-          <el-form-item label="具体地址" prop="receiveUserAddressDetail">
-            <el-input v-model="form.receiveUserAddressDetail"></el-input>
-          </el-form-item>
-          <el-form-item label="快递公司" prop="postCompany">
-            <el-input v-model="form.postCompany"></el-input>
-          </el-form-item>
-          <el-form-item label="邮件单号" prop="trackNumber">
-            <el-input v-model="form.trackNumber"></el-input>
-          </el-form-item>
+          <div v-if="form.awardType == 2">
+            <el-form-item label="收货人"  prop="receiveUserName">
+              <el-input v-model="form.receiveUserName"></el-input>
+            </el-form-item>
+            <el-form-item label="联系方式"  prop="receiveUserMobile">
+              <el-input v-model="form.receiveUserMobile"></el-input>
+            </el-form-item>
+            <el-form-item label="收货地区" prop="receiveUserAddress">
+              <el-input v-model="form.receiveUserAddress"></el-input>
+            </el-form-item>
+            <el-form-item label="具体地址" prop="receiveUserAddressDetail">
+              <el-input v-model="form.receiveUserAddressDetail"></el-input>
+            </el-form-item>
+            <el-form-item label="快递公司" prop="postCompany">
+              <el-input v-model="form.postCompany"></el-input>
+            </el-form-item>
+            <el-form-item label="邮件单号" prop="trackNumber">
+              <el-input v-model="form.trackNumber"></el-input>
+            </el-form-item>
+          </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -158,7 +161,8 @@ export default {
         {
           label: "状态",
           prop: "receiveStatus",
-          width: 125
+          width: 125,
+          formatter: this.formatStatus
         },
         {
           label: "领取时间",
@@ -215,6 +219,19 @@ export default {
       this.getAwardUserDetail(row.awardUserId);
       this.dialogVisible = true;
     },
+    formatStatus(row, column, cellValue){
+      switch(cellValue){
+        case '0':
+          return '未领取'
+          break;
+        case '1':
+          return '申领中'
+          break;
+        case '2':
+          return '已领取'
+          break;
+      }
+    },
     getlistData(awardId = "", receiveStatus = "", nickName = "") {
       this.$smoke_get(wechatActivityAwardUserList, {
         activityId: this.$route.query.activityId,
@@ -255,27 +272,58 @@ export default {
       this.getlistData(this.pricetype, this.pricestate, this.nickName);
     },
     awardUpdate(){
-      this.$smoke_post(wechatActivityAwardUpdateUser,this.form).then(
-        res=>{
-          if(res.code === 200){
-             this.dialogVisible = false
-          }
+      this.$refs['form'].validate((valid) => {
+        if(valid){
+          this.$smoke_post(wechatActivityAwardUpdateUser,this.form).then(
+            res=>{
+              if(res.code === 200){
+                this.dialogVisible = false
+              }
+            }
+          )
+        }else{
+          this.$message({
+            showClose: true,
+            message: '请按要求输入',
+            type: 'error'
+          });
         }
-      )
+      })
+      
       
     },
     awardPost(){//立即派发
-       this.$smoke_post(wechatActivityAwardPost,this.form).then(res=>{
-         if(res.code === 200){
-             this.form.sendStatus = '1'
-         }
-         
-       })
+      this.$refs['form'].validate((valid) => {
+        if(valid){
+          this.$smoke_post(wechatActivityAwardPost,this.form).then(res=>{
+            if(res.code === 200){
+                this.form.sendStatus = '1'
+            }
+          })
+        }else{
+          this.$message({
+            showClose: true,
+            message: '请按要求输入',
+            type: 'error'
+          });
+        }
+      })
     }
   }
 };
 </script>
+<style lang="less">
+.el-form{
+  // .el-form-item__label{
+  //   width: 150px !important;
+  // }
+  .form-tip{
+    font-size: 14px;
+    color: #bbb;
+  }
+}
 
+</style>
 <style lang="less" scoped>
 .index-main {
   height: calc(100vh - 60px);
@@ -288,6 +336,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
   .screen-li {
     width: 90%;

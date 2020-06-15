@@ -17,6 +17,7 @@ export const deleteRoleAndUserRelation = '/api/user/deleteRoleAndUserRelation'; 
 export const updateUser = '/api/user/updateUser'; //修改员工信息
 export const addUserJqUser = '/api/user/addUserJqUser'; //创建员工关联的jq用户信息
 export const loginPlatform = '/api/user/loginPlatform'; //一键登录
+export const forgetPassword = '/api/user/forgetPassword'; //员工忘记密码
 export const getRoleList = '/api/role/getRoleList'; //获取所有角色信息
 export const getRoleMenuList = '/api/role/getRoleMenuList'; //获取角色的菜单信息
 export const addRoleMenuRelation = '/api/role/addRoleMenuRelation'; //新建角色和菜单的关系
@@ -213,6 +214,9 @@ export const getClassTeaOptionByClassUuid = '/api/phone/classTeacher/getClassTea
 export const transferOfficer = '/api/phone/classTeacher/transferOfficer'; //转学员
 export const getClassTeaClass = '/api/phone/classTeacher/getClassTeaClass'; //获取班主任的班级列表
 export const getClassTeaClassWait = '/api/phone/classTeacher/getClassTeaClassWait'; //获取班主任的班级列表(待领取)
+export const getSupStuList = '/api/phone/classTeacher/getSupStuList'; //主管管理的所有学员
+export const transferStu = '/api/phone/classTeacher/transferStu'; //转移学员
+export const getTransferStuCTList = '/api/phone/classTeacher/getTransferStuCTList'; //获取转移学员的班主任列表
 
 //学员管理
 export const getWaitStudentList = '/api/phone/classTeacher/getWaitStudentList'; //获取待分配学员订单列表

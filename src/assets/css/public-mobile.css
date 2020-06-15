@@ -361,8 +361,14 @@ a:link,a:active,a:visited,a:hover {
     font-weight: 500 !important;
 }
 
+.smoke-cascader1 .el-input .el-input__inner {
+    height: 32px !important;
+    margin-top: 1px !important;
+}
 
-
+.smoke-cascader .el-input .el-input__inner {
+    height: 32px !important;
+}
 
 
 

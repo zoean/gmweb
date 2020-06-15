@@ -1,5 +1,7 @@
 export let pass_word = /^(\w){6,12}$/; //密码必须由6-12位数字或者字母组成
 
+export const phone_vailData = /^1\d{10}$/;
+
 export const columnListYes = [
     { 'prop': 'orgName', 'label': '统计单元' },
     { 'prop': 'title0', 'label': '0--1' },
@@ -108,7 +110,8 @@ export const superManageUuid = '383799112b0d47a7a3341bce77f8b776';
 //websock
 export const websockHttp = 'wss://websocket.jhwx.com/websocket/msg/';
 
-
+//销售部组织id
+export const showid = '544230511a59461c8ed6c82ce2355e17';
 
 
 

@@ -1,7 +1,7 @@
 <template>
   <el-container class="index-main">
     <el-main>
-      <div class="people-title">奖品列表</div>
+      <div class="people-title">奖品列表<i class="el-icon-back" title="返回" @click="$router.go(-1)">点击返回</i></div>
       <el-row>
         <el-col :span="4">
           <el-input v-model="awardName" placeholder="奖品名称" style="width:90%;marginBottom:.2rem"></el-input>
@@ -131,7 +131,6 @@ export default {
   },
   methods: {
     priceEdit(row) {
-      console.log(row)
       this.$router.push({
         path: "/operate/activityA/pricedetail",
         query: { activityId: row.activityId, priceType: row.awardType,awardId:row.awardId }
@@ -144,16 +143,14 @@ export default {
         query:{activityId:this.$route.query.activityId}
       });
     },
-    getlistData(awardName='',awardType='') {//获取数据
+    getlistData(awardName,awardType) {//获取数据
       this.$smoke_get(wechatActivityAwardLlist, {
         activityId: this.$route.query.activityId,
         pageSize: this.pageSize,
         currentPage: this.currentPage,
-        awardName,
-        awardType
+        awardName: awardName || '',
+        awardType: awardType || ''
       }).then(res => {
-        console.log(res)
-
         if (res.code === 200) {
          this.awardInstruction = res.data.awardExplain&&res.data.awardExplain.awardInstruction
          this.total = res.data.total
@@ -173,10 +170,11 @@ export default {
     },
     handleCurrentChange(currentPage) {//改变当前页码
       this.currentPage = currentPage;
-      this.getListData();
+      this.getlistData();
     },
     handleSizeChange(pageSiz) {//改变一页显示数量
       this.pageSiz = pageSiz;
+      this.getlistData();
     },
     ProcessingData(data){//处理一下返回的数据
         this.tableData =  data.list.map(item=>{
@@ -219,6 +217,13 @@ export default {
     background: #aaa;
     margin-bottom: 0.3rem;
     color: #fff;
+    position: relative;
+    i{
+        position: absolute;
+        left: 10px;
+        top: 13px;
+        cursor: pointer;
+    }
   }
 }
 .index-main/deep/ .el-textarea__inner {

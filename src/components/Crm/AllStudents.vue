@@ -1,28 +1,54 @@
 <template>
-    <el-main class="index-main newStudents">
-
-        <el-row style="margin-bottom: 10px;">
-
-            <el-col :span="4" style="float: right; text-align: right;"><el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
-            
+    <el-main class="index-main allStudents">
+        <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
+                <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+            </el-col>
+            <el-col :span="4">
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    class="screen-li"
+                    ref="autocomplete"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelect"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
+            </el-col>
+            <el-col :span="4">
+                <el-select v-model="form.classType" placeholder="请选择班型等级" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in classTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="4">
+                <el-input v-model="form.teaName" placeholder="请输入班主任姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
-            </el-col>
+        </el-row>
 
-            <el-col :span="5" class="">
+        <el-row class="people-screen" type="flex" align="middle">
+
+            <el-col :span="5">
 
                 <el-cascader
-                    class="smoke-cascader"
+                    class="smoke-cascader1"
                     ref="cascader"
                     size="small"
-                    style="width: 95%;"
-                    placeholder="请搜索或者选择坐席组织架构"
+                    style="width: 90%;"
+                    placeholder="请搜索或选择坐席组织架构"
                     collapse-tags
-                    :show-all-levels=false
+                    :show-all-levels='true'
                     :options="zuzhiOptions"
                     @change='handleZuzhiChange'
                     filterable
@@ -32,26 +58,41 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            <el-col :span="5">
+                
+                <el-date-picker
+                  style="width: 90%;"
+                  v-model="dataPicker"
+                  type="date"
+                  align="right"
+                  size="small"
+                  clearable
+                  @change="datePickerChange"
+                  placeholder="请选择最后联系时间"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+
             </el-col>
 
-            <el-col :span="3">
-                <el-button type="primary" size="small" @click="getWaitStudentListClick">查 询</el-button>
+            <el-col :span="2">
+
+                <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
+
+            </el-col>
+
+            <el-col :span="12">
+                <el-row type="flex" justify="end">
+                    <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
+                </el-row>
             </el-col>
 
         </el-row>
 
-        <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
-            <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
-        </el-tabs>
-
         <el-table
             :data="list"
-            ref="tree"
+            ref="tableSelect"
             :key="Math.random()"
             v-loading="fullscreenLoading"
-            @sort-change="sortChange"
             style="width: 100%">
             <el-table-column
               type="selection"
@@ -60,15 +101,15 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
+              :formatter="item.formatter"
               :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
               v-for="(item, index) in columnList"
-              :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
               >
 
               <template slot-scope="scope">
                 <el-tooltip effect="dark" v-if="item.prop == 'seatName' && scope.row.orgNameListText != '无'" :open-delay="500" :content="scope.row.orgNameListText" placement="top">
-                    <span>{{scope.row[item.prop] || '- -'}}</span>
+                    <span style="cursor: default">{{scope.row[item.prop] || '- -'}}</span>
                 </el-tooltip>
                 <span v-else>{{scope.row[item.prop] || '- -'}}</span>
               </template>
@@ -76,21 +117,8 @@
             </el-table-column>
             <el-table-column prop="active" label="操作" width="80">
               <template slot-scope="scope">
-
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
-                  
-                <el-popconfirm
-                    confirmButtonText='确定'
-                    cancelButtonText='取消'
-                    icon="el-icon-info"
-                    placement="top"
-                    title="确认领取此学员吗？"
-                    :hideIcon='true'
-                    @onConfirm="receiveClick(scope.row)"
-                  >
-                    <svg-icon slot="reference" icon-title="领取" icon-class="collect" />
-                </el-popconfirm>
-
+                <svg-icon @click="moveStudentOne(scope.row)" icon-title="转移学员" icon-class="move" />
               </template>
             </el-table-column>
         </el-table>
@@ -98,6 +126,7 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -107,6 +136,24 @@
             @size-change="handleSizeChange"
         >
         </el-pagination>
+
+        <el-drawer
+            title="选择转移接受方"
+            :visible.sync="drawerMove"
+            :direction="directionMove"
+            :before-close="handleClose"
+        >
+            <span class="bullets"></span>
+
+        <el-tag 
+            v-for="(item,index) in teacherMoveList" :key="index"
+            style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
+            @click="tagClick(item)"
+            >{{item.classTeacherName}}
+        </el-tag>
+
+        </el-drawer>
+
 
         <el-drawer
             :title="drawerTitle"
@@ -508,63 +555,107 @@
 
 <script>
 import { 
-    getWaitStudentList, 
-    classTeaGetWaitStudent, 
-    getClassTeaClassWait,
+    getSupStuList,
+    getExamBasic,
+    getTransferStuCTList,
+    transferStu,
     getStudentDetails,
+    enumByEnumNums,
     getOrderList,
     getClassTeaStuNotes,
     getClueCallLog,
     getSchoolList,
-    enumByEnumNums,
     getOrgSubsetByUuid
 } from '../../request/api';
-import axios from 'axios'
-import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
+import { 
+    timestampToTime, 
+    genderText,
+    classTypeString,
+    getTextByJs,
+} from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
-    name: 'newStudents',
+    name: 'allStudents',
     data() {
         return {
             form: {
                 currentPage: 1,
                 pageSize: 10,
-                sortSet: [],
-                total: null,
-                classUuid: '',
-                seatOrgList: [],
-                tel: '',
+                classType: '',
+                examItemId: '',
+                examItemText: '',
                 name: '',
-                stuId: '',
+                teaName: '',
+                seatOrgList: [],
+                sortSet: [],
+                tel: "", //手机号
+                total: null,
+                startTime: '',
+                endTime: '',
             },
-            totalFlag: false,
             list: [],
+            totalFlag: false,
             columnList: [
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'tel', 'label': '手机号码' },
-                // { 'prop': 'clueUserUuid', 'label': '所属坐席' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },
-                // { 'prop': 'customerId', 'label': '客户id' },    
-                // { 'prop': 'orderId', 'label': '订单id' },
-                // { 'prop': 'orderNum', 'label': '订单编号' },
-                // { 'prop': 'orderType', 'label': '订单类型' },
                 { 'prop': 'school', 'label': '分校' },
+                { 'prop': 'classTea', 'label': '班主任' },
                 { 'prop': 'seatName', 'label': '成单坐席' },
-                { 'prop': 'createTime', 'label': '报名时间' },
             ],
-            tabsList: [],
-            classUuidDefault: '',
+            drawerMove: false,
+            directionMove: 'rtl',
+            restaurants: [],
+            classTypeList: [
+                { value: 0, label: '普通班' },
+                { value: 1, label: '高端班' },
+            ],
             fullscreenLoading: false,
-            sortSetList: [
-                {'createTime': ''},
-                {'school': ''},
-            ],
-            handleCurrentUuid: '',
+            teacherMoveList: [],
+            teaStuList: [],
 
             zuzhiOptions: [],
+            dataPicker: '',
+            pickerOptions: {
+              disabledDate(time) {
+                return time.getTime() > Date.now();
+              },
+              shortcuts: [{
+                text: '3日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 3);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '7日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '15日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 15);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '30日未联',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  end.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
 
             customerForm: {
                 studentUuid: '', //学员的唯一标识
@@ -694,7 +785,8 @@ export default {
         }
     },
     created() {
-        this.getClassTeaClassWait();
+        this.getSupStuList();
+        this.getExamBasic();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
@@ -702,6 +794,18 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
+        datePickerChange(value) {
+            // console.log(Array.isArray(value));
+            console.log(value);
+            if(Array.isArray(value)){ //选择时间段回来的是数组 (判断数组)
+                this.form.endTime = value[1].getTime();
+                this.dataPicker = value[1];
+            }else if(value != null) { //选择时间回来的是对象obj
+                this.form.endTime = value.getTime();
+            }else{
+                this.form.endTime = '';
+            }
+        },
         handleZuzhiChange(arr) {
             let brr = [];
             // console.log(arr);
@@ -798,77 +902,72 @@ export default {
                 }
             })
         },
-        sortChange(data) {
-            this.form.sortSet = [];
-            const id = sortTextNum(data.prop);
-            if(data.order == "descending"){
-                this.sortSetList[id][data.prop] = 'DESC';
-            }else if(data.order == "ascending"){
-                this.sortSetList[id][data.prop] = 'ASC';
-            }
-            this.form.sortSet.push(this.sortSetList[id]);
-            this.classUuidDefault = this.handleCurrentUuid;
-            this.getWaitStudentList();
+        handleCurrentChange(index) {
+            this.form.currentPage = index;
+            this.getSupStuList();
         },
-        receiveClick( scope ) {
-            console.log(scope);
-            this.classTeaGetWaitStudent('click', scope.uuid)
-        },
-        getClassTeaClassWait() {
-            this.$smoke_get(getClassTeaClassWait,{
-                classTeaUuid: ''
-            }).then(res => {
-                if(res.code == 200) {
-
-                    if(res.data.length != 0) {
-                        res.data.map(sll => {
-                            sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
-                        })
-                        this.tabsList = res.data;
-                        this.form.classUuid = res.data[0].uuid;
-                        this.classUuidDefault = res.data[0].uuid;
-                        this.getWaitStudentList();
-                    }
-
-                }else{
-
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-
-                }
+        handleSizeChange(index) {
+            this.form.pageSize = index;
+            this.form.currentPage = 1;
+            this.getSupStuList();
+        }, 
+        getExamBasic() {
+            let arr;
+            this.$smoke_get(getExamBasic, {}).then(res => {
+                console.log(res);
+                arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
+                this.restaurants = arr;
             })
         },
-        getWaitStudentListClick() {
-            this.form.currentPage = 1;
-            this.getWaitStudentList();
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            console.log(restaurants);
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
         },
-        getWaitStudentList() {
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelect(item) {
+            console.log(item);
+            this.form.examItemId = item.id;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
+        getSupStuListClick() {
+            this.form.currentPage = 1;
+            this.getSupStuList();
+        },
+        getSupStuList() {
             this.fullscreenLoading = true;
-            this.$smoke_post(getWaitStudentList, this.form).then(res => {
+            this.$smoke_post(getSupStuList, this.form).then(res => {
                 if(res.code == 200) {
-
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         res.data.list.map(sll => {
-                            sll.createTime  = timestampToTime(Number(sll.createTime));
                             sll.classType = classTypeString(sll.classType);
-                            sll.orderType = orderTypeText(sll.orderType);
                             if(sll.seatOrgName && sll.seatName) {
                                 sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
                             }else{
                                 sll.seatName = '';
                             }
-
                             sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
                     }, 300);
-
                 }else{
-
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         this.$message({
@@ -876,80 +975,108 @@ export default {
                             message: res.msg
                         })
                     }, 300)
-
                 }
             })
         },
-        handleClassTabClick(tab, event) {
-            console.log(tab);
-            this.handleCurrentUuid = this.form.classUuid = tab.name;
-            this.form.currentPage = 1;
-            this.form.pageSize = 10;
-            this.getWaitStudentList();
+        handleClose(done) {
+            this.teaStuList = [];
+            done();
         },
-        classTeaGetWaitStudent(type, id) {
-            console.log(this.$refs.tree.selection);
+        moveStudents(type, id) {
             let arr = [];
+            let brr = [];
+            let rowClassType;
 
-            if(type == 'all') {
-                this.$refs.tree.selection.map(sll => {
-                    arr.push(sll.uuid);
-                })
-                if(arr.length == 0) {
-                    this.$message({
-                        type: 'error',
-                        message: '请您先勾选您要领取的学员'
-                    });
+            this.$refs.tableSelect.selection.map(sll => {
+                if(sll.classType == '高端班') {
+                    rowClassType = 1;
                 }else{
-                    this.$confirm('确认领取？')
-                    .then(_ => {
-                      this.requestClassTeaGetWaitStudent(arr);
-                    })
-                    .catch(_ => {});
+                    rowClassType = 0;
                 }
+                arr.push({classType: rowClassType, examItemId: sll.examItemId});
+                brr.push({teaUuid: sll.classTeaUuid, uuid: sll.uuid});
+            })
+            if(arr.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要转移的学员'
+                });
             }else{
-                arr.push(id);
-                this.requestClassTeaGetWaitStudent(arr);
+                this.drawerMove = true;
+                console.log(arr);
+                this.getTransferStuCTList(arr);
+                this.teaStuList = brr;
             }
         },
-        requestClassTeaGetWaitStudent(arr) {
-            this.$smoke_post(classTeaGetWaitStudent, {
-                uuidList: arr,
+        moveStudentOne(row) {
+            let arr = [];
+            let brr = [];
+            let rowClassType;
+            if(row.classType == '高端班') {
+                rowClassType = 1;
+            }else{
+                rowClassType = 0;
+            }
+            arr.push({classType: rowClassType, examItemId: row.examItemId});
+            brr.push({teaUuid: row.classTeaUuid, uuid: row.uuid});
+            this.teaStuList = brr;
+            this.drawerMove = true;
+            this.getTransferStuCTList(arr);
+        },
+        getTransferStuCTList(arr) {
+            this.$smoke_post(getTransferStuCTList, {
+                list: arr
+            }).then(res => {
+                if(res.code == 200) {
+                    this.teacherMoveList = res.data;
+                }
+            })
+        },
+        tagClick(item) {
+            this.$confirm('确认转移学员吗？')
+            .then(_ => {
+              this.transferStu(item.classTeacherUuid);
+            })
+            .catch(_ => {});
+        },
+        transferStu(classTeacherUuid) {
+            this.$smoke_post(transferStu, {
+                teaStuList: this.teaStuList,
+                teaUuid: classTeacherUuid
             }).then(res => {
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',
-                        message: '成功领取' + res.data.length + '条'
+                        message: '转移成功'
                     });
-                    this.getWaitStudentList();
+                    setTimeout(() => {
+                        this.drawerMove = false;
+                        this.getSupStuList();
+                    },300)
                 }else{
                     this.$message({
                         type: 'error',
                         message: res.msg
                     });
+                    setTimeout(() => {
+                        this.drawerMove = false;
+                        this.getSupStuList();
+                    },300)
                 }
             })
-        },
-        handleCurrentChange(index) {
-            this.form.currentPage = index;
-            this.getWaitStudentList();
-        },
-        handleSizeChange(index) {
-            this.form.pageSize = index;
-            this.getWaitStudentList();
         },
 
 
         studentDetails( row ) {
             this.drawer = true;
-            this.customerForm.studentUuid = this.notesForm.studentUuid = row.uuid;
+            this.customerForm.studentUuid = this.notesForm.studentUuid = row.stuUuid;
             this.copyClueDataSUuid = row.clueDataSUuid;
             this.notesCallForm.clueDataSUuid = row.clueDataSUuid;
             this.tabs_active = 'first';
             this.customerForm.followUp = '';
             this.customerForm.followUpContent = '';
             this.customerForm.seatName = row.seatName;
-            this.getStudentDetails(row.uuid);
+            this.getStudentDetails(row.stuUuid);
             this.GetAgreementList(row.customerId);
             console.log(row);
             this.getOrderForm.userId = row.customerId;
@@ -1018,7 +1145,6 @@ export default {
                     this.pageshow = true;
                 });
             }else if(tab.label == '课程列表') {
-                this.courseLists = [];
                 this.GetCourseList4Teacher(this.getOrderForm.userId);
             }
         },
@@ -1089,10 +1215,6 @@ export default {
             this.notesCallForm.currentPage = 1;
             this.getClueCallLog();
         }, 
-        handleClose(done) {
-            done();
-            this.getWaitStudentList();
-        },
         cityChange() {
             this.customerForm.province = this.customerForm.provinceCity[0];
             this.customerForm.city = this.customerForm.provinceCity[1];
@@ -1115,7 +1237,7 @@ export default {
     },
     mounted() {
         
-    }
+    },
 }
 </script>
 
@@ -1144,7 +1266,7 @@ export default {
         }
     }
 
-    .newStudents /deep/ div.el-dialog__body{
+    .allStudents /deep/ div.el-dialog__body{
         height: 50vh;
         overflow: auto;
     }

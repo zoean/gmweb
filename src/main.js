@@ -26,26 +26,42 @@ Vue.config.productionTip = false
 //路由守卫
 router.beforeEach((to, from, next) => {
 
+    console.log(to.path);
+
     const jhToken = localStorage.getItem("jhToken");
 
     const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
     // console.log(userMenuList);
 
-    if (!jhToken) {//未登录
-        if (to.path !== '/login') {//跳转到登录页    
-            return next({path: '/login'});
-        }else {
-            next();
-        }
-    }else {//已登录
-        if (to.path === '/login') {//跳转到首页
-            return next({path: '/'});
-        }else{
-            userMenuList.map(res => {
-                if(res.includeSubsetList.length != 0){
-                    res.includeSubsetList.map(lls => {
-                        if(to.path == lls.url){
-                            if(!lls.disabled){
+    if(to.path === '/forget') {
+        next();
+    }else{
+        if (!jhToken) {//未登录
+            if (to.path !== '/login') {//跳转到登录页    
+                return next({path: '/login'});
+            }else {
+                next();
+            }
+        }else {//已登录
+            if (to.path === '/login') {//跳转到首页
+                return next({path: '/'});
+            }else{
+                userMenuList.map(res => {
+                    if(res.includeSubsetList.length != 0){
+                        res.includeSubsetList.map(lls => {
+                            if(to.path == lls.url){
+                                if(!lls.disabled){
+                                    return next({path: '/404'});
+                                }else{
+                                    next();
+                                }
+                            }else{
+                                next();
+                            }
+                        })
+                    }else{
+                        if(to.path == res.url){
+                            if(!res.disabled){
                                 return next({path: '/404'});
                             }else{
                                 next();
@@ -53,25 +69,16 @@ router.beforeEach((to, from, next) => {
                         }else{
                             next();
                         }
-                    })
-                }else{
-                    if(to.path == res.url){
-                        if(!res.disabled){
-                            return next({path: '/404'});
-                        }else{
-                            next();
-                        }
-                    }else{
                         next();
                     }
                     next();
-                }
+                })
                 next();
-            })
+            }
             next();
         }
-        next();
     }
+    
 })
 
 new Vue({

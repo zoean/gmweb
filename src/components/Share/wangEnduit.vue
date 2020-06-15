@@ -4,12 +4,13 @@
     </div>
     <div ref="editor" class="text">
     </div>
-     <!-- <el-button @click="submit">提交</el-button> -->
+    <!--<el-button @click="submit">提交</el-button>-->
   </div>
 </template>
 
 <script>
   import E from 'wangeditor'
+  import {wechatActivityEdit} from '@/request/operateApi.js'
   export default {
     name: 'editoritem',
     data() {
@@ -21,7 +22,7 @@
     },
     model: {
       prop: 'value',
-      event: 'change'
+      event: 'onblur'
     },
     props: {
       value: {
@@ -31,6 +32,10 @@
       isClear: {
         type: Boolean,
         default: false
+      },
+      saveContent: {
+        type: Function,
+        default: null
       }
     },
     watch: {
@@ -53,9 +58,12 @@
       this.editor.txt.html(this.value)
     },
     methods: {
-      // submit(){
-      //     console.log(this.info_)
-      // },
+      //submit(){
+        //console.log(this.info_)
+        //this.$smoke_post(wechatActivityEdit, {activityContent: this.info_}).then(res => {
+        //console.log('info--------------', res)
+        //})
+      //},
       seteditor() {
         this.editor = new E(this.$refs.toolbar, this.$refs.editor)
         this.editor.customConfig.showLinkImg = false
@@ -103,7 +111,6 @@
           },
           success: (xhr, editor, result) => {
             // 图片上传成功回调
-            console.log(result)
           },
           timeout: (xhr, editor) => {
             // 网络超时的回调
@@ -118,15 +125,14 @@
              //循环插入图片
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
-              console.log()
-              let url = "http://testfile.jhwx.com/" + result.data.fileUrl
+              let url = "http://file.jhwx.com/" + result.data.fileUrl
               insertImg(url)
             // } 
           }
         }
-        this.editor.customConfig.onchange = (html) => {
+        this.editor.customConfig.onblur  = (html) => {
           this.info_ = html // 绑定当前逐渐地值
-          this.$emit('change', this.info_) // 将内容同步到父组件中
+          this.$emit('saveContent', html) // 将内容同步到父组件中
         }
         // 创建富文本编辑器
         this.editor.create()
@@ -134,19 +140,23 @@
     }
   }
 </script>
-
+<style>
+.w-e-text{
+  min-height: 500px !important;    
+  }
+</style>
 <style lang="css" scoped>
   .editor {
     width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 0;
+    min-height: 500px;
   }
   .toolbar {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
   }
   .text {
-    border: 1px solid #ccc;
-    min-height: 500px;
+    border: 1px solid #ddd;
   }
 </style>
