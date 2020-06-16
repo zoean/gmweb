@@ -360,12 +360,6 @@
                         <el-row>
 
                             <el-col :span="6">
-                                <el-form-item label="报名班型" prop="signUpClassType">
-                                    <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            
-                            <el-col :span="6">
                                 <el-form-item label="学籍状态" prop="studentStatus">
 
                                     <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
@@ -395,10 +389,6 @@
                                 </el-form-item>
                             </el-col>
 
-                        </el-row>
-
-                        <el-row>
-
                             <el-col :span="12">
 
                                 <el-form-item label="成单坐席" prop="seatName">
@@ -406,6 +396,10 @@
                                 </el-form-item>
 
                             </el-col>
+
+                        </el-row>
+
+                        <el-row>
 
                             <el-col :span="6" style="margin-top: 10px;">
 
@@ -681,7 +675,6 @@ export default {
                 number: '', //客户编号
                 province: "",
                 provinceCity: [], //所在省市
-                signUpClassType: '', //报名班型
                 signUpSchool: '', //注册平台
                 signUpTime: '', //报名时间(13位时间戳)
                 studentStatus: '', //学籍状态
@@ -1093,7 +1086,6 @@ export default {
                     this.customerForm.name = res.data.name;
                     this.customerForm.number = res.data.number;
                     this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
-                    this.customerForm.signUpClassType = res.data.signUpClassType;
                     this.schoolList.map(bbs => {
                         if(bbs.id == res.data.signUpSchool) {
                             this.customerForm.signUpSchool = bbs.name;

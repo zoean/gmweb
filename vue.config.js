@@ -8,7 +8,7 @@ module.exports = {
     lintOnSave: false,
   
     // //基本根url配置项
-    // publicPath: process.env.NODE_ENV === "production" ? "./" : "./",
+    publicPath: process.env.NODE_ENV === "production" ? "./" : "./",
 
     //build构建后生成的文件夹
     outputDir: 'dist',
@@ -33,12 +33,12 @@ module.exports = {
         port: 8080,//设置端口
         host: "0.0.0.0",
         proxy: {//配置跨域
-          '/smoke_api': {
+          '/api': {
               target: process.env.VUE_APP_GM_JHWX,
               ws: false,
               changOrigin: true,//允许跨域
               pathRewrite: {
-                  '^/smoke_api': '/api'//请求的时候使用这个smoke_api就可以
+                  '^/api': '/api'//请求的时候使用这个api就可以
               }
           },
           '/order-service': {

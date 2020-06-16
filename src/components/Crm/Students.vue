@@ -353,12 +353,6 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="报名班型" prop="signUpClassType">
-                                    <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            
-                            <el-col :span="6">
                                 <el-form-item label="学籍状态" prop="studentStatus">
 
                                     <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
@@ -714,7 +708,6 @@ export default {
                 number: '', //客户编号
                 province: "",
                 provinceCity: [], //所在省市
-                signUpClassType: '', //报名班型
                 signUpSchool: '', //注册平台
                 signUpTime: '', //报名时间(13位时间戳)
                 studentStatus: '', //学籍状态
@@ -1096,9 +1089,7 @@ export default {
             });
         },
         getClassTeaClass() {
-            this.$smoke_get(getClassTeaClass,{
-                classTeaUuid: this.$route.query.id || ''
-            }).then(res => {
+            this.$smoke_post(getClassTeaClass, this.form).then(res => {
                 if(res.code == 200) {
                     if(this.$route.query.id == undefined){
                         this.titleFlag = false;
@@ -1152,7 +1143,6 @@ export default {
                     this.customerForm.name = res.data.name;
                     this.customerForm.number = res.data.number;
                     this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
-                    this.customerForm.signUpClassType = res.data.signUpClassType;
                     this.schoolList.map(bbs => {
                         if(bbs.id == res.data.signUpSchool) {
                             this.customerForm.signUpSchool = bbs.name;
@@ -1229,7 +1219,7 @@ export default {
         },
         getClassTeaStudentClick() {
             this.form.currentPage = 1;
-            this.getClassTeaStudent();
+            this.getClassTeaClass();
         },
         getClassTeaStudent() {
             this.fullscreenLoading = true;
@@ -1273,12 +1263,10 @@ export default {
                 this.$confirm('确认关闭？')
                 .then(_ => {
                     done();
-                    this.getClassTeaStudent();
                 })
                 .catch(_ => {});
             }else {
                 done();
-                this.getClassTeaStudent();
             }
         },
         handleClassTabClick(tab, event) {
