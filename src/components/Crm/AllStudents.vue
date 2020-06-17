@@ -392,7 +392,9 @@
                             <el-col :span="12">
 
                                 <el-form-item label="成单坐席" prop="seatName">
-                                    <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    <el-tooltip effect="dark" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
+                                        <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    </el-tooltip>
                                 </el-form-item>
 
                             </el-col>
@@ -685,6 +687,7 @@ export default {
                 workingLife: '', //工作年限
                 wx: "",
                 seatName: '',
+                orgNameListText: ''
             },
 
             rules: {
@@ -1099,6 +1102,7 @@ export default {
                     this.customerForm.work = res.data.work;
                     this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
+                    this.customerForm.orgNameListText = getTextByJs(res.data.orgNameList.reverse()); //reverse()倒序排列
                 }
             })
         },

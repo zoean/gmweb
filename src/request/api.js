@@ -254,5 +254,5 @@ export const uploadFile = '/upload-service/upload/file';//模板录入
 //lovestudy
 export const GetAgreementDetail = '/lovestudy/api/agreement/GetAgreementDetail' //协议
 export const GetAgreementList = '/lovestudy/api/agreement/GetAgreementList' //协议列表
-export const GetCourseList4Teacher = '/lovestudy/api/agreement/GetCourseList4Teacher' //课程列表
+export const GetCourseList4Teacher = '/lovestudy/api/study/GetCourseList4Teacher' //课程列表
 
