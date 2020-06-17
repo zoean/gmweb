@@ -3,12 +3,12 @@ const path = require('path')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-const production = process.env.NODE_ENV === "development"
 module.exports = {
+
+    lintOnSave: false,
   
-    //基本根url配置项
+    // //基本根url配置项
     publicPath: process.env.NODE_ENV === "production" ? "./" : "./",
-    
 
     //build构建后生成的文件夹
     outputDir: 'dist',
@@ -28,18 +28,75 @@ module.exports = {
       },
 
     devServer: {
+        disableHostCheck: true,
         open: true,//设置自动打开
         port: 8080,//设置端口
         host: "0.0.0.0",
         proxy: {//配置跨域
-            '/smoke_api': {
-                target: 'https://gm.jhwx.com',
-                ws: false,
-                changOrigin: true,//允许跨域
-                pathRewrite: {
-                    '^/smoke_api': ''//请求的时候使用这个smoke_api就可以
-                }
+          '/lovestudy': {
+            target: process.env.VUE_APP_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/lovestudy': '/lovestudy'
             }
+          },
+          '/api': {
+              target: process.env.VUE_APP_GM_JHWX,
+              ws: false,
+              changOrigin: true,//允许跨域
+              pathRewrite: {
+                  '^/api': '/api'//请求的时候使用这个api就可以
+              }
+          },
+          '/order-service': {
+            target: process.env.VUE_APP_GM_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/order-service': '/order-service'
+            }
+          },
+          '/upload-service': {
+            target: process.env.VUE_APP_GM_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/upload-service': '/upload-service'
+            }
+          },
+          '/sx_api': {
+            target: process.env.VUE_APP_SX_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/sx_api': '/'
+            }
+          },
+          '/edu_api': {
+            target: process.env.VUE_APP_EDU_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/edu_api': '/'
+            }
+          },
+          '/onelogin': {
+            target: process.env.VUE_APP_WWW_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/onelogin': '/'
+            }
+          },
+          '/file_api': {
+            target: process.env.VUE_APP_FILE_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/file_api': '/'
+            }
+          },
         }
     },
 
@@ -51,7 +108,7 @@ module.exports = {
     },
 
     configureWebpack: config => {
-       if(production){
+       if(process.env.NODE_ENV == 'production'){
          config.devtool = 'source-map'
        }
     },

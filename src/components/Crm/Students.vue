@@ -353,12 +353,6 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="报名班型" prop="signUpClassType">
-                                    <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            
-                            <el-col :span="6">
                                 <el-form-item label="学籍状态" prop="studentStatus">
 
                                     <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
@@ -395,7 +389,9 @@
                             <el-col :span="12">
 
                                 <el-form-item label="成单坐席" prop="seatName">
-                                    <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    <el-tooltip effect="dark" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
+                                        <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    </el-tooltip>
                                 </el-form-item>
 
                             </el-col>
@@ -613,7 +609,9 @@ import {
     phoneOutTea,
     seatOutTea,
     getClueCallLog,
-    getOrgSubsetByUuid
+    getOrgSubsetByUuid,
+    GetAgreementList,
+    GetCourseList4Teacher
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
@@ -712,7 +710,6 @@ export default {
                 number: '', //客户编号
                 province: "",
                 provinceCity: [], //所在省市
-                signUpClassType: '', //报名班型
                 signUpSchool: '', //注册平台
                 signUpTime: '', //报名时间(13位时间戳)
                 studentStatus: '', //学籍状态
@@ -723,6 +720,7 @@ export default {
                 workingLife: '', //工作年限
                 wx: "",
                 seatName: '',
+                orgNameListText: '',
                 
                 followUp: '', //跟进类型
                 followUpContent: '' //跟进内容
@@ -872,50 +870,27 @@ export default {
             })
         },
         GetAgreementList(id) {
-            let that = this;
-            let url = "https://app.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
-            var ajaxObj = new XMLHttpRequest();
-            ajaxObj.open('get', url)
-            ajaxObj.send();
-            ajaxObj.onreadystatechange = function () {
-            // 为了保证 数据 完整返回，我们一般会判断 两个值
-                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-                    // 数据是保存在 异步对象的 属性中
-                    let res = JSON.parse(ajaxObj.responseText);
-                    console.log(res.data.agreementList);
-                    that.$nextTick(() => {
-                        that.agreementList = res.data.agreementList;
-                    })
-                }
-            }
+
+            this.$smoke_get(GetAgreementList, {
+                param: {userId: id}
+            }).then(res => {
+                this.agreementList = res.data.agreementList;
+            })
+
         },
         GetCourseList4Teacher(id) {
-            let that = this;
-            var ajaxObj = new XMLHttpRequest();
-            let url = "https://app.jhwx.com/lovestudy/api/study/GetCourseList4Teacher";
-            ajaxObj.open('post', url)
-            ajaxObj.setRequestHeader("Content-type", "application/json");
-            ajaxObj.send(JSON.stringify({userId: id}));
-            ajaxObj.onreadystatechange = function () {
-            // 为了保证 数据 完整返回，我们一般会判断 两个值
-                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-                    // 数据是保存在 异步对象的 属性中
-                    let res = JSON.parse(ajaxObj.responseText);
-                    if(res.status == 0 && res.data) {
-                        console.log(res.data);
-                        that.$nextTick(() => {
-                            that.courseLists = res.data.courseList;
-                            that.courseListsFlag = true;
-                        })
-                    }else{
-                        that.courseListsFlag = false;
-                    }
+
+            this.$smoke_post(GetCourseList4Teacher, {
+                userId: id
+            }).then (res => {
+                if(res.status == 0 && res.data) {
+                    this.courseLists = res.data.courseList;
+                    this.courseListsFlag = true;
+                }else{
+                    this.courseListsFlag = false;
                 }
-            }
+            })
+            
         },
         phoneOutTea( scope ) {
             if(this.initOptions != undefined){
@@ -1117,9 +1092,7 @@ export default {
             });
         },
         getClassTeaClass() {
-            this.$smoke_get(getClassTeaClass,{
-                classTeaUuid: this.$route.query.id || ''
-            }).then(res => {
+            this.$smoke_post(getClassTeaClass, this.form).then(res => {
                 if(res.code == 200) {
                     if(this.$route.query.id == undefined){
                         this.titleFlag = false;
@@ -1173,7 +1146,6 @@ export default {
                     this.customerForm.name = res.data.name;
                     this.customerForm.number = res.data.number;
                     this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
-                    this.customerForm.signUpClassType = res.data.signUpClassType;
                     this.schoolList.map(bbs => {
                         if(bbs.id == res.data.signUpSchool) {
                             this.customerForm.signUpSchool = bbs.name;
@@ -1192,6 +1164,7 @@ export default {
                     }else{
                         this.customerForm.seatName = '';
                     }
+                    this.customerForm.orgNameListText = getTextByJs(res.data.orgNameList.reverse()); //reverse()倒序排列
                 }
             })
         },
@@ -1250,7 +1223,7 @@ export default {
         },
         getClassTeaStudentClick() {
             this.form.currentPage = 1;
-            this.getClassTeaStudent();
+            this.getClassTeaClass();
         },
         getClassTeaStudent() {
             this.fullscreenLoading = true;
@@ -1294,12 +1267,10 @@ export default {
                 this.$confirm('确认关闭？')
                 .then(_ => {
                     done();
-                    this.getClassTeaStudent();
                 })
                 .catch(_ => {});
             }else {
                 done();
-                this.getClassTeaStudent();
             }
         },
         handleClassTabClick(tab, event) {

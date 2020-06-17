@@ -31,7 +31,7 @@
                 <el-col :span="7">
                   <el-upload
                   class="avatar-uploader"
-                  action="https://gm.jhwx.com/upload-service/upload/file"
+                  :action="uploadFile"
                   :show-file-list="false"
                   :data="pppss"
                   :on-success="handleAvatarSuccessicon"
@@ -116,7 +116,7 @@
                 <el-upload
                   ref="upload"
                   class="avatar-uploader"
-                  action="https://gm.jhwx.com/upload-service/upload/file"
+                  :action="uploadFile"
                   :show-file-list="false"
                   :data="pppss"
                   :on-success="handleAvatarSuccess"
@@ -158,6 +158,7 @@
 <script>
 import EditorBar from "../../components/Share/wangEnduit";
 import {wechatActivityAdd}  from '@/request/operateApi.js'
+import { uploadFile } from '../../request/api';
 export default {
   name: "CreateActivity",
   data() {
@@ -210,7 +211,8 @@ export default {
       },
       pppss: { fileType: "img" }, //上传图片携带参数
       awardNotice:"开启",
-      copyForm:''
+      copyForm:'',
+      uploadFile: uploadFile
     };
   },
   created(){
@@ -221,7 +223,7 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
         this.form.triggerPicture =
-          "https://file.jhwx.com/" + res.data.fileUrl;
+          process.env.VUE_APP_FILE_JHWX + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }
@@ -230,7 +232,7 @@ export default {
       this.imageUrl2 = URL.createObjectURL(file.raw);
       if (res.code === 0) {
         this.form.activityPage =
-          "https://file.jhwx.com/" + res.data.fileUrl;
+          process.env.VUE_APP_FILE_JHWX + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }

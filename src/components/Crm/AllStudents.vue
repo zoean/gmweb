@@ -39,6 +39,10 @@
 
         <el-row class="people-screen" type="flex" align="middle">
 
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            </el-col>
+
             <el-col :span="5">
 
                 <el-cascader
@@ -356,12 +360,6 @@
                         <el-row>
 
                             <el-col :span="6">
-                                <el-form-item label="报名班型" prop="signUpClassType">
-                                    <el-input v-model="customerForm.signUpClassType" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            
-                            <el-col :span="6">
                                 <el-form-item label="学籍状态" prop="studentStatus">
 
                                     <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
@@ -391,17 +389,19 @@
                                 </el-form-item>
                             </el-col>
 
-                        </el-row>
-
-                        <el-row>
-
                             <el-col :span="12">
 
                                 <el-form-item label="成单坐席" prop="seatName">
-                                    <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    <el-tooltip effect="dark" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
+                                        <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    </el-tooltip>
                                 </el-form-item>
 
                             </el-col>
+
+                        </el-row>
+
+                        <el-row>
 
                             <el-col :span="6" style="margin-top: 10px;">
 
@@ -565,7 +565,9 @@ import {
     getClassTeaStuNotes,
     getClueCallLog,
     getSchoolList,
-    getOrgSubsetByUuid
+    getOrgSubsetByUuid,
+    GetAgreementList,
+    GetCourseList4Teacher
 } from '../../request/api';
 import { 
     timestampToTime, 
@@ -591,6 +593,7 @@ export default {
                 sortSet: [],
                 tel: "", //手机号
                 total: null,
+                stuId: '',
                 startTime: '',
                 endTime: '',
             },
@@ -674,7 +677,6 @@ export default {
                 number: '', //客户编号
                 province: "",
                 provinceCity: [], //所在省市
-                signUpClassType: '', //报名班型
                 signUpSchool: '', //注册平台
                 signUpTime: '', //报名时间(13位时间戳)
                 studentStatus: '', //学籍状态
@@ -685,6 +687,7 @@ export default {
                 workingLife: '', //工作年限
                 wx: "",
                 seatName: '',
+                orgNameListText: ''
             },
 
             rules: {
@@ -829,50 +832,27 @@ export default {
             })
         },
         GetAgreementList(id) {
-            let that = this;
-            let url = "https://app.jhwx.com/lovestudy/api/agreement/GetAgreementList?param=" + "{'userId':" + id + "}";
-            var ajaxObj = new XMLHttpRequest();
-            ajaxObj.open('get', url)
-            ajaxObj.send();
-            ajaxObj.onreadystatechange = function () {
-            // 为了保证 数据 完整返回，我们一般会判断 两个值
-                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-                    // 数据是保存在 异步对象的 属性中
-                    let res = JSON.parse(ajaxObj.responseText);
-                    console.log(res.data.agreementList);
-                    that.$nextTick(() => {
-                        that.agreementList = res.data.agreementList;
-                    })
-                }
-            }
+
+            this.$smoke_get(GetAgreementList, {
+                param: {userId: id}
+            }).then(res => {
+                this.agreementList = res.data.agreementList;
+            })
+            
         },
         GetCourseList4Teacher(id) {
-            let that = this;
-            var ajaxObj = new XMLHttpRequest();
-            let url = "https://app.jhwx.com/lovestudy/api/study/GetCourseList4Teacher";
-            ajaxObj.open('post', url)
-            ajaxObj.setRequestHeader("Content-type", "application/json");
-            ajaxObj.send(JSON.stringify({userId: id}));
-            ajaxObj.onreadystatechange = function () {
-            // 为了保证 数据 完整返回，我们一般会判断 两个值
-                if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-                    // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-                    // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-                    // 数据是保存在 异步对象的 属性中
-                    let res = JSON.parse(ajaxObj.responseText);
-                    if(res.status == 0 && res.data) {
-                        console.log(res.data);
-                        that.$nextTick(() => {
-                            that.courseLists = res.data.courseList;
-                            that.courseListsFlag = true;
-                        })
-                    }else{
-                        that.courseListsFlag = false;
-                    }
+
+            this.$smoke_post(GetCourseList4Teacher, {
+                userId: id
+            }).then (res => {
+                if(res.status == 0 && res.data) {
+                    this.courseLists = res.data.courseList;
+                    this.courseListsFlag = true;
+                }else{
+                    this.courseListsFlag = false;
                 }
-            }
+            })
+            
         },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
@@ -1109,7 +1089,6 @@ export default {
                     this.customerForm.name = res.data.name;
                     this.customerForm.number = res.data.number;
                     this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
-                    this.customerForm.signUpClassType = res.data.signUpClassType;
                     this.schoolList.map(bbs => {
                         if(bbs.id == res.data.signUpSchool) {
                             this.customerForm.signUpSchool = bbs.name;
@@ -1123,6 +1102,7 @@ export default {
                     this.customerForm.work = res.data.work;
                     this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
+                    this.customerForm.orgNameListText = getTextByJs(res.data.orgNameList.reverse()); //reverse()倒序排列
                 }
             })
         },

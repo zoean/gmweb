@@ -240,7 +240,7 @@ export default {
                 {'label': '' }
             ],
             initOptions: {},
-            jqStart: null,
+            //jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -261,7 +261,7 @@ export default {
         this.getClueDataNumber();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        this.jqStart = browserfly.noConflict();
+        //this.jqStart = browserfly.noConflict();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
@@ -450,10 +450,10 @@ export default {
                             message: res.msg
                         })
                     }
-	                this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                        console.log(message);
-                        console.log(jsonObject);
-                    });
+	                // this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
+                    //     console.log(message);
+                    //     console.log(jsonObject);
+                    // });
                 })
             }else{
                 this.$message({
@@ -489,21 +489,21 @@ export default {
                             message: res.msg
                         })
                     }
-	                this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
-                        console.log('监听成功-seatState');
-                        console.log(message);
-                        console.log(jsonObject);
-                    }); 
-                    this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                        console.log('监听成功-callEvent');
-                        console.log(message);
-                        console.log(jsonObject);
-                    });
-                    this.jqStart.monitorEvent("callTip",function(message, jsonObject){
-                        console.log('监听成功-callTip');
-                        console.log(message);
-                        console.log(jsonObject);
-                    })
+	                // this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
+                    //     console.log('监听成功-seatState');
+                    //     console.log(message);
+                    //     console.log(jsonObject);
+                    // }); 
+                    // this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
+                    //     console.log('监听成功-callEvent');
+                    //     console.log(message);
+                    //     console.log(jsonObject);
+                    // });
+                    // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
+                    //     console.log('监听成功-callTip');
+                    //     console.log(message);
+                    //     console.log(jsonObject);
+                    // })
                 })
             }else{
                 this.$message({

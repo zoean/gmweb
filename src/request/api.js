@@ -161,6 +161,7 @@ export const seatOutTea = '/api/phone/outbound/seatOutTea'; //坐席外呼（班
 export const outExcelKnow = '/api/knowledgeSystem/knowExcel/outExcelKnow'; //知识点目录导出
 export const outExcelSubject = '/api/knowledgeSystem/knowExcel/outExcelSubject'; //科目目录导出
 export const readExcelSubject = '/api/knowledgeSystem/knowExcel/readExcelSubject'; //科目目录导入
+export const readExcelKnow = '/api/knowledgeSystem/knowExcel/readExcelKnow'; //知识点导入
 
 export const getRecoveryPoolDataList = '/api/phone/clueData/getRecoveryPoolDataList'; //获取回收池的线索数据
 export const getUserRPCDList = '/api/phone/clueData/getUserRPCDList'; //获取待分配回收池线索数据
@@ -247,4 +248,11 @@ export const noReadNum = '/api/phone/stationNews/noReadNum' //获取未读消息
 
 //线索模板导出
 export const clueDataTem = '/api/phone/excel/clueDataTem' //线索模板导出
+export const readExcelClueData = '/api/phone/excel/readExcelClueData';//模板录入
+export const uploadFile = '/upload-service/upload/file';//模板录入
+
+//lovestudy
+export const GetAgreementDetail = '/lovestudy/api/agreement/GetAgreementDetail' //协议
+export const GetAgreementList = '/lovestudy/api/agreement/GetAgreementList' //协议列表
+export const GetCourseList4Teacher = '/lovestudy/api/study/GetCourseList4Teacher' //课程列表
 
