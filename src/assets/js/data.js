@@ -53,7 +53,7 @@ export const everyTimeList = [
     { 'prop': 'isCalledPhone', 'label': '是否接通' },
     { 'prop': 'duration', 'label': '通话时长（秒）' },
     // { 'prop': 'dealState', 'label': '处理状态' },
-    { 'prop': 'resume', 'label': '通话备注' },
+    // { 'prop': 'resume', 'label': '通话备注' },
     // { 'prop': 'areaId', 'label': '号码归属' },
     // { 'prop': 'callStyle', 'label': '呼叫方式' },
     // { 'prop': 'callerQueueTime', 'label': '进入队列' },

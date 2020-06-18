@@ -338,20 +338,6 @@
                                 </el-form-item>
                             </el-col>
 
-                            <el-col :span="12">
-
-                                <el-form-item label="成单坐席" prop="seatName">
-                                    <el-tooltip effect="dark" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
-                                        <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
-                                    </el-tooltip>
-                                </el-form-item>
-
-                            </el-col>
-
-                        </el-row>
-
-                        <el-row>
-
                             <el-col :span="6" style="margin-top: 10px;">
 
                                 <label class="el-form-item__label">协议信息</label>
@@ -359,6 +345,20 @@
                                 <span style="height: 40px; line-height: 40px;">{{agreementList.length}}</span>个
 
                                 <span style="height: 40px; line-height: 40px; cursor: pointer; color: #409EFF;" @click="lookAgreement">查看</span>
+
+                            </el-col>
+
+                        </el-row>
+
+                        <el-row>
+
+                            <el-col :span="12">
+
+                                <el-form-item label="成单坐席" prop="seatName">
+                                    <el-tooltip effect="dark" popper-class="smoke_seatName1" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
+                                        <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
+                                    </el-tooltip>
+                                </el-form-item>
 
                             </el-col>
 

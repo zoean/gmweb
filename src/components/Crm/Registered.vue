@@ -63,6 +63,7 @@
             :schoolId='schoolId'
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
+            :userCDARUuid='userCDARUuid'
             :comMode='comMode'
             :callLogUuid='callLogUuid'
             @fatherDataList='consumerCallDataList'
@@ -117,6 +118,7 @@ export default {
             comMode: '',
             schoolId: '',
             examItem: '',
+            userCDARUuid: '',
 
             fullscreenLoading: false,
         }
@@ -154,6 +156,7 @@ export default {
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = true;
             this.comMode = '微信沟通';
+            this.userCDARUuid = row.userCDARUuid;
             this.examItem = row.examItemId;
         },
         changeDrawer(val){

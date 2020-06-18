@@ -21,7 +21,7 @@
                 <el-input v-model="form.callerId" size="small" placeholder="请输入客户电话" style="width: 90%;" clearable></el-input>
             </el-col>
     
-            <el-col :span="4">
+            <!-- <el-col :span="4">
                 <el-select v-model="form.dealState" size="small" placeholder="请选择处理状态" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in dealStateArr"
@@ -30,9 +30,9 @@
                       :value="item.value">
                     </el-option>
                 </el-select>
-            </el-col>
+            </el-col> -->
     
-            <el-col :span="4">
+            <!-- <el-col :span="4">
                 <el-select v-model="form.hangupSide" size="small" placeholder="请选择挂机方" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in hangupSideArr"
@@ -41,12 +41,23 @@
                       :value="item.value">
                     </el-option>
                 </el-select>
-            </el-col>
+            </el-col> -->
     
             <el-col :span="4">
                 <el-select v-model="form.isCalledPhone" size="small" placeholder="请选择是否接通" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in isCalledPhoneArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="4">
+                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 90%;" clearable>
+                    <el-option
+                      v-for="item in pathwayArr"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value">
@@ -72,20 +83,9 @@
                 </el-date-picker>
             </el-col>
     
-            <el-col :span="4">
-                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 90%;" clearable>
-                    <el-option
-                      v-for="item in pathwayArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-    
-            <el-col :span="4">
+            <!-- <el-col :span="4">
                 <el-input v-model="form.seatId" size="small" placeholder="请输入坐席工号" style="width: 90%;" clearable></el-input>
-            </el-col>
+            </el-col> -->
     
             <el-col :span="8">
                 <el-button type="primary" size="small" @click="timeClick">查询</el-button>
@@ -145,7 +145,7 @@
 <script>
 import { getCallRecord } from '../../request/api';
 import { everyTimeList } from '../../assets/js/data'
-import { getTextByTime, timestampToTime } from '../../assets/js/common'
+import { getTextByTime, timestampToTime, timeReturn } from '../../assets/js/common'
 export default {
     name: 'everyTime',
     data() {
@@ -155,14 +155,14 @@ export default {
                 calledId: '', //座席电话(4位和11位)
                 callerId: '', //客户电话
                 currentPage: 1, //当前页数
-                dealState: '', //处理状态 1:处理 0：未处理
-                hangupSide: '', //挂机方 1：座席侧 2：客户侧
+                // dealState: '', //处理状态 1:处理 0：未处理
+                // hangupSide: '', //挂机方 1：座席侧 2：客户侧
                 insertTimeStartTime: '', //电话开始呼叫开始时间；时间戳10位
                 insertTimeEndTime: '', //电话开始呼叫结束时间；时间戳10位
                 isCalledPhone: '', //是否接通 1:接通 0、2、其他:未接通
                 pageSize: 10, //每页显示条目个数
                 pathway: '', //呼叫途径 1：呼叫中心 2：工作手机
-                seatId: '', //坐席工号
+                // seatId: '', //坐席工号
                 sortSet: [], //排序集合
             },
             callStyleArr: [
@@ -213,13 +213,13 @@ export default {
                         this.columnFlag = false;
                         res.data.list.map((sll,index) => {
                             sll.callStyle = getTextByTime(sll.callStyle, 3, 4, '外呼电话', '直线呼入');
-                            sll.dealState = getTextByTime(sll.dealState, 1, 0, '处理', '未处理');
-                            sll.hangupSide = getTextByTime(sll.hangupSide, 1, 2, '座席侧', '客户侧');
+                            // sll.dealState = getTextByTime(sll.dealState, 1, 0, '处理', '未处理');
+                            // sll.hangupSide = getTextByTime(sll.hangupSide, 1, 2, '座席侧', '客户侧');
                             sll.isCalledPhone = getTextByTime(sll.isCalledPhone, 1, 0, '接通', '其他');
                             sll.pathway = getTextByTime(sll.pathway, 1, 2, '呼叫中心', '工作手机');
                             sll.callerQueueTime = timestampToTime(sll.callerQueueTime);
                             sll.callerStime = timestampToTime(sll.callerStime);
-
+                            sll.duration = timeReturn(sll.duration);
                             sll.insertDbTime = timestampToTime(sll.insertDbTime);
                             sll.insertTime = timestampToTime(sll.insertTime);
                             sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
