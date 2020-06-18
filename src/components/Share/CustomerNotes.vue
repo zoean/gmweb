@@ -609,6 +609,10 @@ export default {
         examItem: {
             type: String,
             default: ''
+        },
+        userCDARUuid: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -953,7 +957,8 @@ export default {
                     runOutPromise2: this.ruleForm.runOutPromise2,
                 },
                 operateType: 1,
-                school: this.schoolId
+                school: this.schoolId,
+                uuid: this.userCDARUuid
             }).then(res => {
                 if(res.code == 200) {
                     this.$message({
