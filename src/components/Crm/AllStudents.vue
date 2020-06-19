@@ -106,7 +106,7 @@
               :prop="item.prop"
               :label="item.label"
               :formatter="item.formatter"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'receiveTime' ? '180px' : ''"
               v-for="(item, index) in columnList"
               :key="index"
               >
@@ -607,6 +607,8 @@ export default {
                 { 'prop': 'school', 'label': '分校' },
                 { 'prop': 'classTea', 'label': '班主任' },
                 { 'prop': 'seatName', 'label': '成单坐席' },
+                { 'prop': 'createTime', 'label': '报名时间' },
+                { 'prop': 'receiveTime', 'label': '领取时间' },
             ],
             drawerMove: false,
             directionMove: 'rtl',
@@ -937,6 +939,8 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         res.data.list.map(sll => {
+                            sll.createTime = timestampToTime(Number(sll.createTime));
+                            sll.receiveTime = timestampToTime(Number(sll.receiveTime));
                             sll.classType = classTypeString(sll.classType);
                             if(sll.seatOrgName && sll.seatName) {
                                 sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
@@ -961,7 +965,7 @@ export default {
         },
         handleClose(done) {
             this.teaStuList = [];
-            this.tableKey = Math.random();
+            // this.tableKey = Math.random();
             done();
         },
         moveStudents(type, id) {

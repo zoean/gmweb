@@ -4,7 +4,7 @@
             title="设置密码"
             :visible.sync="centerDialogVisible"
             :modal-append-to-body='false'
-            width="34%"
+            width="36%"
             :show-close="centerDialogVisible"
             :before-close="handleClose"
             class="reset-password"
@@ -46,7 +46,7 @@
             title="设置工作手机"
             :visible.sync="phoneDialogVisible"
             :modal-append-to-body='false'
-            width="34%"
+            width="36%"
             :show-close="phoneDialogVisible"
             class="reset-phone"
             center>
@@ -69,7 +69,7 @@
             title="设置微信"
             :visible.sync="wxDialogVisible"
             :modal-append-to-body='false'
-            width="34%"
+            width="36%"
             :show-close="wxDialogVisible"
             class="reset-wx"
             center>
@@ -90,8 +90,11 @@
                       :on-success="handleAvatarSuccess"
                       :before-upload="beforeAvatarUpload"
                     >
-                      <img v-if="imageUrl" :src="imageUrl" class="avatar" style="width: 120px; height: 120px;" />
-                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      <img v-if="!imageUrl" :src="imageUrl" class="avatar" style="width: 120px; height: 120px;" />
+                      <div style="width: 180px; height: 120px; border: 1px solid #e1e1e1; border-radius: 4px; padding-top: 20px; color: #606266; font-size: 12px;">
+                          <p>样式请参考示例</p>
+                          <p>请以钉钉手机号命名二维码</p>
+                      </div>
                     </el-upload>
                     <div style="width: 120px; float: right; margin-right: 20%;">
                         <img src="../../assets/images/wx_ma.jpg" style="width: 120px; height: 120px;" alt="">
@@ -142,7 +145,7 @@
                     <el-dropdown-menu slot="dropdown">
                       <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
                       <el-dropdown-item @click.native="change_password">设置密码</el-dropdown-item>
-                      <el-dropdown-item @click.native="change_wx">设置微信</el-dropdown-item>
+                      <!-- <el-dropdown-item @click.native="change_wx">设置微信</el-dropdown-item> -->
                       <el-dropdown-item @click.native="change_phone">设置工作手机</el-dropdown-item>
                       <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
@@ -650,8 +653,8 @@ export default {
           this.imageUrl = URL.createObjectURL(file.raw);
           if (res.code === 0) {
             this.form_wx.wxQrcode =
-            //   process.env.VUE_APP_FILE_JHWX + '/' + res.data.fileUrl;
-                'http://testfile.jhwx.com/' + res.data.fileUrl;
+                process.env.VUE_APP_FILE_JHWX + '/' + res.data.fileUrl;
+                // 'http://testfile.jhwx.com/' + res.data.fileUrl;
             } else {
                 this.$message.error(res.data.msg);
             }

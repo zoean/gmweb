@@ -165,7 +165,9 @@ export default {
                 pageSize: 10, //每页显示条目个数
                 pathway: '', //呼叫途径 1：呼叫中心 2：工作手机
                 // seatId: '', //坐席工号
-                sortSet: [], //排序集合
+                sortSet: [
+                    {insert_time: 'DESC'}
+                ], //排序集合
             },
             callStyleArr: [
                 { label: '外呼电话', value: 3 },
