@@ -1089,7 +1089,7 @@ export default {
                     this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
                     this.customerForm.graduationMajor = res.data.graduationMajor;
                     this.customerForm.name = res.data.name;
-                    this.customerForm.number = res.data.number;
+                    // this.customerForm.number = res.data.number;
                     this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
                     this.schoolList.map(bbs => {
                         if(bbs.id == res.data.signUpSchool) {

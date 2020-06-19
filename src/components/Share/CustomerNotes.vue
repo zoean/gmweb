@@ -19,11 +19,7 @@
                         <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px; margin-top: 20px;">客户信息：</el-row>
                 
                         <el-row>
-                            <el-col :span="6">
-                                <el-form-item label="客户编号" prop="number">
-                                    <el-input v-model="ruleForm.number" readonly size="small" class="borderNone"></el-input>
-                                </el-form-item>
-                            </el-col>
+                            
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="ruleForm.tel" readonly size="small" class="borderNone"></el-input>
@@ -41,7 +37,16 @@
                                     <el-input v-model="ruleForm.callLastTime" readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
                             </el-col>
-                            
+
+                            <el-col :span="6">
+                                <!-- <el-form-item label="客户编号" prop="number">
+                                    <el-input v-model="ruleForm.number" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item> -->
+                                <el-form-item label="客户微信" prop="wx">
+                                    <el-input v-model="ruleForm.wx" size="small" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''"></el-input>
+                                </el-form-item>
+                            </el-col>
+
                         </el-row>
 
                         <el-row>
@@ -155,12 +160,6 @@
                         </el-row>
 
                         <el-row>
-
-                            <el-col :span="6">
-                                <el-form-item label="客户微信" prop="wx">
-                                    <el-input v-model="ruleForm.wx" size="small" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''"></el-input>
-                                </el-form-item>
-                            </el-col>
 
                             <el-col :span="6">
 
