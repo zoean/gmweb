@@ -95,7 +95,7 @@
         <el-table
             :data="list"
             ref="tableSelect"
-            :key="Math.random()"
+            :key="this.tableKey"
             v-loading="fullscreenLoading"
             style="width: 100%">
             <el-table-column
@@ -784,7 +784,8 @@ export default {
             agreeFlag: false,
 
             courseLists: [],
-            courseListsFlag: null
+            courseListsFlag: null,
+            tableKey: '',
         }
     },
     created() {
@@ -960,6 +961,7 @@ export default {
         },
         handleClose(done) {
             this.teaStuList = [];
+            this.tableKey = Math.random();
             done();
         },
         moveStudents(type, id) {

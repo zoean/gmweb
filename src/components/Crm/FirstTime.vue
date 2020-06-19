@@ -159,6 +159,7 @@ export default {
         customerInfo(row) {
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
+            this.userCDARUuid = row.userCDARUuid;
             this.followFlag = false;
         },
         handleAddClick(row) {

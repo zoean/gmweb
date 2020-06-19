@@ -95,6 +95,7 @@
     
         <el-table
             :data="tableData"
+            :key="Math.random()"
             fit
             v-loading="fullscreenLoading"
             style="width: 100%; margin-top: 40px;">
@@ -113,13 +114,14 @@
                 v-if="columnFlag"
             >
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.recordFile" @click="bofangClick(scope.row)" type="text" >
-                        <audio 
-                            :src="scope.row.recordFile"
-                            controls="controls"
-                            style="height: 30px;"
-                        ></audio>
-                    </el-button>
+                    <audio 
+                        @play="bofangClick(scope.row, scope.$index)"
+                        :ref="'audio' + scope.$index"
+                        :src="scope.row.recordFile"
+                        controls="controls"
+                        preload="preload"
+                        style="height: 30px; margin-top: 10px"
+                    ></audio>
                 </template>
             </af-table-column>
     
@@ -199,8 +201,11 @@ export default {
         this.getCallRecord();
     },
     methods: {
-        bofangClick(row) {
-            console.log(row);
+        bofangClick(row, index) {
+            // this.$nextTick(() => {
+            //     console.log(this.$refs['audio' + index]);
+            //     this.$refs['audio' + index].playbackRate = 2;
+            // })
         },
         getCallRecord() {
             this.fullscreenLoading = true;

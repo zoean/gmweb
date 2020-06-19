@@ -823,19 +823,20 @@ export default {
             })
         },
         quxiao() {
-            this.$emit('fatherDataList');
+            this.$emit("changeDrawer", false)
+            // this.$emit('fatherDataList');
         },
         handleCloseDrawer(done) {
             if(this.ruleForm.callLogUuid) {
                 this.$confirm('确认关闭？')
                 .then(_ => {
                     done();
-                    this.$emit('fatherDataList');
+                    // this.$emit('fatherDataList');
                 })
                 .catch(_ => {});
             }else {
                 done();
-                this.$emit('fatherDataList');
+                // this.$emit('fatherDataList');
             }
         },
         handleCloseDrawerDetails(done) {
