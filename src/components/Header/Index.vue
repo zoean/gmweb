@@ -4,28 +4,28 @@
             title="设置密码"
             :visible.sync="centerDialogVisible"
             :modal-append-to-body='false'
-            width="40%"
+            width="36%"
             :show-close="centerDialogVisible"
             :before-close="handleClose"
             class="reset-password"
             center>
             <el-form :model="form">
                 <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-input :value="$store.state.name" style="width: 80%;" disabled></el-input>
+                    <el-input :value="$store.state.name" style="width: 80%;" disabled size=small></el-input>
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth">
-                    <el-input :value="$store.state.accountNumber" style="width: 80%;" disabled></el-input>
+                    <el-input :value="$store.state.accountNumber" style="width: 80%;" disabled size=small></el-input>
                 </el-form-item>
                 
               <el-form-item label="原密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password1" autocomplete="off" type="password" style="width: 80%;"></el-input>
+                <el-input v-model="form.password1" autocomplete="off" type="password" style="width: 80%;" size=small></el-input>
               </el-form-item>
               <el-form-item label="新密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password2" autocomplete="off" type="password" style="width: 80%;"></el-input>
+                <el-input v-model="form.password2" autocomplete="off" type="password" style="width: 80%;" size=small></el-input>
               </el-form-item>
               <el-form-item label="验证码" :label-width="formLabelWidth">
-                <el-input :value="form.verCode" style="width: 40%;" @input="input_change_ma($event)"></el-input>
-                <el-button style="display: inline-block; max-width: 150px; float: right; margin-right: 20%; width: 34%; height: 100%; margin-left: 6%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
+                <el-input :value="form.verCode" style="width: 40%;" @input="input_change_ma($event)" size=small></el-input>
+                <el-button size=small style="display: inline-block; margin-top: 4px; max-width: 150px; float: right; margin-right: 20%; width: 34%; height: 100%; margin-left: 6%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
               </el-form-item>
 
               <el-form-item label="" :label-width="formLabelWidth">
@@ -36,9 +36,9 @@
             
 
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="dialoghold">保 存</el-button>
-              <el-button @click="dialog_cancel" v-if="!oneLogin">取 消</el-button>
-              <el-button @click="dialog_cancel_back" v-if="oneLogin">返回登录页</el-button>
+              <el-button type="primary" @click="dialoghold" size=small>保 存</el-button>
+              <el-button @click="dialog_cancel" v-if="!oneLogin" size=small>取 消</el-button>
+              <el-button @click="dialog_cancel_back" v-if="oneLogin" size=small>返回登录页</el-button>
             </span>
         </el-dialog>
 
@@ -46,22 +46,66 @@
             title="设置工作手机"
             :visible.sync="phoneDialogVisible"
             :modal-append-to-body='false'
-            width="40%"
+            width="36%"
             :show-close="phoneDialogVisible"
             class="reset-phone"
             center>
-            <el-form :model="form_phone" :rules="rules" ref="form_phone">
+            <el-form :model="form_phone" :rules="rules_phone" ref="form_phone">
                 <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-input :value="$store.state.name" style="width: 80%;" disabled></el-input>
+                    <el-input :value="$store.state.name" style="width: 80%;" disabled size=small></el-input>
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-                    <el-input :value="form_phone.phone" style="width: 80%;" @input="input_change($event)"></el-input>
+                    <el-input :value="form_phone.phone" style="width: 80%;" @input="input_change($event)" size=small></el-input>
                 </el-form-item>
             </el-form>
 
             <span slot="footer" class="dialog-footer">
-              <el-button type="primary" @click="dialoghold_phone('form_phone')">保 存</el-button>
-              <el-button @click="dialog_cancel_phone">取 消</el-button>
+              <el-button type="primary" @click="dialoghold_phone('form_phone')" size=small>保 存</el-button>
+              <el-button @click="dialog_cancel_phone" size=small plain>取 消</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog
+            title="设置微信"
+            :visible.sync="wxDialogVisible"
+            :modal-append-to-body='false'
+            width="36%"
+            :show-close="wxDialogVisible"
+            class="reset-wx"
+            center>
+            <el-form :model="form_wx" :rules="rules_wx" ref="form_wx">
+                <el-form-item label="姓名" :label-width="formLabelWidth">
+                    <el-input :value="$store.state.name" style="width: 80%;" disabled size=small></el-input>
+                </el-form-item>
+                <el-form-item label="微信号" :label-width="formLabelWidth" prop="wxId">
+                    <el-input :value="form_wx.wxId" style="width: 80%;" @input="input_change_wx($event)" size=small></el-input>
+                </el-form-item>
+                <el-form-item label="微信二维码" :label-width="formLabelWidth" prop="wxQrcode">
+                    <el-upload
+                      class="avatar-uploader"
+                      style="width: 120px; height: 120px; float: left;"
+                      :action="uploadFile"
+                      :show-file-list="false"
+                      :data="pppss"
+                      :on-success="handleAvatarSuccess"
+                      :before-upload="beforeAvatarUpload"
+                    >
+                      <img v-if="!imageUrl" :src="imageUrl" class="avatar" style="width: 120px; height: 120px;" />
+                      <div style="width: 180px; height: 120px; border: 1px solid #e1e1e1; border-radius: 4px; padding-top: 20px; color: #606266; font-size: 12px;">
+                          <p>样式请参考示例</p>
+                          <p>请以钉钉手机号命名二维码</p>
+                      </div>
+                    </el-upload>
+                    <div style="width: 120px; float: right; margin-right: 20%;">
+                        <img src="../../assets/images/wx_ma.jpg" style="width: 120px; height: 120px;" alt="">
+                        <div style="height:30px; line-height: 0px; text-align: center;">二维码示例</div>
+                    </div>
+                </el-form-item>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="dialoghold_wx('form_wx')" size=small>保 存</el-button>
+              <el-button @click="dialog_cancel_wx" size=small plain>取 消</el-button>
             </span>
         </el-dialog>
 
@@ -100,8 +144,9 @@
                     </div>
                     <el-dropdown-menu slot="dropdown">
                       <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
-                      <el-dropdown-item @click.native="change_password">修改密码</el-dropdown-item>
-                      <el-dropdown-item @click.native="change_phone">修改工作手机</el-dropdown-item>
+                      <el-dropdown-item @click.native="change_password">设置密码</el-dropdown-item>
+                      <!-- <el-dropdown-item @click.native="change_wx">设置微信</el-dropdown-item> -->
+                      <el-dropdown-item @click.native="change_phone">设置工作手机</el-dropdown-item>
                       <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -152,7 +197,8 @@ import {
     noReadNum,
     getProfile,
     upProfile,
-    sendDingVerCode
+    sendDingVerCode,
+    uploadFile
 } from '../../request/api';
 import { getTextByJs, timestampToTime, menuNumberFunc } from '../../assets/js/common';
 import { pass_word, websockHttp } from '../../assets/js/data';
@@ -173,10 +219,17 @@ export default {
             form_phone: {
                 phone: '',
             },
-            rules: {
+            rules_phone: {
                 phone: [
                   { pattern:/^1\d{10}$/, message: "请输入合法手机号", trigger: "blur" }
                 ],
+            },
+            form_wx: {
+                wxId: '',
+                wxQrcode: ''
+            },
+            rules_wx: {
+                
             },
             formLabelWidth: '120px',
             defaultActive: '',
@@ -203,6 +256,10 @@ export default {
             maxLength: 16,
             phoneDialogVisible: false,
             fullscreenLoading: false,
+            wxDialogVisible: false,
+            pppss: { fileType: "img" },
+            imageUrl: '',
+            uploadFile: uploadFile
         }
     },
     created() {
@@ -263,6 +320,10 @@ export default {
         },
         input_change_ma(e) {
             this.form.verCode = e;
+            this.$forceUpdate();
+        },
+        input_change_wx(e) {
+            this.form_wx.wxId = e;
             this.$forceUpdate();
         },
         dialog_cancel_back() {
@@ -364,6 +425,13 @@ export default {
         change_password(){
             this.centerDialogVisible = true;
         },
+        change_wx() {
+            this.wxDialogVisible = true;
+            this.$nextTick(() => {
+              this.$refs['form_wx'].resetFields();
+            }) 
+            this.getProfile();
+        },
         change_phone() {
             this.phoneDialogVisible = true;
             this.$nextTick(() => {
@@ -390,6 +458,9 @@ export default {
         },
         dialog_cancel_phone() {
             this.phoneDialogVisible = false;
+        },
+        dialog_cancel_wx() {
+            this.wxDialogVisible = false;
         },
         // 保存密码接口
         dialoghold() {
@@ -422,7 +493,18 @@ export default {
             this.$refs[formName].validate((valid) => {
               if (valid) {
                 console.log(this.form_phone);
-                this.upProfile();
+                this.upProfile_phone();
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
+        },
+        dialoghold_wx(formName) {
+            this.$refs[formName].validate((valid) => {
+              if (valid) {
+                console.log(this.form_wx);
+                this.upProfile_wx();
               } else {
                 console.log('error submit!!');
                 return false;
@@ -433,10 +515,12 @@ export default {
             this.$smoke_get(getProfile, {}).then(res => {
                 if(res.code == 200) {
                     this.form_phone.phone = res.data.workTel;
+                    this.form_wx.wxId = res.data.wxId;
+                    this.form_wx.wxQrcode = this.imageUrl = res.data.wxQrcode;
                 }
             })
         },
-        upProfile() {
+        upProfile_phone() {
             this.$smoke_post(upProfile, {
                 workTel: this.form_phone.phone
             }).then(res => {
@@ -446,6 +530,25 @@ export default {
                         message: '修改成功'
                     });
                     this.phoneDialogVisible = false;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    });
+                }
+            })
+        },
+        upProfile_wx() {
+            this.$smoke_post(upProfile, {
+                wxId: this.form_wx.wxId,
+                wxQrcode: this.form_wx.wxQrcode
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功'
+                    });
+                    this.wxDialogVisible = false;
                 }else{
                     this.$message({
                         type: 'error',
@@ -544,7 +647,29 @@ export default {
                 return 'readState';
             }
             return '';
-        }
+        },
+        handleAvatarSuccess(res, file) {
+          console.log(file.raw);
+          this.imageUrl = URL.createObjectURL(file.raw);
+          if (res.code === 0) {
+            this.form_wx.wxQrcode =
+                process.env.VUE_APP_FILE_JHWX + '/' + res.data.fileUrl;
+                // 'http://testfile.jhwx.com/' + res.data.fileUrl;
+            } else {
+                this.$message.error(res.data.msg);
+            }
+        },
+        beforeAvatarUpload(file) {
+          const isJPG = file.type === "image/jpeg" || "image/png";
+          const isLt2M = file.size / 1024 / 1024 < 2;
+          if (!isJPG) {
+            this.$message.error("上传头像图片只能是 JPG/png 格式!");
+          }
+          if (!isLt2M) {
+            this.$message.error("上传头像图片大小不能超过 2MB!");
+          }
+          return isJPG && isLt2M;
+        },
     },
     watch:{
       '$route.path': function(newVal,oldVal){
@@ -661,6 +786,13 @@ export default {
             }
         }
         .reset-phone{
+            /deep/ .el-dialog{
+               .el-dialog__body{
+                    padding: 0 !important;
+                }
+            }
+        }
+        .reset-wx{
             /deep/ .el-dialog{
                .el-dialog__body{
                     padding: 0 !important;

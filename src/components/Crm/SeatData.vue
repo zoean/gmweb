@@ -329,6 +329,7 @@ export default {
         customerInfo(row) {
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
+            this.userCDARUuid = row.userCDARUuid;
             this.followFlag = false;
         },
         handleAddClick(row) {
@@ -401,17 +402,21 @@ export default {
                     message: '请您先勾选您要释放的数据'
                 })
             }else{
-                this.$smoke_post(clueDataRelease, {
-                    list: userCDARUuidArr
-                }).then(res => {
-                    if(res.code == 200) {
-                        this.$message({
-                            type: 'success',
-                            message: '数据释放成功'
-                        })
-                        this.getAllUserClueData();
-                    }
+                this.$confirm('确认要释放数据吗？')
+                .then(_ => {
+                    this.$smoke_post(clueDataRelease, {
+                        list: userCDARUuidArr
+                    }).then(res => {
+                        if(res.code == 200) {
+                            this.$message({
+                                type: 'success',
+                                message: '数据释放成功'
+                            })
+                            this.getAllUserClueData();
+                        }
+                    })
                 })
+                .catch(_ => {});
             }
         },
         phoneCopy(row) {

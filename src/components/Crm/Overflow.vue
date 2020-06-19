@@ -384,7 +384,11 @@ export default {
                     res.mainUin = false;
                 }
             })
-            this.spillPoolActClueRule(item.ruleNumberName);
+            this.$confirm('确认要分配给该组吗？')
+            .then(_ => {
+                this.spillPoolActClueRule(item.ruleNumberName);
+            })
+            .catch(_ => {});
         },
         spillPoolActClueRule(name) {
             this.$smoke_post(spillPoolActClueRule, {
