@@ -60,7 +60,7 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'goodsName' ? '220px' : '' "
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
@@ -550,9 +550,9 @@ export default {
                 // { 'prop': 'orderNum', 'label': '订单编号' },
                 // { 'prop': 'orderType', 'label': '订单类型' },
                 { 'prop': 'school', 'label': '分校' },
-                { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
-                { 'prop': 'goodsName', 'label': '购买商品' },
+                { 'prop': 'seatName', 'label': '成单坐席' },
+                { 'prop': 'goodsName', 'label': '购买商品名称' },
             ],
             tabsList: [],
             classUuidDefault: '',
@@ -689,10 +689,17 @@ export default {
             agreeFlag: false,
 
             courseLists: [],
-            courseListsFlag: null
+            courseListsFlag: null,
+            studentsPageSize: null,
         }
     },
     created() {
+        this.studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(this.studentsPageSize) {
+            this.form.pageSize = Number(this.studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getClassTeaClassWait();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
@@ -859,7 +866,7 @@ export default {
             console.log(tab);
             this.handleCurrentUuid = this.form.classUuid = tab.name;
             this.form.currentPage = 1;
-            this.form.pageSize = 10;
+            this.form.pageSize = Number(this.studentsPageSize);
             this.getWaitStudentList();
         },
         classTeaGetWaitStudent(type, id) {
@@ -911,6 +918,8 @@ export default {
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
+            this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getWaitStudentList();
         },
 

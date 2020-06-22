@@ -106,7 +106,7 @@
               :prop="item.prop"
               :label="item.label"
               :formatter="item.formatter"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'receiveTime' ? '180px' : ''"
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'receiveTime' ? '180px' : item.prop == 'goodsName' ? '220px' : ''"
               v-for="(item, index) in columnList"
               :key="index"
               >
@@ -609,7 +609,7 @@ export default {
                 { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
                 { 'prop': 'receiveTime', 'label': '领取时间' },
-                { 'prop': 'goodsName', 'label': '购买商品' },
+                { 'prop': 'goodsName', 'label': '购买商品名称' },
             ],
             drawerMove: false,
             directionMove: 'rtl',
@@ -792,6 +792,12 @@ export default {
         }
     },
     created() {
+        const studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(studentsPageSize) {
+            this.form.pageSize = Number(studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getSupStuList();
         this.getExamBasic();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
@@ -893,6 +899,7 @@ export default {
         handleSizeChange(index) {
             this.form.pageSize = index;
             this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getSupStuList();
         }, 
         getExamBasic() {

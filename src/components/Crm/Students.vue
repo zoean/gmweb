@@ -822,9 +822,16 @@ export default {
 
             courseLists: [],
             courseListsFlag: null,
+            studentsPageSize: null,
         }
     },
     created() {
+        this.studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(this.studentsPageSize) {
+            this.form.pageSize = Number(this.studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getClassTeaClass();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
@@ -1276,7 +1283,7 @@ export default {
         handleClassTabClick(tab, event) {
             this.form.classUuid = tab.name;
             this.form.currentPage = 1;
-            this.form.pageSize = 10;
+            this.form.pageSize = Number(this.studentsPageSize);
             this.getClassTeaStudent();
         },
         handleTabClick(tab) {
@@ -1336,6 +1343,7 @@ export default {
         handleSizeChange(index) {
             this.form.pageSize = index;
             this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getClassTeaStudent();
         },
         lookAgreement() {

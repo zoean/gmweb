@@ -378,7 +378,57 @@ a:link,a:active,a:visited,a:hover {
     top: 406px !important;
 }
 
+.vueAudioBetter .total span:nth-of-type(2){
+    display: none !important;
+}
 
+.vueAudioBetter .operatorButton .icon-roundaddfill, .vueAudioBetter .operatorButton .icon-subtract_fill{
+    display: none !important;
+}
 
+.vueAudioBetter .slider{
+    margin: 14px 12px 14px 22px !important;
+    width: 45% !important;
+    float: left !important;
+    background: #E2E3E7 !important;
+}
 
+.vueAudioBetter .operatorButton{
+    width: 20% !important;
+    float: left !important;
+    margin-right: 10px !important;
+}
 
+.vueAudioBetter .operatorButton .iconfont{
+    font-size: 16px !important;
+    margin-left: 8px !important;
+}
+
+.vueAudioBetter .operatorButton .rate{
+    font-size: 28px !important;
+}
+
+.vueAudioBetter .slider .thunk{
+    top: -3px !important;
+}
+
+.vueAudioBetter .slider .block{
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.vueAudioBetter{
+    background: #fff !important;
+    border: 1px solid #ccc;
+    margin: 10px 0 !important;
+    box-shadow: none !important;
+}
+
+.vueAudioBetter .total{
+    width: 20% !important;
+    float: left !important;
+    margin-top: 4px !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    margin-bottom: 4px !important;
+}

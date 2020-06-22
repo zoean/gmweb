@@ -114,7 +114,7 @@
                 v-if="columnFlag"
             >
                 <template slot-scope="scope">
-                    <audio 
+                    <!-- <audio 
                         v-if="scope.row.recordFile"
                         @play="bofangClick(scope.row, scope.$index)"
                         :ref="'audio' + scope.$index"
@@ -122,11 +122,19 @@
                         controls="controls"
                         preload="preload"
                         style="height: 30px; margin-top: 10px"
-                    ></audio>
+                    ></audio> -->
+                    <vue-audio
+                        v-if="scope.row.recordFile"
+                        :audio-source="scope.row.recordFile"
+                        :width="430"
+                        :html5='true'
+                    ></vue-audio>
                 </template>
             </af-table-column>
     
         </el-table>
+
+        
     
         <el-pagination
             background
@@ -204,10 +212,10 @@ export default {
         this.getCallRecord();
     },
     methods: {
-        bofangClick(row, index) {
-            console.log(this.$refs['audio' + index]);
-            this.$refs['audio' + index].playbackRate = 2;
-        },
+        // bofangClick(row, index) {
+        //     console.log(this.$refs['audio' + index]);
+        //     this.$refs['audio' + index].playbackRate = 2;
+        // },
         getCallRecord() {
             this.fullscreenLoading = true;
             this.$smoke_post(getCallRecord, this.form).then(res => {
@@ -230,7 +238,7 @@ export default {
                             sll.insertTime = timestampToTime(sll.insertTime);
                             sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
                             if(sll.recordFile){
-                                this.columnWidth = 330;
+                                this.columnWidth = 450;
                                 this.columnFlag = true;
                             }
                         })

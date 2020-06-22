@@ -353,6 +353,12 @@ export default {
         }
     },
     created() {
+        const studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(studentsPageSize) {
+            this.form.pageSize = Number(studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getClassList();
         this.getExamBasic();
     },
@@ -366,6 +372,7 @@ export default {
             console.log(index);
             this.form.pageSize = index;
             this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getClassList();
         }, 
         handleCurrentChangeTeacher(index) {
