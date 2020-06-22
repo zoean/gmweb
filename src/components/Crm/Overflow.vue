@@ -200,7 +200,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -239,7 +239,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 ruleNumberName: '', //规则编号分配组ID
                 startTime: '',
                 endTime: '',

@@ -237,7 +237,7 @@ export default {
             direction: 'rtl',
             notReadNumValue: 0,
             newsForm: {
-                pageSize: 1000,
+                pageSize: 2000,
                 currentPage: 1,
                 pageCount: 0,
                 readState: 0 //0是未读，1是已读
@@ -516,7 +516,7 @@ export default {
                 if(res.code == 200) {
                     this.form_phone.phone = res.data.workTel;
                     this.form_wx.wxId = res.data.wxId;
-                    this.form_wx.wxQrcode = this.imageUrl = res.data.wxQrcode;
+                    this.form_wx.wxQrcode = this.imageUrl = '/file_api' + '/' + res.data.wxQrcode;
                 }
             })
         },
@@ -652,8 +652,7 @@ export default {
           console.log(file.raw);
           this.imageUrl = URL.createObjectURL(file.raw);
           if (res.code === 0) {
-            this.form_wx.wxQrcode =
-                process.env.VUE_APP_FILE_JHWX + '/' + res.data.fileUrl;
+            this.form_wx.wxQrcode = res.data.fileUrl;
             } else {
                 this.$message.error(res.data.msg);
             }

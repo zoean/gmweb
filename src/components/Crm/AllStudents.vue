@@ -119,7 +119,7 @@
               </template>
 
             </el-table-column>
-            <el-table-column prop="active" label="操作" width="80">
+            <el-table-column prop="active" label="操作" fixed="right" width="80">
               <template slot-scope="scope">
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
                 <svg-icon @click="moveStudentOne(scope.row)" icon-title="转移学员" icon-class="move" />
@@ -134,7 +134,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -451,7 +451,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -499,7 +499,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -583,7 +583,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 classType: '',
                 examItemId: '',
                 examItemText: '',
@@ -609,6 +609,7 @@ export default {
                 { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
                 { 'prop': 'receiveTime', 'label': '领取时间' },
+                { 'prop': 'goodsName', 'label': '购买商品' },
             ],
             drawerMove: false,
             directionMove: 'rtl',
@@ -733,14 +734,14 @@ export default {
             notesCallForm: {
                 clueDataSUuid: '',
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },
             pcaa: null, //省市数据
             notesForm: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 studentUuid: '',
                 total: null,
             },

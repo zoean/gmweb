@@ -126,7 +126,7 @@
              //循环插入图片
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
-              let url = process.env.VUE_APP_FILE_JHWX + result.data.fileUrl
+              let url = '/file_api' + '/' + result.data.fileUrl
               insertImg(url)
             // } 
           }

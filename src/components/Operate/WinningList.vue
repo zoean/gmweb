@@ -187,7 +187,7 @@ export default {
         trackNumber: "" //	邮件单号
       },
       total: 0, //总数
-      pageSize: 10, //一页显示几条
+      pageSize: 20, //一页显示几条
       currentPage: 1, //当前页数
       totalFlag: false, //当只有一页时隐藏分页
       rules:{

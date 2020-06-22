@@ -245,7 +245,7 @@ export default {
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
-        this.form.pictureUrl = process.env.VUE_APP_FILE_JHWX + res.data.fileUrl;
+        this.form.pictureUrl = '/file_api' + '/' + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }

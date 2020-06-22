@@ -366,7 +366,7 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChange"
                         @size-change="handleSizeChange"
@@ -419,7 +419,7 @@
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -674,14 +674,14 @@ export default {
             notesForm: {
                 clueDataSUuid: this.clueDataSUuid,
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },
             notesCallForm: {
                 clueDataSUuid: this.clueDataSUuid,
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },

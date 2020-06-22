@@ -139,7 +139,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -491,7 +491,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -539,7 +539,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -628,7 +628,7 @@ export default {
             getOrderForm: {},
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 sortSet: [],
                 total: null,
                 classTeaUuid: '',
@@ -747,7 +747,7 @@ export default {
             pcaa: null, //省市数据
             notesForm: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 studentUuid: '',
                 total: null,
             },
@@ -771,7 +771,7 @@ export default {
             notesCallForm: {
                 clueDataSUuid: '',
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },

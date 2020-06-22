@@ -55,7 +55,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -139,7 +139,7 @@
                 :total='teacherForm.total'
                 :page-size='teacherForm.pageSize'
                 :current-page='teacherForm.currentPage'
-                :page-sizes="[10, 20, 30]"
+                :page-sizes="[10, 20, 30, 50]"
                 :hide-on-single-page="totalFlag"
                 @current-change="handleCurrentChangeTeacher"
                 @size-change="handleSizeChangeTeacher"
@@ -261,7 +261,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 sortSet: [],
                 total: null,
                 examItem: '',
@@ -302,7 +302,7 @@ export default {
             direction2: 'rtl',
             teacherForm: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 sortSet: [],
                 total: null,
                 uuid: '', //班级的唯一标识

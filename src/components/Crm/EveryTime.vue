@@ -115,6 +115,7 @@
             >
                 <template slot-scope="scope">
                     <audio 
+                        v-if="scope.row.recordFile"
                         @play="bofangClick(scope.row, scope.$index)"
                         :ref="'audio' + scope.$index"
                         :src="scope.row.recordFile"
@@ -134,7 +135,7 @@
             :total='total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -162,7 +163,7 @@ export default {
                 insertTimeStartTime: '', //电话开始呼叫开始时间；时间戳10位
                 insertTimeEndTime: '', //电话开始呼叫结束时间；时间戳10位
                 isCalledPhone: '', //是否接通 1:接通 0、2、其他:未接通
-                pageSize: 10, //每页显示条目个数
+                pageSize: 20, //每页显示条目个数
                 pathway: '', //呼叫途径 1：呼叫中心 2：工作手机
                 // seatId: '', //坐席工号
                 sortSet: [
@@ -204,10 +205,8 @@ export default {
     },
     methods: {
         bofangClick(row, index) {
-            // this.$nextTick(() => {
-            //     console.log(this.$refs['audio' + index]);
-            //     this.$refs['audio' + index].playbackRate = 2;
-            // })
+            console.log(this.$refs['audio' + index]);
+            this.$refs['audio' + index].playbackRate = 2;
         },
         getCallRecord() {
             this.fullscreenLoading = true;
