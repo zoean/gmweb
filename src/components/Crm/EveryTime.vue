@@ -83,9 +83,9 @@
                 </el-date-picker>
             </el-col>
     
-            <!-- <el-col :span="4">
-                <el-input v-model="form.seatId" size="small" placeholder="请输入坐席工号" style="width: 90%;" clearable></el-input>
-            </el-col> -->
+            <el-col :span="4">
+                <el-input v-model="form.seatName" size="small" placeholder="请输入拨打人姓名" style="width: 90%;" clearable></el-input>
+            </el-col>
     
             <el-col :span="8">
                 <el-button type="primary" size="small" @click="timeClick">查询</el-button>
@@ -114,18 +114,33 @@
                 v-if="columnFlag"
             >
                 <template slot-scope="scope">
-                    <audio 
+                    <VueAudio 
+                        :theUrl="scope.row.recordFile" 
+                        v-if="scope.row.recordFile"
+                        theControlList="onlyOnePlaying noMuted noDownload noVolume"
+                    >
+                    </VueAudio>
+                    <!-- <audio 
+                        v-if="scope.row.recordFile"
                         @play="bofangClick(scope.row, scope.$index)"
                         :ref="'audio' + scope.$index"
                         :src="scope.row.recordFile"
                         controls="controls"
                         preload="preload"
                         style="height: 30px; margin-top: 10px"
-                    ></audio>
+                    ></audio> -->
+                    <!-- <vue-audio
+                        v-if="scope.row.recordFile"
+                        :audio-source="scope.row.recordFile"
+                        :width="430"
+                        :html5='true'
+                    ></vue-audio> -->
                 </template>
             </af-table-column>
     
         </el-table>
+
+        
     
         <el-pagination
             background
@@ -134,7 +149,7 @@
             :total='total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -148,8 +163,12 @@
 import { getCallRecord } from '../../request/api';
 import { everyTimeList } from '../../assets/js/data'
 import { getTextByTime, timestampToTime, timeReturn } from '../../assets/js/common'
+import VueAudio from '../Share/VueAudio';
 export default {
     name: 'everyTime',
+    components: {
+        VueAudio
+    },
     data() {
         return {
             form: {
@@ -162,12 +181,13 @@ export default {
                 insertTimeStartTime: '', //电话开始呼叫开始时间；时间戳10位
                 insertTimeEndTime: '', //电话开始呼叫结束时间；时间戳10位
                 isCalledPhone: '', //是否接通 1:接通 0、2、其他:未接通
-                pageSize: 10, //每页显示条目个数
+                pageSize: 20, //每页显示条目个数
                 pathway: '', //呼叫途径 1：呼叫中心 2：工作手机
                 // seatId: '', //坐席工号
                 sortSet: [
                     {insert_time: 'DESC'}
                 ], //排序集合
+                seatName: '',
             },
             callStyleArr: [
                 { label: '外呼电话', value: 3 },
@@ -203,12 +223,10 @@ export default {
         this.getCallRecord();
     },
     methods: {
-        bofangClick(row, index) {
-            // this.$nextTick(() => {
-            //     console.log(this.$refs['audio' + index]);
-            //     this.$refs['audio' + index].playbackRate = 2;
-            // })
-        },
+        // bofangClick(row, index) {
+        //     console.log(this.$refs['audio' + index]);
+        //     this.$refs['audio' + index].playbackRate = 2;
+        // },
         getCallRecord() {
             this.fullscreenLoading = true;
             this.$smoke_post(getCallRecord, this.form).then(res => {
@@ -231,7 +249,7 @@ export default {
                             sll.insertTime = timestampToTime(sll.insertTime);
                             sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
                             if(sll.recordFile){
-                                this.columnWidth = 330;
+                                this.columnWidth = 360;
                                 this.columnFlag = true;
                             }
                         })
@@ -250,7 +268,7 @@ export default {
                 }
             })
         },
-        datePickerChange(value) {
+        datePickerChange(value) { 
             console.log(value);
             if (value == null) {
                 this.form.insertTimeStartTime = '';

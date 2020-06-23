@@ -60,7 +60,7 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : '' "
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'goodsName' ? '220px' : '' "
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
@@ -74,7 +74,7 @@
               </template>
 
             </el-table-column>
-            <el-table-column prop="active" label="操作" width="80">
+            <el-table-column prop="active" label="操作" fixed="right" width="80">
               <template slot-scope="scope">
 
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
@@ -101,7 +101,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -400,7 +400,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -448,7 +448,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -528,7 +528,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 sortSet: [],
                 total: null,
                 classUuid: '',
@@ -550,8 +550,9 @@ export default {
                 // { 'prop': 'orderNum', 'label': '订单编号' },
                 // { 'prop': 'orderType', 'label': '订单类型' },
                 { 'prop': 'school', 'label': '分校' },
-                { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
+                { 'prop': 'seatName', 'label': '成单坐席' },
+                { 'prop': 'goodsName', 'label': '购买商品名称' },
             ],
             tabsList: [],
             classUuidDefault: '',
@@ -635,14 +636,14 @@ export default {
             notesCallForm: {
                 clueDataSUuid: '',
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },
             pcaa: null, //省市数据
             notesForm: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 studentUuid: '',
                 total: null,
             },
@@ -688,10 +689,17 @@ export default {
             agreeFlag: false,
 
             courseLists: [],
-            courseListsFlag: null
+            courseListsFlag: null,
+            studentsPageSize: null,
         }
     },
     created() {
+        this.studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(this.studentsPageSize) {
+            this.form.pageSize = Number(this.studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getClassTeaClassWait();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
@@ -858,7 +866,7 @@ export default {
             console.log(tab);
             this.handleCurrentUuid = this.form.classUuid = tab.name;
             this.form.currentPage = 1;
-            this.form.pageSize = 10;
+            this.form.pageSize = Number(this.studentsPageSize);
             this.getWaitStudentList();
         },
         classTeaGetWaitStudent(type, id) {
@@ -910,6 +918,8 @@ export default {
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
+            this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getWaitStudentList();
         },
 

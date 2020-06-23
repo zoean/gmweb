@@ -81,7 +81,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='total'
             :page-size='contentsForm.pageSize'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -166,7 +166,7 @@ export default {
             ],
             contentsForm: {
                 currentPage: 1, //当前页数
-                pageSize: 10, //每页显示条目个数	
+                pageSize: 20, //每页显示条目个数	
                 uuid: '', //科目的uuid
             },
             drawerTitle1: '添加目录',

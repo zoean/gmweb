@@ -82,7 +82,7 @@ export default {
       ],
       tableData: [],
       total: 0, //总数
-      pageSize: 10, //一页显示几条
+      pageSize: 20, //一页显示几条
       currentPage: 1, //当前页数
     };
   },

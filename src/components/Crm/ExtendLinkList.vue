@@ -123,7 +123,7 @@
             style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -150,7 +150,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 startTime: '',
                 endTime: '',
                 total: null,

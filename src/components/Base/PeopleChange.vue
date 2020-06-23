@@ -221,7 +221,7 @@ export default {
                 accountType: 0, //账号类型
                 currentPage: 1, //当前页数
                 name: '', //jq的姓名
-                pageSize: 10, //每页显示条目个数
+                pageSize: 20, //每页显示条目个数
                 userName: '', //jq的用户名	
             },
             total: null, //总条目数

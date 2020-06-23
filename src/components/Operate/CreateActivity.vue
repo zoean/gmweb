@@ -223,7 +223,7 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
       if (res.code === 0) {
         this.form.triggerPicture =
-          process.env.VUE_APP_FILE_JHWX + res.data.fileUrl;
+          '/file_api' + '/' + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }
@@ -232,7 +232,7 @@ export default {
       this.imageUrl2 = URL.createObjectURL(file.raw);
       if (res.code === 0) {
         this.form.activityPage =
-          process.env.VUE_APP_FILE_JHWX + res.data.fileUrl;
+          '/file_api' + '/' + res.data.fileUrl;
       } else {
         this.$message.error(res.data.msg);
       }

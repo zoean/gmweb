@@ -52,6 +52,23 @@
 
             </el-col>
 
+        </el-row>
+
+        <el-row style="margin-top: 16px;">
+
+            <el-col :span="8">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValue"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChangeValue"
+                    start-placeholder="开始时间（领取时间）"
+                    end-placeholder="结束时间（领取时间）">
+                </el-date-picker>
+            </el-col>
+
             <el-col :span="2">
                 <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
             </el-col>
@@ -139,7 +156,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -491,7 +508,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -539,7 +556,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -628,7 +645,7 @@ export default {
             getOrderForm: {},
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 sortSet: [],
                 total: null,
                 classTeaUuid: '',
@@ -640,8 +657,11 @@ export default {
                 name: '',
                 startTime: '',
                 endTime: '',
+                receiveStartTime: '',
+                receiveEndTime: ''
             },
             list: [],
+            dataPickerValue: [],
             columnList: [{
                 label: '班型'
             }],
@@ -747,7 +767,7 @@ export default {
             pcaa: null, //省市数据
             notesForm: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 studentUuid: '',
                 total: null,
             },
@@ -771,7 +791,7 @@ export default {
             notesCallForm: {
                 clueDataSUuid: '',
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },
@@ -822,9 +842,16 @@ export default {
 
             courseLists: [],
             courseListsFlag: null,
+            studentsPageSize: null,
         }
     },
     created() {
+        this.studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(this.studentsPageSize) {
+            this.form.pageSize = Number(this.studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getClassTeaClass();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
         this.enumByEnumNums(arr);
@@ -845,6 +872,15 @@ export default {
                 this.form.endTime = value.getTime();
             }else{
                 this.form.endTime = '';
+            }
+        },
+        datePickerChangeValue(value) {
+            if (value == null) {
+                this.form.receiveStartTime = '';
+                this.form.receiveEndTime = '';
+            }else{
+                this.form.receiveStartTime = value[0].getTime();
+                this.form.receiveEndTime = value[1].getTime();
             }
         },
         handleZuzhiChange(arr) {
@@ -1276,7 +1312,7 @@ export default {
         handleClassTabClick(tab, event) {
             this.form.classUuid = tab.name;
             this.form.currentPage = 1;
-            this.form.pageSize = 10;
+            this.form.pageSize = Number(this.studentsPageSize);
             this.getClassTeaStudent();
         },
         handleTabClick(tab) {
@@ -1336,6 +1372,7 @@ export default {
         handleSizeChange(index) {
             this.form.pageSize = index;
             this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getClassTeaStudent();
         },
         lookAgreement() {

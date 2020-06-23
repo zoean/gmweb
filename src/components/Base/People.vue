@@ -110,7 +110,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='total'
             :page-size='screenForm.pageSize'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -156,7 +156,7 @@ export default {
                 jobStatus: '', // 状态选择value
                 name: '', //姓名
                 orgUuidList: [], //组织唯一标识集合
-                pageSize: 10, //单页请求的数量
+                pageSize: 20, //单页请求的数量
                 roleUuid: '', //角色唯一标识
                 sortSet: [], //排序集合
                 startHiredDate: '',

@@ -13,6 +13,9 @@ import 'vue-area-linkage/dist/index.css';
 import VueAreaLinkage from 'vue-area-linkage';
 import './assets/js/rem'
 import '@/icons' // icon
+// import VueAudio from 'vue-audio-better'
+ 
+// Vue.use(VueAudio)
 
 Vue.use(ElementUI);
 Vue.use(AFTableColumn);

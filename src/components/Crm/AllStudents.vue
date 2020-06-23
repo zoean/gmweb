@@ -35,12 +35,25 @@
                 <el-input v-model="form.teaName" placeholder="请输入班主任姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 100%;"></el-input>
+            </el-col>
+
         </el-row>
 
         <el-row class="people-screen" type="flex" align="middle">
 
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            <el-col :span="8">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValue"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChangeValue"
+                    start-placeholder="开始时间（领取时间）"
+                    end-placeholder="结束时间（领取时间）">
+                </el-date-picker>
             </el-col>
 
             <el-col :span="5">
@@ -50,7 +63,7 @@
                     ref="cascader"
                     size="small"
                     style="width: 90%;"
-                    placeholder="请搜索或选择坐席组织架构"
+                    placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels='true'
                     :options="zuzhiOptions"
@@ -84,7 +97,7 @@
 
             </el-col>
 
-            <el-col :span="12">
+            <el-col :span="4">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -106,7 +119,7 @@
               :prop="item.prop"
               :label="item.label"
               :formatter="item.formatter"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'receiveTime' ? '180px' : ''"
+              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'receiveTime' ? '180px' : item.prop == 'goodsName' ? '220px' : ''"
               v-for="(item, index) in columnList"
               :key="index"
               >
@@ -119,7 +132,7 @@
               </template>
 
             </el-table-column>
-            <el-table-column prop="active" label="操作" width="80">
+            <el-table-column prop="active" label="操作" fixed="right" width="80">
               <template slot-scope="scope">
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
                 <svg-icon @click="moveStudentOne(scope.row)" icon-title="转移学员" icon-class="move" />
@@ -134,7 +147,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30]"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -451,7 +464,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -499,7 +512,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30]"
+                        :page-sizes="[10, 20, 30, 50]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -583,7 +596,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 classType: '',
                 examItemId: '',
                 examItemText: '',
@@ -596,8 +609,11 @@ export default {
                 stuId: '',
                 startTime: '',
                 endTime: '',
+                receiveStartTime: '',
+                receiveEndTime: ''
             },
             list: [],
+            dataPickerValue: [],
             totalFlag: false,
             columnList: [
                 { 'prop': 'name', 'label': '姓名' },
@@ -609,6 +625,7 @@ export default {
                 { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
                 { 'prop': 'receiveTime', 'label': '领取时间' },
+                { 'prop': 'goodsName', 'label': '购买商品名称' },
             ],
             drawerMove: false,
             directionMove: 'rtl',
@@ -733,14 +750,14 @@ export default {
             notesCallForm: {
                 clueDataSUuid: '',
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 userUuid: "",
                 total: null, //总条目数
             },
             pcaa: null, //省市数据
             notesForm: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 studentUuid: '',
                 total: null,
             },
@@ -791,6 +808,12 @@ export default {
         }
     },
     created() {
+        const studentsPageSize = localStorage.getItem('studentsPageSize');
+        if(studentsPageSize) {
+            this.form.pageSize = Number(studentsPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getSupStuList();
         this.getExamBasic();
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
@@ -800,6 +823,15 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
+        datePickerChangeValue(value) {
+            if (value == null) {
+                this.form.receiveStartTime = '';
+                this.form.receiveEndTime = '';
+            }else{
+                this.form.receiveStartTime = value[0].getTime();
+                this.form.receiveEndTime = value[1].getTime();
+            }
+        },
         datePickerChange(value) {
             // console.log(Array.isArray(value));
             console.log(value);
@@ -892,6 +924,7 @@ export default {
         handleSizeChange(index) {
             this.form.pageSize = index;
             this.form.currentPage = 1;
+            localStorage.setItem('studentsPageSize', index);
             this.getSupStuList();
         }, 
         getExamBasic() {

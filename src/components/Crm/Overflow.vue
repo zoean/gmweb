@@ -200,7 +200,8 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
-            :page-sizes="[10, 20, 30]"
+            :current-page="form.currentPage"
+            :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -239,7 +240,7 @@ export default {
         return {
             form: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 ruleNumberName: '', //规则编号分配组ID
                 startTime: '',
                 endTime: '',
@@ -291,6 +292,12 @@ export default {
         }
     },
     created() {
+        const seatDataPageSize = localStorage.getItem('seatDataPageSize');
+        if(seatDataPageSize) {
+            this.form.pageSize = Number(seatDataPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         this.getSpillPoolClueData();
         this.getExamBasic();
         let arr = [MJ_6];
@@ -456,6 +463,8 @@ export default {
         handleSizeChange(index) {
             console.log(index);
             this.form.pageSize = index;
+            this.form.currentPage = 1;
+            localStorage.setItem('seatDataPageSize', index);
             this.getSpillPoolClueData();
         },
         handleCurrentChange(index) {

@@ -90,8 +90,8 @@
                       :on-success="handleAvatarSuccess"
                       :before-upload="beforeAvatarUpload"
                     >
-                      <img v-if="!imageUrl" :src="imageUrl" class="avatar" style="width: 120px; height: 120px;" />
-                      <div style="width: 180px; height: 120px; border: 1px solid #e1e1e1; border-radius: 4px; padding-top: 20px; color: #606266; font-size: 12px;">
+                      <img v-if="imageUrl" :src="imageUrl" class="avatar" style="width: 120px; height: 120px;" />
+                      <div v-else style="width: 180px; height: 120px; border: 1px solid #e1e1e1; border-radius: 4px; padding-top: 20px; color: #606266; font-size: 12px;">
                           <p>样式请参考示例</p>
                           <p>请以钉钉手机号命名二维码</p>
                       </div>
@@ -145,7 +145,7 @@
                     <el-dropdown-menu slot="dropdown">
                       <!-- <el-dropdown-item @click.native="userInfo">个人资料</el-dropdown-item> -->
                       <el-dropdown-item @click.native="change_password">设置密码</el-dropdown-item>
-                      <!-- <el-dropdown-item @click.native="change_wx">设置微信</el-dropdown-item> -->
+                      <el-dropdown-item @click.native="change_wx">设置微信</el-dropdown-item>
                       <el-dropdown-item @click.native="change_phone">设置工作手机</el-dropdown-item>
                       <el-dropdown-item @click.native="logout">退出账号</el-dropdown-item>
                     </el-dropdown-menu>
@@ -237,7 +237,7 @@ export default {
             direction: 'rtl',
             notReadNumValue: 0,
             newsForm: {
-                pageSize: 1000,
+                pageSize: 2000,
                 currentPage: 1,
                 pageCount: 0,
                 readState: 0 //0是未读，1是已读
@@ -516,7 +516,7 @@ export default {
                 if(res.code == 200) {
                     this.form_phone.phone = res.data.workTel;
                     this.form_wx.wxId = res.data.wxId;
-                    this.form_wx.wxQrcode = this.imageUrl = res.data.wxQrcode;
+                    this.form_wx.wxQrcode = this.imageUrl = '/file_api' + '/' + res.data.wxQrcode;
                 }
             })
         },
@@ -652,9 +652,7 @@ export default {
           console.log(file.raw);
           this.imageUrl = URL.createObjectURL(file.raw);
           if (res.code === 0) {
-            this.form_wx.wxQrcode =
-                process.env.VUE_APP_FILE_JHWX + '/' + res.data.fileUrl;
-                // 'http://testfile.jhwx.com/' + res.data.fileUrl;
+            this.form_wx.wxQrcode = res.data.fileUrl;
             } else {
                 this.$message.error(res.data.msg);
             }
