@@ -144,6 +144,7 @@
             style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
+            :current-page="form.currentPage"
             :page-sizes="[10, 20, 30, 50]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
@@ -248,6 +249,12 @@ export default {
     //     }
     // },
     created() {
+        const seatDataPageSize = localStorage.getItem('seatDataPageSize');
+        if(seatDataPageSize) {
+            this.form.pageSize = Number(seatDataPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
         this.getAllUserClueData();
@@ -358,6 +365,8 @@ export default {
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
+            this.form.currentPage = 1;
+            localStorage.setItem('seatDataPageSize', index);
             this.getAllUserClueData();
         },
         changeDrawer(val){

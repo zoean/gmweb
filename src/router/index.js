@@ -25,7 +25,6 @@ import contactToday from '@/components/Crm/ContactToday'; //今日联系
 import sevenDay from '@/components/Crm/SevenDay'; //七日未联系
 import allDay from '@/components/Crm/AllDay'; //全部客户
 import completed from '@/components/Crm/Completed'; //已成单
-import crm from '@/components/Crm/Index';
 import recoverData from '@/components/Crm/RecoverData';
 import seatData from '@/components/Crm/SeatData';
 import overflow from '@/components/Crm/Overflow';
@@ -318,11 +317,6 @@ export default new Router({
             path:'/operate/activityA/pricedetail',
             name:'pricedetail',
             component:PriceDetail
-        },
-        {
-            path: '/crm',
-            name: 'crm',
-            component: crm
         },
         {
             path: '/404',

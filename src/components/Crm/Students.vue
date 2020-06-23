@@ -52,6 +52,23 @@
 
             </el-col>
 
+        </el-row>
+
+        <el-row style="margin-top: 16px;">
+
+            <el-col :span="8">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValue"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChangeValue"
+                    start-placeholder="开始时间（领取时间）"
+                    end-placeholder="结束时间（领取时间）">
+                </el-date-picker>
+            </el-col>
+
             <el-col :span="2">
                 <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
             </el-col>
@@ -640,8 +657,11 @@ export default {
                 name: '',
                 startTime: '',
                 endTime: '',
+                receiveStartTime: '',
+                receiveEndTime: ''
             },
             list: [],
+            dataPickerValue: [],
             columnList: [{
                 label: '班型'
             }],
@@ -852,6 +872,15 @@ export default {
                 this.form.endTime = value.getTime();
             }else{
                 this.form.endTime = '';
+            }
+        },
+        datePickerChangeValue(value) {
+            if (value == null) {
+                this.form.receiveStartTime = '';
+                this.form.receiveEndTime = '';
+            }else{
+                this.form.receiveStartTime = value[0].getTime();
+                this.form.receiveEndTime = value[1].getTime();
             }
         },
         handleZuzhiChange(arr) {

@@ -83,9 +83,9 @@
                 </el-date-picker>
             </el-col>
     
-            <!-- <el-col :span="4">
-                <el-input v-model="form.seatId" size="small" placeholder="请输入坐席工号" style="width: 90%;" clearable></el-input>
-            </el-col> -->
+            <el-col :span="4">
+                <el-input v-model="form.seatName" size="small" placeholder="请输入拨打人姓名" style="width: 90%;" clearable></el-input>
+            </el-col>
     
             <el-col :span="8">
                 <el-button type="primary" size="small" @click="timeClick">查询</el-button>
@@ -114,6 +114,12 @@
                 v-if="columnFlag"
             >
                 <template slot-scope="scope">
+                    <VueAudio 
+                        :theUrl="scope.row.recordFile" 
+                        v-if="scope.row.recordFile"
+                        theControlList="onlyOnePlaying noMuted noDownload noVolume"
+                    >
+                    </VueAudio>
                     <!-- <audio 
                         v-if="scope.row.recordFile"
                         @play="bofangClick(scope.row, scope.$index)"
@@ -123,12 +129,12 @@
                         preload="preload"
                         style="height: 30px; margin-top: 10px"
                     ></audio> -->
-                    <vue-audio
+                    <!-- <vue-audio
                         v-if="scope.row.recordFile"
                         :audio-source="scope.row.recordFile"
                         :width="430"
                         :html5='true'
-                    ></vue-audio>
+                    ></vue-audio> -->
                 </template>
             </af-table-column>
     
@@ -157,8 +163,12 @@
 import { getCallRecord } from '../../request/api';
 import { everyTimeList } from '../../assets/js/data'
 import { getTextByTime, timestampToTime, timeReturn } from '../../assets/js/common'
+import VueAudio from '../Share/VueAudio';
 export default {
     name: 'everyTime',
+    components: {
+        VueAudio
+    },
     data() {
         return {
             form: {
@@ -177,6 +187,7 @@ export default {
                 sortSet: [
                     {insert_time: 'DESC'}
                 ], //排序集合
+                seatName: '',
             },
             callStyleArr: [
                 { label: '外呼电话', value: 3 },
@@ -238,7 +249,7 @@ export default {
                             sll.insertTime = timestampToTime(sll.insertTime);
                             sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
                             if(sll.recordFile){
-                                this.columnWidth = 450;
+                                this.columnWidth = 360;
                                 this.columnFlag = true;
                             }
                         })
@@ -257,7 +268,7 @@ export default {
                 }
             })
         },
-        datePickerChange(value) {
+        datePickerChange(value) { 
             console.log(value);
             if (value == null) {
                 this.form.insertTimeStartTime = '';

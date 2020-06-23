@@ -35,12 +35,25 @@
                 <el-input v-model="form.teaName" placeholder="请输入班主任姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
+            <el-col :span="4">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 100%;"></el-input>
+            </el-col>
+
         </el-row>
 
         <el-row class="people-screen" type="flex" align="middle">
 
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            <el-col :span="8">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValue"
+                    type="datetimerange"
+                    range-separator="至"
+                    @change="datePickerChangeValue"
+                    start-placeholder="开始时间（领取时间）"
+                    end-placeholder="结束时间（领取时间）">
+                </el-date-picker>
             </el-col>
 
             <el-col :span="5">
@@ -50,7 +63,7 @@
                     ref="cascader"
                     size="small"
                     style="width: 90%;"
-                    placeholder="请搜索或选择坐席组织架构"
+                    placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels='true'
                     :options="zuzhiOptions"
@@ -84,7 +97,7 @@
 
             </el-col>
 
-            <el-col :span="12">
+            <el-col :span="4">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -596,8 +609,11 @@ export default {
                 stuId: '',
                 startTime: '',
                 endTime: '',
+                receiveStartTime: '',
+                receiveEndTime: ''
             },
             list: [],
+            dataPickerValue: [],
             totalFlag: false,
             columnList: [
                 { 'prop': 'name', 'label': '姓名' },
@@ -807,6 +823,15 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
+        datePickerChangeValue(value) {
+            if (value == null) {
+                this.form.receiveStartTime = '';
+                this.form.receiveEndTime = '';
+            }else{
+                this.form.receiveStartTime = value[0].getTime();
+                this.form.receiveEndTime = value[1].getTime();
+            }
+        },
         datePickerChange(value) {
             // console.log(Array.isArray(value));
             console.log(value);
