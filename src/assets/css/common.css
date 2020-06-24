@@ -14,7 +14,7 @@
   padding: 5px;
 }
 .el-tooltip__popper.is-dark{
-  opacity: 0.65;
+  opacity: 0.9;
 }
 .el-tooltip__popper[x-placement^=bottom] .popper__arrow{
   opacity: 0.95;

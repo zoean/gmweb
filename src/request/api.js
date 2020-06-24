@@ -50,11 +50,11 @@ export const getClassifyByParentUuid = '/api/knowledgeSystem/classify/getClassif
 export const updateClassify = '/api/knowledgeSystem/classify/updateClassify'; //更新分类接口
 export const sortNumber1 = '/api/knowledgeSystem/classify/sortNumber'; //分类移动位置
 
-export const addExamDirection = '/api/knowledgeSystem/examDirection/addExamDirection'; //新增考试方向
-export const deleteExamDirectionByUuid = '/api/knowledgeSystem/examDirection/deleteExamDirectionByUuid'; //删除考试方向
-export const getExamDirectionByUuid = '/api/knowledgeSystem/examDirection/getExamDirectionByUuid'; //获取考试方向信息
-export const updateExamDirection = '/api/knowledgeSystem/examDirection/updateExamDirection'; //更新考试方向
-export const sortNumber2 = '/api/knowledgeSystem/examDirection/sortNumber'; //考试方向移动位置
+export const addExamDirection = '/api/knowledgeSystem/examDirection/addExamDirection'; //新增考试项目
+export const deleteExamDirectionByUuid = '/api/knowledgeSystem/examDirection/deleteExamDirectionByUuid'; //删除考试项目
+export const getExamDirectionByUuid = '/api/knowledgeSystem/examDirection/getExamDirectionByUuid'; //获取考试项目信息
+export const updateExamDirection = '/api/knowledgeSystem/examDirection/updateExamDirection'; //更新考试项目
+export const sortNumber2 = '/api/knowledgeSystem/examDirection/sortNumber'; //考试项目移动位置
 export const addExamAndSubjectRelation = '/api/knowledgeSystem/examDirection/addExamAndSubjectRelation'; //新增考试项和科目的关系
 export const deleteExamAndSubjectRelation = '/api/knowledgeSystem/examDirection/deleteExamAndSubjectRelation'; //删除考试项和科目的关系
 export const getExamAndSubjectRelation = '/api/knowledgeSystem/examDirection/getExamAndSubjectRelation'; //查询考试项和科目的关系

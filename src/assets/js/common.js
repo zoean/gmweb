@@ -81,6 +81,18 @@ export const backType = (type) => {
     return str;
 }
 
+export const schoolType = (type) => {
+    let str = '';
+    if(type == 'jhwx'){
+        str = '慧众';
+    }else if(type == 'shengxuewangxiao'){
+        str = '胜学';
+    }else if(type == 'jhwxedu'){
+        str = '集团';
+    }
+    return str;
+}
+
 export const smoke_MJ_5 = (type) => {
     let str = '';
     if(type == '1'){

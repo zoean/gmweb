@@ -8,6 +8,7 @@
 
         <el-table
             :data="dataAlloList"
+            :key="Math.random()"
             v-loading="fullscreenLoading"
             style="width: 100%"
         >
@@ -169,6 +170,7 @@
             :title="drawerTitleLink"
             :visible.sync="drawerFlagLink"
             :direction="direction"
+            size="35%"
             :before-close="handleClose">
             <span class="bullets"></span>
             
@@ -183,44 +185,57 @@
                     </el-form-item>
 
 
-                    <el-form-item label="考试方向" prop="projectText">
+                    <el-form-item label="考试项目" prop="projectText">
                       
                         <el-autocomplete
+                            clearable
+                            size="small"
+                            ref="autocomplete"
                             class="inline-input"
                             style="width: 100%;"
                             v-model="ruleFormLink.projectText"
                             :fetch-suggestions="querySearch"
-                            placeholder="请输入内容"
+                            placeholder="请输入考试项目"
                             :trigger-on-focus="true"
                             @select="handleSelect"
-                            size="small"
+                            @clear="autocompleteClear"
                         ></el-autocomplete>
 
                     </el-form-item>
 
-                    <el-form-item label="来源渠道" prop="spread">
-                      
-                        <el-select v-model="ruleFormLink.spread" placeholder="请选择来源渠道" size="small">
-                            <el-option
-                              v-for="item in enumList['MJ-6']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="来源渠道" prop="spreadText">
 
+                        <el-autocomplete
+                            clearable
+                            size="small"
+                            ref="autocompleteSpread"
+                            class="inline-input"
+                            style="width: 100%;"
+                            v-model="ruleFormLink.spreadText"
+                            :fetch-suggestions="querySearchSpread"
+                            placeholder="请输入来源渠道"
+                            :trigger-on-focus="true"
+                            @select="handleSelectSpread"
+                            @clear="autocompleteClearSpread"
+                        ></el-autocomplete>
+                      
                     </el-form-item>
 
-                    <el-form-item label="推广账号" prop="acc">
-                      
-                        <el-select v-model="ruleFormLink.acc" placeholder="请选择推广账号" size="small">
-                            <el-option
-                              v-for="item in enumList['MJ-7']"
-                              :key="item.name"
-                              :label="item.name"
-                              :value="item.number">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="推广账号" prop="accText">
+
+                        <el-autocomplete
+                            clearable
+                            size="small"
+                            ref="autocompleteAcc"
+                            class="inline-input"
+                            style="width: 100%;"
+                            v-model="ruleFormLink.accText"
+                            :fetch-suggestions="querySearchAcc"
+                            placeholder="请输入来源渠道"
+                            :trigger-on-focus="true"
+                            @select="handleSelectAcc"
+                            @clear="autocompleteClearAcc"
+                        ></el-autocomplete>
 
                     </el-form-item>
 
@@ -230,6 +245,7 @@
                             <el-option
                               v-for="item in enumList['MJ-9']"
                               :key="item.name"
+                              v-if="item.enable"
                               :label="item.name"
                               :value="item.number">
                             </el-option>
@@ -344,17 +360,19 @@ export default {
                 ruleid: '',  //分配组Id
                 ruleName: '',  //分配组Name
                 acc: '',  //推广账号
+                accText: '',
                 spread: '',  //渠道
+                spreadText: '',
                 projectId: '',  //考试项 id
                 projectText: '',  //考试项 
                 // jqadmin: '', //jq账号
             },
             rulesLink: {
                 projectText: [
-                  { required: true, message: '请选择考试方向', trigger: 'change' }
+                  { required: true, message: '请选择考试项目', trigger: 'change' }
                 ],
-                spread: [
-                  { required: true, message: '请选择来源渠道', trigger: 'blur' }
+                spreadText: [
+                  { required: true, message: '请选择来源渠道', trigger: 'change' }
                 ],
                 // acc: [
                 //   { required: true, message: '请选择推广账号', trigger: 'blur' }
@@ -413,14 +431,11 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
-                    for (var i in res.data) {
-                        res.data[i].map(sll => {
-                            if(sll.enable == 0) {
-                                res.data[i] = removeEvery(sll, res.data[i]);
-                            }
-                        })
-                    }
                     this.enumList = res.data;
+                    for(let i in res.data) {
+                        this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
+                    }
+                    console.log(this.enumList);
                 }
             })
         },
@@ -459,11 +474,13 @@ export default {
             this.drawerFlagLink = true;
             this.ruleFormLink.ruleid = row.id; //分配组ID
             this.ruleFormLink.ruleName = row.name; //分配组Name
-            this.ruleFormLink.acc = '';
-            this.ruleFormLink.spread = '';
-            this.ruleFormLink.projectId = '';
+            this.ruleFormLink.accText = '';
+            this.ruleFormLink.spreadText = '';
             this.ruleFormLink.projectText = '';
             this.createLinkUrl = '';
+            this.$nextTick(() => {
+                this.$refs['ruleFormLink'].resetFields();
+            })
         },
         parentFn(payload) {
             this.drawerFlag2 = payload;
@@ -658,6 +675,18 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchSpread(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-6']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        querySearchAcc(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-7']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         createFilter(queryString) {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
@@ -667,6 +696,41 @@ export default {
             console.log(item);
             this.ruleFormLink.projectId = item.id;
             this.ruleFormLink.projectText = item.value;
+        },
+        handleSelectSpread(item) {
+            this.ruleFormLink.spread = item.number;
+            this.ruleFormLink.spreadText = item.value;
+        },
+        handleSelectAcc(item) {
+            this.ruleFormLink.acc = item.number;
+            this.ruleFormLink.accText = item.value;
+        },
+        autocompleteClearAcc() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteAcc.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.ruleFormLink.acc = '';
+                this.$refs.autocompleteAcc.focus();
+            })
+        },
+        autocompleteClearSpread() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteSpread.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.ruleFormLink.spread = '';
+                this.$refs.autocompleteSpread.focus();
+            })
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.ruleFormLink.projectId = '';
+                this.$refs.autocomplete.focus();
+            })
         },
         handleSelectExam(item) {
             console.log(item);

@@ -117,7 +117,7 @@
                     <VueAudio 
                         :theUrl="scope.row.recordFile" 
                         v-if="scope.row.recordFile"
-                        theControlList="onlyOnePlaying noMuted noDownload noVolume"
+                        theControlList="onlyOnePlaying noMuted noVolume"
                     >
                     </VueAudio>
                     <!-- <audio 
@@ -249,7 +249,7 @@ export default {
                             sll.insertTime = timestampToTime(sll.insertTime);
                             sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
                             if(sll.recordFile){
-                                this.columnWidth = 360;
+                                this.columnWidth = 400;
                                 this.columnFlag = true;
                             }
                         })

@@ -59,6 +59,7 @@
                                 <el-option
                                   v-for="item in enumList['MJ-1']"
                                   :key="item.name"
+                                  v-if="item.enable"
                                   :label="item.name"
                                   :value="item.number">
                                 </el-option>
@@ -81,6 +82,7 @@
                                 <el-option
                                   v-for="item in enumList['MJ-2']"
                                   :key="item.name"
+                                  v-if="item.enable"
                                   :label="item.name"
                                   :value="item.number">
                                 </el-option>
@@ -123,6 +125,7 @@
                                 <el-option
                                   v-for="item in enumList['MJ-3']"
                                   :key="item.name"
+                                  v-if="item.enable"
                                   :label="item.name"
                                   :value="item.number">
                                 </el-option>
@@ -173,6 +176,7 @@
                                 <el-option
                                   v-for="item in enumList['MJ-6']"
                                   :key="item.name"
+                                  v-if="item.enable"
                                   :label="item.name"
                                   :value="item.number">
                                 </el-option>
@@ -214,9 +218,7 @@
 
                 <div style="margin-top: 20px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
-                    <span> (</span>
-                    <span style="display: inline-block; width:20px; height: 10px;background: #F56C6C;"></span>
-                    <span>) </span>
+                    <span style="color: #F56C6C">（红色字体为无效数据）</span>
                 </div>
 
                 <el-table
@@ -226,6 +228,8 @@
                     >
                     <el-table-column
                       :prop="item.prop"
+                      :show-overflow-tooltip="true"
+                      :width="item.prop == 'tel'? '110px' : ''"
                       :label="item.label"
                       v-for="(item, index) in importDataListColumn"
                       :key="index"
@@ -452,13 +456,6 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
-                    for (var i in res.data) {
-                        res.data[i].map(sll => {
-                            if(sll.enable == 0) {
-                                res.data[i] = removeEvery(sll, res.data[i]);
-                            }
-                        })
-                    }
                     this.enumList = res.data;
                 }
             })

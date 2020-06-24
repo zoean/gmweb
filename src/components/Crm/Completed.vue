@@ -10,7 +10,7 @@
                         <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
                     </el-col>
                     <el-col :span="4">
-                        <el-button type="primary" size="small" @click="orderCallDataList">查 询</el-button>
+                        <el-button type="primary" size="small" @click="orderCallDataListClick">查 询</el-button>
                     </el-col>
                 </el-row>
 
@@ -165,7 +165,7 @@ import {
     getOrderCustomer
 } from '../../request/api';
 import Start from '../../components/Share/Start';
-import { timestampToTime, copyData } from '../../assets/js/common';
+import { timestampToTime, copyData, schoolType } from '../../assets/js/common';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'completed',
@@ -309,6 +309,7 @@ export default {
                 if(res.code == 200){
                     res.data.orderList.map(sll => {
                         sll.addTime = timestampToTime(Number(sll.addTime * 1000));
+                        sll.schoolName = schoolType(sll.schoolName);
                     })
                     this.userOrderList = res.data.orderList
                 }
@@ -356,6 +357,10 @@ export default {
         changeDrawer(val){
             // console.log(val);
             this.drawer = val;
+        },
+        orderCallDataListClick() {
+            this.form.currentPage = 1;
+            this.orderCallDataList();
         },
         orderCallDataList() {
             this.fullscreenLoading = true;

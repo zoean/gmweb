@@ -46,6 +46,7 @@
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
+                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
@@ -71,7 +72,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" @click="getRecoveryPoolDataList" size="small">查 询</el-button>
+                <el-button type="primary" @click="getRecoveryPoolDataListClick" size="small">查 询</el-button>
             </el-col>
             <el-col :span="16">
                 <el-row type="flex" justify="end">
@@ -336,13 +337,6 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
-                    for (var i in res.data) {
-                        res.data[i].map(sll => {
-                            if(sll.enable == 0) {
-                                res.data[i] = removeEvery(sll, res.data[i]);
-                            }
-                        })
-                    }
                     this.enumList = res.data;
                 }
             })
@@ -373,6 +367,10 @@ export default {
         changeDrawer(val){
             // console.log(val);
             this.drawer = val;
+        },
+        getRecoveryPoolDataListClick() {
+            this.form.currentPage = 1;
+            this.getRecoveryPoolDataList();
         },
         getRecoveryPoolDataList() {
             this.fullscreenLoading = true;

@@ -7,7 +7,7 @@
                 <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
             <el-col :span="5">
-                <el-button type="primary" size="small" @click="threeDaysNoCallDataList">查 询</el-button>
+                <el-button type="primary" size="small" @click="threeDaysNoCallDataListClick">查 询</el-button>
             </el-col>
         </el-row>
 
@@ -179,6 +179,10 @@ export default {
         },
         changeDrawer(val){
             this.drawer = val;
+        },
+        threeDaysNoCallDataListClick() {
+            this.form.currentPage = 1;
+            this.threeDaysNoCallDataList();
         },
         threeDaysNoCallDataList() {
             this.fullscreenLoading = true;
