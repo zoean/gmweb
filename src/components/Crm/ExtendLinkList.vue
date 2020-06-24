@@ -37,7 +37,7 @@
                     style="width: 90%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
-                    placeholder="请输入考试方向"
+                    placeholder="请输入考试项目"
                     :trigger-on-focus="true"
                     @select="handleSelect"
                     @clear="autocompleteClear"
@@ -51,6 +51,7 @@
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
+                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
@@ -64,6 +65,7 @@
                     <el-option
                       v-for="item in enumList['MJ-7']"
                       :key="item.name"
+                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
@@ -82,7 +84,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" size="small" @click="getPopularizeUrl">查 询</el-button>
+                <el-button type="primary" size="small" @click="getPopularizeUrlClick">查 询</el-button>
             </el-col>
 
         </el-row>
@@ -97,7 +99,7 @@
               :prop="item.prop"
               :label="item.label"
               :show-overflow-tooltip="item.prop == 'url' ? true : false"
-              :width="item.prop == 'copy' ? '60px' : ''"
+              :width="item.prop == 'copy' ? '60px' : item.prop == 'url' ? '200px' : item.prop == 'userName' ? '100px' : ''"
               v-for="(item, index) in columnList"
               :key="index"
               >
@@ -155,7 +157,7 @@ export default {
                 endTime: '',
                 total: null,
                 accId: '', //推广账号
-                examItemsId: '', //考试方向
+                examItemsId: '', //考试项目
                 ruleId: '', //分配组Id
                 spreadId: '', //渠道
                 userName: '', //创建人
@@ -170,7 +172,7 @@ export default {
                 { 'prop': 'userName', 'label': '创建人' },
                 { 'prop': 'acc', 'label': '推广账号' },
                 { 'prop': 'rule', 'label': '分配组' },
-                { 'prop': 'examItems', 'label': '考试方向' },
+                { 'prop': 'examItems', 'label': '考试项目' },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '创建时间' },
             ],
@@ -196,13 +198,6 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
-                    for (var i in res.data) {
-                        res.data[i].map(sll => {
-                            if(sll.enable == 0) {
-                                res.data[i] = removeEvery(sll, res.data[i]);
-                            }
-                        })
-                    }
                     this.enumList = res.data;
                 }
             })
@@ -215,6 +210,10 @@ export default {
                     this.ruleNumberNameList = res.data;
                 }
             })
+        },
+        getPopularizeUrlClick() {
+            this.form.currentPage = 1;
+            this.getPopularizeUrl();
         },
         getPopularizeUrl() {
             this.fullscreenLoading = true;

@@ -164,6 +164,7 @@
                                         <el-option
                                           v-for="item in enumList['MJ-1']"
                                           :key="item.name"
+                                          v-if="item.enable"
                                           :label="item.name"
                                           :value="item.number">
                                         </el-option>
@@ -192,6 +193,7 @@
                                         <el-option
                                           v-for="item in enumList['MJ-2']"
                                           :key="item.name"
+                                          v-if="item.enable"
                                           :label="item.name"
                                           :value="item.number">
                                         </el-option>
@@ -212,6 +214,7 @@
                                         <el-option
                                           v-for="item in enumList['MJ-3']"
                                           :key="item.name"
+                                          v-if="item.enable"
                                           :label="item.name"
                                           :value="item.number">
                                         </el-option>
@@ -296,6 +299,7 @@
                                         <el-option
                                           v-for="item in enumList['MJ-11']"
                                           :key="item.name"
+                                          v-if="item.enable"
                                           :label="item.name"
                                           :value="item.number">
                                         </el-option>
@@ -315,6 +319,7 @@
                                         <el-option
                                           v-for="item in enumList['MJ-10']"
                                           :key="item.name"
+                                          v-if="item.enable"
                                           :label="item.name"
                                           :value="item.number">
                                         </el-option>
@@ -758,13 +763,6 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
-                    for (var i in res.data) {
-                        res.data[i].map(sll => {
-                            if(sll.enable == 0) {
-                                res.data[i] = removeEvery(sll, res.data[i]);
-                            }
-                        })
-                    }
                     this.enumList = res.data;
                 }
             })

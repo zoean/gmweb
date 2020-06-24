@@ -298,7 +298,7 @@ export default {
             rules1: {},
             listForm: {
                 currentPage: 1, //当前页数
-                examDirectionUuid: '', //考试方向的uuid
+                examDirectionUuid: '', //考试项目的uuid
                 pageSize: 20, //每页显示条目个数
                 likeName: '', //文字搜索（编号、标题、链接）
                 sortSet: [], //排序集合
@@ -322,7 +322,7 @@ export default {
                 courseDataList: [], //辅助资料集合
                 coverUrl: '', //封面链接
                 coverName: '',
-                examDirectionUuid: '', //考试方向的uuid
+                examDirectionUuid: '', //考试项目的uuid
                 fileSize: 0, //视频大小（单位：M）
                 length: '', //视频长度（单位：秒）
                 lengthText: '', //视频长度（单位：秒）

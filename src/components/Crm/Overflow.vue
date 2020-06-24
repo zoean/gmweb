@@ -46,6 +46,7 @@
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.name"
+                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
@@ -71,7 +72,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-button type="primary" size="small" @click="getSpillPoolClueData">查 询</el-button>
+                <el-button type="primary" size="small" @click="getSpillPoolClueDataClick">查 询</el-button>
             </el-col>
 
             <el-col :span="4">
@@ -316,6 +317,10 @@ export default {
                 }
             })
         },
+        getSpillPoolClueDataClick() {
+            this.form.currentPage = 1;
+            this.getSpillPoolClueData();
+        },
         getSpillPoolClueData() {
             this.fullscreenLoading = true;
             this.$smoke_post(getSpillPoolClueData, this.form).then(res => {
@@ -355,13 +360,6 @@ export default {
                 numberList: arr
             }).then(res => {
                 if(res.code == 200){
-                    for (var i in res.data) {
-                        res.data[i].map(sll => {
-                            if(sll.enable == 0) {
-                                res.data[i] = removeEvery(sll, res.data[i]);
-                            }
-                        })
-                    }
                     this.enumList = res.data;
                 }
             })

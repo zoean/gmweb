@@ -314,7 +314,7 @@ export default {
                 selectuuid: '', //选择一级大类
                 classifyUuid: '', //考试分类的uuid
                 emphasisStatus: 0, //重点的状态（1：勾选 0：未勾选）
-                name: '', //考试方向名称
+                name: '', //考试项目名称
                 categoryName: '', //考试项目品类
                 uuid: '',
                 userOpenStatus: 0, //用户开放的状态（1：开放 0：未开放）
