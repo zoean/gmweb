@@ -218,9 +218,7 @@
 
                 <div style="margin-top: 20px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
-                    <span> (</span>
-                    <span style="display: inline-block; width:20px; height: 10px;background: #F56C6C;"></span>
-                    <span>) </span>
+                    <span style="color: #F56C6C">（红色字体为无效数据）</span>
                 </div>
 
                 <el-table
@@ -230,6 +228,8 @@
                     >
                     <el-table-column
                       :prop="item.prop"
+                      :show-overflow-tooltip="true"
+                      :width="item.prop == 'tel'? '110px' : ''"
                       :label="item.label"
                       v-for="(item, index) in importDataListColumn"
                       :key="index"

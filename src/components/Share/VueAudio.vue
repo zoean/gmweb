@@ -24,17 +24,17 @@
       
       <!-- <span v-show="!controlList.noSpeed" type="text" style="margin-left: 10px;cursor: pointer;" @click="changeSpeed">{{audio.speed | transSpeed}}</span> -->
 
-      <span type="info" style="margin-left: 10px;cursor: pointer;">{{ audio.currentTime | formatSecond}}</span>
+      <span type="info" style="margin-left: 10px;">{{ audio.currentTime | formatSecond}}</span>
 
       <el-slider v-show="!controlList.noProcess" v-model="sliderTime" :format-tooltip="formatProcessToolTip" @change="changeCurrentTime" class="slider"></el-slider>
       
-      <span type="info" style="margin-left: 10px;cursor: pointer;">{{ audio.maxTime | formatSecond }}</span>
+      <span type="info" style="margin-left: 10px;">{{ audio.maxTime | formatSecond }}</span>
 
       <span v-show="!controlList.noMuted" type="text" @click="startMutedOrNot">{{audio.muted | transMutedOrNot}}</span>
 
       <el-slider v-show="!controlList.noVolume" v-model="volume" :format-tooltip="formatVolumeToolTip" @change="changeVolume" class="slider"></el-slider>
       
-      <a :href="url" v-show="!controlList.noDownload" target="_blank" class="download" download>下载</a>
+      <a :href="url" v-show="!controlList.noDownload" target="_blank" class="download" download><i class="el-icon-download" style="font-size: 20px; position: relative; top:2px;"></i></a>
     </div>
   </div>
 </template>
@@ -245,7 +245,7 @@
   }
   .download {
     color: #666666;
-    margin-left: 15px;
+    margin-left: 10px;
   }
   .dn{
     display: none;
