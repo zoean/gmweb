@@ -236,6 +236,7 @@ export default {
                         if(res.data.result){
                             this.callLogUuid = res.data.callLogUuid;
                             this.clueDataSUuid = scope.clueDataSUuid;
+                            this.userCDARUuid = scope.userCDARUuid;
                             this.drawer = true;
                             this.followFlag = true;
                             this.comMode = '手机外呼';
@@ -276,6 +277,7 @@ export default {
                         if(res.data.result){
                             this.callLogUuid = res.data.callLogUuid;
                             this.clueDataSUuid = scope.clueDataSUuid;
+                            this.userCDARUuid = scope.userCDARUuid;
                             this.drawer = true;
                             this.followFlag = true;
                             this.comMode = '座机外呼';
