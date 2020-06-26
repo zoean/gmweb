@@ -660,20 +660,20 @@ export default {
                 runOutPromise2: '', //截杀承诺
             },
             rules: {
-                classOffer: [
-                  { required: true, message: '请输入班型报价', trigger: 'blur' },
-                ],
-                classType: [
-                  { required: true, message: '请选择主推班型', trigger: 'blur' }
-                ],
+                // classOffer: [
+                //   { required: true, message: '请输入班型报价', trigger: 'blur' },
+                // ],
+                // classType: [
+                //   { required: true, message: '请选择主推班型', trigger: 'blur' }
+                // ],
                 nextContactTime: [
                   { required: true, message: '请选择下次联系时间', trigger: 'blur' }
                 ],
-                runOutPromise: [
-                  { required: true, message: '请输入截杀承诺', trigger: 'blur' }
-                ],
+                // runOutPromise: [
+                //   { required: true, message: '请输入截杀承诺', trigger: 'blur' }
+                // ],
                 intentionLevel: [
-                  { required: true, message: '请选择意向等级', trigger: 'blur' }
+                  { required: true, message: '请选择意向等级', trigger: 'change' }
                 ],
             },
             notesForm: {
