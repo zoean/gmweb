@@ -202,14 +202,18 @@
                             <el-col :span="6">
                                 <el-form-item label="主推班型" prop="classType">
 
-                                    <el-select v-model="ruleForm.classType" placeholder="请选择主推班型" size="small">
-                                        <el-option
-                                          v-for="item in classTypeList"
-                                          :key="item.name"
-                                          :label="item.name"
-                                          :value="item.id">
-                                        </el-option>
-                                    </el-select>
+                                    <el-autocomplete
+                                        clearable
+                                        size="small"
+                                        style="width: 100%;"
+                                        ref="autocompleteMain"
+                                        v-model="ruleForm.classTypeText"
+                                        :fetch-suggestions="querySearchMain"
+                                        placeholder="请输入主推班型"
+                                        :trigger-on-focus="true"
+                                        @select="handleSelectMain"
+                                        @clear="autocompleteClearMain"
+                                    ></el-autocomplete>
 
                                 </el-form-item>
                             </el-col>
@@ -248,13 +252,16 @@
                                 <el-form-item label="兴趣班型" prop="classType2Text">
 
                                     <el-autocomplete
+                                        clearable
+                                        size="small"
                                         style="width: 100%;"
+                                        ref="autocomplete"
                                         v-model="ruleForm.classType2Text"
                                         :fetch-suggestions="querySearch"
                                         placeholder="请输入兴趣班型"
                                         :trigger-on-focus="true"
                                         @select="handleSelect"
-                                        size="small"
+                                        @clear="autocompleteClear"
                                     ></el-autocomplete>
 
                                 </el-form-item>
@@ -647,6 +654,7 @@ export default {
                 classOffer: '', //班型报价
                 classOffer2: '', //班型报价
                 classType: '', //主推班型
+                classTypeText: '',
                 classType2: '', //兴趣班型
                 classType2Text: '', //兴趣班型Text
                 comMode: '', //沟通方式
@@ -822,6 +830,9 @@ export default {
                 schoolName: this.schoolId
             }).then(res => {
                 if(res.code == 200) {
+                    res.data.map(sll => {
+                        sll['value'] = sll.name;
+                    })
                     this.classTypeList = res.data;
                 }
             })
@@ -1099,6 +1110,13 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchMain(queryString, cb) {
+            console.log(this.classTypeList);
+            var restaurants = this.classTypeList;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         createFilter(queryString) {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
@@ -1107,6 +1125,28 @@ export default {
         handleSelect(item) {
             this.ruleForm.classType2 = item.id;
             this.ruleForm.classType2Text = item.value;
+        },
+        handleSelectMain(item) {
+            this.ruleForm.classType = item.id;
+            this.ruleForm.classTypeText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.ruleForm.classType2 = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
+        autocompleteClearMain() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteMain.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.ruleForm.classType = '';
+                this.$refs.autocompleteMain.focus();
+            })
         },
     },
     mounted() {

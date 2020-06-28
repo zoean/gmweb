@@ -2,7 +2,7 @@
     <el-main class="index-main">
         <el-tabs v-model="activeName" @tab-click="handleTabsClick">
 
-            <el-tab-pane label="手动录入" name="first">
+            <el-tab-pane label="手动录入" name="first" v-loading="fullscreenLoading">
 
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
 
@@ -387,6 +387,7 @@ export default {
             validDataNum: '',
             inValidDataNum: '',
             validDataNumFlag: false,
+            fullscreenLoading: false,
             readExcelClueData: readExcelClueData
         }
     },
@@ -543,18 +544,30 @@ export default {
             })
         },
         entryClueData() {
+            this.fullscreenLoading = true;
             this.$smoke_post(entryClueData, this.ruleForm).then(res => {
                 if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '手动录入线索成功'
-                    })
-                    this.$nextTick(() => {
-                        this.$refs['ruleForm'].resetFields();
-                    }) 
-                    this.ruleForm.provinceCity = ["", ""];
-                    this.ruleForm.city = "";
-                    this.ruleForm.province = "";
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                            this.$message({
+                            type: 'success',
+                            message: '手动录入线索成功'
+                        })
+                        this.$nextTick(() => {
+                            this.$refs['ruleForm'].resetFields();
+                        }) 
+                        this.ruleForm.provinceCity = ["", ""];
+                        this.ruleForm.city = "";
+                        this.ruleForm.province = "";
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
                 }
             })
         },

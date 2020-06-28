@@ -25,6 +25,9 @@
                     :filter-node-method="filterNode"
                     @check="handleCheckChange"
                     :props="defaultProps">
+                    <span class="span-ellipsis" slot-scope="{ node, data }">
+		                <span :title="node.label">{{ node.label }}</span>
+	                </span>
                 </el-tree>
 
             </el-col>
@@ -171,3 +174,13 @@ export default {
     },
 }
 </script>
+
+<style lang="less" scoped>
+.span-ellipsis {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+</style>

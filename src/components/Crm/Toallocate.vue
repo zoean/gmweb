@@ -21,20 +21,34 @@
               type="selection"
               width="45">
             </el-table-column>
-            <el-table-column
+            <af-table-column
               :prop="item.prop"
               :label="item.label"
               v-for="(item, index) in columnList"
               :key="index"
               :width="item.width"
               >
-            </el-table-column>
+            </af-table-column>
             <!-- <el-table-column prop="active" label="操作">
               <template slot-scope="scope">
                   <el-button @click="customerDetails(scope.row)" type="text" >客户详情</el-button>
               </template>
             </el-table-column> -->
         </el-table>
+
+        <el-pagination
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            style="text-align: right; margin-top: 20px;"
+            :total='form.total'
+            :page-size='form.pageSize'
+            :current-page="form.currentPage"
+            :page-sizes="[10, 20, 30, 50]"
+            :hide-on-single-page="totalFlag"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </el-pagination>
 
         <el-drawer
             :title="drawerTitle"
@@ -129,14 +143,18 @@ export default {
             form: {
                 tel: "", //手机号
                 userUuid: "",
+                currentPage: 1,
+                pageSize: 20,
+                total: null,
             },
             list: [],
+            totalFlag: false,
             columnList: [
                 { 'prop': 'tel', 'label': '手机号码', 'width': 150 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
-                { 'prop': 'examItem', 'label': '所属项目' },
+                { 'prop': 'examItem', 'label': '所属项目', 'width': 150 },
                 // { 'prop': 'userName', 'label': '所属坐席' },
-                { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
+                { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
                 { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'width': 230 },
@@ -160,11 +178,27 @@ export default {
         }
     },
     created() {
-        this.getUserRPCDList();
+        const seatDataPageSize = localStorage.getItem('seatDataPageSize');
+        if(seatDataPageSize) {
+            this.form.pageSize = Number(seatDataPageSize);
+        }else{
+            this.form.pageSize = 20;
+        }
         const userUuid = localStorage.getItem("userUuid");
         this.form.userUuid = userUuid;
+        this.getUserRPCDList();
     },
     methods: {
+        handleCurrentChange(index) {
+            this.form.currentPage = index;
+            this.getUserRPCDList();
+        },
+        handleSizeChange(index) {
+            this.form.pageSize = index;
+            this.form.currentPage = 1;
+            localStorage.setItem('seatDataPageSize', index);
+            this.getUserRPCDList();
+        }, 
         customerDetails( scope ) {
             this.drawer = true;
             this.getClueDataDetails(scope.clueDataSUuid);
@@ -203,6 +237,7 @@ export default {
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
                         })
                         this.list = res.data.list;
+                        this.form.total = res.data.total;
                     }, 300);
                 }else{
                     setTimeout(() => {
