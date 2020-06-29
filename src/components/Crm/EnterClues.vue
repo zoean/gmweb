@@ -2,7 +2,7 @@
     <el-main class="index-main">
         <el-tabs v-model="activeName" @tab-click="handleTabsClick">
 
-            <el-tab-pane label="手动录入" name="first">
+            <el-tab-pane label="手动录入" name="first" v-loading="fullscreenLoading">
 
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
 
@@ -103,7 +103,7 @@
                         </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                    <!-- <el-col :span="6">
                         <el-form-item label="考试项目" prop="examItemText">
                 
                             <el-autocomplete
@@ -116,7 +116,7 @@
                             ></el-autocomplete>
 
                         </el-form-item>
-                    </el-col>
+                    </el-col> -->
 
                     <el-col :span="6">
                         <el-form-item label="取证目的" prop="evidencePurpose">
@@ -140,18 +140,18 @@
                         </el-form-item>
                     </el-col>
 
-                </el-row>
-
-
-                <el-row>
-
                     <el-col :span="6">
                         <el-form-item label="客户微信" prop="wx">
                             <el-input v-model="ruleForm.wx" size="small" placeholder="请输入客户微信"></el-input>
                         </el-form-item>
                     </el-col>
 
-                    <el-col :span="6">
+                </el-row>
+
+
+                <el-row>
+
+                    <!-- <el-col :span="6">
 
                         <el-form-item label="选择分配组" prop="clueRuleNumber">
 
@@ -166,9 +166,9 @@
 
                         </el-form-item>
 
-                    </el-col>
+                    </el-col> -->
 
-                    <el-col :span="6">
+                    <!-- <el-col :span="6">
 
                         <el-form-item label="来源渠道" prop="spread">
                       
@@ -181,6 +181,16 @@
                                   :value="item.number">
                                 </el-option>
                             </el-select>
+
+                        </el-form-item>
+
+                    </el-col> -->
+
+                    <el-col :span="12">
+
+                        <el-form-item label="推广链接" prop="url">
+                      
+                            <el-input v-model="ruleForm.url" size="small" placeholder="请输入推广链接"></el-input>
 
                         </el-form-item>
 
@@ -298,7 +308,7 @@ import {
     readExcelClueData
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, urlFun } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6 } from '../../assets/js/data';
 export default {
     name: 'enterClues',
@@ -327,19 +337,22 @@ export default {
             },
             rules: {
                 tel: [
-                  { required: true, message: '请输入客户手机', trigger: 'blur' },
+                  { pattern:/^1\d{10}$/, required: true, message: '请输入客户手机', trigger: 'blur' },
                 ],
                 name: [
                   { required: true, message: '请输入客户姓名', trigger: 'blur' }
                 ],
-                examItemText: [
-                  { required: true, message: '请选择考试项目', trigger: 'change' }
-                ],
-                clueRuleNumber: [
-                  { required: true, message: '请选择分配组', trigger: 'change' }
-                ],
-                spread: [
-                  { required: true, message: '请选择来源渠道', trigger: 'change' }
+                // examItemText: [
+                //   { required: true, message: '请选择考试项目', trigger: 'change' }
+                // ],
+                // clueRuleNumber: [
+                //   { required: true, message: '请选择分配组', trigger: 'change' }
+                // ],
+                // spread: [
+                //   { required: true, message: '请选择来源渠道', trigger: 'change' }
+                // ],
+                url: [
+                  { required: true, message: '请输入推广链接', trigger: 'blur' }
                 ],
             },
             importDataRules: {
@@ -387,6 +400,7 @@ export default {
             validDataNum: '',
             inValidDataNum: '',
             validDataNumFlag: false,
+            fullscreenLoading: false,
             readExcelClueData: readExcelClueData
         }
     },
@@ -501,7 +515,18 @@ export default {
             this.$refs[formName].validate((valid) => {
               if (valid) {
                 console.log(this.ruleForm);
-                this.entryClueData();
+                let obj = urlFun(this.ruleForm.url);
+                if(obj.project && obj.ruleid && obj.spread){
+                    this.ruleForm.examItemId = obj.project;
+                    this.ruleForm.clueRuleNumber = obj.ruleid;
+                    this.ruleForm.spread = obj.spread;
+                    this.entryClueData();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: '推广链接错误，请重新输入'
+                    })
+                }
               } else {
                 console.log('error submit!!');
                 return false;
@@ -543,18 +568,30 @@ export default {
             })
         },
         entryClueData() {
+            this.fullscreenLoading = true;
             this.$smoke_post(entryClueData, this.ruleForm).then(res => {
                 if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '手动录入线索成功'
-                    })
-                    this.$nextTick(() => {
-                        this.$refs['ruleForm'].resetFields();
-                    }) 
-                    this.ruleForm.provinceCity = ["", ""];
-                    this.ruleForm.city = "";
-                    this.ruleForm.province = "";
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                            this.$message({
+                            type: 'success',
+                            message: '手动录入线索成功'
+                        })
+                        this.$nextTick(() => {
+                            this.$refs['ruleForm'].resetFields();
+                        }) 
+                        this.ruleForm.provinceCity = ["", ""];
+                        this.ruleForm.city = "";
+                        this.ruleForm.province = "";
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
                 }
             })
         },

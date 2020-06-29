@@ -4,7 +4,7 @@
         <div class="people-title"><i class="el-icon-back" title="返回列表页" @click="goback"></i>员工数据权限管理</div>
 
 
-        <el-row class="tab">
+        <el-row class="tab" v-loading="fullscreenLoading">
 
             <el-col :span="6" class="tab-left">
 
@@ -464,7 +464,8 @@ export default {
             radioId: '',
             cellStyle: {
                 'text-align': 'center'
-            }
+            },
+            fullscreenLoading: false,
         }
     },
     created() {
@@ -506,74 +507,86 @@ export default {
             this.backList[0].attrData = [];
             this.dataSetList[0].attrData = [];
             this.schoolList[0].attrData = [];
+            this.fullscreenLoading = true;
             this.$smoke_post(getPermission, {
                 userUuid: this.userUuid
             }).then(res => {
                 if(res.code == 200) {
-                    this.avatar = res.data.user.avatar;
-                    this.userList[0].attrText = res.data.user.name;
-                    this.userList[1].attrText = res.data.user.accountNumber;
-                    this.userList[2].attrText = res.data.user.orgList.join(' - ');
-                    this.userList[3].attrText = res.data.user.roleList.join('，');
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.avatar = res.data.user.avatar;
+                        this.userList[0].attrText = res.data.user.name;
+                        this.userList[1].attrText = res.data.user.accountNumber;
+                        this.userList[2].attrText = res.data.user.orgList.join(' - ');
+                        this.userList[3].attrText = res.data.user.roleList.join('，');
 
-                    // seatList
-                    this.json = peopleTreeFunc(res.data.orgList);
-                    this.treeData = this.json.arr;
-                    this.seatList[0].attrData = this.json.flagArr = quchong(this.json.flagArr, 'uuid');
-                    console.log(this.json.arr);
-                    if(this.json.flagArr.length > 0) {
-                        this.json.flagArr.map(sll => {
-                            this.seatList[0].attrText += sll.name + '，'
-                            keysArr.push(sll.uuid);
-                        })
-                    }
-                    if (this.seatList[0].attrText.length > 0) {
-                        this.seatList[0].attrText = this.seatList[0].attrText.substr(0, this.seatList[0].attrText.length - 1);
-                    }
-                    this.defaultExpandedKeys = this.defaultCheckedKeys = keysArr;
-
-                    //examItem
-                    this.jsonExam = ExamTreeFunc([res.data.examItem]);
-                    this.treeDataExam = this.jsonExam.arr;
-                    this.backList[0].attrData = this.jsonExam.flagArr = quchong(this.jsonExam.flagArr, 'uuid');
-                    console.log(this.jsonExam.flagArr);
-                    if(this.jsonExam.flagArr.length > 0) {
-                        this.jsonExam.flagArr.map(sll => {
-                            this.backList[0].attrText += sll.name + '，'
-                            keysArrExam.push(sll.uuid);
-                        })
-                    }
-                    if (this.backList[0].attrText.length > 0) {
-                        this.backList[0].attrText = this.backList[0].attrText.substr(0, this.backList[0].attrText.length - 1);
-                    }
-                    this.defaultExpandedKeysExam = this.defaultCheckedKeysExam = keysArrExam;
-
-                    //clueDataList
-                    this.jsonSet = SetTreeFunc([res.data.clueDataList]);
-                    this.treeDataSet = this.jsonSet.arr;
-                    this.dataSetList[0].attrData = this.jsonSet.flagArr = quchong(this.jsonSet.flagArr, 'uuid');
-                    console.log(this.jsonSet.flagArr);
-                    if(this.jsonSet.flagArr.length > 0) {
-                        this.jsonSet.flagArr.map(sll => {
-                            this.dataSetList[0].attrText += sll.name + '，'
-                            keysArrSet.push(sll.uuid);
-                        })
-                    }
-                    if (this.dataSetList[0].attrText.length > 0) {
-                        this.dataSetList[0].attrText = this.dataSetList[0].attrText.substr(0, this.dataSetList[0].attrText.length - 1);
-                    }
-                    this.defaultExpandedKeysSet = this.defaultCheckedKeysSet = keysArrSet;
-
-                    this.tableDataSchool = res.data.schoolList;
-                    res.data.schoolList.map(sll => {
-                        if(sll.flag) {
-                            this.radioId = sll.name
-                            this.schoolList[0].attrText += sll.name + '，';
-                            // this.tableDataSchoolFlagArr.push(sll);
-                            this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
+                        // seatList
+                        this.json = peopleTreeFunc(res.data.orgList);
+                        this.treeData = this.json.arr;
+                        this.seatList[0].attrData = this.json.flagArr = quchong(this.json.flagArr, 'uuid');
+                        console.log(this.json.arr);
+                        if(this.json.flagArr.length > 0) {
+                            this.json.flagArr.map(sll => {
+                                this.seatList[0].attrText += sll.name + '，'
+                                keysArr.push(sll.uuid);
+                            })
                         }
-                    });
-                    this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+                        if (this.seatList[0].attrText.length > 0) {
+                            this.seatList[0].attrText = this.seatList[0].attrText.substr(0, this.seatList[0].attrText.length - 1);
+                        }
+                        this.defaultExpandedKeys = this.defaultCheckedKeys = keysArr;
+
+                        //examItem
+                        this.jsonExam = ExamTreeFunc([res.data.examItem]);
+                        this.treeDataExam = this.jsonExam.arr;
+                        this.backList[0].attrData = this.jsonExam.flagArr = quchong(this.jsonExam.flagArr, 'uuid');
+                        console.log(this.jsonExam.flagArr);
+                        if(this.jsonExam.flagArr.length > 0) {
+                            this.jsonExam.flagArr.map(sll => {
+                                this.backList[0].attrText += sll.name + '，'
+                                keysArrExam.push(sll.uuid);
+                            })
+                        }
+                        if (this.backList[0].attrText.length > 0) {
+                            this.backList[0].attrText = this.backList[0].attrText.substr(0, this.backList[0].attrText.length - 1);
+                        }
+                        this.defaultExpandedKeysExam = this.defaultCheckedKeysExam = keysArrExam;
+
+                        //clueDataList
+                        this.jsonSet = SetTreeFunc([res.data.clueDataList]);
+                        this.treeDataSet = this.jsonSet.arr;
+                        this.dataSetList[0].attrData = this.jsonSet.flagArr = quchong(this.jsonSet.flagArr, 'uuid');
+                        console.log(this.jsonSet.flagArr);
+                        if(this.jsonSet.flagArr.length > 0) {
+                            this.jsonSet.flagArr.map(sll => {
+                                this.dataSetList[0].attrText += sll.name + '，'
+                                keysArrSet.push(sll.uuid);
+                            })
+                        }
+                        if (this.dataSetList[0].attrText.length > 0) {
+                            this.dataSetList[0].attrText = this.dataSetList[0].attrText.substr(0, this.dataSetList[0].attrText.length - 1);
+                        }
+                        this.defaultExpandedKeysSet = this.defaultCheckedKeysSet = keysArrSet;
+
+                        this.tableDataSchool = res.data.schoolList;
+                        res.data.schoolList.map(sll => {
+                            if(sll.flag) {
+                                this.radioId = sll.name
+                                this.schoolList[0].attrText += sll.name + '，';
+                                // this.tableDataSchoolFlagArr.push(sll);
+                                this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
+                            }
+                        });
+                        this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
                 }
             })
         },

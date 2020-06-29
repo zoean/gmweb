@@ -1,3 +1,7 @@
+import {
+  Message
+} from 'element-ui'
+
 export function isExternal(path) {
     return /^(https?:|mailto:|tel:)/.test(path)
 }
@@ -776,7 +780,20 @@ export const copyData = (data) => {
     oInput.remove();
 }
 
-
+export const urlFun = (url) => {
+    if(url.split("?")[1] != undefined){
+        var params = url.split("?")[1].split("&");
+        var obj = {};
+        params.map(v => obj[v.split("=")[0]] = v.split("=")[1]);
+        console.log(obj);
+        return obj;
+    }else {
+        Message({
+            message: '推广链接错误，请重新输入',
+            type: 'error'
+        })
+    }
+}
 
 
 
