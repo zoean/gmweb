@@ -731,6 +731,33 @@ export const SetTreeFunc = (arr) => {
     return json;
 }
 
+export let SpreadArrExp = []; //默认展开推广账号数组
+export const SpreadTreeFunc = (arr) => {
+    let json = {
+        'arr': null,
+        'flagArr': null,
+    }
+    for(var i in arr){
+        if(arr[i].list != undefined){
+            if(arr[i].flag) {
+                SpreadArrExp.push({ name: arr[i].name, type: arr[i].type, uuid: arr[i].uuid});
+            }
+            arr[i].list.map(sll => {
+                if(sll.flag){
+                    // console.log(sll.userUuid);
+                    SpreadArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
+                }
+            })
+            SpreadTreeFunc(arr[i].list);
+        }else{
+            break;
+        }
+    }
+    json.arr = arr;
+    json.flagArr = SpreadArrExp;
+    return json;
+}
+
 //菜单level code转汉字
 export const levelFunc = (arr) => {
     for(var i in arr) {
@@ -795,11 +822,44 @@ export const urlFun = (url) => {
     }
 }
 
+export const input_mode_Text = (text) => {
+    let str;
+    switch (text) {
+        case 0:
+            str = '线上';
+            break;
+        case 1:
+            str = '录入';
+            break;
+    }
+    return str;
+}
 
+export const isAllocationText = (text) => {
+    let str;
+    switch (text) {
+        case 0:
+            str = '未分配';
+            break;
+        case 1:
+            str = '已分配';
+            break;
+    }
+    return str;
+}
 
-
-
-
+export const dialStateText = (text) => {
+    let str;
+    switch (text) {
+        case 0:
+            str = '未拨打';
+            break;
+        case 1:
+            str = '已拨打';
+            break;
+    }
+    return str;
+}
 
 
 

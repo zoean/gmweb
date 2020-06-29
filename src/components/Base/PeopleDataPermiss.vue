@@ -154,6 +154,36 @@
 
                 </el-row>
 
+
+                <div class="tab-right-title">推广线索</div>
+
+                <div class="tab-xian"></div>
+
+                <el-row style="margin-bottom: 20px;">
+                
+                    <el-col style="position: relative;">
+                    
+                        <el-table
+                            :data="spreadList"
+                            :show-header="false"
+                            >
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                :width="item.prop == 'attr' ? '150' : ''"
+                                v-for="(item, index) in userColumnList"
+                                :key="index"
+                                >
+                            </el-table-column>
+                        </el-table>
+
+                    </el-col>
+
+                    <el-button plain size="small" @click="editSpreadClick" style="position: absolute; right: 40px; top: -44px; width: 116px;">修改推广账号</el-button>
+
+                </el-row>
+
+
                 <div style="text-align: center;">
 
                     <el-button type="primary" size="small" @click="onSubmit">保存</el-button>
@@ -378,12 +408,77 @@
 
         </el-drawer>
 
+        <el-drawer
+            :title="drawerTitle4"
+            :visible.sync="drawer4"
+            :direction="direction4"
+            size="50%"
+            :before-close="handleClose">
+            <span class="bullets"></span>
+
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                <el-col :span="10">
+
+                    <el-input
+                        placeholder="输入您想查找的推广账号"
+                        style="margin-bottom: 10px;"
+                        v-model="filterTextSpread">
+                    </el-input>
+
+                    <el-tree
+                        ref="treeSpread"
+                        :data="treeDataSpread"
+                        show-checkbox
+                        style="margin-left: 0px;"
+                        node-key="uuid"
+                        :check-strictly="true"
+                        :default-expanded-keys="defaultExpandedKeysSpread"
+                        :default-checked-keys="defaultCheckedKeysSpread"
+                        :filter-node-method="filterNodeSpread"
+                        @check="handleCheckChangeSpread"
+                        :props="defaultPropsSpread"
+                    >
+                    </el-tree>
+
+                </el-col>
+
+                <el-col :span="13" :offset="1">
+                
+                    <el-table
+                        border
+                        :data="tableDataSpread"
+                    >
+
+                        <el-table-column
+                            :prop="item.props"
+                            :label="item.label"
+                            v-for="(item, index) in columnList1"
+                            :key="index">
+                        </el-table-column>
+
+                        <el-table-column prop="limitLimit" label="操作">
+                            <template slot-scope="scope">
+                                <svg-icon @click="handleDeleteClickSpread(scope.row)" icon-title="移除" icon-class="del" />
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+
+                    <el-button type="primary" style="margin: 20px 0;" @click="addSpread">确定</el-button>
+
+                </el-col>
+
+            </el-row>
+
+        </el-drawer>
+
     </el-main>
 </template>
 
 <script>
 import { getPermission, getPermissionUpdate } from '../../request/api';
-import { peopleTreeFunc, peopleArrExp, removeEvery, ExamArrExp, ExamTreeFunc, quchong, SetArrExp, SetTreeFunc } from '../../assets/js/common';
+import { peopleTreeFunc, peopleArrExp, removeEvery, ExamArrExp, ExamTreeFunc, quchong, SetArrExp, SpreadArrExp, SetTreeFunc, SpreadTreeFunc } from '../../assets/js/common';
 export default {
     name: 'peopleDataPermiss',
     data() {
@@ -408,6 +503,9 @@ export default {
             ],
             dataSetList: [
                 { attr: '管理分配组', attrData: [], attrText: '' },
+            ],
+            spreadList: [
+                { attr: '管理推广账号', attrData: [], attrText: '' },
             ],
             userColumnList: [
                 { 'prop': 'attr', 'label': 'attr' },
@@ -455,6 +553,19 @@ export default {
               children: 'list',
               label: 'name',
             },
+            drawerTitle4: '设置推广账号',
+            drawer4: false,
+            direction4: 'rtl',
+            filterTextSpread: '',
+            treeDataSpread: [],
+            jsonSpread: null,
+            defaultExpandedKeysSpread: [],
+            defaultCheckedKeysSpread: [],
+            tableDataSpread: [],
+            defaultPropsSpread: {
+              children: 'list',
+              label: 'name',
+            },
             onSubmitList: [],
             drawer0: false,
             drawerTitle0: '选择分校',
@@ -494,19 +605,23 @@ export default {
             let keysArr = [];
             let keysArrExam = [];
             let keysArrSet = [];
+            let keysArrSpread = [];
             
             peopleArrExp.length = 0;
             ExamArrExp.length = 0;
             SetArrExp.length = 0;
+            SpreadArrExp.length = 0;
 
             this.seatList[0].attrText = '';
             this.backList[0].attrText = '';
             this.dataSetList[0].attrText = '';
             this.schoolList[0].attrText = '';
+            this.spreadList[0].attrText = '';
             this.seatList[0].attrData = [];
             this.backList[0].attrData = [];
             this.dataSetList[0].attrData = [];
             this.schoolList[0].attrData = [];
+            this.spreadList[0].attrData = [];
             this.fullscreenLoading = true;
             this.$smoke_post(getPermission, {
                 userUuid: this.userUuid
@@ -551,6 +666,22 @@ export default {
                             this.backList[0].attrText = this.backList[0].attrText.substr(0, this.backList[0].attrText.length - 1);
                         }
                         this.defaultExpandedKeysExam = this.defaultCheckedKeysExam = keysArrExam;
+
+                        //spread
+                        this.jsonSpread = SpreadTreeFunc([res.data.accList]);
+                        this.treeDataSpread = this.jsonSpread.arr;
+                        this.spreadList[0].attrData = this.jsonSpread.flagArr = quchong(this.jsonSpread.flagArr, 'uuid');
+                        console.log(this.jsonSpread.flagArr);
+                        if(this.jsonSpread.flagArr.length > 0) {
+                            this.jsonSpread.flagArr.map(sll => {
+                                this.spreadList[0].attrText += sll.name + '，'
+                                keysArrSpread.push(sll.uuid);
+                            })
+                        }
+                        if (this.spreadList[0].attrText.length > 0) {
+                            this.spreadList[0].attrText = this.spreadList[0].attrText.substr(0, this.spreadList[0].attrText.length - 1);
+                        }
+                        this.defaultExpandedKeysSpread = this.defaultCheckedKeysSpread = keysArrSpread;
 
                         //clueDataList
                         this.jsonSet = SetTreeFunc([res.data.clueDataList]);
@@ -631,9 +762,20 @@ export default {
                 SetArrExp.length = 0; //将common.js里的SetArrExp数组重新重置为空
             })
         },
+        getCheckedNodesSpread() {
+            let arr = [];
+            this.$nextTick(() => {
+                console.log(this.$refs.treeSpread.getCheckedNodes());
+                this.$refs.treeSpread.getCheckedNodes().map(sll => {
+                    arr.push(sll);
+                })
+                this.tableDataSpread = arr;
+                SpreadArrExp.length = 0; //将common.js里的SpreadArrExp数组重新重置为空
+            })
+        },
         onSubmit() {
             console.log(this.tableDataSchoolFlagArr)
-            this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.tableDataSchoolFlagArr);
+            this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.tableDataSchoolFlagArr, this.spreadList[0].attrData);
             // this.onSubmitList.push()
             console.log(this.onSubmitList)
             this.$smoke_post(getPermissionUpdate, {
@@ -674,6 +816,10 @@ export default {
             this.drawer3 = true;
             this.getCheckedNodesSet();
         },
+        editSpreadClick() {
+            this.drawer4 = true;
+            this.getCheckedNodesSpread();
+        },
         handleClose(done) {
             done();
         },
@@ -689,6 +835,10 @@ export default {
             if (!value) return true;
             return data.name.indexOf(value) !== -1;
         },
+        filterNodeSpread(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
+        },
         handleCheckChange(data, value) {
             console.log(data);
             console.log(value);
@@ -699,6 +849,9 @@ export default {
         },
         handleCheckChangeSet(data, value) {
             this.getCheckedNodesSet();
+        },
+        handleCheckChangeSpread(data, value) {
+            this.getCheckedNodesSpread();
         },
         addPeople() {
             this.seatList[0].attrText = '';
@@ -735,6 +888,18 @@ export default {
             }
             this.drawer3 = false;
             console.log(this.dataSetList);
+        },
+        addSpread() {
+            this.spreadList[0].attrText = '';
+            this.spreadList[0].attrData = this.$refs.treeSpread.getCheckedNodes();
+            this.$refs.treeSpread.getCheckedNodes().map(sll => {
+                this.spreadList[0].attrText += sll.name + '，'
+            })
+            if (this.spreadList[0].attrText.length > 0) {
+                this.spreadList[0].attrText = this.spreadList[0].attrText.substr(0, this.spreadList[0].attrText.length - 1);
+            }
+            this.drawer4 = false;
+            console.log(this.spreadList);
         },
         addSchool() {
 
@@ -805,6 +970,20 @@ export default {
                 this.$refs.treeSet.setCheckedKeys(arrKey, true);
                 this.tableDataSet = arr;
             })
+        },
+        handleDeleteClickSpread(row) {
+            console.log(row);
+            let arrKey = []; //当前分配组的key的集合
+            let arr = []; //当前分配组的Nodes的集合
+            arr = removeEvery(row, this.$refs.treeSpread.getCheckedNodes());
+            console.log(arr);
+            arr.map(sll => {
+                arrKey.push(sll.uuid);
+            })
+            this.$nextTick(() => {
+                this.$refs.treeSpread.setCheckedKeys(arrKey, true);
+                this.tableDataSpread = arr;
+            })
         }
     },
     mounted() {
@@ -819,6 +998,9 @@ export default {
         },
         filterTextSet(val) {
             this.$refs.treeSet.filter(val);
+        },
+        filterTextSpread(val) {
+            this.$refs.treeSpread.filter(val);
         },
         radioId(val){
             this.tableDataSchoolFlagArr.name = val

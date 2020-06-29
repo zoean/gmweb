@@ -39,6 +39,8 @@ import registered from '@/components/Crm/Registered';
 import headMaster from '@/components/Crm/HeadMaster';
 import allStudents from '@/components/Crm/AllStudents';
 import fieldManagement from '@/components/Crm/FieldManagement';
+import manageClues from '@/components/Crm/ManageClues';
+import peopleClues from '@/components/Crm/PeopleClues';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -234,6 +236,18 @@ export default new Router({
             path: '/crm/eduAdmin/allStudents',
             name: 'allStudents',
             component: allStudents
+        },
+
+        {
+            path: '/crm/dataClues/manageClues',
+            name: 'manageClues',
+            component: manageClues
+        },
+
+        {
+            path: '/crm/dataClues/peopleClues',
+            name: 'peopleClues',
+            component: peopleClues
         },
 
         {
