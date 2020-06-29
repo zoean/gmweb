@@ -333,6 +333,7 @@ export default {
                 twoTel: "",
                 work: "",
                 workingLife: "",
+                acc: "",
                 wx: ""
             },
             rules: {
@@ -516,10 +517,11 @@ export default {
               if (valid) {
                 console.log(this.ruleForm);
                 let obj = urlFun(this.ruleForm.url);
-                if(obj.project && obj.ruleid && obj.spread){
+                if(obj.project && obj.ruleid && obj.spread && obj.acc){
                     this.ruleForm.examItemId = obj.project;
                     this.ruleForm.clueRuleNumber = obj.ruleid;
                     this.ruleForm.spread = obj.spread;
+                    this.ruleForm.acc = obj.acc;
                     this.entryClueData();
                 }else{
                     this.$message({

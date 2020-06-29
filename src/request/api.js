@@ -166,6 +166,7 @@ export const readExcelKnow = '/api/knowledgeSystem/knowExcel/readExcelKnow'; //�
 export const getRecoveryPoolDataList = '/api/phone/clueData/getRecoveryPoolDataList'; //获取回收池的线索数据
 export const getUserRPCDList = '/api/phone/clueData/getUserRPCDList'; //获取待分配回收池线索数据
 export const obtainRPCD = '/api/phone/clueData/obtainRPCD'; //员工获取回收池线索数据
+export const getExteClueData = '/api/phone/clueData/getExteClueData'; //获取推广人员的线索数据
 
 //渠道管理
 export const channelGetList = '/api/phone/channel/getList'; //渠道列表

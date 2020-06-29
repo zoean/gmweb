@@ -174,8 +174,8 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="毕业专业" prop="graduationMajor">
-                                    <el-input v-model="customerForm.graduationMajor" size="small" ></el-input>
+                                <el-form-item label="所在省市" prop="provinceCity">
+                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
                                 </el-form-item>
                             </el-col>
 
@@ -269,8 +269,8 @@
                         <el-row>
 
                             <el-col :span="6">
-                                <el-form-item label="所在省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                                <el-form-item label="毕业专业" prop="graduationMajor">
+                                    <el-input v-model="customerForm.graduationMajor" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
