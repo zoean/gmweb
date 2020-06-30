@@ -44,7 +44,7 @@
                   style="width: 90%;"
                   v-model="form.accText"
                   :fetch-suggestions="querySearchAcc"
-                  placeholder="请输入来源渠道"
+                  placeholder="请输入推广账号"
                   :trigger-on-focus="true"
                   @select="handleSelectAcc"
                   @clear="autocompleteClearAcc"
@@ -121,6 +121,7 @@
                 :prop="item.prop"
                 :label="item.label"
                 v-for="(item, index) in columnList"
+                :width="item.prop == 'examItemName' ? '150px' : ''"
                 :key="index">
 
                 <template slot-scope="scope">
@@ -262,7 +263,7 @@ export default {
             this.form.examItemText = item.value;
         },
         handleSelectSpread(item) {
-            this.form.spread = item.number;
+            this.form.spreadId = item.number;
             this.form.spreadText = item.value;
         },
         handleSelectAcc(item) {
@@ -283,7 +284,7 @@ export default {
                 this.$refs.autocompleteSpread.$children
                     .find(c => c.$el.className.includes('el-input'))
                     .blur();
-                this.form.spread = '';
+                this.form.spreadId = '';
                 this.$refs.autocompleteSpread.focus();
             })
         },
@@ -302,10 +303,10 @@ export default {
             }).then(res => {
                 if(res.code == 200){
                     this.enumList = res.data;
-                    for(let i in res.data) {
-                        this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
-                    }
-                    console.log(this.enumList);
+                    // for(let i in res.data) {
+                    //     this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
+                    // }
+                    // console.log(this.enumList);
                 }
             })
         },
