@@ -100,6 +100,9 @@ export const MJ_9 = 'MJ-9'; //jq平台账号
 export const MJ_10 = 'MJ-10'; //学籍状态
 export const MJ_11 = 'MJ-11'; //学习状况
 export const MJ_12 = 'MJ-12'; //跟进类型
+export const MJ_13 = 'MJ-13'; //内部投诉渠道
+export const MJ_14 = 'MJ-14'; //外部投诉渠道
+export const MJ_15 = 'MJ-15'; //报考条件
 
 //溢出池和回收池 分配至人
 export const zuzhiUuid = '2a39b4c564494c58a0b15512a62e7014';
@@ -113,7 +116,64 @@ export const websockHttp = process.env.VUE_APP_WEB_SOCKET + '/websocket/msg/';
 //销售部组织id
 export const showid = '544230511a59461c8ed6c82ce2355e17';
 
-
+export const nationAll = [
+    {id:1 ,value:'汉族'},
+	{id:2 ,value:'蒙古族'},
+	{id:3 ,value:'回族'},
+	{id:4 ,value:'藏族'},
+	{id:5 ,value:'维吾尔族'},
+	{id:6 ,value:'苗族'},
+	{id:7 ,value:'彝族'},
+	{id:8 ,value:'壮族'},
+	{id:9 ,value:'布依族'},
+	{id:10,value:'朝鲜族'},
+	{id:11,value:'满族'},
+	{id:12,value:'侗族'},
+	{id:13,value:'瑶族'},
+	{id:14,value:'白族'},
+	{id:15,value:'土家族'},
+	{id:16,value:'哈尼族'},
+	{id:17,value:'哈萨克族'},
+	{id:18,value:'傣族'},
+	{id:19,value:'黎族'},
+	{id:20,value:'傈僳族'},
+	{id:21,value:'佤族'},
+	{id:22,value:'畲族'},
+	{id:23,value:'高山族'},
+	{id:24,value:'拉祜族'},
+	{id:25,value:'水族'},
+	{id:26,value:'东乡族'},
+	{id:27,value:'纳西族'},
+	{id:28,value:'景颇族'},
+	{id:29,value:'柯尔克孜族'},
+	{id:30,value:'土族'},
+	{id:31,value:'达翰尔族'},
+	{id:32,value:'么佬族'},
+	{id:33,value:'羌族'},
+	{id:34,value:'布朗族'},
+	{id:35,value:'撒拉族'},
+	{id:36,value:'毛南族'},
+	{id:37,value:'仡佬族'},
+	{id:38,value:'锡伯族'},
+	{id:39,value:'阿昌族'},
+	{id:40,value:'普米族'},
+	{id:41,value:'塔吉克族'},
+	{id:42,value:'怒族'},
+	{id:43,value:'乌孜别克族'},
+	{id:44,value:'俄罗斯族'},
+	{id:45,value:'鄂温克族'},
+	{id:46,value:'德昂族'},
+	{id:47,value:'保安族'},
+	{id:48,value:'裕固族'},
+	{id:49,value:'京族'},
+	{id:50,value:'塔塔尔族'},
+	{id:51,value:'独龙族'},
+	{id:52,value:'鄂伦春族'},
+	{id:53,value:'赫哲族'},
+	{id:54,value:'门巴族'},
+	{id:55,value:'珞巴族'},
+	{id:56,value:'基诺族'},
+]
 
 
 

@@ -86,8 +86,8 @@
                     type="datetimerange"
                     range-separator="至"
                     @change="datePickerChange"
-                    start-placeholder="入库开始时间"
-                    end-placeholder="入库结束时间">
+                    start-placeholder="入库时间"
+                    end-placeholder="入库时间">
                 </el-date-picker>
             </el-col>
     
@@ -129,6 +129,12 @@
                 </template>
 
             </af-table-column>
+
+            <el-table-column prop="active" label="操作" fixed="right" width="60">
+              <template slot-scope="scope">
+                <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+              </template>
+            </el-table-column>
     
         </el-table>
     
@@ -145,6 +151,22 @@
             @size-change="handleSizeChange"
         >
         </el-pagination>
+
+        <CustomerNotes 
+            v-if="drawer"
+            @changeDrawer="changeDrawer"
+            :followFlag='followFlag' 
+            :drawer.sync='drawer'
+            :userUuid='form.userUuid'
+            :schoolId='schoolId'
+            :examItem='examItem'
+            :clueDataSUuid='clueDataSUuid'
+            :userCDARUuid='userCDARUuid'
+            :comMode='comMode'
+            :callLogUuid='callLogUuid'
+            @fatherDataList='getExteClueData'
+        >
+        </CustomerNotes>
 
     </el-main>
 </template>
@@ -216,6 +238,15 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
             fullscreenLoading: false,
+
+            followFlag: false,
+            drawer: false,
+            clueDataSUuid: '',
+            callLogUuid: '',
+            comMode: '',
+            schoolId: '',
+            examItem: '',
+            userCDARUuid: '',
         }
     },
     created() {
@@ -225,6 +256,16 @@ export default {
         this.enumByEnumNums(arr);
     },
     methods: {
+        changeDrawer(val){
+            // console.log(val);
+            this.drawer = val;
+        },
+        //客户信息
+        customerInfo(row) {
+            this.drawer = true;
+            this.clueDataSUuid = row.clueDataSUuid;
+            this.followFlag = false;
+        },
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {

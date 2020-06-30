@@ -138,18 +138,18 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户姓名" prop="name">
-                                    <el-input v-model="customerForm.name" size="small" ></el-input>
+                                    <el-input v-model="customerForm.name" placeholder="请输入客户姓名" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
-                                    <el-input v-model="customerForm.age" size="small" ></el-input>
+                                    <el-input v-model="customerForm.age" placeholder="请输入客户年龄" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="第二电话" prop="twoTel">
-                                    <el-input v-model="customerForm.twoTel" size="small" ></el-input>
+                                    <el-input v-model="customerForm.twoTel" placeholder="请输入第二电话" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -181,7 +181,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户工作" prop="work">
-                                    <el-input v-model="customerForm.work" size="small" ></el-input>
+                                    <el-input v-model="customerForm.work" placeholder="请输入客户工作" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -242,7 +242,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户微信" prop="wx">
-                                    <el-input v-model="customerForm.wx" size="small" ></el-input>
+                                    <el-input v-model="customerForm.wx" placeholder="请输入客户微信" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -265,12 +265,124 @@
 
                         </el-row>
 
+                        <el-row>
+
+                            <el-col :span="6">
+                                <el-form-item label="身份证号" prop="idcardNo">
+                                    <el-input v-model="customerForm.idcardNo" placeholder="请输入身份证号码" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+
+                                <el-form-item label="所属民族" prop="nationText">
+
+                                    <el-autocomplete
+                                        clearable
+                                        style="width: 100%;"
+                                        size="small"
+                                        ref="autocompleteNation"
+                                        v-model="customerForm.nationText"
+                                        :fetch-suggestions="querySearchNation"
+                                        placeholder="请输入所属民族"
+                                        :trigger-on-focus="true"
+                                        @select="handleSelectNation"
+                                        @clear="autocompleteClearNation"
+                                    ></el-autocomplete>
+
+                                </el-form-item>
+
+                            </el-col>
+
+                            <el-col :span="6">
+
+                                <el-form-item label="报考条件" prop="applyExam">
+
+                                    <el-select v-model="customerForm.applyExam" placeholder="请选择报考条件" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-15']"
+                                          :key="item.name"
+                                          v-if="item.enable"
+                                          :label="item.name"
+                                          :value="Number(item.number)">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="报考省市" prop="provinceCity">
+                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" @change="applyCityChange" :data="pcaa"></area-cascader>
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
+
+                        <el-row>
+
+                            <el-col :span="6">
+                                <el-form-item label="毕业院校" prop="graduationSchool">
+                                    <el-input v-model="customerForm.graduationSchool" placeholder="请输入毕业院校" size="small"></el-input>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+
+                                <el-form-item label="毕业时间" prop="graduationTime">
+                                    <el-date-picker
+                                      size="small"
+                                      style="width: 100%;"
+                                      v-model="customerForm.graduationTime"
+                                      type="month"
+                                      @change="graduationTimeChange"
+                                      placeholder="请选择毕业时间">
+                                    </el-date-picker>
+                                </el-form-item>
+
+                            </el-col>
+                            
+                            <el-col :span="6">
+
+                                <el-form-item label="备案金" prop="filingFee">
+
+                                    <el-select v-model="customerForm.filingFee" placeholder="请选择缴纳备案金" size="small" >
+                                        <el-option
+                                          v-for="item in filingFeeList"
+                                          :key="item.name"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="学籍状态" prop="studentStatus">
+
+                                    <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-10']"
+                                          :key="item.name"
+                                          v-if="item.enable"
+                                          :label="item.name"
+                                          :value="item.number">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+                            </el-col>
+
+                        </el-row>
 
                         <el-row>
 
                             <el-col :span="6">
                                 <el-form-item label="毕业专业" prop="graduationMajor">
-                                    <el-input v-model="customerForm.graduationMajor" size="small" ></el-input>
+                                    <el-input v-model="customerForm.graduationMajor" placeholder="请输入毕业专业" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -311,22 +423,6 @@
                         </el-row>
                         
                         <el-row>
-
-                            <el-col :span="6">
-                                <el-form-item label="学籍状态" prop="studentStatus">
-
-                                    <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
-                                        <el-option
-                                          v-for="item in enumList['MJ-10']"
-                                          :key="item.name"
-                                          v-if="item.enable"
-                                          :label="item.name"
-                                          :value="item.number">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-                            </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="考期" prop="examPeriod">
@@ -525,7 +621,7 @@ import {
 import axios from 'axios'
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, showid, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'newStudents',
@@ -566,6 +662,10 @@ export default {
                 {'createTime': ''},
                 {'school': ''},
             ],
+            filingFeeList: [
+                { 'name': '否', 'number': 0 },
+                { 'name': '是', 'number': 1 },
+            ],
             handleCurrentUuid: '',
 
             zuzhiOptions: [],
@@ -597,11 +697,24 @@ export default {
                 workingLife: '', //工作年限
                 wx: "",
                 seatName: '',
-                orgNameListText: ''
+                orgNameListText: '',
+
+                idcardNo: '',
+                nation: '',
+                nationText: '',
+                graduationSchool: '',
+                graduationTime: '',
+                applyExam: '',
+                applyProvince: '',
+                applyCity: '',
+                applyProvinceCity: [],
+                filingFee: ''
             },
 
             rules: {
-                
+                idcardNo: [
+                  { pattern:/(^\d{15}$)|bai(^\d{18}$)|(^\d{17}(\d|X|x)$)/, required: false, message: "请输入正确的身份证号", trigger: "blur" }
+                ],
             },
             getOrderForm: {},
             drawerTitle: '学员详情',
@@ -706,7 +819,7 @@ export default {
             this.form.pageSize = 20;
         }
         this.getClassTeaClassWait();
-        let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12];
+        let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getSchoolList();
@@ -978,6 +1091,15 @@ export default {
                     this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
                     this.customerForm.wx = res.data.wx;
                     this.customerForm.orgNameListText = getTextByJs(res.data.orgNameList.reverse()); //reverse()倒序排列
+
+                    this.customerForm.idcardNo = res.data.iDCardNo;
+                    this.customerForm.nation = res.data.nation;
+                    this.customerForm.nationText = res.data.nation;
+                    this.customerForm.graduationSchool = res.data.graduationSchool;
+                    this.customerForm.graduationTime = timestampToTime(Number(res.data.graduationTime));
+                    this.customerForm.applyExam = res.data.applyExam;
+                    this.customerForm.applyProvinceCity = (res.data.applyProvince == "" && res.data.applyCity == "") ? [] : [res.data.applyProvince, res.data.applyCity];
+                    this.customerForm.filingFee = res.data.filingFee;
                 }
             })
         },
@@ -1092,7 +1214,39 @@ export default {
                 }
             })
             window.open(href, '_blank');
-        }
+        },
+        querySearchNation(queryString, cb) {
+            var restaurants = nationAll;
+            console.log(restaurants);
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelectNation(item) {
+            this.customerForm.nation = item.value;
+            this.customerForm.nationText = item.value;
+        },
+        autocompleteClearNation() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteNation.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.customerForm.nation = '';
+                this.$refs.autocompleteNation.focus();
+            })
+        },
+        applyCityChange() {
+            this.customerForm.applyProvince = this.customerForm.applyProvinceCity[0];
+            this.customerForm.applyCity = this.customerForm.applyProvinceCity[1];
+        },
+        graduationTimeChange() {
+            this.customerForm.graduationTime = this.customerForm.graduationTime.getTime();
+        },
     },
     mounted() {
         

@@ -221,7 +221,7 @@ export default {
             },
             rules_phone: {
                 phone: [
-                  { pattern:/^1\d{10}$/, message: "请输入合法手机号", trigger: "blur" }
+                  { pattern:/^1\d{10}$/, message: "请输入正确的手机号", trigger: "blur" }
                 ],
             },
             form_wx: {
