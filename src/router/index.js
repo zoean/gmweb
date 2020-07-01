@@ -13,6 +13,7 @@ import peopleChange from '@/components/Base/PeopleChange';
 import peopledataPermiss from '@/components/Base/PeopleDataPermiss';
 import role from '@/components/Base/Role';
 import zuzhi from '@/components/Base/Zuzhi';
+import userRecord from '@/components/Base/UserRecord';
 
 import timeData from '@/components/Crm/TimeData';
 import everyTime from '@/components/Crm/EveryTime';
@@ -116,6 +117,11 @@ export default new Router({
             path: '/base/zuzhi',
             name: 'zuzhi',
             component: zuzhi
+        },
+        {
+            path: '/base/userRecord',
+            name: 'userRecord',
+            component: userRecord
         },
 
         {

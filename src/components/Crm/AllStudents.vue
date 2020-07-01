@@ -50,6 +50,7 @@
                     v-model="dataPickerValue"
                     type="datetimerange"
                     range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
                     @change="datePickerChangeValue"
                     start-placeholder="领取时间"
                     end-placeholder="领取时间">

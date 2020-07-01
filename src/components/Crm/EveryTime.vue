@@ -77,6 +77,7 @@
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
                     @change="datePickerChange"
                     start-placeholder="拨打时间"
                     end-placeholder="拨打时间">

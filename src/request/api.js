@@ -258,3 +258,6 @@ export const GetAgreementDetail = '/lovestudy/api/agreement/GetAgreementDetail' 
 export const GetAgreementList = '/lovestudy/api/agreement/GetAgreementList' //协议列表
 export const GetCourseList4Teacher = '/lovestudy/api/study/GetCourseList4Teacher' //课程列表
 
+//userRecord
+export const moduleList = '/api/data/systemLog/moduleList' //查询操作对象接口
+export const systemLogList = '/api/data/systemLog/list' //查询日志列表

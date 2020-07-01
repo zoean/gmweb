@@ -178,7 +178,7 @@
                     
                 </el-popover>
 
-                <span style="float: right; margin-right: 14px; font-size: 14px;">v 1.0.1</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px;">v 1.0.2</span>
     
             </el-col>
         </el-row>
