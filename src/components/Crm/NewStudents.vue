@@ -138,18 +138,18 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户姓名" prop="name">
-                                    <el-input v-model="customerForm.name" placeholder="请输入客户姓名" size="small" ></el-input>
+                                    <el-input v-model="customerForm.name" placeholder="请输入客户姓名" disabled size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
-                                    <el-input v-model="customerForm.age" placeholder="请输入客户年龄" size="small" ></el-input>
+                                    <el-input v-model="customerForm.age" placeholder="请输入客户年龄" disabled size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="第二电话" prop="twoTel">
-                                    <el-input v-model="customerForm.twoTel" placeholder="请输入第二电话" size="small" ></el-input>
+                                    <el-input v-model="customerForm.twoTel" placeholder="请输入第二电话" disabled size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -160,7 +160,7 @@
                             <el-col :span="6">
                                 <el-form-item label="最高学历" prop="education">
 
-                                    <el-select v-model="customerForm.education" placeholder="请选择最高学历" size="small" >
+                                    <el-select v-model="customerForm.education" placeholder="请选择最高学历" disabled size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-1']"
                                           :key="item.name"
@@ -175,13 +175,13 @@
 
                             <el-col :span="6">
                                 <el-form-item label="所在省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                                    <area-cascader type="text" v-model="customerForm.provinceCity" disabled @change="cityChange" :data="pcaa"></area-cascader>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="客户工作" prop="work">
-                                    <el-input v-model="customerForm.work" placeholder="请输入客户工作" size="small" ></el-input>
+                                    <el-input v-model="customerForm.work" placeholder="请输入客户工作" disabled size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -189,7 +189,7 @@
 
                                 <el-form-item label="工作年限" prop="workingLife">
 
-                                    <el-select v-model="customerForm.workingLife" placeholder="请选择工作年限" size="small" >
+                                    <el-select v-model="customerForm.workingLife" placeholder="请选择工作年限" disabled size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-2']"
                                           :key="item.name"
@@ -210,7 +210,7 @@
                             <el-col :span="6">
                                 <el-form-item label="取证目的" prop="evidencePurpose">
 
-                                    <el-select v-model="customerForm.evidencePurpose" placeholder="请选择取证目的" size="small" >
+                                    <el-select v-model="customerForm.evidencePurpose" placeholder="请选择取证目的" disabled size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-3']"
                                           :key="item.name"
@@ -227,7 +227,7 @@
 
                                 <el-form-item label="辅助报名" prop="auxiliarySignUp">
 
-                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
+                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" disabled size="small" >
                                         <el-option
                                           v-for="item in auxiliarySignUpList"
                                           :key="item.name"
@@ -242,7 +242,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户微信" prop="wx">
-                                    <el-input v-model="customerForm.wx" placeholder="请输入客户微信" size="small" ></el-input>
+                                    <el-input v-model="customerForm.wx" placeholder="请输入客户微信" disabled size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -250,7 +250,7 @@
 
                                 <el-form-item label="客户性别" prop="gender">
 
-                                    <el-select v-model="customerForm.gender" placeholder="请选择性别" size="small" >
+                                    <el-select v-model="customerForm.gender" placeholder="请选择性别" disabled size="small" >
                                         <el-option
                                           v-for="item in genderList"
                                           :key="item.name"
@@ -269,8 +269,32 @@
 
                             <el-col :span="6">
                                 <el-form-item label="身份证号" prop="idcardNo">
-                                    <el-input v-model="customerForm.idcardNo" placeholder="请输入身份证号码" size="small"></el-input>
+                                    <el-input v-model="customerForm.idcardNo" placeholder="请输入身份证号码" disabled size="small"></el-input>
                                 </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+                                <el-form-item label="报考省市" prop="provinceCity">
+                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" disabled @change="applyCityChange" :data="pcaa"></area-cascader>
+                                </el-form-item>
+                            </el-col>
+
+                            <el-col :span="6">
+
+                                <el-form-item label="报考条件" prop="applyExam">
+
+                                    <el-select v-model="customerForm.applyExam" placeholder="请选择报考条件" disabled size="small" >
+                                        <el-option
+                                          v-for="item in enumList['MJ-15']"
+                                          :key="item.name"
+                                          v-if="item.enable"
+                                          :label="item.name"
+                                          :value="Number(item.number)">
+                                        </el-option>
+                                    </el-select>
+
+                                </el-form-item>
+
                             </el-col>
 
                             <el-col :span="6">
@@ -279,6 +303,7 @@
 
                                     <el-autocomplete
                                         clearable
+                                        disabled
                                         style="width: 100%;"
                                         size="small"
                                         ref="autocompleteNation"
@@ -294,37 +319,13 @@
 
                             </el-col>
 
-                            <el-col :span="6">
-
-                                <el-form-item label="报考条件" prop="applyExam">
-
-                                    <el-select v-model="customerForm.applyExam" placeholder="请选择报考条件" size="small" >
-                                        <el-option
-                                          v-for="item in enumList['MJ-15']"
-                                          :key="item.name"
-                                          v-if="item.enable"
-                                          :label="item.name"
-                                          :value="Number(item.number)">
-                                        </el-option>
-                                    </el-select>
-
-                                </el-form-item>
-
-                            </el-col>
-
-                            <el-col :span="6">
-                                <el-form-item label="报考省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" @change="applyCityChange" :data="pcaa"></area-cascader>
-                                </el-form-item>
-                            </el-col>
-
                         </el-row>
 
                         <el-row>
 
                             <el-col :span="6">
                                 <el-form-item label="毕业院校" prop="graduationSchool">
-                                    <el-input v-model="customerForm.graduationSchool" placeholder="请输入毕业院校" size="small"></el-input>
+                                    <el-input v-model="customerForm.graduationSchool" placeholder="请输入毕业院校" disabled size="small"></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -334,6 +335,7 @@
                                     <el-date-picker
                                       size="small"
                                       style="width: 100%;"
+                                      disabled
                                       v-model="customerForm.graduationTime"
                                       type="month"
                                       @change="graduationTimeChange"
@@ -347,7 +349,7 @@
 
                                 <el-form-item label="备案金" prop="filingFee">
 
-                                    <el-select v-model="customerForm.filingFee" placeholder="请选择缴纳备案金" size="small" >
+                                    <el-select v-model="customerForm.filingFee" placeholder="请选择缴纳备案金" disabled size="small" >
                                         <el-option
                                           v-for="item in filingFeeList"
                                           :key="item.name"
@@ -363,7 +365,7 @@
                             <el-col :span="6">
                                 <el-form-item label="学籍状态" prop="studentStatus">
 
-                                    <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
+                                    <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" disabled size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-10']"
                                           :key="item.name"
@@ -382,32 +384,32 @@
 
                             <el-col :span="6">
                                 <el-form-item label="毕业专业" prop="graduationMajor">
-                                    <el-input v-model="customerForm.graduationMajor" placeholder="请输入毕业专业" size="small" ></el-input>
+                                    <el-input v-model="customerForm.graduationMajor" placeholder="请输入毕业专业" disabled size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="注册平台" prop="signUpSchool">
-                                    <el-input v-model="customerForm.signUpSchool" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model="customerForm.signUpSchool" size="small" disabled></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="报名时间" prop="createTime">
-                                    <el-input v-model="customerForm.createTime" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model="customerForm.createTime" disabled size="small"></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <!-- <el-col :span="6">
                                 <el-form-item label="购买状态" prop="buyState">
-                                    <el-input v-model="customerForm.buyState" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model="customerForm.buyState" disabled size="small"></el-input>
                                 </el-form-item>
                             </el-col> -->
 
                             <el-col :span="6">
                                 <el-form-item label="学习状况" prop="studySituation">
 
-                                    <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" size="small" >
+                                    <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" disabled size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-11']"
                                           :key="item.name"
@@ -431,6 +433,7 @@
                                         style="width: 100%;"
                                         v-model="customerForm.examPeriod"
                                         size="small" 
+                                        disabled
                                         type="month"
                                         @change="timeChange"
                                         placeholder="请选择日期">

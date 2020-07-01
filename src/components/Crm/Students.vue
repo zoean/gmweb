@@ -230,8 +230,8 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="毕业专业" prop="graduationMajor">
-                                    <el-input v-model="customerForm.graduationMajor" placeholder="请输入毕业专业" size="small" ></el-input>
+                                <el-form-item label="所在省市" prop="provinceCity">
+                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
                                 </el-form-item>
                             </el-col>
 
@@ -330,24 +330,9 @@
                             </el-col>
 
                             <el-col :span="6">
-
-                                <el-form-item label="所属民族" prop="nationText">
-
-                                    <el-autocomplete
-                                        clearable
-                                        style="width: 100%;"
-                                        size="small"
-                                        ref="autocompleteNation"
-                                        v-model="customerForm.nationText"
-                                        :fetch-suggestions="querySearchNation"
-                                        placeholder="请输入所属民族"
-                                        :trigger-on-focus="true"
-                                        @select="handleSelectNation"
-                                        @clear="autocompleteClearNation"
-                                    ></el-autocomplete>
-
+                                <el-form-item label="报考省市" prop="provinceCity">
+                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" @change="applyCityChange" :data="pcaa"></area-cascader>
                                 </el-form-item>
-
                             </el-col>
 
                             <el-col :span="6">
@@ -369,9 +354,24 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="报考省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" @change="applyCityChange" :data="pcaa"></area-cascader>
+
+                                <el-form-item label="所属民族" prop="nationText">
+
+                                    <el-autocomplete
+                                        clearable
+                                        style="width: 100%;"
+                                        size="small"
+                                        ref="autocompleteNation"
+                                        v-model="customerForm.nationText"
+                                        :fetch-suggestions="querySearchNation"
+                                        placeholder="请输入所属民族"
+                                        :trigger-on-focus="true"
+                                        @select="handleSelectNation"
+                                        @clear="autocompleteClearNation"
+                                    ></el-autocomplete>
+
                                 </el-form-item>
+
                             </el-col>
 
                         </el-row>
@@ -437,8 +437,8 @@
                         <el-row>
 
                             <el-col :span="6">
-                                <el-form-item label="所在省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                                <el-form-item label="毕业专业" prop="graduationMajor">
+                                    <el-input v-model="customerForm.graduationMajor" placeholder="请输入毕业专业" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -737,7 +737,6 @@ import PageFieldManage from '@/components/Base/PageFieldManage';
 import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid, nationAll, MJ_15 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
-import axios from 'axios';
 export default {
     name: 'students',
     components: {

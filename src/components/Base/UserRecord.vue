@@ -30,7 +30,7 @@
             </el-col>
     
             <el-col :span="4">
-                <el-input v-model="form.userName" size="small" placeholder="请输入拨打人姓名" style="width: 90%;" clearable></el-input>
+                <el-input v-model="form.userName" size="small" placeholder="请输入管理员姓名" style="width: 90%;" clearable></el-input>
             </el-col>
     
             <el-col :span="8">
@@ -42,7 +42,7 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 40px;">
+            style="width: 100%; margin-top: 20px;">
     
             <af-table-column
                 :prop="item.prop"
