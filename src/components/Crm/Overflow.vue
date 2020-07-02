@@ -203,7 +203,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"
-            :page-sizes="[10, 20, 30, 50]"
+            :page-sizes="[10, 20, 30, 50, 100]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"

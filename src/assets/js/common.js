@@ -414,6 +414,9 @@ export const sortTextNum = (text) => {
         case 'name':
             str = 1;
             break;
+        case 'receiveTime':
+            str = 1;
+            break;
         case 'hiredDate':
             str = 2;
             break;

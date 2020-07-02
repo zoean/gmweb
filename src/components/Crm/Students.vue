@@ -157,7 +157,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30, 50]"
+            :page-sizes="[10, 20, 30, 50, 100]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -611,7 +611,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30, 50]"
+                        :page-sizes="[10, 20, 30, 50, 100]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -659,7 +659,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30, 50]"
+                        :page-sizes="[10, 20, 30, 50, 100]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -748,13 +748,14 @@ export default {
             form: {
                 currentPage: 1,
                 pageSize: 20,
-                sortSet: [],
+                sortSet: [
+                    {'receiveTime': 'DESC'},
+                ],
                 total: null,
                 classTeaUuid: '',
                 seatOrgList: [],
                 classUuid: '', //班级的uuid
                 num: '',
-                sortSet: [],
                 tel: '',
                 name: '',
                 startTime: '',

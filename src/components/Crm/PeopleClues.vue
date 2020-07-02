@@ -3,6 +3,14 @@
         <el-row style="margin-bottom: 20px;" class="people-screen">
 
             <el-col :span="4">
+                <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+            </el-col>
+
+            <el-col :span="4">
+                <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
+            </el-col>
+
+            <el-col :span="4">
                 <el-autocomplete
                   clearable
                   size="small"
@@ -62,17 +70,6 @@
                 </el-select>
             </el-col>
     
-            <el-col :span="4">
-                <el-select v-model="form.dialState" size="small" placeholder="请选择是否拨打" style="width: 90%;" clearable>
-                    <el-option
-                      v-for="item in dialStateArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-    
         </el-row>
     
         <el-row>
@@ -91,6 +88,17 @@
                     end-placeholder="入库时间">
                 </el-date-picker>
             </el-col>
+
+            <el-col :span="4">
+                <el-select v-model="form.dialState" size="small" placeholder="请选择是否拨打" style="width: 90%;" clearable>
+                    <el-option
+                      v-for="item in dialStateArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
     
             <el-col :span="4">
                 <el-input v-model="form.belongingSeat" size="small" placeholder="请输入坐席" style="width: 90%;" clearable></el-input>
@@ -107,7 +115,7 @@
                 </el-select>
             </el-col>
     
-            <el-col :span="8">
+            <el-col :span="4">
                 <el-button type="primary" size="small" @click="getExteClueDataClick">查询</el-button>
             </el-col>
     
@@ -146,7 +154,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30, 50]"
+            :page-sizes="[10, 20, 30, 50, 100]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"

@@ -48,7 +48,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total='total'
             :page-size='classForm.pageSize'
-            :page-sizes="[10, 20, 30, 50]"
+            :page-sizes="[10, 20, 30, 50, 100]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"

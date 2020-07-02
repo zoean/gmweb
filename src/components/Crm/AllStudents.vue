@@ -109,6 +109,7 @@
         <el-table
             :data="list"
             ref="tableSelect"
+            @sort-change="sortChange"
             :key="this.tableKey"
             v-loading="fullscreenLoading"
             style="width: 100%">
@@ -120,6 +121,7 @@
               :prop="item.prop"
               :label="item.label"
               :formatter="item.formatter"
+              :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'receiveTime' ? 'custom' : false"
               :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'receiveTime' ? '180px' : item.prop == 'goodsName' ? '220px' : item.prop == 'applyExamName' ? '80px' :  item.prop == 'filingFee' ? '120px' : ''"
               v-for="(item, index) in columnList"
               :key="index"
@@ -148,7 +150,7 @@
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
-            :page-sizes="[10, 20, 30, 50]"
+            :page-sizes="[10, 20, 30, 50, 100]"
             :hide-on-single-page="totalFlag"
             @current-change="handleCurrentChange"
             @size-change="handleSizeChange"
@@ -569,7 +571,7 @@
                         :total='notesForm.total'
                         :page-size='notesForm.pageSize'
                         :current-page='notesForm.currentPage'
-                        :page-sizes="[10, 20, 30, 50]"
+                        :page-sizes="[10, 20, 30, 50, 100]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeFollow"
                         @size-change="handleSizeChangeFollow"
@@ -617,7 +619,7 @@
                         :total='notesCallForm.total'
                         :page-size='notesCallForm.pageSize'
                         :current-page='notesCallForm.currentPage'
-                        :page-sizes="[10, 20, 30, 50]"
+                        :page-sizes="[10, 20, 30, 50, 100]"
                         :hide-on-single-page="totalFlag"
                         @current-change="handleCurrentChangeCall"
                         @size-change="handleSizeChangeCall"
@@ -692,6 +694,7 @@ import {
     genderText,
     classTypeString,
     getTextByJs,
+    sortTextNum,
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, showid, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
@@ -708,7 +711,9 @@ export default {
                 name: '',
                 teaName: '',
                 seatOrgList: [],
-                sortSet: [],
+                sortSet: [
+                    {'receiveTime': 'DESC'},
+                ],
                 tel: "", //手机号
                 total: null,
                 stuId: '',
@@ -730,7 +735,7 @@ export default {
                 { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'createTime', 'label': '报名时间' },
                 { 'prop': 'receiveTime', 'label': '领取时间' },
-                { 'prop': 'goodsName', 'label': '购买商品名称' },
+                { 'prop': 'goodsName', 'label': '购买商品' },
                 { 'prop': 'applyExamName', 'label': '报考条件' },
                 { 'prop': 'filingFee', 'label': '是否缴纳备案金' },
             ],
@@ -929,6 +934,10 @@ export default {
             courseLists: [],
             courseListsFlag: null,
             tableKey: '',
+            sortSetList: [
+                {'createTime': ''},
+                {'receiveTime': ''},
+            ],
         }
     },
     created() {
@@ -947,6 +956,17 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
+        sortChange(data) {
+            this.form.sortSet = [];
+            const id = sortTextNum(data.prop);
+            if(data.order == "descending"){
+                this.sortSetList[id][data.prop] = 'DESC';
+            }else if(data.order == "ascending"){
+                this.sortSetList[id][data.prop] = 'ASC';
+            }
+            this.form.sortSet.push(this.sortSetList[id]);
+            this.getSupStuList();
+        },
         datePickerChangeValue(value) {
             if (value == null) {
                 this.form.receiveStartTime = '';

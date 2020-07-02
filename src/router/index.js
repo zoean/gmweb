@@ -42,6 +42,8 @@ import allStudents from '@/components/Crm/AllStudents';
 import fieldManagement from '@/components/Crm/FieldManagement';
 import manageClues from '@/components/Crm/ManageClues';
 import peopleClues from '@/components/Crm/PeopleClues';
+import sendSMS from '@/components/Crm/SendSMS';
+import smsRecord from '@/components/Crm/SMSRecord';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -254,6 +256,18 @@ export default new Router({
             path: '/crm/dataClues/peopleClues',
             name: 'peopleClues',
             component: peopleClues
+        },
+
+        {
+            path: '/crm/sms/sendSMS',
+            name: 'sendSMS',
+            component: sendSMS
+        },
+
+        {
+            path: '/crm/sms/smsRecord',
+            name: 'smsRecord',
+            component: smsRecord
         },
 
         {
