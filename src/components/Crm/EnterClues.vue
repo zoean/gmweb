@@ -235,6 +235,7 @@
                     style="margin-top: 20px;"
                     :data="importDataForm.list"
                     :row-class-name="tableRowClassName"
+                    v-loading="fullscreenLoadingTable"
                     >
                     <el-table-column
                       :prop="item.prop"
@@ -283,6 +284,23 @@
 
                         </el-form-item>
 
+                        <el-form-item label="选择推广账号" size="small" prop="accText">
+
+                            <el-autocomplete
+                              clearable
+                              size="small"
+                              ref="autocompleteAcc"
+                              style="width: 100%;"
+                              v-model="importDataForm.accText"
+                              :fetch-suggestions="querySearchAcc"
+                              placeholder="请输入推广账号"
+                              :trigger-on-focus="true"
+                              @select="handleSelectAcc"
+                              @clear="autocompleteClearAcc"
+                            ></el-autocomplete>
+
+                        </el-form-item>
+
                     </el-form>
 
                     <span slot="footer" class="dialog-footer">
@@ -309,7 +327,7 @@ import {
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, urlFun } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6 } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'enterClues',
     data() {
@@ -363,6 +381,9 @@ export default {
                 clueRuleNumber: [
                   { required: true, message: '请选择分配组', trigger: 'change' }
                 ],
+                accText: [
+                  { required: true, message: '请选择推广账号', trigger: 'change' }
+                ],
             },
             genderList: [
                 { 'name': '女', 'number': 0 },
@@ -396,17 +417,20 @@ export default {
                 clueRuleNumber: '',
                 examItemId: '',
                 examItemText: '',
+                acc: '',
+                accText: '',
                 list: []
             },
             validDataNum: '',
             inValidDataNum: '',
             validDataNumFlag: false,
             fullscreenLoading: false,
+            fullscreenLoadingTable: false,
             readExcelClueData: readExcelClueData
         }
     },
     created() {
-        let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6];
+        let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6, MJ_7];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getExamBasic();
@@ -415,6 +439,30 @@ export default {
         this.headersObj.Authorization = jhToken;
     },
     methods: {
+        querySearchAcc(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-7']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelectAcc(item) {
+            this.importDataForm.acc = item.number;
+            this.importDataForm.accText = item.value;
+        },
+        autocompleteClearAcc() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteAcc.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.importDataForm.acc = '';
+                this.$refs.autocompleteAcc.focus();
+            })
+        },
         tableRowClassName({row, rowIndex}) {
             console.log(row);
             if (row.type == 2) {
@@ -429,29 +477,33 @@ export default {
             console.log(res);
             console.log(file);
             let str = '';
+            this.fullscreenLoadingTable = true;
             if(res.code == 200) {
-                this.$message({
-                    type: 'success',
-                    message: '导入线索成功'
-                })
-                res.data.list.map(sll => {
-                    if(sll.type == 1) {
-                        num1 = num1 + 1;
-                    }else{
-                        num2 = num2 + 1;
-                    }
-                })
-                this.validDataNumFlag = true;
-                console.log(num1)
-                console.log(num2)
-                this.importDataForm.list = res.data.list;
-                this.validDataNum = num1;
-                this.inValidDataNum = num2;
+                setTimeout(() => {
+                    this.fullscreenLoadingTable = false;
+                    res.data.list.map(sll => {
+                        if(sll.type == 1) {
+                            num1 = num1 + 1;
+                        }else{
+                            num2 = num2 + 1;
+                        }
+                    })
+                    this.validDataNumFlag = true;
+                    console.log(num1)
+                    console.log(num2)
+                    this.importDataForm.list = res.data.list;
+
+                    this.validDataNum = num1;
+                    this.inValidDataNum = num2;
+                }, 300);
             }else{
-                this.$message({
-                    type: 'error',
-                    message: '导入线索失败'
-                })
+                setTimeout(() => {
+                    this.fullscreenLoadingTable = false;
+                    this.$message({
+                        type: 'error',
+                        message: '导入线索失败，请重新导入'
+                    })
+                }, 300)
             }
         },
         getRuleItem() {
@@ -472,6 +524,9 @@ export default {
             }).then(res => {
                 if(res.code == 200){
                     this.enumList = res.data;
+                    for(let i in res.data) {
+                        this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
+                    }
                 }
             })
         },

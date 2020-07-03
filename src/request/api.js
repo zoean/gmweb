@@ -257,6 +257,8 @@ export const uploadFile = '/upload-service/upload/file';//模板录入
 export const GetAgreementDetail = '/lovestudy/api/agreement/GetAgreementDetail' //协议
 export const GetAgreementList = '/lovestudy/api/agreement/GetAgreementList' //协议列表
 export const GetCourseList4Teacher = '/lovestudy/api/study/GetCourseList4Teacher' //课程列表
+export const GetCityList = '/lovestudy/api/address/GetCityList' //城市数据
+export const updateAddress = '/order-service/order/updateAddress' //修改收货人地址
 
 //userRecord
 export const moduleList = '/api/data/systemLog/moduleList' //查询操作对象接口

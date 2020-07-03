@@ -72,7 +72,7 @@
             
         </el-row>
     
-        <el-row>
+        <el-row style="margin-bottom: 20px;">
         
             <el-col :span="8">
                 <el-date-picker
@@ -115,10 +115,18 @@
                 </el-select>
             </el-col>
     
+        </el-row>
+
+        <el-row>
+
+            <el-col :span="4">
+                <el-input v-model="form.exteName" size="small" placeholder="请输入推广人" style="width: 90%;" clearable></el-input>
+            </el-col>
+
             <el-col :span="4">
                 <el-button type="primary" size="small" @click="getExteAllClueDataClick">查询</el-button>
             </el-col>
-    
+
         </el-row>
     
         <el-table
@@ -213,6 +221,7 @@ export default {
                 spreadId: "",
                 spreadText: "",
                 inputMode: "",
+                exteName: "",
                 startCreateTime: "",
                 total: null
             },
