@@ -31,9 +31,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 说明方法
 ```
-this.$smoke_get(`/api`+`${media_info}`).then(res => {
-    console.log(res.data);
-})
+this.$smoke_get(`/api`+`${media_info}`).then(res => {})
 ```
 
 <el-submenu v-for="(item,index) in $store.state.userMenuList" :key="index" :index="`${item.menuComponent}`">

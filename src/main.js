@@ -29,12 +29,9 @@ Vue.config.productionTip = false
 //路由守卫
 router.beforeEach((to, from, next) => {
 
-    console.log(to.path);
-
     const jhToken = localStorage.getItem("jhToken");
 
     const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
-    // console.log(userMenuList);
 
     if(to.path === '/forget') {
         next();

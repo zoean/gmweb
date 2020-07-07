@@ -115,7 +115,6 @@ export default {
     methods: {
         channelGetList() {
             this.$smoke_post(channelGetList, this.form).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.list = res.data.list;
                 }
@@ -130,7 +129,6 @@ export default {
         },
         channelAdd() {
             this.$smoke_post(channelAdd, this.ruleForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer = false;
                     this.channelGetList();
@@ -149,17 +147,14 @@ export default {
                     this.channelUpdate();
                   }
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
         },
         handleDeleteClick(scope) {
-            // console.log(scope.row.uuid);
             this.$smoke_post(channelDelete, {
                 uuid: scope.row.uuid
             }).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     scope._self.$refs[`popover-${scope.$index}`].doClose();
                     this.$message({
@@ -171,7 +166,6 @@ export default {
             })
         },
         handleUpdataClick(row) {
-            console.log(row);
             this.drawer = true;
             this.drawerTitle = '修改渠道';
             this.ruleForm.uuid = row.uuid;
@@ -181,7 +175,6 @@ export default {
             this.$smoke_post(channeGet, {
                 uuid: id        
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.ruleForm.name = res.data.name;
                     this.ruleForm.remarks = res.data.remarks;
@@ -190,7 +183,6 @@ export default {
         },
         channelUpdate() {
             this.$smoke_post(channelUpdate, this.ruleForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',

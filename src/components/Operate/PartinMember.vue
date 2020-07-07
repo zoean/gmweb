@@ -99,7 +99,6 @@ export default {
       }).then(res => {
 
         if (res.code === 200) {
-                  console.log(res);
           this.total = res.data.total
           //0-未关注，1-已关注，2-已取关
           let arr = ["未关注", "已关注", "已取关"];

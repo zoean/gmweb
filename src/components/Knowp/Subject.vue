@@ -159,13 +159,11 @@ export default {
         },
         getExamBasic() {
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 this.subjectOption = res.data;
             })
         },
         addSubject() {
             this.$smoke_post(addSubject, this.ruleForm1).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getSubjectByExamUuidAndName();
@@ -179,7 +177,6 @@ export default {
         },
         updateSubject() {
             this.$smoke_post(updateSubject, this.ruleForm1).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getSubjectByExamUuidAndName();
@@ -197,14 +194,12 @@ export default {
         submitForm1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleForm1);
                     if(this.drawerTitle1 == '添加科目'){
                         this.addSubject();
                     }else{
                         this.updateSubject();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -217,7 +212,6 @@ export default {
         },
         getSubjectByExamUuidAndName() {
             let arr;
-            // console.log(this.subjectForm);
             this.$smoke_post(getSubjectByExamUuidAndName, this.subjectForm).then(res => {
                 res.data.list.map(sll => {
                     sll.examList = getTextByJs(sll.examList);
@@ -235,7 +229,6 @@ export default {
             this.getSubjectByExamUuidAndName();
         },
         editClick(scope) {
-            console.log(scope);
             this.drawer1 = true;
             this.drawerTitle1 = '编辑科目';
             this.getSubjectByUuid(scope);
@@ -244,7 +237,6 @@ export default {
             this.$smoke_post(getSubjectByUuid, {
                 uuid: scope.uuid
             }).then(res => {
-                // console.log(res);
                 this.ruleForm1.describe = res.data.describe;
                 this.ruleForm1.name = res.data.name;
                 this.ruleForm1.soreNumber = res.data.soreNumber;
@@ -252,7 +244,6 @@ export default {
             })
         },
         deleteClick(scope) {
-            console.log(scope);
             this.$smoke_post(deleteSubject, {
                 uuid: scope.row.uuid
             }).then(res => {

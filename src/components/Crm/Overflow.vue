@@ -347,7 +347,6 @@ export default {
             })
         },
         datePickerChange(value) {
-            console.log(value);
             if (value == null) {
                 this.form.startTime = '';
                 this.form.endTime = '';
@@ -430,14 +429,12 @@ export default {
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -448,26 +445,22 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.form.examItemId = item.id;
         },
         autocompleteClear() {
             this.form.examItemId = '';
         },
         cityChange() {
-            console.log(this.form.provinceCity);
             this.form.province = this.form.provinceCity[0];
             this.form.city = this.form.provinceCity[1];
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.form.currentPage = 1;
             localStorage.setItem('seatDataPageSize', index);
             this.getSpillPoolClueData();
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.getSpillPoolClueData();
         },
@@ -515,14 +508,12 @@ export default {
         getCheckedNodes() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.tree.getCheckedNodes());
                 this.$refs.tree.getCheckedNodes().map(sll => {
                     if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
                         arr.push(sll);
                     }
                 })
                 this.tableData = arr;
-                console.log(this.tableData);
             })
         },
         addPeople() {

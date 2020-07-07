@@ -153,12 +153,10 @@ export default {
     },
     methods: {
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.firstConDataList();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.form.currentPage = 1;
             localStorage.setItem('seatDataPageSize', index);
@@ -180,7 +178,6 @@ export default {
             this.examItem = row.examItemId;
         },
         changeDrawer(val){
-            // console.log(val);
             this.drawer = val;
         },
         firstConDataListClick() {
@@ -191,7 +188,6 @@ export default {
             this.fullscreenLoading = true;
             this.drawer = false;
             this.$smoke_post(firstConDataList, this.form).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -220,7 +216,6 @@ export default {
             this.$smoke_post(clueDataRelease, {
                 list: arr
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',
@@ -231,8 +226,6 @@ export default {
             })
         },
         phoneOut( scope ) {
-            console.log(this.initOptions);
-            console.log(scope);
             if(this.initOptions != undefined){
                 this.$smoke_post(phoneOut, {
                     adminUin: this.initOptions.adminUin,
@@ -325,7 +318,6 @@ export default {
             }
         },
         phoneCopy(row) {
-            console.log(row.clueDataSUuid);
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {

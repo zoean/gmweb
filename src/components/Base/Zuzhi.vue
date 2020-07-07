@@ -44,7 +44,6 @@ export default {
     },
     methods: {
         // handleClick(row) {
-        //     console.log(row);
         //     alert('暂未开发');
         // },
         getOrgSubsetByUuid() {
@@ -52,10 +51,8 @@ export default {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: ""
             }).then(res => {
-                console.log(res.data);
                 //替换key（includeSubsetList换为children）table子节点key必须为children
                 arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
-                console.log(arr);
                 arr.map(sll => {
                     sll.name = sll.name;
                 })

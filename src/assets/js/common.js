@@ -429,9 +429,6 @@ export const sortTextNum = (text) => {
 
 export const sortNumberMove = (arr, scope, move) => {
     let json = {};
-    console.log(arr);
-    console.log(scope);
-    console.log(move);
     arr.map((sll, index) => {
         if(scope.uuid == sll.uuid){
             json.moveSortNumber = sll.sortNumber;
@@ -447,7 +444,6 @@ export const sortNumberMove = (arr, scope, move) => {
         }else{
             sll.children.map((qqs, index) => {
                 if(scope.uuid == qqs.uuid) {
-                    console.log('3322323');
                     json.moveSortNumber = qqs.sortNumber;
                     json.moveUuid = qqs.uuid;
                     if(move == 'up') {
@@ -606,7 +602,6 @@ export const treeFunc = (arr) => {
                 sll.orgName = sll.userName;
                 sll.orgUuid = sll.userUuid
                 if(sll.flag){
-                    // console.log(sll.userUuid);
                     flagArrAll.push(sll.userUuid);
                 }
             })
@@ -633,7 +628,6 @@ export const teacherTreeFunc = (arr) => {
                 sll.orgName = sll.userName;
                 sll.orgUuid = sll.userUuid
                 if(sll.flag){
-                    // console.log(sll.userUuid);
                     teacherArrExp.push(sll.userUuid);
                 }
                 if(sll.studentNum > 0 && sll.flag) {
@@ -665,7 +659,6 @@ export const peopleTreeFunc = (arr) => {
             }
             arr[i].userList.map(sll => {
                 if(sll.flag){
-                    // console.log(sll.userUuid);
                     peopleArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
                 }
             })
@@ -693,7 +686,6 @@ export const ExamTreeFunc = (arr) => {
             }
             arr[i].list.map(sll => {
                 if(sll.flag){
-                    // console.log(sll.userUuid);
                     ExamArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
                 }
             })
@@ -720,7 +712,6 @@ export const SetTreeFunc = (arr) => {
             }
             arr[i].list.map(sll => {
                 if(sll.flag){
-                    // console.log(sll.userUuid);
                     SetArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
                 }
             })
@@ -747,7 +738,6 @@ export const SpreadTreeFunc = (arr) => {
             }
             arr[i].list.map(sll => {
                 if(sll.flag){
-                    // console.log(sll.userUuid);
                     SpreadArrExp.push({ name: sll.name, type: sll.type, uuid: sll.uuid});
                 }
             })
@@ -815,7 +805,6 @@ export const urlFun = (url) => {
         var params = url.split("?")[1].split("&");
         var obj = {};
         params.map(v => obj[v.split("=")[0]] = v.split("=")[1]);
-        console.log(obj);
         return obj;
     }else {
         Message({

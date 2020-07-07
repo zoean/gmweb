@@ -141,13 +141,11 @@ export default {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: ""
             }).then(res => {
-                console.log(res);
                 this.zuzhiOptions = res.data;
             })
         },
         handleZuzhiChange(arr) {
             let brr = [];
-            // console.log(arr);
             arr.map(res => {
                 if(res.length == 1){
                     brr.push(res[0]);
@@ -158,7 +156,6 @@ export default {
             this.upperForm.orgUuidList = brr;
         },
         handleDeleteClick(scope) {
-            console.log(scope.row.userUuid);
             this.deletePeople.userUuidList.push(scope.row.userUuid);
             this.$smoke_post(deleteDataAllocationStaff, this.deletePeople).then(res => {
                 if(res.code == 200) {

@@ -235,7 +235,6 @@ export default {
             '&endHiredDate=' + this.screenForm.endHiredDate
             // + '&sortSet=' + str + 
             // '&orgUuidList=' + this.screenForm.orgUuidList[0];
-            // console.log(href);
             window.open(href, '_blank');
 
         },

@@ -40,7 +40,6 @@ export default {
                     res.data.map(sll => {
                         str = str + sll + '\n';
                     })
-                    console.log(str);
                     this.$notify.error({
                         title: '失败',
                         message: str,
@@ -55,7 +54,7 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
-            console.log(file);
+            // console.log(file);
         },
     },
     mounted() {

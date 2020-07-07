@@ -444,9 +444,6 @@ export default {
             // this.$router.push({path: '/base/people/default'});
         },
         logout() {
-            // this.$smoke_post(logOut,{}).then(res => {
-            //     console.log(res);
-            // })
             localStorage.removeItem('jhToken');
             localStorage.removeItem('userMenuList');
             localStorage.removeItem('initOptions');
@@ -492,10 +489,8 @@ export default {
         dialoghold_phone(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.form_phone);
                 this.upProfile_phone();
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -503,10 +498,8 @@ export default {
         dialoghold_wx(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.form_wx);
                 this.upProfile_wx();
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -574,7 +567,6 @@ export default {
         getUserLoginMessage() {
             var that = this;
             this.$smoke_post(getUserLoginMessage,{}).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.centerDialogVisible = res.data.oneLogin;
 
@@ -591,15 +583,11 @@ export default {
                     this.$store.commit('setCurrentDate', res.data.time)
 
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
-                    console.log(this.clueDataNumberList);
                     // this.$store.dispatch('actionsSetOneLogin', res.data.oneLogin);
 
                     localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(res.data.userMenuList, this.clueDataNumberList)));
 
                     if( "WebSocket" in window ) {
-
-                        console.log("您的浏览器支持 WebSocket!");
-
 
                         var http = websockHttp + res.data.uuid;
 
@@ -613,9 +601,7 @@ export default {
 
                         ws.onmessage = function (evt) { 
                             if(evt.data.indexOf("notReadNum") != -1) {
-                                console.log(evt);
                                 let infoData = eval("(" + evt.data + ")");;
-                                console.log(infoData);
                                 that.$notify({
                                     title: '消息',
                                     message: infoData.msg,
@@ -627,7 +613,7 @@ export default {
                         };
 
                     }else{
-                        console.log("您的浏览器不支持 WebSocket!");
+                        // console.log("您的浏览器不支持 WebSocket!");
                     }
 
                 }else{
@@ -649,7 +635,6 @@ export default {
             return '';
         },
         handleAvatarSuccess(res, file) {
-          console.log(file.raw);
           this.imageUrl = URL.createObjectURL(file.raw);
           if (res.code === 0) {
             this.form_wx.wxQrcode = res.data.fileUrl;

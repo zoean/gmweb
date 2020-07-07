@@ -99,7 +99,6 @@ export default {
     },
     created() {
         this.getRuleUserStructureLimit();
-        console.log(this.groupId);
         this.defaultExpandedKeys = this.defaultCheckedKeys = [];
     },
     methods: {
@@ -112,7 +111,6 @@ export default {
                     this.json = treeFunc(res.data.list);
                     this.treeData = this.json.arr;
                     this.toggleRowList = this.defaultExpandedKeys = this.defaultCheckedKeys = this.json.flagArr;
-                    console.log(this.json.flagArr);
                     this.getCheckedNodes();
                 }
             })
@@ -120,7 +118,6 @@ export default {
         getCheckedNodes() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.tree.getCheckedNodes());
                 this.$refs.tree.getCheckedNodes().map(sll => {
                     if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
                         arr.push(sll);
@@ -134,7 +131,6 @@ export default {
             this.getCheckedNodes();
         },
         btnOk() {
-            console.log(this.tableData);
             let treeDataFlag = true;
             this.tableData.map(sll => {
                 if(sll.limitLimit == 0){

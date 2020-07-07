@@ -232,7 +232,6 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(getCallRecord, this.form).then(res => {
                 if(res.code == 200){
-                    // console.log(res);
                     setTimeout(() => {
                         this.fullscreenLoading = false;
 
@@ -270,7 +269,6 @@ export default {
             })
         },
         datePickerChange(value) { 
-            console.log(value);
             if (value == null) {
                 this.form.insertTimeStartTime = '';
                 this.form.insertTimeEndTime = '';
@@ -280,7 +278,6 @@ export default {
             }
         },
         timeClick() {
-            // console.log(this.form);
             this.form.currentPage = 1;
             this.getCallRecord();
         },
@@ -289,7 +286,6 @@ export default {
             this.getCallRecord();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.getCallRecord();
         },

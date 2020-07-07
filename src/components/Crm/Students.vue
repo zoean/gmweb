@@ -719,7 +719,7 @@
 
         <el-dialog width="50%" title="设置地址信息" :visible.sync="addressFlag">
           
-          <el-form :model="ruleFormAddress" ref="ruleFormAddress" class="demo-ruleForm" :rules="rulesAddress">
+          <el-form :model="ruleFormAddress" ref="ruleFormAddress" class="demo-ruleForm" :rules="rulesAddress" :key="formAddressKey">
                         
             <el-form-item label="姓名" prop="userName">
               <el-input v-model="ruleFormAddress.userName" size="small"></el-input>
@@ -1050,7 +1050,8 @@ export default {
                 address: [
                   { required: true, message: '请输入地址', trigger: 'blur' }
                 ],
-            }
+            },
+            formAddressKey: '',
         }
     },
     created() {
@@ -1079,7 +1080,6 @@ export default {
             })
         },
         cityshandleChange(arr) {
-            console.log(arr);
             this.ruleFormAddress.provinceId = arr[0];
             this.ruleFormAddress.cityId = arr[1];
             this.ruleFormAddress.districtId = arr[2];
@@ -1097,6 +1097,7 @@ export default {
             this.ruleFormAddress.districtId = row.districtId;
             this.ruleFormAddress.address = row.address;
             this.ruleFormAddress.orderId = row.orderId;
+            this.formAddressKey = Math.random();
             this.$nextTick(() => {
                 this.$refs['ruleFormAddress'].resetFields();
             })
@@ -1104,10 +1105,8 @@ export default {
         addressSubmitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleFormAddress);
                     this.updateAddress();
                 } else {
-                  console.log('error submit!!');
                   return false;
                 }
             });
@@ -1125,8 +1124,6 @@ export default {
             })
         },
         datePickerChange(value) {
-            // console.log(Array.isArray(value));
-            console.log(value);
             if(Array.isArray(value)){
                 this.form.endTime = value[1].getTime();
                 this.dataPicker = value[1];
@@ -1147,7 +1144,6 @@ export default {
         },
         handleZuzhiChange(arr) {
             let brr = [];
-            // console.log(arr);
             arr.map(res => {
                 if(res.length == 1){
                     brr.push(res[0]);
@@ -1155,15 +1151,12 @@ export default {
                     brr.push(res[res.length-1]);
                 }
             })
-            // console.log(brr);
             this.form.seatOrgList = brr;
-            console.log(this.form.seatOrgList);
         },
         getOrgSubsetByUuid() {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: showid
             }).then(res => {
-                console.log(res);
                 this.zuzhiOptions = res.data;
             })
         },
@@ -1373,12 +1366,10 @@ export default {
               if (valid) {
                 this.$confirm('确认保存修改内容吗？')
                 .then(_ => {
-                    // console.log(this.customerForm)
                   this.addClassTeaStuNotes();
                 })
                 .catch(_ => {});
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -1602,7 +1593,6 @@ export default {
                     this.pageshow = true;
                 });
             }else if(tab.label == '通话记录'){
-                console.log(222);
                 this.getClueCallLog();
                 this.notesCallForm.currentPage = 1;
                 this.pageshow = false;//让分页隐藏
@@ -1665,7 +1655,6 @@ export default {
         },
         querySearchNation(queryString, cb) {
             var restaurants = nationAll;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -1701,7 +1690,6 @@ export default {
     },
     watch:{
       '$route': function(){
-        console.log(this.$route.query.id);
         if(this.$route.query.id == undefined) {
             this.form.classTeaUuid = '';
             this.getClassTeaClass();

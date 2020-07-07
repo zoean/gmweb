@@ -21,7 +21,6 @@ export default {
       this.$smoke_get(GetAgreementDetail, {
         param: {agrId: id}
       }).then(res => {
-        console.log(res);
         if(res.status == 0) {
           res.data.agreementDetail.addTime = timestampToTime(res.data.agreementDetail.addTime);
           this.agreementDetail = res.data.agreementDetail;

@@ -114,7 +114,6 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(systemLogList, this.form).then(res => {
                 if(res.code == 200){
-                    // console.log(res);
                     setTimeout(() => {
                         this.fullscreenLoading = false;
 
@@ -142,7 +141,6 @@ export default {
           })
         },
         datePickerChange(value) { 
-            console.log(value);
             if (value == null) {
                 this.form.startDate = '';
                 this.form.endDate = '';
@@ -152,7 +150,6 @@ export default {
             }
         },
         recordClick() {
-            // console.log(this.form);
             this.form.pageNum = 1;
             this.systemLogList();
         },
@@ -161,7 +158,6 @@ export default {
             this.systemLogList();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.systemLogList();
         },

@@ -211,8 +211,6 @@ export default {
             window.open(href, '_blank');
         },
         handleAvatarSuccess(res, file) {
-            console.log(res);
-            console.log(file);
             let str = '';
             if(res.code == 200) {
                 if(res.data.length == 0){
@@ -225,7 +223,6 @@ export default {
                     res.data.map(sll => {
                         str = str + sll + '\n';
                     })
-                    console.log(str);
                     this.$notify.error({
                         title: '失败',
                         message: str,
@@ -240,7 +237,7 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
-            console.log(file);
+            // console.log(file);
         },
 
         tableRowClassName({row, rowIndex}) {
@@ -272,7 +269,6 @@ export default {
             }
         },
         editClick(scope) {
-            console.log(scope);
             this.drawer1 = true;
             this.drawerTitle1 = '编辑知识点';
             this.getKnowledgePointsByUuid(scope);
@@ -281,7 +277,6 @@ export default {
             this.$smoke_post(getKnowledgePointsByUuid, {
                 uuid: scope.uuid
             }).then(res => {
-                console.log(res);
                 this.ruleForm1.averageScore = res.data.averageScore;
                 this.ruleForm1.catalogueUuid = res.data.catalogueUuid;
                 this.ruleForm1.emphasisLevel = res.data.emphasisLevel;
@@ -295,14 +290,12 @@ export default {
             this.deleteKnowledgePoints(scope);
         },
         addClick(scope) {
-            console.log(scope);
             this.drawer1 = true;
             this.drawerTitle1 = '添加知识点';
             this.ruleForm1.catalogueUuid = scope.uuid;
         },
         addKnowledgePoints() {
             this.$smoke_post(addKnowledgePoints, this.ruleForm1).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getCatalogueAndKnowBySubjectUuid();
@@ -319,7 +312,6 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(getCatalogueAndKnowBySubjectUuid, this.knowsForm).then(res => {
 
-                console.log(res);
                 if(res.code == 200) {
 
                     setTimeout(() => {
@@ -411,7 +403,6 @@ export default {
                         this.updateKnowledgePoints();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });

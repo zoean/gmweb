@@ -1111,7 +1111,6 @@ export default {
             cb(results);
         },
         querySearchMain(queryString, cb) {
-            console.log(this.classTypeList);
             var restaurants = this.classTypeList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据

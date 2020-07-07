@@ -276,7 +276,6 @@ export default {
     },
     methods: {
         changeDrawer(val){
-            // console.log(val);
             this.drawer = val;
         },
         //客户信息
@@ -288,14 +287,12 @@ export default {
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -318,7 +315,6 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.form.examItemId = item.id;
             this.form.examItemText = item.value;
         },
@@ -378,7 +374,6 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(getExteAllClueData, this.form).then(res => {
                 if(res.code == 200){
-                    // console.log(res);
                     setTimeout(() => {
                         this.fullscreenLoading = false;
 
@@ -405,7 +400,6 @@ export default {
             })
         },
         datePickerChange(value) { 
-            console.log(value);
             if (value == null) {
                 this.form.startCreateTime = '';
                 this.form.endCreateTime = '';
@@ -419,7 +413,6 @@ export default {
             this.getExteAllClueData();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.form.currentPage = 1;
             this.getExteAllClueData();

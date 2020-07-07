@@ -297,12 +297,9 @@ export default {
             })
         },
         handleRoleUuidChange(value) {
-            console.log(value);
         },
         getRoleList() {
             this.$smoke_get(getRoleList, {}).then(res => {
-                console.log(res);
-                console.log(res);
                 var roleArrFlag = this.roleArr.some(item => {
                     if(item == superManageUuid){
                         return true
@@ -317,20 +314,15 @@ export default {
                         return false
                     }
                 })
-                console.log(roleArrFlag);
-                console.log(resDataFlag);
                 if(roleArrFlag && resDataFlag) {
-                    console.log(222);
                     res.data.push({name: '超级管理员', uuid: superManageUuid});
                 }else {
-                    console.log(2222222);
                     res.data.push({name: '超级管理员', uuid: superManageUuid, disabled: true});
                 }
                 this.roleOptions = quchong(res.data, 'uuid');
             })
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.searchForm.currentPage = index;
             this.phoneUserList();
         },
@@ -341,7 +333,6 @@ export default {
             this.$smoke_post(getUserDetailed, {
                 uuid: this.uuid
             }).then(res => {
-                console.log(res);
                 this.form = res.data;
                 this.formText = res.data;
                 this.formText.jobStatus = getTextByState(res.data.jobStatus);
@@ -395,14 +386,12 @@ export default {
             })
         },
         onSubmit() {
-            console.log(this.formText.jqList);
             this.fullscreenLoading = true;
             this.$smoke_post(updateUser, {
                 roleUuidList: this.roleArr,
                 userUuid: this.uuid,
                 jqList: this.formText.jqList
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -435,22 +424,18 @@ export default {
         },
         getJqAccountNumberList() {
             this.$smoke_get(getJqAccountNumberList,{}).then(res => {
-                console.log(res);
                 this.selectOptions = res.data;
                 this.selectCreate = res.data;
             })
         },
         changeItem(value) {
-            console.log(value);
             this.searchForm.accountType = value;
         },
         createItem(value) {
-            console.log(value);
             this.createForm.type = value;
         },
         phoneUserList() {
             this.$smoke_post(phoneUserList, this.searchForm).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.tableData = res.data.list;
                     this.total = res.data.total;
@@ -479,7 +464,6 @@ export default {
                 this.drawerSearch = false;
                 this.formText.jqList = this.formText.jqList;
             }
-            // console.log(this.formText.jqList);
         },
         createNo() {
             this.drawerCreate = false;
@@ -489,7 +473,6 @@ export default {
                 if (valid) {
                     this.createForm.userUuid = this.uuid;
                     this.$smoke_post(addUserJqUser, this.createForm).then(res => {
-                        console.log(res);
                         if(res.code == 200) {
                             this.$router.go(0);
                         }else{
@@ -501,7 +484,6 @@ export default {
                     })
 
                 } else {
-                  console.log('error submit!!');
                   return false;
                 }
             });

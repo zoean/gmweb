@@ -353,7 +353,6 @@ export default {
     },
     methods: {
         handleAvatarSuccess(res, file) {
-            console.log(file);
             this.vedioForm.coverUrl = file.response.data;
         },
         beforeAvatarUpload(file) {
@@ -397,28 +396,23 @@ export default {
             this.getCourseVideoList();
         },
         vedioExamChange(value) {
-            console.log(value);
             this.listForm.examDirectionUuid = value;
             this.getCourseVideoList();
         },
         examDirectionChange(value) {
-            console.log(value);
             this.vedioForm.examDirectionUuid = value;
         },
         vedioSubjectChange(value) {
-            console.log(value);
             this.vedioForm.subjectUuidList = value;
             this.getCourseVideoList();
         },
         subjectChange(value) {
-            console.log(value);
             let obj = {};
             obj = this.kemuOptions2.find((item)=>{
                return item.uuid === value;
             });
             let getName = ''
             getName = obj.name;
-            console.log(getName);
 
             this.vedioForm.subjectUuid = value;
             this.vedioForm.subjectName = getName;
@@ -431,13 +425,11 @@ export default {
         },
         getExamBasic() {
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 this.vedioOption = res.data;
             })
         },
         addCourseVideo() {
             this.$smoke_post(addCourseVideo, this.vedioForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getCourseVideoList();
@@ -451,7 +443,6 @@ export default {
         },
         updateCourseVideo() {
             this.$smoke_post(updateCourseVideo, this.vedioForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getCourseVideoList();
@@ -469,14 +460,12 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.vedioForm);
                     if(this.drawerTitle1 == '添加视频资源'){
                         this.addCourseVideo();
                     }else{
                         this.updateCourseVideo();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -490,7 +479,6 @@ export default {
         getCourseVideoList() {
             let arr;
             this.$smoke_post(getCourseVideoList, this.listForm).then(res => {
-                console.log(res);
                 res.data.list.map(sll => {
                     sll.length = formatSeconds(sll.length);
                     sll.type = vedioTypeText(sll.type);
@@ -508,7 +496,6 @@ export default {
             this.getCourseVideoList();
         },
         editClick(scope) {
-            console.log(scope);
             this.drawer1 = true;
             this.drawerTitle1 = '编辑视频资源';
             this.getCourseVideoByUuid(scope);
@@ -517,7 +504,6 @@ export default {
             this.$smoke_post(getCourseVideoByUuid, {
                 uuid: scope.uuid
             }).then(res => {
-                console.log(res);
                 this.vedioForm.auxiliaryKnowList = res.data.auxiliaryKnowList;
                 this.vedioForm.chiefKnowList = res.data.chiefKnowList;
                 this.vedioForm.coverUrl = res.data.coverUrl;
@@ -540,7 +526,6 @@ export default {
             })
         },
         deleteClick(scope) {
-            console.log(scope);
             this.$smoke_post(deleteCourseVideoByUuid, {
                 uuid: scope.row.uuid
             }).then(res => {
@@ -560,7 +545,6 @@ export default {
                 uuid: this.vedioForm.subjectUuid
             }).then(res => {
                 if(res.code == 200) {
-                    console.log(res);
                     res.data.map(sll => {
                         sll.disabled = true;
                         if(sll.list.length != 0){
@@ -587,7 +571,6 @@ export default {
             this.checkKeys = arr;
         },
         treeYes() {
-            console.log(this.$refs.tree.getCheckedNodes());
             if(this.treeType == 'zhu') {
                 this.vedioForm.chiefKnowList = this.$refs.tree.getCheckedNodes();
                 this.drawer2 = false;
@@ -601,7 +584,6 @@ export default {
                 this.$smoke_post(getSubjectBasicByExamUuid, {
                     uuid: this.listForm.examDirectionUuid
                 }).then(res => {
-                    console.log(res);
                     this.kemuOptions1 = res.data;
                 })
             }
@@ -611,14 +593,11 @@ export default {
                 this.$smoke_post(getSubjectBasicByExamUuid, {
                     uuid: this.vedioForm.examDirectionUuid
                 }).then(res => {
-                    console.log(res);
                     this.kemuOptions2 = res.data;
                 })
             }
         },
         videoLength() {
-            // console.log(this.$refs.video.duration);
-            
             if(!isNaN(this.$refs.video.duration)){
                 setTimeout(() => {
                     this.vedioForm.length = this.$refs.video.duration;
@@ -645,7 +624,6 @@ export default {
             this.$smoke_post(getFileSize, {
                 fileUrl: url
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.vedioForm.fileSize = ( res.data / 1000 / 1000 ).toFixed(2);
                 }else{

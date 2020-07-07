@@ -79,8 +79,6 @@ export default {
       }else{
         this.widthClass = 'sidebar-close'
       }
-      
-    console.log(this.widthClass)
     }
   }
 }

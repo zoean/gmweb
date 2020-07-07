@@ -364,24 +364,20 @@ export default {
     },
     methods: {
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.getClassList();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.form.currentPage = 1;
             localStorage.setItem('studentsPageSize', index);
             this.getClassList();
         }, 
         handleCurrentChangeTeacher(index) {
-            console.log(index);
             this.teacherForm.currentPage = index;
             this.getClassTeacherList();
         },
         handleSizeChangeTeacher(index) {
-            console.log(index);
             this.teacherForm.pageSize = index;
             this.teacherForm.currentPage = 1;
             this.getClassTeacherList();
@@ -415,10 +411,8 @@ export default {
         submitForm1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleForm1);
                     this.addClass();
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -429,14 +423,12 @@ export default {
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -447,12 +439,10 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.ruleForm1.examItemUuid = item.id;
             this.ruleForm1.subjectText = item.value;
         },
         handleSelectExam(item) {
-            console.log(item);
             this.form.examItem = item.id;
             this.form.examItemText = item.value;
         },
@@ -505,56 +495,10 @@ export default {
                 done();
             }
         },
-        // headTeacherListClick( scope ) {
-        //     console.log(scope);
-        //     this.drawer2 = true;
-        //     this.teacherForm.uuid = scope.uuid;
-        //     this.teacherForm.pageSize = 10;
-        //     this.teacherForm.currentPage = 1;
-        //     this.addTeacherForm.classUuid = scope.uuid;
-        //     this.teacherMoveForm.className = scope.examItem + ' - ' + scope.classType;
-        //     this.drawerTitle2 = scope.examItem + ' - ' + scope.classType + ' - 班主任列表'; //一级消防工程师 - 普通班 - 班主任列表
-        //     this.getClassTeacherList();
-        // },
-        // studentsListClick(scope) {
-        //     console.log(scope);
-        //     this.$router.push({
-        //         path: '/crm/myStudents/students',
-        //         query: {
-        //             id: scope.classTeacherUuid,
-        //             name: scope.classTeacherName,
-        //             classUuid: this.teacherForm.uuid
-        //         }
-        //     })
-        // },
-        // getClassTeacherList() {
-        //     this.fullscreenLoadingDetails = true;
-        //     this.$smoke_post(getClassTeacherList, this.teacherForm).then(res => {
-        //         if(res.code == 200) {
-
-        //             setTimeout(() => {
-        //                 this.fullscreenLoadingDetails = false;
-        //                 this.teacherList = res.data.list;
-        //                 this.teacherForm.total = res.data.total;
-        //             }, 300);
-
-        //         }else{
-        //             setTimeout(() => {
-        //                 this.fullscreenLoadingDetails = false;
-        //                 this.$message({
-        //                     type: 'error',
-        //                     message: res.msg
-        //                 })
-        //             }, 300)
-        //         }
-        //     })
-        // },
         addHeadTeacherClick(scope) {
-            console.log(scope);
             this.drawer3 = true;
             this.addTeacherForm.classUuid = scope.uuid;
             this.drawerTitle3 = scope.examItem + ' - ' + scope.classType + ' - 配置班主任'; //一级消防工程师 - 普通班 - 配置班主任
-            // console.log(this.addTeacherForm.classUuid);
             this.getOrgStrAndClassTch(scope.uuid);
         },
         getOrgStrAndClassTch(id) {
@@ -564,9 +508,7 @@ export default {
                 if(res.code == 200) {
                     this.json = teacherTreeFunc(res.data.list);
                     this.treeData = this.json.arr;
-                    console.log(this.treeData);
                     this.toggleRowList = this.defaultExpandedKeys = this.defaultCheckedKeys = this.json.flagArr;
-                    console.log(this.json.flagArr);
                     this.getCheckedNodes();
                 }
             })
@@ -574,7 +516,6 @@ export default {
         getCheckedNodes() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.tree.getCheckedNodes());
                 this.$refs.tree.getCheckedNodes().map(sll => {
                     if(sll.hasOwnProperty('studentNum')){ // hasOwnProperty 判断对象是否含有某个属性
                         arr.push(sll);
@@ -585,17 +526,13 @@ export default {
             })
         },
         handleCheckChange(data, value) {
-            console.log(data);
-            console.log(value);
             this.getCheckedNodes();
         },
         addClassTeacher() {
-            console.log(this.tableData);
             let arr = [];
             this.tableData.map(sll => {
                 arr.push({ userUuid : sll.userUuid });
             })
-            console.log(arr);
             this.addTeacherForm.list = arr;
             this.$smoke_post(addClassTeacher, this.addTeacherForm).then(res => {
                 if(res.code == 200) {
@@ -618,7 +555,6 @@ export default {
             })
         },
         handleDeleteClick(scope) {
-            console.log(scope);
             this.delVerClassTeacher(scope);
         },
         delVerClassTeacher(scope) {
@@ -633,7 +569,6 @@ export default {
                         type: 'success',
                         message: '删除成功'
                     })
-                    console.log(scope);
                     this.$refs.tree.getCheckedNodes().map(sll => {
                         if(sll.hasOwnProperty('studentNum')){ // hasOwnProperty 判断对象是否含有某个属性
                             arrKey.push(sll.userUuid);
@@ -659,63 +594,6 @@ export default {
             if (!value) return true;
             return data.orgName.indexOf(value) !== -1;
         },
-        // studentsMoveClick(row) {
-        //     this.drawer4 = true;
-        //     this.getClassTeaOptionByClassUuid();
-        //     this.teacherMoveForm.classUserUuid = row.classTeacherUuid;
-        // },
-        // getClassTeaOptionByClassUuid() {
-        //     this.$smoke_post(getClassTeaOptionByClassUuid, {
-        //         uuid: this.teacherForm.uuid
-        //     }).then(res => {
-        //         if(res.code == 200) {
-        //             this.teacherMoveForm.classLength = res.data.length;
-        //             res.data.map((sll,index) => {
-        //                 if(sll.userUuid == this.teacherMoveForm.classUserUuid){
-        //                     res.data = removeEvery(sll, res.data);
-        //                 }
-        //             })
-        //             console.log(res.data);
-        //             this.teacherMoveList = res.data;
-        //         }
-        //     });
-        // },
-        // tagClick(item) {
-        //     this.$confirm('确认转移学员吗？')
-        //     .then(_ => {
-        //       this.teacherMoveList.map((res,index) => {
-        //         if(res.userUuid == item.userUuid){
-        //             res.mainUin = true;
-        //             this.$forceUpdate();
-        //         }else{
-        //             res.mainUin = false;
-        //         }
-        //       })
-        //       this.transferOfficer(item.userUuid);
-        //     })
-        //     .catch(_ => {});
-        // },
-        // transferOfficer(id) {
-        //     this.$smoke_post(transferOfficer, {
-        //         classTeaUuid: this.teacherMoveForm.classUserUuid, //班主任唯一标识
-        //         receiveClassTeaUuid: id, //接收的班主任唯一标识
-        //         classUuid: this.teacherForm.uuid
-        //     }).then(res => {
-        //         if(res.code == 200) {
-        //             this.$message({
-        //                 type: 'success',
-        //                 message: '转移学员成功'
-        //             })
-        //             this.drawer4 = false;
-        //             this.getClassTeacherList();
-        //         }else{
-        //             this.$message({
-        //                 type: 'error',
-        //                 message: res.msg
-        //             })
-        //         }
-        //     })
-        // }
     },
     mounted() {
         

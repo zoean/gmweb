@@ -639,7 +639,7 @@ export default {
                         this.json = peopleTreeFunc(res.data.orgList);
                         this.treeData = this.json.arr;
                         this.seatList[0].attrData = this.json.flagArr = quchong(this.json.flagArr, 'uuid');
-                        console.log(this.json.arr);
+
                         if(this.json.flagArr.length > 0) {
                             this.json.flagArr.map(sll => {
                                 this.seatList[0].attrText += sll.name + '，'
@@ -655,7 +655,7 @@ export default {
                         this.jsonExam = ExamTreeFunc([res.data.examItem]);
                         this.treeDataExam = this.jsonExam.arr;
                         this.backList[0].attrData = this.jsonExam.flagArr = quchong(this.jsonExam.flagArr, 'uuid');
-                        console.log(this.jsonExam.flagArr);
+                        
                         if(this.jsonExam.flagArr.length > 0) {
                             this.jsonExam.flagArr.map(sll => {
                                 this.backList[0].attrText += sll.name + '，'
@@ -671,7 +671,7 @@ export default {
                         this.jsonSpread = SpreadTreeFunc([res.data.accList]);
                         this.treeDataSpread = this.jsonSpread.arr;
                         this.spreadList[0].attrData = this.jsonSpread.flagArr = quchong(this.jsonSpread.flagArr, 'uuid');
-                        console.log(this.jsonSpread.flagArr);
+
                         if(this.jsonSpread.flagArr.length > 0) {
                             this.jsonSpread.flagArr.map(sll => {
                                 this.spreadList[0].attrText += sll.name + '，'
@@ -687,7 +687,7 @@ export default {
                         this.jsonSet = SetTreeFunc([res.data.clueDataList]);
                         this.treeDataSet = this.jsonSet.arr;
                         this.dataSetList[0].attrData = this.jsonSet.flagArr = quchong(this.jsonSet.flagArr, 'uuid');
-                        console.log(this.jsonSet.flagArr);
+
                         if(this.jsonSet.flagArr.length > 0) {
                             this.jsonSet.flagArr.map(sll => {
                                 this.dataSetList[0].attrText += sll.name + '，'
@@ -732,7 +732,6 @@ export default {
         getCheckedNodes() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.tree.getCheckedNodes());
                 this.$refs.tree.getCheckedNodes().map(sll => {
                     arr.push(sll);
                 })
@@ -743,7 +742,6 @@ export default {
         getCheckedNodesExam() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.treeExam.getCheckedNodes());
                 this.$refs.treeExam.getCheckedNodes().map(sll => {
                     arr.push(sll);
                 })
@@ -754,7 +752,6 @@ export default {
         getCheckedNodesSet() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.treeSet.getCheckedNodes());
                 this.$refs.treeSet.getCheckedNodes().map(sll => {
                     arr.push(sll);
                 })
@@ -765,7 +762,6 @@ export default {
         getCheckedNodesSpread() {
             let arr = [];
             this.$nextTick(() => {
-                console.log(this.$refs.treeSpread.getCheckedNodes());
                 this.$refs.treeSpread.getCheckedNodes().map(sll => {
                     arr.push(sll);
                 })
@@ -774,10 +770,8 @@ export default {
             })
         },
         onSubmit() {
-            console.log(this.tableDataSchoolFlagArr)
             this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.tableDataSchoolFlagArr, this.spreadList[0].attrData);
             // this.onSubmitList.push()
-            console.log(this.onSubmitList)
             this.$smoke_post(getPermissionUpdate, {
                 list: this.onSubmitList,
                 userUuid: this.userUuid
@@ -840,8 +834,6 @@ export default {
             return data.name.indexOf(value) !== -1;
         },
         handleCheckChange(data, value) {
-            console.log(data);
-            console.log(value);
             this.getCheckedNodes();
         },
         handleCheckChangeExam(data, value){
@@ -863,7 +855,6 @@ export default {
                 this.seatList[0].attrText = this.seatList[0].attrText.substr(0, this.seatList[0].attrText.length - 1);
             }
             this.drawer1 = false;
-            console.log(this.seatList);
         },
         addExam() {
             this.backList[0].attrText = '';
@@ -875,7 +866,6 @@ export default {
                 this.backList[0].attrText = this.backList[0].attrText.substr(0, this.backList[0].attrText.length - 1);
             }
             this.drawer2 = false;
-            console.log(this.backList);
         },
         addSet() {
             this.dataSetList[0].attrText = '';
@@ -887,7 +877,6 @@ export default {
                 this.dataSetList[0].attrText = this.dataSetList[0].attrText.substr(0, this.dataSetList[0].attrText.length - 1);
             }
             this.drawer3 = false;
-            console.log(this.dataSetList);
         },
         addSpread() {
             this.spreadList[0].attrText = '';
@@ -899,7 +888,6 @@ export default {
                 this.spreadList[0].attrText = this.spreadList[0].attrText.substr(0, this.spreadList[0].attrText.length - 1);
             }
             this.drawer4 = false;
-            console.log(this.spreadList);
         },
         addSchool() {
 
@@ -911,7 +899,6 @@ export default {
                 //     this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
                 // }
                 this.drawer0 = false;
-                console.log(this.tableDataSchoolFlagArr);
 
             }else if(this.tableDataSchoolFlagArr.length == 0){
                 
@@ -930,11 +917,9 @@ export default {
             }
         },
         handleDeleteClick(row) {
-            console.log(row);
             let arrKey = []; //当前人员或组织的key的集合
             let arr = []; //当前人员或组织的Nodes的集合
             arr = removeEvery(row, this.$refs.tree.getCheckedNodes());
-            console.log(arr);
             arr.map(sll => {
                 arrKey.push(sll.uuid);
             })
@@ -944,11 +929,9 @@ export default {
             })
         },
         handleDeleteClickExam(row) {
-            console.log(row);
             let arrKey = []; //当前考试项的key的集合
             let arr = []; //当前考试项的Nodes的集合
             arr = removeEvery(row, this.$refs.treeExam.getCheckedNodes());
-            console.log(arr);
             arr.map(sll => {
                 arrKey.push(sll.uuid);
             })
@@ -958,11 +941,9 @@ export default {
             })
         },
         handleDeleteClickSet(row) {
-            console.log(row);
             let arrKey = []; //当前分配组的key的集合
             let arr = []; //当前分配组的Nodes的集合
             arr = removeEvery(row, this.$refs.treeSet.getCheckedNodes());
-            console.log(arr);
             arr.map(sll => {
                 arrKey.push(sll.uuid);
             })
@@ -972,11 +953,9 @@ export default {
             })
         },
         handleDeleteClickSpread(row) {
-            console.log(row);
             let arrKey = []; //当前分配组的key的集合
             let arr = []; //当前分配组的Nodes的集合
             arr = removeEvery(row, this.$refs.treeSpread.getCheckedNodes());
-            console.log(arr);
             arr.map(sll => {
                 arrKey.push(sll.uuid);
             })
@@ -1009,7 +988,6 @@ export default {
             })
             this.tableDataSchoolFlagArr.uuid = curSchool.uuid
             this.tableDataSchoolFlagArr.type = curSchool.type
-            console.log(this.tableDataSchoolFlagArr)
             // this.schoolList.attrText = val
             // this.schoolList.attrData = [val]
         }

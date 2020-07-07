@@ -263,3 +263,7 @@ export const updateAddress = '/order-service/order/updateAddress' //修改收货
 //userRecord
 export const moduleList = '/api/data/systemLog/moduleList' //查询操作对象接口
 export const systemLogList = '/api/data/systemLog/list' //查询日志列表
+
+//短信模板
+export const getSMSTem = '/api/phone/getSMSTem' //获取短信模板
+export const createSMSMsg = '/api/phone/createSMSMsg' //创建短信内容

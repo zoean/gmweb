@@ -238,8 +238,6 @@ export default {
           });
         }
       })
-      // console.log(this.$refs["form"].resetFields());
-        
 
     },
     handleAvatarSuccess(res, file) {

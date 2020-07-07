@@ -86,13 +86,11 @@ export default {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: ""
             }).then(res => {
-                console.log(res);
                 this.zuzhiOptions = res.data;
             })
         },
         handleZuzhiChange(arr) {
             let brr = [];
-            // console.log(arr);
             arr.map(res => {
                 if(res.length == 1){
                     brr.push(res[0]);
@@ -100,14 +98,12 @@ export default {
                     brr.push(res[res.length-1]);
                 }
             })
-            // console.log(brr);
             this.form.orgUuidList = brr;
         },
         handleClick(row) {
             // console.log(row);
         },
         timeChange() {
-            // console.log(this.timeDate.getTime());
             this.form.time = this.timeDate.getTime();
         },
         countCallRecord() {
@@ -116,7 +112,6 @@ export default {
             if(this.form.orgUuidList.length != 0 && this.form.time != 0) {
                 this.$smoke_post(countCallRecord, this.form).then(res => {
                     if(res.code == 200){
-                        // console.log(res);
                         setTimeout(() => {
                             this.fullscreenLoading = false;
                             res.data.map(lls => {
@@ -125,7 +120,6 @@ export default {
                                     lls['title' + index] = Math.round((act.passTime / 3600) * 100) / 100;
                                 })
                             })
-                            console.log(res.data);
                             this.tableData = res.data;
                             this.columnList = columnListYes;
                         }, 300);

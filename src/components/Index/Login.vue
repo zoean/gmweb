@@ -54,7 +54,6 @@ export default {
                     accountNumber: this.accountNumber,
                     password: this.password
                 }).then(res => {
-                    // console.log(res);
                     if(res.code == 200){
                         this.$store.dispatch('actionsSetCommonFlag', true);                        
                         localStorage.setItem("jhToken", res.data.token);
@@ -81,7 +80,6 @@ export default {
         // 将用户菜单缓存到本地
         getUserLoginMessage() {
             this.$smoke_post(getUserLoginMessage,{}).then(res => {
-                // console.log(JSON.stringify(res.data.userMenuList));
                 if(res.code == 200) {
                     localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));

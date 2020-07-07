@@ -140,7 +140,6 @@ export default {
     mounted() {
         // const userMenuList = this.$store.state.userMenuList;
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
-        console.log(userMenuList);
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){
           this.openedsIndex = [];

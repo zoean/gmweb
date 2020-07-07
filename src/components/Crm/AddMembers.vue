@@ -98,13 +98,12 @@ export default {
     // watch: {
     //     'updataPeople':{
     //         handler:function(val,oldval){
-    //            console.log('修改后',val,'修改前',oldval);
+
     //         }
     //     }
     // },
     methods: {
         handleSelectionChange(val) {
-            console.log(val);
             this.toggleArring = val;
         },
         dataSave() {
@@ -164,13 +163,11 @@ export default {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: ""
             }).then(res => {
-                console.log(res);
                 this.zuzhiOptions = res.data;
             })
         },
         handleZuzhiChange(arr) {
             let brr = [];
-            // console.log(arr);
             arr.map(res => {
                 if(res.length == 1){
                     brr.push(res[0]);

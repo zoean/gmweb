@@ -231,7 +231,6 @@ export default {
             }
         },
         addEnum() {
-            console.log(this.enumForm);
             this.$smoke_post(addEnum, this.enumForm).then(res => {
                 if(res.code == 200) {
                     this.enumFlag = false;
@@ -250,13 +249,11 @@ export default {
             })
         },
         customerDetails( row ) {
-            console.log(row);
             this.drawerFlag = true;
             this.enumItemForm.enumUuid = row.uuid;
             this.getEnumItem();
         },
         editEnumClick(row) {
-            console.log(row);
             this.enumFlag = true;
             this.enumTitle = '修改枚举';
             this.enumForm.name = row.name;
@@ -294,7 +291,6 @@ export default {
                         })
                         this.list = res.data.list;
                         this.total = res.data.total;
-                        console.log(this.list);
                     }, 300);
 
                 }else{
@@ -311,7 +307,6 @@ export default {
             })
         },
         editEnumItemClick(row) {
-            console.log(row);
             this.enumItemFlag = true;
             this.enumItemForm.name = row.name;
             this.enumItemForm.enable = row.enable;
@@ -399,12 +394,10 @@ export default {
             })
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.getEnumList();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.getEnumList();
         },

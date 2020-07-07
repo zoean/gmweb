@@ -435,17 +435,14 @@ export default {
                     for(let i in res.data) {
                         this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
                     }
-                    console.log(this.enumList);
                 }
             })
         },
         submitFormLink(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleFormLink);
                     this.popularizeUrl();
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -461,7 +458,6 @@ export default {
                     this.createLinkUrl = '?ruleid=' + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
                      + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
                     //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
-                    console.log(this.createLinkUrl);
                 }else{
                     this.$message({
                         type: 'error',
@@ -488,7 +484,6 @@ export default {
         getDataAllocationRulesList() {
             this.fullscreenLoading = true;
             this.$smoke_post(getDataAllocationRulesList, this.dataAlloForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
 
                     setTimeout(() => {
@@ -521,14 +516,12 @@ export default {
             })
         },
         handleUpdataClick(scope) {
-            console.log(scope);
             this.drawerFlag1 = true;
             this.drawerTitle1 = '编辑 ' + scope.name;
             this.ruleForm.schoolId = scope.schoolId;
             this.getDataAllocationRulesByUuid(scope);
         },
         handleOneKeyClick(scope) {
-            console.log(scope);
             this.$smoke_post(oneKeyDistribution, {
                 ruleNumber: scope.id
             }).then(res => {
@@ -544,15 +537,12 @@ export default {
         handleCurrentChange(index) {
             this.dataAlloForm.currentPage = index;
             this.getDataAllocationRulesList();
-            console.log(index);
         },
         handleSizeChange(index) {
             this.dataAlloForm.currentPage = index;
             this.getDataAllocationRulesList();
-            console.log(index);
         },
         handleDeleteClick(scope) {
-            // console.log(scope);
             this.$smoke_post(deleteDataAllocationRules, {
                 uuid: scope.row.uuid
             }).then(res => {
@@ -581,12 +571,10 @@ export default {
             })
         },
         getDataAllocationRulesByUuid(scope) {
-            console.log(scope);
             this.$smoke_post(getDataAllocationRulesByUuid, {
                 uuid: scope.uuid
             }).then(res => {
                 if(res.code == 200) {
-                    console.log(res);
                     this.ruleForm.name = res.data.name;
                     this.ruleForm.describe = res.data.describe;
                     this.ruleForm.state = res.data.state;
@@ -610,14 +598,12 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.ruleForm);
                 if(this.drawerTitle1 == '添加分配组'){
                     this.addDataAllocationRules();
                 }else{
                     this.updateDataAllocationRules();
                 }
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -625,7 +611,6 @@ export default {
         addDataAllocationRules() {
             this.$smoke_post(addDataAllocationRules, this.ruleForm).then(res => {
                 if(res.code == 200) {
-                    console.log(res);
                     this.drawerFlag1 = false;
                     this.getDataAllocationRulesList();
                 }else{
@@ -639,7 +624,6 @@ export default {
         updateDataAllocationRules() {
             this.$smoke_post(updateDataAllocationRules, this.ruleForm).then(res => {
                 if(res.code == 200) {
-                    console.log(res);
                     this.drawerFlag1 = false;
                     this.getDataAllocationRulesList();
                 }else{
@@ -651,7 +635,6 @@ export default {
             })
         },
         handleAddClick(scope) {
-            console.log(scope);
             this.sonRefresh = false;
             this.$nextTick(() => {
                 this.sonRefresh = true;
@@ -663,14 +646,12 @@ export default {
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -693,7 +674,6 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.ruleFormLink.projectId = item.id;
             this.ruleFormLink.projectText = item.value;
         },
@@ -733,12 +713,10 @@ export default {
             })
         },
         handleSelectExam(item) {
-            console.log(item);
             this.ruleForm.examItemId = item.id;
             this.ruleForm.examItemText = item.value;
         },
         classTypeFun(val) {
-            console.log(val);
             this.ruleForm.examItemId = '';
             this.ruleForm.examItemText = '';
         }

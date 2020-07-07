@@ -198,8 +198,6 @@ export default {
             window.open(href, '_blank');
         },
         handleAvatarSuccess(res, file) {
-            console.log(res);
-            console.log(file);
             let str = '';
             if(res.code == 200) {
                 if(res.data.length == 0){
@@ -212,7 +210,6 @@ export default {
                     res.data.map(sll => {
                         str = str + sll + '\n';
                     })
-                    console.log(str);
                     this.$notify.error({
                         title: '失败',
                         message: str,
@@ -227,7 +224,7 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
-            console.log(file);
+            // console.log(file);
         },
         tableRowClassName({row, rowIndex}) {
             if (row.level == 1) {
@@ -264,7 +261,6 @@ export default {
             this.ruleForm1.uuid = '';
         },
         editClick(scope) {
-            console.log(scope);
             this.drawer1 = true;
             this.drawerTitle1 = '编辑目录';
             if(scope.level == 1){
@@ -278,8 +274,6 @@ export default {
             this.$smoke_post(getSubjectCatalogueByUuid, {
                 uuid: scope.uuid
             }).then(res => {
-                console.log(res);
-                this.ruleForm1.name = res.data.name;
                 this.ruleForm1.sortNumberName = res.data.sortNumberName;
                 this.ruleForm1.specialStatus = res.data.specialStatus;
                 this.ruleForm1.parentUuid = res.data.parentUuid;
@@ -290,7 +284,6 @@ export default {
             this.deleteSubjectCatalogueByUuid(scope);
         },
         addClick(scope) {
-            console.log(scope);
             this.drawer1 = true;
             this.drawerTitle1 = '添加目录';
             this.ruleForm1.parentUuid = scope.uuid;
@@ -299,7 +292,6 @@ export default {
         },
         addSubjectCatalogue() {
             this.$smoke_post(addSubjectCatalogue, this.ruleForm1).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getSubjectCatalogueBySubjectUuid();
@@ -315,7 +307,6 @@ export default {
             let arr;
             this.fullscreenLoading = true;
             this.$smoke_post(getSubjectCatalogueBySubjectUuid, this.contentsForm).then(res => {
-                console.log(res);
                 if(res.code == 200) {
 
                     setTimeout(() => {
@@ -340,8 +331,6 @@ export default {
             })
         },
         deleteSubjectCatalogueByUuid(scope) {
-            console.log(scope.row);
-            console.log(scope.row.level);
             this.$smoke_post(deleteSubjectCatalogueByUuid, {
                 parentUuid: scope.row.level == 1 ? '' : scope.row.parentUuid,
                 subjectUuid: scope.row.level == 1 ? this.contentsForm.uuid : '',
@@ -400,7 +389,6 @@ export default {
                         this.updateSubjectCatalogue();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });

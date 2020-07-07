@@ -251,7 +251,6 @@ export default {
             })
         },
         obtainRPCD() {
-            console.log(this.$refs.tree.selection);
             let arr = [];
             this.$refs.tree.selection.map(sll => {
                 arr.push(sll.uuid);

@@ -612,7 +612,7 @@
 
         <el-dialog width="50%" title="设置地址信息" :visible.sync="addressFlag">
           
-          <el-form :model="ruleFormAddress" ref="ruleFormAddress" class="demo-ruleForm" :rules="rulesAddress">
+          <el-form :model="ruleFormAddress" ref="ruleFormAddress" class="demo-ruleForm" :rules="rulesAddress" :key="formAddressKey">
                         
             <el-form-item label="姓名" prop="userName">
               <el-input v-model="ruleFormAddress.userName" size="small"></el-input>
@@ -898,7 +898,8 @@ export default {
                 address: [
                   { required: true, message: '请输入地址', trigger: 'blur' }
                 ],
-            }
+            },
+            formAddressKey: '',
         }
     },
     created() {
@@ -925,7 +926,6 @@ export default {
             })
         },
         cityshandleChange(arr) {
-            console.log(arr);
             this.ruleFormAddress.provinceId = arr[0];
             this.ruleFormAddress.cityId = arr[1];
             this.ruleFormAddress.districtId = arr[2];
@@ -943,6 +943,7 @@ export default {
             this.ruleFormAddress.districtId = row.districtId;
             this.ruleFormAddress.address = row.address;
             this.ruleFormAddress.orderId = row.orderId;
+            this.formAddressKey = Math.random();
             this.$nextTick(() => {
                 this.$refs['ruleFormAddress'].resetFields();
             })
@@ -950,10 +951,8 @@ export default {
         addressSubmitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleFormAddress);
                     this.updateAddress();
                 } else {
-                  console.log('error submit!!');
                   return false;
                 }
             });
@@ -972,7 +971,6 @@ export default {
         },
         handleZuzhiChange(arr) {
             let brr = [];
-            // console.log(arr);
             arr.map(res => {
                 if(res.length == 1){
                     brr.push(res[0]);
@@ -980,15 +978,12 @@ export default {
                     brr.push(res[res.length-1]);
                 }
             })
-            // console.log(brr);
             this.form.seatOrgList = brr;
-            console.log(this.form.seatOrgList);
         },
         getOrgSubsetByUuid() {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: showid
             }).then(res => {
-                console.log(res);
                 this.zuzhiOptions = res.data;
             })
         },
@@ -1049,7 +1044,6 @@ export default {
             this.getWaitStudentList();
         },
         receiveClick( scope ) {
-            console.log(scope);
             this.classTeaGetWaitStudent('click', scope.uuid)
         },
         getClassTeaClassWait() {
@@ -1118,14 +1112,12 @@ export default {
             })
         },
         handleClassTabClick(tab, event) {
-            console.log(tab);
             this.handleCurrentUuid = this.form.classUuid = tab.name;
             this.form.currentPage = 1;
             this.form.pageSize = Number(this.studentsPageSize);
             this.getWaitStudentList();
         },
         classTeaGetWaitStudent(type, id) {
-            console.log(this.$refs.tree.selection);
             let arr = [];
 
             if(type == 'all') {
@@ -1190,7 +1182,6 @@ export default {
             this.customerForm.seatName = row.seatName;
             this.getStudentDetails(row.uuid);
             this.GetAgreementList(row.customerId);
-            console.log(row);
             this.getOrderForm.userId = row.customerId;
             this.getOrderForm.itemId = '';
             this.getOrderForm.classType = '';
@@ -1260,7 +1251,6 @@ export default {
                     this.pageshow = true;
                 });
             }else if(tab.label == '通话记录'){
-                console.log(222);
                 this.getClueCallLog();
                 this.notesCallForm.currentPage = 1;
                 this.pageshow = false;//让分页隐藏
@@ -1363,7 +1353,6 @@ export default {
         },
         querySearchNation(queryString, cb) {
             var restaurants = nationAll;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);

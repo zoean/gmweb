@@ -357,17 +357,14 @@ export default {
 
             if(scope.level == '一级分类' || scope.level == '二级分类'){
                 this.$smoke_post(sortNumber1, json).then(res => {
-                    console.log(res);
                     this.getKnowledgeStructure();
                 })
             }else if(scope.level == '考试项目') {
                 this.$smoke_post(sortNumber2, json).then(res => {
-                    console.log(res);
                     this.getKnowledgeStructure();
                 })
             }else if(scope.level == '科目') {
                 this.$smoke_post(sortNumberSubjectRelation, json).then(res => {
-                    console.log(res);
                     this.getKnowledgeStructure();
                 })
             }
@@ -377,14 +374,12 @@ export default {
             this.$smoke_post(getSubjectByName, {
                 name: ''
             }).then(res => {
-                console.log(res.data);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -395,7 +390,6 @@ export default {
             };
         },
         handleSelect(item) {
-            console.log(item);
             this.ruleForm3.subjectUuid = item.uuid;
         },
         focusOne() {
@@ -407,19 +401,16 @@ export default {
             this.getClassifyByParentUuid();
         },
         handleOneChange(value) {
-            console.log(value);
             this.twoParentUuid = value;
             this.getClassifyByParentUuid();
             this.ruleForm2.classifyUuid = '';
         },
         handleTwoChange(value) {
-            console.log(value);
         },
         getClassifyByParentUuid() {
             this.$smoke_post(getClassifyByParentUuid, {
                 parentUuid: this.twoParentUuid
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     if(res.data[0].parentUuid == '' ) {
                         this.oneOptions = res.data;
@@ -437,7 +428,6 @@ export default {
         getKnowledgeStructure() {
             let arr;
             this.$smoke_post(getKnowledgeStructure, this.classForm).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data.list).replace(/list/g,"children"));
                 this.classList = arr;
                 this.classList.map(sll => {
@@ -486,7 +476,6 @@ export default {
             this.$smoke_post(getClassifyByUuid, {
                 uuid: uuid
             }).then(res => {
-                console.log(res);
                 this.ruleForm1.name = res.data.name;
                 this.ruleForm1.emphasisStatus = res.data.emphasisStatus;
                 this.ruleForm1.userOpenStatus = res.data.userOpenStatus;
@@ -498,7 +487,6 @@ export default {
             this.$smoke_post(getExamDirectionByUuid, {
                 uuid: this.ruleForm2.uuid
             }).then(res => {
-                console.log(res);
                 this.ruleForm2.selectuuid = res.data.classifyOneName;
                 this.ruleForm2.classifyUuid = res.data.classifyTwoName;
                 this.oneParentUuid = res.data.classifyOneUuid;
@@ -521,14 +509,12 @@ export default {
         submitForm1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleForm1);
                     if(this.drawerTitle1 == '创建一级大类' || this.drawerTitle1 == '创建二级大类'){
                         this.addClassify();
                     }else{
                         this.updateClassify();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -536,7 +522,6 @@ export default {
         submitForm2(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleForm2);
                     if(this.drawerTitle2 == '创建考试项目'){
                         this.addExamDirection();
                         
@@ -544,7 +529,6 @@ export default {
                         this.updateExamDirection();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -552,14 +536,12 @@ export default {
         submitForm3(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.ruleForm3);
                     if(this.drawerTitle3 == '添加科目'){
                         this.addExamAndSubjectRelation();
                     }else{
                         this.updateExamAndSubjectRelation();
                     }
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });
@@ -579,7 +561,6 @@ export default {
         },
         addExamAndSubjectRelation() {
             this.$smoke_post(addExamAndSubjectRelation, this.ruleForm3).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer3 = false;
                     this.getKnowledgeStructure();
@@ -588,7 +569,6 @@ export default {
         },
         addClassify() {
             this.$smoke_post(addClassify, this.ruleForm1).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.drawer1 = false;
                     this.getKnowledgeStructure();
@@ -602,12 +582,10 @@ export default {
             });
         },
         handleSizeChange(index) {
-            console.log(index);
             this.screenForm.pageSize = index;
             this.getKnowledgeStructure();
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.screenForm.currentPage = index;
             this.getKnowledgeStructure();
         },
@@ -644,7 +622,6 @@ export default {
             this.$smoke_post(deleteClassifyByUuid, {
                 uuid: scope.row.uuid
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     scope._self.$refs[`popover-${scope.$index}`].doClose();
                     this.$message({
@@ -666,7 +643,6 @@ export default {
                 classifyUuid: scope.row.classifyUuid,
                 uuid: scope.row.uuid
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     scope._self.$refs[`popover-${scope.$index}`].doClose();
                     this.$message({
@@ -679,7 +655,6 @@ export default {
         },
         updateClassify() {
             this.$smoke_post(updateClassify, this.ruleForm1).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer1 = false;
                     this.getKnowledgeStructure();
@@ -687,7 +662,6 @@ export default {
             })
         },
         addClick(row) {
-            console.log(row);
             if (row.level == '一级分类') {
                 this.drawer1 = true;
                 this.drawerTitle1 = '创建二级大类';
@@ -710,7 +684,6 @@ export default {
             }
         },
         editClick(row) {
-            console.log(row);
             if(row.level == '一级分类' || row.level == '二级分类') {
                 this.drawer1 = true;
                 this.drawerTitle1 = '编辑' + row.name;
@@ -735,7 +708,6 @@ export default {
                 examDirectionUuid: examDirectionUuid,
                 subjectUuid: subjectUuid
             }).then(res => {
-                console.log(res);
                 this.ruleForm3.emphasisStatus = res.data.emphasisStatus;
                 this.ruleForm3.examDirectionUuid = res.data.examDirectionUuid;
                 this.subjectText = res.data.subjectName;
@@ -745,7 +717,6 @@ export default {
         },
         addExamDirection() {
             this.$smoke_post(addExamDirection, this.ruleForm2).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.drawer2 = false;
                     this.getKnowledgeStructure();
@@ -760,7 +731,6 @@ export default {
         updateExamDirection() {
             this.ruleForm2.classifyUuid = this.editTwoUuid;
             this.$smoke_post(updateExamDirection, this.ruleForm2).then(res => {
-                console.log(res);
                 this.drawer2 = false;
                 this.getKnowledgeStructure();
             })
@@ -776,7 +746,6 @@ export default {
                 examDirectionUuid: this.ruleForm2.uuid,
                 name: this.categoryAll.categoryNameAdd
             }).then(res => {
-                console.log(res);
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',
@@ -806,7 +775,6 @@ export default {
             })
         },
         tagDel(tag) {
-            console.log(tag);
             this.deleteExamCategory(tag);
         },
         tagClick(tag) {

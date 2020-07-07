@@ -242,7 +242,6 @@ export default {
             })
         },
         lookUrlClick(row) {
-            console.log(row);
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = false;
@@ -251,7 +250,6 @@ export default {
             copyData(row.url);
         },
         datePickerChange(value) {
-            console.log(value);
             if (value == null) {
                 this.form.startTime = '';
                 this.form.endTime = '';
@@ -261,26 +259,22 @@ export default {
             }
         },
         handleCurrentChange(index) {
-            console.log(index);
             this.form.currentPage = index;
             this.getPopularizeUrl();
         },
         handleSizeChange(index) {
-            console.log(index);
             this.form.pageSize = index;
             this.getPopularizeUrl();
         },
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                 this.restaurants = arr;
             })
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -291,7 +285,6 @@ export default {
             };
         },
         handleSelect(value) {
-            console.log(value);
             this.form.examItemsId = value.id;
         },
         autocompleteClear() {

@@ -464,7 +464,6 @@ export default {
             })
         },
         tableRowClassName({row, rowIndex}) {
-            console.log(row);
             if (row.type == 2) {
                 return 'error-row';
             }else{
@@ -474,8 +473,6 @@ export default {
         handleAvatarSuccess(res, file) {
             let num1 = 0;
             let num2 = 0;
-            console.log(res);
-            console.log(file);
             let str = '';
             this.fullscreenLoadingTable = true;
             if(res.code == 200) {
@@ -489,8 +486,6 @@ export default {
                         }
                     })
                     this.validDataNumFlag = true;
-                    console.log(num1)
-                    console.log(num2)
                     this.importDataForm.list = res.data.list;
 
                     this.validDataNum = num1;
@@ -516,7 +511,6 @@ export default {
             })
         },
         handleTabsClick(tab, event) {
-            console.log(tab, event);
         },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
@@ -531,17 +525,14 @@ export default {
             })
         },
         cityChange() {
-            console.log(this.ruleForm.provinceCity);
             this.ruleForm.province = this.ruleForm.provinceCity[0];
             this.ruleForm.city = this.ruleForm.provinceCity[1];
         },
         handleSelect(item) {
-            console.log(item);
             this.ruleForm.examItemId = item.id;
             this.ruleForm.examItemText = item.value;
         },
         importDataHandleSelect(item) {
-            console.log(item);
             this.importDataForm.examItemId = item.id;
             this.importDataForm.examItemText = item.value;
         },
@@ -549,7 +540,6 @@ export default {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
                 if(res.code == 200) {
-                    console.log(res);
                     arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                     this.restaurants = arr;
                 }
@@ -557,7 +547,6 @@ export default {
         },
         querySearch(queryString, cb) {
             var restaurants = this.restaurants;
-            console.log(restaurants);
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
@@ -570,7 +559,6 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.ruleForm);
                 let obj = urlFun(this.ruleForm.url);
                 if(obj.project && obj.ruleid && obj.spread && obj.acc){
                     this.ruleForm.examItemId = obj.project;
@@ -585,7 +573,6 @@ export default {
                     })
                 }
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -593,10 +580,8 @@ export default {
         importDataSubmitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.importDataForm);
                     this.bulkImportClueData();
                 } else {
-                  console.log('error submit!!');
                   return false;
                 }
             });
@@ -654,7 +639,6 @@ export default {
         },
         downloadImport() {
             const href = clueDataTem;
-            // console.log(href);
             window.open(href, '_blank');
         },
         clearImport() {
@@ -669,7 +653,7 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
-            console.log(file);
+            // console.log(file);
         },
     },
     mounted() {

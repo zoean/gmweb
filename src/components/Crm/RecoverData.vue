@@ -366,7 +366,6 @@ export default {
             this.examItem = row.examItemId;
         },
         changeDrawer(val){
-            // console.log(val);
             this.drawer = val;
         },
         getRecoveryPoolDataListClick() {

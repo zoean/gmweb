@@ -249,7 +249,6 @@ export default {
             this.searchOkTags = [];
         },
         handleUpdataClick(row) {
-            console.log(row);
             this.drawer = true;
             this.drawerTitle = '修改角色';
             this.ruleForm.name = row.name;
@@ -257,11 +256,9 @@ export default {
             this.ruleForm.uuid = row.uuid;
         },
         handleDeleteClick(scope) {
-            // console.log(scope.row.uuid);
             this.$smoke_post(deleteRole, {
                 uuid: scope.row.uuid
             }).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     scope._self.$refs[`popover-${scope.$index}`].doClose();
                     this.$message({
@@ -305,14 +302,12 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                console.log(this.ruleForm);
                 if(this.drawerTitle == '新增角色'){
                     this.addRole();
                 }else{
                     this.updateRole();
                 }
               } else {
-                console.log('error submit!!');
                 return false;
               }
             });
@@ -324,7 +319,6 @@ export default {
         },
         addRole() {
             this.$smoke_post(addRole, this.ruleForm).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.drawer = false;
                     this.getRoleDetailedList();
@@ -333,7 +327,6 @@ export default {
         },
         updateRole() {
             this.$smoke_post(updateRole, this.ruleForm).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.drawer = false;
                     this.getRoleDetailedList();
@@ -341,13 +334,11 @@ export default {
             })
         },
         handleMenuClick(row) {
-            console.log(row);
             this.drawerMenu = true;
             this.getRoleMenuList(row.uuid);
             this.ruleForm.uuid = row.uuid;
         },
         handlePeopleClick(row) {
-            console.log(row);
             this.drawerPeople = true;
             this.getUserByRoleUuid(row.uuid);
             this.ruleForm.uuid = row.uuid;
@@ -358,35 +349,29 @@ export default {
             this.$smoke_post(getUserByRoleUuid, {
                 roleUuid: id
             }).then(res => {
-                console.log(res);
                 this_.rolePeopleList = res.data;
             })
         },
         inner_search() {
             this.innerForm.roleUuid = this.ruleForm.uuid;
             // this.innerForm.roleUuid = "ef4f619613b848bd81eb744d8790827a";
-            console.log(this.innerForm);
             this.getUserByNameAndAccountNumber();
         },
         getUserByNameAndAccountNumber() {
             this.$smoke_post(getUserByNameAndAccountNumber, this.innerForm).then(res => {
-                console.log(res);
                 this.searchTags = res.data;
             })
         },
         tagClick(tag) {
-            console.log(tag);
             this.searchOkTags.push(tag);
             this.searchOkTags = deteleObject(this.searchOkTags);
         },
         tagClose(tag) {
             let arr;
-            console.log(tag);
             arr = removeObject(this.searchOkTags, tag);
             this.searchOkTags = arr;
         },
         userDel(tag){
-            console.log(tag);
             this.$confirm('确定要删除该成员吗?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -405,7 +390,6 @@ export default {
                 roleUuid: this.ruleForm.uuid,
                 userUuidList: [id]
             }).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.getUserByRoleUuid(this.ruleForm.uuid);
                     this.$message({
@@ -424,10 +408,8 @@ export default {
                 roleUuid: this.ruleForm.uuid,
                 userUuidList: arr
             }).then(res => {
-                console.log(res);
                 if(res.code == 200){
                     this.innerDrawer = false;
-                    // console.log(this.ruleForm.uuid);
                     this.getUserByRoleUuid(this.ruleForm.uuid);
                 }
             })
@@ -438,14 +420,12 @@ export default {
             this.$smoke_post(getRoleMenuList, {
                 uuid: id
             }).then(res => {
-                console.log(res);
                 arr = JSON.parse(JSON.stringify(res.data).replace(/disabled/g,"flag"));
                 arr.forEach(element => {
                     if((element.flag) && (element.includeSubsetList.length == 0)){
                         this.checkedKeys.push(element.uuid);
                     }else if(element.includeSubsetList.length != 0){
                         element.includeSubsetList.forEach(tag => {
-                            console.log(tag);
                             if(tag.flag && (element.includeSubsetList.length == 0)){
                                 this.checkedKeys.push(tag.uuid);
                             }else if(tag.includeSubsetList.length != 0){
@@ -466,18 +446,15 @@ export default {
                         })
                     }
                 });
-                console.log(this.checkedKeys);
                 this.treeData = arr;
             })
         },
         treeYes() {
-            console.log(this.$refs.tree.getCheckedKeys());
             this.$smoke_post(addRoleMenuRelation, {
                 menuUuidList: this.$refs.tree.getCheckedKeys(),
                 roleUuid: this.ruleForm.uuid
             }).then(res => {
                 if(res.code == 200) {
-                    console.log(res);
                     this.drawerMenu = false;
                     this.$message({
                         type: 'success',
