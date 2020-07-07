@@ -1114,7 +1114,7 @@ export default {
         handleClassTabClick(tab, event) {
             this.handleCurrentUuid = this.form.classUuid = tab.name;
             this.form.currentPage = 1;
-            this.form.pageSize = Number(this.studentsPageSize);
+            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
             this.getWaitStudentList();
         },
         classTeaGetWaitStudent(type, id) {
@@ -1161,6 +1161,7 @@ export default {
         },
         handleCurrentChange(index) {
             this.form.currentPage = index;
+            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
             this.getWaitStudentList();
         },
         handleSizeChange(index) {

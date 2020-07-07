@@ -1149,6 +1149,7 @@ export default {
         },
         handleCurrentChange(index) {
             this.form.currentPage = index;
+            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
             this.getSupStuList();
         },
         handleSizeChange(index) {

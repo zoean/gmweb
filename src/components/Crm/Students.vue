@@ -1579,7 +1579,7 @@ export default {
         handleClassTabClick(tab, event) {
             this.form.classUuid = tab.name;
             this.form.currentPage = 1;
-            this.form.pageSize = Number(this.studentsPageSize);
+            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
             this.getClassTeaStudent();
         },
         handleTabClick(tab) {
@@ -1633,6 +1633,7 @@ export default {
         },
         handleCurrentChange(index) {
             this.form.currentPage = index;
+            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
             this.getClassTeaStudent();
         },
         handleSizeChange(index) {

@@ -447,6 +447,7 @@ export default {
             localStorage.removeItem('jhToken');
             localStorage.removeItem('userMenuList');
             localStorage.removeItem('initOptions');
+            localStorage.removeItem('studentsPageSize');
             this.$store.dispatch('actionsSetCommonFlag', false);
             this.$router.push({ path: '/login'});
         },
