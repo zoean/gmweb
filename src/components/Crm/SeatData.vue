@@ -421,6 +421,11 @@ export default {
                                 message: '数据释放成功'
                             })
                             this.getAllUserClueData();
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: res.msg
+                            })
                         }
                     })
                 })

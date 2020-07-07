@@ -399,6 +399,11 @@ export default {
                         message: '释放数据成功'
                     })
                     this.orderCallDataList();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
                 }
             })
         },
