@@ -480,6 +480,13 @@
                             :key="index" 
                             :formatter="item.formatter"
                         ></af-table-column>
+
+                        <el-table-column prop="active" fixed="right" label="操作" width="50">
+                            <template slot-scope="scope">                            
+                                <svg-icon icon-title="修改地址" @click="handleEditAddressClick(scope.row)" icon-class="edit" class="svg-handle" />     
+                            </template>
+                        </el-table-column>
+
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="跟进记录" name="second">
@@ -603,6 +610,53 @@
 
         </el-dialog>
 
+        <el-dialog width="50%" title="设置地址信息" :visible.sync="addressFlag">
+          
+          <el-form :model="ruleFormAddress" ref="ruleFormAddress" class="demo-ruleForm" :rules="rulesAddress">
+                        
+            <el-form-item label="姓名" prop="userName">
+              <el-input v-model="ruleFormAddress.userName" size="small"></el-input>
+            </el-form-item>
+
+            <el-form-item label="手机号" prop="phone">
+              <el-input v-model="ruleFormAddress.phone" size="small"></el-input>
+            </el-form-item>
+
+            <el-form-item label="设置省市县" prop="addressArr">
+              
+                <el-cascader
+                    class="smoke-cascader-demo"
+                    ref="cascaderDemo"
+                    size="small"
+                    style="width: 100%;"
+                    placeholder="请选择省市县"
+                    collapse-tags
+                    :show-all-levels='true'
+                    :options="citysOptions"
+                    @change='cityshandleChange'
+                    v-model="ruleFormAddress.addressArr"
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'cityid', children: 'cities' }"
+                    clearable>
+                </el-cascader>
+
+            </el-form-item>
+
+            <el-form-item label="设置地址" prop="address">
+              <el-input v-model="ruleFormAddress.address" size="small"></el-input>
+            </el-form-item>
+
+        </el-form>
+
+        <span slot="footer" class="dialog-footer">
+
+            <el-button @click="addressFlag = false" plain size="small">取 消</el-button>
+            <el-button type="primary" @click="addressSubmitForm('ruleFormAddress')" size="small">确 定</el-button>
+
+        </span>
+
+        </el-dialog>
+
     </el-main>
 </template>
 
@@ -619,11 +673,16 @@ import {
     enumByEnumNums,
     getOrgSubsetByUuid,
     GetAgreementList,
-    GetCourseList4Teacher
+    GetCourseList4Teacher,
+    GetCityList,
+    updateAddress
 } from '../../request/api';
 import axios from 'axios'
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs } from '../../assets/js/common';
+import { 
+    timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery, getTextByJs,
+    citiesFun, 
+} from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, showid, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -812,6 +871,34 @@ export default {
             courseLists: [],
             courseListsFlag: null,
             studentsPageSize: null,
+
+            citysOptions: [],
+            addressFlag: false,
+            ruleFormAddress: {
+                orderId: "",
+                userName: "",
+                address: "",
+                phone: "",
+                provinceId: "",
+                cityId: "",
+                addressArr: [],
+                districtId: "",
+                schoolName: ""
+            },
+            rulesAddress: {
+                userName: [
+                  { required: true, message: '请输入姓名', trigger: 'blur' }
+                ],
+                phone: [
+                  { required: true, message: '请输入手机号', trigger: 'blur' }
+                ],
+                addressArr: [
+                  { required: true, message: '请选择省市县', trigger: 'change' }
+                ],
+                address: [
+                  { required: true, message: '请输入地址', trigger: 'blur' }
+                ],
+            }
         }
     },
     created() {
@@ -827,8 +914,62 @@ export default {
         this.pcaa = pcaa;
         this.getSchoolList();
         this.getOrgSubsetByUuid();
+        this.GetCityList();
     },
     methods: {
+        GetCityList() {
+            this.$smoke_get(GetCityList, {}).then(res => {
+                if(res.status == 0) {
+                    this.citysOptions = citiesFun(res.data.cityList);
+                }
+            })
+        },
+        cityshandleChange(arr) {
+            console.log(arr);
+            this.ruleFormAddress.provinceId = arr[0];
+            this.ruleFormAddress.cityId = arr[1];
+            this.ruleFormAddress.districtId = arr[2];
+        },
+        handleEditAddressClick(row) {
+            this.addressFlag = true;
+            this.ruleFormAddress.userName = row.userName;
+            this.ruleFormAddress.phone = row.phone;
+            this.ruleFormAddress.addressArr = [];
+            this.ruleFormAddress.addressArr.push(row.provinceId);
+            this.ruleFormAddress.addressArr.push(row.cityId);
+            this.ruleFormAddress.addressArr.push(row.districtId);
+            this.ruleFormAddress.provinceId = row.provinceId;
+            this.ruleFormAddress.cityId = row.cityId;
+            this.ruleFormAddress.districtId = row.districtId;
+            this.ruleFormAddress.address = row.address;
+            this.ruleFormAddress.orderId = row.orderId;
+            this.$nextTick(() => {
+                this.$refs['ruleFormAddress'].resetFields();
+            })
+        },
+        addressSubmitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    console.log(this.ruleFormAddress);
+                    this.updateAddress();
+                } else {
+                  console.log('error submit!!');
+                  return false;
+                }
+            });
+        },
+        updateAddress() {
+            this.$smoke_post(updateAddress, this.ruleFormAddress).then(res => {
+                if(res.code == 200) {
+                    this.addressFlag = false;
+                    this.$message({
+                        type: 'success',
+                        message: '地址设置成功'
+                    });
+                    this.geOrderRecord();
+                }
+            })
+        },
         handleZuzhiChange(arr) {
             let brr = [];
             // console.log(arr);
@@ -1017,7 +1158,7 @@ export default {
                         type: 'success',
                         message: '成功领取' + res.data.length + '条'
                     });
-                    this.getWaitStudentList();
+                    this.getClassTeaClassWait();
                 }else{
                     this.$message({
                         type: 'error',
@@ -1103,6 +1244,8 @@ export default {
                     this.customerForm.applyExam = res.data.applyExam;
                     this.customerForm.applyProvinceCity = (res.data.applyProvince == "" && res.data.applyCity == "") ? [] : [res.data.applyProvince, res.data.applyCity];
                     this.customerForm.filingFee = res.data.filingFee;
+
+                    this.ruleFormAddress.schoolName = res.data.signUpSchool;
                 }
             })
         },
@@ -1283,7 +1426,7 @@ export default {
     }
 
     .newStudents /deep/ div.el-dialog__body{
-        height: 50vh;
+        height: 55vh;
         overflow: auto;
     }
 </style>

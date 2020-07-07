@@ -864,7 +864,18 @@ export const dialStateText = (text) => {
     return str;
 }
 
-
+export const citiesFun = (data) => {
+    for(var i=0;i<data.length;i++){
+        if(data[i].cities.length<1){
+          // children若为空数组，则将children设为undefined
+          data[i].cities = undefined;
+        }else {
+          // children若不为空数组，则继续 递归调用 本方法
+          citiesFun(data[i].cities);
+        }
+    }
+    return data;
+}
 
 
 

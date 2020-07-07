@@ -9,7 +9,7 @@
 
                 <el-input class="user" v-model="accountNumber" size="medium" placeholder="请输入账号" prefix-icon="el-icon-user"></el-input>
                 <el-input class="lock" v-model="password" size="medium" placeholder="请输入密码" show-password prefix-icon="el-icon-lock"></el-input>
-                <el-button type="primary" class="login-btn" size="medium" @click="login" v-loading.fullscreen.lock="fullscreenLoading">登录</el-button>
+                <el-button type="primary" class="login-btn" size="medium" @click="login" v-loading.fullscreen.lock="fullscreenLoading" :disabled="isDisable">登录</el-button>
 
                 <div class="contain-forget" @click="forget_password">忘记密码</div>
 
@@ -25,7 +25,8 @@ export default {
         return {
             accountNumber: '',
             password: '',
-            fullscreenLoading: false
+            fullscreenLoading: false,
+            isDisable: false,
         }
     },
     created() {
@@ -48,6 +49,7 @@ export default {
                 })
             }else{
                 this.fullscreenLoading = true;
+                this.isDisable=true;
                 this.$smoke_post(login, {
                     accountNumber: this.accountNumber,
                     password: this.password
@@ -59,14 +61,14 @@ export default {
                         this.getUserLoginMessage();
                         setTimeout(() => {
                             this.fullscreenLoading = false;
+                            this.isDisable=false;
                             this.$router.push({ path: '/'});
                         }, 1000);
-
-                        
 
                     }else{
                         setTimeout(() => {
                             this.fullscreenLoading = false;
+                            this.isDisable=false;
                             this.$message({
                                 type: 'error',
                                 message: res.msg
