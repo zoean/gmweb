@@ -881,6 +881,22 @@ export const sendStartText = (text) => {
     return str;
 }
 
+export const countDown = (time) => {
+
+    var s = 0;
+    
+    var hour = time.split(':')[0];
+    
+    var min = time.split(':')[1];
+    
+    var sec = time.split(':')[2];
+    
+    s = Number(hour * 3600) + Number(min * 60) + Number(sec);
+    
+    return s * 1000;
+    
+}
+
 export const citiesFun = (data) => {
     for(var i=0;i<data.length;i++){
         if(data[i].cities.length<1){

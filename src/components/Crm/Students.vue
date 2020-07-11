@@ -842,6 +842,7 @@
 
                 <el-time-picker
                   v-model="smsForm.timeValue"
+                  value-format="HH:mm:ss"
                   placeholder="每日发送时间"
                   size="small"
                   style="width: 100%;"
@@ -894,7 +895,7 @@ import {
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, copyData, removeEvery, getTextByJs,
-    citiesFun, 
+    citiesFun, countDown
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid, nationAll, MJ_15 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
@@ -1215,6 +1216,7 @@ export default {
     methods: {
         sendSmsFalse() {
             this.smsSetFlag = true;
+            
             this.$nextTick(() => {
                 this.smsList.map(sll => {
                     this.$refs.smsTable.toggleRowSelection(sll, true);
@@ -1225,7 +1227,7 @@ export default {
             this.$refs[formName].validate((valid) => {
               if (valid) {
                 if(this.smsTypeFlag) {
-                    this.smsForm.time = this.smsForm.timeValue.getTime() - new Date(new Date(new Date().toLocaleDateString()).getTime());
+                    this.smsForm.time = countDown(this.smsForm.timeValue);
                 }
                 // console.log(this.smsForm);
                 this.groupSMS();
@@ -1294,6 +1296,7 @@ export default {
             // console.log(stuUuidArr);
             if(stuUuidArr.length != 0) {
                 this.smsForm.stuList = stuUuidArr;
+                this.smsForm.timeValue = '';
                 this.smsSetFlag = false;
                 this.getSMSMsgBaseList();
             }else{
