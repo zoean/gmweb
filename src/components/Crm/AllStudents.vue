@@ -58,7 +58,7 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="4">
 
                 <el-cascader
                     class="smoke-cascader1"
@@ -77,7 +77,7 @@
 
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="4">
                 
                 <el-date-picker
                   style="width: 90%;"
@@ -96,6 +96,12 @@
             <el-col :span="2">
 
                 <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
+
+            </el-col>
+
+            <el-col :span="2">
+
+                <!-- <el-button type="primary" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button> -->
 
             </el-col>
 
@@ -678,6 +684,36 @@
 
         </el-dialog>
 
+        <el-dialog width="40%" title="短信发送" :visible.sync="smsFlag">
+          
+          <el-table
+            :data="smsList"
+            :row-key="getRowKey"
+            >
+
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
+
+            <el-table-column
+                :prop="item.prop"
+                :label="item.label"
+                v-for="(item, index) in smsColumnList"
+                :key="index">
+            </el-table-column>
+
+          </el-table>
+
+          <span slot="footer" class="dialog-footer">
+
+            <el-button @click="smsFlag = false" plain size="small">取 消</el-button>
+            <el-button type="primary" @click="smsStuUuidListClick" size="small">确 定</el-button>
+
+        </span>
+
+        </el-dialog>
+
         <el-dialog width="50%" title="设置地址信息" :visible.sync="addressFlag">
           
           <el-form :model="ruleFormAddress" ref="ruleFormAddress" class="demo-ruleForm" :rules="rulesAddress" :key="formAddressKey">
@@ -744,7 +780,8 @@ import {
     GetAgreementList,
     GetCourseList4Teacher,
     GetCityList,
-    updateAddress
+    updateAddress,
+    getSendMsgClassTeaStudent
 } from '../../request/api';
 import { 
     timestampToTime, 
@@ -1024,6 +1061,14 @@ export default {
                 ],
             },
             formAddressKey: '',
+
+            smsFlag: false,
+            smsList: [],
+            smsColumnList: [
+                { 'prop': 'name', 'label': '姓名' },
+                { 'prop': 'tel', 'label': '手机号码' },
+                { 'prop': 'stuUuid', 'label': '学员标识' },
+            ]
         }
     },
     created() {
@@ -1043,6 +1088,20 @@ export default {
         this.GetCityList();
     },
     methods: {
+        // getSendMsgClassTeaStudentClick() {
+        //     this.smsFlag = true;
+        //     this.$smoke_post(getSendMsgClassTeaStudent, this.form).then(res => {
+        //         if(res.code == 200) {
+
+        //         }
+        //     })
+        // },
+        // smsStuUuidListClick() {
+
+        // },
+        // getRowKey(row){
+        //     return row.stuUuid
+        // },
         GetCityList() {
             this.$smoke_get(GetCityList, {}).then(res => {
                 if(res.status == 0) {

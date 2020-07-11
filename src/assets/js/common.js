@@ -853,6 +853,34 @@ export const dialStateText = (text) => {
     return str;
 }
 
+export const sendStartText = (text) => {
+    let str;
+    switch (text) {
+        case 0:
+            str = '未发送';
+            break;
+        case 1:
+            str = '已发送';
+            break;
+        case 2:
+            str = '发送失败';
+            break;
+        case 3:
+            str = '内容为空';
+            break;
+        case 4:
+            str = '手机号码为空';
+            break;
+        case 5:
+            str = '模板id为空';
+            break;
+        case 6:
+            str = '模板参数为空';
+            break;
+    }
+    return str;
+}
+
 export const citiesFun = (data) => {
     for(var i=0;i<data.length;i++){
         if(data[i].cities.length<1){

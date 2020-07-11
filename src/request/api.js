@@ -220,6 +220,7 @@ export const getClassTeaClassWait = '/api/phone/classTeacher/getClassTeaClassWai
 export const getSupStuList = '/api/phone/classTeacher/getSupStuList'; //主管管理的所有学员
 export const transferStu = '/api/phone/classTeacher/transferStu'; //转移学员
 export const getTransferStuCTList = '/api/phone/classTeacher/getTransferStuCTList'; //获取转移学员的班主任列表
+export const getSendMsgClassTeaStudent = '/api/phone/classTeacher/getSendMsgClassTeaStudent'; //发送短信（班主任学员列表）
 
 //学员管理
 export const getWaitStudentList = '/api/phone/classTeacher/getWaitStudentList'; //获取待分配学员订单列表
@@ -267,3 +268,9 @@ export const systemLogList = '/api/data/systemLog/list' //查询日志列表
 //短信模板
 export const getSMSTem = '/api/phone/getSMSTem' //获取短信模板
 export const createSMSMsg = '/api/phone/createSMSMsg' //创建短信内容
+export const getSMSMsgDel = '/api/phone/getSMSMsgDel' //获取短信内容详情
+export const getSMSMsgList = '/api/phone/getSMSMsgList' //获取短信内容集合
+export const getSMSMsgBaseList = '/api/phone/getSMSMsgBaseList' //获取短信基础内容集合
+export const getSMSTemList = '/api/phone/getSMSTemList' //获取短信模板列表
+export const groupSMS = '/api/phone/groupSMS' //群发消息
+export const getSMSRecordList = '/api/phone/getSMSRecordList' //获取短信记录列表

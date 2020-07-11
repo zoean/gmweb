@@ -43,6 +43,7 @@ import fieldManagement from '@/components/Crm/FieldManagement';
 import manageClues from '@/components/Crm/ManageClues';
 import peopleClues from '@/components/Crm/PeopleClues';
 import sendSMS from '@/components/Crm/SendSMS';
+import smslist from '@/components/Crm/SMSlist';
 import smsRecord from '@/components/Crm/SMSRecord';
 
 import knowp from '@/components/Knowp/Index';
@@ -262,6 +263,12 @@ export default new Router({
             path: '/crm/sms/sendSMS',
             name: 'sendSMS',
             component: sendSMS
+        },
+
+        {
+            path: '/crm/sms/smslist',
+            name: 'smslist',
+            component: smslist
         },
 
         {
