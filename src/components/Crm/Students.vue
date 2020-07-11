@@ -776,7 +776,6 @@
             :data="smsList"
             ref="smsTable"
             v-if="smsSetFlag"
-            :row-key="getRowKey"
             >
 
             <el-table-column
@@ -814,7 +813,7 @@
                 <el-select @change="smsMsgChange" v-model="smsForm.smsMsgId" placeholder="请选择短信模板" size="small" >
                     <el-option
                       v-for="item in smsMsgList"
-                      :key="item.msgName"
+                      :key="item.msgId"
                       :label="item.msgName"
                       :value="item.msgId">
                     </el-option>
@@ -831,7 +830,7 @@
                 <el-select @change="smsTypeChange" v-model="smsForm.type" placeholder="请选择发送方式" size="small" >
                     <el-option
                       v-for="item in smsTypeList"
-                      :key="item.msgName"
+                      :key="item.msgId"
                       :label="item.msgName"
                       :value="item.msgId">
                     </el-option>
@@ -1226,7 +1225,7 @@ export default {
             this.$refs[formName].validate((valid) => {
               if (valid) {
                 if(this.smsTypeFlag) {
-                    this.smsForm.time = this.smsForm.timeValue.getTime() - new Date(new Date().toLocaleDateString()).getTime();
+                    this.smsForm.time = this.smsForm.timeValue.getTime() - new Date(new Date(new Date().toLocaleDateString()).getTime());
                 }
                 // console.log(this.smsForm);
                 this.groupSMS();
@@ -1293,12 +1292,16 @@ export default {
                 stuUuidArr.push(sll.stuUuid);
             });
             // console.log(stuUuidArr);
-            this.smsForm.stuList = stuUuidArr;
-            this.smsSetFlag = false;
-            this.getSMSMsgBaseList();
-        },
-        getRowKey(row){
-            return row.stuUuid
+            if(stuUuidArr.length != 0) {
+                this.smsForm.stuList = stuUuidArr;
+                this.smsSetFlag = false;
+                this.getSMSMsgBaseList();
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '暂无学员可发送短信'
+                });
+            }
         },
         GetCityList() {
             this.$smoke_get(GetCityList, {}).then(res => {
