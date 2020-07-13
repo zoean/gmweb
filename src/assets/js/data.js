@@ -28,7 +28,7 @@ export const columnListYes = [
     { 'prop': 'title21', 'label': '21--22' },
     { 'prop': 'title22', 'label': '22--23' },
     { 'prop': 'title23', 'label': '23--24' },
-    { 'prop': 'totalPassTime', 'label': '全天合计单位：小时' },
+    { 'prop': 'totalPassTime', 'label': '全天合计' },
 ]
 
 export const columnListNo = [

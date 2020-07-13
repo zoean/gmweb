@@ -5,6 +5,7 @@ import index from '@/components/Index/Index';
 import four from '@/components/Index/Four';
 import login from '@/components/Index/Login';
 import forget from '@/components/Index/Forget';
+import url from '@/components/Index/Url';
 
 import menu from '@/components/Base/Menu';
 import people from '@/components/Base/People';
@@ -85,6 +86,11 @@ export default new Router({
             path: '/forget',
             name: 'forget',
             component: forget
+        },
+        {
+            path: '/url/:id',
+            name: 'url',
+            component: url
         },
         {
             path: '/base/people',

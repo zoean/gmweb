@@ -61,6 +61,7 @@
 
 <script>
 import { countCallRecord, getOrgSubsetByUuid } from '../../request/api';
+import { countDownTime } from '../../assets/js/common';
 import { columnListYes, columnListNo } from '../../assets/js/data';
 export default {
     name: 'timeData',
@@ -115,9 +116,9 @@ export default {
                         setTimeout(() => {
                             this.fullscreenLoading = false;
                             res.data.map(lls => {
-                                lls.totalPassTime = Math.round((lls.totalPassTime / 3600) * 100) / 100;
+                                lls.totalPassTime = countDownTime(Number(lls.totalPassTime));
                                 lls.list.map((act,index) => {
-                                    lls['title' + index] = Math.round((act.passTime / 3600) * 100) / 100;
+                                    lls['title' + index] = countDownTime(Number(act.passTime));
                                 })
                             })
                             this.tableData = res.data;

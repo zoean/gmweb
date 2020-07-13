@@ -274,3 +274,14 @@ export const getSMSMsgBaseList = '/api/phone/getSMSMsgBaseList' //获取短信�
 export const getSMSTemList = '/api/phone/getSMSTemList' //获取短信模板列表
 export const groupSMS = '/api/phone/groupSMS' //群发消息
 export const getSMSRecordList = '/api/phone/getSMSRecordList' //获取短信记录列表
+
+//代报考管理
+export const registerList = '/api/phone/register/list' //查询报考信息列表
+export const queryProvinceAll = '/api/phone/register/queryProvinceAll' //查询报考信息列表
+export const queryUserList = '/api/phone/register/queryUserList' //查询分配报考员列表
+export const allocationUser = '/api/phone/register/allocationUser' //分配报考员操作
+export const registerGet = '/api/phone/register/get' //查看报考信息
+export const registerCheck = '/api/phone/register/check' //审核报考信息
+export const updataPayment = '/api/phone/register/updataPayment' //更新报考缴费状态
+export const queryRegisterProcess = '/api/phone/register/queryRegisterProcess' //查询代报考进度
+

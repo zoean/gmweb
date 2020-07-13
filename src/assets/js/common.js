@@ -209,6 +209,16 @@ export const classTypeText = (id) => {
     return str;
 }
 
+export const urlText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = 'https://www.wjx.cn/m/84619210.aspx';
+            break;
+    }
+    return str;
+}
+
 export const classTypeString = (id) => {
     let str;
     switch (id) {
@@ -895,6 +905,32 @@ export const countDown = (time) => {
     
     return s * 1000;
     
+}
+
+export const countDownTime = (time) => {
+    var hh;
+    var mm;
+    var ss;
+    if(time==null||time<0){
+        return;
+    }
+    //得到小时
+    hh=time/3600|0;
+    time=parseInt(time)-hh*3600;
+    if(parseInt(hh)<10){
+          hh="0"+hh;
+    }
+    //得到分
+    mm=time/60|0;
+    //得到秒
+    ss=parseInt(time)-mm*60;
+    if(parseInt(mm)<10){
+         mm="0"+mm;    
+    }
+    if(ss<10){
+        ss="0"+ss;      
+    }
+    return hh+":"+mm+":"+ss;
 }
 
 export const citiesFun = (data) => {

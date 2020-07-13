@@ -28,7 +28,7 @@ export default {
     }
   },
   created() {
-    if((this.$route.path == '/login') || (this.$route.path == '/forget') || ((this.$route.path == '/404') || (this.$route.path.indexOf('agreeMentDetails') !== -1))){
+    if((this.$route.path.indexOf('url') !== -1) || (this.$route.path == '/login') || (this.$route.path == '/forget') || ((this.$route.path == '/404') || (this.$route.path.indexOf('agreeMentDetails') !== -1))){
       this.$store.dispatch('actionsSetCommonFlag', false);
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
@@ -36,7 +36,7 @@ export default {
   },
   watch:{
     '$route.path': function(newVal){
-      if(newVal == '/404' || newVal == '/login' || newVal == '/forget' || (this.$route.path.indexOf('agreeMentDetails') !== -1)){
+      if(newVal == '/404' || newVal == '/login' || newVal == '/forget' || (this.$route.path.indexOf('agreeMentDetails') !== -1) || (this.$route.path.indexOf('url') !== -1)){
         this.$store.dispatch('actionsSetCommonFlag', false);
       }else{
         this.$store.dispatch('actionsSetCommonFlag', true);
