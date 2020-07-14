@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
 
     const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
 
-    if(to.path === '/forget') {
+    if(to.path === '/forget' || (to.path.indexOf('url') !== -1)) {
         next();
     }else{
         if (!jhToken) {//未登录
