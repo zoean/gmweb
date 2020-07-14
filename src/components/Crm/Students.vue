@@ -1,6 +1,5 @@
 <template>
     <el-main class="index-main students">
-        <!-- <div class="people-title">{{titleFlag ? titleName : '班主任 - ' + this.$store.state.name + ' - 服务学员'}}</div> -->
         
         <el-row style="margin-bottom: 6px;">
             
