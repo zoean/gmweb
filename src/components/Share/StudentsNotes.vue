@@ -32,18 +32,18 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户姓名" prop="name">
-                                    <el-input v-model="customerForm.name" placeholder="请输入客户姓名" size="small" ></el-input>
+                                    <el-input v-model="customerForm.name" :disabled='routePathFlag' placeholder="请输入客户姓名" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
-                                    <el-input v-model="customerForm.age" placeholder="请输入客户年龄" size="small" ></el-input>
+                                    <el-input v-model="customerForm.age" :disabled='routePathFlag' placeholder="请输入客户年龄" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="第二电话" prop="twoTel">
-                                    <el-input v-model="customerForm.twoTel" placeholder="请输入第二电话" size="small" ></el-input>
+                                    <el-input v-model="customerForm.twoTel" :disabled='routePathFlag' placeholder="请输入第二电话" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -54,7 +54,7 @@
                             <el-col :span="6">
                                 <el-form-item label="最高学历" prop="education">
 
-                                    <el-select v-model="customerForm.education" placeholder="请选择最高学历" size="small" >
+                                    <el-select v-model="customerForm.education" :disabled='routePathFlag' placeholder="请选择最高学历" size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-1']"
                                           :key="item.name"
@@ -69,13 +69,13 @@
 
                             <el-col :span="6">
                                 <el-form-item label="所在省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                                    <area-cascader type="text" v-model="customerForm.provinceCity" :disabled='routePathFlag' @change="cityChange" :data="pcaa"></area-cascader>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="客户工作" prop="work">
-                                    <el-input v-model="customerForm.work" placeholder="请输入客户工作" size="small" ></el-input>
+                                    <el-input v-model="customerForm.work" placeholder="请输入客户工作" :disabled='routePathFlag' size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
                             
@@ -83,7 +83,7 @@
 
                                 <el-form-item label="工作年限" prop="workingLife">
 
-                                    <el-select v-model="customerForm.workingLife" placeholder="请选择工作年限" size="small" >
+                                    <el-select v-model="customerForm.workingLife" placeholder="请选择工作年限" :disabled='routePathFlag' size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-2']"
                                           :key="item.name"
@@ -104,7 +104,7 @@
                             <el-col :span="6">
                                 <el-form-item label="取证目的" prop="evidencePurpose">
 
-                                    <el-select v-model="customerForm.evidencePurpose" placeholder="请选择取证目的" size="small" >
+                                    <el-select v-model="customerForm.evidencePurpose" :disabled='routePathFlag' placeholder="请选择取证目的" size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-3']"
                                           :key="item.name"
@@ -121,7 +121,7 @@
 
                                 <el-form-item label="辅助报名" prop="auxiliarySignUp">
 
-                                    <el-select v-model="customerForm.auxiliarySignUp" placeholder="请选择辅助报名" size="small" >
+                                    <el-select v-model="customerForm.auxiliarySignUp" :disabled='routePathFlag' placeholder="请选择辅助报名" size="small" >
                                         <el-option
                                           v-for="item in auxiliarySignUpList"
                                           :key="item.name"
@@ -136,7 +136,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="客户微信" prop="wx">
-                                    <el-input v-model="customerForm.wx" placeholder="请输入客户微信" size="small" ></el-input>
+                                    <el-input v-model="customerForm.wx" placeholder="请输入客户微信" :disabled='routePathFlag' size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -144,7 +144,7 @@
 
                                 <el-form-item label="客户性别" prop="gender">
 
-                                    <el-select v-model="customerForm.gender" placeholder="请选择性别" size="small" >
+                                    <el-select v-model="customerForm.gender" placeholder="请选择性别" :disabled='routePathFlag' size="small" >
                                         <el-option
                                           v-for="item in genderList"
                                           :key="item.name"
@@ -163,13 +163,13 @@
 
                             <el-col :span="6">
                                 <el-form-item label="身份证号" prop="idcardNo">
-                                    <el-input v-model="customerForm.idcardNo" placeholder="请输入身份证号码" size="small"></el-input>
+                                    <el-input v-model="customerForm.idcardNo" placeholder="请输入身份证号码" :disabled='routePathFlag' size="small"></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="报考省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" @change="applyCityChange" :data="pcaa"></area-cascader>
+                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" :disabled='routePathFlag' @change="applyCityChange" :data="pcaa"></area-cascader>
                                 </el-form-item>
                             </el-col>
 
@@ -177,7 +177,7 @@
 
                                 <el-form-item label="报考条件" prop="applyExam">
 
-                                    <el-select v-model="customerForm.applyExam" placeholder="请选择报考条件" size="small" >
+                                    <el-select v-model="customerForm.applyExam" placeholder="请选择报考条件" :disabled='routePathFlag' size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-15']"
                                           :key="item.name"
@@ -198,6 +198,7 @@
                                     <el-autocomplete
                                         clearable
                                         style="width: 100%;"
+                                        :disabled='routePathFlag' 
                                         size="small"
                                         ref="autocompleteNation"
                                         v-model="customerForm.nationText"
@@ -218,7 +219,7 @@
 
                             <el-col :span="6">
                                 <el-form-item label="毕业院校" prop="graduationSchool">
-                                    <el-input v-model="customerForm.graduationSchool" placeholder="请输入毕业院校" size="small"></el-input>
+                                    <el-input v-model="customerForm.graduationSchool" :disabled='routePathFlag' placeholder="请输入毕业院校" size="small"></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -230,6 +231,7 @@
                                       style="width: 100%;"
                                       v-model="customerForm.graduationTime"
                                       type="month"
+                                      :disabled='routePathFlag' 
                                       @change="graduationTimeChange"
                                       placeholder="请选择毕业时间">
                                     </el-date-picker>
@@ -241,7 +243,7 @@
 
                                 <el-form-item label="备案金" prop="filingFee">
 
-                                    <el-select v-model="customerForm.filingFee" placeholder="请选择缴纳备案金" size="small" >
+                                    <el-select v-model="customerForm.filingFee" :disabled='routePathFlag' placeholder="请选择缴纳备案金" size="small" >
                                         <el-option
                                           v-for="item in filingFeeList"
                                           :key="item.name"
@@ -257,7 +259,7 @@
                             <el-col :span="6">
                                 <el-form-item label="学籍状态" prop="studentStatus">
 
-                                    <el-select v-model="customerForm.studentStatus" placeholder="请选择学籍状态" size="small" >
+                                    <el-select v-model="customerForm.studentStatus" :disabled='routePathFlag' placeholder="请选择学籍状态" size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-10']"
                                           :key="item.name"
@@ -276,19 +278,19 @@
 
                             <el-col :span="6">
                                 <el-form-item label="毕业专业" prop="graduationMajor">
-                                    <el-input v-model="customerForm.graduationMajor" placeholder="请输入毕业专业" size="small" ></el-input>
+                                    <el-input v-model="customerForm.graduationMajor" :disabled='routePathFlag' placeholder="请输入毕业专业" size="small" ></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="注册平台" prop="signUpSchool">
-                                    <el-input v-model="customerForm.signUpSchool" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model="customerForm.signUpSchool" :disabled='routePathFlag' readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
                             </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="报名时间" prop="createTime">
-                                    <el-input v-model="customerForm.createTime" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model="customerForm.createTime" readonly size="small" :disabled='routePathFlag' class="borderNone"></el-input>
                                 </el-form-item>
                             </el-col>
 
@@ -301,7 +303,7 @@
                             <el-col :span="6">
                                 <el-form-item label="学习状况" prop="studySituation">
 
-                                    <el-select v-model="customerForm.studySituation" placeholder="请选择学习状况" size="small" >
+                                    <el-select v-model="customerForm.studySituation" :disabled='routePathFlag' placeholder="请选择学习状况" size="small" >
                                         <el-option
                                           v-for="item in enumList['MJ-11']"
                                           :key="item.name"
@@ -318,7 +320,7 @@
                         
                         <el-row>
 
-                            <el-col :span="6">
+                            <el-col :span="6" v-if="!routePathFlag">
                                 <el-form-item label="所属班主任" prop="classTeaName">
                                     <el-input v-model="customerForm.classTeaName" readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
@@ -329,6 +331,7 @@
 
                                     <el-date-picker
                                         style="width: 100%;"
+                                        :disabled='routePathFlag' 
                                         v-model="customerForm.examPeriod"
                                         size="small" 
                                         type="month"
@@ -356,7 +359,7 @@
                             <el-col :span="12">
 
                                 <el-form-item label="成单坐席" prop="seatName">
-                                    <el-tooltip effect="dark" popper-class="smoke_seatName2" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
+                                    <el-tooltip effect="dark" v-if="customerForm.orgNameListText != '无'" :open-delay="500" :content="customerForm.orgNameListText" placement="top-start">
                                         <el-input v-model="customerForm.seatName" readonly size="small" class="borderNone"></el-input>
                                     </el-tooltip>
                                 </el-form-item>
@@ -365,9 +368,9 @@
                             
                         </el-row>
     
-                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;" v-if="!$route.query.id"></el-row>
+                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 10px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
 
-                        <el-row v-if="!$route.query.id">
+                        <el-row v-if="!routePathFlag">
                             
                             <el-col :span="6">
 
@@ -388,7 +391,7 @@
                             </el-col>
                         </el-row>
 
-                        <el-row v-if="!$route.query.id">
+                        <el-row v-if="!routePathFlag">
 
                             <el-col :span="18">
                                 <el-form-item label="跟进内容" prop="followUpContent">
@@ -408,7 +411,7 @@
 
                         </el-row>
                         
-                        <el-form-item style="text-align: center;" v-if="!$route.query.id">
+                        <el-form-item style="text-align: center;" v-if="!routePathFlag">
                           <el-button type="primary" @click="submitForm('customerForm')" size="small" style="width: 80px;">确定</el-button>
                           <el-button plain size="small" style="width: 80px;" @click="quxiao">取消</el-button>
                         </el-form-item>
@@ -608,11 +611,21 @@
 
 <script>
 import { 
-    
+  getStudentDetails, 
+  addClassTeaStuNotes, 
+  getClassTeaStuNotes, 
+  enumByEnumNums,
+  copyTel,
+  getOrderList,
+  getClueCallLog,
+  GetAgreementList,
+  GetCourseList4Teacher,
+  GetCityList,
+  updateAddress,
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { 
-
+  timestampToTime, getTextByJs, citiesFun
 } from '../../assets/js/common';
 import { 
   MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid, nationAll, MJ_15
@@ -621,17 +634,37 @@ export default {
     name: 'customerNotes',
     props: {
         drawer: {
-            type: Boolean,
-            default: false
+          type: Boolean,
+          default: false
+        },
+        studentUuid: {
+          type: String,
+          default: ''
+        },
+        userId: {
+          type: String,
+          default: ''
+        },
+        clueDataSUuid: {
+          type: String,
+          default: ''
+        },
+        callLogUuid: {
+          type: String,
+          default: ''
         },
     },
     data() {
         return {
-          drawerTitle: '',
+          drawerTitle: '学员详情',
           direction: 'btt',
-          getOrderForm: {},
+          getOrderForm: {
+            userId: this.userId,
+            itemId: '',
+            classType: '',
+          },
           customerForm: {
-            studentUuid: '', //学员的唯一标识
+            studentUuid: this.studentUuid, //学员的唯一标识
             age: '',
             auxiliarySignUp: '', //辅助报名
             buyState: '', //购买状态
@@ -715,6 +748,12 @@ export default {
               return cellValue ? cellValue : '--'
             }
           }],
+          notesForm: {
+            currentPage: 1,
+            pageSize: 20,
+            studentUuid: this.studentUuid,
+            total: null,
+          },
           notesList: [],
           notesColumnList: [
             { 'prop': 'createTime', 'label': '创建时间'},
@@ -733,14 +772,212 @@ export default {
           ],
           enumList: {},
           pcaa: null, //省市数据
+          citysOptions: [],
+          notesCallForm: {
+            clueDataSUuid: this.clueDataSUuid,
+            currentPage: 1,
+            pageSize: 20,
+            total: null, //总条目数
+          },
+          columnWidth: 90,
+          columnFlag: false,
+          totalFlag: false,
+          pageshow: true, //分页重新渲染
+          agreementList: [],
+          agreeColumnList: [
+            { 'prop': 'agrName', 'label': '协议名称' },  
+          ],
+          agreeFlag: false,
+          courseLists: [],
+          courseListsFlag: null,
+
+          addressFlag: false,
+          ruleFormAddress: {
+            orderId: "",
+            userName: "",
+            address: "",
+            phone: "",
+            provinceId: "",
+            cityId: "",
+            addressArr: [],
+            districtId: "",
+            schoolName: ""
+          },
+          rulesAddress: {
+            userName: [
+              { required: true, message: '请输入姓名', trigger: 'blur' }
+            ],
+            phone: [
+              { required: true, message: '请输入手机号', trigger: 'blur' }
+            ],
+            addressArr: [
+              { required: true, message: '请选择省市县', trigger: 'change' }
+            ],
+            address: [
+              { required: true, message: '请输入地址', trigger: 'blur' }
+            ],
+          },
+          formAddressKey: '',
+          auxiliarySignUpList: [
+            { 'name': '是', 'number': 1 },
+            { 'name': '否', 'number': 0 },
+          ],
+          genderList: [
+            { 'name': '女', 'number': 0 },
+            { 'name': '男', 'number': 1 },
+          ],
+          filingFeeList: [
+            { 'name': '否', 'number': 0 },
+            { 'name': '是', 'number': 1 },
+          ],
+          routePathFlag: false,
         }
     },
     created() {
         let arr = [MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
+        this.GetCityList();
+        this.GetAgreementList(this.getOrderForm.userId);
+        this.getStudentDetails(this.studentUuid);
+        console.log(this.$route.path);
+        if(this.$route.path.indexOf("newStudents") != -1 || this.$route.path.indexOf("allStudents") != -1){
+            this.routePathFlag = true;
+        }
     },
     methods: {
+      addressSubmitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+            if (valid) {
+                this.updateAddress();
+            } else {
+              return false;
+            }
+        });
+      },
+      updateAddress() {
+        this.$smoke_post(updateAddress, this.ruleFormAddress).then(res => {
+            if(res.code == 200) {
+                this.addressFlag = false;
+                this.$message({
+                    type: 'success',
+                    message: '地址设置成功'
+                });
+                this.geOrderRecord();
+            }
+        })
+      },
+      cityshandleChange(arr) {
+        this.ruleFormAddress.provinceId = arr[0];
+        this.ruleFormAddress.cityId = arr[1];
+        this.ruleFormAddress.districtId = arr[2];
+      },
+      handleEditAddressClick(row) {
+        this.addressFlag = true;
+        this.ruleFormAddress.userName = row.userName;
+        this.ruleFormAddress.phone = row.phone;
+        this.ruleFormAddress.addressArr = [];
+        this.ruleFormAddress.addressArr.push(row.provinceId);
+        this.ruleFormAddress.addressArr.push(row.cityId);
+        this.ruleFormAddress.addressArr.push(row.districtId);
+        this.ruleFormAddress.provinceId = row.provinceId;
+        this.ruleFormAddress.cityId = row.cityId;
+        this.ruleFormAddress.districtId = row.districtId;
+        this.ruleFormAddress.address = row.address;
+        this.ruleFormAddress.orderId = row.orderId;
+        this.formAddressKey = Math.random();
+        this.$nextTick(() => {
+            this.$refs['ruleFormAddress'].resetFields();
+        })
+      },
+      copyTel(id) {
+        this.$smoke_post(copyTel, {
+          uuid: id
+        }).then(res => {
+          if(res.code == 200) {
+              copyData(res.data);
+              this.$message({
+                  type: 'success',
+                  message: '复制成功',
+              });
+          }else{
+              this.$message({
+                  type: 'error',
+                  message: res.msg
+              })
+          }
+        })
+      },
+      phoneCopyFun() {
+          this.copyTel(this.clueDataSUuid);
+      },
+      quxiao() {
+        this.$emit("changeDrawer", false)
+      },
+      lookAgreement() {
+        this.agreeFlag = true;
+      },
+      lookAgreeLink(id) {
+        const { href } = this.$router.resolve({
+            name: "agreeMentDetails",
+            query: {
+                id: id
+            }
+        })
+        window.open(href, '_blank');
+      },
+      handleSelectNation(item) {
+        this.customerForm.nation = item.value;
+        this.customerForm.nationText = item.value;
+      },
+      autocompleteClearNation() {
+        this.$nextTick(() => {
+            this.$refs.autocompleteNation.$children
+                .find(c => c.$el.className.includes('el-input'))
+                .blur();
+            this.customerForm.nation = '';
+            this.$refs.autocompleteNation.focus();
+        })
+      },
+      timeChange() {
+        this.customerForm.examPeriod = this.customerForm.examPeriod.getTime();
+      },
+      graduationTimeChange() {
+        this.customerForm.graduationTime = this.customerForm.graduationTime.getTime();
+      },
+      applyCityChange() {
+        this.customerForm.applyProvince = this.customerForm.applyProvinceCity[0];
+        this.customerForm.applyCity = this.customerForm.applyProvinceCity[1];
+      },
+      cityChange() {
+        this.customerForm.province = this.customerForm.provinceCity[0];
+        this.customerForm.city = this.customerForm.provinceCity[1];
+      },
+      handleCurrentChangeFollow(index) {
+        this.notesForm.currentPage = index;
+        this.getClassTeaStuNotes();
+      },
+      handleSizeChangeFollow(index) {
+        this.notesForm.pageSize = index;
+        this.notesForm.currentPage = 1;
+        this.getClassTeaStuNotes();
+      }, 
+      handleCurrentChangeCall(index) {
+        this.notesCallForm.currentPage = index;
+        this.getClueCallLog();
+      },
+      handleSizeChangeCall(index) {
+        this.notesCallForm.pageSize = index;
+        this.notesCallForm.currentPage = 1;
+        this.getClueCallLog();
+      }, 
+      GetCityList() {
+        this.$smoke_get(GetCityList, {}).then(res => {
+            if(res.status == 0) {
+                this.citysOptions = citiesFun(res.data.cityList);
+            }
+        })
+      },
       enumByEnumNums(arr) {
         this.$smoke_post(enumByEnumNums, {
             numberList: arr
@@ -826,7 +1063,7 @@ export default {
         };
       },
       handleClose(done) {
-        if(this.ruleForm.callLogUuid) {
+        if(this.callLogUuid) {
             this.$confirm('确认关闭？')
             .then(_ => {
                 done();
@@ -910,9 +1147,11 @@ export default {
       GetAgreementList(id) {
 
         this.$smoke_get(GetAgreementList, {
-            param: {userId: id}
+          param: {userId: id}
         }).then(res => {
+          if(res.status == 0) {
             this.agreementList = res.data.agreementList;
+          }
         })
 
       },
@@ -929,6 +1168,61 @@ export default {
             }
         })
           
+      },
+      getStudentDetails(id) {
+        const date = new Date;
+        this.$smoke_post(getStudentDetails, {
+            studentUuid: id
+        }).then(res => {
+          if(res.code == 200) {
+            this.customerForm.age = res.data.age == 0 ? '' : res.data.age;
+            this.customerForm.auxiliarySignUp = res.data.auxiliarySignUp;
+            if(res.data.buyState == 0) {
+                this.customerForm.buyState = '已交全款';
+            }else if(res.data.buyState == 1) {
+                this.customerForm.buyState = '已交定金';
+            }else{
+                this.customerForm.buyState = '已交尾款';
+            }
+            this.customerForm.city = res.data.city;
+            this.customerForm.classTeaName = res.data.classTeaName;
+            this.customerForm.createTime = timestampToTime(Number(res.data.createTime));
+            this.customerForm.education = res.data.education == 0 || res.data.education == null ? '' : String(res.data.education);
+            this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 || res.data.evidencePurpose == null ? '' : String(res.data.evidencePurpose)
+            this.customerForm.examPeriod = res.data.examPeriod == "" ? date.getTime() : Number(res.data.examPeriod);
+            this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
+            this.customerForm.graduationMajor = res.data.graduationMajor;
+            this.customerForm.name = res.data.name;
+            this.customerForm.number = res.data.number;
+            this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
+            this.customerForm.signUpSchool = res.data.signUpSchool;
+            this.customerForm.signUpTime = (res.data.signUpTime != '' ? timestampToTime(Number(res.data.signUpTime)) : '');
+            this.customerForm.studentStatus = res.data.studentStatus == 0 || res.data.studentStatus == null ? '' : String(res.data.studentStatus);
+            this.customerForm.studySituation = res.data.studySituation == 0 || res.data.studySituation == null ? '' : String(res.data.studySituation);
+            this.customerForm.tel = res.data.tel;
+            this.customerForm.twoTel = res.data.twoTel;
+            this.customerForm.work = res.data.work;
+            this.customerForm.workingLife = res.data.workingLife == 0 || res.data.workingLife == null ? '' : String(res.data.workingLife);
+            this.customerForm.wx = res.data.wx;
+            if(res.data.seatOrgName && res.data.seatName) {
+                this.customerForm.seatName = res.data.seatPOrgName? res.data.seatPOrgName + ' ' + res.data.seatOrgName + ' ' + res.data.seatName : res.data.seatOrgName + ' ' + res.data.seatName;
+            }else{
+                this.customerForm.seatName = '';
+            }
+            this.customerForm.orgNameListText = getTextByJs(res.data.orgNameList.reverse()); //reverse()倒序排列
+            
+            this.customerForm.idcardNo = res.data.iDCardNo;
+            this.customerForm.nation = res.data.nation;
+            this.customerForm.nationText = res.data.nation;
+            this.customerForm.graduationSchool = res.data.graduationSchool;
+            this.customerForm.graduationTime = timestampToTime(Number(res.data.graduationTime));
+            this.customerForm.applyExam = res.data.applyExam;
+            this.customerForm.applyProvinceCity = (res.data.applyProvince == "" && res.data.applyCity == "") ? [] : [res.data.applyProvince, res.data.applyCity];
+            this.customerForm.filingFee = res.data.filingFee;
+
+            this.ruleFormAddress.schoolName = res.data.signUpSchool;
+          }
+        })
       },
     },
     mounted() {

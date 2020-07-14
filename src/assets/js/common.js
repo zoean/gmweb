@@ -215,6 +215,18 @@ export const urlText = (id) => {
         case 1:
             str = 'https://www.wjx.cn/m/84619210.aspx';
             break;
+        case 2:
+            str = 'https://www.wjx.cn/jq/85237487.aspx';
+            break;
+        case 3:
+            str = 'https://www.wjx.cn/jq/85236140.aspx';
+            break;
+        case 4:
+            str = 'https://www.wjx.cn/jq/85236030.aspx';
+            break;
+        case 5:
+            str = 'https://www.wjx.cn/jq/85236389.aspx';
+            break;
     }
     return str;
 }
