@@ -252,6 +252,8 @@ export const noReadNum = '/api/phone/stationNews/noReadNum' //获取未读消息
 //线索模板导出
 export const clueDataTem = '/api/phone/excel/clueDataTem' //线索模板导出
 export const readExcelClueData = '/api/phone/excel/readExcelClueData';//模板录入
+export const registerExportExcel = '/api/phone/excel/registerExportExcel';//报考信息导出Excel
+export const registerExportZip = '/api/phone/excel/registerExportZip';//报考信息导出Zip
 export const uploadFile = '/upload-service/upload/file';//模板录入
 
 //lovestudy
@@ -284,4 +286,5 @@ export const registerGet = '/api/phone/register/get' //查看报考信息
 export const registerCheck = '/api/phone/register/check' //审核报考信息
 export const updataPayment = '/api/phone/register/updataPayment' //更新报考缴费状态
 export const queryRegisterProcess = '/api/phone/register/queryRegisterProcess' //查询代报考进度
+export const queryItemList = '/api/phone/register/queryItemList' //查询报考项目信息
 

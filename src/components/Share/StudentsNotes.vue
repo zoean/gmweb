@@ -841,7 +841,7 @@ export default {
         this.GetAgreementList(this.getOrderForm.userId);
         this.getStudentDetails(this.studentUuid);
         console.log(this.$route.path);
-        if(this.$route.path.indexOf("newStudents") != -1 || this.$route.path.indexOf("allStudents") != -1){
+        if(this.$route.path.indexOf("newStudents") != -1 || this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
             this.routePathFlag = true;
         }
     },
