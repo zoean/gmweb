@@ -176,6 +176,14 @@
         >
         </StudentsNotes>
 
+        <BaoKaoMessage 
+            v-if="baokaoFlag"
+            @changebaokaoFlag="changebaokaoFlag"
+            :baokaoFlag.sync='baokaoFlag'
+            :registerId='registerId'
+        >
+        </BaoKaoMessage>
+
     </el-main>
 </template>
 
@@ -189,6 +197,7 @@ import {
     registerExportZip
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
+import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
 import { 
     timestampToTime, 
     genderText,
@@ -205,7 +214,8 @@ import pcaa from 'area-data/pcaa';
 export default {
     name: 'studentsNewBaoKao',
     components: {
-        StudentsNotes
+        StudentsNotes,
+        BaoKaoMessage
     },
     data() {
         return {
@@ -252,6 +262,9 @@ export default {
             userId: '',
             clueDataSUuid: '',
             callLogUuid: '',
+
+            baokaoFlag: false,
+            registerId: '',
 
             basicInfoStatusList: [
                 { value: 0, label: '不完整' },
@@ -307,8 +320,9 @@ export default {
             filepostDown(registerExportExcel, this.form, '报考数据.xlsx');
             filepostDown(registerExportZip, this.form, '报考数据.zip');
         },
-        lookBaoKaoMessage() {
-            alert('暂未开发')
+        lookBaoKaoMessage(row) {
+            this.baokaoFlag = true;
+            this.registerId = row.registerId;
         },
         queryItemList() {
             let arr;
@@ -321,6 +335,9 @@ export default {
         },
         changeDrawer(val){
             this.drawer = val;
+        },
+        changebaokaoFlag(val){
+            this.baokaoFlag = val;
         },
         registerListClick() {
             this.form.currentPage = 1;

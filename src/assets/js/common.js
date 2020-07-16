@@ -132,6 +132,34 @@ export const genderText = (id) => {
     return str;
 }
 
+export const educationText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '初中以下';
+            break;
+        case 2:
+            str = '高中';
+            break;
+        case 3:
+            str = '大专';
+            break;
+        case 4:
+            str = '本科';
+            break;
+        case 5:
+            str = '硕士';
+            break;
+        case 6:
+            str = '博士';
+            break;
+        case 7:
+            str = '中专';
+            break;
+    }
+    return str;
+}
+
 export const smoke_MJ_6 = (type) => {
     let str = '';
     if(type == '1'){
