@@ -143,10 +143,11 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="80">
+            <el-table-column prop="active" label="操作" fixed="right" width="100">
               <template slot-scope="scope">
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
                 <svg-icon @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
+                <svg-icon @click="updataPaymentClick(scope.row)" icon-title="修改交费状态" icon-class="addnotes" />
               </template>
             </el-table-column>
         </el-table>
@@ -164,6 +165,24 @@
             @size-change="handleSizeChange"
         >
         </el-pagination>
+
+        <el-dialog width="40%" title="修改交费状态" :visible.sync="paymentFlag" :before-close="handleClose">
+          
+            <el-select v-model="paymentForm.paymentStatus" placeholder="请选择交费情况" class="screen-li" size="small" clearable>
+                <el-option
+                  v-for="item in paymentStatusList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+            </el-select>
+        
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="updataPayment" size="small">确定</el-button>
+                <el-button plain @click="paymentFlag = false;" size="small">取消</el-button>
+            </span>
+
+        </el-dialog>
 
         <StudentsNotes 
             v-if="drawer"
@@ -194,7 +213,8 @@ import {
     queryProvinceAll,
     queryItemList,
     registerExportExcel,
-    registerExportZip
+    registerExportZip,
+    updataPayment
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
@@ -285,6 +305,12 @@ export default {
             ],
             restaurants: [],
             ItemBaoKaoList: [],
+
+            paymentFlag: false,
+            paymentForm: {
+                paymentStatus: '',
+                registerId: ''
+            }
         }
     },
     created() {
@@ -300,6 +326,29 @@ export default {
         this.getExamBasic();
     },
     methods: {
+        handleClose() {
+            this.paymentFlag = false;
+        },
+        updataPaymentClick(row) {
+            this.paymentFlag = true;
+            this.paymentForm.registerId = row.registerId;
+            this.paymentForm.paymentStatus = row.paymentStatus;
+        },
+        updataPayment() {
+            if(/^[\u4e00-\u9fa5]+$/i.test(this.paymentForm.paymentStatus)){ //判断是否是汉字
+                this.paymentForm.paymentStatus = this.paymentForm.paymentStatus == '已交费' ? 1 : 0;
+            }
+            this.$smoke_post(updataPayment, this.paymentForm).then(res => {
+                if(res.code == 200){
+                    this.$message({
+                        type: 'success',
+                        message: '交费情况更新成功'
+                    });
+                    this.paymentFlag = false;
+                    this.registerList();
+                }
+            })
+        },
         exportClick() {
             let arr = [];
 
@@ -319,7 +368,7 @@ export default {
         registerExportExcel() {
             filepostDown(registerExportExcel, this.form, '报考数据.xlsx');
             filepostDown(registerExportZip, this.form, '报考数据.zip');
-        },
+        },  
         lookBaoKaoMessage(row) {
             this.baokaoFlag = true;
             this.registerId = row.registerId;

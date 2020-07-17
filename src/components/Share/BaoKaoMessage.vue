@@ -1,5 +1,5 @@
 <template>
-    <div class="baokao" id="baokao">
+    <div class="baokao">
         <el-dialog width="40%" title="报考信息" :visible.sync="baokaoFlag_" :before-close="handleClose">
           
             <div><span>姓名：</span><span>{{message.name}}</span></div>
@@ -12,10 +12,10 @@
             <div><span>职务：</span><span>{{message.workPost}}</span></div>
             <div><span>常用邮箱：</span><span>{{message.email}}</span></div>
 
-            <ul v-loading="fullscreenLoading">
+            <ul v-loading="fullscreenLoading" id="baokao">
                 <li v-for="(item, index) in imgArr"
                     :key="index">
-                    <img :src="item.address" />
+                    <img :src="item.address ? item.address : require('../../assets/images/no_picture.png')" />
                     <span>{{item.name}}</span>
                 </li>
             </ul>
@@ -44,8 +44,6 @@
                 </el-popover>
             </span>
         </el-dialog>
-
-
 
     </div>
 </template>

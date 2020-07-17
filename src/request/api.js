@@ -284,7 +284,7 @@ export const queryUserList = '/api/phone/register/queryUserList' //查询分配�
 export const allocationUser = '/api/phone/register/allocationUser' //分配报考员操作
 export const registerGet = '/api/phone/register/get' //查看报考信息
 export const registerCheck = '/api/phone/register/check' //审核报考信息
-export const updataPayment = '/api/phone/register/updataPayment' //更新报考缴费状态
+export const updataPayment = '/api/phone/register/updataPayment' //更新报考交费状态
 export const queryRegisterProcess = '/api/phone/register/queryRegisterProcess' //查询代报考进度
 export const queryItemList = '/api/phone/register/queryItemList' //查询报考项目信息
 

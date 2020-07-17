@@ -342,6 +342,12 @@
                                 </el-form-item>
                             </el-col>
 
+                            <el-col :span="6">
+                                <el-form-item label="报考员" prop="examaAsistant">
+                                    <el-input v-model="customerForm.examaAsistant" :disabled='routePathFlag' readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
+
                             <el-col :span="6" style="margin-top: 10px;">
 
                                 <label class="el-form-item__label">协议信息</label>
@@ -534,6 +540,24 @@
 
                 </el-tab-pane>
 
+                <el-tab-pane label="代报考进度" name="six">
+
+                    <el-table
+
+                        :data="registerList"
+                        style="margin: 0 auto; margin-bottom: 30px;"
+                        >
+                        <el-table-column
+                          :prop="item.prop"
+                          :label="item.label"
+                          v-for="(item, index) in registerColumn"
+                          :key="index"
+                          >
+                        </el-table-column>
+
+                    </el-table>
+                </el-tab-pane>
+
             </el-tabs>
         </el-drawer>
 
@@ -622,6 +646,7 @@ import {
   GetCourseList4Teacher,
   GetCityList,
   updateAddress,
+  queryRegisterProcess
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { 
@@ -702,6 +727,7 @@ export default {
             applyCity: '',
             applyProvinceCity: [],
             filingFee: '',
+            examaAsistant: '',
             
             followUp: '', //跟进类型
             followUpContent: '' //跟进内容
@@ -831,6 +857,15 @@ export default {
             { 'name': '是', 'number': 1 },
           ],
           routePathFlag: false,
+          datasId: '', //代报考
+          registerList: [],
+          registerColumn: [
+            { 'prop': 'itemName', 'label': '报考项目名称' },
+            { 'prop': 'basicInfoStatus', 'label': '基本信息情况' },
+            { 'prop': 'pictureStatus', 'label': '报考材料情况' },
+            { 'prop': 'checkStatus', 'label': '审核情况' },
+            { 'prop': 'checkResult', 'label': '审核结果' },
+          ]
         }
     },
     created() {
@@ -1028,6 +1063,7 @@ export default {
             applyProvince: this.customerForm.applyProvince,
             applyCity: this.customerForm.applyCity,
             filingFee: this.customerForm.filingFee,
+            examaAsistant: this.customerForm.examaAsistant,
           },
           notes: {
             followUp: this.customerForm.followUp,
@@ -1093,7 +1129,23 @@ export default {
         }else if(tab.label == '课程列表') {
           this.courseLists = [];
           this.GetCourseList4Teacher(this.getOrderForm.userId);
+        }else if(tab.label == '代报考进度') {
+          this.queryRegisterProcess();
         }
+      },
+      queryRegisterProcess() {
+        this.$smoke_get(queryRegisterProcess, {
+          datasId: this.datasId
+        }).then(res => {
+          if(res.code == 200) {
+            res.data.list.map(sll => {
+              sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
+              sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
+              sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
+            })
+            this.registerList = res.data.list;
+          }
+        })
       },
       geOrderRecord(){
         this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
@@ -1219,8 +1271,10 @@ export default {
             this.customerForm.applyExam = res.data.applyExam;
             this.customerForm.applyProvinceCity = (res.data.applyProvince == "" && res.data.applyCity == "") ? [] : [res.data.applyProvince, res.data.applyCity];
             this.customerForm.filingFee = res.data.filingFee;
+            this.customerForm.examaAsistant = res.data.examaAsistant;
 
             this.ruleFormAddress.schoolName = res.data.signUpSchool;
+            this.datasId = res.data.datasId;
           }
         })
       },
