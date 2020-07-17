@@ -346,6 +346,7 @@ export default {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
                             sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
+                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
                         })
 
                         this.list = res.data.list;

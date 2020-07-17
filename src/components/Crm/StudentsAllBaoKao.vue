@@ -184,6 +184,14 @@
         >
         </StudentsNotes>
 
+        <BaoKaoMessage 
+            v-if="baokaoFlag"
+            @changebaokaoFlag="changebaokaoFlag"
+            :baokaoFlag.sync='baokaoFlag'
+            :registerId='registerId'
+        >
+        </BaoKaoMessage>
+
     </el-main>
 </template>
 
@@ -197,6 +205,7 @@ import {
     allocationUser
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
+import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
 import { 
     timestampToTime, 
     genderText,
@@ -212,7 +221,8 @@ import pcaa from 'area-data/pcaa';
 export default {
     name: 'studentsNewBaoKao',
     components: {
-        StudentsNotes
+        StudentsNotes,
+        BaoKaoMessage
     },
     data() {
         return {
@@ -261,6 +271,9 @@ export default {
             clueDataSUuid: '',
             callLogUuid: '',
 
+            baokaoFlag: false,
+            registerId: '',
+
             basicInfoStatusList: [
                 { value: 0, label: '不完整' },
                 { value: 1, label: '完整' },
@@ -299,8 +312,9 @@ export default {
         this.getExamBasic();
     },
     methods: {
-        lookBaoKaoMessage() {
-            alert('暂未开发')
+        lookBaoKaoMessage(row) {
+            this.baokaoFlag = true;
+            this.registerId = row.registerId;
         },
         queryUserList() {
             this.$smoke_get(queryUserList, {
@@ -353,6 +367,10 @@ export default {
         changeDrawer(val){
             this.drawer = val;
         },
+        changebaokaoFlag(val){
+            this.baokaoFlag = val;
+            this.registerList();
+        },
         registerListClick() {
             this.form.currentPage = 1;
             this.registerList();
@@ -368,6 +386,7 @@ export default {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
                             sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
+                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
                         })
 
                         this.list = res.data.list;
