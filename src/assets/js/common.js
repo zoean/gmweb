@@ -1,6 +1,7 @@
 import {
   Message
 } from 'element-ui'
+import axios from 'axios';
 
 export function isExternal(path) {
     return /^(https?:|mailto:|tel:)/.test(path)
@@ -126,6 +127,34 @@ export const genderText = (id) => {
             break;
         case 2:
             str = '';
+            break;
+    }
+    return str;
+}
+
+export const educationText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '初中以下';
+            break;
+        case 2:
+            str = '高中';
+            break;
+        case 3:
+            str = '大专';
+            break;
+        case 4:
+            str = '本科';
+            break;
+        case 5:
+            str = '硕士';
+            break;
+        case 6:
+            str = '博士';
+            break;
+        case 7:
+            str = '中专';
             break;
     }
     return str;
@@ -958,5 +987,32 @@ export const citiesFun = (data) => {
     return data;
 }
 
+//post下载Excel
+export const filepostDown = (url, cfg, name) => {
+    axios.post(url, cfg, { responseType: 'blob', headers : {
+            'Cache-Control' : 'no-cache',
+            'Pragma' : 'no-cache'
+        } }).then((res) => {
+        //  如果支持微软的文件下载方式(ie10+浏览器)
+        if (window.navigator.msSaveBlob) {
+            try {
+              const blobObject = new Blob([res.data]);
+              window.navigator.msSaveBlob(blobObject, name);
+            } catch (e) {
+              console.log(e);
+            }
+        } else {
+        //  其他浏览器
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', name);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link); // 下载完成移除元素
+            window.URL.revokeObjectURL(url); // 释放掉blob对象
+        }
+    });
+}
 
 

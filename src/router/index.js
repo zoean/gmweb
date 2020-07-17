@@ -46,6 +46,9 @@ import peopleClues from '@/components/Crm/PeopleClues';
 import sendSMS from '@/components/Crm/SendSMS';
 import smslist from '@/components/Crm/SMSlist';
 import smsRecord from '@/components/Crm/SMSRecord';
+import studentsNewBaoKao from '@/components/Crm/StudentsNewBaoKao';
+import studentsAllBaoKao from '@/components/Crm/StudentsAllBaoKao';
+import studentsMyBaoKao from '@/components/Crm/StudentsMyBaoKao';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -281,6 +284,24 @@ export default new Router({
             path: '/crm/sms/smsRecord',
             name: 'smsRecord',
             component: smsRecord
+        },
+
+        {
+            path: '/crm/baokao/new',
+            name: 'studentsNewBaoKao',
+            component: studentsNewBaoKao
+        },
+
+        {
+            path: '/crm/baokao/all',
+            name: 'studentsAllBaoKao',
+            component: studentsAllBaoKao
+        },
+
+        {
+            path: '/crm/baokao/my',
+            name: 'studentsMyBaoKao',
+            component: studentsMyBaoKao
         },
 
         {
