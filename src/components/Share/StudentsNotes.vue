@@ -870,7 +870,7 @@ export default {
             { 'prop': 'basicInfoStatus', 'label': '基本信息情况' },
             { 'prop': 'pictureStatus', 'label': '报考材料情况' },
             { 'prop': 'checkStatus', 'label': '审核情况' },
-            { 'prop': 'checkResult', 'label': '审核结果' },
+            { 'prop': 'checkResult', 'label': '失败原因' },
           ],
           provinceList: []
         }
@@ -1278,7 +1278,7 @@ export default {
             this.customerForm.nationText = res.data.nation;
             this.customerForm.graduationSchool = res.data.graduationSchool;
             this.customerForm.graduationTime = timestampToTime(Number(res.data.graduationTime));
-            this.customerForm.applyExam = res.data.applyExam;
+            this.customerForm.applyExam = res.data.applyExam == 0 || res.data.applyExam == null ? '' : res.data.applyExam;
             this.customerForm.applyProvince = res.data.applyProvince;
             this.customerForm.applyCity = res.data.applyCity;
             this.customerForm.filingFee = res.data.filingFee;

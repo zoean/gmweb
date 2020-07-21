@@ -147,8 +147,28 @@
               <template slot-scope="scope">
                 <div style="text-align: left;">
                     <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
+                    <el-popover
+                        placement="top"
+                        width="230"
+                        trigger="click"
+                        :ref="`popover-${scope.$index}`">
+
+                        <el-select v-model="paymentForm.paymentStatus" placeholder="请选择交费情况" style="width: 200px; margin: 10px 0 16px 0;" size="small" clearable>
+                            <el-option
+                              v-for="item in paymentStatusList"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="Number(item.value)">
+                            </el-option>
+                        </el-select>
+
+                        <div style="text-align: right; margin: 0">
+                          <el-button size="mini" plain @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                          <el-button type="primary" size="mini" @click="updataPaymentClick(scope)">确定</el-button>
+                        </div>
+                        <svg-icon slot="reference" icon-title="修改交费状态" icon-class="addnotes" />
+                    </el-popover>
                     <svg-icon v-if="scope.row.basicInfoStatus == '完整' && scope.row.pictureStatus == '完整'" @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
-                    <svg-icon @click="updataPaymentClick(scope.row)" icon-title="修改交费状态" icon-class="addnotes" />
                 </div>
               </template>
             </el-table-column>
@@ -167,24 +187,6 @@
             @size-change="handleSizeChange"
         >
         </el-pagination>
-
-        <el-dialog width="40%" title="修改交费状态" :visible.sync="paymentFlag" :before-close="handleClose">
-          
-            <el-select v-model="paymentForm.paymentStatus" placeholder="请选择交费情况" style="width: 200px;" size="small" clearable>
-                <el-option
-                  v-for="item in paymentStatusList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-            </el-select>
-        
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="updataPayment" size="small">确定</el-button>
-                <el-button plain @click="paymentFlag = false;" size="small">取消</el-button>
-            </span>
-
-        </el-dialog>
 
         <StudentsNotes 
             v-if="drawer"
@@ -274,7 +276,7 @@ export default {
                 { 'prop': 'basicInfoStatus', 'label': '基本信息情况', width: 110},
                 { 'prop': 'pictureStatus', 'label': '照片情况' },
                 { 'prop': 'checkStatus', 'label': '审核情况' },
-                { 'prop': 'paymentStatus', 'label': '交费情况' },
+                { 'prop': 'paymentStatusText', 'label': '交费情况' },
             ],
             provinceList: [],
             fullscreenLoading: false,
@@ -308,7 +310,6 @@ export default {
             restaurants: [],
             ItemBaoKaoList: [],
 
-            paymentFlag: false,
             paymentForm: {
                 paymentStatus: '',
                 registerId: ''
@@ -328,25 +329,26 @@ export default {
         this.getExamBasic();
     },
     methods: {
-        handleClose() {
-            this.paymentFlag = false;
-        },
-        updataPaymentClick(row) {
-            this.paymentFlag = true;
-            this.paymentForm.registerId = row.registerId;
-            this.paymentForm.paymentStatus = row.paymentStatus;
-        },
-        updataPayment() {
-            if(/^[\u4e00-\u9fa5]+$/i.test(this.paymentForm.paymentStatus)){ //判断是否是汉字
-                this.paymentForm.paymentStatus = this.paymentForm.paymentStatus == '已交费' ? 1 : 0;
+        updataPaymentClick(scope) {
+            this.paymentForm.registerId = scope.row.registerId;
+            if(this.paymentForm.paymentStatus === ''){
+                this.$message({
+                    type: 'error',
+                    message: '请您选择交费情况'
+                });
+            }else{
+                this.updataPayment(scope);
             }
+        },
+        updataPayment(scope) {
             this.$smoke_post(updataPayment, this.paymentForm).then(res => {
                 if(res.code == 200){
                     this.$message({
                         type: 'success',
                         message: '交费情况更新成功'
                     });
-                    this.paymentFlag = false;
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.paymentForm.paymentStatus = '';
                     this.registerList();
                 }
             })
@@ -407,7 +409,7 @@ export default {
                         res.data.list.map(sll => {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
-                            sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
+                            sll.paymentStatusText = sll.paymentStatus == '1' ? '已交费' : '未交费';
                             sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : sll.checkStatus == '0' ? '待审核' : '- -';
                         })
 

@@ -20,7 +20,7 @@
 
                 <div v-if="message.itemId != 97"><span class="baokao_lable">手机：</span><span>{{message.telephone}}</span></div>
 
-                <div><span class="baokao_lable">职务：</span><span>{{message.workPost}}</span></div>
+                <div v-if="message.itemId == 97"><span class="baokao_lable">职务：</span><span>{{message.workPost}}</span></div>
                 <div><span class="baokao_lable">常用邮箱：</span><span>{{message.email}}</span></div>
 
                 <div v-if="message.itemId != 97"><span class="baokao_lable">人事考试网账号：</span><span>{{message.cptaAccount}}</span></div>

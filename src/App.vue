@@ -88,7 +88,7 @@ export default {
 
 @media screen and (min-width: 1640px) {
   .sidebar-open{
-    width: calc( 100vw - 260px );
+    width: calc( 100vw - 256px ) !important;
     position: absolute;
     left: 256px !important;
   }
@@ -114,9 +114,9 @@ export default {
   width: 100%;
 }
 .sidebar-open{
-  width: calc( 100vw - 260px );
+  width: calc( 100vw - 3rem );
   position: absolute;
-  left: 240px
+  left: 3rem;
 }
 .sidebar-close{
   width: calc( 100vw - 84px );
