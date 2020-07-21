@@ -115,6 +115,7 @@ export default {
 }
 .sidebar-open{
   width: calc( 100vw - 3rem );
+  max-width: calc( 100vw - 257px );
   position: absolute;
   left: 3rem;
 }
