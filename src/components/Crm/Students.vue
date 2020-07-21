@@ -671,8 +671,10 @@ export default {
         getClassTeaClass() {
             this.$smoke_post(getClassTeaClass, this.form).then(res => {
                 if(res.code == 200) {
-                    this.form.classUuid = res.data[0].uuid;
-                    this.classUuidDefault = res.data[0].uuid;
+                    if(res.data.length != 0) {
+                        this.form.classUuid = res.data[0].uuid;
+                        this.classUuidDefault = res.data[0].uuid;
+                    }
                     res.data.map(sll => {
                         sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
                     })
