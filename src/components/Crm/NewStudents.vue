@@ -74,7 +74,7 @@
               </template>
 
             </el-table-column>
-            <el-table-column prop="active" label="操作" fixed="right" width="80">
+            <el-table-column prop="active" label="操作" fixed="right" width="80" class-name="table_active">
               <template slot-scope="scope">
 
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
@@ -424,8 +424,4 @@ export default {
         }
     }
 
-    .newStudents /deep/ div.el-dialog__body{
-        height: 55vh;
-        overflow: auto;
-    }
 </style>

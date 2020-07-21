@@ -3,7 +3,7 @@
 
         <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+                <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
             <el-col :span="4">
                 <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
@@ -143,10 +143,33 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="80">
+            <el-table-column prop="active" label="操作" fixed="right" width="90" class-name="table_active">
               <template slot-scope="scope">
-                <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
-                <svg-icon @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
+                <div style="text-align: left;">
+                    <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
+                    <el-popover
+                        placement="top"
+                        width="230"
+                        trigger="click"
+                        :ref="`popover-${scope.$index}`">
+
+                        <el-select v-model="paymentForm.paymentStatus" placeholder="请选择交费情况" style="width: 200px; margin: 10px 0 16px 0;" size="small" clearable>
+                            <el-option
+                              v-for="item in paymentStatusList"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="Number(item.value)">
+                            </el-option>
+                        </el-select>
+
+                        <div style="text-align: right; margin: 0">
+                          <el-button size="mini" plain @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
+                          <el-button type="primary" size="mini" @click="updataPaymentClick(scope)">确定</el-button>
+                        </div>
+                        <svg-icon slot="reference" icon-title="修改交费状态" icon-class="addnotes" />
+                    </el-popover>
+                    <svg-icon v-if="scope.row.basicInfoStatus == '完整' && scope.row.pictureStatus == '完整'" @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
+                </div>
               </template>
             </el-table-column>
         </el-table>
@@ -194,7 +217,8 @@ import {
     queryProvinceAll,
     queryItemList,
     registerExportExcel,
-    registerExportZip
+    registerExportZip,
+    updataPayment
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
@@ -252,7 +276,7 @@ export default {
                 { 'prop': 'basicInfoStatus', 'label': '基本信息情况', width: 110},
                 { 'prop': 'pictureStatus', 'label': '照片情况' },
                 { 'prop': 'checkStatus', 'label': '审核情况' },
-                { 'prop': 'paymentStatus', 'label': '交费情况' },
+                { 'prop': 'paymentStatusText', 'label': '交费情况' },
             ],
             provinceList: [],
             fullscreenLoading: false,
@@ -285,6 +309,11 @@ export default {
             ],
             restaurants: [],
             ItemBaoKaoList: [],
+
+            paymentForm: {
+                paymentStatus: '',
+                registerId: ''
+            }
         }
     },
     created() {
@@ -300,6 +329,30 @@ export default {
         this.getExamBasic();
     },
     methods: {
+        updataPaymentClick(scope) {
+            this.paymentForm.registerId = scope.row.registerId;
+            if(this.paymentForm.paymentStatus === ''){
+                this.$message({
+                    type: 'error',
+                    message: '请您选择交费情况'
+                });
+            }else{
+                this.updataPayment(scope);
+            }
+        },
+        updataPayment(scope) {
+            this.$smoke_post(updataPayment, this.paymentForm).then(res => {
+                if(res.code == 200){
+                    this.$message({
+                        type: 'success',
+                        message: '交费情况更新成功'
+                    });
+                    scope._self.$refs[`popover-${scope.$index}`].doClose();
+                    this.paymentForm.paymentStatus = '';
+                    this.registerList();
+                }
+            })
+        },
         exportClick() {
             let arr = [];
 
@@ -313,13 +366,15 @@ export default {
                 });
             }else{
                 this.form.registerIds = arr;
-                this.registerExportExcel();
+                var tmp = (new Date()).getTime();
+                tmp = timestampToTime(tmp);
+                this.registerExportExcel(tmp);
             }
         },
-        registerExportExcel() {
-            filepostDown(registerExportExcel, this.form, '报考数据.xlsx');
-            filepostDown(registerExportZip, this.form, '报考数据.zip');
-        },
+        registerExportExcel(tmp) {
+            filepostDown(registerExportExcel, this.form, '报考数据-' + tmp + '.xlsx');
+            filepostDown(registerExportZip, this.form, '报考数据-' + tmp + '.zip');
+        },  
         lookBaoKaoMessage(row) {
             this.baokaoFlag = true;
             this.registerId = row.registerId;
@@ -354,8 +409,8 @@ export default {
                         res.data.list.map(sll => {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
-                            sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
-                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
+                            sll.paymentStatusText = sll.paymentStatus == '1' ? '已交费' : '未交费';
+                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : sll.checkStatus == '0' ? '待审核' : '- -';
                         })
 
                         this.list = res.data.list;

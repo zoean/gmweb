@@ -21,7 +21,7 @@
               >
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="140" fixed="right">
+            <el-table-column prop="active" label="操作" width="140" fixed="right" class-name="table_active">
               <template slot-scope="scope">              
                     <svg-icon v-if="editDataAllocation" @click="handleUpdataClick(scope.row)" icon-title="修改" icon-class="edit" />
                   <el-popover

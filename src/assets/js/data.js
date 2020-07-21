@@ -116,6 +116,9 @@ export const websockHttp = process.env.VUE_APP_WEB_SOCKET + '/websocket/msg/';
 //销售部组织id
 export const showid = '544230511a59461c8ed6c82ce2355e17';
 
+//报考专员
+export const registerPeopleId = '报考专员';
+
 export const nationAll = [
     {id:1 ,value:'汉族'},
 	{id:2 ,value:'蒙古族'},

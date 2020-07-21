@@ -42,6 +42,7 @@ export default {
             }
         },
         login() {
+            console.log(222);
             if( !this.accountNumber || !this.password){
                 this.$message({
                     type: 'error',

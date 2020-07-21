@@ -133,7 +133,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="50">
+            <el-table-column prop="active" label="操作" fixed="right" width="50" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
