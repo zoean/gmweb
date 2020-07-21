@@ -3,7 +3,7 @@
 
         <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+                <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
             <el-col :span="4">
                 <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
@@ -133,11 +133,13 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="100">
+            <el-table-column prop="active" label="操作" fixed="right" width="90" class-name="table_active">
               <template slot-scope="scope">
-                <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
-                <svg-icon @click="moveStudentOne(scope.row)" icon-title="转移学员" icon-class="move" />
-                <svg-icon @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
+                <div style="text-align: left;">
+                    <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
+                    <svg-icon @click="moveStudentOne(scope.row)" icon-title="转移学员" icon-class="move" />
+                    <svg-icon v-if="scope.row.basicInfoStatus == '完整' && scope.row.pictureStatus == '完整'" @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
+                </div>
               </template>
             </el-table-column>
         </el-table>
@@ -215,7 +217,7 @@ import {
     citiesFun,
 } from '../../assets/js/common';
 import { 
-
+    registerPeopleId
 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
@@ -318,7 +320,7 @@ export default {
         },
         queryUserList() {
             this.$smoke_get(queryUserList, {
-                roleName: '报考专员'
+                roleName: registerPeopleId
             }).then(res => {
                 if(res.code == 200) {
                     this.teacherMoveList = res.data;
@@ -386,7 +388,7 @@ export default {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
                             sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
-                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
+                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : sll.checkStatus == '0' ? '待审核' : '- -';
                         })
 
                         this.list = res.data.list;

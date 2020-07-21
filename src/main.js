@@ -17,7 +17,7 @@ import '@/icons' // icon
  
 // Vue.use(VueAudio)
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { zIndex: 1000});
 Vue.use(AFTableColumn);
 Vue.use(VueAreaLinkage);
 Vue.use(Vuex);

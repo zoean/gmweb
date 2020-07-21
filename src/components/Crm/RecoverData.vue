@@ -109,7 +109,7 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="active" label="操作" fixed="right">
+            <el-table-column prop="active" label="操作" fixed="right" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
                   <!-- <el-button @click="handleAddClick(scope.row)" type="text" >添加备注</el-button> -->

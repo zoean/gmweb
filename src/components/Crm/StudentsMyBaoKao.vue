@@ -3,7 +3,7 @@
 
         <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+                <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
             <el-col :span="4">
                 <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
@@ -143,11 +143,13 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="100">
+            <el-table-column prop="active" label="操作" fixed="right" width="90" class-name="table_active">
               <template slot-scope="scope">
-                <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
-                <svg-icon @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
-                <svg-icon @click="updataPaymentClick(scope.row)" icon-title="修改交费状态" icon-class="addnotes" />
+                <div style="text-align: left;">
+                    <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
+                    <svg-icon v-if="scope.row.basicInfoStatus == '完整' && scope.row.pictureStatus == '完整'" @click="lookBaoKaoMessage(scope.row)" icon-title="查看报考信息" icon-class="members" />
+                    <svg-icon @click="updataPaymentClick(scope.row)" icon-title="修改交费状态" icon-class="addnotes" />
+                </div>
               </template>
             </el-table-column>
         </el-table>
@@ -168,7 +170,7 @@
 
         <el-dialog width="40%" title="修改交费状态" :visible.sync="paymentFlag" :before-close="handleClose">
           
-            <el-select v-model="paymentForm.paymentStatus" placeholder="请选择交费情况" class="screen-li" size="small" clearable>
+            <el-select v-model="paymentForm.paymentStatus" placeholder="请选择交费情况" style="width: 200px;" size="small" clearable>
                 <el-option
                   v-for="item in paymentStatusList"
                   :key="item.value"
@@ -362,12 +364,14 @@ export default {
                 });
             }else{
                 this.form.registerIds = arr;
-                this.registerExportExcel();
+                var tmp = (new Date()).getTime();
+                tmp = timestampToTime(tmp);
+                this.registerExportExcel(tmp);
             }
         },
-        registerExportExcel() {
-            filepostDown(registerExportExcel, this.form, '报考数据.xlsx');
-            filepostDown(registerExportZip, this.form, '报考数据.zip');
+        registerExportExcel(tmp) {
+            filepostDown(registerExportExcel, this.form, '报考数据-' + tmp + '.xlsx');
+            filepostDown(registerExportZip, this.form, '报考数据-' + tmp + '.zip');
         },  
         lookBaoKaoMessage(row) {
             this.baokaoFlag = true;
@@ -404,7 +408,7 @@ export default {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
                             sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
-                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
+                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : sll.checkStatus == '0' ? '待审核' : '- -';
                         })
 
                         this.list = res.data.list;

@@ -122,7 +122,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="100">
+            <el-table-column prop="active" label="操作" fixed="right" width="100" class-name="table_active">
               <template slot-scope="scope">
 
                 <el-popconfirm
@@ -798,8 +798,4 @@ export default {
         }
     }
 
-    .students /deep/ div.el-dialog__body{
-        height: 55vh;
-        overflow: auto;
-    }
 </style>

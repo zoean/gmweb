@@ -2,15 +2,31 @@
     <div class="baokao">
         <el-dialog width="40%" title="报考信息" :visible.sync="baokaoFlag_" :before-close="handleClose">
           
-            <div><span>姓名：</span><span>{{message.name}}</span></div>
-            <div><span>身份证号：</span><span>{{message.idCardNo}}</span></div>
-            <div><span>性别：</span><span>{{message.gender}}</span></div>
-            <div><span>学历：</span><span>{{message.education}}</span></div>
-            <div><span>毕业院校：</span><span>{{message.graduationSchool}}</span></div>
-            <div><span>所学专业：</span><span>{{message.graduationMajor}}</span></div>
-            <div><span>工作单位：</span><span>{{message.work}}</span></div>
-            <div><span>职务：</span><span>{{message.workPost}}</span></div>
-            <div><span>常用邮箱：</span><span>{{message.email}}</span></div>
+            <div class="baokao_kuang">
+
+                <div><span class="baokao_lable">姓名：</span><span>{{message.name}}</span></div>
+                <div><span class="baokao_lable">身份证号：</span><span>{{message.idCardNo}}</span></div>
+                <div><span class="baokao_lable">性别：</span><span>{{message.gender}}</span></div>
+                <div><span class="baokao_lable">学历：</span><span>{{message.education}}</span></div>
+                <div><span class="baokao_lable">毕业院校：</span><span>{{message.graduationSchool}}</span></div>
+                <div><span class="baokao_lable">所学专业：</span><span>{{message.graduationMajor}}</span></div>
+
+                <div v-if="message.itemId != 97"><span class="baokao_lable">学历类型：</span><span>{{message.educationType}}</span></div>
+                <div v-if="message.itemId != 97"><span class="baokao_lable">毕业时间：</span><span>{{message.graduationTime}}</span></div>
+
+                <div v-if="message.itemId != 97"><span class="baokao_lable">资格证书：</span><span>{{message.qualificationCert}}</span></div>
+
+                <div><span class="baokao_lable">工作单位：</span><span>{{message.work}}</span></div>
+
+                <div v-if="message.itemId != 97"><span class="baokao_lable">手机：</span><span>{{message.telephone}}</span></div>
+
+                <div><span class="baokao_lable">职务：</span><span>{{message.workPost}}</span></div>
+                <div><span class="baokao_lable">常用邮箱：</span><span>{{message.email}}</span></div>
+
+                <div v-if="message.itemId != 97"><span class="baokao_lable">人事考试网账号：</span><span>{{message.cptaAccount}}</span></div>
+                <div v-if="message.itemId != 97"><span class="baokao_lable">人事考试网密码：</span><span>{{message.cptaPassword}}</span></div>
+
+            </div>
 
             <ul v-loading="fullscreenLoading" id="baokao">
                 <li v-for="(item, index) in imgArr"
@@ -23,7 +39,7 @@
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="examineYes" size="small">审核通过</el-button>
                 <el-popover
-                    placement="top-end"
+                    placement="right-end"
                     width="200"
                     v-model="examineNoFlag">
                     
@@ -56,7 +72,7 @@ import {
     registerCheck,
 } from '../../request/api';
 import { 
-    timestampToTime, getTextByJs, genderText, educationText
+    timestampToTime, getTextByJs, genderText, educationText, educationTypeText
 } from '../../assets/js/common';
 import { 
     MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid, nationAll, MJ_15
@@ -105,11 +121,18 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.gender = genderText(res.data.gender);
                         res.data.education = educationText(res.data.education);
+                        res.data.educationType = educationTypeText(Number(res.data.educationType));
                         this.message = res.data;
+
                         this.imgArr.push({name: '个人图片', address: res.data.personalPictureUrl});
                         this.imgArr.push({name: '学历证书', address: res.data.diplomaUrl});
-                        this.imgArr.push({name: '申请表', address: res.data.applicationFormUrl});
+                        if(res.data.itemId == '97') {
+                            this.imgArr.push({name: '申请表', address: res.data.applicationFormUrl});
+                        }else{
+                            this.imgArr.push({name: '身份证', address: res.data.idCardCopyUrl});
+                        }
                         this.imgArr.push({name: '工作年限证明', address: res.data.workTimeProveUrl});
+                        
                         this.$nextTick(() => {
                             this.initImageTools();
                         })
@@ -164,7 +187,7 @@ export default {
             //初始化 viewerjs
             const ViewerDom = document.getElementById('baokao');
             const viewer = new Viewer(ViewerDom, {
-                
+                zIndex: 8888,
             });
         },
     },
@@ -186,12 +209,14 @@ export default {
 
 <style lang="less" scoped>
     .baokao{
+        text-align: center;
         ul {
             li {
                 width: 100px;
                 height: 100px;
                 margin-right: 10px;
                 margin-top: 20px;
+                border: 1px dashed #cccccc;
                 cursor: pointer;
                 display: inline-block;
                 text-align: center;
@@ -202,10 +227,24 @@ export default {
                 }
             }
         }
+        .baokao_kuang{
+            border-top: 1px solid #DDDDDD;
+            text-align: left;
+            padding-top: 20px;
+            .baokao_lable {
+                width: 50%;
+                text-align: right;
+                display: inline-block;
+            }
+        }
     }
     .baokao /deep/ div.el-dialog__body{
         height: 55vh;
         overflow: auto;
         padding: 10px 20px;
+    }
+    
+    .baokao /deep/ div.el-dialog__footer{
+        text-align: center;
     }
 </style>

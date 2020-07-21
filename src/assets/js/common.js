@@ -160,6 +160,28 @@ export const educationText = (id) => {
     return str;
 }
 
+export const educationTypeText = (id) => {
+    let str;
+    switch (id) {
+        case 1:
+            str = '全日制统招';
+            break;
+        case 2:
+            str = '成人教育';
+            break;
+        case 3:
+            str = '自学考试';
+            break;
+        case 4:
+            str = '网络教育';
+            break;
+        case 5:
+            str = '国家开放大学';
+            break;
+    }
+    return str;
+}
+
 export const smoke_MJ_6 = (type) => {
     let str = '';
     if(type == '1'){

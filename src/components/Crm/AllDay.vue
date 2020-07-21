@@ -119,7 +119,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="140">
+            <el-table-column prop="active" label="操作" fixed="right" width="140" class-name="table_active">
                 <template slot-scope="scope">
                 <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                 <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />

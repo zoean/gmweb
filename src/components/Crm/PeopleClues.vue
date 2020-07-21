@@ -139,7 +139,7 @@
 
             </af-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="60">
+            <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
               </template>

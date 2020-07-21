@@ -58,7 +58,7 @@
             :key="index"
             >
           </af-table-column>
-          <af-table-column prop="active" width="95" fixed="right" label="操作">
+          <af-table-column prop="active" width="95" fixed="right" label="操作" class-name="table_active">
             <template slot-scope="scope">
                 <svg-icon @click="handleCopy(scope.row)" icon-class="copy" icon-title="复制链接" />
                 <svg-icon @click="editClick(scope.row)" icon-class="edit" icon-title="编辑" />

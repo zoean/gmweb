@@ -168,8 +168,15 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="报考省市" prop="provinceCity">
-                                    <area-cascader type="text" v-model="customerForm.applyProvinceCity" :disabled='routePathFlag' @change="applyCityChange" :data="pcaa"></area-cascader>
+                                <el-form-item label="报考省份" prop="applyProvince">
+                                  <el-select v-model="customerForm.applyProvince" placeholder="请选择报考省份" style="width: 100%" size="small" :disabled='routePathFlag' clearable>
+                                    <el-option
+                                      v-for="item in provinceList"
+                                      :key="item.provinceName"
+                                      :label="item.provinceName"
+                                      :value="item.provinceName">
+                                    </el-option>
+                                  </el-select>
                                 </el-form-item>
                             </el-col>
 
@@ -435,7 +442,7 @@
                             :formatter="item.formatter"
                         ></af-table-column>
 
-                        <el-table-column prop="active" fixed="right" label="操作" width="50">
+                        <el-table-column prop="active" fixed="right" label="操作" width="50" class-name="table_active">
                             <template slot-scope="scope">                            
                                 <svg-icon icon-title="修改地址" @click="handleEditAddressClick(scope.row)" icon-class="edit" class="svg-handle" />     
                             </template>
@@ -646,11 +653,12 @@ import {
   GetCourseList4Teacher,
   GetCityList,
   updateAddress,
-  queryRegisterProcess
+  queryRegisterProcess,
+  queryProvinceAll
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { 
-  timestampToTime, getTextByJs, citiesFun
+  timestampToTime, getTextByJs, citiesFun, schoolType
 } from '../../assets/js/common';
 import { 
   MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid, nationAll, MJ_15
@@ -725,7 +733,6 @@ export default {
             applyExam: '',
             applyProvince: '',
             applyCity: '',
-            applyProvinceCity: [],
             filingFee: '',
             examaAsistant: '',
             
@@ -857,7 +864,6 @@ export default {
             { 'name': '是', 'number': 1 },
           ],
           routePathFlag: false,
-          datasId: '', //代报考
           registerList: [],
           registerColumn: [
             { 'prop': 'itemName', 'label': '报考项目名称' },
@@ -865,7 +871,8 @@ export default {
             { 'prop': 'pictureStatus', 'label': '报考材料情况' },
             { 'prop': 'checkStatus', 'label': '审核情况' },
             { 'prop': 'checkResult', 'label': '审核结果' },
-          ]
+          ],
+          provinceList: []
         }
     },
     created() {
@@ -875,12 +882,19 @@ export default {
         this.GetCityList();
         this.GetAgreementList(this.getOrderForm.userId);
         this.getStudentDetails(this.studentUuid);
-        console.log(this.$route.path);
+        this.queryProvinceAll();
         if(this.$route.path.indexOf("newStudents") != -1 || this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
             this.routePathFlag = true;
         }
     },
     methods: {
+      queryProvinceAll() {
+        this.$smoke_get(queryProvinceAll, {}).then(res => {
+          if(res.code == 200) {
+              this.provinceList = res.data;
+          }
+        })
+      },
       addressSubmitForm(formName) {
         this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -979,10 +993,6 @@ export default {
       },
       graduationTimeChange() {
         this.customerForm.graduationTime = this.customerForm.graduationTime.getTime();
-      },
-      applyCityChange() {
-        this.customerForm.applyProvince = this.customerForm.applyProvinceCity[0];
-        this.customerForm.applyCity = this.customerForm.applyProvinceCity[1];
       },
       cityChange() {
         this.customerForm.province = this.customerForm.provinceCity[0];
@@ -1135,7 +1145,7 @@ export default {
       },
       queryRegisterProcess() {
         this.$smoke_get(queryRegisterProcess, {
-          datasId: this.datasId
+          studentUuid: this.studentUuid,
         }).then(res => {
           if(res.code == 200) {
             res.data.list.map(sll => {
@@ -1247,7 +1257,7 @@ export default {
             this.customerForm.name = res.data.name;
             this.customerForm.number = res.data.number;
             this.customerForm.provinceCity = (res.data.province == "" && res.data.city == "") ? [] : [res.data.province, res.data.city];
-            this.customerForm.signUpSchool = res.data.signUpSchool;
+            this.customerForm.signUpSchool = schoolType(res.data.signUpSchool);
             this.customerForm.signUpTime = (res.data.signUpTime != '' ? timestampToTime(Number(res.data.signUpTime)) : '');
             this.customerForm.studentStatus = res.data.studentStatus == 0 || res.data.studentStatus == null ? '' : String(res.data.studentStatus);
             this.customerForm.studySituation = res.data.studySituation == 0 || res.data.studySituation == null ? '' : String(res.data.studySituation);
@@ -1269,7 +1279,8 @@ export default {
             this.customerForm.graduationSchool = res.data.graduationSchool;
             this.customerForm.graduationTime = timestampToTime(Number(res.data.graduationTime));
             this.customerForm.applyExam = res.data.applyExam;
-            this.customerForm.applyProvinceCity = (res.data.applyProvince == "" && res.data.applyCity == "") ? [] : [res.data.applyProvince, res.data.applyCity];
+            this.customerForm.applyProvince = res.data.applyProvince;
+            this.customerForm.applyCity = res.data.applyCity;
             this.customerForm.filingFee = res.data.filingFee;
             this.customerForm.examaAsistant = res.data.examaAsistant;
 
