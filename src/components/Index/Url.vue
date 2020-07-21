@@ -32,6 +32,11 @@ export default {
     },
     mounted() {
         
+    },
+    watch: {
+      '$route.params.id'(val){
+        this.getUrlMsg();
+      }
     }
 }
 </script>
@@ -39,7 +44,7 @@ export default {
 <style lang="less" scoped>
     .main-area{
       width: 100vw;
-      height: 100vh;
+      min-height: 110vh;
       background: #587cf7;
       .smoke{
         width: 100vw;
@@ -55,6 +60,7 @@ export default {
           position: absolute;
           top: 230px;
           line-height: 1.9;
+          word-break:break-all;
         }
       }
     }
