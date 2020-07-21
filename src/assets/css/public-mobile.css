@@ -22,6 +22,8 @@ body {
     font: 12px/1.5 Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #555;
     background-color: #F7F7F7;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 em, i {
     font-style: normal;
