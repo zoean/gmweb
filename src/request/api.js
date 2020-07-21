@@ -276,6 +276,7 @@ export const getSMSMsgBaseList = '/api/phone/getSMSMsgBaseList' //获取短信�
 export const getSMSTemList = '/api/phone/getSMSTemList' //获取短信模板列表
 export const groupSMS = '/api/phone/groupSMS' //群发消息
 export const getSMSRecordList = '/api/phone/getSMSRecordList' //获取短信记录列表
+export const getUrlMsg = '/api/phone/urlMsg/getUrl' //获取报考的url内容
 
 //代报考管理
 export const registerList = '/api/phone/register/list' //查询报考信息列表

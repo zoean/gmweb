@@ -260,28 +260,6 @@ export const classTypeText = (id) => {
     return str;
 }
 
-export const urlText = (id) => {
-    let str;
-    switch (id) {
-        case 1:
-            str = 'https://www.wjx.cn/m/84619210.aspx';
-            break;
-        case 2:
-            str = 'https://www.wjx.cn/jq/85237487.aspx';
-            break;
-        case 3:
-            str = 'https://www.wjx.cn/jq/85236140.aspx';
-            break;
-        case 4:
-            str = 'https://www.wjx.cn/jq/85236030.aspx';
-            break;
-        case 5:
-            str = 'https://www.wjx.cn/jq/85236389.aspx';
-            break;
-    }
-    return str;
-}
-
 export const classTypeString = (id) => {
     let str;
     switch (id) {
@@ -1037,4 +1015,10 @@ export const filepostDown = (url, cfg, name) => {
     });
 }
 
+export const textUrl = (text) => {
+    let url = '';
+    const reg = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g;
+    url = text.replace(reg, "<a style='color: #587cf7' href='$1$2'>$1$2</a>").replace(/\n/g, "<br />");
+    return url;
+}
 
