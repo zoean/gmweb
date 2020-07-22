@@ -44,7 +44,7 @@
 
         <el-row class="people-screen" type="flex" align="middle">
 
-            <el-col :span="8">
+            <el-col :span="5">
                 <el-date-picker
                     size="small"
                     style="width: 95%;"
@@ -58,29 +58,43 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="5">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValueSignUp"
+                    type="datetimerange"
+                    :default-time="['00:00:00', '23:59:59']"
+                    range-separator="至"
+                    @change="datePickerChangeValueSignUp"
+                    start-placeholder="报名时间"
+                    end-placeholder="报名时间">
+                </el-date-picker>
+            </el-col>
+
+            <el-col :span="5">
 
                 <el-cascader
                     class="smoke-cascader1"
                     ref="cascader"
                     size="small"
-                    style="width: 90%;"
+                    style="width: 95%;"
                     placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels='true'
                     :options="zuzhiOptions"
                     @change='handleZuzhiChange'
                     filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
                     clearable>
                 </el-cascader>
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="5">
                 
                 <el-date-picker
-                  style="width: 90%;"
+                  style="width: 95%;"
                   v-model="dataPicker"
                   type="date"
                   align="right"
@@ -107,7 +121,7 @@
 
             <el-col :span="4">
                 <el-row type="flex" justify="end">
-                    <svg-icon class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
+                    <svg-icon style="margin-right: 0;" class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
             </el-col>
 
@@ -202,7 +216,7 @@ import {
     getTransferStuCTList,
     transferStu,
     getSchoolList,
-    getOrgSubsetByUuid,
+    clTeaOrgFilterBox,
     getSendMsgClassTeaStudent
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
@@ -214,7 +228,7 @@ import {
     sortTextNum,
     citiesFun,
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, showid, nationAll } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'allStudents',
@@ -241,10 +255,13 @@ export default {
                 startTime: '',
                 endTime: '',
                 receiveStartTime: '',
-                receiveEndTime: ''
+                receiveEndTime: '',
+                signUpStartTime: '',
+                signUpEndTime: '',
             },
             list: [],
             dataPickerValue: [],
+            dataPickerValueSignUp: [],
             totalFlag: false,
             columnList: [
                 { 'prop': 'name', 'label': '姓名' },
@@ -337,9 +354,18 @@ export default {
         this.getSupStuList();
         this.getExamBasic();
         this.getSchoolList();
-        this.getOrgSubsetByUuid();
+        this.clTeaOrgFilterBox();
     },
     methods: {
+        datePickerChangeValueSignUp(value) {
+            if (value == null) {
+                this.form.signUpStartTime = '';
+                this.form.signUpEndTime = '';
+            }else{
+                this.form.signUpStartTime = value[0].getTime();
+                this.form.signUpEndTime = value[1].getTime();
+            }
+        },
         changeDrawer(val){
             this.drawer = val;
         },
@@ -389,11 +415,11 @@ export default {
             this.ruleFormAddress.cityId = arr[1];
             this.ruleFormAddress.districtId = arr[2];
         },
-        getOrgSubsetByUuid() {
-            this.$smoke_post(getOrgSubsetByUuid, {
-                uuid: showid
-            }).then(res => {
-                this.zuzhiOptions = res.data;
+        clTeaOrgFilterBox() {
+            this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
+                if(res.code == 200) {
+                    this.zuzhiOptions = res.data;
+                }
             })
         },
         getSchoolList() {

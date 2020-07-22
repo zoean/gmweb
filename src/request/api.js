@@ -221,6 +221,8 @@ export const getSupStuList = '/api/phone/classTeacher/getSupStuList'; //主管�
 export const transferStu = '/api/phone/classTeacher/transferStu'; //转移学员
 export const getTransferStuCTList = '/api/phone/classTeacher/getTransferStuCTList'; //获取转移学员的班主任列表
 export const getSendMsgClassTeaStudent = '/api/phone/classTeacher/getSendMsgClassTeaStudent'; //发送短信（班主任学员列表）
+export const classTeaExamItem = '/api/phone/classTeacher/classTeaExamItem'; //班主任的考试项目列表
+export const clTeaOrgFilterBox = '/api/phone/classTeacher/clTeaOrgFilterBox'; //获取班主任的组织筛选框
 
 //学员管理
 export const getWaitStudentList = '/api/phone/classTeacher/getWaitStudentList'; //获取待分配学员订单列表

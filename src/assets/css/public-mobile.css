@@ -463,7 +463,9 @@ div.el-dialog__body{
     overflow: auto;
 }
 
-
+.el-cascader__tags{
+    flex-wrap: nowrap !important;
+}
 
 
 

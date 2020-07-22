@@ -114,7 +114,7 @@ export const superManageUuid = '383799112b0d47a7a3341bce77f8b776';
 export const websockHttp = process.env.VUE_APP_WEB_SOCKET + '/websocket/msg/';
 
 //销售部组织id
-export const showid = '544230511a59461c8ed6c82ce2355e17';
+// export const showid = '544230511a59461c8ed6c82ce2355e17';
 
 //报考专员
 export const registerPeopleId = '报考专员';
