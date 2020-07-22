@@ -94,14 +94,6 @@ export default {
   }
 }
 
-@media screen and (min-width: 1600px) {
-  .sidebar-open{
-    width: calc( 100vw - 3rem ) !important;
-    position: absolute;
-    left: 3rem !important;
-  }
-}
-
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
