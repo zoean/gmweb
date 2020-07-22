@@ -1,10 +1,8 @@
 <template>
     <el-main class="index-main newStudents">
 
-        <el-row style="margin-bottom: 10px;">
+        <el-row style="margin-bottom: 16px;">
 
-            <el-col :span="4" style="float: right; text-align: right;"><el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
-            
             <el-col :span="4">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
             </el-col>
@@ -13,38 +11,80 @@
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="5" class="">
-
-                <el-cascader
-                    class="smoke-cascader"
-                    ref="cascader"
+            <el-col :span="4">
+                <el-autocomplete
+                    clearable
                     size="small"
-                    style="width: 95%;"
-                    placeholder="请搜索或者选择坐席组织架构"
-                    collapse-tags
-                    :show-all-levels=false
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
-                    clearable>
-                </el-cascader>
+                    style="width: 90%;"
+                    ref="autocomplete"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelect"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
+            </el-col>
 
+            <el-col :span="4">
+                <el-select v-model="form.classType" placeholder="请选择班型等级" style="width: 90%;" size="small" clearable>
+                    <el-option
+                      v-for="item in classTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
             </el-col>
 
             <el-col :span="4">
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="3">
+        </el-row>
+
+        <el-row style="margin-bottom: 16px;">
+
+            <el-col :span="5">
+
+                <el-cascader
+                    class="smoke-cascader"
+                    ref="cascader"
+                    size="small"
+                    style="width: 95%;"
+                    placeholder="请选择坐席组织架构"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
+                    clearable>
+                </el-cascader>
+
+            </el-col>
+
+            <el-col :span="5">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValueSignUp"
+                    type="datetimerange"
+                    :default-time="['00:00:00', '23:59:59']"
+                    range-separator="至"
+                    @change="datePickerChangeValueSignUp"
+                    start-placeholder="报名时间"
+                    end-placeholder="报名时间">
+                </el-date-picker>
+            </el-col>
+
+            <el-col :span="2">
                 <el-button type="primary" size="small" @click="getWaitStudentListClick">查 询</el-button>
             </el-col>
 
-        </el-row>
+            <el-col :span="4" style="float: right; text-align: right;"><el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
 
-        <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
-            <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
-        </el-tabs>
+        </el-row>
 
         <el-table
             :data="list"
@@ -126,17 +166,17 @@
 import { 
     getWaitStudentList, 
     classTeaGetWaitStudent, 
-    getClassTeaClassWait,
     getSchoolList,
-    getOrgSubsetByUuid,
+    clTeaOrgFilterBox,
+    classTeaExamItem
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     timestampToTime, classTypeString, orderTypeText, copyData, getTextByJs,
-    citiesFun, countDown 
+    citiesFun, countDown, schoolType
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, showid, nationAll } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'newStudents',
@@ -148,6 +188,9 @@ export default {
             form: {
                 currentPage: 1,
                 pageSize: 20,
+                classType: '',
+                examItemId: '',
+                examItemText: '',
                 sortSet: [],
                 total: null,
                 classUuid: '',
@@ -155,6 +198,8 @@ export default {
                 tel: '',
                 name: '',
                 stuId: '',
+                signUpStartTime: '',
+                signUpEndTime: '',
             },
             totalFlag: false,
             list: [],
@@ -163,13 +208,11 @@ export default {
                 { 'prop': 'tel', 'label': '手机号码' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },
-                { 'prop': 'school', 'label': '分校' },
+                { 'prop': 'singlePlatform', 'label': '成单平台' },
                 { 'prop': 'createTime', 'label': '报名时间' },
                 { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'goodsName', 'label': '购买商品' },
             ],
-            tabsList: [],
-            classUuidDefault: '',
             fullscreenLoading: false,
             sortSetList: [
                 {'createTime': ''},
@@ -187,6 +230,13 @@ export default {
             userId: '',
             clueDataSUuid: '',
             callLogUuid: '',
+
+            restaurants: [],
+            classTypeList: [
+                { label: '普通班', value: 0 },
+                { label: '高端班', value: 1 },
+            ],
+            dataPickerValueSignUp: [],
         }
     },
     created() {
@@ -196,11 +246,52 @@ export default {
         }else{
             this.form.pageSize = 20;
         }
-        this.getClassTeaClassWait();
+        this.getWaitStudentList();
         this.getSchoolList();
-        this.getOrgSubsetByUuid();
+        this.clTeaOrgFilterBox();
+        this.classTeaExamItem();
     },
     methods: {
+        datePickerChangeValueSignUp(value) {
+            if (value == null) {
+                this.form.signUpStartTime = '';
+                this.form.signUpEndTime = '';
+            }else{
+                this.form.signUpStartTime = value[0].getTime();
+                this.form.signUpEndTime = value[1].getTime();
+            }
+        },
+        classTeaExamItem() {
+            let arr;
+            this.$smoke_get(classTeaExamItem, {}).then(res => {
+                arr = JSON.parse(JSON.stringify(res.data).replace(/examItemName/g,"value"));
+                this.restaurants = arr;
+            })
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelect(item) {
+            this.form.examItemId = item.examItemId;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
         changeDrawer(val){
             this.drawer = val;
         },
@@ -215,11 +306,11 @@ export default {
             })
             this.form.seatOrgList = brr;
         },
-        getOrgSubsetByUuid() {
-            this.$smoke_post(getOrgSubsetByUuid, {
-                uuid: showid
-            }).then(res => {
-                this.zuzhiOptions = res.data;
+        clTeaOrgFilterBox() {
+            this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
+                if(res.code == 200) {
+                    this.zuzhiOptions = res.data;
+                }
             })
         },
         getSchoolList() {
@@ -243,40 +334,15 @@ export default {
                 this.sortSetList[id][data.prop] = 'ASC';
             }
             this.form.sortSet.push(this.sortSetList[id]);
-            this.classUuidDefault = this.handleCurrentUuid;
+            // this.classUuidDefault = this.handleCurrentUuid;
             this.getWaitStudentList();
         },
         receiveClick( scope ) {
             this.classTeaGetWaitStudent('click', scope.uuid)
         },
-        getClassTeaClassWait() {
-            this.$smoke_post(getClassTeaClassWait, this.form).then(res => {
-                if(res.code == 200) {
-
-                    if(res.data.length != 0) {
-                        res.data.map(sll => {
-                            sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
-                        })
-                        this.form.classUuid = res.data[0].uuid;
-                        this.classUuidDefault = res.data[0].uuid;
-                    }
-
-                    this.tabsList = res.data;
-                    this.getWaitStudentList();
-
-                }else{
-
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-
-                }
-            })
-        },
         getWaitStudentListClick() {
             this.form.currentPage = 1;
-            this.getClassTeaClassWait();
+            this.getWaitStudentList();
         },
         getWaitStudentList() {
             this.fullscreenLoading = true;
@@ -289,6 +355,7 @@ export default {
                             sll.createTime  = timestampToTime(Number(sll.createTime));
                             sll.classType = classTypeString(sll.classType);
                             sll.orderType = orderTypeText(sll.orderType);
+                            sll.singlePlatform = schoolType(sll.singlePlatform);
                             if(sll.seatOrgName && sll.seatName) {
                                 sll.seatName = sll.seatPOrgName? sll.seatPOrgName + ' ' + sll.seatOrgName + ' ' + sll.seatName : sll.seatOrgName + ' ' + sll.seatName;
                             }else{
@@ -313,12 +380,6 @@ export default {
 
                 }
             })
-        },
-        handleClassTabClick(tab, event) {
-            this.handleCurrentUuid = this.form.classUuid = tab.name;
-            this.form.currentPage = 1;
-            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
-            this.getWaitStudentList();
         },
         classTeaGetWaitStudent(type, id) {
             let arr = [];
@@ -353,7 +414,7 @@ export default {
                         type: 'success',
                         message: '成功领取' + res.data.length + '条'
                     });
-                    this.getClassTeaClassWait();
+                    this.getWaitStudentList();
                 }else{
                     this.$message({
                         type: 'error',

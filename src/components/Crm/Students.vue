@@ -11,20 +11,20 @@
                 <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
             </el-col>
             
-            <el-col :span="5">
+            <el-col :span="4">
 
                 <el-cascader
                     class="smoke-cascader"
                     ref="cascader"
                     size="small"
-                    style="width: 95%;"
-                    placeholder="请搜索或者选择坐席组织架构"
+                    style="width: 90%;"
+                    placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels=false
                     :options="zuzhiOptions"
                     @change='handleZuzhiChange'
                     filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
                     clearable>
                 </el-cascader>
 
@@ -34,7 +34,7 @@
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="4">
                 
                 <el-date-picker
                   class="smoke-cascader"
@@ -51,11 +51,23 @@
 
             </el-col>
 
+            <el-col :span="4">
+                <el-select v-model="form.studentStatus" placeholder="请选择学籍状态" style="width: 100%;" size="small" clearable>
+                    <el-option
+                        v-for="item in enumList['MJ-10']"
+                        :key="item.name"
+                        v-if="item.enable"
+                        :label="item.name"
+                        :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
+
         </el-row>
 
         <el-row style="margin-top: 16px;">
 
-            <el-col :span="8">
+            <el-col :span="5">
                 <el-date-picker
                     size="small"
                     style="width: 95%;"
@@ -69,33 +81,61 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="2">
-                <el-button type="primary" size="small" @click="getClassTeaStudentClick">查 询</el-button>
+            <el-col :span="5">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerValueSignUp"
+                    type="datetimerange"
+                    :default-time="['00:00:00', '23:59:59']"
+                    range-separator="至"
+                    @change="datePickerChangeValueSignUp"
+                    start-placeholder="报名时间"
+                    end-placeholder="报名时间">
+                </el-date-picker>
             </el-col>
 
-            <el-col :span="2">
-
-                <el-button type="primary" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button>
-
+            <el-col :span="4">
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    style="width: 90%;"
+                    ref="autocomplete"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    @select="handleSelect"
+                    @clear="autocompleteClear"
+                ></el-autocomplete>
             </el-col>
+
+            <el-col :span="4">
+                <el-select v-model="form.classType" placeholder="请选择班型等级" style="width: 90%;" size="small" clearable>
+                    <el-option
+                      v-for="item in classTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="4">
+                <el-button type="primary" style="float: left;" size="small" @click="getClassTeaStudentClick">查 询</el-button>
+                <el-button type="primary" style="float: left; margin-left: 20px;" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button>
+            </el-col>
+
+            <el-col :span="2" style="float: right; text-align: right;"><svg-icon class="border-icon" style="margin-right: 0;" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
 
         </el-row>
 
-        <el-row style="margin-bottom: 10px;">
-
-            <el-col style="float: right; text-align: right;"><svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
-
-        </el-row>
-
-        <el-tabs v-model="classUuidDefault" @tab-click="handleClassTabClick">
-            <el-tab-pane :label="item.text" :name="item.uuid" v-for="(item,index) in tabsList" :key="index"></el-tab-pane>
-        </el-tabs>
         <el-table
             :data="list"
             :key="Math.random()" 
             ref="tree"
             v-loading="fullscreenLoading"
-            style="width: calc( 100vw - 3.8rem)"
+            style="margin-top: 16px;"
             :row-key="getRowKey">
             <el-table-column
               :prop="item.props"
@@ -282,15 +322,16 @@
 <script>
 import { 
     getClassTeaStudent, 
-    getClassTeaClass,
     getSchoolList,
     copyTel,
     phoneOutTea,
     seatOutTea,
-    getOrgSubsetByUuid,
+    clTeaOrgFilterBox,
     getSendMsgClassTeaStudent,
     groupSMS,
-    getSMSMsgBaseList
+    getSMSMsgBaseList,
+    classTeaExamItem,
+    enumByEnumNums
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import PageFieldManage from '@/components/Base/PageFieldManage';
@@ -298,7 +339,7 @@ import {
     timestampToTime, classTypeString, orderTypeText, copyData, getTextByJs,
     citiesFun, countDown
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, showid, nationAll, } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll, } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'students',
@@ -311,6 +352,10 @@ export default {
             form: {
                 currentPage: 1,
                 pageSize: 20,
+                classType: '',
+                examItemId: '',
+                examItemText: '',
+                studentStatus: '',
                 sortSet: [
                     {'receiveTime': 'DESC'},
                 ],
@@ -324,13 +369,20 @@ export default {
                 startTime: '',
                 endTime: '',
                 receiveStartTime: '',
-                receiveEndTime: ''
+                receiveEndTime: '',
+                signUpStartTime: '',
+                signUpEndTime: '',
             },
             list: [],
             dataPickerValue: [],
+            dataPickerValueSignUp: [],
             columnList: [{
                 label: '班型'
             }],
+            classTypeList: [
+                { label: '普通班', value: 0 },
+                { label: '高端班', value: 1 },
+            ],
             zuzhiOptions: [],
             dataPicker: '',
             pickerOptions: {
@@ -371,8 +423,6 @@ export default {
                 }
               }]
             },
-            tabsList: [],
-            classUuidDefault: '',
             totalFlag: false, //当只有一页时隐藏分页
             schoolList: [],
             fullscreenLoading: false,
@@ -422,6 +472,9 @@ export default {
             userId: '',
             clueDataSUuid: '',
             callLogUuid: '',
+
+            restaurants: [],
+            enumList: {}
         }
     },
     created() {
@@ -431,13 +484,56 @@ export default {
         }else{
             this.form.pageSize = 20;
         }
-        this.getClassTeaClass();
+        this.getClassTeaStudent();
         this.getSchoolList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        this.getOrgSubsetByUuid();
+        this.clTeaOrgFilterBox();
+        this.classTeaExamItem();
+        let arr = [MJ_10];
+        this.enumByEnumNums(arr);
     },
     methods: {
+        enumByEnumNums(arr) {
+            this.$smoke_post(enumByEnumNums, {
+                numberList: arr
+            }).then(res => {
+                if(res.code == 200){
+                    this.enumList = res.data;
+                }
+            })
+        },
+        classTeaExamItem() {
+            let arr;
+            this.$smoke_get(classTeaExamItem, {}).then(res => {
+                arr = JSON.parse(JSON.stringify(res.data).replace(/examItemName/g,"value"));
+                this.restaurants = arr;
+            })
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        handleSelect(item) {
+            this.form.examItemId = item.examItemId;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
         changeDrawer(val){
             this.drawer = val;
         },
@@ -480,7 +576,6 @@ export default {
             })
         },
         smsMsgChange(value) {
-            // console.log(value);
             this.smsMsgList.map(sll => {
                 if(sll.msgId == value){
                     this.smsForm.smsMsgText = sll.msg;
@@ -520,7 +615,6 @@ export default {
             this.$refs.smsTable.selection.map(sll => {
                 stuUuidArr.push(sll.stuUuid);
             });
-            // console.log(stuUuidArr);
             if(stuUuidArr.length != 0) {
                 this.smsForm.stuList = stuUuidArr;
                 this.smsForm.timeValue = '';
@@ -552,6 +646,15 @@ export default {
                 this.form.receiveEndTime = value[1].getTime();
             }
         },
+        datePickerChangeValueSignUp(value) {
+            if (value == null) {
+                this.form.signUpStartTime = '';
+                this.form.signUpEndTime = '';
+            }else{
+                this.form.signUpStartTime = value[0].getTime();
+                this.form.signUpEndTime = value[1].getTime();
+            }
+        },
         handleZuzhiChange(arr) {
             let brr = [];
             arr.map(res => {
@@ -563,11 +666,11 @@ export default {
             })
             this.form.seatOrgList = brr;
         },
-        getOrgSubsetByUuid() {
-            this.$smoke_post(getOrgSubsetByUuid, {
-                uuid: showid
-            }).then(res => {
-                this.zuzhiOptions = res.data;
+        clTeaOrgFilterBox() {
+            this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
+                if(res.code == 200) {
+                    this.zuzhiOptions = res.data;
+                }
             })
         },
         phoneOutTea( scope ) {
@@ -668,29 +771,9 @@ export default {
             this.userId = row.customerId;
             this.clueDataSUuid = row.clueDataSUuid;
         },
-        getClassTeaClass() {
-            this.$smoke_post(getClassTeaClass, this.form).then(res => {
-                if(res.code == 200) {
-                    if(res.data.length != 0) {
-                        this.form.classUuid = res.data[0].uuid;
-                        this.classUuidDefault = res.data[0].uuid;
-                    }
-                    res.data.map(sll => {
-                        sll.text = sll.examItem + ' - ' + classTypeString(sll.classType) + ' (' + sll.num + ') ';
-                    })
-                    this.tabsList = res.data;
-                    this.getClassTeaStudent();
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
-            })
-        },
         getClassTeaStudentClick() {
             this.form.currentPage = 1;
-            this.getClassTeaClass();
+            this.getClassTeaStudent();
         },
         getClassTeaStudent() {
             this.fullscreenLoading = true;
@@ -728,12 +811,6 @@ export default {
 
                 }
             })
-        },
-        handleClassTabClick(tab, event) {
-            this.form.classUuid = tab.name;
-            this.form.currentPage = 1;
-            this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
-            this.getClassTeaStudent();
         },
         phoneCopy(row) {
             this.copyTel(row.clueDataSUuid);

@@ -75,7 +75,7 @@ import {
     timestampToTime, getTextByJs, genderText, educationText, educationTypeText
 } from '../../assets/js/common';
 import { 
-    MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, showid, nationAll, MJ_15
+    MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, nationAll, MJ_15
 } from '../../assets/js/data';
 export default {
     name: 'baokaoMessage',
