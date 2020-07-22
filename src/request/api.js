@@ -289,3 +289,5 @@ export const updataPayment = '/api/phone/register/updataPayment' //更新报考�
 export const queryRegisterProcess = '/api/phone/register/queryRegisterProcess' //查询代报考进度
 export const queryItemList = '/api/phone/register/queryItemList' //查询报考项目信息
 
+// 教务统计
+export const getTeaWork='/api/phone/classTeacher/teaWork'//获取班主任的工作情况
