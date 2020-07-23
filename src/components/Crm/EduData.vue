@@ -1,7 +1,7 @@
 <template>
   <el-main class="index-main">
     <el-row>
-      <el-col :span="4">
+      <!-- <el-col :span="4">
         <el-select
           v-model="form.date"
           placeholder="请选择查看时间段"
@@ -14,6 +14,21 @@
           <el-option label="近14天" value="14"></el-option>
           <el-option label="近30天" value="30"></el-option>
         </el-select>
+      </el-col>-->
+      <el-col :span="6">
+        <el-date-picker
+          value-format="timestamp"
+          style="width:90%"
+          size="small"
+          v-model="form.time"
+          type="daterange"
+          align="left"
+          unlink-panels
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="pickerOptions"
+        ></el-date-picker>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="query">查询</el-button>
@@ -88,9 +103,50 @@ export default {
   name: "EduData",
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "昨天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近7天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近14天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 14);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近30天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
       form: {
-        date: "1",
+        // date: "1",
         name: "",
+        time: [],
       },
       tableData: [],
       loading: false,
@@ -134,26 +190,30 @@ export default {
       return sums;
     },
     query() {
-      if (!this.form.date) {
+      //查询
+      if (!this.form.time || !this.form.time.length) {
         this.$message({
           message: "请选择查看时间段",
           type: "warning",
         });
         return;
       }
-      let dateNow = new Date(new Date().toLocaleDateString()).getTime();
-      let startTime = dateNow - this.form.date * 86400000 + "";
       let data = {
         name: this.form.name,
-        endTime: dateNow + "",
-        startTime,
+        endTime: new Date(
+          new Date(this.form.time[1]).toLocaleDateString()
+        ).getTime(),
+        startTime: new Date(
+          new Date(this.form.time[0]).toLocaleDateString()
+        ).getTime(),
       };
 
       this.loading = true;
       this.$smoke_post(getTeaWork, data)
         .then((res) => {
           if (res.code == 200) {
-            this.tableData = res.data.map((item) => {//重新赋值了
+            this.tableData = res.data.map((item) => {
+              //重新赋值了
               return {
                 classTeaName: item.classTeaName,
                 talkTimeVOdurationCallCount: item.talkTimeVO.durationCallCount,
