@@ -293,3 +293,7 @@ export const queryItemList = '/api/phone/register/queryItemList' //查询报考�
 
 // 教务统计
 export const getTeaWork='/api/phone/classTeacher/teaWork'//获取班主任的工作情况
+
+//服务监测
+export const orgOpenClass = '/api/phone/qualityTesting/orgOpenClass' //组织下班主任开班情况
+export const openClass = '/api/phone/qualityTesting/openClass' //班主任的开班情况

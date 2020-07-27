@@ -1,5 +1,5 @@
 <template>
-    <el-header style="height: 60px;">
+    <el-header style="height: 60px; box-shadow:0px 1px 4px 0px rgba(0,21,41,0.12);">
         <el-dialog
             title="设置密码"
             :visible.sync="centerDialogVisible"
@@ -32,8 +32,6 @@
                 <div style="font-size: 12px; float: right; margin-right: 20%;">@：获取验证码后，请去钉钉查看</div>
               </el-form-item>
             </el-form>
-
-            
 
             <span slot="footer" class="dialog-footer">
               <el-button type="primary" @click="dialoghold" size=small>保 存</el-button>
@@ -808,6 +806,7 @@ export default {
         text-align: right;
         cursor: pointer;
         color: #333;
+        height: 44px;
     }
     .el-menu-demo{
         float: left;
