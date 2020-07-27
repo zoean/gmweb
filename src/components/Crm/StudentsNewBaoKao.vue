@@ -3,24 +3,13 @@
 
         <el-row class="people-screen">
             <el-col :span="4">
-                <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+                <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small" clearable></el-input>
             </el-col>
             <el-col :span="4">
-                <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
+                <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small" clearable></el-input>
             </el-col>
             <el-col :span="4">
-                <el-autocomplete
-                    clearable
-                    size="small"
-                    class="screen-li"
-                    ref="autocomplete"
-                    v-model="form.examLableText"
-                    :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
-                    :trigger-on-focus="true"
-                    @select="handleSelect"
-                    @clear="autocompleteClear"
-                ></el-autocomplete>
+                <el-input v-model="form.examLable" placeholder="请输入考试项目" class="screen-li" size="small" clearable></el-input>
             </el-col>
             <el-col :span="4">
                 <el-autocomplete
@@ -178,7 +167,6 @@
 <script>
 import { 
     registerList,
-    getExamBasic,
     queryProvinceAll,
     queryItemList,
     queryUserList,
@@ -209,7 +197,6 @@ export default {
                 checkStatus: '', //审核状态（0-待审核，1-审核通过，2-审核失败）
                 currentPage: 1,
                 examLable: '', //考试项目
-                examLableText: '',
                 examProvince: '', //报考省份	
                 itemName: '', //报考项目
                 itemNameText: '',
@@ -259,7 +246,6 @@ export default {
                 { value: 0, label: '未交费' },
                 { value: 1, label: '已交费' },
             ],
-            restaurants: [],
             ItemBaoKaoList: [],
             drawerMove: false,
             directionMove: 'rtl',
@@ -277,7 +263,6 @@ export default {
         this.queryProvinceAll();
         this.registerList();
         this.queryItemList();
-        this.getExamBasic();
     },
     methods: {
         queryUserList() {
@@ -346,7 +331,7 @@ export default {
                             sll.basicInfoStatus = sll.basicInfoStatus == '1' ? '完整' : '不完整';
                             sll.pictureStatus = sll.pictureStatus == '1' ? '完整' : '不完整';
                             sll.paymentStatus = sll.paymentStatus == '1' ? '已交费' : '未交费';
-                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : sll.checkStatus == '0' ? '待审核' : '- -';
+                            sll.checkStatus = sll.checkStatus == '1' ? '审核通过' : sll.checkStatus == '2' ? '审核失败' : '待审核';
                         })
 
                         this.list = res.data.list;
@@ -373,29 +358,14 @@ export default {
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.form.pageSize = Number(localStorage.getItem('studentsPageSize')) ? Number(localStorage.getItem('studentsPageSize')) : 20;
-            this.getSupStuList();
+            this.registerList();
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
             this.form.currentPage = 1;
             localStorage.setItem('studentsPageSize', index);
-            this.getSupStuList();
+            this.registerList();
         }, 
-        getExamBasic() {
-            let arr;
-            this.$smoke_get(getExamBasic, {}).then(res => {
-                if(res.code == 200) {
-                    arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
-                    this.restaurants = arr;
-                }
-            })
-        },
-        querySearch(queryString, cb) {
-            var restaurants = this.restaurants;
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
         querySearchBaoKao(queryString, cb) {
             var restaurants = this.ItemBaoKaoList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -406,19 +376,6 @@ export default {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
             };
-        },
-        handleSelect(item) {
-            this.form.examLable = item.id;
-            this.form.examLableText = item.value;
-        },
-        autocompleteClear() {
-            this.$nextTick(() => {
-                this.$refs.autocomplete.$children
-                    .find(c => c.$el.className.includes('el-input'))
-                    .blur();
-                this.form.examLable = '';
-                this.$refs.autocomplete.focus();
-            })
         },
         handleSelectItemName(item) {
             this.form.itemName = item.itemId;

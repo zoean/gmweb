@@ -1,6 +1,6 @@
 <template>
     <div class="baokao">
-        <el-dialog width="40%" title="报考信息" :visible.sync="baokaoFlag_" :before-close="handleClose">
+        <el-dialog width="56%" title="报考信息" :visible.sync="baokaoFlag_" :before-close="handleClose">
           
             <div class="baokao_kuang">
 
@@ -12,14 +12,15 @@
                 <div><span class="baokao_lable">所学专业：</span><span>{{message.graduationMajor}}</span></div>
 
                 <div v-if="message.itemId != 97"><span class="baokao_lable">学历类型：</span><span>{{message.educationType}}</span></div>
-                <div v-if="message.itemId != 97"><span class="baokao_lable">毕业时间：</span><span>{{message.graduationTime}}</span></div>
+                <div><span class="baokao_lable">毕业时间：</span><span>{{message.graduationTime}}</span></div>
 
                 <div v-if="message.itemId != 97"><span class="baokao_lable">资格证书：</span><span>{{message.qualificationCert}}</span></div>
 
                 <div><span class="baokao_lable">工作单位：</span><span>{{message.work}}</span></div>
+                <div><span class="baokao_lable">工作年限：</span><span>{{message.workingYears}}</span></div>
 
-                <div v-if="message.itemId != 97"><span class="baokao_lable">手机：</span><span>{{message.telephone}}</span></div>
-
+                <div><span class="baokao_lable">手机：</span><span>{{message.telephone}}</span></div>
+ 
                 <div v-if="message.itemId == 97"><span class="baokao_lable">职务：</span><span>{{message.workPost}}</span></div>
                 <div><span class="baokao_lable">常用邮箱：</span><span>{{message.email}}</span></div>
 
@@ -28,13 +29,25 @@
 
             </div>
 
-            <ul v-loading="fullscreenLoading" id="baokao">
-                <li v-for="(item, index) in imgArr"
-                    :key="index">
-                    <img :src="item.address ? item.address : require('../../assets/images/no_picture.png')" />
-                    <span>{{item.name}}</span>
-                </li>
-            </ul>
+            <div>
+
+                <ul v-loading="fullscreenLoading" id="baokao">
+                    <li v-for="(item, index) in imgArr"
+                        :key="index">
+                        <img :src="item.address ? item.address : require('../../assets/images/no_picture.png')" />
+                        <span>{{item.name}}</span>
+                    </li>
+                </ul>
+
+                <ul v-if="message.itemId == 97">
+                    <li
+                        @click="itemClick()">
+                        <img style="width: 100px; height: 100px;" :src="educationFormUrl ? require('../../assets/images/yes_pdf.png') : require('../../assets/images/no_pdf.png')" alt="">
+                        <span>学历电子备案表</span>
+                    </li>
+                </ul>
+
+            </div>
             
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="examineYes" size="small">审核通过</el-button>
@@ -104,13 +117,19 @@ export default {
                 {label: '照片不合格', value: '照片不合格'},
                 {label: '工作证明不合格', value: '工作证明不合格'},
                 {label: '学历不合格', value: '学历不合格'},
-            ]
+            ],
+            educationFormUrl: ''
         }
     },
     created() {
         this.registerGet();
     },
     methods: {
+        itemClick() {
+            if(this.educationFormUrl != '') {
+                window.open(this.educationFormUrl, '_blank');
+            }
+        },
         registerGet() {
             this.fullscreenLoading = true;
             this.$smoke_get(registerGet, {
@@ -124,10 +143,13 @@ export default {
                         res.data.educationType = educationTypeText(Number(res.data.educationType));
                         this.message = res.data;
 
-                        this.imgArr.push({name: '个人图片', address: res.data.personalPictureUrl});
+                        this.imgArr.push({name: '个人相片', address: res.data.personalPictureUrl});
                         this.imgArr.push({name: '学历证书', address: res.data.diplomaUrl});
                         if(res.data.itemId == '97') {
                             this.imgArr.push({name: '申请表', address: res.data.applicationFormUrl});
+                            this.imgArr.push({name: '身份证', address: res.data.idCardCopyUrl});
+                            // this.imgArr.push({name: '学历电子备案表', address: res.data.educationFormUrl});
+                            this.educationFormUrl = res.data.educationFormUrl;
                         }else{
                             this.imgArr.push({name: '身份证', address: res.data.idCardCopyUrl});
                         }

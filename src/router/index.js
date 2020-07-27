@@ -49,6 +49,10 @@ import smsRecord from '@/components/Crm/SMSRecord';
 import studentsNewBaoKao from '@/components/Crm/StudentsNewBaoKao';
 import studentsAllBaoKao from '@/components/Crm/StudentsAllBaoKao';
 import studentsMyBaoKao from '@/components/Crm/StudentsMyBaoKao';
+import eduData from '@/components/Crm/EduData';
+
+import orgOpenClass from '@/components/Crm/OrgOpenClass';
+import openClass from '@/components/Crm/OpenClass';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -90,6 +94,7 @@ export default new Router({
             name: 'forget',
             component: forget
         },
+        
         {
             path: '/url/:id',
             name: 'url',
@@ -145,6 +150,11 @@ export default new Router({
             path: '/crm/dataStatistics/everyTime',
             name: 'everyTime',
             component: everyTime
+        },
+        {
+            path: '/crm/dataStatistics/eduData',
+            name: 'eduData',
+            component: eduData
         },
         {
             path: '/crm/dataStatistics/recoverData',
@@ -302,6 +312,18 @@ export default new Router({
             path: '/crm/baokao/my',
             name: 'studentsMyBaoKao',
             component: studentsMyBaoKao
+        },
+
+        {
+            path: '/crm/class/orgOpenClass',
+            name: 'orgOpenClass',
+            component: orgOpenClass
+        },
+
+        {
+            path: '/crm/class/openClass',
+            name: 'openClass',
+            component: openClass
         },
 
         {
