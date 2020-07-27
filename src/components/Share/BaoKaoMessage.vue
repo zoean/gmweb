@@ -29,15 +29,25 @@
 
             </div>
 
-            <ul v-loading="fullscreenLoading" id="baokao">
-                <li v-for="(item, index) in imgArr"
-                    @click="itemClick(item)"
-                    :key="index">
-                    <img v-if="item.name != '学历电子备案表'" :src="item.address ? item.address : require('../../assets/images/no_picture.png')" />
-                    <img v-if="item.name == '学历电子备案表'" :src="item.address? require('../../assets/images/yes_pdf.png') : require('../../assets/images/no_pdf.png')" alt="">
-                    <span>{{item.name}}</span>
-                </li>
-            </ul>
+            <div>
+
+                <ul v-loading="fullscreenLoading" id="baokao">
+                    <li v-for="(item, index) in imgArr"
+                        :key="index">
+                        <img :src="item.address ? item.address : require('../../assets/images/no_picture.png')" />
+                        <span>{{item.name}}</span>
+                    </li>
+                </ul>
+
+                <ul v-if="message.itemId == 97">
+                    <li
+                        @click="itemClick()">
+                        <img style="width: 100px; height: 100px;" :src="educationFormUrl ? require('../../assets/images/yes_pdf.png') : require('../../assets/images/no_pdf.png')" alt="">
+                        <span>学历电子备案表</span>
+                    </li>
+                </ul>
+
+            </div>
             
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="examineYes" size="small">审核通过</el-button>
@@ -115,12 +125,9 @@ export default {
         this.registerGet();
     },
     methods: {
-        itemClick(item) {
-            if(item.name == '学历电子备案表' && item.address != '') {
-                // const { href } = this.$router.resolve({
-                //     name: "pdf",
-                // })
-                window.open(item.address, '_blank');
+        itemClick() {
+            if(this.educationFormUrl != '') {
+                window.open(this.educationFormUrl, '_blank');
             }
         },
         registerGet() {
@@ -141,7 +148,8 @@ export default {
                         if(res.data.itemId == '97') {
                             this.imgArr.push({name: '申请表', address: res.data.applicationFormUrl});
                             this.imgArr.push({name: '身份证', address: res.data.idCardCopyUrl});
-                            this.imgArr.push({name: '学历电子备案表', address: res.data.educationFormUrl});
+                            // this.imgArr.push({name: '学历电子备案表', address: res.data.educationFormUrl});
+                            this.educationFormUrl = res.data.educationFormUrl;
                         }else{
                             this.imgArr.push({name: '身份证', address: res.data.idCardCopyUrl});
                         }
