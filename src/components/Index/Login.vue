@@ -9,7 +9,7 @@
 
                 <el-input class="user" v-model="accountNumber" size="medium" placeholder="请输入账号" prefix-icon="el-icon-user"></el-input>
                 <el-input class="lock" v-model="password" size="medium" placeholder="请输入密码" show-password prefix-icon="el-icon-lock"></el-input>
-                <el-button type="primary" class="login-btn" size="medium" @click="login" v-loading.fullscreen.lock="fullscreenLoading" :disabled="isDisable">登录</el-button>
+                <el-button type="primary" class="login-btn" size="medium" @click="login" @keyup.enter="login" v-loading.fullscreen.lock="fullscreenLoading" :disabled="isDisable">登录</el-button>
 
                 <div class="contain-forget" @click="forget_password">忘记密码</div>
 
@@ -30,17 +30,19 @@ export default {
         }
     },
     created() {
-        this.keyupSubmit()
+        var _self = this;
+        document.onkeydown = function(e){
+            if(window.event == undefined){
+                var key = e.keyCode;
+            }else{
+                var key = window.event.keyCode;
+            }
+            if(key == 13){
+                _self.login();
+            }
+        }
     },
     methods: {
-        keyupSubmit(){
-            document.onkeydown=e=>{
-                let _key=window.event.keyCode;
-                if(_key===13){
-                    this.login();
-                }
-            }
-        },
         login() {
             console.log(222);
             if( !this.accountNumber || !this.password){
@@ -59,6 +61,7 @@ export default {
                         this.$store.dispatch('actionsSetCommonFlag', true);                        
                         localStorage.setItem("jhToken", res.data.token);
                         this.getUserLoginMessage();
+                        document.onkeydown = undefined;
                         setTimeout(() => {
                             this.fullscreenLoading = false;
                             this.isDisable=false;

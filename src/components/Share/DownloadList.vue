@@ -19,7 +19,7 @@
 
                   <template slot-scope="scope">
                     <span>{{scope.row[item.prop]}}</span>
-                    <svg-icon v-if="item.prop == 'download'" icon-class="down" icon-title="点击下载" @click="downloadClick(scope.row)" />
+                    <svg-icon v-if="item.prop == 'download' && scope.row['status'] == '已完成'" icon-class="download" icon-title="点击下载" @click="downloadClick(scope.row)" />
                   </template>
 
                 </el-table-column>
@@ -55,10 +55,9 @@ export default {
         return {
             list: [],
             columnList: [
-                { 'prop': 'taskName', 'label': '任务名称' },
-                { 'prop': 'downloadUrl', 'label': '下载地址', width: 200 },
-                { 'prop': 'finishTime', 'label': '完成时间', width: 90 },
-                { 'prop': 'status', 'label': '处理状态' },
+                { 'prop': 'taskName', 'label': '任务名称', width: 200 },
+                { 'prop': 'finishTime', 'label': '完成时间', width: 120 },
+                { 'prop': 'status', 'label': '处理状态', width: 60 },
                 { 'prop': 'download', 'label': '', width: 50 },
             ],
         }

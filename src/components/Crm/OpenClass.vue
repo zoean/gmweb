@@ -148,7 +148,7 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
-                            sll.followUp = sll.followUp == 1 ? '是' : sll.followUp == 0 ? '否' : '- -';
+                            sll.followUp = sll.followUp == 1 ? '是' : sll.followUp == 2 ? '否' : '- -';
                             sll.openClass = sll.openClass == 1 ? '开班' : sll.openClass == 0 ? '未开班' : '- -';
                         })
                         this.list = res.data;
