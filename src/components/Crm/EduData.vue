@@ -38,13 +38,18 @@
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
-      style="width: 100%"
+      style="width: 100%;margin-top:20px"
       v-loading="loading"
     >
       <el-table-column prop="classTeaName" label="姓名" width="180" align="center"></el-table-column>
       <el-table-column label="学员领取情况" width="180" align="center">
         <el-table-column label="领取总数" prop="receiveStuVOstuNumCount" align="center"></el-table-column>
-        <el-table-column label="系统领取数" prop="receiveStuVOsystemAllStuNum" width="120" align="center"></el-table-column>
+        <el-table-column
+          label="系统领取数"
+          prop="receiveStuVOsystemAllStuNum"
+          width="120"
+          align="center"
+        ></el-table-column>
         <el-table-column label="商城领取数" prop="receiveStuVOreceiveStuNum" width="120" align="center"></el-table-column>
         <el-table-column label="主管分配内容" prop="receiveStuVOleadAllStuNum" width="120" align="center"></el-table-column>
       </el-table-column>
@@ -52,7 +57,7 @@
         <el-table-column label="学员数量" prop="addNotesVOaddNotesNum" align="center"></el-table-column>
         <el-table-column label="备注条数" prop="addNotesVOaddNotesStuNum" align="center"></el-table-column>
       </el-table-column>
-      <el-table-column label="外拨电话情况"  align="center">
+      <el-table-column label="外拨电话情况" align="center">
         <el-table-column label="系统" align="center">
           <el-table-column label="拨打总数" prop="dialVOnewSystemDialVOnewSystemNum" align="center"></el-table-column>
           <el-table-column label="手机外拨" prop="dialVOnewSystemDialVOnewSystemTelNum" align="center"></el-table-column>
@@ -60,22 +65,32 @@
             label="手机外拨接通"
             prop="dialVOnewSystemDialVOnewSystemOpenTelNum"
             width="120"
-             align="center"
+            align="center"
           ></el-table-column>
           <el-table-column label="座机外拨" prop="dialVOnewSystemDialVOnewSystemSeatNum" align="center"></el-table-column>
           <el-table-column
             label="座机外拨接通"
             prop="dialVOnewSystemDialVOnewSystemOpenSeatNum"
             width="120"
-             align="center"
+            align="center"
           ></el-table-column>
         </el-table-column>
         <el-table-column label="JQ" align="center">
           <el-table-column label="拨打总数" prop="dialVOjqDialVOjqNum" align="center"></el-table-column>
           <el-table-column label="手机外拨" prop="dialVOjqDialVOjqTelNum" align="center"></el-table-column>
-          <el-table-column label="手机外拨接通" prop="dialVOjqDialVOjqOpenTelNum" width="120" align="center"></el-table-column>
+          <el-table-column
+            label="手机外拨接通"
+            prop="dialVOjqDialVOjqOpenTelNum"
+            width="120"
+            align="center"
+          ></el-table-column>
           <el-table-column label="座机外拨" prop="dialVOjqDialVOjqSeatNum" align="center"></el-table-column>
-          <el-table-column label="座机外拨接通" prop="dialVOjqDialVOjqOpenSeatNum" width="120" align="center"></el-table-column>
+          <el-table-column
+            label="座机外拨接通"
+            prop="dialVOjqDialVOjqOpenSeatNum"
+            width="120"
+            align="center"
+          ></el-table-column>
         </el-table-column>
       </el-table-column>
       <el-table-column label="呼入情况" align="center">
@@ -87,10 +102,20 @@
         <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center" width="120">
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCount)}}</template>
         </el-table-column>
-        <el-table-column label="外拨通话时长" prop="talkTimeVOdurationOutCount" width="120" align="center">
+        <el-table-column
+          label="外拨通话时长"
+          prop="talkTimeVOdurationOutCount"
+          width="120"
+          align="center"
+        >
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationOutCount)}}</template>
         </el-table-column>
-        <el-table-column label="呼入通话时长" prop="talkTimeVOdurationCallCount" width="120" align="center">
+        <el-table-column
+          label="呼入通话时长"
+          prop="talkTimeVOdurationCallCount"
+          width="120"
+          align="center"
+        >
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCallCount)}}</template>
         </el-table-column>
       </el-table-column>
@@ -106,13 +131,17 @@ export default {
   data() {
     return {
       pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 3600 * 1000 * 24;
+        },
         shortcuts: [
           {
             text: "昨天",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
-              // start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+              end.setTime(start.getTime());
               picker.$emit("pick", [start, end]);
             },
           },
@@ -261,10 +290,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
- .el-table {
+.el-table {
   overflow-x: auto !important;
 }
- /deep/ .el-table__header-wrapper,
+/deep/ .el-table__header-wrapper,
 /deep/ .el-table__body-wrapper,
 /deep/ .el-table__footer-wrapper {
   overflow: visible !important;
