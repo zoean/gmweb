@@ -38,7 +38,7 @@
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
-      style="width: 100%;margin-top:20px"
+      style="width: 100%"
       v-loading="loading"
     >
       <el-table-column prop="classTeaName" label="姓名" width="180" align="center"></el-table-column>
@@ -151,6 +151,7 @@ export default {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              end.setTime(end.getTime() - 3600 * 1000 * 24);
               picker.$emit("pick", [start, end]);
             },
           },
@@ -160,6 +161,7 @@ export default {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 14);
+              end.setTime(end.getTime() - 3600 * 1000 * 24);
               picker.$emit("pick", [start, end]);
             },
           },
@@ -169,6 +171,7 @@ export default {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              end.setTime(end.getTime() - 3600 * 1000 * 24);
               picker.$emit("pick", [start, end]);
             },
           },
