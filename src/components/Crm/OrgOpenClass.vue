@@ -149,12 +149,8 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
-                            sll.alreadyOpenClassNum = sll.alreadyOpenClassNum == 0 || sll.alreadyOpenClassNum == null ? '0' : sll.alreadyOpenClassNum;
-                            sll.openClassNum = sll.openClassNum == 0 || sll.openClassNum == null ? '0' : sll.openClassNum;
-                            sll.alreadyFollowUpNum = sll.alreadyFollowUpNum == 0 || sll.alreadyFollowUpNum == null ? '0' : sll.alreadyFollowUpNum;
-                            sll.followUpNum = sll.followUpNum == 0 || sll.followUpNum == null ? '0' : sll.followUpNum;
-                            sll.openClassNumData = (sll.alreadyOpenClassNum ? sll.alreadyOpenClassNum : 0 / sll.openClassNum) * 100 + '%';
-                            sll.followUpNumData = (sll.alreadyFollowUpNum ? sll.alreadyFollowUpNum : 0 / sll.followUpNum) * 100 + '%';
+                            sll.openClassNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
+                            sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
                         })
                         this.list = res.data;
                     }, 300);
