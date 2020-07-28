@@ -38,7 +38,7 @@
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
-      style="width: 100%;margin-top:40px"
+      style="width: 100%"
       v-loading="loading"
     >
       <el-table-column prop="classTeaName" label="姓名" width="180" align="center"></el-table-column>
@@ -112,7 +112,7 @@ export default {
             onClick(picker) {
               const end = new Date();
               const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+              // start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
               picker.$emit("pick", [start, end]);
             },
           },
