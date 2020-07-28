@@ -10,6 +10,7 @@
                     size="small"
                     v-model="timeDate"
                     type="date"
+                    value-format='timestamp'
                     :picker-options="pickerOptions"
                     @change="timeChange"
                     placeholder="请选择日期">
@@ -92,28 +93,28 @@ export default {
                 shortcuts: [{
                   text: '昨天',
                   onClick(picker) {
-                    const date = new Date();
+                    const date = new Date(new Date(new Date().toLocaleDateString()).getTime());
                     date.setTime(date.getTime() - 3600 * 1000 * 24);
                     picker.$emit('pick', date);
                   }
                 }, {
                   text: '前天',
                   onClick(picker) {
-                    const date = new Date();
+                    const date = new Date(new Date(new Date().toLocaleDateString()).getTime());
                     date.setTime(date.getTime() - 3600 * 1000 * 24 * 2);
                     picker.$emit('pick', date);
                   }
                 }, {
                   text: '2天前',
                   onClick(picker) {
-                    const date = new Date();
+                    const date = new Date(new Date(new Date().toLocaleDateString()).getTime());
                     date.setTime(date.getTime() - 3600 * 1000 * 24 * 3);
                     picker.$emit('pick', date);
                   }
                 }, {
                   text: '3天前',
                   onClick(picker) {
-                    const date = new Date();
+                    const date = new Date(new Date(new Date().toLocaleDateString()).getTime());
                     date.setTime(date.getTime() - 3600 * 1000 * 24 * 4);
                     picker.$emit('pick', date);
                   }
@@ -127,10 +128,17 @@ export default {
     },
     methods: {
         timeChange() {
-            this.form.time = this.timeDate.getTime();
+            this.form.time = this.timeDate;
         },
         openClassClick() {
-            this.openClass();
+            if(this.form.time){
+                this.openClass();
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择查询日期'
+                })
+            }
         },
         openClass() {
             this.fullscreenLoading = true;
@@ -140,7 +148,7 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
-                            sll.followUp = sll.followUp == 1 ? '是' : sll.followUp == 0 ? '否' : '- -';
+                            sll.followUp = sll.followUp == 1 ? '是' : sll.followUp == 2 ? '否' : '- -';
                             sll.openClass = sll.openClass == 1 ? '开班' : sll.openClass == 0 ? '未开班' : '- -';
                         })
                         this.list = res.data;

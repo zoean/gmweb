@@ -5,7 +5,6 @@
         <el-table
           :data="classList"
           row-key="uuid"
-          default-expand-all
           :indent="35"
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
           style="width: 100%">
