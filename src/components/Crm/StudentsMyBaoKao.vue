@@ -93,16 +93,15 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="4">
-
-                <el-button style="float: right;" @click="exportClick" size="small" plain>导 出</el-button>
-
+            <el-col :span="5">
+                <el-button style="float: right;" @click="downloadListClick" size="small" plain>查看下载任务</el-button>
+                <el-button style="float: right; margin-right: 20px;" @click="exportClick" size="small" plain>导 出</el-button>
             </el-col>
 
         </el-row>
@@ -195,6 +194,8 @@
             :registerId='registerId'
         >
         </BaoKaoMessage>
+
+        
 
     </el-main>
 </template>
@@ -314,6 +315,9 @@ export default {
         this.queryItemList();
     },
     methods: {
+        downloadListClick() {
+
+        },
         updataPaymentClick(scope) {
             this.paymentForm.registerId = scope.row.registerId;
             if(this.paymentForm.paymentStatus === ''){
