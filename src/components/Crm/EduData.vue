@@ -109,16 +109,15 @@
         <el-table-column label="呼入人数" prop="callStuVOcallStuNum" align="center" width="50"></el-table-column>
       </el-table-column>
       <el-table-column label="通时情况" align="center">
-        <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center" width="50">
+        <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center">
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCount)}}</template>
         </el-table-column>
-        <el-table-column label="外拨通话时长" prop="talkTimeVOdurationOutCount" width="60" align="center">
+        <el-table-column label="外拨通话时长" prop="talkTimeVOdurationOutCount" align="center">
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationOutCount)}}</template>
         </el-table-column>
         <el-table-column
           label="呼入通话时长"
           prop="talkTimeVOdurationCallCount"
-          width="60"
           align="center"
         >
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCallCount)}}</template>
