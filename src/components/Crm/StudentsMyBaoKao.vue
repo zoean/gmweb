@@ -195,7 +195,12 @@
         >
         </BaoKaoMessage>
 
-        
+        <DownloadList 
+            v-if="downloadFlag"
+            @changedownloadFlag="changedownloadFlag"
+            :downloadFlag.sync='downloadFlag'
+        >
+        </DownloadList>
 
     </el-main>
 </template>
@@ -211,6 +216,7 @@ import {
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
+import DownloadList from '@/components/Share/DownloadList';
 import { 
     timestampToTime, 
     genderText,
@@ -228,7 +234,8 @@ export default {
     name: 'studentsMyBaoKao',
     components: {
         StudentsNotes,
-        BaoKaoMessage
+        BaoKaoMessage,
+        DownloadList
     },
     data() {
         return {
@@ -278,6 +285,8 @@ export default {
             baokaoFlag: false,
             registerId: '',
 
+            downloadFlag: false,
+
             basicInfoStatusList: [
                 { value: 0, label: '不完整' },
                 { value: 1, label: '完整' },
@@ -316,7 +325,7 @@ export default {
     },
     methods: {
         downloadListClick() {
-
+            this.downloadFlag = true;
         },
         updataPaymentClick(scope) {
             this.paymentForm.registerId = scope.row.registerId;
@@ -344,26 +353,33 @@ export default {
         },
         exportClick() {
             let arr = [];
-
             this.$refs.tableSelect.selection.map(sll => {
                 arr.push(sll.registerId);
             })
-            if(arr.length == 0) {
-                this.$message({
-                    type: 'error',
-                    message: '请您先勾选您要导出的学员'
-                });
-            }else{
-                this.form.registerIds = arr;
-                var tmp = (new Date()).getTime();
-                tmp = timestampToTime(tmp);
-                this.registerExportExcel(tmp);
-            }
+            this.form.registerIds = arr;
+            let tmp = (new Date()).getTime();
+            tmp = timestampToTime(tmp);
+            this.registerExportExcel(tmp);
+            this.registerExportZip();
         },
         registerExportExcel(tmp) {
             filepostDown(registerExportExcel, this.form, '报考数据-' + tmp + '.xlsx');
-            filepostDown(registerExportZip, this.form, '报考数据-' + tmp + '.zip');
         },  
+        registerExportZip(){
+            this.$smoke_post(registerExportZip, this.form).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '导出成功'
+                    });
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: '导出失败'
+                    });
+                }
+            })
+        },
         lookBaoKaoMessage(row) {
             this.baokaoFlag = true;
             this.registerId = row.registerId;
@@ -383,6 +399,9 @@ export default {
         changebaokaoFlag(val){
             this.baokaoFlag = val;
             this.registerList();
+        },
+        changedownloadFlag(val){
+            this.downloadFlag = val;
         },
         registerListClick() {
             this.form.currentPage = 1;
