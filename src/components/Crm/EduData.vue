@@ -49,8 +49,8 @@
         <el-table-column label="主管分配内容" prop="receiveStuVOleadAllStuNum" width="60" align="center"></el-table-column>
       </el-table-column>
       <el-table-column label="添加备注情况" align="center">
-        <el-table-column label="学员数量" prop="addNotesVOaddNotesNum" align="center" width="50"></el-table-column>
-        <el-table-column label="备注条数" prop="addNotesVOaddNotesStuNum" align="center" width="50"></el-table-column>
+        <el-table-column label="学员数量" prop="addNotesVOaddNotesStuNum" align="center" width="50"></el-table-column>
+        <el-table-column label="备注条数" prop="addNotesVOaddNotesNum" align="center" width="50"></el-table-column>
       </el-table-column>
       <el-table-column label="外拨电话情况" align="center">
         <el-table-column label="系统" align="center">
