@@ -42,7 +42,7 @@
               >
 
               <template slot-scope="scope">
-                <span>{{scope.row[item.prop] || '- -'}}</span>
+                <span>{{scope.row[item.prop]}}</span>
               </template>
 
             </el-table-column>
@@ -149,8 +149,16 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
-                            sll.openClassNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
-                            sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
+                            if(sll.openClassNum != 0) {
+                                sll.openClassNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
+                            }else{
+                                sll.openClassNumData = '0%';
+                            }
+                            if(sll.followUpNum != 0) {
+                                sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
+                            }else{
+                                sll.openClassNumData = '0%';
+                            }
                         })
                         this.list = res.data;
                     }, 300);
