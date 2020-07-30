@@ -224,7 +224,7 @@ export default {
           }, 0);
         }
         // console.log(index);
-        if (index === 20 || index === 21 || index === 22) {
+        if (index === 1 || index === 2 || index === 3) {
           sums[index] = this.timeReturn(sums[index]);
         }
       });
