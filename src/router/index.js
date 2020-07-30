@@ -53,6 +53,8 @@ import eduData from '@/components/Crm/EduData';
 
 import orgOpenClass from '@/components/Crm/OrgOpenClass';
 import openClass from '@/components/Crm/OpenClass';
+import returnOrgVisit from '@/components/Crm/ReturnOrgVisit';
+import returnVisit from '@/components/Crm/ReturnVisit';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -324,6 +326,18 @@ export default new Router({
             path: '/crm/class/openClass',
             name: 'openClass',
             component: openClass
+        },
+
+        {
+            path: '/crm/class/returnOrgVisit',
+            name: 'returnOrgVisit',
+            component: returnOrgVisit
+        },
+
+        {
+            path: '/crm/class/returnVisit',
+            name: 'returnVisit',
+            component: returnVisit
         },
 
         {

@@ -467,7 +467,19 @@ div.el-dialog__body{
     flex-wrap: nowrap !important;
 }
 
-
+.tag_class{
+    border-color: #409EFF !important;
+    color: #333 !important;
+    background-color: #EFF7FF !important;
+}
+.number_search{
+    height: 36px !important;
+    line-height: 36px !important;
+    color: #666 !important;
+    border: 1px solid #409EFF !important;
+    background-color: #EFF7FF !important;
+    margin-bottom: 16px !important;
+}
 
 
 

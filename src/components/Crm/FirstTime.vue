@@ -14,7 +14,24 @@
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
+            :key="Math.random()"
             style="width: 100%">
+
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="110" class-name="table_active">
+                <template slot-scope="scope">
+                
+                <el-select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" size="small" class="screen-li">
+                    <el-option
+                      v-for="item in enumList['MJ-16']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="Number(item.number)">
+                    </el-option>
+                </el-select>
+
+                </template>
+            </el-table-column>
 
             <el-table-column
               :prop="item.prop"
@@ -90,11 +107,13 @@ import {
     phoneOut,
     seatOut,
     clueDataRelease,
-    copyTel
+    copyTel,
+    clueContactSign,
+    enumByEnumNums
 } from '../../request/api';
 import Start from '../../components/Share/Start';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, copyData } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
+import { MJ_16 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'firstTime',
@@ -132,6 +151,8 @@ export default {
             userCDARUuid: '',
 
             fullscreenLoading: false,
+
+            enumList: {}
         }
     },
     components: {
@@ -150,8 +171,41 @@ export default {
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         //this.jqStart = browserfly.noConflict();
+        let arr = [MJ_16];
+        this.enumByEnumNums(arr);
     },
     methods: {
+        enumByEnumNums(arr) {
+            this.$smoke_post(enumByEnumNums, {
+                numberList: arr
+            }).then(res => {
+                if(res.code == 200){
+                    this.enumList = res.data;
+                }
+            })
+        },
+        clueConSignChange(row) {
+            this.clueContactSign(row.clueConSign, row.userCDARUuid);
+        },
+        clueContactSign(clueConSign, userCDARUuid) {
+            this.$smoke_post(clueContactSign, {
+                start: clueConSign,
+                userCDARUuid: userCDARUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '标记成功'
+                    })
+                    this.getClueDataAll();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.firstConDataList();
@@ -194,6 +248,7 @@ export default {
                         res.data.list.map(sll => {
                             sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
+                            sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
