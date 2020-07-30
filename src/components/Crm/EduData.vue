@@ -42,6 +42,17 @@
       v-loading="loading"
     >
       <el-table-column prop="classTeaName" label="姓名" width="100" align="center"></el-table-column>
+      <el-table-column label="通时情况" align="center">
+        <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center">
+          <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCount)}}</template>
+        </el-table-column>
+        <el-table-column label="外拨通话时长" prop="talkTimeVOdurationOutCount" align="center">
+          <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationOutCount)}}</template>
+        </el-table-column>
+        <el-table-column label="呼入通话时长" prop="talkTimeVOdurationCallCount" align="center">
+          <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCallCount)}}</template>
+        </el-table-column>
+      </el-table-column>
       <el-table-column label="学员领取情况" width="180" align="center" class="height_32">
         <el-table-column label="领取总数" prop="receiveStuVOstuNumCount" align="center" width="50"></el-table-column>
         <el-table-column label="系统领取数" prop="receiveStuVOreceiveStuNum" width="60" align="center"></el-table-column>
@@ -108,21 +119,6 @@
         <el-table-column label="接听数量" prop="callStuVOcallOpenNum" align="center" width="50"></el-table-column>
         <el-table-column label="呼入人数" prop="callStuVOcallStuNum" align="center" width="50"></el-table-column>
       </el-table-column>
-      <el-table-column label="通时情况" align="center">
-        <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center">
-          <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCount)}}</template>
-        </el-table-column>
-        <el-table-column label="外拨通话时长" prop="talkTimeVOdurationOutCount" align="center">
-          <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationOutCount)}}</template>
-        </el-table-column>
-        <el-table-column
-          label="呼入通话时长"
-          prop="talkTimeVOdurationCallCount"
-          align="center"
-        >
-          <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCallCount)}}</template>
-        </el-table-column>
-      </el-table-column>
     </el-table>
   </el-main>
 </template>
@@ -139,6 +135,14 @@ export default {
           return time.getTime() > Date.now() - 3600 * 1000 * 24;
         },
         shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              picker.$emit("pick", [start, end]);
+            },
+          },
           {
             text: "昨天",
             onClick(picker) {
@@ -236,14 +240,18 @@ export default {
         });
         return;
       }
+      let endTime = new Date(
+        new Date(this.form.time[1]).toLocaleDateString()
+      ).getTime();
+      let startTime = new Date(
+        new Date(this.form.time[0]).toLocaleDateString()
+      ).getTime();
+      console.log(Date.now() - 24 * 60 * 60 * 1000 < startTime);
       let data = {
-        name: this.form.name,
-        endTime: new Date(
-          new Date(this.form.time[1]).toLocaleDateString()
-        ).getTime(),
-        startTime: new Date(
-          new Date(this.form.time[0]).toLocaleDateString()
-        ).getTime(),
+        dayState: Date.now() - 24 * 60 * 60 * 1000 < startTime ? 1 : 0,
+        classTeaName: this.form.name,
+        endTime,
+        startTime,
       };
 
       this.loading = true;
@@ -254,9 +262,9 @@ export default {
               //重新赋值了
               return {
                 classTeaName: item.classTeaName,
-                talkTimeVOdurationCallCount: item.talkTimeVO.durationCallCount,
-                talkTimeVOdurationOutCount: item.talkTimeVO.durationOutCount,
-                talkTimeVOdurationCount: item.talkTimeVO.durationCount,
+                talkTimeVOdurationCallCount: item.talkTimeVO.durationCallCount||0,
+                talkTimeVOdurationOutCount: item.talkTimeVO.durationOutCount||0,
+                talkTimeVOdurationCount: item.talkTimeVO.durationCount||0,
                 receiveStuVOstuNumCount: item.receiveStuVO.stuNumCount,
                 receiveStuVOsystemAllStuNum: item.receiveStuVO.systemAllStuNum,
                 receiveStuVOreceiveStuNum: item.receiveStuVO.receiveStuNum,
@@ -311,7 +319,7 @@ export default {
 .el-table--scrollable-x .el-table__body-wrapper {
   overflow: visible !important;
 }
-.eduData /deep/ .is-leaf .cell{
-line-height: 20px;
+.eduData /deep/ .is-leaf .cell {
+  line-height: 20px;
 }
 </style>
