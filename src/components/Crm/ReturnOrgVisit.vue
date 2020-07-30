@@ -78,9 +78,9 @@ export default {
             totalFlag: false,
             columnList: [
                 { 'prop': 'singlePlatform', 'label': '成单平台', width: 120},
-                { 'prop': 'classTeaOrg', 'label': '班主任组别' },
-                { 'prop': 'ranking', 'label': '排名' },
-                { 'prop': 'returnVisitNum', 'label': '应回访' },
+                { 'prop': 'classTeaOrg', 'label': '班主任组别', width: 120 },
+                { 'prop': 'ranking', 'label': '排名', width: 120 },
+                { 'prop': 'returnVisitNum', 'label': '应回访', width: 120 },
                 { 'prop': 'alreadyReturnVisitNum', 'label': '已回访', width: 120 },
                 { 'prop': 'returnVisitNumData', 'label': '回访率', width: 120 },
                 { 'prop': 'followUpNum', 'label': '应跟进', width: 120},
