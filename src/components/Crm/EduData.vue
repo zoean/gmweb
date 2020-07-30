@@ -44,10 +44,10 @@
       <el-table-column prop="classTeaName" label="姓名" width="100" align="center"></el-table-column>
       <el-table-column label="学员领取情况" width="180" align="center" class="height_32">
         <el-table-column label="领取总数" prop="receiveStuVOstuNumCount" align="center" width="50"></el-table-column>
-        <el-table-column label="系统领取数" prop="receiveStuVOsystemAllStuNum" width="60" align="center"></el-table-column>
-        <el-table-column label="商城领取数" prop="receiveStuVOreceiveStuNum" width="60" align="center"></el-table-column>
+        <el-table-column label="系统领取数" prop="receiveStuVOreceiveStuNum" width="60" align="center"></el-table-column>
+        <el-table-column label="商城领取数" prop="receiveStuVOsystemAllStuNum" width="60" align="center"></el-table-column>
         <el-table-column label="主管分配内容" prop="receiveStuVOleadAllStuNum" width="60" align="center"></el-table-column>
-      </el-table-column>
+      </el-table-column>receiveStuVOsystemAllStuNum
       <el-table-column label="添加备注情况" align="center">
         <el-table-column label="学员数量" prop="addNotesVOaddNotesStuNum" align="center" width="50"></el-table-column>
         <el-table-column label="备注条数" prop="addNotesVOaddNotesNum" align="center" width="50"></el-table-column>
