@@ -31,7 +31,7 @@
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
                 <template slot-scope="scope">
                 
-                <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" style="width: 60px; font-size: 10px; height: 26px; line-height: 26px;">
+                <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
                     <option
                       v-for="item in enumList['MJ-16']"
                       :key="item.name"
@@ -223,7 +223,6 @@ export default {
                         type: 'success',
                         message: '标记成功'
                     })
-                    this.getClueDataAll();
                 }else{
                     this.$message({
                         type: 'error',

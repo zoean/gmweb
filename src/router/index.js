@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import index from '@/components/Index/Index';
 import four from '@/components/Index/Four';
+import edition from '@/components/Index/Edition';
 import login from '@/components/Index/Login';
 import forget from '@/components/Index/Forget';
 import url from '@/components/Index/Url';
@@ -426,6 +427,11 @@ export default new Router({
             path: '/404',
             name: '404',
             component: four,
+        },
+        {
+            path: '/edition',
+            name: 'edition',
+            component: edition,
         },
         {
             path: '*',

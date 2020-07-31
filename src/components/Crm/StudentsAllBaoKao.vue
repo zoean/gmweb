@@ -148,7 +148,7 @@
         </el-pagination>
 
         <el-drawer
-            title="选择分配接受方"
+            title="选择转移接受方"
             :visible.sync="drawerMove"
             :direction="directionMove"
             :before-close="handleClose"
@@ -327,7 +327,7 @@ export default {
                 if(res.code == 200) {
                     this.$message({
                         type: 'success',
-                        message: '分配成功'
+                        message: '转移成功'
                     })
                     this.drawerMove = false;
                     this.registerList();

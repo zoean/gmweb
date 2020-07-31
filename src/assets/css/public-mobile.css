@@ -481,7 +481,15 @@ div.el-dialog__body{
     margin-bottom: 16px !important;
 }
 
-
+.smoke-select{
+    border-color: #999 !important;
+    color: #999 !important;
+    width: 60px !important; 
+    font-size: 10px !important; 
+    height: 22px !important; 
+    line-height: 22px !important;
+    border-radius: 4px !important;
+}
 
 
 

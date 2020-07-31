@@ -88,14 +88,24 @@
 
             </el-col>
 
+            <el-col :span="10">
+
+                <el-button plain @click="cationUserAllClick" size="small" style="float: right;">批量分配</el-button>
+
+            </el-col>
+
         </el-row>
 
         <el-table
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            :key="Math.random()"
             style="width: 100%">
+
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
             
             <el-table-column
               :prop="item.prop"
@@ -274,6 +284,22 @@ export default {
                 }
             })
         },
+        cationUserAllClick() {
+            let arr = [];
+            this.$refs.tableSelect.selection.map(sll => {
+                arr.push(sll.registerId);
+            })
+            this.registerIds = arr;
+            if(this.registerIds.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请先选择分配学员'
+                })
+            }else{
+                this.drawerMove = true;
+                this.queryUserList();
+            }
+        },
         tagClick(item) {
             this.$confirm('确认分配吗？')
             .then(_ => {
@@ -283,7 +309,7 @@ export default {
         },
         allocationUser(id) {
             this.$smoke_post(allocationUser, {
-                registerId: this.registerId,
+                registerIds: this.registerIds,
                 userUuid: id
             }).then(res => {
                 if(res.code == 200) {
@@ -397,7 +423,9 @@ export default {
         moveStudentOne(row) {
             this.drawerMove = true;
             this.teacherMoveList = [];
-            this.registerId = row.registerId;
+            let arr = [];
+            arr.push(row.registerId);
+            this.registerIds = arr;
             this.queryUserList();
         },
         studentDetails( row ) {

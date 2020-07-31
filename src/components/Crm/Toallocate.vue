@@ -13,12 +13,12 @@
                     range-separator="至"
                     :default-time="['00:00:00', '23:59:59']"
                     @change="datePickerChange"
-                    start-placeholder="回收时间"
-                    end-placeholder="回收时间">
+                    start-placeholder="最新回收时间"
+                    end-placeholder="最新回收时间">
                 </el-date-picker>
             </el-col>
             <el-col :span="4">
-                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
                       :key="item.name"

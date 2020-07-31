@@ -6,7 +6,7 @@
                 <el-cascader
                     ref="cascader"
                     size="small"
-                    class="screen-li"
+                    style="width: 90%;"
                     placeholder="请选择统计单元"
                     collapse-tags
                     :show-all-levels=false
@@ -92,16 +92,16 @@
             :key="Math.random()"
             fit
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 40px;">
+            style="width: 100%; margin-top: 20px;">
     
-            <af-table-column
+            <el-table-column
                 :prop="item.prop"
                 :label="item.label"
                 v-for="(item, index) in columnList"
                 :key="index">
-            </af-table-column>
+            </el-table-column>
     
-            <af-table-column
+            <el-table-column
                 prop="bofang" label="录音播放"
                 fixed="right"
                 :width="columnWidth"
@@ -115,7 +115,7 @@
                     >
                     </VueAudio>
                 </template>
-            </af-table-column>
+            </el-table-column>
     
         </el-table>
     
