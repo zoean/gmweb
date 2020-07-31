@@ -35,13 +35,14 @@
       </el-col>
     </el-row>
     <el-table
+     max-height="600"
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
       style="width: 100%"
       v-loading="loading"
     >
-      <el-table-column prop="classTeaName" label="姓名" width="100" align="center"></el-table-column>
+      <el-table-column prop="classTeaName" label="姓名" fixed="left" width="100" align="center"></el-table-column>
       <el-table-column label="通时情况" align="center">
         <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center">
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCount)}}</template>
@@ -305,20 +306,26 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.el-table {
-  overflow-x: auto !important;
+// .el-table {
+//   overflow-x: auto !important;
+// }
+// /deep/ .el-table__header-wrapper,
+// /deep/ .el-table__body-wrapper,
+// /deep/ .el-table__footer-wrapper {
+//   overflow: visible !important;
+// }
+.eduData /deep/ .el-table__body-wrapper::-webkit-scrollbar{
+  display: none;
 }
-/deep/ .el-table__header-wrapper,
-/deep/ .el-table__body-wrapper,
-/deep/ .el-table__footer-wrapper {
-  overflow: visible !important;
+.eduData /deep/ .el-table__footer-wrapper {
+  overflow-x:auto
 }
-.el-table::after {
-  position: relative !important;
-}
-.el-table--scrollable-x .el-table__body-wrapper {
-  overflow: visible !important;
-}
+// .el-table::after {
+//   position: relative !important;
+// }
+// .el-table--scrollable-x .el-table__body-wrapper {
+//   overflow: visible !important;
+// }
 .eduData /deep/ .is-leaf .cell {
   line-height: 20px;
 }
