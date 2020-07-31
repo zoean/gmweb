@@ -1,14 +1,58 @@
 <template>
     <el-main class="index-main">
         <el-row class="people-screen">
-            <el-col :span="5">
+            <el-col :span="4">
                 <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            </el-col>
+            <el-col :span="8">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPicker"
+                    type="datetimerange"
+                    range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
+                    @change="datePickerChange"
+                    start-placeholder="回收时间"
+                    end-placeholder="回收时间">
+                </el-date-picker>
+            </el-col>
+            <el-col :span="4">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;">
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="4" class="seatData">
+                <area-cascader style="width: 90%;" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+            </el-col>
+        </el-row>
+
+        <el-row class="people-screen">
+            <el-col :span="4">
+                <el-autocomplete
+                    ref="autocomplete"
+                    size="small"
+                    style="width: 90%;"
+                    v-model="form.examItemText"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入考试项目"
+                    :trigger-on-focus="true"
+                    clearable
+                    @clear="autocompleteClear"
+                    @select="handleSelect"
+                ></el-autocomplete>
             </el-col>
             <el-col :span="2">
                 <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
             </el-col>
-            <el-col :span="17">
-                <el-button type="primary" size="small" @click="obtainRPCD" style="float: right;">确认领取</el-button>
+            <el-col :span="18">
+                <el-button size="small" @click="obtainRPCD" style="float: right;" plain>确认领取</el-button>
             </el-col>
         </el-row>
 
@@ -29,11 +73,13 @@
               :width="item.width"
               >
             </af-table-column>
-            <!-- <el-table-column prop="active" label="操作">
-              <template slot-scope="scope">
-                  <el-button @click="customerDetails(scope.row)" type="text" >客户详情</el-button>
+
+            <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
+                <template slot-scope="scope">
+                    <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
-            </el-table-column> -->
+            </el-table-column>
+
         </el-table>
 
         <el-pagination
@@ -50,94 +96,36 @@
         >
         </el-pagination>
 
-        <el-drawer
-            :title="drawerTitle"
-            :visible.sync="drawer"
-            :direction="direction"
-            style="line-height: 30px;"
-            :before-close="handleClose">
-            <span class="bullets"></span>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">姓名：</el-col>
-                <el-col :span="16">{{ruleForm.name}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">年龄：</el-col>
-                <el-col :span="16">{{ruleForm.age}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">性别：</el-col>
-                <el-col :span="16">{{ruleForm.gender}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">所属省份：</el-col>
-                <el-col :span="16">{{ruleForm.province}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">所属城市：</el-col>
-                <el-col :span="16">{{ruleForm.city}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">电话号码2：</el-col>
-                <el-col :span="16">{{ruleForm.twoTel}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">工作：</el-col>
-                <el-col :span="16">{{ruleForm.work}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">工作年限：</el-col>
-                <el-col :span="16">{{ruleForm.workingLife}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">微信：</el-col>
-                <el-col :span="16">{{ruleForm.wx}}</el-col>
-
-            </el-row>
-
-            <el-row>
-
-                <el-col :span="6" :offset="2">取证目的：</el-col>
-                <el-col :span="16">{{ruleForm.evidencePurpose}}</el-col>
-
-            </el-row>
-
-        </el-drawer>
+        <CustomerNotes 
+            v-if="drawer"
+            @changeDrawer="changeDrawer"
+            :followFlag='followFlag' 
+            :drawer.sync='drawer'
+            :userUuid='form.userUuid'
+            :schoolId='schoolId'
+            :examItem='examItem'
+            :clueDataSUuid='clueDataSUuid'
+            :userCDARUuid='userCDARUuid'
+            :comMode='comMode'
+            :callLogUuid='callLogUuid'
+            @fatherDataList='getUserRPCDList'
+        >
+        </CustomerNotes>
 
     </el-main>
 </template>
 
 <script>
-import { getUserRPCDList, obtainRPCD, getClueDataDetails } from '../../request/api';
+import { getUserRPCDList, obtainRPCD, enumByEnumNums, getExamBasic } from '../../request/api';
 import { timestampToTime } from '../../assets/js/common';
+import { MJ_5 } from '../../assets/js/data';
+import pcaa from 'area-data/pcaa';
+import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'toAllocate',
+    components: {
+        CustomerNotes,
+    },
     data() {
         return {
             form: {
@@ -146,18 +134,28 @@ export default {
                 currentPage: 1,
                 pageSize: 20,
                 total: null,
+                examItemId: '',
+                examItemText: '',
+                intentionLevel: '',
+                dataStartTime: '',
+                dataEndTime: '',
+                province: '',
+                city: '',
+                provinceCity: [],
             },
             list: [],
             totalFlag: false,
             columnList: [
-                { 'prop': 'tel', 'label': '手机号码', 'width': 150 },
+                { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
-                { 'prop': 'examItem', 'label': '所属项目', 'width': 150 },
+                { 'prop': 'examItem', 'label': '所属项目', 'width': 130 },
                 // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'width': 230 },
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间'},
+                { 'prop': 'dataCreateTime', 'label': '最新回收时间'},
+                { 'prop': 'intentionLevel', 'label': '意向等级'},
             ],
             ruleForm: {
                 age: '',
@@ -175,6 +173,20 @@ export default {
             drawer: false,
             direction: 'rtl',
             fullscreenLoading: false,
+
+            followFlag: false,
+            drawer: false,
+            clueDataSUuid: '',
+            callLogUuid: '',
+            comMode: '',
+            schoolId: '',
+            examItem: '',
+            userCDARUuid: '',
+
+            dataPicker: [],
+            enumList: {},
+            restaurants: [],
+            pcaa: null, //省市数据
         }
     },
     created() {
@@ -187,8 +199,70 @@ export default {
         const userUuid = localStorage.getItem("userUuid");
         this.form.userUuid = userUuid;
         this.getUserRPCDList();
+        let arr = [MJ_5];
+        this.enumByEnumNums(arr);
+        this.getExamBasic();
+        this.pcaa = pcaa;
     },
     methods: {
+        cityChange() {
+            this.form.province = this.form.provinceCity[0];
+            this.form.city = this.form.provinceCity[1];
+        },
+        handleSelect(item) {
+            this.form.examItemId = item.id;
+            this.form.examItemText = item.value;
+        },
+        autocompleteClear() {
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
+        getExamBasic() {
+            let arr;
+            this.$smoke_get(getExamBasic, {}).then(res => {
+                if(res.code == 200) {
+                    arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
+                    this.restaurants = arr;
+                }
+            })
+        },
+        querySearch(queryString, cb) {
+            var restaurants = this.restaurants;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
+            };
+        },
+        enumByEnumNums(arr) {
+            this.$smoke_post(enumByEnumNums, {
+                numberList: arr
+            }).then(res => {
+                if(res.code == 200){
+                    this.enumList = res.data;
+                }
+            })
+        },
+        datePickerChange(value) {
+            if (value == null) {
+                this.form.dataStartTime = '';
+                this.form.dataEndTime = '';
+            }else{
+                this.form.dataStartTime = value[0].getTime();
+                this.form.dataEndTime = value[1].getTime();
+            }
+        },
+        changeDrawer(val){
+            this.drawer = val;
+        },
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.getUserRPCDList();
@@ -199,27 +273,11 @@ export default {
             localStorage.setItem('seatDataPageSize', index);
             this.getUserRPCDList();
         }, 
-        customerDetails( scope ) {
+        customerInfo( row ) {
             this.drawer = true;
-            this.getClueDataDetails(scope.clueDataSUuid);
-        },
-        getClueDataDetails(id) {
-            this.$smoke_post(getClueDataDetails, {
-                uuid: id
-            }).then(res => {
-                if(res.code == 200){
-                    this.ruleForm.age = res.data.age == 0 ? '' : res.data.age;
-                    this.ruleForm.city = res.data.city;
-                    this.ruleForm.evidencePurpose = res.data.evidencePurpose == 0 ? '' : evidencePurposeText(res.data.evidencePurpose);
-                    this.ruleForm.gender = res.data.gender == 2 ? '' : genderText(res.data.gender);
-                    this.ruleForm.name = res.data.name;
-                    this.ruleForm.province = res.data.province;
-                    this.ruleForm.twoTel = res.data.twoTel;
-                    this.ruleForm.work = res.data.work;
-                    this.ruleForm.workingLife = res.data.workingLife == 0 ? '' : workingLifeText(res.data.workingLife);
-                    this.ruleForm.wx = res.data.wx;
-                }
-            })
+            this.clueDataSUuid = row.clueDataSUuid;
+            this.userCDARUuid = row.userCDARUuid;
+            this.followFlag = false;
         },
         handleClose(done) {
             done();
@@ -232,6 +290,7 @@ export default {
                         this.fullscreenLoading = false;
                         res.data.list.map(sll => {
                             sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
+                            sll.dataCreateTime = timestampToTime(Number(sll.dataCreateTime));
                             sll.createTime = timestampToTime(Number(sll.createTime));
                             sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;

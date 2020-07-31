@@ -19,6 +19,7 @@
             <el-col :span="4">
 
                 <el-autocomplete
+                    ref="autocomplete"
                     size="small"
                     style="width: 90%;"
                     v-model="form.examItemText"
@@ -391,9 +392,16 @@ export default {
         },
         handleSelect(item) {
             this.form.examItemId = item.id;
+            this.form.examItemText = item.value;
         },
         autocompleteClear() {
-            this.form.examItemId = '';
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
         },
         cityChange() {
             this.form.province = this.form.provinceCity[0];

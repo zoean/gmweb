@@ -17,18 +17,18 @@
             :key="Math.random()"
             style="width: 100%">
 
-            <el-table-column prop="clueConSign" label="标记" fixed="left" width="110" class-name="table_active">
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
                 <template slot-scope="scope">
                 
-                <el-select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" size="small" class="screen-li">
-                    <el-option
+                <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" style="width: 60px; font-size: 10px; height: 26px; line-height: 26px;">
+                    <option
                       v-for="item in enumList['MJ-16']"
                       :key="item.name"
                       v-if="item.enable"
                       :label="item.name"
                       :value="Number(item.number)">
-                    </el-option>
-                </el-select>
+                    </option>
+                </select>
 
                 </template>
             </el-table-column>
