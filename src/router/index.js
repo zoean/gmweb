@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 import index from '@/components/Index/Index';
 import four from '@/components/Index/Four';
+import edition from '@/components/Index/Edition';
 import login from '@/components/Index/Login';
 import forget from '@/components/Index/Forget';
 import url from '@/components/Index/Url';
@@ -53,6 +54,8 @@ import eduData from '@/components/Crm/EduData';
 
 import orgOpenClass from '@/components/Crm/OrgOpenClass';
 import openClass from '@/components/Crm/OpenClass';
+import returnOrgVisit from '@/components/Crm/ReturnOrgVisit';
+import returnVisit from '@/components/Crm/ReturnVisit';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -327,6 +330,18 @@ export default new Router({
         },
 
         {
+            path: '/crm/class/returnOrgVisit',
+            name: 'returnOrgVisit',
+            component: returnOrgVisit
+        },
+
+        {
+            path: '/crm/class/returnVisit',
+            name: 'returnVisit',
+            component: returnVisit
+        },
+
+        {
             path: '/crm/myClient/registered',
             name: 'registered',
             component: registered
@@ -412,6 +427,11 @@ export default new Router({
             path: '/404',
             name: '404',
             component: four,
+        },
+        {
+            path: '/edition',
+            name: 'edition',
+            component: edition,
         },
         {
             path: '*',

@@ -19,6 +19,7 @@
             <el-col :span="4">
 
                 <el-autocomplete
+                    ref="autocomplete"
                     size="small"
                     style="width: 90%;"
                     v-model="form.examItemText"
@@ -45,7 +46,7 @@
                 <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
-                      :key="item.name"
+                      :key="item.number"
                       v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
@@ -391,9 +392,16 @@ export default {
         },
         handleSelect(item) {
             this.form.examItemId = item.id;
+            this.form.examItemText = item.value;
         },
         autocompleteClear() {
-            this.form.examItemId = '';
+            this.$nextTick(() => {
+                this.$refs.autocomplete.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
         },
         cityChange() {
             this.form.province = this.form.provinceCity[0];

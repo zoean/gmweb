@@ -819,7 +819,7 @@ export default {
         this.getClueDataDetails(this.clueDataSUuid);
         this.getGoodsList();
         this.getGoodsList2();
-        if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("peopleClues") != -1 || this.$route.path.indexOf("manageClues") != -1 || this.$route.path.indexOf("recoverData") != -1){
+        if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("peopleClues") != -1 || this.$route.path.indexOf("manageClues") != -1 || this.$route.path.indexOf("recoverData") != -1 || this.$route.path.indexOf("toallocate") != -1){
             this.routePathFlag = true;
         }
     },

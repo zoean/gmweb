@@ -176,7 +176,7 @@
                     
                 </el-popover>
 
-                <span style="float: right; margin-right: 14px; font-size: 14px;">v 1.0.2</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.0</span>
     
             </el-col>
         </el-row>
@@ -265,6 +265,11 @@ export default {
         this.noReadNum();
     },
     methods: {
+        editionClick(){
+            this.$router.push({
+                path: '/edition'
+            })
+        },
         sendDingVerCode() {
             let num = 60;
             this.$smoke_get(sendDingVerCode, {}).then(res => {

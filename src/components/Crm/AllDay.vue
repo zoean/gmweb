@@ -83,22 +83,56 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-button type="primary" size="small" @click="getClueDataAllClick">查 询</el-button>
+            <el-col :span="14">
+
+                <el-tag 
+                    v-for="(item,index) in searchList" :key="item.id"
+                    style="margin-left: 4px; cursor: pointer;"
+                    :class="tag_id == item.id ? 'tag_class' : ''"
+                    type="info"
+                    effect="plain"
+                    @click="tagClick(item)"
+                    >{{item.name}}
+                </el-tag>
+
+                <el-button type="primary" size="small" style="margin-left: 20px;" @click="getClueDataAllClick">查 询</el-button>
+
             </el-col>
-            <el-col :span="12">
+            
+            <el-col :span="2">
                 <el-row type="flex" justify="end">
-                    <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                    <svg-icon class="border-icon" @click="editFieldHandle" style="margin-right: 0px" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
         </el-row>
+
+        <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
+
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
             :row-class-name="tableRowClassName"
             style="width: 100%"
             :row-key="getRowKey"
+            :key="Math.random()"
             >
+
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
+                <template slot-scope="scope">
+                
+                <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
+                    <option
+                      v-for="item in enumList['MJ-16']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="Number(item.number)">
+                    </option>
+                </select>
+
+                </template>
+            </el-table-column>
+
             <el-table-column
               :prop="item.props"
               v-for="(item, index) in columnList"
@@ -185,12 +219,17 @@ import {
     enumByEnumNums,
     getRuleItem,
     getClueDataNumber,
-    copyTel
+    copyTel,
+    geSeatWork,
+    clueContactSign
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-import { menuNumberFunc, copyData, removeEvery } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
+import { 
+    menuNumberFunc, copyData, removeEvery,
+    receiveTimeFun
+} from '../../assets/js/common';
+import { MJ_1, MJ_2, MJ_16 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'AllDay',
@@ -204,7 +243,6 @@ export default {
     //         if(!val && this.$store.state.pageNum == 'YM_1'){
     //             this.getClueDataAll()
     //         }
-            
     //     }
     // },
     data() {
@@ -225,7 +263,10 @@ export default {
                 selectTime: '', //未联间隔
                 ruleNumberName: '', //分配组组名
                 num: '',
-                sortSet: []
+                sortSet: [],
+                dataType: '', //数据类型（1：首咨 2：回收池）
+                receiveStartTime: '', //领取时间的查询开始时间（13位）
+                receiveEndTime: '', //领取时间的查询结束时间（13位）
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -257,7 +298,19 @@ export default {
 
             enumList: {},
             fullscreenLoading: false,
-            clueDataNumberList: []
+            clueDataNumberList: [],
+            searchList: [
+                { name: '今日首咨', id: 1 },
+                { name: '2~3天数据', id: 2 },
+                { name: '4~7天数据', id: 3 },
+                { name: '8~14天数据', id: 4 },
+                { name: '14天以上数据', id: 5 },
+                { name: '公海领取数据', id: 6 },
+            ],
+            tag_id: '',
+            tag_name: '',
+            tag_flag: false,
+            SeatWorkObj: {},
         }
     },
     created() {
@@ -273,20 +326,51 @@ export default {
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         //this.jqStart = browserfly.noConflict();
-        let arr = [MJ_1, MJ_2, MJ_3, MJ_4, MJ_5];
+        let arr = [MJ_1, MJ_2, MJ_16];
         this.enumByEnumNums(arr);
         this.getRuleItem();
     },
     methods: {
+        clueConSignChange(row) {
+            this.clueContactSign(row.clueConSign, row.userCDARUuid);
+        },
+        clueContactSign(clueConSign, userCDARUuid) {
+            this.$smoke_post(clueContactSign, {
+                start: clueConSign,
+                userCDARUuid: userCDARUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '标记成功'
+                    })
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
+        tagClick(item){
+            this.tag_flag = false;
+            if(this.tag_id == item.id) {
+                this.tag_id = '';
+                this.tag_name = '';
+            }else{
+                this.tag_id = item.id;
+                this.tag_name = item.name;
+            }
+        },
         setPageNum(pageNum){
             this.form.num = pageNum
         },
-    getRowKey(row){
-      return row.num
-    },
-    editFieldHandle(){
-        this.$store.commit('setEditFieldVisible', true)
-    },
+        getRowKey(row){
+          return row.num
+        },
+        editFieldHandle(){
+            this.$store.commit('setEditFieldVisible', true)
+        },
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.getClueDataAll();
@@ -378,7 +462,37 @@ export default {
         },
         getClueDataAllClick() {
             this.form.currentPage = 1;
+            const obj = receiveTimeFun(this.tag_id);
+            this.form.receiveStartTime = obj.receiveStartTime;
+            this.form.receiveEndTime = obj.receiveEndTime;
+            if(this.tag_id == 6) {
+                this.form.dataType = 2;
+                this.geSeatWork();
+            }else if(this.tag_id == ''){
+                this.form.dataType = 1;
+            }else{
+                this.form.dataType = 1;
+                this.geSeatWork();
+            }
             this.getClueDataAll();
+        },
+        geSeatWork() {
+            this.$smoke_post(geSeatWork, {
+                dataType: this.form.dataType,
+                receiveStartTime: this.form.receiveStartTime,
+                receiveEndTime: this.form.receiveEndTime,
+            }).then(res => {
+                if(res.code == 200) {
+                    this.tag_flag = true;
+                    this.SeatWorkObj = res.data;
+                }else{
+                    this.tag_flag = false;
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
         },
         getClueDataAll() {
             this.fullscreenLoading = true;
@@ -389,6 +503,9 @@ export default {
                         this.fullscreenLoading = false;
                         this.columnList = res.data.filedList;
                         this.schoolId = res.data.schoolId;
+                        res.data.list.map(sll => {
+                            sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
+                        })
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
                         this.$nextTick(() => {

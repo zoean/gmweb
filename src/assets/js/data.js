@@ -103,6 +103,7 @@ export const MJ_12 = 'MJ-12'; //跟进类型
 export const MJ_13 = 'MJ-13'; //内部投诉渠道
 export const MJ_14 = 'MJ-14'; //外部投诉渠道
 export const MJ_15 = 'MJ-15'; //报考条件
+export const MJ_16 = 'MJ-16'; //线索联系标记
 
 //溢出池和回收池 分配至人
 export const zuzhiUuid = '2a39b4c564494c58a0b15512a62e7014';

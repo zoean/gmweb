@@ -1022,3 +1022,43 @@ export const textUrl = (text) => {
     return url;
 }
 
+export const receiveTimeFun = (id) => {
+    let obj = {
+        receiveStartTime: '',
+        receiveEndTime: ''
+    }
+    const date = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
+    const now = new Date().getTime();
+    switch (id) {
+        case 1:
+            obj.receiveStartTime = date;
+            obj.receiveEndTime = now;
+            break;
+        case 2:
+            obj.receiveStartTime = date - 3600 * 1000 * 24 * 2;
+            obj.receiveEndTime = date - 3600 * 1000 * 24 * 1;
+            break;
+        case 3:
+            obj.receiveStartTime = date - 3600 * 1000 * 24 * 6;
+            obj.receiveEndTime = date - 3600 * 1000 * 24 * 3;
+            break;
+        case 4:
+            obj.receiveStartTime = date - 3600 * 1000 * 24 * 13;
+            obj.receiveEndTime = date - 3600 * 1000 * 24 * 7;
+            break;
+        case 5:
+            obj.receiveStartTime = '';
+            obj.receiveEndTime = date - 3600 * 1000 * 24 * 13;
+            break;
+        case 6:
+            obj.receiveStartTime = '';
+            obj.receiveEndTime = '';
+            break;
+        case '':
+            obj.receiveStartTime = '';
+            obj.receiveEndTime = '';
+            break;
+    }
+    return obj;
+}
+

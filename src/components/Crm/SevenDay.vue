@@ -3,18 +3,46 @@
 
         <Start></Start>
         <el-row class="people-screen">
-            <el-col :span="5">
+            <el-col :span="4">
                 <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
             </el-col>
-            <el-col :span="5">
-                <el-button type="primary" size="small" @click="threeDaysNoCallDataListClick">查 询</el-button>
+            <el-col :span="20">
+
+                <el-tag 
+                    v-for="(item,index) in searchList" :key="item.id"
+                    style="margin-left: 4px; cursor: pointer;"
+                    :class="tag_id == item.id ? 'tag_class' : ''"
+                    type="info"
+                    effect="plain"
+                    @click="tagClick(item)"
+                    >{{item.name}}
+                </el-tag>
+
+                <el-button style="margin-left: 20px;" type="primary" size="small" @click="threeDaysNoCallDataListClick">查 询</el-button>
             </el-col>
         </el-row>
 
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
+            :key="Math.random()"
             style="width: 100%">
+
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
+                <template slot-scope="scope">
+                
+                <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
+                    <option
+                      v-for="item in enumList['MJ-16']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="Number(item.number)">
+                    </option>
+                </select>
+
+                </template>
+            </el-table-column>
 
             <el-table-column
               :prop="item.prop"
@@ -91,10 +119,14 @@ import {
     seatOut,
     clueDataRelease,  
     copyTel,
+    clueContactSign,
+    enumByEnumNums
 } from '../../request/api';
 import Start from '../../components/Share/Start';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, copyData } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
+import { 
+    timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, copyData, receiveTimeFun
+} from '../../assets/js/common';
+import { MJ_16 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'sevenDay',
@@ -106,6 +138,9 @@ export default {
                 userUuid: '',
                 total: null,
                 tel: '',
+                dataType: '', //数据类型（1：首咨 2：回收池）
+                receiveStartTime: '', //领取时间的查询开始时间（13位）
+                receiveEndTime: '', //领取时间的查询结束时间（13位）
             },
             totalFlag: false,
             list: [],
@@ -132,6 +167,16 @@ export default {
             userCDARUuid: '',
 
             fullscreenLoading: false,
+
+            searchList: [
+                { name: '4~7天数据', id: 3 },
+                { name: '8~14天数据', id: 4 },
+                { name: '14天以上数据', id: 5 },
+                { name: '公海领取数据', id: 6 },
+            ],
+            tag_id: '',
+
+            enumList: {}
         }
     },
     components: {
@@ -150,8 +195,47 @@ export default {
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         //this.jqStart = browserfly.noConflict();
+        let arr = [MJ_16];
+        this.enumByEnumNums(arr);
     },
     methods: {
+        enumByEnumNums(arr) {
+            this.$smoke_post(enumByEnumNums, {
+                numberList: arr
+            }).then(res => {
+                if(res.code == 200){
+                    this.enumList = res.data;
+                }
+            })
+        },
+        clueConSignChange(row) {
+            this.clueContactSign(row.clueConSign, row.userCDARUuid);
+        },
+        clueContactSign(clueConSign, userCDARUuid) {
+            this.$smoke_post(clueContactSign, {
+                start: clueConSign,
+                userCDARUuid: userCDARUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.$message({
+                        type: 'success',
+                        message: '标记成功'
+                    })
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
+        tagClick(item){
+            if(this.tag_id == item.id) {
+                this.tag_id = '';
+            }else{
+                this.tag_id = item.id;
+            }
+        },
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.threeDaysNoCallDataList();
@@ -182,6 +266,14 @@ export default {
         },
         threeDaysNoCallDataListClick() {
             this.form.currentPage = 1;
+            const obj = receiveTimeFun(this.tag_id);
+            this.form.receiveStartTime = obj.receiveStartTime;
+            this.form.receiveEndTime = obj.receiveEndTime;
+            if(this.tag_id == 6) {
+                this.form.dataType = 2;
+            }else{
+                this.form.dataType = 1;
+            }
             this.threeDaysNoCallDataList();
         },
         threeDaysNoCallDataList() {
@@ -194,6 +286,7 @@ export default {
                         res.data.list.map(sll => {
                             sll.lastCallTime = timestampToTime(Number(sll.lastCallTime));
                             sll.callDialUp = sll.dialUpNum + '/' + sll.callNum;
+                            sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;

@@ -20,7 +20,7 @@
 
             <el-col :span="4">
 
-                <el-button type="primary" @click="orgOpenClassClick" size="small">查 询</el-button>
+                <el-button type="primary" @click="returnVisitClick" size="small">查 询</el-button>
 
             </el-col>
 
@@ -42,7 +42,7 @@
               >
 
               <template slot-scope="scope">
-                <span>{{scope.row[item.prop]}}</span>
+                <span>{{scope.row[item.prop] || '- -'}}</span>
               </template>
 
             </el-table-column>
@@ -54,7 +54,7 @@
 
 <script>
 import { 
-    orgOpenClass,
+    returnVisit,
 } from '../../request/api';
 import { 
     timestampToTime, 
@@ -77,14 +77,12 @@ export default {
             list: [],
             totalFlag: false,
             columnList: [
-                { 'prop': 'singlePlatform', 'label': '成单平台', width: 120},
-                { 'prop': 'classTeaOrg', 'label': '班主任组别' },
-                { 'prop': 'openClassNum', 'label': '应开班' },
-                { 'prop': 'alreadyOpenClassNum', 'label': '已开班', width: 120 },
-                { 'prop': 'openClassNumData', 'label': '开班率', width: 120 },
-                { 'prop': 'followUpNum', 'label': '应跟进', width: 120},
-                { 'prop': 'alreadyFollowUpNum', 'label': '已跟进', width: 120},
-                { 'prop': 'followUpNumData', 'label': '跟进率', width: 110},
+                { 'prop': 'singlePlatform', 'label': '成单平台', width: 120 },
+                { 'prop': 'classTeaOrg', 'label': '班主任组别', width: 120 },
+                { 'prop': 'tel', 'label': '手机号码', width: 120 },
+                { 'prop': 'name', 'label': '姓名', width: 120 },
+                { 'prop': 'returnVisit', 'label': '是否回访', width: 120 },
+                { 'prop': 'followUp', 'label': '是否跟进', width: 120 },
             ],
             fullscreenLoading: false,
             timeDate: '',
@@ -121,6 +119,7 @@ export default {
                     picker.$emit('pick', date);
                   }
                 }]
+                
             },
         }
     },
@@ -131,9 +130,9 @@ export default {
         timeChange() {
             this.form.time = this.timeDate;
         },
-        orgOpenClassClick() {
+        returnVisitClick() {
             if(this.form.time){
-                this.orgOpenClass();
+                this.returnVisit();
             }else{
                 this.$message({
                     type: 'error',
@@ -141,24 +140,16 @@ export default {
                 })
             }
         },
-        orgOpenClass() {
+        returnVisit() {
             this.fullscreenLoading = true;
-            this.$smoke_post(orgOpenClass, this.form).then(res => {
+            this.$smoke_post(returnVisit, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
-                            if(sll.openClassNum != 0) {
-                                sll.openClassNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
-                            }else{
-                                sll.openClassNumData = '0%';
-                            }
-                            if(sll.followUpNum != 0) {
-                                sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
-                            }else{
-                                sll.openClassNumData = '0%';
-                            }
+                            sll.followUp = sll.followUp == 1 ? '是' : sll.followUp == 2 ? '否' : '- -';
+                            sll.returnVisit = sll.returnVisit == 1 ? '是' : sll.returnVisit == 0 ? '否' : '- -';
                         })
                         this.list = res.data;
                     }, 300);

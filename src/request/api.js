@@ -147,7 +147,9 @@ export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获�
 export const copyTel = '/api/phone/clueData/copyTel'; //复制手机号码    
 export const entryClueData = '/api/phone/clueData/entryClueData'; //手动录入线索数据    
 export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //批量导入线索数据    
-export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户    
+export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户
+export const geSeatWork = '/api/phone/clueData/geSeatWork'; //获取坐席的工作情况
+export const clueContactSign = '/api/phone/clueData/clueContactSign'; //线索联系标记
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）
@@ -296,5 +298,7 @@ export const downloadList = '/api/phone/register/downloadList' //查看下载任
 export const getTeaWork='/api/phone/classTeacher/teaWork'//获取班主任的工作情况
 
 //服务监测
-export const orgOpenClass = '/api/phone/qualityTesting/orgOpenClass' //组织下班主任开班情况
 export const openClass = '/api/phone/qualityTesting/openClass' //班主任的开班情况
+export const orgOpenClass = '/api/phone/qualityTesting/orgOpenClass' //组织下班主任开班情况
+export const returnVisit = '/api/phone/qualityTesting/returnVisit' //质检班主任的回访情况
+export const orgReturnVisit = '/api/phone/qualityTesting/orgReturnVisit' //质检组织的班主任回访情况

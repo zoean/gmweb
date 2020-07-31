@@ -3,6 +3,21 @@
         <el-row style="margin-bottom: 20px;">
 
             <el-col :span="4">
+                <el-cascader
+                    ref="cascader"
+                    size="small"
+                    style="width: 90%;"
+                    placeholder="请选择统计单元"
+                    collapse-tags
+                    :show-all-levels=false
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                    clearable>
+                </el-cascader>
+            </el-col>
+
+            <el-col :span="4">
                 <el-select v-model="form.callStyle" size="small" placeholder="请选择拨打方式" style="width: 90%;" clearable>
                     <el-option
                       v-for="item in callStyleArr"
@@ -21,28 +36,6 @@
                 <el-input v-model="form.callerId" size="small" placeholder="请输入客户电话" style="width: 90%;" clearable></el-input>
             </el-col>
     
-            <!-- <el-col :span="4">
-                <el-select v-model="form.dealState" size="small" placeholder="请选择处理状态" style="width: 90%;" clearable>
-                    <el-option
-                      v-for="item in dealStateArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col> -->
-    
-            <!-- <el-col :span="4">
-                <el-select v-model="form.hangupSide" size="small" placeholder="请选择挂机方" style="width: 90%;" clearable>
-                    <el-option
-                      v-for="item in hangupSideArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col> -->
-    
             <el-col :span="4">
                 <el-select v-model="form.isCalledPhone" size="small" placeholder="请选择是否接通" style="width: 90%;" clearable>
                     <el-option
@@ -55,7 +48,7 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 90%;" clearable>
+                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 100%;" clearable>
                     <el-option
                       v-for="item in pathwayArr"
                       :key="item.value"
@@ -99,16 +92,16 @@
             :key="Math.random()"
             fit
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 40px;">
+            style="width: 100%; margin-top: 20px;">
     
-            <af-table-column
+            <el-table-column
                 :prop="item.prop"
                 :label="item.label"
                 v-for="(item, index) in columnList"
                 :key="index">
-            </af-table-column>
+            </el-table-column>
     
-            <af-table-column
+            <el-table-column
                 prop="bofang" label="录音播放"
                 fixed="right"
                 :width="columnWidth"
@@ -121,27 +114,10 @@
                         theControlList="onlyOnePlaying noMuted noVolume"
                     >
                     </VueAudio>
-                    <!-- <audio 
-                        v-if="scope.row.recordFile"
-                        @play="bofangClick(scope.row, scope.$index)"
-                        :ref="'audio' + scope.$index"
-                        :src="scope.row.recordFile"
-                        controls="controls"
-                        preload="preload"
-                        style="height: 30px; margin-top: 10px"
-                    ></audio> -->
-                    <!-- <vue-audio
-                        v-if="scope.row.recordFile"
-                        :audio-source="scope.row.recordFile"
-                        :width="430"
-                        :html5='true'
-                    ></vue-audio> -->
                 </template>
-            </af-table-column>
+            </el-table-column>
     
         </el-table>
-
-        
     
         <el-pagination
             background
@@ -161,7 +137,7 @@
 </template>
 
 <script>
-import { getCallRecord } from '../../request/api';
+import { getCallRecord, getOrgSubsetByUuid } from '../../request/api';
 import { everyTimeList } from '../../assets/js/data'
 import { getTextByTime, timestampToTime, timeReturn } from '../../assets/js/common'
 import VueAudio from '../Share/VueAudio';
@@ -189,6 +165,7 @@ export default {
                     {insert_time: 'DESC'}
                 ], //排序集合
                 seatName: '',
+                seatOrgList: []
             },
             callStyleArr: [
                 { label: '外呼电话', value: 3 },
@@ -218,16 +195,33 @@ export default {
             columnWidth: 90,
             columnFlag: false,
             fullscreenLoading: false,
+
+            zuzhiOptions: [],
         }
     },
     created() {
         this.getCallRecord();
+        this.getOrgSubsetByUuid();
     },
     methods: {
-        // bofangClick(row, index) {
-        //     console.log(this.$refs['audio' + index]);
-        //     this.$refs['audio' + index].playbackRate = 2;
-        // },
+        getOrgSubsetByUuid() {
+            this.$smoke_post(getOrgSubsetByUuid, {
+                uuid: ""
+            }).then(res => {
+                this.zuzhiOptions = res.data;
+            })
+        },
+        handleZuzhiChange(arr) {
+            let brr = [];
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            this.form.seatOrgList = brr;
+        },
         getCallRecord() {
             this.fullscreenLoading = true;
             this.$smoke_post(getCallRecord, this.form).then(res => {

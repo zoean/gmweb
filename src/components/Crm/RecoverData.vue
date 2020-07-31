@@ -46,7 +46,7 @@
                 <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
-                      :key="item.name"
+                      :key="item.number"
                       v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
@@ -58,6 +58,32 @@
         </el-row>
 
         <el-row class="people-screen" type="flex" align="middle">
+
+            <el-col :span="8">
+                <el-date-picker
+                    size="small"
+                    style="width: 95%;"
+                    v-model="dataPickerReturn"
+                    type="datetimerange"
+                    range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
+                    @change="datePickerChangeReturn"
+                    start-placeholder="最新回收时间"
+                    end-placeholder="最新回收时间">
+                </el-date-picker>
+            </el-col>
+
+            <el-col :span="4">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
 
             <el-col :span="4">
 
@@ -75,10 +101,10 @@
             <el-col :span="4">
                 <el-button type="primary" @click="getRecoveryPoolDataListClick" size="small">查 询</el-button>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="4">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
-                    <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                    <svg-icon class="border-icon" style="margin-right: 0;" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
 
@@ -228,7 +254,7 @@ import {
     removeEvery
 } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
-import { MJ_6, zuzhiUuid } from '../../assets/js/data';
+import { MJ_6, zuzhiUuid, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'reCoverData',
@@ -251,6 +277,9 @@ export default {
                 spread: '',
                 userUuid: '',
                 num: '',
+                dataStartTime: '',
+                dataEndTime: '',
+                intentionLevel: '',
             },
             list: [],
             columnList: [
@@ -286,6 +315,9 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+
+            dataPickerReturn: [],
+
         }
     },
     components: {
@@ -304,7 +336,7 @@ export default {
         this.form.num = this.$store.state.pageNum
         this.getRecoveryPoolDataList();
         this.getExamBasic();
-        let arr = [MJ_6];
+        let arr = [MJ_6, MJ_5];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getRuleItem();
@@ -331,6 +363,15 @@ export default {
             }else{
                 this.form.startTime = value[0].getTime();
                 this.form.endTime = value[1].getTime();
+            }
+        },
+        datePickerChangeReturn(value) {
+            if (value == null) {
+                this.form.dataStartTime = '';
+                this.form.dataEndTime = '';
+            }else{
+                this.form.dataStartTime = value[0].getTime();
+                this.form.dataEndTime = value[1].getTime();
             }
         },
         enumByEnumNums(arr) {

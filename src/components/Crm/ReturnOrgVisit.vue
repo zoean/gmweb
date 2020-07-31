@@ -20,7 +20,7 @@
 
             <el-col :span="4">
 
-                <el-button type="primary" @click="orgOpenClassClick" size="small">查 询</el-button>
+                <el-button type="primary" @click="orgReturnVisitClick" size="small">查 询</el-button>
 
             </el-col>
 
@@ -54,7 +54,7 @@
 
 <script>
 import { 
-    orgOpenClass,
+    orgReturnVisit,
 } from '../../request/api';
 import { 
     timestampToTime, 
@@ -78,10 +78,11 @@ export default {
             totalFlag: false,
             columnList: [
                 { 'prop': 'singlePlatform', 'label': '成单平台', width: 120},
-                { 'prop': 'classTeaOrg', 'label': '班主任组别' },
-                { 'prop': 'openClassNum', 'label': '应开班' },
-                { 'prop': 'alreadyOpenClassNum', 'label': '已开班', width: 120 },
-                { 'prop': 'openClassNumData', 'label': '开班率', width: 120 },
+                { 'prop': 'classTeaOrg', 'label': '班主任组别', width: 120 },
+                { 'prop': 'ranking', 'label': '排名', width: 120 },
+                { 'prop': 'returnVisitNum', 'label': '应回访', width: 120 },
+                { 'prop': 'alreadyReturnVisitNum', 'label': '已回访', width: 120 },
+                { 'prop': 'returnVisitNumData', 'label': '回访率', width: 120 },
                 { 'prop': 'followUpNum', 'label': '应跟进', width: 120},
                 { 'prop': 'alreadyFollowUpNum', 'label': '已跟进', width: 120},
                 { 'prop': 'followUpNumData', 'label': '跟进率', width: 110},
@@ -131,9 +132,9 @@ export default {
         timeChange() {
             this.form.time = this.timeDate;
         },
-        orgOpenClassClick() {
+        orgReturnVisitClick() {
             if(this.form.time){
-                this.orgOpenClass();
+                this.orgReturnVisit();
             }else{
                 this.$message({
                     type: 'error',
@@ -141,23 +142,23 @@ export default {
                 })
             }
         },
-        orgOpenClass() {
+        orgReturnVisit() {
             this.fullscreenLoading = true;
-            this.$smoke_post(orgOpenClass, this.form).then(res => {
+            this.$smoke_post(orgReturnVisit, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
                             if(sll.openClassNum != 0) {
-                                sll.openClassNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
+                                sll.returnVisitNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
                             }else{
-                                sll.openClassNumData = '0%';
+                                sll.returnVisitNumData = '0%';
                             }
                             if(sll.followUpNum != 0) {
                                 sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
                             }else{
-                                sll.openClassNumData = '0%';
+                                sll.returnVisitNumData = '0%';
                             }
                         })
                         this.list = res.data;
