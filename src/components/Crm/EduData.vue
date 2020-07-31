@@ -35,14 +35,14 @@
       </el-col>
     </el-row>
     <el-table
-     max-height="600"
+      max-height="600"
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
       style="width: 100%"
       v-loading="loading"
     >
-      <el-table-column prop="classTeaName" label="姓名" fixed="left" width="100" align="center"></el-table-column>
+      <el-table-column prop="classTeaName" label="姓名" fixed width="100" align="center"></el-table-column>
       <el-table-column label="通时情况" align="center">
         <el-table-column label="总通时" prop="talkTimeVOdurationCount" align="center">
           <template slot-scope="scope">{{timeReturn(scope.row.talkTimeVOdurationCount)}}</template>
@@ -263,9 +263,11 @@ export default {
               //重新赋值了
               return {
                 classTeaName: item.classTeaName,
-                talkTimeVOdurationCallCount: item.talkTimeVO.durationCallCount||0,
-                talkTimeVOdurationOutCount: item.talkTimeVO.durationOutCount||0,
-                talkTimeVOdurationCount: item.talkTimeVO.durationCount||0,
+                talkTimeVOdurationCallCount:
+                  item.talkTimeVO.durationCallCount || 0,
+                talkTimeVOdurationOutCount:
+                  item.talkTimeVO.durationOutCount || 0,
+                talkTimeVOdurationCount: item.talkTimeVO.durationCount || 0,
                 receiveStuVOstuNumCount: item.receiveStuVO.stuNumCount,
                 receiveStuVOsystemAllStuNum: item.receiveStuVO.systemAllStuNum,
                 receiveStuVOreceiveStuNum: item.receiveStuVO.receiveStuNum,
@@ -306,26 +308,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// .el-table {
-//   overflow-x: auto !important;
-// }
-// /deep/ .el-table__header-wrapper,
-// /deep/ .el-table__body-wrapper,
-// /deep/ .el-table__footer-wrapper {
-//   overflow: visible !important;
-// }
-.eduData /deep/ .el-table__body-wrapper::-webkit-scrollbar{
-  display: none;
+
+.eduData /deep/ .el-table {
+  overflow-x: auto;
 }
+.eduData /deep/  .el-table__header-wrapper,
+.eduData /deep/ .el-table__body-wrapper,
 .eduData /deep/ .el-table__footer-wrapper {
-  overflow-x:auto
+  overflow: visible;
 }
-// .el-table::after {
-//   position: relative !important;
-// }
-// .el-table--scrollable-x .el-table__body-wrapper {
-//   overflow: visible !important;
-// }
+.eduData /deep/ .el-table::after {
+  position: relative;
+}
 .eduData /deep/ .is-leaf .cell {
   line-height: 20px;
 }
