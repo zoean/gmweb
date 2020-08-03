@@ -35,7 +35,6 @@
       </el-col>
     </el-row>
     <el-table
-      max-height="600"
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
