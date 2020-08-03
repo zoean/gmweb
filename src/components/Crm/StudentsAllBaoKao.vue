@@ -284,7 +284,7 @@ export default {
             drawerMove: false,
             directionMove: 'rtl',
             teacherMoveList: [],
-            registerId: '' //报考信息ID
+            registerIds: '' //报考信息ID
         }
     },
     created() {
@@ -321,7 +321,7 @@ export default {
         },
         allocationUser(id) {
             this.$smoke_post(allocationUser, {
-                registerId: this.registerId,
+                registerIds: this.registerIds,
                 userUuid: id
             }).then(res => {
                 if(res.code == 200) {
@@ -439,7 +439,9 @@ export default {
         moveStudentOne(row) {
             this.drawerMove = true;
             this.teacherMoveList = [];
-            this.registerId = row.registerId;
+            let arr = [];
+            arr.push(row.registerId);
+            this.registerIds = arr;
             this.queryUserList();
         },
         studentDetails( row ) {
