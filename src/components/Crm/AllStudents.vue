@@ -21,8 +21,8 @@
                     :trigger-on-focus="true"
                     @select="handleSelect"
                     @clear="autocompleteClear"
-                    @focus="scrollLockFocus"
-                    @blur="scrollLockBlur"
+                    @focus="scrollLockFlag = true"
+                    @blur="scrollLockFlag = false"
                 ></el-autocomplete>
             </el-col>
             <el-col :span="4">
@@ -362,12 +362,6 @@ export default {
         this.clTeaOrgFilterBox();
     },
     methods: {
-        scrollLockFocus() {
-            this.scrollLockFlag = true;
-        },
-        scrollLockBlur() {
-            this.scrollLockFlag = false;
-        },
         datePickerChangeValueSignUp(value) {
             if (value == null) {
                 this.form.signUpStartTime = '';

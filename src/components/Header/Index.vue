@@ -176,7 +176,7 @@
                     
                 </el-popover>
 
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.0</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.1</span>
     
             </el-col>
         </el-row>

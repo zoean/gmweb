@@ -93,9 +93,15 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="2">
+            <el-col :span="4">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
+
+            </el-col>
+
+            <el-col :span="4">
+
+                <el-button plain @click="cationUserAllClick" size="small" style="float: right;">批量转移</el-button>
 
             </el-col>
 
@@ -107,6 +113,11 @@
             v-loading="fullscreenLoading"
             :key="Math.random()"
             style="width: 100%">
+
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
             
             <el-table-column
               :prop="item.prop"
@@ -299,6 +310,22 @@ export default {
         this.queryItemList();
     },
     methods: {
+        cationUserAllClick() {
+            let arr = [];
+            this.$refs.tableSelect.selection.map(sll => {
+                arr.push(sll.registerId);
+            })
+            this.registerIds = arr;
+            if(this.registerIds.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请先选择转移学员'
+                })
+            }else{
+                this.drawerMove = true;
+                this.queryUserList();
+            }
+        },
         lookBaoKaoMessage(row) {
             this.baokaoFlag = true;
             this.registerId = row.registerId;

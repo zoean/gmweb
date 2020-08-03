@@ -74,7 +74,13 @@
                 </el-popover>
             </span>
 
-            <div v-if="!message.itemId"> 暂无数据 </div>
+            <div v-if="!message.itemId"> 
+                <el-image
+                    style="width: 180px; height: 160px; margin-top: 40px;"
+                    :src="require('../../assets/images/no_data.png')"
+                ></el-image>    
+                <div style="margin-top: 20px; font-size: 16px;"> 暂无数据 </div>
+            </div>
             </div>
         </el-dialog>
 
