@@ -3,6 +3,16 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.1 -- 2020/08/03" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、修改中药师、西药师收集信息内容</p>
+          <p>2、报考员管理页面新增批量转移功能</p>
+          <h4>修复bug</h4>
+          <p>1、优化教务统计页面展示效果</p>
+          <p>2、修改报考管理转移学员bug</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.0 -- 2020/07/31" placement="top">
         <el-card>
           <h4>新增功能</h4>
@@ -17,16 +27,6 @@
           <p>9、增加回访及时度页面</p>
           <p>10、增加回访监控页面</p>
           <p>11、增加版本记录页面</p>
-        </el-card>
-      </el-timeline-item>
-      <el-timeline-item timestamp="v 1.1.1 -- 2020/08/03" placement="top">
-        <el-card>
-          <h4>新增功能</h4>
-          <p>1、修改中药师、西药师收集信息内容</p>
-          <p>2、报考员管理页面新增批量转移功能</p>
-          <h4>修复bug</h4>
-          <p>1、优化教务统计页面展示效果</p>
-          <p>2、修改报考管理转移学员bug</p>
         </el-card>
       </el-timeline-item>
     </el-timeline>
