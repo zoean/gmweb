@@ -35,6 +35,7 @@
       </el-col>
     </el-row>
     <el-table
+    max-height="600"
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
@@ -267,30 +268,30 @@ export default {
                 talkTimeVOdurationOutCount:
                   item.talkTimeVO.durationOutCount || 0,
                 talkTimeVOdurationCount: item.talkTimeVO.durationCount || 0,
-                receiveStuVOstuNumCount: item.receiveStuVO.stuNumCount,
-                receiveStuVOsystemAllStuNum: item.receiveStuVO.systemAllStuNum,
-                receiveStuVOreceiveStuNum: item.receiveStuVO.receiveStuNum,
-                receiveStuVOleadAllStuNum: item.receiveStuVO.leadAllStuNum,
-                addNotesVOaddNotesNum: item.addNotesVO.addNotesNum,
-                addNotesVOaddNotesStuNum: item.addNotesVO.addNotesStuNum,
+                receiveStuVOstuNumCount: item.receiveStuVO.stuNumCount||0,
+                receiveStuVOsystemAllStuNum: item.receiveStuVO.systemAllStuNum||0,
+                receiveStuVOreceiveStuNum: item.receiveStuVO.receiveStuNum||0,
+                receiveStuVOleadAllStuNum: item.receiveStuVO.leadAllStuNum||0,
+                addNotesVOaddNotesNum: item.addNotesVO.addNotesNum||0,
+                addNotesVOaddNotesStuNum: item.addNotesVO.addNotesStuNum||0,
                 dialVOnewSystemDialVOnewSystemNum:
-                  item.dialVO.newSystemDialVO.newSystemNum,
+                  item.dialVO.newSystemDialVO.newSystemNum||0,
                 dialVOnewSystemDialVOnewSystemTelNum:
-                  item.dialVO.newSystemDialVO.newSystemTelNum,
+                  item.dialVO.newSystemDialVO.newSystemTelNum||0,
                 dialVOnewSystemDialVOnewSystemOpenTelNum:
-                  item.dialVO.newSystemDialVO.newSystemOpenTelNum,
+                  item.dialVO.newSystemDialVO.newSystemOpenTelNum||0,
                 dialVOnewSystemDialVOnewSystemSeatNum:
-                  item.dialVO.newSystemDialVO.newSystemSeatNum,
+                  item.dialVO.newSystemDialVO.newSystemSeatNum||0,
                 dialVOnewSystemDialVOnewSystemOpenSeatNum:
-                  item.dialVO.newSystemDialVO.newSystemOpenSeatNum,
-                dialVOjqDialVOjqNum: item.dialVO.jqDialVO.jqNum,
-                dialVOjqDialVOjqTelNum: item.dialVO.jqDialVO.jqTelNum,
-                dialVOjqDialVOjqOpenTelNum: item.dialVO.jqDialVO.jqOpenTelNum,
-                dialVOjqDialVOjqSeatNum: item.dialVO.jqDialVO.jqSeatNum,
-                dialVOjqDialVOjqOpenSeatNum: item.dialVO.jqDialVO.jqOpenSeatNum,
-                callStuVOcallNum: item.callStuVO.callNum,
-                callStuVOcallOpenNum: item.callStuVO.callOpenNum,
-                callStuVOcallStuNum: item.callStuVO.callStuNum,
+                  item.dialVO.newSystemDialVO.newSystemOpenSeatNum||0,
+                dialVOjqDialVOjqNum: item.dialVO.jqDialVO.jqNum||0,
+                dialVOjqDialVOjqTelNum: item.dialVO.jqDialVO.jqTelNum||0,
+                dialVOjqDialVOjqOpenTelNum: item.dialVO.jqDialVO.jqOpenTelNum||0,
+                dialVOjqDialVOjqSeatNum: item.dialVO.jqDialVO.jqSeatNum||0,
+                dialVOjqDialVOjqOpenSeatNum: item.dialVO.jqDialVO.jqOpenSeatNum||0,
+                callStuVOcallNum: item.callStuVO.callNum||0,
+                callStuVOcallOpenNum: item.callStuVO.callOpenNum||0,
+                callStuVOcallStuNum: item.callStuVO.callStuNum||0,
               };
             });
           }
@@ -307,18 +308,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-.eduData /deep/ .el-table {
-  overflow-x: auto;
-}
-.eduData /deep/  .el-table__header-wrapper,
-.eduData /deep/ .el-table__body-wrapper,
-.eduData /deep/ .el-table__footer-wrapper {
-  overflow: visible;
-}
-.eduData /deep/ .el-table::after {
-  position: relative;
-}
 .eduData /deep/ .is-leaf .cell {
   line-height: 20px;
 }
