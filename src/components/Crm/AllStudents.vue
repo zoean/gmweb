@@ -10,6 +10,7 @@
             </el-col>
             <el-col :span="4">
                 <el-autocomplete
+                    v-scroll-lock="scrollLockFlag"
                     clearable
                     size="small"
                     class="screen-li"
@@ -20,6 +21,8 @@
                     :trigger-on-focus="true"
                     @select="handleSelect"
                     @clear="autocompleteClear"
+                    @focus="scrollLockFlag = true"
+                    @blur="scrollLockFlag = false"
                 ></el-autocomplete>
             </el-col>
             <el-col :span="4">
@@ -342,6 +345,8 @@ export default {
             userId: '',
             clueDataSUuid: '',
             callLogUuid: '',
+
+            scrollLockFlag: false,
         }
     },
     created() {

@@ -434,13 +434,13 @@
                 </el-tab-pane>
                 <el-tab-pane label="订单记录" name="third">
                     <el-table :data="orderList">
-                        <af-table-column 
+                        <el-table-column 
                             v-for="(item, index) in orderListColumn" 
                             :label="item.label" 
                             :prop="item.prop" 
                             :key="index" 
                             :formatter="item.formatter"
-                        ></af-table-column>
+                        ></el-table-column>
 
                         <el-table-column prop="active" fixed="right" label="操作" width="50" class-name="table_active">
                             <template slot-scope="scope">                            
@@ -1159,7 +1159,7 @@ export default {
       },
       geOrderRecord(){
         this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
-          if(res.data){
+          if(res.code == 200){
               res.data.map(sll => {
                   sll.userInfo = sll.userName + ' / '  + sll.phone + ' / ' +  sll.location + sll.address ;
               })

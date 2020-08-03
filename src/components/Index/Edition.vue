@@ -19,6 +19,16 @@
           <p>11、增加版本记录页面</p>
         </el-card>
       </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.1 -- 2020/08/03" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、修改中药师、西药师收集信息内容</p>
+          <p>2、报考员管理页面新增批量转移功能</p>
+          <h4>修复bug</h4>
+          <p>1、优化教务统计页面展示效果</p>
+          <p>2、修改报考管理转移学员bug</p>
+        </el-card>
+      </el-timeline-item>
     </el-timeline>
   </div>
 </template>
@@ -60,10 +70,11 @@ export default {
         width: 80%;
       }
       .el-card__body{
-        padding: 20px !important;
+        padding: 10px 20px 20px 20px !important;
       }
       h4{
-        margin-bottom: 10px;
+        margin-top: 10px;
+        margin-bottom: 6px;
       }
     }
 </style>

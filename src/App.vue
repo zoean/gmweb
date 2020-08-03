@@ -2,7 +2,7 @@
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container :class="paddingClass" id="el-container">
-      <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar"></Aside>
+      <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar" v-scroll-lock="scrollLockFlag" @mouseenter.native="scrollLockFlag = true" @mouseleave.native="scrollLockFlag = false"></Aside>
       <div :class="[widthClass]">
         <router-view/>
       </div>
@@ -24,7 +24,8 @@ export default {
       isNormalPage: false,
       unNormalPage: ['/login', '/'],
       widthClass: 'sidebar-open',
-      paddingClass: ''
+      paddingClass: '',
+      scrollLockFlag: false,
     }
   },
   created() {
