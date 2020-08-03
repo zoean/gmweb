@@ -2,7 +2,8 @@
     <div class="baokao">
         <el-dialog width="56%" title="报考信息" :visible.sync="baokaoFlag_" :before-close="handleClose">
           
-            <div class="baokao_kuang">
+            <div v-loading="fullscreenLoading">
+                <div class="baokao_kuang" v-if="message.itemId">
 
                 <div><span class="baokao_lable">姓名：</span><span>{{message.name}}</span></div>
                 <div><span class="baokao_lable">身份证号：</span><span>{{message.idCardNo}}</span></div>
@@ -16,8 +17,8 @@
 
                 <div v-if="message.itemId != 97"><span class="baokao_lable">资格证书：</span><span>{{message.qualificationCert}}</span></div>
 
-                <div><span class="baokao_lable">工作单位：</span><span>{{message.work}}</span></div>
-                <div><span class="baokao_lable">工作年限：</span><span>{{message.workingYears}}</span></div>
+                <div v-if="message.itemId == 97 || message.itemId == 15"><span class="baokao_lable">工作单位：</span><span>{{message.work}}</span></div>
+                <div v-if="message.itemId == 97 || message.itemId == 15"><span class="baokao_lable">工作年限：</span><span>{{message.workingYears}}</span></div>
 
                 <div><span class="baokao_lable">手机：</span><span>{{message.telephone}}</span></div>
  
@@ -29,9 +30,9 @@
 
             </div>
 
-            <div>
+            <div v-if="message.itemId" style="margin-bottom: 10px;">
 
-                <ul v-loading="fullscreenLoading" id="baokao">
+                <ul id="baokao">
                     <li v-for="(item, index) in imgArr"
                         :key="index">
                         <img :src="item.address ? item.address : require('../../assets/images/no_picture.png')" />
@@ -49,7 +50,7 @@
 
             </div>
             
-            <span slot="footer" class="dialog-footer">
+            <span slot="footer" class="dialog-footer" v-if="message.itemId">
                 <el-button type="primary" @click="examineYes" size="small">审核通过</el-button>
                 <el-popover
                     placement="right-end"
@@ -72,6 +73,9 @@
                     <el-button slot="reference" plain size="small" style="margin-left: 10px;">审核失败</el-button>
                 </el-popover>
             </span>
+
+            <div v-if="!message.itemId"> 暂无数据 </div>
+            </div>
         </el-dialog>
 
     </div>
@@ -104,7 +108,9 @@ export default {
     },
     data() {
         return {
-            message: {},
+            message: {
+                itemId: '1'
+            },
             imgArr: [],
             fullscreenLoading: false,
             checkForm: {
@@ -153,8 +159,11 @@ export default {
                         }else{
                             this.imgArr.push({name: '身份证', address: res.data.idCardCopyUrl});
                         }
-                        this.imgArr.push({name: '工作年限证明', address: res.data.workTimeProveUrl});
-                        
+
+                        if(res.data.itemId == '97' || res.data.itemId == '15') {
+                            this.imgArr.push({name: '工作年限证明', address: res.data.workTimeProveUrl});
+                        }
+
                         this.$nextTick(() => {
                             this.initImageTools();
                         })
