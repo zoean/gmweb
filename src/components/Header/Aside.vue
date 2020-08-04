@@ -260,7 +260,7 @@ export default {
       max-width: 244px;
       svg{
         color:#909399;
-        font-size: 18px;
+        font-size: 16px;
       }
     }
     .el-menu-item-smoke:hover{

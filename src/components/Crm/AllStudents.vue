@@ -230,6 +230,7 @@ import {
     getTextByJs,
     sortTextNum,
     citiesFun,
+    schoolType
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
@@ -274,6 +275,7 @@ export default {
                 { 'prop': 'school', 'label': '分校' },
                 { 'prop': 'classTea', 'label': '班主任' },
                 { 'prop': 'seatName', 'label': '成单坐席' },
+                { 'prop': 'singlePlatform', 'label': '成单平台' },
                 { 'prop': 'createTime', 'label': '报名时间' },
                 { 'prop': 'receiveTime', 'label': '领取时间' },
                 { 'prop': 'goodsName', 'label': '购买商品' },
@@ -500,6 +502,7 @@ export default {
                             }else{
                                 sll.seatName = '';
                             }
+                            sll.singlePlatform = schoolType(sll.singlePlatform);
                             sll.orgNameListText = getTextByJs(sll.orgNameList.reverse()); //reverse()倒序排列
                             sll.filingFee = sll.filingFee ? '是' : '否';
                         })

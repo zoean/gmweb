@@ -157,7 +157,7 @@ export default {
                             if(sll.followUpNum != 0) {
                                 sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
                             }else{
-                                sll.openClassNumData = '0%';
+                                sll.followUpNumData = '0%';
                             }
                         })
                         this.list = res.data;

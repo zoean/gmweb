@@ -50,6 +50,10 @@
         <el-row class="people-screen" type="flex" align="middle">
 
             <el-col :span="4">
+                <el-input v-model="form.customerId" placeholder="请输入用户id" class="screen-li" size="small" clearable></el-input>
+            </el-col>
+
+            <el-col :span="4">
                 <el-select v-model="form.basicInfoStatus" placeholder="请选择基本信息情况" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in basicInfoStatusList"
@@ -82,6 +86,10 @@
                 </el-select>
             </el-col>
 
+        </el-row>
+
+        <el-row class="people-screen">
+
             <el-col :span="4">
                 <el-select v-model="form.paymentStatus" placeholder="请选择交费情况" class="screen-li" size="small" clearable>
                     <el-option
@@ -93,13 +101,13 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="3">
+            <el-col :span="4">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="16">
                 <el-button style="float: right;" @click="downloadListClick" size="small" plain>查看下载任务</el-button>
                 <el-button style="float: right; margin-right: 20px;" @click="exportClick" size="small" plain>导 出</el-button>
             </el-col>
