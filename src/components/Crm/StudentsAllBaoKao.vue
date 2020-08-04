@@ -50,6 +50,10 @@
         <el-row class="people-screen" type="flex" align="middle">
 
             <el-col :span="4">
+                <el-input v-model="form.customerId" placeholder="请输入用户id" class="screen-li" size="small" clearable></el-input>
+            </el-col>
+
+            <el-col :span="4">
                 <el-select v-model="form.basicInfoStatus" placeholder="请选择基本信息情况" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in basicInfoStatusList"
@@ -96,10 +100,6 @@
             <el-col :span="4">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
-
-            </el-col>
-
-            <el-col :span="4">
 
                 <el-button plain @click="cationUserAllClick" size="small" style="float: right;">批量转移</el-button>
 

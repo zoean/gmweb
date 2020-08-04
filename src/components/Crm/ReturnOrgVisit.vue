@@ -151,14 +151,14 @@ export default {
                         res.data.map(sll => {
                             sll.singlePlatform = schoolType(sll.singlePlatform);
                             if(sll.openClassNum != 0) {
-                                sll.returnVisitNumData = ((sll.alreadyOpenClassNum / sll.openClassNum) * 100).toFixed(2) + '%';
+                                sll.returnVisitNumData = ((sll.alreadyReturnVisitNum / sll.returnVisitNum) * 100).toFixed(2) + '%';
                             }else{
                                 sll.returnVisitNumData = '0%';
                             }
                             if(sll.followUpNum != 0) {
                                 sll.followUpNumData = ((sll.alreadyFollowUpNum / sll.followUpNum) * 100).toFixed(2) + '%';
                             }else{
-                                sll.returnVisitNumData = '0%';
+                                sll.followUpNumData = '0%';
                             }
                         })
                         this.list = res.data;

@@ -3,6 +3,19 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.2 -- 2020/08/04" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、我的学员页面增加“报考省份”的筛选</p>
+          <p>2、学员详情-课程列表增加课程有效期</p>
+          <p>3、用户id的筛选</p>
+          <p>4、所辖学员页面增加“成单平台字段”</p>
+          <p>5、新学员管理增加拨打电话功能</p>
+          <h4>修复bug</h4>
+          <p>1、开班监控和回访监控的显示bug</p>
+          <p>2、修复新学员管理报名时间筛选bug</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.1 -- 2020/08/03" placement="top">
         <el-card>
           <h4>新增功能</h4>

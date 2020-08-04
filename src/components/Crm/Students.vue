@@ -67,7 +67,7 @@
 
         <el-row style="margin-top: 16px;">
 
-            <el-col :span="5">
+            <el-col :span="8">
                 <el-date-picker
                     size="small"
                     style="width: 95%;"
@@ -81,7 +81,7 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="8">
                 <el-date-picker
                     size="small"
                     style="width: 95%;"
@@ -111,12 +111,27 @@
             </el-col>
 
             <el-col :span="4">
-                <el-select v-model="form.classType" placeholder="请选择班型等级" style="width: 90%;" size="small" clearable>
+                <el-select v-model="form.classType" placeholder="请选择班型等级" size="small" clearable>
                     <el-option
                       v-for="item in classTypeList"
                       :key="item.value"
                       :label="item.label"
                       :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+        </el-row>
+
+        <el-row style="margin-top: 16px;">
+
+            <el-col :span="4">
+                <el-select v-model="form.examProvince" placeholder="请选择报考省份" style="width: 90%;" size="small" clearable>
+                    <el-option
+                      v-for="item in provinceList"
+                      :key="item.provinceName"
+                      :label="item.provinceName"
+                      :value="item.provinceName">
                     </el-option>
                 </el-select>
             </el-col>
@@ -331,7 +346,8 @@ import {
     groupSMS,
     getSMSMsgBaseList,
     classTeaExamItem,
-    enumByEnumNums
+    enumByEnumNums,
+    queryProvinceAll
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import PageFieldManage from '@/components/Base/PageFieldManage';
@@ -339,7 +355,7 @@ import {
     timestampToTime, classTypeString, orderTypeText, copyData, getTextByJs,
     citiesFun, countDown
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll, } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'students',
@@ -474,7 +490,8 @@ export default {
             callLogUuid: '',
 
             restaurants: [],
-            enumList: {}
+            enumList: {},
+            provinceList: [],
         }
     },
     created() {
@@ -492,8 +509,16 @@ export default {
         this.classTeaExamItem();
         let arr = [MJ_10];
         this.enumByEnumNums(arr);
+        this.queryProvinceAll();
     },
     methods: {
+        queryProvinceAll() {
+          this.$smoke_get(queryProvinceAll, {}).then(res => {
+            if(res.code == 200) {
+                this.provinceList = res.data;
+            }
+          })
+        },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
                 numberList: arr

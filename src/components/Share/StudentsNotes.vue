@@ -536,8 +536,9 @@
 
                         <div :data="courseLists" v-for="(baby, haha) in courseLists" :key="haha">
                             <div style="background: #FAFAFA; height: 40px; font-size: 14px; line-height: 40px; padding-left: 20px;">{{baby.categoryName}}</div>
-                            <div v-for="(item, index) in baby.courseList">
-                                <div style="padding-left: 50px; border-bottom: 1px solid #F1F1F1; height: 40px; font-size: 14px; line-height: 40px;">{{item.courseName}}</div>
+                            <div v-for="(item, index) in baby.courseList" style="padding-left: 50px; border-bottom: 1px solid #F1F1F1; height: 40px; font-size: 14px; line-height: 40px;">
+                                <span>{{item.courseName}}</span>
+                                <span style="margin-left: 50px; color: #aaa; font-size: 12px;">有效期：{{item.startTime}} ~ {{item.endTime}}</span>
                             </div>
                         </div>
 
@@ -883,7 +884,7 @@ export default {
         this.GetAgreementList(this.getOrderForm.userId);
         this.getStudentDetails(this.studentUuid);
         this.queryProvinceAll();
-        if(this.$route.path.indexOf("newStudents") != -1 || this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
+        if(this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
             this.routePathFlag = true;
         }
     },

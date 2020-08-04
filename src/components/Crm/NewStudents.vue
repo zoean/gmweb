@@ -89,7 +89,6 @@
         <el-table
             :data="list"
             ref="tree"
-            :key="Math.random()"
             v-loading="fullscreenLoading"
             @sort-change="sortChange"
             style="width: 100%">
@@ -114,8 +113,34 @@
               </template>
 
             </el-table-column>
-            <el-table-column prop="active" label="操作" fixed="right" width="80" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="110" class-name="table_active">
               <template slot-scope="scope">
+
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    placement="top"
+                    title="确认拨打该学员电话吗？"
+                    :hideIcon='true'
+                    v-if="!$route.query.id"
+                    @onConfirm="phoneOutTea(scope.row)"
+                  >
+                    <svg-icon slot="reference" icon-title="手机外拨" icon-class="takephone" />
+                </el-popconfirm>
+
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    placement="top"
+                    title="确认拨打该学员电话吗？"
+                    :hideIcon='true'
+                    v-if="!$route.query.id"
+                    @onConfirm="seatOutTea(scope.row)"
+                  >
+                    <svg-icon slot="reference" icon-title="座机外拨" icon-class="landline" />
+                </el-popconfirm>
 
                 <svg-icon @click="studentDetails(scope.row)" icon-title="学员详情" icon-class="detail" />
                   
@@ -168,13 +193,15 @@ import {
     classTeaGetWaitStudent, 
     getSchoolList,
     clTeaOrgFilterBox,
-    classTeaExamItem
+    classTeaExamItem,
+    phoneOutTea,
+    seatOutTea,
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     timestampToTime, classTypeString, orderTypeText, copyData, getTextByJs,
-    citiesFun, countDown, schoolType
+    citiesFun, countDown, schoolType, sortTextNum
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
@@ -237,6 +264,7 @@ export default {
                 { label: '高端班', value: 1 },
             ],
             dataPickerValueSignUp: [],
+            initOptions: {},
         }
     },
     created() {
@@ -246,12 +274,80 @@ export default {
         }else{
             this.form.pageSize = 20;
         }
+        const initOptions = localStorage.getItem('initOptions');
+        this.initOptions = JSON.parse(initOptions);
         this.getWaitStudentList();
         this.getSchoolList();
         this.clTeaOrgFilterBox();
         this.classTeaExamItem();
     },
     methods: {
+        phoneOutTea( scope ) {
+            if(this.initOptions != undefined){
+                this.$smoke_post(phoneOutTea, {
+                    adminUin: this.initOptions.adminUin,
+                    uin: this.initOptions.uin,
+                    uuid: scope.uuid,
+                }).then(res => {
+                    if(res.code == 200){
+                        if(res.data.result){
+                            this.drawer = true;
+                            this.studentDetails(scope);
+                            this.callLogUuid = res.data.callLogUuid;
+                            this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '目前服务线路忙，请稍后重试'
+                            })
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请联系主管配置jq账号'
+                })
+            }
+        },
+        seatOutTea( scope ) {
+            if(this.initOptions != undefined){
+                this.$smoke_post(seatOutTea, {
+                    adminUin: this.initOptions.adminUin,
+                    uin: this.initOptions.uin,
+                    uuid: scope.uuid,
+                }).then(res => {
+                    if(res.code == 200){
+                        if(res.data.result){
+                            this.drawer = true;
+                            this.studentDetails(scope);
+                            this.callLogUuid = res.data.callLogUuid;
+                            this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '目前服务线路忙，请稍后重试'
+                            })
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请联系主管配置jq账号'
+                })
+            }
+        },
         datePickerChangeValueSignUp(value) {
             if (value == null) {
                 this.form.signUpStartTime = '';
