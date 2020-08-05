@@ -266,6 +266,7 @@ export const GetAgreementList = '/lovestudy/api/agreement/GetAgreementList' //�
 export const GetCourseList4Teacher = '/lovestudy/api/study/GetCourseList4Teacher' //课程列表
 export const GetCityList = '/lovestudy/api/address/GetCityList' //城市数据
 export const updateAddress = '/order-service/order/updateAddress' //修改收货人地址
+export const xieyi = '/xieyi.php?act=agrinfo&order_sn=' //xieyi
 
 //userRecord
 export const moduleList = '/api/data/systemLog/moduleList' //查询操作对象接口

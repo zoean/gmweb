@@ -110,19 +110,30 @@
 
             </el-col>
 
+            <el-col :span="4">
+                <el-select v-model="form.examProvince" placeholder="请选择报考省份" style="width: 90%;" size="small" clearable>
+                    <el-option
+                      v-for="item in provinceList"
+                      :key="item.provinceName"
+                      :label="item.provinceName"
+                      :value="item.provinceName">
+                    </el-option>
+                </el-select>
+            </el-col>
+
             <el-col :span="2">
 
                 <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
 
             </el-col>
 
+            <!-- <el-col :span="2">
+
+                <el-button type="primary" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button>
+
+            </el-col> -->
+
             <el-col :span="2">
-
-                <!-- <el-button type="primary" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button> -->
-
-            </el-col>
-
-            <el-col :span="4">
                 <el-row type="flex" justify="end">
                     <svg-icon style="margin-right: 0;" class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -220,7 +231,8 @@ import {
     transferStu,
     getSchoolList,
     clTeaOrgFilterBox,
-    getSendMsgClassTeaStudent
+    getSendMsgClassTeaStudent,
+    queryProvinceAll
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import { 
@@ -272,7 +284,6 @@ export default {
                 { 'prop': 'tel', 'label': '手机号码' },
                 { 'prop': 'examItemName', 'label': '考试项目' },
                 { 'prop': 'classType', 'label': '班型' },
-                { 'prop': 'school', 'label': '分校' },
                 { 'prop': 'classTea', 'label': '班主任' },
                 { 'prop': 'seatName', 'label': '成单坐席' },
                 { 'prop': 'singlePlatform', 'label': '成单平台' },
@@ -280,6 +291,7 @@ export default {
                 { 'prop': 'receiveTime', 'label': '领取时间' },
                 { 'prop': 'goodsName', 'label': '购买商品' },
                 { 'prop': 'applyExamName', 'label': '报考条件' },
+                { 'prop': 'examProvince', 'label': '报考省份' },
                 { 'prop': 'filingFee', 'label': '是否缴纳备案金' },
             ],
             drawerMove: false,
@@ -349,6 +361,7 @@ export default {
             callLogUuid: '',
 
             scrollLockFlag: false,
+            provinceList: [],
         }
     },
     created() {
@@ -362,8 +375,16 @@ export default {
         this.getExamBasic();
         this.getSchoolList();
         this.clTeaOrgFilterBox();
+        this.queryProvinceAll();
     },
     methods: {
+        queryProvinceAll() {
+          this.$smoke_get(queryProvinceAll, {}).then(res => {
+            if(res.code == 200) {
+                this.provinceList = res.data;
+            }
+          })
+        },
         datePickerChangeValueSignUp(value) {
             if (value == null) {
                 this.form.signUpStartTime = '';
