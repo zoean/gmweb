@@ -72,7 +72,8 @@ export default {
     data() {
         return {
             form: {
-                time: ''
+                time: '',
+                dayType: '',
             },
             list: [],
             totalFlag: false,
@@ -93,6 +94,13 @@ export default {
                   return time.getTime() > Date.now();
                 },
                 shortcuts: [{
+                  text: '今天',
+                  onClick(picker) {
+                    const date = new Date(new Date(new Date().toLocaleDateString()).getTime());
+                    date.setTime(date.getTime());
+                    picker.$emit('pick', date);
+                  }
+                }, {
                   text: '昨天',
                   onClick(picker) {
                     const date = new Date(new Date(new Date().toLocaleDateString()).getTime());
@@ -133,6 +141,13 @@ export default {
         },
         orgOpenClassClick() {
             if(this.form.time){
+                if(this.form.time == new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime()){
+                    this.form.dayType = 1;
+                }else if(this.form.time == new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() - 3600 * 1000 * 24){
+                    this.form.dayType = 0;
+                }else{
+                    this.form.dayType = '';
+                }
                 this.orgOpenClass();
             }else{
                 this.$message({

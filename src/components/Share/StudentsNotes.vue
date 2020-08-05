@@ -355,7 +355,7 @@
                                 </el-form-item>
                             </el-col>
 
-                            <el-col :span="6" style="margin-top: 10px;">
+                            <!-- <el-col :span="6" style="margin-top: 10px;">
 
                                 <label class="el-form-item__label">协议信息</label>
 
@@ -363,7 +363,7 @@
 
                                 <span style="height: 40px; line-height: 40px; cursor: pointer; color: #409EFF;" @click="lookAgreement">查看</span>
 
-                            </el-col>
+                            </el-col> -->
 
                         </el-row>
 
@@ -442,9 +442,10 @@
                             :formatter="item.formatter"
                         ></el-table-column>
 
-                        <el-table-column prop="active" fixed="right" label="操作" width="50" class-name="table_active">
+                        <el-table-column prop="active" fixed="right" label="操作" width="70" class-name="table_active">
                             <template slot-scope="scope">                            
-                                <svg-icon icon-title="修改地址" @click="handleEditAddressClick(scope.row)" icon-class="edit" class="svg-handle" />     
+                                <svg-icon icon-title="修改地址" @click="handleEditAddressClick(scope.row)" icon-class="edit" class="svg-handle" />   
+                                <svg-icon icon-title="查看协议" @click="lookAgreementDetailsClick(scope.row)" icon-class="info" class="svg-handle" />
                             </template>
                         </el-table-column>
 
@@ -569,7 +570,7 @@
             </el-tabs>
         </el-drawer>
 
-        <el-dialog width="40%" title="协议列表" :visible.sync="agreeFlag">
+        <!-- <el-dialog width="40%" title="协议列表" :visible.sync="agreeFlag">
           
           <el-table
             :data="agreementList"
@@ -588,7 +589,7 @@
             </el-table-column>
           </el-table>
 
-        </el-dialog>
+        </el-dialog> -->
 
         <el-dialog width="50%" title="设置地址信息" :visible.sync="addressFlag">
           
@@ -650,12 +651,13 @@ import {
   copyTel,
   getOrderList,
   getClueCallLog,
-  GetAgreementList,
+  // GetAgreementList,
   GetCourseList4Teacher,
   GetCityList,
   updateAddress,
   queryRegisterProcess,
-  queryProvinceAll
+  queryProvinceAll,
+  xieyi
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { 
@@ -817,11 +819,11 @@ export default {
           columnFlag: false,
           totalFlag: false,
           pageshow: true, //分页重新渲染
-          agreementList: [],
-          agreeColumnList: [
-            { 'prop': 'agrName', 'label': '协议名称' },  
-          ],
-          agreeFlag: false,
+          // agreementList: [],
+          // agreeColumnList: [
+          //   { 'prop': 'agrName', 'label': '协议名称' },  
+          // ],
+          // agreeFlag: false,
           courseLists: [],
           courseListsFlag: null,
 
@@ -881,7 +883,7 @@ export default {
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.GetCityList();
-        this.GetAgreementList(this.getOrderForm.userId);
+        // this.GetAgreementList(this.getOrderForm.userId);
         this.getStudentDetails(this.studentUuid);
         this.queryProvinceAll();
         if(this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
@@ -889,6 +891,10 @@ export default {
         }
     },
     methods: {
+      lookAgreementDetailsClick(row) {
+        const href = '/onelogin' + xieyi + row.orderNo;
+        window.open(href, '_blank');
+      },
       queryProvinceAll() {
         this.$smoke_get(queryProvinceAll, {}).then(res => {
           if(res.code == 200) {
@@ -964,18 +970,18 @@ export default {
       quxiao() {
         this.$emit("changeDrawer", false)
       },
-      lookAgreement() {
-        this.agreeFlag = true;
-      },
-      lookAgreeLink(id) {
-        const { href } = this.$router.resolve({
-            name: "agreeMentDetails",
-            query: {
-                id: id
-            }
-        })
-        window.open(href, '_blank');
-      },
+      // lookAgreement() {
+      //   this.agreeFlag = true;
+      // },
+      // lookAgreeLink(id) {
+      //   const { href } = this.$router.resolve({
+      //       name: "agreeMentDetails",
+      //       query: {
+      //           id: id
+      //       }
+      //   })
+      //   window.open(href, '_blank');
+      // },
       handleSelectNation(item) {
         this.customerForm.nation = item.value;
         this.customerForm.nationText = item.value;
@@ -1207,17 +1213,17 @@ export default {
           }
         }) 
       },
-      GetAgreementList(id) {
+      // GetAgreementList(id) {
 
-        this.$smoke_get(GetAgreementList, {
-          param: {userId: id}
-        }).then(res => {
-          if(res.status == 0) {
-            this.agreementList = res.data.agreementList;
-          }
-        })
+      //   this.$smoke_get(GetAgreementList, {
+      //     param: {userId: id}
+      //   }).then(res => {
+      //     if(res.status == 0) {
+      //       this.agreementList = res.data.agreementList;
+      //     }
+      //   })
 
-      },
+      // },
       GetCourseList4Teacher(id) {
 
         this.$smoke_post(GetCourseList4Teacher, {
