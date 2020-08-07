@@ -303,3 +303,7 @@ export const openClass = '/api/phone/qualityTesting/openClass' //班主任的开
 export const orgOpenClass = '/api/phone/qualityTesting/orgOpenClass' //组织下班主任开班情况
 export const returnVisit = '/api/phone/qualityTesting/returnVisit' //质检班主任的回访情况
 export const orgReturnVisit = '/api/phone/qualityTesting/orgReturnVisit' //质检组织的班主任回访情况
+
+//微信管理
+export const wxNumList = '/api/phone/saleAddWX/wxNumList' //获取销售添加微信数量集合
+export const upWxNum= '/api/phone/saleAddWX/upWxNum' //销售修改微信数量
