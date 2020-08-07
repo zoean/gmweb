@@ -48,9 +48,9 @@
     :key="index"
     :prop="item.prop"
     :label="item.label">
-      <template slot-scope="scope">
+      <!-- <template slot-scope="scope">
         <span>{{scope.row[item.prop] || '- -'}}</span>
-      </template>
+      </template> -->
     </el-table-column>
     <el-table-column label="操作" v-if="buttonMap.editWechatNum" width="70">
       <template slot-scope="scope">
@@ -71,7 +71,7 @@
   <el-dialog :visible.sync="dialogVisible" width="300px" :close-on-click-modal="false">
     <el-form ref="addWechatNumForm" :model="addWechatNumForm" label-position="top" :rules="addNumRule">
       <el-form-item label="今日添加客户微信数" prop="num">
-        <el-input v-model="addWechatNumForm.num" type="number" min="0"></el-input>
+        <el-input v-model="addWechatNumForm.num" type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"></el-input>
       </el-form-item>
       <el-button type="primary" @click="submitAddWechatData">保存</el-button>
     </el-form>    
@@ -120,7 +120,7 @@ export default {
       addNumRule: {
         num: [
           {
-            required: true, message: '请输入页面名称', trigger: 'blur'
+            required: true, message: '请输入今日添加微信数', trigger: 'blur'
           },
           {
             min: 0, message: '请输入大于0的数字', trigger: 'blur'
@@ -135,7 +135,13 @@ export default {
     this.searchForm.userUuid = localStorage.getItem('userUuid')
     this.buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
   },
-  methods: {    
+  methods: {   
+    inputExcludeE(value){
+      console.log(this.addWechatNumForm.num)
+      if(value.match(/[^\d]/)){
+        return Number(value.replace(/[^\d]/g, ''))
+      }
+    }, 
     getWxNumList(){
       this.$smoke_post(wxNumList, this.searchForm).then(res => {
         if(res.code == 200){
