@@ -85,7 +85,20 @@
                     </el-option>
                 </el-select>
             </el-col>
-
+            <el-col :span="6" style="height: 32px !important;">
+                <el-date-picker
+                    class="screen-li"
+                    v-model="dateRange"
+                    size="small"
+                    type="daterange"
+                    value-format='timestamp'
+                    :picker-options="pickerOptions"
+                    range-separator="至"
+                    start-placeholder="分配时间"
+                    end-placeholder="分配时间"
+                    @change="changeDateRange">
+                </el-date-picker>
+            </el-col>
         </el-row>
 
         <el-row class="people-screen">
@@ -265,6 +278,14 @@ export default {
                 telephone: '', // 手机号
                 total: null,
                 registerIds: [],
+                startTime: '',
+                endTime: ''
+            },
+            dateRange: [],
+            pickerOptions: {
+                disabledDate(time) {
+                return time.getTime() > Date.now();
+                }
             },
             list: [],
             totalFlag: false,
@@ -331,7 +352,11 @@ export default {
         this.registerList();
         this.queryItemList();
     },
-    methods: {
+    methods: {        
+        changeDateRange(){
+        this.form.startTime = this.dateRange[0]
+        this.form.endTime = this.dateRange[1]
+        },
         downloadListClick() {
             this.downloadFlag = true;
         },

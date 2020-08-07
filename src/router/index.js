@@ -56,6 +56,7 @@ import orgOpenClass from '@/components/Crm/OrgOpenClass';
 import openClass from '@/components/Crm/OpenClass';
 import returnOrgVisit from '@/components/Crm/ReturnOrgVisit';
 import returnVisit from '@/components/Crm/ReturnVisit';
+import wechatManagement from '@/components/Crm/WechatManagement';
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -339,6 +340,12 @@ export default new Router({
             path: '/crm/class/returnVisit',
             name: 'returnVisit',
             component: returnVisit
+        },
+
+        {
+            path: '/crm/wechat/wechatManagement',
+            name: 'wechatManagement',
+            component: wechatManagement
         },
 
         {
