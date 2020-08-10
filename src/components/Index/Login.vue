@@ -26,6 +26,7 @@ export default {
             accountNumber: '',
             password: '',
             fullscreenLoading: false,
+            isDisable: true
         }
     },
     created() {
@@ -43,7 +44,6 @@ export default {
     },
     methods: {
         login() {
-            console.log(222);
             if( !this.accountNumber || !this.password){
                 this.$message({
                     type: 'error',
@@ -51,9 +51,8 @@ export default {
                 })
             }else{
                 this.fullscreenLoading = true;
-                let isDisable = true;
-                if(isDisable) {
-                    isDisable = false;
+                if(this.isDisable) {
+                    this.isDisable = false;
                     this.$smoke_post(login, {
                         accountNumber: this.accountNumber,
                         password: this.password
@@ -65,19 +64,18 @@ export default {
                             document.onkeydown = undefined;
                             setTimeout(() => {
                                 this.fullscreenLoading = false;
-                                isDisable = true;
                                 this.$router.push({ path: '/'});
                             }, 2500);
     
                         }else{
                             setTimeout(() => {
                                 this.fullscreenLoading = false;
-                                isDisable = true;
+                                this.isDisable = true;
                                 this.$message({
                                     type: 'error',
                                     message: res.msg
                                 })
-                            }, 1000);
+                            }, 2000);
                         }
                     })
                 }
