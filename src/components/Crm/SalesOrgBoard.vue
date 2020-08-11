@@ -286,7 +286,11 @@ export default {
                         res.data.callTime = timeReturn(res.data.callTime);
                         res.data.daysTime1 = timeReturn(res.data.daysTime1);
                         res.data.daysTime2 = timeReturn(res.data.daysTime2);
-                        res.data.callOpenLv = ((res.data.callOpenStuNum / res.data.callStuNum) * 100).toFixed(2) + '%';
+                        if(res.data.callStuNum == 0) {
+                            res.data.callOpenLv = 0 + '%';
+                        }else{
+                            res.data.callOpenLv = ((res.data.callOpenStuNum / res.data.callStuNum) * 100).toFixed(2) + '%';
+                        }
                         arr.push(res.data);
                         this.list = arr;
                     }, 300);
