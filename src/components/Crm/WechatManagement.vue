@@ -81,6 +81,8 @@ export default {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
         this.$message.error('请输入大于0的数字')
+      }else{
+        callback();
       }
     }
     return {
