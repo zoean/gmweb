@@ -160,8 +160,8 @@ export default {
       })
     },
     changeDateRange(){
-      this.searchForm.startTime = this.dateRange[0]
-      this.searchForm.endTime = this.dateRange[1]
+      this.searchForm.startTime = this.dateRange ? this.dateRange[0] : ''
+      this.searchForm.endTime =this.dateRange ? this.dateRange[1] : ''
     },
     clTeaOrgFilterBox() {
       this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
