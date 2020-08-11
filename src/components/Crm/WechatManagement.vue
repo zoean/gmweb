@@ -124,9 +124,6 @@ export default {
         num: [
           {
             required: true, message: '请输入今日添加微信数', trigger: 'blur'
-          },
-          {
-            min: 0, message: '请输入大于0的数字', trigger: 'blur'
           }
         ]
       }
