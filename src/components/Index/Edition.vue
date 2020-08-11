@@ -3,6 +3,12 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.5 -- 2020/08/11" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、增加销售个人通时明细</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.4 -- 2020/08/11" placement="top">
         <el-card>
           <h4>修复bug</h4>
