@@ -78,6 +78,11 @@
 import {clTeaOrgFilterBox, wxNumList, upWxNum} from '@/request/api'
 export default {
   data() {
+    var validateNumber = (rule, value, callback) => {
+      if(value < 0){
+        this.$message.error('请输入大于0的数字')
+      }
+    }
     return {
       buttonMap: {},
       searchForm: {
@@ -124,6 +129,8 @@ export default {
         num: [
           {
             required: true, message: '请输入今日添加微信数', trigger: 'blur'
+          },{
+            validator: validateNumber, trigger: 'change'
           }
         ]
       }
