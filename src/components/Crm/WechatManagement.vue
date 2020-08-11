@@ -21,6 +21,7 @@
         :options="orgOptions"
         :props="props"
         collapse-tags
+        :show-all-levels=false
         @change="orgChange"
         ref="cascaderOrg">
       </el-cascader>
