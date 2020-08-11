@@ -3,6 +3,24 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.4 -- 2020/08/11" placement="top">
+        <el-card>
+          <h4>修复bug</h4>
+          <p>1、修复微信管理页面的组织架构筛选</p>
+          <p>2、修复微信管理页面的筛选数据显示</p>
+          <p>3、修复微信管理页面的时间筛选</p>
+        </el-card>
+      </el-timeline-item>
+      
+      <el-timeline-item timestamp="v 1.1.3 -- 2020/08/07" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、增加记录坐席添加客户微信数量功能</p>
+          <p>2、修改协议入口位置及内容展示样式</p>
+          <p>3、所辖学员页面列表去掉分校字段</p>
+          <p>4、代报考管理页面增加分配时间段筛选项</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.2 -- 2020/08/04" placement="top">
         <el-card>
           <h4>新增功能</h4>

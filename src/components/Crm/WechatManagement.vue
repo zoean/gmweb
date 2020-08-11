@@ -16,18 +16,14 @@
     </el-col>
     <el-col :span="4">
       <el-cascader
-        v-model="searchForm.orgList"
-        class="smoke-cascader1"
-        ref="cascader"
         size="small"
         placeholder="请选择坐席组织架构"
+        :options="orgOptions"
+        :props="props"
         collapse-tags
-        :show-all-levels='true'
-        :options="zuzhiOptions"
-        @change='handleZuzhiChange'
-        filterable
-        :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
-        clearable>
+        :show-all-levels=false
+        @change="orgChange"
+        ref="cascaderOrg">
       </el-cascader>
     </el-col>
     <el-col :span="4">
@@ -82,6 +78,13 @@
 import {clTeaOrgFilterBox, wxNumList, upWxNum} from '@/request/api'
 export default {
   data() {
+    var validateNumber = (rule, value, callback) => {
+      if(value < 0){
+        this.$message.error('请输入大于0的数字')
+      }else{
+        callback();
+      }
+    }
     return {
       buttonMap: {},
       searchForm: {
@@ -115,15 +118,21 @@ export default {
         prop: 'countNum'
       }],
       dateRange: [],
-      zuzhiOptions: [],
+      orgOptions: [],
+      props: {
+        value: 'uuid',
+        label: 'name',
+        children: 'list',
+        multiple: true,
+        checkStrictly: true
+      },
       dialogVisible: false,
       addNumRule: {
         num: [
           {
             required: true, message: '请输入今日添加微信数', trigger: 'blur'
-          },
-          {
-            min: 0, message: '请输入大于0的数字', trigger: 'blur'
+          },{
+            validator: validateNumber, trigger: 'change'
           }
         ]
       }
@@ -151,28 +160,25 @@ export default {
       })
     },
     changeDateRange(){
-      this.searchForm.startTime = this.dateRange[0]
-      this.searchForm.endTime = this.dateRange[1]
+      this.searchForm.startTime = this.dateRange ? this.dateRange[0] : ''
+      this.searchForm.endTime =this.dateRange ? this.dateRange[1] : ''
     },
     clTeaOrgFilterBox() {
       this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
         if(res.code == 200) {
-          this.zuzhiOptions = res.data;
+          this.orgOptions = res.data;
         }
       })
     },
-    handleZuzhiChange(arr) {
-      let brr = [];
-      arr.map(res => {
-        if(res.length == 1){
-          brr.push(res[0]);
-        }else{
-          brr.push(res[res.length-1]);
-        }
+    orgChange(){
+      this.searchForm.orgList = []
+      let checkedArray = this.$refs['cascaderOrg'].checkedValue
+      checkedArray.forEach((item, index, array) => {
+        this.searchForm.orgList.push(item[item.length - 1])
       })
-      this.searchForm.orgList = brr
     },
     searchList(){
+      this.searchForm.currentPage = 1
       this.getWxNumList()
     },
     submitAddWechatData(){

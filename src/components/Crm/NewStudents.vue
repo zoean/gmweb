@@ -394,6 +394,7 @@ export default {
         handleZuzhiChange(arr) {
             let brr = [];
             arr.map(res => {
+            console.log(res.length)
                 if(res.length == 1){
                     brr.push(res[0]);
                 }else{
@@ -401,6 +402,7 @@ export default {
                 }
             })
             this.form.seatOrgList = brr;
+            console.log(this.form.seatOrgList)
         },
         clTeaOrgFilterBox() {
             this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
