@@ -66,10 +66,10 @@
             <div class="target-four">
                 <div>
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_all.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日流水</span>
+                    <span style="position: relative; top: -7px; left: 8px;">今日流水(￥)</span>
                 </div>
                 <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayEntry}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry}}</div>
                     <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthEntry}}</div>
                 </div>
@@ -81,21 +81,21 @@
                     <span style="position: relative; top: -7px; left: 8px;">今日首咨/机会</span>
                 </div>
                 <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayFirstCon}}/{{dataJson.todayChance}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
-                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekFirstCon}}/{{dataJson.thisWeekChance}}</div>
-                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthFirstCon}}/{{dataJson.thisMonthChance}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekFirstCon}} / {{dataJson.thisWeekChance}}</div>
+                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthFirstCon}} / {{dataJson.thisMonthChance}}</div>
                 </div>
             </div>
 
             <div class="target-four">
                 <div>
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_2.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日回访（2-3天数据/4-7天数据）</span>
+                    <span style="position: relative; top: -7px; left: 8px;">今日回访（2-3天数据/3天以上数据）</span>
                 </div>
                 <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayReturnVisit1}}/{{dataJson.todayReturnVisit2}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
-                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekReturnVisit1}}/{{dataJson.thisWeekReturnVisit2}}</div>
-                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthReturnVisit1}}/{{dataJson.thisMonthReturnVisit2}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekReturnVisit1}} / {{dataJson.thisWeekReturnVisit2}}</div>
+                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthReturnVisit1}} / {{dataJson.thisMonthReturnVisit2}}</div>
                 </div>
             </div>
 
@@ -105,7 +105,7 @@
                     <span style="position: relative; top: -7px; left: 8px;">今日通话时长</span>
                 </div>
                 <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayTalkTime}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周平均时长 {{dataJson.thisWeekTalkTime}}</div>
                     <div style="width: 50%; display: inline-block;">本月平均时长 {{dataJson.thisMonthTalkTime}}</div>
                 </div>
@@ -157,7 +157,7 @@
             </el-table-column>
 
         </el-table>
-        
+
     </el-main>
 </template>
 
@@ -348,6 +348,7 @@ export default {
                 background: #fff;
                 text-align: center;
                 padding-top: 20px;
+                position: relative;
             }
         }
     }

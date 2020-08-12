@@ -310,5 +310,7 @@ export const upWxNum = '/api/phone/saleAddWX/upWxNum' //销售修改微信数量
 
 //数据看板
 export const dayWork = '/api/data/saleStatistics/dayWork' //获取销售每天的工作情况的数据看板
-export const todayWork = '/api/data/saleStatistics/todayWork' //获取销售今天工作情况的数据看板
 export const orgDayWork = '/api/data/saleStatistics/orgDayWork' //获取组织下销售人员工作情况的数据看板
+export const todayWork = '/api/data/saleStatistics/todayWork' //获取销售今天工作情况的数据看板
+export const orgTodayWork = '/api/data/saleStatistics/orgTodayWork' //获取组织下销售人员今天工作情况汇总的数据看板
+export const orgSaleDayWork = '/api/data/saleStatistics/orgSaleDayWork' //获取组织下销售人员每天的工作情况的数据看板

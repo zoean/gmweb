@@ -66,10 +66,10 @@
             <div class="target-four">
                 <div>
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_all.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日流水</span>
+                    <span style="position: relative; top: -7px; left: 8px;">今日流水 (￥)</span>
                 </div>
                 <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayEntry}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry}}</div>
                     <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthEntry}}</div>
                 </div>
@@ -78,36 +78,36 @@
             <div class="target-four">
                 <div>
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_1.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日首咨/机会</span>
+                    <span style="position: relative; top: -7px; left: 8px;">今日人均首咨</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayFirstCon}}/{{dataJson.todayChance}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
-                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekFirstCon}}/{{dataJson.thisWeekChance}}</div>
-                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthFirstCon}}/{{dataJson.thisMonthChance}}</div>
+                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayFirstAverage}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                    <div style="width: 30%; display: inline-block; border-right: 1px solid #E9E9E9;">人均机会 {{dataJson.todayChanceAverage}}</div>
+                    <div style="width: 70%; display: inline-block;">人均回访(2-3天/3天以上) {{dataJson.todayReturnVisitAverage1}} / {{dataJson.todayReturnVisitAverage2}}</div>
                 </div>
             </div>
 
             <div class="target-four">
                 <div>
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_2.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日回访（2-3天数据/4-7天数据）</span>
+                    <span style="position: relative; top: -7px; left: 8px;">高意向率</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayReturnVisit1}}/{{dataJson.todayReturnVisit2}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
-                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekReturnVisit1}}/{{dataJson.thisWeekReturnVisit2}}</div>
-                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthReturnVisit1}}/{{dataJson.thisMonthReturnVisit2}}</div>
+                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.highIntentionNum_thisDayFirstCon}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.weekHighIntention_thisWeekFirstCon}}</div>
+                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthHighIntention_thisMonthFirstCon}}</div>
                 </div>
             </div>
 
             <div class="target-four">
                 <div>
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_3.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日通话时长</span>
+                    <span style="position: relative; top: -7px; left: 8px;">出勤/通话人数</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayTalkTime}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); margin-top: 10px;">
-                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周平均时长 {{dataJson.thisWeekTalkTime}}</div>
-                    <div style="width: 50%; display: inline-block;">本月平均时长 {{dataJson.thisMonthTalkTime}}</div>
+                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.attendanceNum}}/{{dataJson.callUserNum}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">人均拨打 {{dataJson.userCallAverageNum}}</div>
+                    <div style="width: 50%; display: inline-block;">人均时长 {{dataJson.todayTalkAverageTime}}</div>
                 </div>
             </div>
 
@@ -138,6 +138,12 @@
 
             </el-col>
 
+            <el-col :span="16">
+
+                <el-button @click="salesOrgBoardDetailsClick" style="float:right;" plain size="small">详 情</el-button>
+
+            </el-col>
+
         </el-row>
 
         <el-table
@@ -157,6 +163,13 @@
             </el-table-column>
 
         </el-table>
+
+        <SalesOrgBoardDetails 
+            v-if="boardFlag"
+            @changeBoardFlag="changeBoardFlag"
+            :boardFlag.sync='boardFlag'
+        >
+        </SalesOrgBoardDetails>
         
     </el-main>
 </template>
@@ -164,12 +177,16 @@
 <script>
 import { 
     orgDayWork,
-    todayWork
+    orgTodayWork
 } from '../../request/api';
 import {  } from '../../assets/js/data';
 import { timeReturn } from '../../assets/js/common';
+import SalesOrgBoardDetails from '@/components/Share/SalesOrgBoardDetails';
 export default {
     name: 'salesOrgBoard',
+    components: {
+        SalesOrgBoardDetails
+    },
     data() {
         return {
             form: {
@@ -179,10 +196,10 @@ export default {
             totalFlag: false,
             columnList: [
                 { 'prop': 'heji', 'label': '' },
-                { 'prop': 'callTime', 'label': '总通话时长' },
-                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120},
-                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120},
-                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120},
+                { 'prop': 'callTime', 'label': '总通话时长', width: 120 },
+                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
+                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120 },
+                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
                 { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120 },
                 { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
                 { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140 },
@@ -234,21 +251,41 @@ export default {
                 }]
             },
             dataJson: {},
+            boardFlag: false,
         }
     },
     created() {
-        this.todayWork();
+        this.orgTodayWork();
     },
     methods: {
-        todayWork() {
+        changeBoardFlag(val){
+            this.boardFlag = val;
+        },
+        salesOrgBoardDetailsClick() {
+            this.boardFlag = true;
+        },
+        orgTodayWork() {
             this.fullscreenLoadingBoard = true;
-            this.$smoke_get(todayWork, {}).then(res => {
+            this.$smoke_get(orgTodayWork, {}).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoadingBoard = false;
-                        res.data.todayTalkTime = timeReturn(res.data.todayTalkTime);
-                        res.data.thisWeekTalkTime = timeReturn(res.data.thisWeekTalkTime);
-                        res.data.thisMonthTalkTime = timeReturn(res.data.thisMonthTalkTime);
+                        res.data.todayTalkAverageTime = timeReturn(res.data.todayTalkAverageTime);
+                        if(res.data.thisDayFirstCon == 0) {
+                            res.data.highIntentionNum_thisDayFirstCon = 0 + '%';
+                        }else{
+                            res.data.highIntentionNum_thisDayFirstCon = ((res.data.highIntentionNum / res.data.thisDayFirstCon) * 100).toFixed(2) + '%';
+                        }
+                        if(res.data.thisWeekFirstCon == 0) {
+                            res.data.weekHighIntention_thisWeekFirstCon = 0 + '%';
+                        }else{
+                            res.data.weekHighIntention_thisWeekFirstCon = ((res.data.weekHighIntention / res.data.thisWeekFirstCon) * 100).toFixed(2) + '%';
+                        }
+                        if(res.data.thisMonthFirstCon == 0) {
+                            res.data.thisMonthHighIntention_thisMonthFirstCon = 0 + '%';
+                        }else{
+                            res.data.thisMonthHighIntention_thisMonthFirstCon = ((res.data.thisMonthHighIntention / res.data.thisMonthFirstCon) * 100).toFixed(2) + '%';
+                        }
                         this.dataJson = res.data;
                     }, 300);
                 }else {
@@ -349,6 +386,7 @@ export default {
                 background: #fff;
                 text-align: center;
                 padding-top: 20px;
+                position: relative;
             }
         }
     }
