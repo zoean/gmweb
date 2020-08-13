@@ -3,7 +3,7 @@
 
         <div class="people-title">目标完成情况</div>
 
-        <div class="board-target">
+        <div class="board-target" v-loading="loadingNum">
 
             <div class="target-two">
 
@@ -14,20 +14,20 @@
 
                 <div style="display: flex; justify-content: space-between; text-align: center;">
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #409EFF;">10</p>
+                        <p style="font-size: 36px; color: #409EFF;">{{saleAimsForm.aims}}</p>
                         <p style="font-size: 12px; color: #999999;">目标（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">3</p>
+                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.entry}}</p>
                         <p style="font-size: 12px; color: #999999;">完成（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">7</p>
+                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.aims_entry}}</p>
                         <p style="font-size: 12px; color: #999999;">未完成（万元）</p>
                     </div>
                 </div>
 
-                <el-progress :text-inside="true" :stroke-width="24" :percentage="30" style="width: 80%; margin: 34px auto;"></el-progress>
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="saleAimsForm.aims_entry_lv" style="width: 80%; margin: 34px auto;"></el-progress>
 
             </div>
 
@@ -40,20 +40,20 @@
 
                 <div style="display: flex; justify-content: space-between; text-align: center;">
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #409EFF;">10</p>
+                        <p style="font-size: 36px; color: #409EFF;">{{saleAimsForm.monthAims}}</p>
                         <p style="font-size: 12px; color: #999999;">目标（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">3</p>
+                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.monthEntry}}</p>
                         <p style="font-size: 12px; color: #999999;">完成（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">7</p>
+                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.monthAims_monthEntry}}</p>
                         <p style="font-size: 12px; color: #999999;">未完成（万元）</p>
                     </div>
                 </div>
 
-                <el-progress :text-inside="true" :stroke-width="24" :percentage="30" style="width: 80%; margin: 34px auto;"></el-progress>
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="saleAimsForm.monthAims_monthEntry_lv" style="width: 80%; margin: 34px auto;"></el-progress>
 
             </div>
 
@@ -177,7 +177,8 @@
 <script>
 import { 
     orgDayWork,
-    orgTodayWork
+    orgTodayWork,
+    orgSaleAims
 } from '../../request/api';
 import {  } from '../../assets/js/data';
 import { timeReturn } from '../../assets/js/common';
@@ -252,12 +253,50 @@ export default {
             },
             dataJson: {},
             boardFlag: false,
+            saleAimsForm: {
+                aims: '',
+                entry: '',
+                aims_entry: '',
+                aims_entry_lv: '',
+                monthAims: '',
+                monthEntry: '',
+                monthAims_monthEntry: '',
+                monthAims_monthEntry_lv: '',
+            },
+            loadingNum: false,
         }
     },
     created() {
         this.orgTodayWork();
+        this.orgSaleAims();
     },
     methods: {
+        orgSaleAims() {
+            this.loadingNum = true;
+            this.$smoke_get(orgSaleAims, {}).then(res => {
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.loadingNum = false;
+                        this.saleAimsForm.aims = (res.data.aims / 10000).toFixed(2);
+                        this.saleAimsForm.entry = (res.data.entry / 10000).toFixed(2);
+                        this.saleAimsForm.aims_entry = ((res.data.aims - res.data.entry) / 10000).toFixed(2);
+                        this.saleAimsForm.aims_entry_lv = ((res.data.entry / res.data.aims) * 100).toFixed(2);
+                        this.saleAimsForm.monthAims = (res.data.monthAims / 10000).toFixed(2);
+                        this.saleAimsForm.monthEntry = (res.data.monthEntry / 10000).toFixed(2);
+                        this.saleAimsForm.monthAims_monthEntry = ((res.data.monthAims - res.data.monthEntry) / 10000).toFixed(2);
+                        this.saleAimsForm.monthAims_monthEntry_lv = ((res.data.monthEntry / res.data.monthAims) * 100).toFixed(2);
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.loadingNum = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
+            })
+        },
         changeBoardFlag(val){
             this.boardFlag = val;
         },

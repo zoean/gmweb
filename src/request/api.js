@@ -311,6 +311,10 @@ export const upWxNum = '/api/phone/saleAddWX/upWxNum' //销售修改微信数量
 //数据看板
 export const dayWork = '/api/data/saleStatistics/dayWork' //获取销售每天的工作情况的数据看板
 export const orgDayWork = '/api/data/saleStatistics/orgDayWork' //获取组织下销售人员工作情况的数据看板
+export const orgDayWorkSum = '/api/data/saleStatistics/orgDayWorkSum' //获取组织下销售人员每天的工作情况的数据汇总看板
 export const todayWork = '/api/data/saleStatistics/todayWork' //获取销售今天工作情况的数据看板
 export const orgTodayWork = '/api/data/saleStatistics/orgTodayWork' //获取组织下销售人员今天工作情况汇总的数据看板
 export const orgSaleDayWork = '/api/data/saleStatistics/orgSaleDayWork' //获取组织下销售人员每天的工作情况的数据看板
+export const saleDataOrg = '/api/data/saleStatistics/saleDataOrg' //获取销售的数据组织权限
+export const orgSaleAims = '/api/data/saleStatistics/orgSaleAims' //获取组织的销售人员的今日目标完成情况
+export const saleAims = '/api/data/saleStatistics/saleAims' //获取销售的今日目标完成情况
