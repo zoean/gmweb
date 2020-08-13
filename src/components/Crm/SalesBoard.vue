@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <el-progress :text-inside="true" :stroke-width="24" :percentage="saleAimsForm.aims_entry_lv" style="width: 80%; margin: 34px auto;"></el-progress>
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="Number(saleAimsForm.aims_entry_lv)" style="width: 80%; margin: 34px auto;"></el-progress>
 
             </div>
 
@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <el-progress :text-inside="true" :stroke-width="24" :percentage="saleAimsForm.monthAims_monthEntry_lv" style="width: 80%; margin: 34px auto;"></el-progress>
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="Number(saleAimsForm.monthAims_monthEntry_lv)" style="width: 80%; margin: 34px auto;"></el-progress>
 
             </div>
 
