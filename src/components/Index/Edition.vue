@@ -3,6 +3,15 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.6 -- 2020/08/14" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、完善销售看板数据</p>
+          <p>2、完善销售主管看板数据</p>
+          <h4>修复bug</h4>
+          <p>1、修复了一键复制手机号码在Safari浏览器下的兼容性bug</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.5 -- 2020/08/11" placement="top">
         <el-card>
           <h4>新增功能</h4>
