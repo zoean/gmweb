@@ -847,6 +847,7 @@ export const copyData = (data) => {
     oInput.value = url;
     document.body.appendChild(oInput);
     oInput.select(); // 选择对象;
+    oInput.setSelectionRange(0, 20);
     document.execCommand("Copy"); // 执行浏览器复制命令
     oInput.remove();
 }
