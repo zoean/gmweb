@@ -503,6 +503,7 @@ export default {
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {
+            var that = this;
             this.$smoke_post(copyTel, {
                 uuid: id
             }).then(res => {
@@ -510,12 +511,19 @@ export default {
                     var clipboard = new ClipboardJS('.copy-tel', {
                     // 点击copy按钮，直接通过text直接返回复印的内容
                         text: function() {
-                            return 'to be or not to be';
+                            return res.data;
                         }
                     });
-                    this.$message({
-                        type: 'success',
-                        message: '复制成功',
+                    clipboard.on('success', function(e) {
+	                	//alert(e.text);
+	                	clipboard.destroy();// 复制完毕删除，否则会有创建多个clipboard对象
+                        that.$message({
+                            type: 'success',
+                            message: '复制成功',
+                        });
+                    });
+                    clipboard.on('error', function(e) {
+                        console.log(e);
                     });
                 }else{
                     this.$message({
