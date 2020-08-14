@@ -172,7 +172,7 @@
                     </el-tooltip>
                     <span v-else>{{scope.row[item.props] || '- -'}}</span>
 
-                    <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
+                    <svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
                     
               </template>
             </el-table-column>

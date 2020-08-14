@@ -42,7 +42,7 @@
               >
               <template slot-scope="scope">
                     <span>{{scope.row[item.prop]}}</span>
-                    <svg-icon class="copy-tel" v-if="item.prop == 'phone'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
+                    <svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.prop == 'phone'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
               </template>
             </el-table-column>
 
