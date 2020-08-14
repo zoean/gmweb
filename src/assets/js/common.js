@@ -842,15 +842,13 @@ export const menuNumberFunc = (arr, brr) => {
 //copyData
 
 export const copyData = (data) => {
-    navigator.clipboard.writeText(data)
-    .then(() => {
-      console.log('文本已经成功复制到剪切板');
-    })
-    .catch(err => {
-      // This can happen if the user denies clipboard permissions:
-      // 如果用户没有授权，则抛出异常
-      console.error('无法复制此文本：', err);
-    });
+    let oInput = document.createElement('input');
+    oInput.value = data;
+    document.body.appendChild(oInput);
+    oInput.select(); // 选择对象;
+    oInput.setSelectionRange(0, 9999);
+    document.execCommand("Copy"); // 执行浏览器复制命令
+    oInput.remove();
 }
 
 export const urlFun = (url) => {

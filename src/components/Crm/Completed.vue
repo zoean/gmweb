@@ -507,7 +507,12 @@ export default {
                 uuid: id
             }).then(res => {
                 if(res.code == 200) {
-                    copyData(res.data);
+                    var clipboard = new ClipboardJS('.copy-tel', {
+                    // 点击copy按钮，直接通过text直接返回复印的内容
+                        text: function() {
+                            return 'to be or not to be';
+                        }
+                    });
                     this.$message({
                         type: 'success',
                         message: '复制成功',
