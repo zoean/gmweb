@@ -459,6 +459,9 @@ export const sortTextNum = (text) => {
         case 'createTime':
             str = 0;
             break;
+        case 'num':
+            str = 0;
+            break;
         case 'school':
             str = 1;
             break;
@@ -466,6 +469,9 @@ export const sortTextNum = (text) => {
             str = 1;
             break;
         case 'receiveTime':
+            str = 1;
+            break;
+        case 'countNum':
             str = 1;
             break;
         case 'hiredDate':

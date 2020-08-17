@@ -1,7 +1,7 @@
 <template>
 <el-main class="index-main">
-  <el-row :gutter="20" type="flex">
-    <el-col :span="7">
+  <el-row>
+    <el-col :span="8">
       <el-date-picker
         v-model="dateRange"
         size="small"
@@ -11,6 +11,7 @@
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
+        style="width: 95%"
         @change="changeDateRange">
       </el-date-picker>
     </el-col>
@@ -20,6 +21,7 @@
         placeholder="请选择坐席组织架构"
         :options="orgOptions"
         :props="props"
+        style="width: 90%"
         collapse-tags
         :show-all-levels=false
         @change="orgChange"
@@ -27,22 +29,26 @@
       </el-cascader>
     </el-col>
     <el-col :span="4">
-      <el-input size="small" v-model="searchForm.saleName" placeholder="请输入坐席名字"></el-input>
+      <el-input size="small" v-model="searchForm.saleName" style="width: 90%" placeholder="请输入坐席名字"></el-input>
     </el-col>
     <el-col :span="4">
       <el-button type="primary" size="small" @click="searchList">查询</el-button>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="4">
       <el-button v-if="buttonMap.addWechatNum" type="primary" size="small" @click="addWechatData" style="float: right;">新增</el-button>
     </el-col>
   </el-row>
   <el-table 
   :data="list"  
+  @sort-change="sortChange"
+  :summary-method="getSummaries"
+  show-summary
   >
     <el-table-column
     v-for="(item, index) in tableProps"
     :key="index"
     :prop="item.prop"
+    :sortable="item.prop == 'num' ? 'custom' : item.prop == 'countNum' ? 'custom' : false"
     :label="item.label">
       <!-- <template slot-scope="scope">
         <span>{{scope.row[item.prop] || '- -'}}</span>
@@ -75,7 +81,8 @@
 </el-main>
 </template>
 <script>
-import {clTeaOrgFilterBox, wxNumList, upWxNum} from '@/request/api'
+import {clTeaOrgFilterBox, wxNumList, upWxNum} from '@/request/api';
+import {sortTextNum} from '@/assets/js/common';
 export default {
   data() {
     var validateNumber = (rule, value, callback) => {
@@ -95,8 +102,13 @@ export default {
         userUuid: '',
         total: 0,
         pageSize: 20,
-        currentPage: 1
+        currentPage: 1,
+        sortSet: [], //排序集合
       },
+      sortSetList: [
+        {'num': ''},
+        {'countNum': ''},
+      ],
       addWechatNumForm: {
         num: 0,
         saleUuid: ''
@@ -144,7 +156,47 @@ export default {
     this.searchForm.userUuid = localStorage.getItem('userUuid')
     this.buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
   },
-  methods: {   
+  methods: {
+    getSummaries(param) {
+      //合计
+      const { columns, data } = param;
+      // console.log(columns, data);
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = "合计";
+          return;
+        }
+        const values = data.map((item) => {
+          // console.log(item, item[column.property], column, column.property);
+          return Number(item[column.property]); //如果直接取值a[a.b]取不到
+        });
+        // console.log(values);
+        if (!values.every((value) => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+        }
+        // console.log(index);
+      });
+      return sums;
+    },
+    sortChange(data) {
+      this.searchForm.sortSet = [];
+      const id = sortTextNum(data.prop);
+      if(data.order == "descending"){
+          this.sortSetList[id][data.prop] = 'DESC';
+      }else if(data.order == "ascending"){
+          this.sortSetList[id][data.prop] = 'ASC';
+      }
+      this.searchForm.sortSet.push(this.sortSetList[id]);
+      this.getWxNumList();
+    },
     inputExcludeE(value){
       console.log(this.addWechatNumForm.num)
       if(value.match(/[^\d]/)){
