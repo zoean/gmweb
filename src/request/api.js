@@ -318,3 +318,18 @@ export const orgSaleDayWork = '/api/data/saleStatistics/orgSaleDayWork' //获取
 export const saleDataOrg = '/api/data/saleStatistics/saleDataOrg' //获取销售的数据组织权限
 export const orgSaleAims = '/api/data/saleStatistics/orgSaleAims' //获取组织的销售人员的今日目标完成情况
 export const saleAims = '/api/data/saleStatistics/saleAims' //获取销售的今日目标完成情况
+
+//(主管)部门目标管理
+export const getManageOrgList = '/api/data/deptTarget/getManageOrgList' //查询当前登录用户管理的组织
+export const getLastDeptYear = '/api/data/deptTarget/getLastDeptYear' //查询上级部门和子部门的年度目标流水
+export const addOrEditYear = '/api/data/deptTarget/addOrEditYear' //部门 - 年 -新增 | 修改 年度目标
+export const getYearDetail = '/api/data/deptTarget/getYearDetail' //部门 - 年 -查询年目标详情
+export const getYearList = '/api/data/deptTarget/getYearList' //部门 - 年 - 目标列表
+export const getLastDeptMonth = '/api/data/deptTarget/getLastDeptMonth' //查询上级部门和子部门的月度目标流水
+export const addOrEditMonth = '/api/data/deptTarget/addOrEditMonth' //部门 - 月 -新增 | 修改 月度目标
+export const getMonthDetail = '/api/data/deptTarget/getMonthDetail' //部门 - 月 -查询月目标详情
+export const getMonthList = '/api/data/deptTarget/getMonthList' //部门 - 月 - 目标列表
+export const addOrEditDaily = '/api/data/deptTarget/addOrEditDaily' //部门 - 日 -新增 | 修改 日目标
+export const getDailyDetail = '/api/data/deptTarget/getDailyDetail' //部门 - 日 -查询日目标详情
+export const getLastDeptDaily = '/api/data/deptTarget/getLastDeptDaily' //部门 - 日 - 查询上级部门和子部门的日目标流水
+export const getDailyList = '/api/data/deptTarget/getDailyList' //部门 - 日 - 目标列表
