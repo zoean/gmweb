@@ -724,7 +724,7 @@ export default {
                 { 'prop': 'callStyle', 'label': '呼叫方式' },
                 { 'prop': 'duration', 'label': '通话时长(秒)' },
                 { 'prop': 'ringTime', 'label': '响铃时长(秒)' },
-                { 'prop': 'recordUrl', 'label': '录音地址' },
+                // { 'prop': 'recordUrl', 'label': '录音地址' },
             ],
             columnWidth: 90,
             columnFlag: false,

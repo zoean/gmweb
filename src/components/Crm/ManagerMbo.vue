@@ -6,13 +6,40 @@
                 
             </el-tab-pane>
         </el-tabs>
+
+        <el-radio-group size="small" v-model="radioTime">
+            <el-radio-button label="年"></el-radio-button>
+            <el-radio-button label="月"></el-radio-button>
+            <el-radio-button label="日"></el-radio-button>
+        </el-radio-group>
+
+        <el-row style="margin-top: 14px;">
+            <el-col :span="4">
+                <el-date-picker
+                    style="width: 100%;"
+                    size="small"
+                    v-model="yearTime"
+                    value-format="timestamp"
+                    type="year"
+                    @change="changeTime"
+                    placeholder="选择年度">
+                </el-date-picker>
+            </el-col>
+
+            <el-col :span="4">
+                <el-button type="primary" size="small" style="margin-left: 20px;" @click="getYearListClick">查 询</el-button>
+            </el-col>
+        </el-row>
+
+        
         
     </el-main>
 </template>
 
 <script>
 import { 
-  getManageOrgList
+  getManageOrgList,
+  getYearList
 } from '../../request/api';
 import { 
   timestampToTime,
@@ -22,14 +49,36 @@ export default {
     name: 'ManagerMbo',
     data() {
         return {
-            activeName: 'first',
+            activeName: '',
             orgList: [],
+            radioTime: '年',
+            yearTime: '',
         }
     },
     created() {
         this.getManageOrgList();
     },
     methods: {
+        getYearListClick() {
+            let arr = [];
+            arr.push(this.yearTime);
+            this.$smoke_post(getYearList, {
+                orgUuid: this.activeName,
+                yearOrMonths: arr
+            }).then(res => {
+                if(res.code == 200) {
+                    
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
+        changeTime(val) {
+            console.log(val);
+        },
         getManageOrgList() {
             this.$smoke_post(getManageOrgList, {
                 userId: localStorage.getItem('userUuid')
