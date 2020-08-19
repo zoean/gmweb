@@ -273,6 +273,8 @@ export default {
             this.form.receiveEndTime = obj.receiveEndTime;
             if(this.tag_id == 6) {
                 this.form.dataType = 2;
+            }else if(this.tag_id == ''){
+                this.form.dataType = '';
             }else{
                 this.form.dataType = 1;
             }

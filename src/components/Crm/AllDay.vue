@@ -469,7 +469,7 @@ export default {
                 this.form.dataType = 2;
                 this.geSeatWork();
             }else if(this.tag_id == ''){
-                this.form.dataType = 1;
+                this.form.dataType = '';
             }else{
                 this.form.dataType = 1;
                 this.geSeatWork();

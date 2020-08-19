@@ -2,10 +2,7 @@
     <el-main class="index-main">
 
         <el-tabs v-model="activeName" @tab-click="tabChange">
-            <el-tab-pane label="用户管理" name="first">
-                
-            </el-tab-pane>
-            <el-tab-pane label="配置管理" name="second">
+            <el-tab-pane :label="item.orgName" :name="item.orgUuid" v-for="(item,index) in orgList" :key="index">
                 
             </el-tab-pane>
         </el-tabs>
@@ -26,7 +23,7 @@ export default {
     data() {
         return {
             activeName: 'first',
-
+            orgList: [],
         }
     },
     created() {
@@ -38,9 +35,15 @@ export default {
                 userId: localStorage.getItem('userUuid')
             }).then(res => {
                 if(res.code == 200) {
-
+                    this.orgList = res.data;
+                    if(res.data.length != 0) {
+                        this.activeName = res.data[0].orgUuid;
+                    }
                 }else{
-
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
                 }
             })
         },

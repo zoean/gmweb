@@ -38,11 +38,13 @@
       <el-button v-if="buttonMap.addWechatNum" type="primary" size="small" @click="addWechatData" style="float: right;">新增</el-button>
     </el-col>
   </el-row>
+
+  <div class="number_search" style="margin-top: 16px;"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />
+本次查询【新增客户微信数量】合计：{{countVO.num || 0}}，【累计客户微信数量】合计：{{countVO.countNum || 0}}</div>
+
   <el-table 
   :data="list"  
   @sort-change="sortChange"
-  :summary-method="getSummaries"
-  show-summary
   >
     <el-table-column
     v-for="(item, index) in tableProps"
@@ -147,7 +149,8 @@ export default {
             validator: validateNumber, trigger: 'change'
           }
         ]
-      }
+      },
+      countVO: {}
     }
   },
   created(){
@@ -157,35 +160,6 @@ export default {
     this.buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
   },
   methods: {
-    getSummaries(param) {
-      //合计
-      const { columns, data } = param;
-      // console.log(columns, data);
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "合计";
-          return;
-        }
-        const values = data.map((item) => {
-          // console.log(item, item[column.property], column, column.property);
-          return Number(item[column.property]); //如果直接取值a[a.b]取不到
-        });
-        // console.log(values);
-        if (!values.every((value) => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0);
-        }
-        // console.log(index);
-      });
-      return sums;
-    },
     sortChange(data) {
       this.searchForm.sortSet = [];
       const id = sortTextNum(data.prop);
@@ -207,6 +181,7 @@ export default {
       this.$smoke_post(wxNumList, this.searchForm).then(res => {
         if(res.code == 200){
           this.list = res.data.list
+          this.countVO = res.data.countVO
           this.searchForm.total = res.data.total
         }
       })
