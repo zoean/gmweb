@@ -17,6 +17,9 @@ const state = {
     curDate: '',
     pageNum: '',//页面编号
     editFieldVisible: false,//页面字段排序dialog
+    curYear: '',
+    curMonth: '',
+    curDay: ''
 }
 
 const mutations = {
@@ -58,6 +61,10 @@ const mutations = {
     },
     setCurrentDate(state, time){
         state.curDate = timestampToTime(Number(time)).slice(0, 10)
+        sessionStorage.setItem('curYear', state.curDate.split('-')[0])
+        sessionStorage.setItem('curMonth', state.curDate.split('-')[1])
+        sessionStorage.setItem('curDay', state.curDate.split('-')[2])
+        sessionStorage.setItem('curTime', time)
     }
 }
 

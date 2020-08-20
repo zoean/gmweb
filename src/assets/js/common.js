@@ -7,6 +7,11 @@ export function isExternal(path) {
     return /^(https?:|mailto:|tel:)/.test(path)
 }
 
+export function formatNumber(n) {
+    n = n.toString()
+    return n[1] ? n : '0' + n
+  }
+
 export const getTextByJs = (arr) => {
     let str = "";
     for (var i = 0; i < arr.length; i++) {

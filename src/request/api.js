@@ -306,7 +306,23 @@ export const orgReturnVisit = '/api/phone/qualityTesting/orgReturnVisit' //质�
 
 //微信管理
 export const wxNumList = '/api/phone/saleAddWX/wxNumList' //获取销售添加微信数量集合
-export const upWxNum = '/api/phone/saleAddWX/upWxNum' //销售修改微信数量
+export const upWxNum= '/api/phone/saleAddWX/upWxNum' //销售修改微信数量
+
+//目标管理
+export const getYearTargetList = '/api/data/companyTarget/getYearTargetList' //公司年目标列表
+export const getLastYear = '/api/data/companyTarget/getLastYear' //查询公司上一年总流水
+export const addOrEditYearTarget = '/api/data/companyTarget/addOrEditYearTarget' //新增 | 修改 公司年度目标
+export const getComYearDetail = '/api/data/companyTarget/getComYearDetail' //查询公司年目标详情
+
+export const getCurrentYear = '/api/data/companyTarget/getCurrentYear' //公司本年度所有月的目标流水
+export const getComMonthList = '/api/data/companyTarget/getComMonthList' //公司月目标列表
+export const getComMonthDetail = '/api/data/companyTarget/getComMonthDetail' //查询公司月份目标详情
+export const addOrEditMonthTarget = '/api/data/companyTarget/addOrEditMonthTarget' //新增 | 修改 公司月份目标
+
+export const getCurrentMonth = '/api/data/companyTarget/getCurrentMonth' //查询公司本月所有天的目标流水
+export const getComDailyList = '/api/data/companyTarget/getComDailyList' //公司日目标列表
+export const getComDailyDetail = '/api/data/companyTarget/getComDailyDetail' //公司日目标详情
+export const addOrEditDailyTarget = '/api/data/companyTarget/addOrEditDailyTarget' //新增 | 修改 公司月份下的日目标
 
 //数据看板
 export const dayWork = '/api/data/saleStatistics/dayWork' //获取销售每天的工作情况的数据看板
