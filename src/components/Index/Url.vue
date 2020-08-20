@@ -52,6 +52,7 @@ export default {
         width: 100vw;
         .smoke_kuang{
           width: 100vw;
+          padding-bottom: 30px;
           .text{
             width: 88%;
             background: #fff;
