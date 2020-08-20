@@ -512,7 +512,7 @@ export default {
             line-height: 40px;
             text-align: center;
             font-size: 15px;
-            background: #F7F7F7;
+            background: #F1F1F1;
             margin-bottom: .3rem;
             color: #666666;
             position: relative;
