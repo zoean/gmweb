@@ -488,6 +488,8 @@ export default {
             }).then(res => {
                 this.ruleForm2.selectuuid = res.data.classifyOneName;
                 this.ruleForm2.classifyUuid = res.data.classifyTwoName;
+                this.ruleForm2.emphasisStatus = res.data.emphasisStatus;
+                this.ruleForm2.userOpenStatus = res.data.userOpenStatus;
                 this.oneParentUuid = res.data.classifyOneUuid;
                 this.twoParentUuid = res.data.classifyTwoUuid;
                 this.editTwoUuid = res.data.classifyTwoUuid;
