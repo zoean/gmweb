@@ -1,8 +1,10 @@
 <template>
     <div class="main-area">
         <div class="smoke">
-          <el-image :src="require('../../assets/images/baokao.png')" style="width: 100%;"></el-image>
-          <div class="text" ref="text"></div>
+          <el-image :src="require('../../assets/images/message.png')" style="width: 100%;"></el-image>
+          <div class="smoke_kuang">
+            <div class="text" ref="text"></div>
+          </div>
         </div>
     </div>
 </template>
@@ -44,23 +46,25 @@ export default {
 <style lang="less" scoped>
     .main-area{
       width: 100vw;
-      min-height: 110vh;
-      background: #587cf7;
+      min-height: 100vh;
+      background: #4F71E1;
       .smoke{
         width: 100vw;
-        position: relative;
-        .text{
-          width: 88%;
-          background: #fff;
-          padding: 20px;
-          border-radius: 6px;
-          left: 6%;
-          font-size: .8rem;
-          color: #333;
-          position: absolute;
-          top: 230px;
-          line-height: 1.9;
-          word-break:break-all;
+        .smoke_kuang{
+          width: 100vw;
+          padding-bottom: 30px;
+          .text{
+            width: 88%;
+            background: #fff;
+            padding: 20px;
+            margin: 0 auto;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: .8rem;
+            color: #333;
+            line-height: 1.9;
+            word-break:break-all;
+          }
         }
       }
     }

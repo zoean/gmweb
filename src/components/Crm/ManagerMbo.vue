@@ -29,9 +29,11 @@
             <el-col :span="4">
                 <el-button type="primary" size="small" style="margin-left: 20px;" @click="getYearListClick">查 询</el-button>
             </el-col>
-        </el-row>
 
-        
+            <el-col :span="16">
+                <el-button size="small" style="float: right;" plain @click="addClick">新 增</el-button>
+            </el-col>
+        </el-row>
         
     </el-main>
 </template>
@@ -59,6 +61,9 @@ export default {
         this.getManageOrgList();
     },
     methods: {
+        addClick() {
+
+        },
         getYearListClick() {
             let arr = [];
             arr.push(this.yearTime);
@@ -67,7 +72,7 @@ export default {
                 yearOrMonths: arr
             }).then(res => {
                 if(res.code == 200) {
-                    
+                    this.monthTableList = res.data
                 }else{
                     this.$message({
                         type: 'error',
