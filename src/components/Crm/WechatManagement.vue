@@ -172,7 +172,6 @@ export default {
       this.getWxNumList();
     },
     inputExcludeE(value){
-      console.log(this.addWechatNumForm.num)
       if(value.match(/[^\d]/)){
         return Number(value.replace(/[^\d]/g, ''))
       }
