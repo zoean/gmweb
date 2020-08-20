@@ -51,6 +51,10 @@ import studentsNewBaoKao from '@/components/Crm/StudentsNewBaoKao';
 import studentsAllBaoKao from '@/components/Crm/StudentsAllBaoKao';
 import studentsMyBaoKao from '@/components/Crm/StudentsMyBaoKao';
 import eduData from '@/components/Crm/EduData';
+import managermbo from '@/components/Crm/ManagerMbo';
+
+import salesBoard from '@/components/Crm/SalesBoard';
+import salesOrgBoard from '@/components/Crm/SalesOrgBoard';
 
 import orgOpenClass from '@/components/Crm/OrgOpenClass';
 import openClass from '@/components/Crm/OpenClass';
@@ -166,6 +170,24 @@ export default new Router({
             name: 'eduData',
             component: eduData
         },
+
+        {
+            path: '/crm/mbo/managermbo',
+            name: 'managermbo',
+            component: managermbo
+        },
+
+        {
+            path: '/crm/salesBoard/salesBoard',
+            name: 'salesBoard',
+            component: salesBoard
+        },
+        {
+            path: '/crm/salesBoard/salesOrgBoard',
+            name: 'salesOrgBoard',
+            component: salesOrgBoard
+        },
+
         {
             path: '/crm/dataStatistics/recoverData',
             name: 'recoverData',

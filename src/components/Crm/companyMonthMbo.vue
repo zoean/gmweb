@@ -91,7 +91,7 @@
   </el-main>
 </template>
 <script>
-import {getCurrentYear, getMonthList, getMonthDetail, addOrEditMonthTarget} from '@/request/api'
+import {getCurrentYear, getComMonthList, getComMonthDetail, addOrEditMonthTarget} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
   data() {
@@ -221,7 +221,7 @@ export default{
       return timestampToTime(Number(cellValue)).slice(0, 4)
     },
     getMonthTargetList: function(){
-      this.$smoke_post(getMonthList, this.searchForm).then(res => {
+      this.$smoke_post(getComMonthList, this.searchForm).then(res => {
         if(res.code == 200){
           this.monthTableList = res.data[0].list
         }

@@ -464,6 +464,9 @@ export const sortTextNum = (text) => {
         case 'createTime':
             str = 0;
             break;
+        case 'num':
+            str = 0;
+            break;
         case 'school':
             str = 1;
             break;
@@ -471,6 +474,9 @@ export const sortTextNum = (text) => {
             str = 1;
             break;
         case 'receiveTime':
+            str = 1;
+            break;
+        case 'countNum':
             str = 1;
             break;
         case 'hiredDate':
@@ -847,11 +853,11 @@ export const menuNumberFunc = (arr, brr) => {
 //copyData
 
 export const copyData = (data) => {
-    let url = data;
     let oInput = document.createElement('input');
-    oInput.value = url;
+    oInput.value = data;
     document.body.appendChild(oInput);
     oInput.select(); // 选择对象;
+    oInput.setSelectionRange(0, 9999);
     document.execCommand("Copy"); // 执行浏览器复制命令
     oInput.remove();
 }

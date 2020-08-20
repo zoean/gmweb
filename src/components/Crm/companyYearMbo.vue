@@ -82,7 +82,7 @@
   </el-main>
 </template>
 <script>
-import {getYearTargetList, getLastYear, getYearDetail, addOrEditYearTarget} from '@/request/api'
+import {getYearTargetList, getLastYear, getComYearDetail, addOrEditYearTarget} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
   data() {

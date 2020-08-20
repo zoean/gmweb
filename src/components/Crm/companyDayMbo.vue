@@ -20,7 +20,7 @@
               </el-date-picker>
               </el-col>
               <el-col>
-                <el-button size="mini" type="primary" @click="getDailyList">查询</el-button>
+                <el-button size="mini" type="primary" @click="getComDailyList">查询</el-button>
               </el-col>
             </el-row>
           </el-col>
@@ -90,7 +90,7 @@
   </el-main>
 </template>
 <script>
-import {getCurrentMonth, getDailyList, getDailyDetail, addOrEditDailyTarget} from '@/request/api'
+import {getCurrentMonth, getComDailyList, getComDailyDetail, addOrEditDailyTarget} from '@/request/api'
 import {timestampToTime, formatNumber} from '@/assets/js/common'
 export default{
   data() {
@@ -163,7 +163,7 @@ export default{
     }
   },
   created() {  
-    this.getDailyList()
+    this.getComDailyList()
   },
   methods: {
     tabClick(tab, event){
@@ -186,8 +186,8 @@ export default{
         return row.daily.slice(8)
       }
     },
-    getDailyList: function(){
-      this.$smoke_post(getDailyList, this.searchForm).then(res => {
+    getComDailyList: function(){
+      this.$smoke_post(getComDailyList, this.searchForm).then(res => {
         if(res.code == 200){
           this.dailyTableList = res.data[0].list
         }
@@ -234,7 +234,7 @@ export default{
             if(res.code == 200){
               this.addEditDailyParams.visible = false
               if(this.addEditDailyParams.type == 2 || this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
-                this.getDailyList()
+                this.getComDailyList()
               }
               this.$message({
                 message: '添加成功',
