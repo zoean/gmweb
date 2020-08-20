@@ -148,7 +148,7 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <span><svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
+                    <span><svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
                     
               </template>
             </el-table-column>
@@ -469,7 +469,7 @@ export default {
                 this.form.dataType = 2;
                 this.geSeatWork();
             }else if(this.tag_id == ''){
-                this.form.dataType = 1;
+                this.form.dataType = '';
             }else{
                 this.form.dataType = 1;
                 this.geSeatWork();
@@ -654,11 +654,7 @@ export default {
                 uuid: id
             }).then(res => {
                 if(res.code == 200) {
-                    copyData(res.data);
-                    this.$message({
-                        type: 'success',
-                        message: '复制成功',
-                    });
+                    this.copyFun(res.data);
                 }else{
                     this.$message({
                         type: 'error',
@@ -666,7 +662,27 @@ export default {
                     })
                 }
             })
+        },
+        copyFun(text) {
+            var that = this;
+            var clipboard = new ClipboardJS('.copy-tel', {
+            // 点击copy按钮，直接通过text直接返回复印的内容
+                text: () => text
+            });
+            clipboard.on('success', function(e) {
+                that.$message({
+                    type: 'success',
+                    message: '复制成功',
+                });
+	        	clipboard.destroy();// 复制完毕删除，否则会有创建多个clipboard对象
+            });
+            clipboard.on('error', function(e) {
+                clipboard.destroy();
+            });
         }
+    },
+    mounted() {
+
     }
 }
 </script>

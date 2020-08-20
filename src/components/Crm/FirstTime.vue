@@ -42,7 +42,7 @@
               >
               <template slot-scope="scope">
                     <span>{{scope.row[item.prop]}}</span>
-                    <svg-icon class="copy-tel" v-if="item.prop == 'phone'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
+                    <svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.prop == 'phone'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
               </template>
             </el-table-column>
 
@@ -380,14 +380,27 @@ export default {
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {
+            var that = this;
             this.$smoke_post(copyTel, {
                 uuid: id
             }).then(res => {
                 if(res.code == 200) {
-                    copyData(res.data);
-                    this.$message({
-                        type: 'success',
-                        message: '复制成功',
+                    var clipboard = new ClipboardJS('.copy-tel', {
+                    // 点击copy按钮，直接通过text直接返回复印的内容
+                        text: function() {
+                            return res.data;
+                        }
+                    });
+                    clipboard.on('success', function(e) {
+	                	//alert(e.text);
+	                	clipboard.destroy();// 复制完毕删除，否则会有创建多个clipboard对象
+                        that.$message({
+                            type: 'success',
+                            message: '复制成功',
+                        });
+                    });
+                    clipboard.on('error', function(e) {
+                        console.log(e);
                     });
                 }else{
                     this.$message({
