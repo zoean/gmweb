@@ -226,39 +226,34 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(getCallRecord, this.form).then(res => {
                 if(res.code == 200){
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-
-                        this.columnFlag = false;
-                        res.data.list.map((sll,index) => {
-                            sll.callStyle = getTextByTime(sll.callStyle, 3, 4, '外呼电话', '直线呼入');
-                            // sll.dealState = getTextByTime(sll.dealState, 1, 0, '处理', '未处理');
-                            // sll.hangupSide = getTextByTime(sll.hangupSide, 1, 2, '座席侧', '客户侧');
-                            sll.isCalledPhone = getTextByTime(sll.isCalledPhone, 1, 0, '接通', '其他');
-                            sll.pathway = getTextByTime(sll.pathway, 1, 2, '呼叫中心', '工作手机');
-                            sll.callerQueueTime = timestampToTime(sll.callerQueueTime);
-                            sll.callerStime = timestampToTime(sll.callerStime);
-                            sll.duration = timeReturn(sll.duration);
-                            sll.insertDbTime = timestampToTime(sll.insertDbTime);
-                            sll.insertTime = timestampToTime(sll.insertTime);
-                            sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
-                            if(sll.recordFile){
-                                this.columnWidth = 400;
-                                this.columnFlag = true;
-                            }
-                        })
-                        this.tableData = res.data.list;
-                        this.total = res.data.total;
-                        this.form.currentPage = res.data.currentPage;
-                    }, 300);
+                    this.fullscreenLoading = false;
+                    this.columnFlag = false;
+                    res.data.list.map((sll,index) => {
+                        sll.callStyle = getTextByTime(sll.callStyle, 3, 4, '外呼电话', '直线呼入');
+                        // sll.dealState = getTextByTime(sll.dealState, 1, 0, '处理', '未处理');
+                        // sll.hangupSide = getTextByTime(sll.hangupSide, 1, 2, '座席侧', '客户侧');
+                        sll.isCalledPhone = getTextByTime(sll.isCalledPhone, 1, 0, '接通', '其他');
+                        sll.pathway = getTextByTime(sll.pathway, 1, 2, '呼叫中心', '工作手机');
+                        sll.callerQueueTime = timestampToTime(sll.callerQueueTime);
+                        sll.callerStime = timestampToTime(sll.callerStime);
+                        sll.duration = timeReturn(sll.duration);
+                        sll.insertDbTime = timestampToTime(sll.insertDbTime);
+                        sll.insertTime = timestampToTime(sll.insertTime);
+                        sll.seatOrgName = sll.seatPOrgName + sll.seatOrgName;
+                        if(sll.recordFile){
+                            this.columnWidth = 400;
+                            this.columnFlag = true;
+                        }
+                    })
+                    this.tableData = res.data.list;
+                    this.total = res.data.total;
+                    this.form.currentPage = res.data.currentPage;
                 }else{
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }, 300)
+                    this.fullscreenLoading = false;
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
                 }
             })
         },

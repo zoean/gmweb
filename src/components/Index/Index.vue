@@ -1,7 +1,7 @@
 <template>
     <div class="main-area">
         <el-carousel trigger="click" height="300px">
-            <el-carousel-item v-for="item in bannerList" :key="item.url" style="background: #F7F7F7;">
+            <el-carousel-item v-for="item in bannerList" :key="item.url" style="background: #F1F1F1;">
                 <img :src="item.url" alt="">
             </el-carousel-item>
         </el-carousel>

@@ -1,7 +1,7 @@
 <template>
     <div class="main-area">
         <div class="smoke">
-          <el-image :src="require('../../assets/images/baokao.png')" style="width: 100%;"></el-image>
+          <el-image :src="require('../../assets/images/message.png')" style="width: 100%;"></el-image>
           <div class="text" ref="text"></div>
         </div>
     </div>
@@ -44,21 +44,14 @@ export default {
 <style lang="less" scoped>
     .main-area{
       width: 100vw;
-      min-height: 110vh;
-      background: #587cf7;
       .smoke{
         width: 100vw;
-        position: relative;
         .text{
-          width: 88%;
+          width: 100vw;
           background: #fff;
           padding: 20px;
-          border-radius: 6px;
-          left: 6%;
           font-size: .8rem;
           color: #333;
-          position: absolute;
-          top: 230px;
           line-height: 1.9;
           word-break:break-all;
         }

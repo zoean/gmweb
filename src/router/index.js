@@ -62,12 +62,18 @@ import returnOrgVisit from '@/components/Crm/ReturnOrgVisit';
 import returnVisit from '@/components/Crm/ReturnVisit';
 import wechatManagement from '@/components/Crm/WechatManagement';
 
+import companyYearMbo from '@/components/Crm/companyYearMbo'
+import companyMonthMbo from '@/components/Crm/companyMonthMbo'
+import companyDayMbo from '@/components/Crm/companyDayMbo'
+
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
 import subject from '@/components/Knowp/Subject';
 import know from '@/components/Knowp/Know';
 import vedio from '@/components/Knowp/Vedio';
 import contents from '@/components/Knowp/Contents';
+
+
 //运营活动
 import activityA from '@/components/Operate/ActivityA';
 import ActivityDetail  from '@/components/Operate/ActivityDetail'
@@ -368,6 +374,24 @@ export default new Router({
             path: '/crm/wechat/wechatManagement',
             name: 'wechatManagement',
             component: wechatManagement
+        },
+
+        {
+            path: '/crm/mbo/companyyearmbo',
+            name: 'companyyearmbo',
+            component: companyYearMbo
+        },
+
+        {
+            path: '/crm/mbo/companymonthmbo',
+            name: 'companymonthmbo',
+            component: companyMonthMbo
+        },
+
+        {
+            path: '/crm/mbo/companydaymbo',
+            name: 'companydaymbo',
+            component: companyDayMbo
         },
 
         {

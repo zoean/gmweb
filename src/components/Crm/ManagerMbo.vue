@@ -29,9 +29,30 @@
             <el-col :span="4">
                 <el-button type="primary" size="small" style="margin-left: 20px;" @click="getYearListClick">查 询</el-button>
             </el-col>
+
+            <el-col :span="16">
+                <el-button size="small" style="float: right;" plain @click="addClick">新 增</el-button>
+            </el-col>
         </el-row>
 
-        
+        <el-table :data="monthTableList" style="margin-top: 16px;" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+          <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
+          <el-table-column label="完成率">
+            <template slot-scope="scope">
+              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+            </template>
+          </el-table-column>
+          <el-table-column label="未完成">
+            <template slot-scope="scope">
+              {{scope.row.target - scope.row.complete}}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="70">
+            <template slot-scope="scope">
+              <svg-icon @click.native.prevent="editYearTarget(scope.row)" icon-title="修改" icon-class="edit" />
+            </template>
+          </el-table-column>
+        </el-table>
         
     </el-main>
 </template>
@@ -53,12 +74,37 @@ export default {
             orgList: [],
             radioTime: '年',
             yearTime: '',
+            monthTableList: [],
+            monthTableColumn: [
+              {
+                label: '年',
+                prop: 'time',
+                formatter: this.timeFormatter
+              },
+              {
+                label: '流水目标（万元）',
+                prop: 'target'
+              },
+              {
+                label: '完成流水（万元）',
+                prop: 'complete'
+              }
+            ],
         }
     },
     created() {
         this.getManageOrgList();
     },
     methods: {
+        addClick() {
+
+        },
+        editYearTarget(row) {
+            
+        },
+        computedPercentage(row) {
+            return parseInt(row.complete / row.target);
+        },
         getYearListClick() {
             let arr = [];
             arr.push(this.yearTime);
@@ -67,7 +113,7 @@ export default {
                 yearOrMonths: arr
             }).then(res => {
                 if(res.code == 200) {
-                    
+                    this.monthTableList = res.data
                 }else{
                     this.$message({
                         type: 'error',
