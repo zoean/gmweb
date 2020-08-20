@@ -73,7 +73,7 @@
         </el-form-item>     
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
-            <el-button size="mini">取消</el-button> 
+            <el-button size="mini" @click="addEditYearParams.visible = false">取消</el-button> 
             <el-button type="primary" size="mini" @click="submitAddEditYear">保存</el-button>           
           </el-col>
         </el-row>     
