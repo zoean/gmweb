@@ -51,7 +51,6 @@ import studentsNewBaoKao from '@/components/Crm/StudentsNewBaoKao';
 import studentsAllBaoKao from '@/components/Crm/StudentsAllBaoKao';
 import studentsMyBaoKao from '@/components/Crm/StudentsMyBaoKao';
 import eduData from '@/components/Crm/EduData';
-import managermbo from '@/components/Crm/ManagerMbo';
 
 import salesBoard from '@/components/Crm/SalesBoard';
 import salesOrgBoard from '@/components/Crm/SalesOrgBoard';
@@ -65,6 +64,10 @@ import wechatManagement from '@/components/Crm/WechatManagement';
 import companyYearMbo from '@/components/Crm/companyYearMbo'
 import companyMonthMbo from '@/components/Crm/companyMonthMbo'
 import companyDayMbo from '@/components/Crm/companyDayMbo'
+
+import departmentYearMbo from '@/components/Crm/departmentYearMbo'
+import departmentMonthMbo from '@/components/Crm/departmentMonthMbo'
+import departmentDayMbo from '@/components/Crm/departmentDayMbo'
 
 import knowp from '@/components/Knowp/Index';
 import classManage from '@/components/Knowp/ClassManage';
@@ -169,12 +172,6 @@ export default new Router({
             path: '/crm/dataStatistics/eduData',
             name: 'eduData',
             component: eduData
-        },
-
-        {
-            path: '/crm/mbo/managermbo',
-            name: 'managermbo',
-            component: managermbo
         },
 
         {
@@ -392,6 +389,24 @@ export default new Router({
             path: '/crm/mbo/companydaymbo',
             name: 'companydaymbo',
             component: companyDayMbo
+        },
+
+        {
+            path: '/crm/mbo/departmentyearmbo',
+            name: 'departmentyearmbo',
+            component: departmentYearMbo
+        },
+
+        {
+            path: '/crm/mbo/departmentmonthmbo',
+            name: 'departmentmonthmbo',
+            component: departmentMonthMbo
+        },
+
+        {
+            path: '/crm/mbo/departmentdaymbo',
+            name: 'departmentdaymbo',
+            component: departmentDayMbo
         },
 
         {
