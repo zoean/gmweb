@@ -180,7 +180,7 @@
 
                     <el-form-item label="分配组" prop="ruleid">
                       
-                        <el-input v-model="ruleFormLink.ruleName" readonly class="borderNone" size="small"></el-input>
+                        <el-input :value="creatUrlForm.ruleName" readonly class="borderNone" size="small">{{creatUrlForm.ruleName}}</el-input>
 
                     </el-form-item>
 
@@ -469,7 +469,6 @@ export default {
             })
         },
         createLinksClick(row) {
-            console.log(row.id)
             this.drawerFlagLink = true;
             this.creatUrlForm = {
                 ruleid: row.id,//分配组ID
