@@ -1,65 +1,65 @@
 <template>
     <el-main class="index-main">
 
-        <div class="people-title">目标完成情况</div>
+        <div class="people-title"><span class="kanban_dian"></span>目标完成情况</div>
 
         <div class="board-target" v-loading="loadingNum">
 
             <div class="target-two">
 
-                <div style="padding: 20px;">
+                <div style="padding: 10px 20px;">
                     <el-image style="width: 22px; height: 22px" :src="require('../../assets/images/board_date.png')"></el-image>
                     <span style="position: relative; top: -5px; left: 10px;">日目标</span>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; text-align: center;">
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #409EFF;">{{saleAimsForm.aims}}</p>
+                        <p style="font-size: 28px; color: #409EFF;">{{saleAimsForm.aims}}</p>
                         <p style="font-size: 12px; color: #999999;">目标（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.entry}}</p>
+                        <p style="font-size: 28px; color: #333333;">{{saleAimsForm.entry}}</p>
                         <p style="font-size: 12px; color: #999999;">完成（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.aims_entry}}</p>
+                        <p style="font-size: 28px; color: #333333;">{{saleAimsForm.aims_entry}}</p>
                         <p style="font-size: 12px; color: #999999;">未完成（万元）</p>
                     </div>
                 </div>
 
-                <el-progress :text-inside="true" :stroke-width="24" :percentage="Number(saleAimsForm.aims_entry_lv)" style="width: 80%; margin: 34px auto;"></el-progress>
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="Number(saleAimsForm.aims_entry_lv)" style="width: 80%; margin: 18px auto;"></el-progress>
 
             </div>
 
             <div class="target-two">
                 
-                <div style="padding: 20px;">
+                <div style="padding: 10px 20px;">
                     <el-image style="width: 22px; height: 22px" :src="require('../../assets/images/board_month.png')"></el-image>
                     <span style="position: relative; top: -5px; left: 10px;">月目标</span>
                 </div>
 
                 <div style="display: flex; justify-content: space-between; text-align: center;">
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #409EFF;">{{saleAimsForm.monthAims}}</p>
+                        <p style="font-size: 28px; color: #409EFF;">{{saleAimsForm.monthAims}}</p>
                         <p style="font-size: 12px; color: #999999;">目标（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.monthEntry}}</p>
+                        <p style="font-size: 28px; color: #333333;">{{saleAimsForm.monthEntry}}</p>
                         <p style="font-size: 12px; color: #999999;">完成（万元）</p>
                     </div>
                     <div style="width: calc(100% / 3);">
-                        <p style="font-size: 36px; color: #333333;">{{saleAimsForm.monthAims_monthEntry}}</p>
+                        <p style="font-size: 28px; color: #333333;">{{saleAimsForm.monthAims_monthEntry}}</p>
                         <p style="font-size: 12px; color: #999999;">未完成（万元）</p>
                     </div>
                 </div>
 
-                <el-progress :text-inside="true" :stroke-width="24" :percentage="Number(saleAimsForm.monthAims_monthEntry_lv)" style="width: 80%; margin: 34px auto;"></el-progress>
+                <el-progress :text-inside="true" :stroke-width="24" :percentage="Number(saleAimsForm.monthAims_monthEntry_lv)" style="width: 80%; margin: 18px auto;"></el-progress>
 
             </div>
 
         </div>
 
-        <div class="people-title">基本情况</div>
+        <div class="people-title"><span class="kanban_dian"></span>基本情况</div>
 
         <div class="board-details" v-loading="fullscreenLoadingBoard">
 
@@ -68,8 +68,8 @@
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_all.png')"></el-image>
                     <span style="position: relative; top: -7px; left: 8px;">今日流水 (￥)</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayEntry}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayEntry}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry}}</div>
                     <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthEntry}}</div>
                 </div>
@@ -80,8 +80,8 @@
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_1.png')"></el-image>
                     <span style="position: relative; top: -7px; left: 8px;">今日人均首咨</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.todayFirstAverage}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayFirstAverage}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 30%; display: inline-block; border-right: 1px solid #E9E9E9;">人均机会 {{dataJson.todayChanceAverage}}</div>
                     <div style="width: 70%; display: inline-block;">人均回访(2-3天/3天以上) {{dataJson.todayReturnVisitAverage1}} / {{dataJson.todayReturnVisitAverage2}}</div>
                 </div>
@@ -92,8 +92,8 @@
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_2.png')"></el-image>
                     <span style="position: relative; top: -7px; left: 8px;">高意向率</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.highIntentionNum_thisDayFirstCon}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.highIntentionNum_thisDayFirstCon}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.weekHighIntention_thisWeekFirstCon}}</div>
                     <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthHighIntention_thisMonthFirstCon}}</div>
                 </div>
@@ -104,8 +104,8 @@
                     <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_3.png')"></el-image>
                     <span style="position: relative; top: -7px; left: 8px;">出勤/通话人数</span>
                 </div>
-                <div style="font-size: 36px; color: #333333; margin-top: 10px;">{{dataJson.attendanceNum}}/{{dataJson.callUserNum}}</div>
-                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); position: absolute; width: 100%; bottom: 0;">
+                <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.attendanceNum}}/{{dataJson.callUserNum}}</div>
+                <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">人均拨打 {{dataJson.userCallAverageNum}}</div>
                     <div style="width: 50%; display: inline-block;">人均时长 {{dataJson.todayTalkAverageTime}}</div>
                 </div>
@@ -113,56 +113,60 @@
 
         </div>
 
-        <div class="people-title">通话明细</div>
-
-        <el-row class="people-screen">
-
-            <el-col :span="4">
-                
-                <el-date-picker
-                    style="width: 90%;"
-                    size="small"
-                    v-model="timeDate"
-                    type="date"
-                    value-format='timestamp'
-                    :picker-options="pickerOptions"
-                    @change="timeChange"
-                    placeholder="请选择日期">
-                </el-date-picker>
-
-            </el-col>
-
-            <el-col :span="4">
-
-                <el-button type="primary" @click="salesOrgBoardClick" size="small">查 询</el-button>
-
-            </el-col>
-
-            <el-col :span="16">
-
-                <el-button @click="salesOrgBoardDetailsClick" style="float:right;" plain size="small">详 情</el-button>
-
-            </el-col>
-
-        </el-row>
-
-        <el-table
-            :data="list"
-            ref="tableSelect"
-            v-loading="fullscreenLoading"
-            style="width: 100%">
+        <div style="background: #fff;">
             
-            <el-table-column
-              :prop="item.prop"
-              :label="item.label"
-              :min-width="item.width"
-              v-for="(item, index) in columnList"
-              :key="index"
-              >
+            <div class="people-title" style="border-bottom: 1px solid #F1F1F1;"><span class="kanban_dian"></span>通话明细</div>
+    
+            <el-row class="people-screen">
+            
+                <el-col :span="4">
+                    
+                    <el-date-picker
+                        style="width: 90%;"
+                        size="small"
+                        v-model="timeDate"
+                        type="date"
+                        value-format='timestamp'
+                        :picker-options="pickerOptions"
+                        @change="timeChange"
+                        placeholder="请选择日期">
+                    </el-date-picker>
+    
+                </el-col>
+    
+                <el-col :span="4">
+                
+                    <el-button type="primary" @click="salesOrgBoardClick" size="small">查 询</el-button>
+    
+                </el-col>
+    
+                <el-col :span="16">
+                
+                    <el-button @click="salesOrgBoardDetailsClick" style="float:right;" plain size="small">详 情</el-button>
+    
+                </el-col>
+    
+            </el-row>
+    
+            <el-table
+                :data="list"
+                ref="tableSelect"
+                v-loading="fullscreenLoading"
+                style="width: 100%; padding: 0 20px 20px 20px;">
+                
+                <el-table-column
+                  :prop="item.prop"
+                  :label="item.label"
+                  :min-width="item.width"
+                  v-for="(item, index) in columnList"
+                  :key="index"
+                  >
+    
+                </el-table-column>
+    
+            </el-table>
 
-            </el-table-column>
-
-        </el-table>
+        </div>
 
         <SalesOrgBoardDetails 
             v-if="boardFlag"
@@ -398,7 +402,7 @@ export default {
             background: #fff;
             color: #333333;
             padding-left: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 1px;
         }
         .screen-li{
             width: 90%;
@@ -406,31 +410,38 @@ export default {
         .board-target{
             display: flex;
             justify-content: space-between;
-            margin-bottom: 16px;
-            height: 224px;
+            margin-bottom: 10px;
+            height: 170px;
             .target-two{
                 height: 100%;
-                width: 49.3%;
+                width: 50%;
                 background: #fff;
+                &:nth-of-type(1){
+                    border-right: 1px solid #F1F1F1;
+                }
             }
         }
         .board-details{
             display: flex;
             justify-content: space-between;
-            margin-bottom: 16px;
-            height: 167px;
+            margin-bottom: 10px;
+            height: 146px;
             .target-four{
-                height: 167px;
-                width: 24%;
+                height: 146px;
+                width: 25%;
                 background: #fff;
                 text-align: center;
-                padding-top: 20px;
+                padding-top: 10px;
                 position: relative;
+                border-right: 1px solid #F1F1F1;
+                &:last-of-type{
+                    border-right: none !important;
+                }
             }
         }
     }
     .people-screen{
-        margin-bottom: 16px;
+        margin: 10px 20px;
         .screen-li{
             width: 90%;
         }

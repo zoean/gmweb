@@ -8,7 +8,7 @@ import AFTableColumn from 'af-table-column'
 import 'element-ui/lib/theme-chalk/index.css';
 import VScrollLock from 'v-scroll-lock'
 import { smoke_get, smoke_post } from './request/http' //引入js文件默认是js的后缀
-import './assets/css/public-mobile.css' //引入css文件要加后缀
+import './assets/css/public.css' //引入css文件要加后缀
 import '@/assets/css/common.css'
 import 'vue-area-linkage/dist/index.css';
 import VueAreaLinkage from 'vue-area-linkage';
