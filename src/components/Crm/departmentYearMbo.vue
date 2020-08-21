@@ -24,8 +24,8 @@
             <el-button size="mini" type="primary" @click="addYearTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="monthTableList">
-          <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
+        <el-table :data="yearTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+          <el-table-column v-for="(item, index) in yearTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率">
             <template slot-scope="scope">
               <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
@@ -33,12 +33,12 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.yearTarget - scope.row.yearComplete}}
+              {{scope.row.target - scope.row.complete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <svg-icon @click.native.prevent="editYearTarget(scope.row)" icon-title="修改" icon-class="edit" />
+              <svg-icon v-if="scope.row.name" @click.native.prevent="editYearTarget(scope.row)" icon-title="修改" icon-class="edit" />
             </template>
           </el-table-column>
         </el-table>
@@ -48,32 +48,41 @@
     </el-tabs>
     <el-dialog :visible.sync="addEditYearParams.visible" :title="addEditYearParams.title" width="500px">
       <el-form :model="addEditYearForm" ref="addEditYearForm" label-width="160px !important" :rules="addEditYearRules">
-        <el-form-item label="年度" prop="yearTime">
+        <el-form-item label="年度" prop="time">
           <el-col :span="16">
             <el-date-picker
-              v-model="addEditYearForm.yearTime"
+              v-model="addEditYearForm.time"
               type="year"
               placeholder="选择年"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini">
+              size="mini"
+              @change="addEditChangeYear">
             </el-date-picker>
           </el-col>
         </el-form-item>           
-        <el-row>
+        <el-row type="flex" class="mt10">
+          <el-col class="text-right" :span="12">
+            本年度公司总目标            
+          </el-col>
           <el-col>
-            上一年总流水（万元）
-            <span class="target-num">{{lastYearComplete || 0}}</span>
+            <span class="target-num">{{deptDetailData.target || 0}}</span>
           </el-col>
         </el-row>
-        <el-form-item label="流水目标（万元）" prop="yearTarget">
-          <el-col :span="162">
-            <el-input type="number" v-model="addEditYearForm.yearTarget"></el-input>
-          </el-col>          
-        </el-form-item>     
+        <el-row type="flex" class="mt10">
+          <el-col class="text-right" :span="12">军团</el-col>
+          <el-col class="ml16">流水目标（万元）</el-col>
+        </el-row>
+        <el-row type="flex" class="mt10">
+          <el-col class="text-right" :span="12">总计</el-col>
+          <el-col><span class="target-num">{{total}}</span></el-col>
+        </el-row>
+        <el-form-item v-for="(item, index) in addEditYearForm.deptList" :label="item.name" prop="targetMoney">
+          <el-input v-model="addEditYearForm.deptList[index].targetMoney" size="mini"></el-input>
+        </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
-            <el-button size="mini">取消</el-button> 
+            <el-button size="mini" @click="addEditYearParams.visible = false">取消</el-button> 
             <el-button type="primary" size="mini" @click="submitAddEditYear">保存</el-button>           
           </el-col>
         </el-row>     
@@ -82,7 +91,7 @@
   </el-main>
 </template>
 <script>
-import {getYearTargetList, getLastYear, getComYearDetail, addOrEditYearTarget} from '@/request/api'
+import {getManageOrgList, getLastDeptYear, addOrEditDeptYear, getDeptYearDetail, getDeptYearList} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
   data() {
@@ -99,8 +108,9 @@ export default{
           return time.getTime() < Date.now();
         }
       },
-      lastYearCompleteForm: {
-        yearTime: ''
+      yearDetailForm:{
+        orgUuid: sessionStorage.getItem('orgUuid'),
+        time: sessionStorage.getItem('curTime')
       },
       tabActiveName: 'year',
       curYear: Number(sessionStorage.getItem('curYear')),
@@ -108,22 +118,26 @@ export default{
       yearOptions:[],
       selectYear: '',
       searchForm: {
-        yearOrMonths: [sessionStorage.getItem('curTime')]
+        yearOrMonths: [sessionStorage.getItem('curTime')],
+        orgUuid: sessionStorage.getItem('orgUuid')
       },
-      monthTableList: [],
-      monthTableColumn: [
+      yearTableList: [],
+      yearTableColumn: [
         {
           label: '年',
-          prop: 'yearTime',
-          formatter: this.timeFormatter
+          prop: 'time'
+        },
+        {
+          label: '军团',
+          prop: 'name'
         },
         {
           label: '流水目标（万元）',
-          prop: 'yearTarget'
+          prop: 'target'
         },
         {
           label: '完成流水（万元）',
-          prop: 'yearComplete'
+          prop: 'complete'
         }
       ],
       addEditYearParams: {
@@ -132,9 +146,9 @@ export default{
         type: 1, //1-添加 2-编辑
       },
       addEditYearForm: {
-        yearTime: '',
-        yearTarget: '',
-        uuid: ''
+        orgUuid: '',
+        time: '',
+        deptList: []
       },
       addEditYearRules:{
         yearTime: [
@@ -146,18 +160,35 @@ export default{
         ]
       },
       addEditYear: '',
-      lastYearComplete: ''
+      lastYearComplete: '',
+      orgList: [],
+      orgUuid: sessionStorage.getItem('orgUuid'),
+      deptDetailData: {}
     }
   },
-  created() {   
-    for(var i = this.curYear; i < (this.curYear + 3); i++){
-      this.yearOptions.push({label: i, value: i + '-01-01'})
-    }
+  created() { 
+    this.getOrgInfo()
     this.getYearTargetList()
+  },
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditYearForm.deptList.length > 0){
+        this.addEditYearForm.deptList.map((item, index, arr) => {
+          total = total + Number(item.targetMoney || 0)
+        })
+      }      
+      return total
+    }
   },
   methods: {
     getOrgInfo: function (){
-      
+      this.$smoke_post(getManageOrgList).then(res => {
+        if(res.code == 200){
+          this.orgList = res.data
+          sessionStorage.setItem('orgUuid', this.orgList[0].orgUuid)
+        }
+      })
     },
     getLastYear: function (){
       this.$smoke_post(getLastYear, this.lastYearCompleteForm).then((res) => {
@@ -177,52 +208,72 @@ export default{
       }
     },
     computedPercentage(row){
-      return parseInt(row.yearComplete / row.yearTarget)
+      if(row.complete == 0 || row.target == 0){
+        return 0
+      }else{
+        return parseInt(row.complete / row.target)
+      }
     },
     timeFormatter(row, column, cellValue){
       return timestampToTime(Number(cellValue)).slice(0, 4)
     },
     getYearTargetList: function(){
-      this.$smoke_post(getYearTargetList, this.searchForm).then(res => {
+      this.$smoke_post(getDeptYearList, this.searchForm).then(res => {
         if(res.code == 200){
-          this.monthTableList = res.data
+          this.yearTableList = res.data
         }
       })
     },
-    changeYear: function (){
-      this.searchForm.yearOrMonths[0] = new Date(this.selectYear).getTime()
-      this.getYearTargetList()
+    addEditChangeYear(val){
+      this.yearDetailForm.time = val
+      this.getDeptYearDetail()
+    },
+    getDeptYearDetail: function (){
+      this.$smoke_post(getLastDeptYear, this.yearDetailForm).then(res => {
+        if(res.code == 200){
+          this.deptDetailData = res.data
+          this.addEditYearForm.time = this.yearDetailForm.time
+          this.addEditYearForm.orgUuid = this.yearDetailForm.orgUuid
+          this.addEditYearForm.deptList = []
+          this.deptDetailData.deptList.map((item, index, arr) => {
+            this.addEditYearForm.deptList.push({
+              uuid: item.uuid,
+              orgUserId: item.orgUserId,
+              type: item.type,
+              targetMoney: item.target || 0,
+              name: item.name
+            })
+          })
+          this.deptDetailData.userList.map((item, index, arr) => {
+            this.addEditYearForm.deptList.push({
+              uuid: item.uuid,
+              orgUserId: item.orgUserId,
+              type: item.type,
+              targetMoney: item.target || 0,
+              name: item.name
+            })
+          })
+        }
+      })
     },
     editYearTarget: function (row){
       this.addEditYearParams.visible = true
       this.addEditYearParams.type = 2
       this.addEditYearParams.title = '编辑年目标'
-      this.addEditYearForm.yearTime = row.yearTime
-      this.lastYearCompleteForm.yearTime = row.yearTime
-      this.addEditYearForm.yearTarget = row.yearTarget
-      this.addEditYearForm.uuid = row.uuid
-      console.log(this.lastYearCompleteForm.yearTime, timestampToTime(this.lastYearCompleteForm.yearTime))
-      this.getLastYear()
+      this.getDeptYearDetail()
     },
     addYearTarget: function (){
       this.addEditYearParams.visible = true
       this.addEditYearParams.type = 1
       this.addEditYearParams.title = '添加年目标'
-      // 重置表单
-      this.addEditYear = ''
-      this.addEditYearForm.yearTime = this.curTime
-      this.lastYearCompleteForm.yearTime = this.curTime
-      this.addEditYearForm.yearTarget = ''
-      this.addEditYearForm.uuid = ''
-      this.getLastYear()
+      this.getDeptYearDetail()
     },
     submitAddEditYear: function (){
       this.$refs['addEditYearForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditYearTarget, this.addEditYearForm).then(res => {
+          this.$smoke_post(addOrEditDeptYear, this.addEditYearForm).then(res => {
             if(res.code == 200){
               this.addEditYearParams.visible = false
-              // this.getWxNumList()
               this.$message({
                 message: '添加成功',
                 type: 'success'
