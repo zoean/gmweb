@@ -45,7 +45,7 @@
                         :key="index">
                     </el-table-column>
 
-                    <el-table-column prop="limitLimit" label="上限值">
+                    <el-table-column prop="limitLimit" label="本组上限">
                         <template slot-scope="scope">
                             <el-input-number class="inputNum" v-model="scope.row.limitLimit" :min="0" size="mini" :controls="false"></el-input-number>
                         </template>
@@ -90,7 +90,7 @@ export default {
             columnList: [
                 { props: 'userName', label: '已选组员'},
                 { props: 'userUin', label: '主JQ账号'},
-                // { props: 'limitLimitTotal', label: '他组上限'},
+                { props: 'limitLimitTotal', label: '他组上限'},
             ],
             uuid: '',
             treeShow: true,
