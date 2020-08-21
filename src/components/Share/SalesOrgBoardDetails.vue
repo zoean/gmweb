@@ -1,6 +1,6 @@
 <template>
     <div class="board">
-        <el-dialog width="56%" title="通时明细" :visible.sync="boardFlag_" :before-close="handleClose">
+        <el-dialog width="56%" title="通话明细" :visible.sync="boardFlag_" :before-close="handleClose">
           
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane label="组织列表" name="first">

@@ -503,7 +503,16 @@ div.el-dialog__body{
     border-radius: 8px;
 } */
 
-
+.kanban_dian{
+    width:5px;
+    height:16px;
+    background:#409EFF;
+    border-radius:2px;
+    display: inline-block;
+    margin-right: 6px;
+    position: relative;
+    top: 2px;
+}
 
 
 
