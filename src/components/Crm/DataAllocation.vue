@@ -273,6 +273,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { 
     addDataAllocationRules, 
     deleteDataAllocationRules,
@@ -367,6 +368,7 @@ export default {
                 projectText: '',  //考试项 
                 // jqadmin: '', //jq账号
             },
+            creatUrlForm: {},
             rulesLink: {
                 projectText: [
                   { required: true, message: '请选择考试项目', trigger: 'change' }
@@ -451,11 +453,11 @@ export default {
             this.$smoke_post(popularizeUrl, {
                 accId: this.ruleFormLink.acc,
                 examItemsId: this.ruleFormLink.projectId,
-                ruleId: this.ruleFormLink.ruleid,
+                ruleId: this.creatUrlForm.ruleid,
                 spreadId: this.ruleFormLink.spread,
             }).then(res => {
                 if(res.code == 200) {
-                    this.createLinkUrl = '?ruleid=' + this.ruleFormLink.ruleid + '&project=' + this.ruleFormLink.projectId
+                    this.createLinkUrl = '?ruleid=' + this.creatUrlForm.ruleid + '&project=' + this.ruleFormLink.projectId
                      + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
                     //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
                 }else{
@@ -467,12 +469,15 @@ export default {
             })
         },
         createLinksClick(row) {
+            console.log(row.id)
             this.drawerFlagLink = true;
-            this.ruleFormLink.ruleid = row.id; //分配组ID
-            this.ruleFormLink.ruleName = row.name; //分配组Name
-            this.ruleFormLink.accText = '';
-            this.ruleFormLink.spreadText = '';
-            this.ruleFormLink.projectText = '';
+            this.creatUrlForm = {
+                ruleid: row.id,//分配组ID
+                ruleName: row.name,//分配组Name
+                accText: '',
+                spreadText: '',
+                projectText: ''
+            }
             this.createLinkUrl = '';
             this.$nextTick(() => {
                 this.$refs['ruleFormLink'].resetFields();
