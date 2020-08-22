@@ -11,7 +11,6 @@
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
                   placeholder="选择年"
-                  :pickerOptions="pickerOptions"
                   value-format="timestamp"
                   size="mini"
                   :clearable="false">
@@ -156,7 +155,7 @@ export default{
       },
       addEditMonth: '',
       getCurrentYearForm: {
-        yearTime: [sessionStorage.getItem('curTime')]
+        yearTime: sessionStorage.getItem('curTime')
       },
       currentYearMonthData: {}
     }
@@ -166,18 +165,11 @@ export default{
   },
   methods: {
     getCurrentYear: function (){
-      // 添加月目标默认当年
-      if(this.addEditMonthParams == 1){
-        this.getCurrentYearForm.yearTime = this.curYear
-        this.addEditMonth = timestampToTime(Number(this.curYear)).slice(0, 4)
-      }else{
-        this.getCurrentYearForm.yearTime = this.searchForm.yearOrMonths[0]
-        this.addEditMonth = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 4)
-      }
       this.$smoke_post(getCurrentYear, this.getCurrentYearForm).then(res => {
         if(res.code == 200){
           const monthList = res.data.monthList
           this.currentYearMonthData = res.data
+          this.addEditMonthForm.months = []
           monthList.map((currentValue, index, arr)=>{
             this.addEditMonthForm.months.push({
               uuid: currentValue.uuid,
@@ -239,6 +231,7 @@ export default{
       this.addEditMonthParams.type = 1
       this.addEditMonthParams.title = '添加月目标'
       this.addEditMonthForm.yearTime = this.curTime
+      this.getCurrentYearForm.yearTime = this.curTime
       this.getCurrentYear()
     },
     submitAddEditMonth: function (){
