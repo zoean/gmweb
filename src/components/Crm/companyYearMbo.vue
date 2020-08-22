@@ -149,10 +149,7 @@ export default{
       lastYearComplete: ''
     }
   },
-  created() {   
-    for(var i = this.curYear; i < (this.curYear + 3); i++){
-      this.yearOptions.push({label: i, value: i + '-01-01'})
-    }
+  created() {  
     this.getYearTargetList()
   },
   methods: {
