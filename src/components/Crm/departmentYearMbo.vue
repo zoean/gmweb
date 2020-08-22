@@ -10,7 +10,6 @@
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
                   placeholder="选择年"
-                  :pickerOptions="pickerOptions"
                   value-format="timestamp"
                   size="mini">
                 </el-date-picker>

@@ -14,7 +14,6 @@
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
                 placeholder="选择月"
-                :pickerOptions="pickerOptions"
                 value-format="timestamp"
                 size="mini">
               </el-date-picker>

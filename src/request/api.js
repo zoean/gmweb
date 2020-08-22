@@ -330,8 +330,15 @@ export const getLastDeptYear = '/api/data/deptTarget/getLastDeptYear' //查询�
 export const addOrEditDeptYear = '/api/data/deptTarget/addOrEditYear' //部门 - 年 -新增 | 修改 年度目标
 export const getDeptYearDetail = '/api/data/deptTarget/getYearDetail' //部门 - 年 -查询年目标详情
 export const getDeptYearList = '/api/data/deptTarget/getYearList' //部门 - 年 - 目标列表
+
 export const getDeptMonthList = '/api/data/deptTarget/getMonthList' //部门 - 月 - 目标列表
 export const getDeptMonthDetail = '/api/data/deptTarget/getMonthDetail' //部门 - 月 -查询月目标详情
+export const addOrEditDeptMonth = '/api/data/deptTarget/addOrEditMonth' //部门 - 月 -新增 | 修改 月度目标
+
+export const getDeptDailyList = '/api/data/deptTarget/getDailyList' //公司—日—目标列表
+export const getDeptDailyDetail = '/api/data/deptTarget/getDailyDetail' //部门 - 日 -查询日目标详情
+export const addOrEditDeptDaily = '/api/data/deptTarget/addOrEditDaily' //部门 - 日 -新增 | 修改 日目标
+
 
 
 
