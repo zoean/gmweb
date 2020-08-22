@@ -178,7 +178,11 @@ export default{
       }
     },
     computedPercentage(row){
-      return parseInt(row.yearComplete / row.yearTarget)
+      if(!row.yearComplete || !row.yearTarget)
+      return 0
+      else
+      return (row.yearComplete / row.yearTarget * 100).toFixed(2)
+      // return parseInt(row.yearComplete / row.yearTarget > 1 ? '100' : row.yearComplete / row.yearTarget)
     },
     timeFormatter(row, column, cellValue){
       return timestampToTime(Number(cellValue)).slice(0, 4)
@@ -249,5 +253,9 @@ export default{
 }
 .el-progress{
   margin-top: 10px;
+  /deep/.el-progress-bar{
+    padding-right: 66px;
+    margin-right: -66px;
+  }
 }
 </style>

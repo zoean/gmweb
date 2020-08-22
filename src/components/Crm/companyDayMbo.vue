@@ -36,7 +36,7 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.target - scope.row.complete}}
+              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -176,7 +176,7 @@ export default{
       if(!row.complete || !row.target) 
         return 0
       else
-        return parseInt(row.complete / row.target)
+        return (row.complete / row.target * 100).toFixed(2)
     },
     dailyFormatter(row, column, cellValue){
       if(row.endTime && row.startTime){
@@ -291,5 +291,9 @@ export default{
 }
 .el-progress{
   margin-top: 10px;
+  /deep/.el-progress-bar{
+    padding-right: 66px;
+    margin-right: -66px;
+  }
 }
 </style>

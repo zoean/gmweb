@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.target - scope.row.complete}}
+              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -206,7 +206,7 @@ export default{
       if(row.complete == 0 || row.target == 0){
         return 0
       }else{
-        return parseInt(row.complete / row.target)
+        return (row.complete / row.target * 100).toFixed(2)
       }
     },
     timeFormatter(row, column, cellValue){
@@ -270,5 +270,9 @@ export default{
 }
 .el-progress{
   margin-top: 10px;
+  /deep/.el-progress-bar{
+    padding-right: 66px;
+    margin-right: -66px;
+  }
 }
 </style>
