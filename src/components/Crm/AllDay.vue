@@ -94,7 +94,6 @@
                     @click="tagClick(item)"
                     >{{item.name}}
                 </el-tag>
-
                 <el-button type="primary" size="small" style="margin-left: 20px;" @click="getClueDataAllClick">查 询</el-button>
 
             </el-col>
@@ -113,8 +112,6 @@
             v-loading="fullscreenLoading"
             :row-class-name="tableRowClassName"
             style="width: 100%"
-            :row-key="getRowKey"
-            :key="Math.random()"
             >
 
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
@@ -148,7 +145,7 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <span><svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
+                    <span><svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
                     
               </template>
             </el-table-column>
@@ -364,9 +361,6 @@ export default {
         },
         setPageNum(pageNum){
             this.form.num = pageNum
-        },
-        getRowKey(row){
-          return row.num
         },
         editFieldHandle(){
             this.$store.commit('setEditFieldVisible', true)

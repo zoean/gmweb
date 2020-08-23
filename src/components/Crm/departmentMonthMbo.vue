@@ -11,7 +11,6 @@
                   v-model="searchForm.yearOrMonths[0]"
                   type="month"
                   placeholder="选择年"
-                  :pickerOptions="pickerOptions"
                   value-format="timestamp"
                   size="mini"
                   :clearable="false">
@@ -36,12 +35,12 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.target - scope.row.complete}}
+              {{scope.row.target < scope.row.complete ? 100 : scope.row.target - scope.row.complete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <svg-icon v-if="scope.row.month != null" @click.native.prevent="editMonthTarget" icon-title="修改" icon-class="edit" />
+              <svg-icon v-if="scope.row.month" @click.native.prevent="editMonthTarget(scope.row)" icon-title="修改" icon-class="edit" />
             </template>
           </el-table-column>
         </el-table>
@@ -50,12 +49,12 @@
     </el-tabs>
     <el-dialog :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
       <el-form :model="addEditMonthForm" ref="addEditMonthForm" label-width="160px !important" :rules="addEditMonthRules">
-        <el-form-item label="年度" prop="yearTime">
+        <el-form-item label="月份" prop="time">
           <el-col :span="16">
             <el-date-picker
               v-model="addEditMonthForm.time"
               type="month"
-              placeholder="选择年"
+              placeholder="选择月份"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
@@ -71,12 +70,12 @@
         </el-row>        
         <el-row id="targetTitle">
           <el-col :span="12">
-            月份
+            分校
           </el-col>
           <el-col :span="12">流水目标（万元）</el-col>
         </el-row> 
         <el-row id="targetList">
-          <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.month" :key="item.uuid" prop="target">
+          <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
             <el-input v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input>
           </el-form-item>
         </el-row>         
@@ -91,7 +90,7 @@
   </el-main>
 </template>
 <script>
-import {getDeptMonthList, getDeptMonthDetail} from '@/request/api'
+import {getDeptMonthList, getDeptMonthDetail, addOrEditDeptMonth} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
   data() {
@@ -141,13 +140,14 @@ export default{
           prop: 'complete'
         }
       ],
+      monthListYear: '',
       addEditMonthParams: {
         title: '新增月目标',
         visible: false,
         type: 1, //1-添加 2-编辑
       },
       addEditMonthForm: {
-        time: this.curTime,
+        time: '',
         orgUuid: sessionStorage.getItem('orgUuid'),
         deptList: []
       },
@@ -161,9 +161,6 @@ export default{
         ]
       },
       addEditMonth: '',
-      getCurrentYearForm: {
-        yearTime: [sessionStorage.getItem('curTime')]
-      },
       monthDetailData: {},
       getMonthDetailForm: {
         orgUuid: sessionStorage.getItem('orgUuid'),
@@ -200,7 +197,7 @@ export default{
       if(row.complete == 0 || row.target == 0){
         return 0
       }else{
-        return parseInt(row.complete / row.target)
+        return (row.complete / row.target * 100).toFixed(2)
       }
     },
     timeFormatter(row, column, cellValue){
@@ -210,6 +207,7 @@ export default{
       this.$smoke_post(getDeptMonthList, this.searchForm).then(res => {
         if(res.code == 200){
           this.monthTableList = res.data[0].list
+          this.monthListYear = res.data[0].yearTime
         }
       })
     },
@@ -218,19 +216,19 @@ export default{
         if(res.code == 200){
           this.monthDetailData = res.data
           this.addEditMonthForm.deptList = []
-          this.monthDetailData.userList.map((item, index, arr) => {
+          this.monthDetailData.deptList.map((item, index, arr) => {
             this.addEditMonthForm.deptList.push({
               name: item.name,
-              targetMoney: item.target,
+              targetMoney: item.target || 0,
               uuid: item.uuid,
               orgUserId: item.orgUserId,
               type: item.type
             })
           })
-          this.monthDetailData.deptList.map((item, index, arr) => {
+          this.monthDetailData.userList.map((item, index, arr) => {
             this.addEditMonthForm.deptList.push({
               name: item.name,
-              targetMoney: item.target,
+              targetMoney: item.target || 0,
               uuid: item.uuid,
               orgUserId: item.orgUserId,
               type: item.type
@@ -239,24 +237,30 @@ export default{
         }
       })
     },
-    editMonthTarget: function (row){
+    editMonthTarget: function (row){      
+      const curYear = timestampToTime(this.monthListYear).slice(0, 4)
+      const curMonth = row.month ? row.month.slice(0, 2) : ''
+      const curEditTime = curYear + '-' + curMonth + '-01'
       this.addEditMonthParams.visible = true
       this.addEditMonthParams.type = 2
       this.addEditMonthParams.title = '编辑月目标'
-      this.getCurrentYearForm.yearTime = this.searchForm.yearOrMonths[0]
+      this.addEditMonthForm.time = new Date(curEditTime).getTime()
+      this.getMonthDetailForm.time = new Date(curEditTime).getTime()
       this.getMonthDetail()
     },
     addMonthTarget: function (){
       this.addEditMonthParams.visible = true
       this.addEditMonthParams.type = 1
       this.addEditMonthParams.title = '添加月目标'
-      this.addEditMonthForm.yearTime = this.curTime
+      this.addEditMonthForm.time = this.curTime
+      this.getMonthDetailForm.time = this.curTime()
       this.getMonthDetail()
     },
     submitAddEditMonth: function (){
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
+          this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
+            console.log(res)
             if(res.code == 200){
               this.addEditMonthParams.visible = false
               this.getMonthTargetList()
@@ -289,5 +293,9 @@ export default{
 }
 .el-progress{
   margin-top: 10px;
+  /deep/.el-progress-bar{
+    padding-right: 66px;
+    margin-right: -66px;
+  }
 }
 </style>

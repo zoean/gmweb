@@ -10,7 +10,6 @@
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
                   placeholder="选择年"
-                  :pickerOptions="pickerOptions"
                   value-format="timestamp"
                   size="mini">
                 </el-date-picker>
@@ -33,7 +32,7 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.yearTarget - scope.row.yearComplete}}
+              {{scope.row.yearComplete > scope.row.yearTarget ? 0 : scope.row.yearTarget - scope.row.yearComplete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -56,7 +55,8 @@
               placeholder="选择年"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini">
+              size="mini"
+              @change="changeYear">
             </el-date-picker>
           </el-col>
         </el-form-item>           
@@ -149,10 +149,7 @@ export default{
       lastYearComplete: ''
     }
   },
-  created() {   
-    for(var i = this.curYear; i < (this.curYear + 3); i++){
-      this.yearOptions.push({label: i, value: i + '-01-01'})
-    }
+  created() {  
     this.getYearTargetList()
   },
   methods: {
@@ -160,6 +157,13 @@ export default{
       this.$smoke_post(getLastYear, this.lastYearCompleteForm).then((res) => {
         if(res.data == 200){
           this.lastYearComplete = res.data.lastYearComplete
+        }
+      })
+    },
+    getComYearDetail: function (){
+      this.$smoke_post(getComYearDetail, {yearTime: this.addEditYearForm.yearTarget}).then(res => {
+        if(res.data == 200){
+          this.addEditYearForm.yearTarget = res.data.yearTarget
         }
       })
     },
@@ -174,7 +178,11 @@ export default{
       }
     },
     computedPercentage(row){
-      return parseInt(row.yearComplete / row.yearTarget)
+      if(!row.yearComplete || !row.yearTarget)
+      return 0
+      else
+      return (row.yearComplete / row.yearTarget * 100).toFixed(2)
+      // return parseInt(row.yearComplete / row.yearTarget > 1 ? '100' : row.yearComplete / row.yearTarget)
     },
     timeFormatter(row, column, cellValue){
       return timestampToTime(Number(cellValue)).slice(0, 4)
@@ -187,8 +195,9 @@ export default{
       })
     },
     changeYear: function (){
-      this.searchForm.yearOrMonths[0] = new Date(this.selectYear).getTime()
-      this.getYearTargetList()
+      this.lastYearCompleteForm.yearTime = this.addEditYearForm.yearTime
+      this.getLastYear()
+      // this.getComYearDetail()
     },
     editYearTarget: function (row){
       this.addEditYearParams.visible = true
@@ -198,7 +207,6 @@ export default{
       this.lastYearCompleteForm.yearTime = row.yearTime
       this.addEditYearForm.yearTarget = row.yearTarget
       this.addEditYearForm.uuid = row.uuid
-      console.log(this.lastYearCompleteForm.yearTime, timestampToTime(this.lastYearCompleteForm.yearTime))
       this.getLastYear()
     },
     addYearTarget: function (){
@@ -245,5 +253,9 @@ export default{
 }
 .el-progress{
   margin-top: 10px;
+  /deep/.el-progress-bar{
+    padding-right: 66px;
+    margin-right: -66px;
+  }
 }
 </style>

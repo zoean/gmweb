@@ -115,7 +115,6 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%"
-            :row-key="getRowKey"
             >
             <el-table-column
               type="selection"
@@ -344,9 +343,6 @@ export default {
     methods: {
         setPageNum(pageNum){
             this.form.num = pageNum
-        },
-        getRowKey(row){
-            return row.num
         },
         tableSort(type, props){
              this.form.sortSet = []

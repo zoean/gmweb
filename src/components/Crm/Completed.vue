@@ -111,7 +111,6 @@
                         <span>{{scope.row[item.prop]}}</span>
                         <el-tooltip v-if="item.prop=='tel'" effect="dark" content="复制手机号码" placement="top">
                             <el-image
-                                @mouseenter="phoneCopy(scope.row)"
                                 class="copy-icon-style"
                                 @click="phoneCopy(scope.row)"
                                 :src="require('../../assets/images/copy-icon.png')">

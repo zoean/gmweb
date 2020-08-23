@@ -14,13 +14,12 @@
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
                 placeholder="选择月"
-                :pickerOptions="pickerOptions"
                 value-format="timestamp"
                 size="mini">
               </el-date-picker>
               </el-col>
               <el-col>
-                <el-button size="mini" type="primary" @click="getComDailyList">查询</el-button>
+                <el-button size="mini" type="primary" @click="getDeptDailyList">查询</el-button>
               </el-col>
             </el-row>
           </el-col>
@@ -37,51 +36,52 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.target - scope.row.complete}}
+              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <svg-icon v-if="scope.row.daily" @click.native.prevent="editDialyTarget()" icon-title="修改" icon-class="edit" />
+              <svg-icon v-if="scope.row.daily" @click.native.prevent="editDialyTarget(scope.row)" icon-title="修改" icon-class="edit" />
             </template>
           </el-table-column>
         </el-table>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="800px">
+    <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="400px">
       <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules">
         <el-row type="flex" style="align-items: center;" :gutter="20">
-          <el-col :span="8">
+          <el-col>
             <el-date-picker
-              v-model="getMonthForm.time"
-              type="month"
-              placeholder="选择月"
+              v-model="addEditDailyForm.time"
+              type="date"
+              placeholder="选择日期"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
-              @change="getCurrentMonth">
+              @change="changeDaily">
             </el-date-picker>
           </el-col>
-          <el-col :span="8">
-            本月目标流水（万元）
-            <span class="target-num">{{currentMonthData.monthTarget}}</span>
-          </el-col>
         </el-row>  
-        <el-row id="dialyTargetTitle" type="flex" justify="start" :gutter="10">
-          <el-col><span>日期</span>流水目标(万元)</el-col>
-          <el-col><span>日期</span>流水目标(万元)</el-col>
-          <el-col><span>日期</span>流水目标(万元)</el-col>
-          <el-col><span>日期</span>流水目标(万元)</el-col>
-          <el-col><span>日期</span>流水目标(万元)</el-col>
+        <el-row class="mt10">
+          <el-col>
+            本日军团总目标（万元）
+            <span class="target-num">{{currentDailyData.target || 0}}</span>
+          </el-col>
         </el-row>
-        <el-row type="flex" id="dialyTarget">
-          <el-form-item v-for="(item, index) in addEditDailyForm.dailys" :label="item.label" :key="item.uuid">
-            <el-input size="mini" v-model="item.target" :value="item.target">222</el-input>
-          </el-form-item>
+        <el-row class="mt20" :gutter="10">
+          <el-col class="text-right" :span="5">分校</el-col>
+          <el-col :span="8">流水目标(万元)</el-col>
         </el-row>
+        <el-row class="mt10" type="flex" justify="start" :gutter="10">
+          <el-col class="text-right" :span="5">总计</el-col>
+          <el-col :span="8"><span class="target-num">0</span></el-col>
+        </el-row>
+        <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
+          <el-input size="mini" v-model="addEditDailyForm.deptList[index].targetMoney"></el-input>
+        </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
-            <el-button size="mini">取消</el-button> 
+            <el-button size="mini" @click="addEditDailyParams.visible = false">取消</el-button> 
             <el-button type="primary" size="mini" @click="submitAddEditDaily">保存</el-button>           
           </el-col>
         </el-row>     
@@ -90,7 +90,7 @@
   </el-main>
 </template>
 <script>
-import {getCurrentMonth, getComDailyList, getComDailyDetail, addOrEditDailyTarget} from '@/request/api'
+import {getDeptDailyList, getDeptDailyDetail, addOrEditDeptDaily} from '@/request/api'
 import {timestampToTime, formatNumber} from '@/assets/js/common'
 export default{
   data() {
@@ -115,7 +115,8 @@ export default{
       selectYear: '',
       selectMonth: '',
       searchForm: {
-        yearOrMonths: [sessionStorage.getItem('curTime')]
+        yearOrMonths: [sessionStorage.getItem('curTime')],
+        orgUuid: sessionStorage.getItem('orgUuid')
       },
       dailyTableList: [],
       dailyTableColumn: [
@@ -127,6 +128,10 @@ export default{
           label: '日',
           prop: 'daily',
           formatter: this.dailyFormatter
+        },
+        {
+          label: '分校',
+          prop: 'name'
         },
         {
           label: '流水目标（万元）',
@@ -144,7 +149,8 @@ export default{
       },
       addEditDailyForm: {
         time: sessionStorage.getItem('curTime'),
-        dailys: []
+        deptList: [],
+        orgUuid: sessionStorage.getItem('orgUuid')
       },
       addEditDailyRules:{
         time: [
@@ -154,16 +160,17 @@ export default{
           {required: true, message: '请输入目标额度', trigger: 'blur'}
         ]
       },
-      getMonthForm: {
-        time: sessionStorage.getItem('curTime')
+      getDailyDetailForm: {
+        time: sessionStorage.getItem('curTime'),
+        orgUuid: sessionStorage.getItem('orgUuid')
       },
       addEditDailyYear: '',
       addEditDailyMonth: '',
-      currentMonthData: {}
+      currentDailyData: {}
     }
   },
   created() {  
-    this.getComDailyList()
+    this.getDeptDailyList()
   },
   methods: {
     tabClick(tab, event){
@@ -177,7 +184,7 @@ export default{
       if(!row.complete || !row.target) 
         return 0
       else
-        return parseInt(row.complete / row.target)
+        return (row.complete / row.target * 100).toFixed(2)
     },
     dailyFormatter(row, column, cellValue){
       if(row.endTime && row.startTime){
@@ -186,8 +193,8 @@ export default{
         return row.daily.slice(8)
       }
     },
-    getComDailyList: function(){
-      this.$smoke_post(getComDailyList, this.searchForm).then(res => {
+    getDeptDailyList: function(){
+      this.$smoke_post(getDeptDailyList, this.searchForm).then(res => {
         if(res.code == 200){
           this.dailyTableList = res.data[0].list
         }
@@ -196,45 +203,56 @@ export default{
     editDialyTarget: function (row){
       this.addEditDailyParams.visible = true
       this.addEditDailyParams.type = 2
-      this.addEditDailyParams.title = '编辑日目标'
-      this.getMonthForm.time = this.searchForm.yearOrMonths[0]
-      this.getCurrentMonth()
+      this.addEditDailyParams.title = '编辑日目标'      
+      this.addEditDailyForm.time = new Date(row.daily).getTime()
+      this.getDailyDetailForm.time = new Date(row.daily).getTime()
+      this.getDailyDetail()
     },
     addDialyTarget: function (){
       this.addEditDailyParams.visible = true
       this.addEditDailyParams.type = 1
       this.addEditDailyParams.title = '新增日目标'
-      this.getCurrentMonth()
+      this.addEditDailyForm.time = this.curTime
+      this.getDailyDetailForm.time = this.curTime
+      this.getDailyDetail()
     },
-    getCurrentMonth: function (){
-      this.$smoke_post(getCurrentMonth, this.getMonthForm).then(res => {
+    getDailyDetail: function (){
+      this.$smoke_post(getDeptDailyDetail, this.getDailyDetailForm).then(res => {
         if(res.code == 200){
-          this.currentMonthData = res.data
-          const dailyList = res.data.dailyList
-          this.addEditDailyForm.dailys = []
-          dailyList.map((currentValue, index, arr)=> {
-            this.addEditDailyForm.dailys.push({
-              daily: currentValue.daily,
-              target: currentValue.target,
-              uuid: currentValue.uuid,
-              label: currentValue.daily.split('-')[2] + '日'
+          this.currentDailyData = res.data
+          this.addEditDailyForm.deptList = []
+          this.currentDailyData.deptList.map((item, index, arr)=> {
+            this.addEditDailyForm.deptList.push({
+              name: item.name,
+              targetMoney: item.target || 0,
+              uuid: item.uuid
+            })
+          })
+          this.currentDailyData.userList.map((item, index, arr)=> {
+            this.addEditDailyForm.deptList.push({
+              name: item.name,
+              type: item.type,
+              targetMoney: item.target || 0,
+              uuid: item.uuid,
+              orgUserId: item.orgUserId
+              // label: item.daily.split('-')[2] + '日'
             })
           })
         }
       })
     },
-    changeAddEditDaily: function (){
-      this.addEditDailyForm.time = new Date(this.addEditDaily).getTime()
-      console.log(this.addEditDailyForm)
+    changeDaily(){
+      this.getDailyDetailForm.time = this.addEditDailyForm.time
+      this.getDailyDetail()
     },
     submitAddEditDaily: function (){
       this.$refs['addEditDailyForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDailyTarget, this.addEditDailyForm).then(res => {
+          this.$smoke_post(addOrEditDeptDaily, this.addEditDailyForm).then(res => {
             if(res.code == 200){
               this.addEditDailyParams.visible = false
               if(this.addEditDailyParams.type == 2 || this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
-                this.getComDailyList()
+                this.getDeptDailyList()
               }
               this.$message({
                 message: '添加成功',
@@ -266,15 +284,14 @@ export default{
     }
     .el-form-item__content{
       margin-left: 80px !important;
-    }
-  }
-  #dialyTargetTitle{
-    margin-top: 20px;
-    .el-col{
-      span{
-        padding: 0 8px;
+      .el-input{
+        width: 50%;
       }
     }
+    
+      .el-date-editor.el-input, .el-date-editor.el-input__inner{
+        width: 140px;
+      }
   }
   #dialyTarget{
     flex-wrap: wrap;
@@ -290,7 +307,12 @@ export default{
     }
   }
 }
+
 .el-progress{
   margin-top: 10px;
+  /deep/.el-progress-bar{
+    padding-right: 66px;
+    margin-right: -66px;
+  }
 }
 </style>

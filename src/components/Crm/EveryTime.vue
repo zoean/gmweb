@@ -89,7 +89,6 @@
     
         <el-table
             :data="tableData"
-            :key="Math.random()"
             fit
             v-loading="fullscreenLoading"
             style="width: 100%; margin-top: 20px;">
