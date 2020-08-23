@@ -3,13 +3,22 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.9 -- 2020/08/23" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、保存备注由跳转到跟进记录改为原列表</p>
+          <h4>修复bug</h4>
+          <p>1、优化数据筛选选项卡卡顿问题</p>
+          <p>2、解决点击复制手机号码按钮重复点击问题</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.8 -- 2020/08/21" placement="top">
         <el-card>
           <h4>新增功能</h4>
           <p>1、分配上限由各分配组公用一个上限改为所在分配组上限之和</p>
           <h4>修复bug</h4>
-          <p>1.修复考试项目数据的回显问题</p>
-          <p>2.修复生成推广链接的id</p>
+          <p>1、修复考试项目数据的回显问题</p>
+          <p>2、修复生成推广链接的id</p>
         </el-card>
       </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.7 -- 2020/08/19" placement="top">
