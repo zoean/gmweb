@@ -31,7 +31,6 @@
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
-            :key="Math.random()" 
             style="width: 100%">
             <el-table-column
               :prop="item.prop"

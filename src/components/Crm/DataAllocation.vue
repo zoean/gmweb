@@ -8,7 +8,6 @@
 
         <el-table
             :data="dataAlloList"
-            :key="Math.random()"
             v-loading="fullscreenLoading"
             style="width: 100%"
         >

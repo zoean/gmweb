@@ -147,7 +147,6 @@
 
         <el-table
             :data="list"
-            :key="Math.random()" 
             ref="tree"
             v-loading="fullscreenLoading"
             style="margin-top: 16px;">
@@ -171,7 +170,7 @@
                     </el-tooltip>
                     <span v-else>{{scope.row[item.props] || '- -'}}</span>
 
-                    <svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
+                    <svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" />
                     
               </template>
             </el-table-column>
