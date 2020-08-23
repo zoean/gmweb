@@ -102,7 +102,6 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%"
-            :row-key="getRowKey"
             >
 
             <el-table-column
@@ -270,9 +269,6 @@ export default {
     methods: {
         setPageNum(pageNum){
             this.form.num = pageNum
-        },
-        getRowKey(row){
-        return row.num
         },
         editFieldHandle(){
             this.$store.commit('setEditFieldVisible', true)

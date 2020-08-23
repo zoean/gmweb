@@ -112,8 +112,6 @@
             v-loading="fullscreenLoading"
             :row-class-name="tableRowClassName"
             style="width: 100%"
-            :row-key="getRowKey"
-            :key="Math.random()"
             >
 
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
@@ -363,9 +361,6 @@ export default {
         },
         setPageNum(pageNum){
             this.form.num = pageNum
-        },
-        getRowKey(row){
-          return row.num
         },
         editFieldHandle(){
             this.$store.commit('setEditFieldVisible', true)

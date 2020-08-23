@@ -27,7 +27,7 @@ export default {
     },
     methods: {
         smoke_init() {
-            var demo = browserfly.noConflict();
+            var demo = jsmc.noConflict();
             var initOptions = {
 		        debug: true, // 日志是否输出 default false
   		        strid: '',

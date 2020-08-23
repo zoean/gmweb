@@ -150,8 +150,7 @@
             :key="Math.random()" 
             ref="tree"
             v-loading="fullscreenLoading"
-            style="margin-top: 16px;"
-            :row-key="getRowKey">
+            style="margin-top: 16px;">
             <el-table-column
               :prop="item.props"
               v-for="(item, index) in columnList"
@@ -771,9 +770,6 @@ export default {
         },
         setPageNum(pageNum){
             this.form.num = pageNum
-        },
-        getRowKey(row){
-            return row.num
         },
         editFieldHandle(){
             this.$store.commit('setEditFieldVisible', true)
