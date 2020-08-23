@@ -94,7 +94,6 @@
                     @click="tagClick(item)"
                     >{{item.name}}
                 </el-tag>
-
                 <el-button type="primary" size="small" style="margin-left: 20px;" @click="getClueDataAllClick">查 询</el-button>
 
             </el-col>
