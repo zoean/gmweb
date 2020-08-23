@@ -65,8 +65,8 @@
 
             <div class="target-four">
                 <div>
-                    <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_all.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日流水 (￥)</span>
+                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_all.png')"></el-image>
+                    <span style="position: relative; top: -5px; left: 8px;">今日流水 (￥)</span>
                 </div>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayEntry}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
@@ -77,8 +77,8 @@
 
             <div class="target-four">
                 <div>
-                    <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_1.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">今日人均首咨</span>
+                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_1.png')"></el-image>
+                    <span style="position: relative; top: -5px; left: 8px;">今日人均首咨</span>
                 </div>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayFirstAverage}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
@@ -89,8 +89,8 @@
 
             <div class="target-four">
                 <div>
-                    <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_2.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">高意向率</span>
+                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_2.png')"></el-image>
+                    <span style="position: relative; top: -5px; left: 8px;">高意向率</span>
                 </div>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.highIntentionNum_thisDayFirstCon}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
@@ -101,8 +101,8 @@
 
             <div class="target-four">
                 <div>
-                    <el-image style="width: 26px; height: 26px" :src="require('../../assets/images/board_3.png')"></el-image>
-                    <span style="position: relative; top: -7px; left: 8px;">出勤/通话人数</span>
+                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_3.png')"></el-image>
+                    <span style="position: relative; top: -5px; left: 8px;">出勤/通话人数</span>
                 </div>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.attendanceNum}}/{{dataJson.callUserNum}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
@@ -115,7 +115,7 @@
 
         <div style="background: #fff;">
             
-            <div class="people-title" style="border-bottom: 1px solid #F1F1F1;"><span class="kanban_dian"></span>通话明细</div>
+            <div class="people-title"><span class="kanban_dian"></span>通话明细</div>
     
             <el-row class="people-screen">
             
@@ -402,7 +402,7 @@ export default {
             background: #fff;
             color: #333333;
             padding-left: 16px;
-            margin-bottom: 1px;
+            border-bottom: 1px solid #dddddd;
         }
         .screen-li{
             width: 90%;
@@ -417,7 +417,7 @@ export default {
                 width: 50%;
                 background: #fff;
                 &:nth-of-type(1){
-                    border-right: 1px solid #F1F1F1;
+                    border-right: 1px solid #dddddd;
                 }
             }
         }
@@ -433,7 +433,7 @@ export default {
                 text-align: center;
                 padding-top: 10px;
                 position: relative;
-                border-right: 1px solid #F1F1F1;
+                border-right: 1px solid #dddddd;
                 &:last-of-type{
                     border-right: none !important;
                 }
