@@ -84,6 +84,7 @@
                     range-separator="至"
                     :default-time="['00:00:00', '23:59:59']"
                     @change="datePickerChange"
+                    :picker-options="pickerOptions"
                     start-placeholder="入库时间"
                     end-placeholder="入库时间">
                 </el-date-picker>
@@ -228,7 +229,45 @@ export default {
                 { label: '线上', value: 0 },
                 { label: '录入', value: 1 },
             ],
-            dataPicker: [],
+            dataPicker: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
+            pickerOptions: {
+                disabledDate(time) {
+                  return time.getTime() > new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1;
+                },
+                shortcuts: [{
+                  text: '今天',
+                  onClick(picker) {
+                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
+                    const end = new Date();
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '近7天',
+                  onClick(picker) {
+                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 6);
+                    const end = new Date();
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '本月',
+                  onClick(picker) {
+                    let start = new Date();
+                    start.setDate(1);
+                    start.setHours(0);
+                    start.setSeconds(0);
+                    start.setMinutes(0);
+                    const end = new Date();
+                    picker.$emit('pick', [start, end]);
+                  }
+                }, {
+                  text: '近30天',
+                  onClick(picker) {
+                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 29);
+                    const end = new Date();
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+            },
             tableData: [],
             columnList: [
               { 'prop': 'tel', 'label': '手机号码' },
@@ -259,6 +298,8 @@ export default {
         }
     },
     created() {
+        this.form.startCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
+        this.form.endCreateTime = new Date().getTime();
         this.getExteClueData();
         this.getExamBasic();
         let arr = [MJ_6, MJ_7, MJ_9];

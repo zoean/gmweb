@@ -86,9 +86,44 @@
             </el-col>
 
             <el-col :span="4">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="12">
+
+                <el-tag 
+                    v-for="(item,index) in searchList" :key="item.id"
+                    style="margin-left: 4px; cursor: pointer;"
+                    :class="tag_id == item.id ? 'tag_class' : ''"
+                    type="info"
+                    effect="plain"
+                    @click="tagClick(item)"
+                    >{{item.name}}
+                </el-tag>
+
+            </el-col>
+
+            
+        </el-row>
+
+        <el-row class="people-screen">
+
+            <el-col :span="4">
+                <el-input v-model="form.saleName" size="small" placeholder="请输入坐席姓名" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="4">
                 <el-button type="primary" size="small" @click="getAllUserClueDataClick">查 询</el-button>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="16">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
                     <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
@@ -96,6 +131,8 @@
             </el-col>
 
         </el-row>
+
+        <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
 
         <el-table
             :data="list"
@@ -183,11 +220,12 @@ import {
     getRuleItem,
     clueDataRelease,
     copyTel,
+    geSeatWork
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import {  } from '../../assets/js/common';
+import { receiveTimeFun } from '../../assets/js/common';
 import pcaa from 'area-data/pcaa';
-import { MJ_6 } from '../../assets/js/data';
+import { MJ_6, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'seatData',
@@ -215,7 +253,11 @@ export default {
                 spread: '',
                 userUuid: '',
                 num: '',
-                sortSet: []
+                sortSet: [],
+                intentionLevel: '',
+                saleName: '',
+                receiveStartTime: '',
+                receiveEndTime: '',
             },
             totalFlag: false,
             dialStateList: [
@@ -241,6 +283,18 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+            searchList: [
+                { name: '今日首咨', id: 1 },
+                { name: '2~3天数据', id: 2 },
+                { name: '4~7天数据', id: 3 },
+                { name: '8~14天数据', id: 4 },
+                { name: '14天以上数据', id: 5 },
+                { name: '公海领取数据', id: 6 },
+            ],
+            tag_id: '',
+            tag_name: '',
+            tag_flag: false,
+            SeatWorkObj: {},
         }
     },
     // watch:{
@@ -261,12 +315,22 @@ export default {
         this.form.userUuid = uuid;
         this.getAllUserClueData();
         this.getExamBasic();
-        let arr = [MJ_6];
+        let arr = [MJ_6, MJ_5];
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getRuleItem();
     },
     methods: {
+        tagClick(item){
+            this.tag_flag = false;
+            if(this.tag_id == item.id) {
+                this.tag_id = '';
+                this.tag_name = '';
+            }else{
+                this.tag_id = item.id;
+                this.tag_name = item.name;
+            }
+        },
         setPageNum(pageNum){
             this.form.num = pageNum
         },
@@ -298,7 +362,38 @@ export default {
         },
         getAllUserClueDataClick() {
             this.form.currentPage = 1;
+            const obj = receiveTimeFun(this.tag_id);
+            this.form.receiveStartTime = obj.receiveStartTime;
+            this.form.receiveEndTime = obj.receiveEndTime;
+            if(this.tag_id == 6) {
+                this.form.dataType = 2;
+                this.geSeatWork();
+            }else if(this.tag_id == ''){
+                this.form.dataType = '';
+            }else{
+                this.form.dataType = 1;
+                this.geSeatWork();
+            }
             this.getAllUserClueData();
+        },
+        geSeatWork() {
+            this.$smoke_post(geSeatWork, {
+                dataType: this.form.dataType,
+                receiveStartTime: this.form.receiveStartTime,
+                receiveEndTime: this.form.receiveEndTime,
+            }).then(res => {
+                if(res.code == 200) {
+                    // this.tag_flag = true;
+                    this.tag_flag = false;
+                    this.SeatWorkObj = res.data;
+                }else{
+                    this.tag_flag = false;
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
         },
         getAllUserClueData() {
             this.fullscreenLoading = true;
