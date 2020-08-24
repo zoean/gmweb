@@ -275,7 +275,7 @@ import {
     getCatalogueKnowBasicBySubjectUuid,
     uploadimg
 } from '../../request/api';
-import { getTextByJs, timestampToTime, formatSeconds, vedioTypeText, copyData } from '../../assets/js/common';
+import { timestampToTime, formatSeconds, vedioTypeText } from '../../assets/js/common';
 import { vedioTypeArr } from '../../assets/js/data';
 export default {
     name: 'subject',
@@ -614,11 +614,20 @@ export default {
             this.getFileSize(this.vedioForm.url);
         },
         handleCopy(row) {
-            this.$message({
-              message: '复制成功',
-              type: 'success'
-            });
-            copyData(row.url);
+            this.$copyText(row.url).then(
+		        res => {
+		            this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    })
+		        },
+		        err => {
+		            this.$message({
+                        type: 'error',
+                        message: '复制失败',
+                    })
+		        }
+		    )
         },
         getFileSize(url) {
             this.$smoke_post(getFileSize, {

@@ -947,28 +947,24 @@ export default {
         })
       },
       copyTel(id) {
-        var that = this;
           this.$smoke_post(copyTel, {
               uuid: id
           }).then(res => {
               if(res.code == 200) {
-                  var clipboard = new ClipboardJS('.copy-tel', {
-                  // 点击copy按钮，直接通过text直接返回复印的内容
-                      text: function() {
-                          return res.data;
-                      }
-                  });
-                  clipboard.on('success', function(e) {
-	              	//alert(e.text);
-	              	clipboard.destroy();// 复制完毕删除，否则会有创建多个clipboard对象
-                      that.$message({
-                          type: 'success',
-                          message: '复制成功',
-                      });
-                  });
-                  clipboard.on('error', function(e) {
-                      console.log(e);
-                  });
+                  this.$copyText(res.data).then(
+		                res => {
+		                    this.$message({
+                            type: 'success',
+                            message: '复制成功',
+                        })
+		                },
+		                err => {
+		                    this.$message({
+                            type: 'error',
+                            message: '复制失败',
+                        })
+		                }
+		            )
               }else{
                   this.$message({
                       type: 'error',

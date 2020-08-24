@@ -148,7 +148,7 @@
               </template>
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
-                    <span><svg-icon @mouseenter="phoneCopy(scope.row)" class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
+                    <span><svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
                     
               </template>
             </el-table-column>
@@ -226,7 +226,7 @@ import {
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
 import { 
-    menuNumberFunc, copyData, removeEvery,
+    menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_16 } from '../../assets/js/data';
@@ -267,6 +267,7 @@ export default {
                 dataType: '', //数据类型（1：首咨 2：回收池）
                 receiveStartTime: '', //领取时间的查询开始时间（13位）
                 receiveEndTime: '', //领取时间的查询结束时间（13位）
+                intentionLevel: '', //意向等级
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -654,7 +655,20 @@ export default {
                 uuid: id
             }).then(res => {
                 if(res.code == 200) {
-                    this.copyFun(res.data);
+                    this.$copyText(res.data).then(
+		                res => {
+		                    this.$message({
+                                type: 'success',
+                                message: '复制成功',
+                            })
+		                },
+		                err => {
+		                    this.$message({
+                                type: 'error',
+                                message: '复制失败',
+                            })
+		                }
+		            )
                 }else{
                     this.$message({
                         type: 'error',
@@ -663,23 +677,6 @@ export default {
                 }
             })
         },
-        copyFun(text) {
-            var that = this;
-            var clipboard = new ClipboardJS('.copy-tel', {
-            // 点击copy按钮，直接通过text直接返回复印的内容
-                text: () => text
-            });
-            clipboard.on('success', function(e) {
-                that.$message({
-                    type: 'success',
-                    message: '复制成功',
-                });
-	        	clipboard.destroy();// 复制完毕删除，否则会有创建多个clipboard对象
-            });
-            clipboard.on('error', function(e) {
-                clipboard.destroy();
-            });
-        }
     },
     mounted() {
 

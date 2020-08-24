@@ -4,7 +4,7 @@
 
 <script>
 import { GetAgreementDetail } from '../../request/api';
-import { timestampToTime, classTypeString, orderTypeText, smoke_MJ_4, smoke_MJ_5, sortTextNum, copyData, removeEvery } from '../../assets/js/common';
+import { timestampToTime } from '../../assets/js/common';
 export default {
   name: 'agreeMentDetails',
   data() {

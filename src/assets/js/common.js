@@ -850,18 +850,6 @@ export const menuNumberFunc = (arr, brr) => {
 
 }
 
-//copyData
-
-export const copyData = (data) => {
-    let oInput = document.createElement('input');
-    oInput.value = data;
-    document.body.appendChild(oInput);
-    oInput.select(); // 选择对象;
-    oInput.setSelectionRange(0, 9999);
-    document.execCommand("Copy"); // 执行浏览器复制命令
-    oInput.remove();
-}
-
 export const urlFun = (url) => {
     if(url.split("?")[1] != undefined){
         var params = url.split("?")[1].split("&");
@@ -1047,15 +1035,15 @@ export const receiveTimeFun = (id) => {
             break;
         case 2:
             obj.receiveStartTime = date - 3600 * 1000 * 24 * 2;
-            obj.receiveEndTime = date - 3600 * 1000 * 24 * 1;
+            obj.receiveEndTime = date;
             break;
         case 3:
             obj.receiveStartTime = date - 3600 * 1000 * 24 * 6;
-            obj.receiveEndTime = date - 3600 * 1000 * 24 * 3;
+            obj.receiveEndTime = date - 3600 * 1000 * 24 * 2;
             break;
         case 4:
             obj.receiveStartTime = date - 3600 * 1000 * 24 * 13;
-            obj.receiveEndTime = date - 3600 * 1000 * 24 * 7;
+            obj.receiveEndTime = date - 3600 * 1000 * 24 * 6;
             break;
         case 5:
             obj.receiveStartTime = '';

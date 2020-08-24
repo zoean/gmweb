@@ -14,11 +14,13 @@ import 'vue-area-linkage/dist/index.css';
 import VueAreaLinkage from 'vue-area-linkage';
 import './assets/js/rem'
 import '@/icons' // icon
+import VueClipboard from 'vue-clipboard2'
 // import VueAudio from 'vue-audio-better'
  
 // Vue.use(VueAudio)
 
 Vue.use(ElementUI, { zIndex: 1000});
+Vue.use(VueClipboard);
 Vue.use(AFTableColumn);
 Vue.use(VScrollLock);
 Vue.use(VueAreaLinkage);

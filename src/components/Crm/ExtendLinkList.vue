@@ -145,7 +145,7 @@ import {
     clueDataRelease,
     copyTel,
 } from '../../request/api';
-import { timestampToTime, backType, workingLifeText, evidencePurposeText, genderText, copyData, removeEvery } from '../../assets/js/common';
+import { timestampToTime } from '../../assets/js/common';
 import { MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'seatData',
@@ -247,7 +247,20 @@ export default {
             this.followFlag = false;
         },
         copyUrlClick(row) {
-            copyData(row.url);
+            this.$copyText(row.url).then(
+		        res => {
+		            this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    })
+		        },
+		        err => {
+		            this.$message({
+                        type: 'error',
+                        message: '复制失败',
+                    })
+		        }
+		    )
         },
         datePickerChange(value) {
             if (value == null) {

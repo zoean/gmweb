@@ -286,7 +286,7 @@ import {
     popularizeUrl
 } from '../../request/api';
 import { dateList } from '../../assets/js/data';
-import { stateText, getTextByJs, quchong, copyData, removeEvery } from '../../assets/js/common';
+import { stateText } from '../../assets/js/common';
 import { MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import Tree from '../Share/Tree';
 export default {
@@ -408,11 +408,20 @@ export default {
     },
     methods: {
         handleCopy() {
-            this.$message({
-              message: '复制成功',
-              type: 'success'
-            });
-            copyData(this.createLinkUrl);
+            this.$copyText(this.createLinkUrl).then(
+		        res => {
+		            this.$message({
+                        type: 'success',
+                        message: '复制成功',
+                    })
+		        },
+		        err => {
+		            this.$message({
+                        type: 'error',
+                        message: '复制失败',
+                    })
+		        }
+		    )
         },
         getSchoolList() {
             this.$smoke_get(getSchoolList, {}).then(res => {

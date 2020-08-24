@@ -200,8 +200,8 @@ import {
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
-    timestampToTime, classTypeString, orderTypeText, copyData, getTextByJs,
-    citiesFun, countDown, schoolType, sortTextNum
+    timestampToTime, classTypeString, orderTypeText, getTextByJs,
+    schoolType, sortTextNum
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
