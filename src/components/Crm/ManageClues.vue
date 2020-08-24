@@ -241,7 +241,7 @@ export default {
             dataPicker: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
             pickerOptions: {
                 disabledDate(time) {
-                  return time.getTime() > Date.now();
+                  return time.getTime() > new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1;
                 },
                 shortcuts: [{
                   text: '今天',
