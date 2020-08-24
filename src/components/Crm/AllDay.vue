@@ -53,6 +53,18 @@
 
             </el-col>
 
+            <el-col :span="4">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 100%;" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
+
         </el-row>
 
         <el-row class="people-screen" type="flex" align="middle">
@@ -226,7 +238,7 @@ import {
     menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_16 } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'AllDay',
@@ -324,7 +336,7 @@ export default {
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         //this.jqStart = browserfly.noConflict();
-        let arr = [MJ_1, MJ_2, MJ_16];
+        let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
     },
