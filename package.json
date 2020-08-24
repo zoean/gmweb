@@ -13,6 +13,7 @@
     "area-data": "^5.0.6",
     "axios": "^0.19.0",
     "core-js": "^2.6.5",
+    "default-passive-events": "^2.0.0",
     "element-ui": "^2.12.0",
     "swiper": "^4.5.0",
     "v-scroll-lock": "^1.2.0",

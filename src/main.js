@@ -15,6 +15,7 @@ import VueAreaLinkage from 'vue-area-linkage';
 import './assets/js/rem'
 import '@/icons' // icon
 import VueClipboard from 'vue-clipboard2'
+import 'default-passive-events'
 // import VueAudio from 'vue-audio-better'
  
 // Vue.use(VueAudio)

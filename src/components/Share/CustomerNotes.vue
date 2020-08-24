@@ -974,8 +974,10 @@ export default {
                         type: 'success',
                         message: '添加备注成功',
                     })
-                    this.tabs_active = 'second';
-                    this.getClueDataNotes();
+                    this.$emit("changeDrawer", false)
+                    // this.tabs_active = 'second';
+                    // this.getClueDataNotes();
+
                 }else{
                     this.$message({
                         type: 'error',

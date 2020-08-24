@@ -9,7 +9,7 @@
               <el-col>
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
-                  type="year"
+                  type="month"
                   placeholder="选择年"
                   value-format="timestamp"
                   size="mini"
@@ -35,12 +35,12 @@
           </el-table-column>
           <el-table-column label="未完成">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
+              {{scope.row.target < scope.row.complete ? 100 : scope.row.target - scope.row.complete}}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <svg-icon v-if="scope.row.month != null" @click.native.prevent="editMonthTarget" icon-title="修改" icon-class="edit" />
+              <svg-icon v-if="scope.row.month" @click.native.prevent="editMonthTarget(scope.row)" icon-title="修改" icon-class="edit" />
             </template>
           </el-table-column>
         </el-table>
@@ -49,39 +49,39 @@
     </el-tabs>
     <el-dialog :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
       <el-form :model="addEditMonthForm" ref="addEditMonthForm" label-width="160px !important" :rules="addEditMonthRules">
-        <el-form-item label="年度" prop="yearTime">
+        <el-form-item label="月份" prop="time">
           <el-col :span="16">
             <el-date-picker
-              v-model="getCurrentYearForm.yearTime"
-              type="year"
-              placeholder="选择年"
+              v-model="addEditMonthForm.time"
+              type="month"
+              placeholder="选择月份"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
-              @change="getCurrentYear">
+              >
             </el-date-picker>
           </el-col>
         </el-form-item>           
         <el-row>
           <el-col>
             本年度目标流水（万元）
-            <span class="target-num">{{currentYearMonthData.yearTarget || 0}}</span>
+            <span class="target-num">{{monthDetailData.target || 0}}</span>
           </el-col>
         </el-row>        
         <el-row id="targetTitle">
           <el-col :span="12">
-            月份
+            分校
           </el-col>
           <el-col :span="12">流水目标（万元）</el-col>
         </el-row> 
         <el-row id="targetList">
-          <el-form-item v-for="(item, index) in currentYearMonthData.monthList" :label="item.month" :key="item.uuid" prop="target">
-            <el-input :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target" size="mini"></el-input>
+          <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
+            <el-input v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input>
           </el-form-item>
         </el-row>         
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
-            <el-button size="mini" @click="addEditMonthParams.visible = false">取消</el-button> 
+            <el-button size="mini">取消</el-button> 
             <el-button type="primary" size="mini" @click="submitAddEditMonth">保存</el-button>           
           </el-col>
         </el-row>     
@@ -90,7 +90,7 @@
   </el-main>
 </template>
 <script>
-import {getCurrentYear, getComMonthList, getComMonthDetail, addOrEditMonthTarget} from '@/request/api'
+import {getDeptMonthList, getDeptMonthDetail, addOrEditDeptMonth} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
   data() {
@@ -113,7 +113,8 @@ export default{
       yearOptions:[],
       selectYear: '',
       searchForm: {
-        yearOrMonths: [sessionStorage.getItem('curTime')]
+        yearOrMonths: [sessionStorage.getItem('curTime')],
+        orgUuid: sessionStorage.getItem('orgUuid')
       },
       monthTableList: [],
       monthTableColumn: [
@@ -127,6 +128,10 @@ export default{
           prop: 'month'
         },
         {
+          label: '军团',
+          prop: 'name'
+        },
+        {
           label: '流水目标（万元）',
           prop: 'target'
         },
@@ -135,14 +140,16 @@ export default{
           prop: 'complete'
         }
       ],
+      monthListYear: '',
       addEditMonthParams: {
         title: '新增月目标',
         visible: false,
         type: 1, //1-添加 2-编辑
       },
       addEditMonthForm: {
-        yearTime: this.curTime,
-        months: [],
+        time: '',
+        orgUuid: sessionStorage.getItem('orgUuid'),
+        deptList: []
       },
       addEditMonthRules:{
         yearTime: [
@@ -154,33 +161,17 @@ export default{
         ]
       },
       addEditMonth: '',
-      getCurrentYearForm: {
-        yearTime: sessionStorage.getItem('curTime')
-      },
-      currentYearMonthData: {}
+      monthDetailData: {},
+      getMonthDetailForm: {
+        orgUuid: sessionStorage.getItem('orgUuid'),
+        time: sessionStorage.getItem('curTime')
+      }
     }
   },
   created() {   
     this.getMonthTargetList()
   },
   methods: {
-    getCurrentYear: function (){
-      this.$smoke_post(getCurrentYear, this.getCurrentYearForm).then(res => {
-        if(res.code == 200){
-          const monthList = res.data.monthList
-          this.currentYearMonthData = res.data
-          this.addEditMonthForm.months = []
-          monthList.map((currentValue, index, arr)=>{
-            this.addEditMonthForm.months.push({
-              uuid: currentValue.uuid,
-              month: currentValue.month,
-              target: currentValue.target
-            })
-          })
-          
-        }
-      })
-    },
     formatterQuarter: function (row, column, cellValue){
       if(cellValue == 1){
         return '一季度'
@@ -197,9 +188,9 @@ export default{
     },
     tabClick(tab, event){
       if(tab.index == 0){
-        this.$router.push({name: 'companyyearmbo' })
+        this.$router.push({name: 'departmentyearmbo' })
       }else if(tab.index == 2){
-        this.$router.push({name: 'companydaymbo' })
+        this.$router.push({name: 'departmentdaymbo' })
       }
     },
     computedPercentage(row){
@@ -213,31 +204,63 @@ export default{
       return timestampToTime(Number(cellValue)).slice(0, 4)
     },
     getMonthTargetList: function(){
-      this.$smoke_post(getComMonthList, this.searchForm).then(res => {
+      this.$smoke_post(getDeptMonthList, this.searchForm).then(res => {
         if(res.code == 200){
           this.monthTableList = res.data[0].list
+          this.monthListYear = res.data[0].yearTime
         }
       })
     },
-    editMonthTarget: function (row){
+    getMonthDetail: function (){
+      this.$smoke_post(getDeptMonthDetail, this.getMonthDetailForm).then(res => {
+        if(res.code == 200){
+          this.monthDetailData = res.data
+          this.addEditMonthForm.deptList = []
+          this.monthDetailData.deptList.map((item, index, arr) => {
+            this.addEditMonthForm.deptList.push({
+              name: item.name,
+              targetMoney: item.target || 0,
+              uuid: item.uuid,
+              orgUserId: item.orgUserId,
+              type: item.type
+            })
+          })
+          this.monthDetailData.userList.map((item, index, arr) => {
+            this.addEditMonthForm.deptList.push({
+              name: item.name,
+              targetMoney: item.target || 0,
+              uuid: item.uuid,
+              orgUserId: item.orgUserId,
+              type: item.type
+            })
+          })
+        }
+      })
+    },
+    editMonthTarget: function (row){      
+      const curYear = timestampToTime(this.monthListYear).slice(0, 4)
+      const curMonth = row.month ? row.month.slice(0, 2) : ''
+      const curEditTime = curYear + '-' + curMonth + '-01'
       this.addEditMonthParams.visible = true
       this.addEditMonthParams.type = 2
       this.addEditMonthParams.title = '编辑月目标'
-      this.getCurrentYearForm.yearTime = this.searchForm.yearOrMonths[0]
-      this.getCurrentYear()
+      this.addEditMonthForm.time = new Date(curEditTime).getTime()
+      this.getMonthDetailForm.time = new Date(curEditTime).getTime()
+      this.getMonthDetail()
     },
     addMonthTarget: function (){
       this.addEditMonthParams.visible = true
       this.addEditMonthParams.type = 1
       this.addEditMonthParams.title = '添加月目标'
-      this.addEditMonthForm.yearTime = this.curTime
-      this.getCurrentYearForm.yearTime = this.curTime
-      this.getCurrentYear()
+      this.addEditMonthForm.time = this.curTime
+      this.getMonthDetailForm.time = this.curTime()
+      this.getMonthDetail()
     },
     submitAddEditMonth: function (){
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
+          this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
+            console.log(res)
             if(res.code == 200){
               this.addEditMonthParams.visible = false
               this.getMonthTargetList()

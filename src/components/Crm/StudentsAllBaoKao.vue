@@ -111,7 +111,6 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            :key="Math.random()"
             style="width: 100%">
 
             <el-table-column
