@@ -3,7 +3,7 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
-      <el-timeline-item timestamp="v 1.1.9 -- 2020/08/23" placement="top">
+      <el-timeline-item timestamp="v 1.2.0 -- 2020/08/24" placement="top">
         <el-card>
           <h4>新增功能</h4>
           <p>1、全部客户页面新增成单状态字段，新增意向等级、成单状态筛选项</p>
