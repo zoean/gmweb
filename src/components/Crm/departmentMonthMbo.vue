@@ -128,7 +128,7 @@ export default{
           prop: 'month'
         },
         {
-          label: '军团',
+          label: '下属组织',
           prop: 'name'
         },
         {

@@ -157,6 +157,8 @@ export default{
       this.$smoke_post(getLastYear, this.lastYearCompleteForm).then((res) => {
         if(res.data == 200){
           this.lastYearComplete = res.data.lastYearComplete
+          this.addEditYearForm.yearTarget = res.data.currentTarget || 0
+          console.log(this.addEditYearForm.yearTarget)
         }
       })
     },

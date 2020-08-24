@@ -64,12 +64,12 @@
         </el-row>  
         <el-row class="mt10">
           <el-col>
-            本日军团总目标（万元）
+            本日该组织总目标（万元）
             <span class="target-num">{{currentDailyData.target || 0}}</span>
           </el-col>
         </el-row>
         <el-row class="mt20" :gutter="10">
-          <el-col class="text-right" :span="5">分校</el-col>
+          <el-col class="text-right" :span="5">下属组织</el-col>
           <el-col :span="8">流水目标(万元)</el-col>
         </el-row>
         <el-row class="mt10" type="flex" justify="start" :gutter="10">

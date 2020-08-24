@@ -69,7 +69,7 @@
           </el-col>
         </el-row>
         <el-row type="flex" class="mt10">
-          <el-col class="text-right" :span="12">军团</el-col>
+          <el-col class="text-right" :span="12">下属组织</el-col>
           <el-col class="ml16">流水目标（万元）</el-col>
         </el-row>
         <el-row type="flex" class="mt10">
@@ -127,7 +127,7 @@ export default{
           prop: 'time'
         },
         {
-          label: '军团',
+          label: '下属组织',
           prop: 'name'
         },
         {
