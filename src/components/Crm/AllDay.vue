@@ -53,6 +53,18 @@
 
             </el-col>
 
+            <el-col :span="4">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 100%;" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
+
         </el-row>
 
         <el-row class="people-screen" type="flex" align="middle">
@@ -94,15 +106,38 @@
                     @click="tagClick(item)"
                     >{{item.name}}
                 </el-tag>
-                <el-button type="primary" size="small" style="margin-left: 20px;" @click="getClueDataAllClick">查 询</el-button>
 
             </el-col>
             
-            <el-col :span="2">
+        </el-row>
+
+        <el-row class="people-screen">
+
+            <el-col :span="4">
+
+                <el-select v-model="form.orderState" size="small" placeholder="请选择成单状态" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in orderStateList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+
+            </el-col>
+
+            <el-col :span="4">
+
+                <el-button type="primary" size="small" @click="getClueDataAllClick">查 询</el-button>
+
+            </el-col>
+
+            <el-col :span="16">
                 <el-row type="flex" justify="end">
                     <svg-icon class="border-icon" @click="editFieldHandle" style="margin-right: 0px" icon-title="表头管理" icon-class="field" />
                 </el-row>
             </el-col>
+
         </el-row>
 
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
@@ -226,7 +261,7 @@ import {
     menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
-import { MJ_1, MJ_2, MJ_16 } from '../../assets/js/data';
+import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'AllDay',
@@ -265,6 +300,7 @@ export default {
                 receiveStartTime: '', //领取时间的查询开始时间（13位）
                 receiveEndTime: '', //领取时间的查询结束时间（13位）
                 intentionLevel: '', //意向等级
+                orderState: '',//成单状态
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -277,6 +313,10 @@ export default {
             dialStateList: [
                 { 'name': '首咨', 'number': 0 },
                 { 'name': '非首咨', 'number': 1 },
+            ],
+            orderStateList: [
+                { 'name': '未成单', 'number': 0 },
+                { 'name': '已成单', 'number': 1 },
             ],
             list: [],
             columnList: [
@@ -324,7 +364,7 @@ export default {
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         //this.jqStart = browserfly.noConflict();
-        let arr = [MJ_1, MJ_2, MJ_16];
+        let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
     },

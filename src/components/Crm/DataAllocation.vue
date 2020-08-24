@@ -346,7 +346,7 @@ export default {
             ],
             dateList: dateList,
             schoolList: [],
-            drawerTitle2: '分配组员',
+            drawerTitle2: '配置组员',
             drawerFlag2: false,
             groupId: '',
             schoolId: '',
