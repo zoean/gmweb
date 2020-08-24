@@ -25,17 +25,17 @@
         </el-row>
         <el-table :data="monthTableList">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
               <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.yearComplete > scope.row.yearTarget ? 0 : scope.row.yearTarget - scope.row.yearComplete}}
+              <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + Math.abs(scope.row.yearTarget - scope.row.yearComplete) : '￥' + (scope.row.yearTarget - scope.row.yearComplete)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="70">
+          <el-table-column label="操作" width="70" align="center">
             <template slot-scope="scope">
               <svg-icon @click.native.prevent="editYearTarget(scope.row)" icon-title="修改" icon-class="edit" />
             </template>

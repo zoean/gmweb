@@ -29,14 +29,14 @@
         </el-row>
         <el-table :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
               <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs(scope.row.target - scope.row.complete) : '￥' + (scope.row.target - scope.row.complete)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -75,7 +75,7 @@
         </el-row>
         <el-row type="flex" id="dialyTarget">
           <el-form-item v-for="(item, index) in addEditDailyForm.dailys" :label="item.label" :key="item.uuid">
-            <el-input size="mini" v-model="item.target" :value="item.target">222</el-input>
+            <el-input size="mini" v-model="item.target" :value="item.target"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -299,6 +299,9 @@ export default{
       }
       .el-form-item__content{
         margin-left: 50px !important;
+        .el-input{
+          width: 80px;
+        }
       }
     }
   }

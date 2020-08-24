@@ -123,10 +123,15 @@ export default {
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[1].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[1].includeSubsetList;
+          if(newVal.indexOf('/mbo/company') != -1){
+            this.activeIndex = '/crm/mbo/companyyearmbo'
+          }else if(newVal.indexOf('/mbo/department') != -1){
+            this.activeIndex = '/crm/mbo/departmentyearmbo'
+          }
         }else if(newVal.indexOf("/knowp") != -1){
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[2].defaultUrl;
-          this.userMenuList = this.$store.state.userMenuList[2].includeSubsetList;
+          this.userMenuList = this.$store.state.userMenuList[2].includeSubsetList;          
         }else if(newVal.indexOf("/operate") != -1){
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[3].defaultUrl;
@@ -135,6 +140,7 @@ export default {
           this.routersFlag = true;
           // this.activeIndex = newVal;
         }
+        
       }
     },
     mounted() {
