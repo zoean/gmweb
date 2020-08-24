@@ -31,7 +31,7 @@
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
           <el-table-column label="未完成">
@@ -64,12 +64,12 @@
         </el-row>  
         <el-row class="mt10">
           <el-col>
-            本日军团总目标（万元）
+            本日该组织总目标（万元）
             <span class="target-num">{{currentDailyData.target || 0}}</span>
           </el-col>
         </el-row>
         <el-row class="mt20" :gutter="10">
-          <el-col class="text-right" :span="5">分校</el-col>
+          <el-col class="text-right" :span="5">下属组织</el-col>
           <el-col :span="8">流水目标(万元)</el-col>
         </el-row>
         <el-row class="mt10" type="flex" justify="start" :gutter="10">
@@ -180,11 +180,25 @@ export default{
         this.$router.push({name: 'departmentmonthmbo' })
       }
     },
-    computedPercentage(row){
-      if(!row.complete || !row.target) 
-        return 0
-      else
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
+      }
     },
     dailyFormatter(row, column, cellValue){
       if(row.endTime && row.startTime){

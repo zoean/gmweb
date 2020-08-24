@@ -30,7 +30,7 @@
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
           <el-table-column label="未完成">
@@ -128,7 +128,7 @@ export default{
           prop: 'month'
         },
         {
-          label: '军团',
+          label: '下属组织',
           prop: 'name'
         },
         {
@@ -193,11 +193,24 @@ export default{
         this.$router.push({name: 'departmentdaymbo' })
       }
     },
-    computedPercentage(row){
-      if(row.complete == 0 || row.target == 0){
-        return 0
-      }else{
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
       }
     },
     timeFormatter(row, column, cellValue){
