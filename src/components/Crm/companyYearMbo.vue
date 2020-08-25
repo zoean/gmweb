@@ -241,7 +241,9 @@ export default{
           this.$smoke_post(addOrEditYearTarget, this.addEditYearForm).then(res => {
             if(res.code == 200){
               this.addEditYearParams.visible = false
-              // this.getWxNumList()
+              if(this.addEditYearForm.yearTime == this.searchForm.yearOrMonths[0]){
+                this.getYearTargetList()
+              }
               this.$message({
                 message: '添加成功',
                 type: 'success'

@@ -165,6 +165,7 @@ export default{
   },
   methods: {
     getCurrentYear: function (){
+      this.addEditMonthForm.yearTime = this.getCurrentYearForm.yearTime
       this.$smoke_post(getCurrentYear, this.getCurrentYearForm).then(res => {
         if(res.code == 200){
           const monthList = res.data.monthList
@@ -253,7 +254,9 @@ export default{
           this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
             if(res.code == 200){
               this.addEditMonthParams.visible = false
-              this.getMonthTargetList()
+              if(this.addEditMonthForm.yearTime == this.searchForm.yearOrMonths[0]){
+                this.getMonthTargetList()
+              }              
               this.$message({
                 message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
                 type: 'success'

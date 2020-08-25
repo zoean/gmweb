@@ -290,6 +290,9 @@ export default{
                 message: '添加成功',
                 type: 'success'
               })
+              if(this.addEditYearForm.time == this.searchForm.yearOrMonths[0]){
+                this.getYearTargetList()
+              }
             }else{
               this.addEditYearParams.visible = false
               this.$message.error(res.msg)
