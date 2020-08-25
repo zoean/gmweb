@@ -246,7 +246,7 @@ export default{
           this.$smoke_post(addOrEditDailyTarget, this.addEditDailyForm).then(res => {
             if(res.code == 200){
               this.addEditDailyParams.visible = false
-              if(this.addEditDailyParams.type == 2 || this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
+              if(this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
                 this.getComDailyList()
               }
               this.$message({

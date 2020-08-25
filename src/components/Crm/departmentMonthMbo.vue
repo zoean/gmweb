@@ -80,7 +80,7 @@
         </el-row>         
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
-            <el-button size="mini">取消</el-button> 
+            <el-button size="mini" @click="addEditMonthParams.visible = false">取消</el-button> 
             <el-button type="primary" size="mini" @click="submitAddEditMonth">保存</el-button>           
           </el-col>
         </el-row>     
@@ -272,10 +272,11 @@ export default{
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
           this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
-            console.log(res)
             if(res.code == 200){
               this.addEditMonthParams.visible = false
-              this.getMonthTargetList()
+              if(this.addEditMonthForm.time == this.searchForm.time){
+                this.getMonthTargetList()
+              }              
               this.$message({
                 message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
                 type: 'success'
