@@ -39,7 +39,7 @@
                     <svg-icon v-if="addDataAllocationPeople" @click="handleAddClick(scope.row)" icon-title="配置组员" icon-class="members" />
                     <svg-icon v-if="addDataAllocationLink && !scope.row.classType" @click="createLinksClick(scope.row)" icon-title="生成推广链接" icon-class="generatlinks" />
                     
-                    <svg-icon v-if="scope.row.setFlag && oneKeyPush" @click="handleOneKeyClick(scope.row)" icon-title="一键分配" icon-class="distribute" />
+                    <svg-icon v-if="oneKeyPush" @click="handleOneKeyClick(scope.row)" icon-title="一键分配" icon-class="distribute" />
               </template>
             </el-table-column>
 
@@ -505,12 +505,7 @@ export default {
                             if(sll.totalOverflowAllocated == 0) {
                                 sll.totalOverflowAllocated = '- -';
                             }
-                            sll.state = stateText(sll.state)
-                            if((sll.totalAlreadyAllocated < sll.totalAllocatedLeads) && (sll.totalOverflowAllocated > 0)) {
-                                sll.setFlag = true;
-                            }else{
-                                sll.setFlag = false;
-                            }
+                            sll.state = stateText(sll.state);
                         })
                         this.dataAlloList = res.data.list;
                         this.dataAlloForm.total = res.data.total;
@@ -533,18 +528,26 @@ export default {
             this.ruleForm.schoolId = scope.schoolId;
             this.getDataAllocationRulesByUuid(scope);
         },
-        handleOneKeyClick(scope) {
-            this.$smoke_post(oneKeyDistribution, {
-                ruleNumber: scope.id
-            }).then(res => {
-                if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '一键分配成功', 
-                    });
-                    this.getDataAllocationRulesList();
-                }
-            })
+        handleOneKeyClick(row) {
+            console.log(row);
+            if((row.totalAlreadyAllocated < row.totalAllocatedLeads) && (row.totalOverflowAllocated > 0)) {
+                this.$smoke_post(oneKeyDistribution, {
+                    ruleNumber: row.id
+                }).then(res => {
+                    if(res.code == 200) {
+                        this.$message({
+                            type: 'success',
+                            message: '一键分配成功', 
+                        });
+                        this.getDataAllocationRulesList();
+                    }
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '不符合一键分配的分配条件', 
+                });
+            }
         },
         handleCurrentChange(index) {
             this.dataAlloForm.currentPage = index;

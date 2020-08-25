@@ -503,13 +503,12 @@
                             v-if="columnFlag"
                         >
                             <template slot-scope="scope">
-                                <el-button v-if="scope.row.recordUrl" type="text" >
-                                    <audio 
-                                        :src="scope.row.recordUrl"
-                                        controls="controls"
-                                        style="height: 30px;"
-                                    ></audio>
-                                </el-button>
+                                <VueAudio 
+                                  :theUrl="scope.row.recordFile" 
+                                  v-if="scope.row.recordFile"
+                                  theControlList="onlyOnePlaying noMuted noVolume"
+                                >
+                                </VueAudio>
                             </template>
                         </el-table-column>
 
@@ -660,6 +659,7 @@ import {
   xieyi
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
+import VueAudio from '@/components/Share/VueAudio';
 import { 
   timestampToTime, getTextByJs, citiesFun, schoolType
 } from '../../assets/js/common';
@@ -668,6 +668,9 @@ import {
 } from '../../assets/js/data';
 export default {
     name: 'customerNotes',
+    components: {
+        VueAudio
+    },
     props: {
         drawer: {
           type: Boolean,
