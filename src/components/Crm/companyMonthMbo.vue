@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs(scope.row.target - scope.row.complete) : '￥' + (scope.row.target - scope.row.complete)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs((scope.row.target - scope.row.complete).toFixed(2)) : '￥' + (scope.row.target - scope.row.complete).toFixed(2)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
