@@ -1,8 +1,11 @@
 <template>
   <el-main class="index-main">
-    <el-tabs row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">年</el-tab-pane>
-      <el-tab-pane label="月" name="month">
+    <el-radio-group v-model="orgUuid" @change="changeOrg">
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}</el-radio-button>
+    </el-radio-group>
+    <el-tabs type="border-card" class="mt20" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+      <el-tab-pane label="年目标" name="year">年</el-tab-pane>
+      <el-tab-pane label="月目标" name="month">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
@@ -34,7 +37,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs(scope.row.target - scope.row.complete) : '￥' + (scope.row.target - scope.row.complete)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs((scope.row.target - scope.row.complete).toFixed(2)) : '￥' + (scope.row.target - scope.row.complete).toFixed(2)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -44,7 +47,7 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="日" name="day">日</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">日</el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
       <el-form :model="addEditMonthForm" ref="addEditMonthForm" label-width="160px !important" :rules="addEditMonthRules">
@@ -113,7 +116,7 @@ export default{
       selectYear: '',
       searchForm: {
         yearOrMonths: [sessionStorage.getItem('curTime')],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       monthTableList: [],
       monthTableColumn: [
@@ -147,7 +150,7 @@ export default{
       },
       addEditMonthForm: {
         time: '',
-        orgUuid: sessionStorage.getItem('orgUuid'),
+        orgUuid: '',
         deptList: []
       },
       addEditMonthRules:{
@@ -162,15 +165,28 @@ export default{
       addEditMonth: '',
       monthDetailData: {},
       getMonthDetailForm: {
-        orgUuid: sessionStorage.getItem('orgUuid'),
+        orgUuid: '',
         time: sessionStorage.getItem('curTime')
-      }
+      },      
+      orgUuid: ''
     }
   },
   created() {   
+    this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+    this.orgUuid = this.orgList[0].orgUuid
+    this.setFormOrgUuid()
     this.getMonthTargetList()
   },
   methods: {
+    setFormOrgUuid: function (){
+      this.searchForm.orgUuid = this.orgUuid
+      this.getMonthDetailForm.orgUuid = this.orgUuid
+      this.addEditMonthForm.orgUuid = this.orgUuid
+    },
+    changeOrg: function (){
+      this.setFormOrgUuid()
+      this.getMonthTargetList()
+    },
     formatterQuarter: function (row, column, cellValue){
       if(cellValue == 1){
         return '一季度'
@@ -265,7 +281,7 @@ export default{
       this.addEditMonthParams.type = 1
       this.addEditMonthParams.title = '添加月目标'
       this.addEditMonthForm.time = this.curTime
-      this.getMonthDetailForm.time = this.curTime()
+      this.getMonthDetailForm.time = this.curTime
       this.getMonthDetail()
     },
     submitAddEditMonth: function (){

@@ -1,7 +1,10 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">
+    <el-radio-group v-model="orgUuid" @change="changeOrg">
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}</el-radio-button>
+    </el-radio-group>
+    <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+      <el-tab-pane label="年目标" name="year">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
@@ -32,7 +35,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs(scope.row.target - scope.row.complete) : '￥' + (scope.row.target - scope.row.complete)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs((scope.row.target - scope.row.complete).toFixed(2)) : '￥' + (scope.row.target - scope.row.complete).toFixed(2)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -42,8 +45,8 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="月" name="month">月</el-tab-pane>
-      <el-tab-pane label="日" name="day">日</el-tab-pane>
+      <el-tab-pane label="月目标" name="month">月</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">日</el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="addEditYearParams.visible" :title="addEditYearParams.title" width="500px">
       <el-form :model="addEditYearForm" ref="addEditYearForm" label-width="160px !important" :rules="addEditYearRules">
@@ -101,14 +104,15 @@ export default{
         callback();
       }
     }
-    return {     
+    return {  
+      radio1: '',   
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now();
         }
       },
       yearDetailForm:{
-        orgUuid: sessionStorage.getItem('orgUuid'),
+        orgUuid: '',
         time: sessionStorage.getItem('curTime')
       },
       tabActiveName: 'year',
@@ -118,7 +122,7 @@ export default{
       selectYear: '',
       searchForm: {
         yearOrMonths: [sessionStorage.getItem('curTime')],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       yearTableList: [],
       yearTableColumn: [
@@ -161,14 +165,20 @@ export default{
       addEditYear: '',
       lastYearComplete: '',
       orgList: [],
-      orgUuid: sessionStorage.getItem('orgUuid'),
+      orgUuid: '',
       deptDetailData: {}
     }
   },
   created() { 
-    this.getOrgInfo()
+    if(sessionStorage.getItem('orgList')){
+      this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+      this.orgUuid = this.orgList[0].orgUuid
+      this.setFormOrgUuid()
+    }else{
+      this.getOrgInfo()
+    }    
     this.getYearTargetList()
-  },
+  },  
   computed: {
     total: function (){
       let total = 0
@@ -181,11 +191,22 @@ export default{
     }
   },
   methods: {
+    setFormOrgUuid: function (){
+      this.searchForm.orgUuid = this.orgUuid
+      this.yearDetailForm.orgUuid = this.orgUuid
+      this.addEditYearForm.orgUuid = this.orgUuid
+    },
+    changeOrg: function (){
+      this.setFormOrgUuid()
+      this.getYearTargetList()
+    },
     getOrgInfo: function (){
       this.$smoke_post(getManageOrgList).then(res => {
         if(res.code == 200){
           this.orgList = res.data
-          sessionStorage.setItem('orgUuid', this.orgList[0].orgUuid)
+          this.orgUuid = res.orgList[0].orgUuid
+          this.setFormOrgUuid()
+          sessionStorage.setItem('orgList', JSON.stringify(this.orgList))
         }
       })
     },

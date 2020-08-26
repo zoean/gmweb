@@ -1,11 +1,14 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">
+    <el-radio-group v-model="orgUuid" @change="changeOrg">
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}</el-radio-button>
+    </el-radio-group>
+    <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+      <el-tab-pane label="年目标" name="year">
         年
       </el-tab-pane>
-      <el-tab-pane label="月" name="month">月</el-tab-pane>
-      <el-tab-pane label="日" name="day">
+      <el-tab-pane label="月目标" name="month">月</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
@@ -36,7 +39,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs(scope.row.target - scope.row.complete) : '￥' + (scope.row.target - scope.row.complete)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs((scope.row.target - scope.row.complete).toFixed(2)) : '￥' + (scope.row.target - scope.row.complete).toFixed(2)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -116,7 +119,7 @@ export default{
       selectMonth: '',
       searchForm: {
         yearOrMonths: [sessionStorage.getItem('curTime')],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       dailyTableList: [],
       dailyTableColumn: [
@@ -150,7 +153,7 @@ export default{
       addEditDailyForm: {
         time: sessionStorage.getItem('curTime'),
         deptList: [],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       addEditDailyRules:{
         time: [
@@ -162,17 +165,30 @@ export default{
       },
       getDailyDetailForm: {
         time: sessionStorage.getItem('curTime'),
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       addEditDailyYear: '',
       addEditDailyMonth: '',
-      currentDailyData: {}
+      currentDailyData: {},
+      orgUuid: ''
     }
   },
   created() {  
+    this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+    this.orgUuid = this.orgList[0].orgUuid
+    this.setFormOrgUuid()
     this.getDeptDailyList()
   },
   methods: {
+    setFormOrgUuid: function (){
+      this.searchForm.orgUuid = this.orgUuid
+      this.getDailyDetailForm.orgUuid = this.orgUuid
+      this.addEditDailyForm.orgUuid = this.orgUuid
+    },
+    changeOrg: function (){
+      this.setFormOrgUuid()
+      this.getDeptDailyList()
+    },
     tabClick(tab, event){
       if(tab.index == 0){
         this.$router.push({name: 'departmentyearmbo' })
