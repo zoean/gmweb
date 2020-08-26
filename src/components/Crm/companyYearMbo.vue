@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+    <el-tabs type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年" name="year">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
