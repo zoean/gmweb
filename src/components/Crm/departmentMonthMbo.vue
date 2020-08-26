@@ -1,7 +1,7 @@
 <template>
   <el-main class="index-main">
     <el-radio-group v-model="orgUuid" @change="changeOrg">
-      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}</el-radio-button>
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
     </el-radio-group>
     <el-tabs type="border-card" class="mt20" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年目标" name="year">年</el-tab-pane>
@@ -60,25 +60,28 @@
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
+              @change="changeMonth"
               >
             </el-date-picker>
           </el-col>
-        </el-form-item>           
+        </el-form-item>       
         <el-row>
-          <el-col>
-            本年度目标流水（万元）
-            <span class="target-num">{{monthDetailData.target || 0}}</span>
-          </el-col>
-        </el-row>        
+          <el-col class="text-right" :span="12">本年度该组织目标流水（万元）</el-col>
+          <el-col :span="8"><span class="target-num">{{monthDetailData.target || 0}}</span></el-col>
+        </el-row>            
         <el-row id="targetTitle">
           <el-col :span="12">
-            分校
+            下属组织
           </el-col>
-          <el-col :span="12">流水目标（万元）</el-col>
+          <el-col class="text-left" :span="12">流水目标（万元）</el-col>
         </el-row> 
+        <el-row type="flex" class="mt10">
+          <el-col class="text-right" :span="12">总计</el-col>
+          <el-col><span class="target-num">{{total}}</span></el-col>
+        </el-row>    
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
-            <el-input v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input>
+            <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input-number>
           </el-form-item>
         </el-row>         
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -170,16 +173,30 @@ export default{
         orgUuid: '',
         time: sessionStorage.getItem('curTime')
       },      
-      orgUuid: ''
+      orgUuid: sessionStorage.getItem('orgUuid')
+    }
+  },   
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditMonthForm.deptList.length > 0){
+        this.addEditMonthForm.deptList.map((item, index, arr) => {
+          total = total + Number(item.targetMoney || 0)
+        })
+      }      
+      return total
     }
   },
   created() {   
     this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
-    this.orgUuid = this.orgList[0].orgUuid
     this.setFormOrgUuid()
     this.getMonthTargetList()
   },
   methods: {
+    changeMonth: function (val){
+      this.getMonthDetailForm.time = val
+      this.getMonthDetail()
+    },
     numberFormatter: function (row, column, cellValue){
       return cellValue.toFixed(4)
     },
@@ -292,21 +309,25 @@ export default{
     submitAddEditMonth: function (){
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
-            if(res.code == 200){
-              this.addEditMonthParams.visible = false
-              if(this.addEditMonthForm.time == this.searchForm.time){
-                this.getMonthTargetList()
-              }              
-              this.$message({
-                message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditMonthParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+          if(this.monthDetailData.target > this.total){
+            this.$message.error('下属组织目标合计需大于上级组织目标')
+          }else{
+            this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
+              if(res.code == 200){
+                this.addEditMonthParams.visible = false
+                if(this.addEditMonthForm.time == this.searchForm.time){
+                  this.getMonthTargetList()
+                }              
+                this.$message({
+                  message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
+                  type: 'success'
+                })
+              }else{
+                this.addEditMonthParams.visible = false
+                this.$message.error(res.msg)
+              }
+            })
+          }          
         }
       })
     }

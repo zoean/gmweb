@@ -1,7 +1,7 @@
 <template>
   <el-main class="index-main">
     <el-radio-group v-model="orgUuid" @change="changeOrg">
-      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}</el-radio-button>
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
     </el-radio-group>
     <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年目标" name="year">
@@ -59,13 +59,13 @@
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
-              @change="addEditChangeYear">
+              @change="changeYear">
             </el-date-picker>
           </el-col>
         </el-form-item>           
         <el-row type="flex" class="mt10">
           <el-col class="text-right" :span="12">
-            本年度公司总目标            
+            本年度该组织总目标            
           </el-col>
           <el-col>
             <span class="target-num">{{deptDetailData.target || 0}}</span>
@@ -80,7 +80,7 @@
           <el-col><span class="target-num">{{total}}</span></el-col>
         </el-row>
         <el-form-item v-for="(item, index) in addEditYearForm.deptList" :label="item.name" prop="targetMoney">
-          <el-input v-model="addEditYearForm.deptList[index].targetMoney" size="mini"></el-input>
+          <el-input-number :min="0" v-model="addEditYearForm.deptList[index].targetMoney" size="mini"></el-input-number>
         </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
@@ -104,8 +104,7 @@ export default{
         callback();
       }
     }
-    return {  
-      radio1: '',   
+    return {    
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now();
@@ -167,17 +166,17 @@ export default{
       addEditYear: '',
       lastYearComplete: '',
       orgList: [],
-      orgUuid: '',
+      orgUuid: sessionStorage.getItem('orgUuid'),
       deptDetailData: {}
     }
   },
   created() { 
-    if(sessionStorage.getItem('orgList')){
-      this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
-      this.orgUuid = this.orgList[0].orgUuid
-      this.setFormOrgUuid()
-    }else{
+    if(!sessionStorage.getItem('orgList')){
       this.getOrgInfo()
+    }else{
+      this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+      sessionStorage.setItem('orgUuid', this.orgUuid)
+      this.setFormOrgUuid()
     }    
     this.getYearTargetList()
   },  
@@ -211,7 +210,8 @@ export default{
           this.orgList = res.data
           this.orgUuid = this.orgList[0].orgUuid
           this.setFormOrgUuid()
-          sessionStorage.setItem('orgList', JSON.stringify(this.orgList))
+          sessionStorage.setItem('orgList', JSON.stringify(this.orgList))          
+          sessionStorage.setItem('orgUuid', this.orgUuid)
         }
       })
     },
@@ -230,7 +230,8 @@ export default{
         this.$router.push({name: 'departmentmonthmbo' })
       }else if(tab.index == 2){
         this.$router.push({name: 'departmentdaymbo' })
-      }
+      }      
+      sessionStorage.setItem('orgUuid', this.orgUuid)
     },
     computedPercentage(row, format){
       if(!row.complete || !row.target){
@@ -262,7 +263,7 @@ export default{
         }
       })
     },
-    addEditChangeYear(val){
+    changeYear(val){
       this.yearDetailForm.time = val
       this.getDeptYearDetail()
     },
@@ -309,21 +310,25 @@ export default{
     submitAddEditYear: function (){
       this.$refs['addEditYearForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDeptYear, this.addEditYearForm).then(res => {
-            if(res.code == 200){
-              this.addEditYearParams.visible = false
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-              if(this.addEditYearForm.time == this.searchForm.yearOrMonths[0]){
-                this.getYearTargetList()
+          if(this.deptDetailData.target > this.total){
+            this.$message.error('下属组织目标合计需大于上级组织目标')
+          }else{
+            this.$smoke_post(addOrEditDeptYear, this.addEditYearForm).then(res => {
+              if(res.code == 200){
+                this.addEditYearParams.visible = false
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
+                if(this.addEditYearForm.time == this.searchForm.yearOrMonths[0]){
+                  this.getYearTargetList()
+                }
+              }else{
+                this.addEditYearParams.visible = false
+                this.$message.error(res.msg)
               }
-            }else{
-              this.addEditYearParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+            })
+          }          
         }
       })
     }

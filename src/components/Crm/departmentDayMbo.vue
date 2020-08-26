@@ -1,7 +1,7 @@
 <template>
   <el-main class="index-main">
     <el-radio-group v-model="orgUuid" @change="changeOrg">
-      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}</el-radio-button>
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
     </el-radio-group>
     <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年目标" name="year">
@@ -64,23 +64,21 @@
               @change="changeDaily">
             </el-date-picker>
           </el-col>
-        </el-row>  
+        </el-row> 
         <el-row class="mt10">
-          <el-col>
-            本日该组织总目标（万元）
-            <span class="target-num">{{currentDailyData.target || 0}}</span>
-          </el-col>
-        </el-row>
+          <el-col class="text-right" :span="12">本日该组织总目标（万元）</el-col>
+          <el-col :span="8"><span class="target-num">{{currentDailyData.target || 0}}</span></el-col>
+        </el-row>  
         <el-row class="mt20" :gutter="10">
           <el-col class="text-right" :span="5">下属组织</el-col>
           <el-col :span="8">流水目标(万元)</el-col>
         </el-row>
         <el-row class="mt10" type="flex" justify="start" :gutter="10">
           <el-col class="text-right" :span="5">总计</el-col>
-          <el-col :span="8"><span class="target-num">0</span></el-col>
+          <el-col :span="8"><span class="target-num">{{total}}</span></el-col>
         </el-row>
         <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
-          <el-input size="mini" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled" type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"></el-input>
+          <el-input-number :min="0" size="mini" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled"></el-input-number>
         </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
@@ -172,12 +170,22 @@ export default{
       addEditDailyYear: '',
       addEditDailyMonth: '',
       currentDailyData: {},
-      orgUuid: ''
+      orgUuid: sessionStorage.getItem('orgUuid')
+    }
+  },
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditDailyForm.deptList.length > 0){
+        this.addEditDailyForm.deptList.map((item, index, arr) => {
+          total = total + Number(item.targetMoney || 0)
+        })
+      }      
+      return total
     }
   },
   created() {  
     this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
-    this.orgUuid = this.orgList[0].orgUuid
     this.setFormOrgUuid()
     this.getDeptDailyList()
   },
@@ -284,21 +292,25 @@ export default{
     submitAddEditDaily: function (){
       this.$refs['addEditDailyForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDeptDaily, this.addEditDailyForm).then(res => {
-            if(res.code == 200){
-              this.addEditDailyParams.visible = false
-              if(this.searchForm.yearOrMonths[0] == this.addEditDailyForm.time){
-                this.getDeptDailyList()
+          if(this.currentDailyData.target > this.total){
+            this.$message.error('下属组织目标合计需大于上级组织目标')
+          }else{
+            this.$smoke_post(addOrEditDeptDaily, this.addEditDailyForm).then(res => {
+              if(res.code == 200){
+                this.addEditDailyParams.visible = false
+                if(this.searchForm.yearOrMonths[0] == this.addEditDailyForm.time){
+                  this.getDeptDailyList()
+                }
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
+              }else{
+                this.addEditDailyParams.visible = false
+                this.$message.error(res.msg)
               }
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditDailyParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+            })
+          }          
         }
       })
     }
@@ -322,6 +334,11 @@ export default{
       margin-left: 80px !important;
       .el-input{
         width: 50%;
+      }
+      .el-input-number{
+        .el-input{
+          width: 100%;
+        }
       }
     }
     

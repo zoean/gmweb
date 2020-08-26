@@ -76,7 +76,7 @@
         </el-row> 
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in currentYearMonthData.monthList" :label="item.month" :key="item.uuid" prop="target">
-            <el-input :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target" size="mini"></el-input>
+            <el-input-number :min="0" :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target" size="mini"></el-input-number>
           </el-form-item>
         </el-row>         
         <el-row :gutter="20" type="flex" justify="end" class="text-right">

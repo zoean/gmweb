@@ -75,7 +75,7 @@
         </el-row>
         <el-row type="flex" id="dialyTarget">
           <el-form-item v-for="(item, index) in addEditDailyForm.dailys" :label="item.label" :key="item.uuid">
-            <el-input size="mini" v-model="item.target" :value="item.target" type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))" :disabled="item.disabled"></el-input>
+            <el-input-number :min="0" size="mini" v-model="item.target" :value="item.target" :disabled="item.disabled"></el-input-number>
           </el-form-item>
         </el-row>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -298,7 +298,7 @@ export default{
   #dialyTarget{
     flex-wrap: wrap;
     /deep/.el-form-item{
-      width: 20%;
+      width: 32%;
       .el-form-item__label{
         width: 50px !important;
         padding-right: 10px !important;
@@ -307,6 +307,11 @@ export default{
         margin-left: 50px !important;
         .el-input{
           width: 80px;
+        }
+        .el-input-number{
+          .el-input{
+            width: 100%;
+          }
         }
       }
     }
