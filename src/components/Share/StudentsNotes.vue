@@ -504,8 +504,8 @@
                         >
                             <template slot-scope="scope">
                                 <VueAudio 
-                                  :theUrl="scope.row.recordFile" 
-                                  v-if="scope.row.recordFile"
+                                  :theUrl="scope.row.recordUrl" 
+                                  v-if="scope.row.recordUrl"
                                   theControlList="onlyOnePlaying noMuted noVolume"
                                 >
                                 </VueAudio>
@@ -1216,7 +1216,7 @@ export default {
                   sll.callStyle = '直线呼入';
               }
               if(sll.recordUrl){
-                  this.columnWidth = 314;
+                  this.columnWidth = 400;
                   this.columnFlag = true;
               }
             })

@@ -3,8 +3,8 @@
 </template>
     
 <script>
-import jsmc from '../../assets/js/jsmc.min.js';
-import json2 from '../../assets/js/json2';
+import jsmc from '@/assets/js/jsmc.min.js';
+import json2 from '@/assets/js/json2.js';
 export default {
     name: 'start',
     data() {

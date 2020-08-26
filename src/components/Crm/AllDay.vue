@@ -257,6 +257,8 @@ import {
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
+// import jsmc from '@/assets/js/jsmc.min.js';
+// import json2 from '@/assets/js/json2.js';
 import { 
     menuNumberFunc,
     receiveTimeFun
@@ -323,7 +325,7 @@ export default {
                 {'label': '' }
             ],
             initOptions: {},
-            //jqStart: null,
+            // jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -363,10 +365,10 @@ export default {
         this.getClueDataNumber();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        //this.jqStart = browserfly.noConflict();
         let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
+        // this.jqStart = jsmc.noConflict();
     },
     methods: {
         clueConSignChange(row) {
@@ -713,7 +715,7 @@ export default {
         },
     },
     mounted() {
-
+        
     }
 }
 </script>
