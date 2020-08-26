@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+    <el-tabs type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年" name="year">
         年
       </el-tab-pane>
@@ -9,7 +9,7 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>                
+              <el-col :span="17">                
                 <el-date-picker
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
@@ -18,7 +18,7 @@
                 size="mini">
               </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="getComDailyList">查询</el-button>
               </el-col>
             </el-row>
@@ -27,16 +27,16 @@
             <el-button size="mini" type="primary" @click="addDialyTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -75,7 +75,7 @@
         </el-row>
         <el-row type="flex" id="dialyTarget">
           <el-form-item v-for="(item, index) in addEditDailyForm.dailys" :label="item.label" :key="item.uuid">
-            <el-input size="mini" v-model="item.target" :value="item.target">222</el-input>
+            <el-input-number :min="0" size="mini" v-model="item.target" :value="item.target" :disabled="item.disabled"></el-input-number>
           </el-form-item>
         </el-row>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -129,11 +129,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditDailyParams: {
@@ -164,7 +166,10 @@ export default{
   created() {  
     this.getComDailyList()
   },
-  methods: {
+  methods: {    
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     tabClick(tab, event){
       if(tab.index == 0){
         this.$router.push({name: 'companyyearmbo' })
@@ -172,11 +177,25 @@ export default{
         this.$router.push({name: 'companymonthmbo' })
       }
     },
-    computedPercentage(row){
-      if(!row.complete || !row.target) 
-        return 0
-      else
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
+      }
     },
     dailyFormatter(row, column, cellValue){
       if(row.endTime && row.startTime){
@@ -216,7 +235,8 @@ export default{
               daily: currentValue.daily,
               target: currentValue.target,
               uuid: currentValue.uuid,
-              label: currentValue.daily.split('-')[2] + '日'
+              label: currentValue.daily.split('-')[2] + '日',
+              disabled: currentValue.disabled
             })
           })
         }
@@ -232,7 +252,7 @@ export default{
           this.$smoke_post(addOrEditDailyTarget, this.addEditDailyForm).then(res => {
             if(res.code == 200){
               this.addEditDailyParams.visible = false
-              if(this.addEditDailyParams.type == 2 || this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
+              if(this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
                 this.getComDailyList()
               }
               this.$message({
@@ -278,13 +298,21 @@ export default{
   #dialyTarget{
     flex-wrap: wrap;
     /deep/.el-form-item{
-      width: 20%;
+      width: 32%;
       .el-form-item__label{
         width: 50px !important;
         padding-right: 10px !important;
       }
       .el-form-item__content{
         margin-left: 50px !important;
+        .el-input{
+          width: 80px;
+        }
+        .el-input-number{
+          .el-input{
+            width: 100%;
+          }
+        }
       }
     }
   }

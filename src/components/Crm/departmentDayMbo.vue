@@ -1,15 +1,18 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">
+    <el-radio-group v-model="orgUuid" @change="changeOrg">
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
+    </el-radio-group>
+    <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+      <el-tab-pane label="年目标" name="year">
         年
       </el-tab-pane>
-      <el-tab-pane label="月" name="month">月</el-tab-pane>
-      <el-tab-pane label="日" name="day">
+      <el-tab-pane label="月目标" name="month">月</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>                
+              <el-col :span="17">                
                 <el-date-picker
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
@@ -18,7 +21,7 @@
                 size="mini">
               </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="getDeptDailyList">查询</el-button>
               </el-col>
             </el-row>
@@ -29,14 +32,14 @@
         </el-row>
         <el-table :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -61,23 +64,21 @@
               @change="changeDaily">
             </el-date-picker>
           </el-col>
-        </el-row>  
+        </el-row> 
         <el-row class="mt10">
-          <el-col>
-            本日军团总目标（万元）
-            <span class="target-num">{{currentDailyData.target || 0}}</span>
-          </el-col>
-        </el-row>
+          <el-col class="text-right" :span="12">本日该组织总目标（万元）</el-col>
+          <el-col :span="8"><span class="target-num">{{currentDailyData.target || 0}}</span></el-col>
+        </el-row>  
         <el-row class="mt20" :gutter="10">
-          <el-col class="text-right" :span="5">分校</el-col>
+          <el-col class="text-right" :span="5">下属组织</el-col>
           <el-col :span="8">流水目标(万元)</el-col>
         </el-row>
         <el-row class="mt10" type="flex" justify="start" :gutter="10">
           <el-col class="text-right" :span="5">总计</el-col>
-          <el-col :span="8"><span class="target-num">0</span></el-col>
+          <el-col :span="8"><span class="target-num">{{total}}</span></el-col>
         </el-row>
         <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
-          <el-input size="mini" v-model="addEditDailyForm.deptList[index].targetMoney"></el-input>
+          <el-input-number :min="0" size="mini" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled"></el-input-number>
         </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
@@ -116,7 +117,7 @@ export default{
       selectMonth: '',
       searchForm: {
         yearOrMonths: [sessionStorage.getItem('curTime')],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       dailyTableList: [],
       dailyTableColumn: [
@@ -135,11 +136,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditDailyParams: {
@@ -150,7 +153,7 @@ export default{
       addEditDailyForm: {
         time: sessionStorage.getItem('curTime'),
         deptList: [],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       addEditDailyRules:{
         time: [
@@ -162,17 +165,43 @@ export default{
       },
       getDailyDetailForm: {
         time: sessionStorage.getItem('curTime'),
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       addEditDailyYear: '',
       addEditDailyMonth: '',
-      currentDailyData: {}
+      currentDailyData: {},
+      orgUuid: sessionStorage.getItem('orgUuid')
+    }
+  },
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditDailyForm.deptList.length > 0){
+        this.addEditDailyForm.deptList.map((item, index, arr) => {
+          total = total + Number(item.targetMoney || 0)
+        })
+      }      
+      return total
     }
   },
   created() {  
+    this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+    this.setFormOrgUuid()
     this.getDeptDailyList()
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
+    setFormOrgUuid: function (){
+      this.searchForm.orgUuid = this.orgUuid
+      this.getDailyDetailForm.orgUuid = this.orgUuid
+      this.addEditDailyForm.orgUuid = this.orgUuid
+    },
+    changeOrg: function (){
+      this.setFormOrgUuid()
+      this.getDeptDailyList()
+    },
     tabClick(tab, event){
       if(tab.index == 0){
         this.$router.push({name: 'departmentyearmbo' })
@@ -180,11 +209,25 @@ export default{
         this.$router.push({name: 'departmentmonthmbo' })
       }
     },
-    computedPercentage(row){
-      if(!row.complete || !row.target) 
-        return 0
-      else
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
+      }
     },
     dailyFormatter(row, column, cellValue){
       if(row.endTime && row.startTime){
@@ -225,7 +268,8 @@ export default{
             this.addEditDailyForm.deptList.push({
               name: item.name,
               targetMoney: item.target || 0,
-              uuid: item.uuid
+              uuid: item.uuid,
+              disable: item.disable
             })
           })
           this.currentDailyData.userList.map((item, index, arr)=> {
@@ -248,21 +292,25 @@ export default{
     submitAddEditDaily: function (){
       this.$refs['addEditDailyForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDeptDaily, this.addEditDailyForm).then(res => {
-            if(res.code == 200){
-              this.addEditDailyParams.visible = false
-              if(this.addEditDailyParams.type == 2 || this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
-                this.getDeptDailyList()
+          if(this.currentDailyData.target > this.total){
+            this.$message.error('下属组织目标合计需大于上级组织目标')
+          }else{
+            this.$smoke_post(addOrEditDeptDaily, this.addEditDailyForm).then(res => {
+              if(res.code == 200){
+                this.addEditDailyParams.visible = false
+                if(this.searchForm.yearOrMonths[0] == this.addEditDailyForm.time){
+                  this.getDeptDailyList()
+                }
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
+              }else{
+                this.addEditDailyParams.visible = false
+                this.$message.error(res.msg)
               }
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditDailyParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+            })
+          }          
         }
       })
     }
@@ -286,6 +334,11 @@ export default{
       margin-left: 80px !important;
       .el-input{
         width: 50%;
+      }
+      .el-input-number{
+        .el-input{
+          width: 100%;
+        }
       }
     }
     

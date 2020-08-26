@@ -1,11 +1,11 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+    <el-tabs type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年" name="year">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>
+              <el-col :span="17">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
@@ -14,7 +14,7 @@
                   size="mini">
                 </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="searchYearList">查询</el-button>
               </el-col>
             </el-row>
@@ -25,17 +25,17 @@
         </el-row>
         <el-table :data="monthTableList">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.yearComplete > scope.row.yearTarget ? 0 : scope.row.yearTarget - scope.row.yearComplete}}
+              <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(4).slice(1) : '￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(4)}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="70">
+          <el-table-column label="操作" width="70" align="center">
             <template slot-scope="scope">
               <svg-icon @click.native.prevent="editYearTarget(scope.row)" icon-title="修改" icon-class="edit" />
             </template>
@@ -63,12 +63,12 @@
         <el-row>
           <el-col>
             上一年总流水（万元）
-            <span class="target-num">{{lastYearComplete || 0}}</span>
+            <span class="target-num">{{lastYearComplete}}</span>
           </el-col>
         </el-row>
         <el-form-item label="流水目标（万元）" prop="yearTarget">
           <el-col :span="162">
-            <el-input type="number" v-model="addEditYearForm.yearTarget"></el-input>
+            <el-input-number :min="0" v-model="addEditYearForm.yearTarget"></el-input-number>
           </el-col>          
         </el-form-item>     
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -83,7 +83,7 @@
 </template>
 <script>
 import {getYearTargetList, getLastYear, getComYearDetail, addOrEditYearTarget} from '@/request/api'
-import {timestampToTime} from '@/assets/js/common'
+import {timestampToTime, formatComputed} from '@/assets/js/common'
 export default{
   data() {
     var validateNumber = (rule, value, callback) => {
@@ -119,11 +119,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'yearTarget'
+          prop: 'yearTarget',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'yearComplete'
+          prop: 'yearComplete',
+          formatter: this.numberFormatter
         }
       ],
       addEditYearParams: {
@@ -153,10 +155,14 @@ export default{
     this.getYearTargetList()
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     getLastYear: function (){
       this.$smoke_post(getLastYear, this.lastYearCompleteForm).then((res) => {
-        if(res.data == 200){
-          this.lastYearComplete = res.data.lastYearComplete
+        if(res.code == 200){
+          this.lastYearComplete = res.data.lastComplete
+          this.addEditYearForm.yearTarget = res.data.currentTarget
         }
       })
     },
@@ -177,12 +183,25 @@ export default{
         this.$router.push({name: 'companydaymbo' })
       }
     },
-    computedPercentage(row){
-      if(!row.yearComplete || !row.yearTarget)
-      return 0
-      else
-      return (row.yearComplete / row.yearTarget * 100).toFixed(2)
-      // return parseInt(row.yearComplete / row.yearTarget > 1 ? '100' : row.yearComplete / row.yearTarget)
+    computedPercentage(row, format){
+      if(!row.yearComplete || !row.yearTarget){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.yearComplete / row.yearTarget * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.yearComplete / row.yearTarget * 100).toFixed(2))
+        }
+      }
     },
     timeFormatter(row, column, cellValue){
       return timestampToTime(Number(cellValue)).slice(0, 4)
@@ -227,7 +246,9 @@ export default{
           this.$smoke_post(addOrEditYearTarget, this.addEditYearForm).then(res => {
             if(res.code == 200){
               this.addEditYearParams.visible = false
-              // this.getWxNumList()
+              if(this.addEditYearForm.yearTime == this.searchForm.yearOrMonths[0]){
+                this.getYearTargetList()
+              }
               this.$message({
                 message: '添加成功',
                 type: 'success'

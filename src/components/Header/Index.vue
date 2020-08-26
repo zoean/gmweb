@@ -450,6 +450,7 @@ export default {
             localStorage.removeItem('userMenuList');
             localStorage.removeItem('initOptions');
             localStorage.removeItem('studentsPageSize');
+            sessionStorage.clear()
             this.$store.dispatch('actionsSetCommonFlag', false);
             this.$router.push({ path: '/login'});
         },

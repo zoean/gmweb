@@ -1,11 +1,14 @@
 <template>
   <el-main class="index-main">
-    <el-tabs v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">
+    <el-radio-group v-model="orgUuid" @change="changeOrg">
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
+    </el-radio-group>
+    <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+      <el-tab-pane label="年目标" name="year">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>
+              <el-col :span="17">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
@@ -14,7 +17,7 @@
                   size="mini">
                 </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="searchYearList">查询</el-button>
               </el-col>
             </el-row>
@@ -25,14 +28,14 @@
         </el-row>
         <el-table :data="yearTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in yearTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 100 : scope.row.target - scope.row.complete}}
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -42,8 +45,8 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="月" name="month">月</el-tab-pane>
-      <el-tab-pane label="日" name="day">日</el-tab-pane>
+      <el-tab-pane label="月目标" name="month">月</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">日</el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="addEditYearParams.visible" :title="addEditYearParams.title" width="500px">
       <el-form :model="addEditYearForm" ref="addEditYearForm" label-width="160px !important" :rules="addEditYearRules">
@@ -56,20 +59,20 @@
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
-              @change="addEditChangeYear">
+              @change="changeYear">
             </el-date-picker>
           </el-col>
         </el-form-item>           
         <el-row type="flex" class="mt10">
           <el-col class="text-right" :span="12">
-            本年度公司总目标            
+            本年度该组织总目标            
           </el-col>
           <el-col>
             <span class="target-num">{{deptDetailData.target || 0}}</span>
           </el-col>
         </el-row>
         <el-row type="flex" class="mt10">
-          <el-col class="text-right" :span="12">军团</el-col>
+          <el-col class="text-right" :span="12">下属组织</el-col>
           <el-col class="ml16">流水目标（万元）</el-col>
         </el-row>
         <el-row type="flex" class="mt10">
@@ -77,7 +80,7 @@
           <el-col><span class="target-num">{{total}}</span></el-col>
         </el-row>
         <el-form-item v-for="(item, index) in addEditYearForm.deptList" :label="item.name" prop="targetMoney">
-          <el-input v-model="addEditYearForm.deptList[index].targetMoney" size="mini"></el-input>
+          <el-input-number :min="0" v-model="addEditYearForm.deptList[index].targetMoney" size="mini"></el-input-number>
         </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
@@ -101,14 +104,14 @@ export default{
         callback();
       }
     }
-    return {     
+    return {    
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now();
         }
       },
       yearDetailForm:{
-        orgUuid: sessionStorage.getItem('orgUuid'),
+        orgUuid: '',
         time: sessionStorage.getItem('curTime')
       },
       tabActiveName: 'year',
@@ -118,7 +121,7 @@ export default{
       selectYear: '',
       searchForm: {
         yearOrMonths: [sessionStorage.getItem('curTime')],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       yearTableList: [],
       yearTableColumn: [
@@ -127,16 +130,18 @@ export default{
           prop: 'time'
         },
         {
-          label: '军团',
+          label: '下属组织',
           prop: 'name'
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditYearParams: {
@@ -166,9 +171,15 @@ export default{
     }
   },
   created() { 
-    this.getOrgInfo()
+    if(!sessionStorage.getItem('orgList')){
+      this.getOrgInfo()
+    }else{
+      this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+      sessionStorage.setItem('orgUuid', this.orgUuid)
+      this.setFormOrgUuid()
+    }    
     this.getYearTargetList()
-  },
+  },  
   computed: {
     total: function (){
       let total = 0
@@ -181,11 +192,26 @@ export default{
     }
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
+    setFormOrgUuid: function (){
+      this.searchForm.orgUuid = this.orgUuid
+      this.yearDetailForm.orgUuid = this.orgUuid
+      this.addEditYearForm.orgUuid = this.orgUuid
+    },
+    changeOrg: function (){
+      this.setFormOrgUuid()
+      this.getYearTargetList()
+    },
     getOrgInfo: function (){
       this.$smoke_post(getManageOrgList).then(res => {
         if(res.code == 200){
           this.orgList = res.data
-          sessionStorage.setItem('orgUuid', this.orgList[0].orgUuid)
+          this.orgUuid = this.orgList[0].orgUuid
+          this.setFormOrgUuid()
+          sessionStorage.setItem('orgList', JSON.stringify(this.orgList))          
+          sessionStorage.setItem('orgUuid', this.orgUuid)
         }
       })
     },
@@ -204,13 +230,27 @@ export default{
         this.$router.push({name: 'departmentmonthmbo' })
       }else if(tab.index == 2){
         this.$router.push({name: 'departmentdaymbo' })
-      }
+      }      
+      sessionStorage.setItem('orgUuid', this.orgUuid)
     },
-    computedPercentage(row){
-      if(row.complete == 0 || row.target == 0){
-        return 0
-      }else{
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
       }
     },
     timeFormatter(row, column, cellValue){
@@ -223,7 +263,7 @@ export default{
         }
       })
     },
-    addEditChangeYear(val){
+    changeYear(val){
       this.yearDetailForm.time = val
       this.getDeptYearDetail()
     },
@@ -270,18 +310,25 @@ export default{
     submitAddEditYear: function (){
       this.$refs['addEditYearForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDeptYear, this.addEditYearForm).then(res => {
-            if(res.code == 200){
-              this.addEditYearParams.visible = false
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditYearParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+          if(this.deptDetailData.target > this.total){
+            this.$message.error('下属组织目标合计需大于上级组织目标')
+          }else{
+            this.$smoke_post(addOrEditDeptYear, this.addEditYearForm).then(res => {
+              if(res.code == 200){
+                this.addEditYearParams.visible = false
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
+                if(this.addEditYearForm.time == this.searchForm.yearOrMonths[0]){
+                  this.getYearTargetList()
+                }
+              }else{
+                this.addEditYearParams.visible = false
+                this.$message.error(res.msg)
+              }
+            })
+          }          
         }
       })
     }

@@ -1,12 +1,12 @@
 <template>
   <el-main class="index-main">
-    <el-tabs row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+    <el-tabs type="border-card" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年" name="year">年</el-tab-pane>
       <el-tab-pane label="月" name="month">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>
+              <el-col :span="17">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
@@ -16,7 +16,7 @@
                   :clearable="false">
                 </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="searchMonthList">查询</el-button>
               </el-col>
             </el-row>
@@ -28,19 +28,19 @@
         <el-table :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <!-- <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column> -->
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 0 : scope.row.target - scope.row.complete}}
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
             <template slot-scope="scope">
-              <svg-icon v-if="scope.row.month != null" @click.native.prevent="editMonthTarget" icon-title="修改" icon-class="edit" />
+              <svg-icon v-if="scope.row.month" @click.native.prevent="editMonthTarget" icon-title="修改" icon-class="edit" />
             </template>
           </el-table-column>
         </el-table>
@@ -76,7 +76,7 @@
         </el-row> 
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in currentYearMonthData.monthList" :label="item.month" :key="item.uuid" prop="target">
-            <el-input :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target" size="mini"></el-input>
+            <el-input-number :min="0" :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target" size="mini"></el-input-number>
           </el-form-item>
         </el-row>         
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -128,11 +128,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditMonthParams: {
@@ -164,7 +166,11 @@ export default{
     this.getMonthTargetList()
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     getCurrentYear: function (){
+      this.addEditMonthForm.yearTime = this.getCurrentYearForm.yearTime
       this.$smoke_post(getCurrentYear, this.getCurrentYearForm).then(res => {
         if(res.code == 200){
           const monthList = res.data.monthList
@@ -202,11 +208,24 @@ export default{
         this.$router.push({name: 'companydaymbo' })
       }
     },
-    computedPercentage(row){
-      if(row.complete == 0 || row.target == 0){
-        return 0
-      }else{
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
       }
     },
     timeFormatter(row, column, cellValue){
@@ -240,7 +259,9 @@ export default{
           this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
             if(res.code == 200){
               this.addEditMonthParams.visible = false
-              this.getMonthTargetList()
+              if(this.addEditMonthForm.yearTime == this.searchForm.yearOrMonths[0]){
+                this.getMonthTargetList()
+              }              
               this.$message({
                 message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
                 type: 'success'

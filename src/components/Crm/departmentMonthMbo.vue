@@ -1,12 +1,15 @@
 <template>
   <el-main class="index-main">
-    <el-tabs row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">年</el-tab-pane>
-      <el-tab-pane label="月" name="month">
+    <el-radio-group v-model="orgUuid" @change="changeOrg">
+      <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
+    </el-radio-group>
+    <el-tabs type="border-card" class="mt20" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+      <el-tab-pane label="年目标" name="year">年</el-tab-pane>
+      <el-tab-pane label="月目标" name="month">
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>
+              <el-col :span="17">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="month"
@@ -16,7 +19,7 @@
                   :clearable="false">
                 </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="searchMonthList">查询</el-button>
               </el-col>
             </el-row>
@@ -26,16 +29,15 @@
           </el-col>
         </el-row>
         <el-table :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
-          <!-- <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column> -->
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
-          <el-table-column label="完成率">
+          <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
-              <el-progress :percentage="computedPercentage(scope.row)"></el-progress>
+              <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成">
+          <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              {{scope.row.target < scope.row.complete ? 100 : scope.row.target - scope.row.complete}}
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -45,7 +47,7 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="日" name="day">日</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">日</el-tab-pane>
     </el-tabs>
     <el-dialog :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
       <el-form :model="addEditMonthForm" ref="addEditMonthForm" label-width="160px !important" :rules="addEditMonthRules">
@@ -58,30 +60,33 @@
               :pickerOptions="pickerOptions"
               value-format="timestamp"
               size="mini"
+              @change="changeMonth"
               >
             </el-date-picker>
           </el-col>
-        </el-form-item>           
+        </el-form-item>       
         <el-row>
-          <el-col>
-            本年度目标流水（万元）
-            <span class="target-num">{{monthDetailData.target || 0}}</span>
-          </el-col>
-        </el-row>        
+          <el-col class="text-right" :span="12">本年度该组织目标流水（万元）</el-col>
+          <el-col :span="8"><span class="target-num">{{monthDetailData.target || 0}}</span></el-col>
+        </el-row>            
         <el-row id="targetTitle">
           <el-col :span="12">
-            分校
+            下属组织
           </el-col>
-          <el-col :span="12">流水目标（万元）</el-col>
+          <el-col class="text-left" :span="12">流水目标（万元）</el-col>
         </el-row> 
+        <el-row type="flex" class="mt10">
+          <el-col class="text-right" :span="12">总计</el-col>
+          <el-col><span class="target-num">{{total}}</span></el-col>
+        </el-row>    
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
-            <el-input v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input>
+            <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input-number>
           </el-form-item>
         </el-row>         
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
-            <el-button size="mini">取消</el-button> 
+            <el-button size="mini" @click="addEditMonthParams.visible = false">取消</el-button> 
             <el-button type="primary" size="mini" @click="submitAddEditMonth">保存</el-button>           
           </el-col>
         </el-row>     
@@ -114,7 +119,7 @@ export default{
       selectYear: '',
       searchForm: {
         yearOrMonths: [sessionStorage.getItem('curTime')],
-        orgUuid: sessionStorage.getItem('orgUuid')
+        orgUuid: ''
       },
       monthTableList: [],
       monthTableColumn: [
@@ -128,16 +133,18 @@ export default{
           prop: 'month'
         },
         {
-          label: '军团',
+          label: '下属组织',
           prop: 'name'
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       monthListYear: '',
@@ -148,7 +155,7 @@ export default{
       },
       addEditMonthForm: {
         time: '',
-        orgUuid: sessionStorage.getItem('orgUuid'),
+        orgUuid: '',
         deptList: []
       },
       addEditMonthRules:{
@@ -163,15 +170,45 @@ export default{
       addEditMonth: '',
       monthDetailData: {},
       getMonthDetailForm: {
-        orgUuid: sessionStorage.getItem('orgUuid'),
+        orgUuid: '',
         time: sessionStorage.getItem('curTime')
-      }
+      },      
+      orgUuid: sessionStorage.getItem('orgUuid')
+    }
+  },   
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditMonthForm.deptList.length > 0){
+        this.addEditMonthForm.deptList.map((item, index, arr) => {
+          total = total + Number(item.targetMoney || 0)
+        })
+      }      
+      return total
     }
   },
   created() {   
+    this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
+    this.setFormOrgUuid()
     this.getMonthTargetList()
   },
   methods: {
+    changeMonth: function (val){
+      this.getMonthDetailForm.time = val
+      this.getMonthDetail()
+    },
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
+    setFormOrgUuid: function (){
+      this.searchForm.orgUuid = this.orgUuid
+      this.getMonthDetailForm.orgUuid = this.orgUuid
+      this.addEditMonthForm.orgUuid = this.orgUuid
+    },
+    changeOrg: function (){
+      this.setFormOrgUuid()
+      this.getMonthTargetList()
+    },
     formatterQuarter: function (row, column, cellValue){
       if(cellValue == 1){
         return '一季度'
@@ -193,11 +230,24 @@ export default{
         this.$router.push({name: 'departmentdaymbo' })
       }
     },
-    computedPercentage(row){
-      if(row.complete == 0 || row.target == 0){
-        return 0
-      }else{
-        return (row.complete / row.target * 100).toFixed(2)
+    computedPercentage(row, format){
+      if(!row.complete || !row.target){
+        if(format){
+          return () => {
+            return 0 + '%'
+          }
+        }else{
+          return 0
+        }
+      }
+      else{
+        if(format){
+          return () =>{
+            return Number((row.complete / row.target * 100).toFixed(2)) + '%'
+          }
+        }else{
+          return Number((row.complete / row.target * 100).toFixed(2))
+        }
       }
     },
     timeFormatter(row, column, cellValue){
@@ -253,26 +303,31 @@ export default{
       this.addEditMonthParams.type = 1
       this.addEditMonthParams.title = '添加月目标'
       this.addEditMonthForm.time = this.curTime
-      this.getMonthDetailForm.time = this.curTime()
+      this.getMonthDetailForm.time = this.curTime
       this.getMonthDetail()
     },
     submitAddEditMonth: function (){
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
-            console.log(res)
-            if(res.code == 200){
-              this.addEditMonthParams.visible = false
-              this.getMonthTargetList()
-              this.$message({
-                message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditMonthParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+          if(this.monthDetailData.target > this.total){
+            this.$message.error('下属组织目标合计需大于上级组织目标')
+          }else{
+            this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
+              if(res.code == 200){
+                this.addEditMonthParams.visible = false
+                if(this.addEditMonthForm.time == this.searchForm.time){
+                  this.getMonthTargetList()
+                }              
+                this.$message({
+                  message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
+                  type: 'success'
+                })
+              }else{
+                this.addEditMonthParams.visible = false
+                this.$message.error(res.msg)
+              }
+            })
+          }          
         }
       })
     }
