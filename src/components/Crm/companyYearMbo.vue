@@ -32,7 +32,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + Math.abs(scope.row.yearTarget - scope.row.yearComplete) : '￥' + (scope.row.yearTarget - scope.row.yearComplete)}}</span>
+              <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + Math.abs((scope.row.yearTarget - scope.row.yearComplete).toFixed(2)) : '￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(2)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70" align="center">
@@ -68,7 +68,7 @@
         </el-row>
         <el-form-item label="流水目标（万元）" prop="yearTarget">
           <el-col :span="162">
-            <el-input type="number" v-model="addEditYearForm.yearTarget"></el-input>
+            <el-input type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))" v-model="addEditYearForm.yearTarget"></el-input>
           </el-col>          
         </el-form-item>     
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -83,7 +83,7 @@
 </template>
 <script>
 import {getYearTargetList, getLastYear, getComYearDetail, addOrEditYearTarget} from '@/request/api'
-import {timestampToTime} from '@/assets/js/common'
+import {timestampToTime, formatComputed} from '@/assets/js/common'
 export default{
   data() {
     var validateNumber = (rule, value, callback) => {
