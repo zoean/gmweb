@@ -204,7 +204,7 @@ export default{
       this.$smoke_post(getManageOrgList).then(res => {
         if(res.code == 200){
           this.orgList = res.data
-          this.orgUuid = res.orgList[0].orgUuid
+          this.orgUuid = this.orgList[0].orgUuid
           this.setFormOrgUuid()
           sessionStorage.setItem('orgList', JSON.stringify(this.orgList))
         }

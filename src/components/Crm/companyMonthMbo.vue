@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-tabs row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
+    <el-tabs type="border-card" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年" name="year">年</el-tab-pane>
       <el-tab-pane label="月" name="month">
         <el-row type="flex" justify="space-between">
