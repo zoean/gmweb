@@ -45,12 +45,12 @@
 
         </el-row>
 
-        <el-row class="people-screen" type="flex" align="middle">
+        <el-row class="people-screen">
 
-            <el-col :span="5">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 94%;"
                     v-model="dataPickerValue"
                     type="datetimerange"
                     range-separator="至"
@@ -61,10 +61,10 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 94%;"
                     v-model="dataPickerValueSignUp"
                     type="datetimerange"
                     :default-time="['00:00:00', '23:59:59']"
@@ -75,13 +75,13 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="6">
 
                 <el-cascader
                     class="smoke-cascader1"
                     ref="cascader"
                     size="small"
-                    style="width: 95%;"
+                    style="width: 94%;"
                     placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels='true'
@@ -94,10 +94,10 @@
 
             </el-col>
 
-            <el-col :span="5">
+            <el-col :span="6">
                 
                 <el-date-picker
-                  style="width: 95%;"
+                  style="width: 100%;"
                   v-model="dataPicker"
                   type="date"
                   align="right"
@@ -109,6 +109,10 @@
                 </el-date-picker>
 
             </el-col>
+
+        </el-row>
+
+        <el-row class="people-screen">
 
             <el-col :span="4">
                 <el-select v-model="form.examProvince" placeholder="请选择报考省份" style="width: 90%;" size="small" clearable>
@@ -127,13 +131,13 @@
 
             </el-col>
 
-            <!-- <el-col :span="2">
+            <el-col :span="2">
 
                 <el-button type="primary" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button>
 
-            </el-col> -->
+            </el-col>
 
-            <el-col :span="2">
+            <el-col :span="16">
                 <el-row type="flex" justify="end">
                     <svg-icon style="margin-right: 0;" class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
                 </el-row>
@@ -220,6 +224,14 @@
         >
         </StudentsNotes>
 
+        <StudentsSMS 
+            v-if="studentsSMSFlag"
+            @changeStudentsSMSFlag="changeStudentsSMSFlag"
+            :studentsSMSFlag.sync='studentsSMSFlag'
+            :studentsSMSForm='form'
+        >
+        </StudentsSMS>
+
     </el-main>
 </template>
 
@@ -235,6 +247,7 @@ import {
     queryProvinceAll
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
+import StudentsSMS from '@/components/Share/StudentsSMS';
 import { 
     timestampToTime, 
     genderText,
@@ -249,7 +262,8 @@ import pcaa from 'area-data/pcaa';
 export default {
     name: 'allStudents',
     components: {
-        StudentsNotes
+        StudentsNotes,
+        StudentsSMS
     },
     data() {
         return {
@@ -360,6 +374,8 @@ export default {
             clueDataSUuid: '',
             callLogUuid: '',
 
+            studentsSMSFlag: false,
+
             scrollLockFlag: false,
             provinceList: [],
         }
@@ -378,6 +394,12 @@ export default {
         this.queryProvinceAll();
     },
     methods: {
+        getSendMsgClassTeaStudentClick() {
+            this.studentsSMSFlag = true;
+        },
+        changeStudentsSMSFlag(val){
+            this.studentsSMSFlag = val;
+        },
         queryProvinceAll() {
           this.$smoke_get(queryProvinceAll, {}).then(res => {
             if(res.code == 200) {
@@ -663,6 +685,9 @@ export default {
         .el-pagination{
             text-align: right;
             margin-top: .4rem;
+        }
+        .el-col-6{
+            height: auto !important;
         }
     }
 
