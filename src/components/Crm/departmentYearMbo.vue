@@ -8,7 +8,7 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>
+              <el-col :span="17">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
@@ -17,7 +17,7 @@
                   size="mini">
                 </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="searchYearList">查询</el-button>
               </el-col>
             </el-row>
@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs((scope.row.target - scope.row.complete).toFixed(2)) : '￥' + (scope.row.target - scope.row.complete).toFixed(2)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -136,11 +136,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditYearParams: {
@@ -191,6 +193,9 @@ export default{
     }
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     setFormOrgUuid: function (){
       this.searchForm.orgUuid = this.orgUuid
       this.yearDetailForm.orgUuid = this.orgUuid

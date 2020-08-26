@@ -12,7 +12,7 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>                
+              <el-col :span="17">                
                 <el-date-picker
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
@@ -21,7 +21,7 @@
                 size="mini">
               </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="getDeptDailyList">查询</el-button>
               </el-col>
             </el-row>
@@ -39,7 +39,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs((scope.row.target - scope.row.complete).toFixed(2)) : '￥' + (scope.row.target - scope.row.complete).toFixed(2)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -80,7 +80,7 @@
           <el-col :span="8"><span class="target-num">0</span></el-col>
         </el-row>
         <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
-          <el-input size="mini" v-model="addEditDailyForm.deptList[index].targetMoney"></el-input>
+          <el-input size="mini" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled" type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"></el-input>
         </el-form-item>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
           <el-col>
@@ -138,11 +138,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditDailyParams: {
@@ -180,6 +182,9 @@ export default{
     this.getDeptDailyList()
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     setFormOrgUuid: function (){
       this.searchForm.orgUuid = this.orgUuid
       this.getDailyDetailForm.orgUuid = this.orgUuid
@@ -255,7 +260,8 @@ export default{
             this.addEditDailyForm.deptList.push({
               name: item.name,
               targetMoney: item.target || 0,
-              uuid: item.uuid
+              uuid: item.uuid,
+              disable: item.disable
             })
           })
           this.currentDailyData.userList.map((item, index, arr)=> {

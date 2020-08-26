@@ -5,7 +5,7 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>
+              <el-col :span="17">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
@@ -14,7 +14,7 @@
                   size="mini">
                 </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="searchYearList">查询</el-button>
               </el-col>
             </el-row>
@@ -32,7 +32,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + Math.abs((scope.row.yearTarget - scope.row.yearComplete).toFixed(2)) : '￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(2)}}</span>
+              <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(4).slice(1) : '￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70" align="center">
@@ -63,7 +63,7 @@
         <el-row>
           <el-col>
             上一年总流水（万元）
-            <span class="target-num">{{lastYearComplete || 0}}</span>
+            <span class="target-num">{{lastYearComplete}}</span>
           </el-col>
         </el-row>
         <el-form-item label="流水目标（万元）" prop="yearTarget">
@@ -119,11 +119,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'yearTarget'
+          prop: 'yearTarget',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'yearComplete'
+          prop: 'yearComplete',
+          formatter: this.numberFormatter
         }
       ],
       addEditYearParams: {
@@ -153,11 +155,14 @@ export default{
     this.getYearTargetList()
   },
   methods: {
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     getLastYear: function (){
       this.$smoke_post(getLastYear, this.lastYearCompleteForm).then((res) => {
         if(res.code == 200){
-          this.lastYearComplete = res.data.lastYearComplete
-          this.addEditYearForm.yearTarget = res.data.currentTarget || 0
+          this.lastYearComplete = res.data.lastComplete
+          this.addEditYearForm.yearTarget = res.data.currentTarget
         }
       })
     },

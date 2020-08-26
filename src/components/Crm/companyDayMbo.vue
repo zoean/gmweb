@@ -9,7 +9,7 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="6">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col>                
+              <el-col :span="17">                
                 <el-date-picker
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
@@ -18,7 +18,7 @@
                 size="mini">
               </el-date-picker>
               </el-col>
-              <el-col>
+              <el-col :span="5">
                 <el-button size="mini" type="primary" @click="getComDailyList">查询</el-button>
               </el-col>
             </el-row>
@@ -27,7 +27,7 @@
             <el-button size="mini" type="primary" @click="addDialyTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -36,7 +36,7 @@
           </el-table-column>
           <el-table-column label="未完成" align="center">
             <template slot-scope="scope">
-              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + Math.abs(scope.row.target - scope.row.complete) : '￥' + (scope.row.target - scope.row.complete)}}</span>
+              <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="70">
@@ -75,7 +75,7 @@
         </el-row>
         <el-row type="flex" id="dialyTarget">
           <el-form-item v-for="(item, index) in addEditDailyForm.dailys" :label="item.label" :key="item.uuid">
-            <el-input size="mini" v-model="item.target" :value="item.target"></el-input>
+            <el-input size="mini" v-model="item.target" :value="item.target" type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))" :disabled="item.disabled"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
@@ -129,11 +129,13 @@ export default{
         },
         {
           label: '流水目标（万元）',
-          prop: 'target'
+          prop: 'target',
+          formatter: this.numberFormatter
         },
         {
           label: '完成流水（万元）',
-          prop: 'complete'
+          prop: 'complete',
+          formatter: this.numberFormatter
         }
       ],
       addEditDailyParams: {
@@ -164,7 +166,10 @@ export default{
   created() {  
     this.getComDailyList()
   },
-  methods: {
+  methods: {    
+    numberFormatter: function (row, column, cellValue){
+      return cellValue.toFixed(4)
+    },
     tabClick(tab, event){
       if(tab.index == 0){
         this.$router.push({name: 'companyyearmbo' })
@@ -230,7 +235,8 @@ export default{
               daily: currentValue.daily,
               target: currentValue.target,
               uuid: currentValue.uuid,
-              label: currentValue.daily.split('-')[2] + '日'
+              label: currentValue.daily.split('-')[2] + '日',
+              disabled: currentValue.disabled
             })
           })
         }
