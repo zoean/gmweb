@@ -408,13 +408,12 @@
                             v-if="columnFlag"
                         >
                             <template slot-scope="scope">
-                                <el-button v-if="scope.row.recordUrl" type="text" >
-                                    <audio 
-                                        :src="scope.row.recordUrl"
-                                        controls="controls"
-                                        style="height: 30px;"
-                                    ></audio>
-                                </el-button>
+                                <VueAudio 
+                                  :theUrl="scope.row.recordFile" 
+                                  v-if="scope.row.recordFile"
+                                  theControlList="onlyOnePlaying noMuted noVolume"
+                                >
+                                </VueAudio>
                             </template>
                         </el-table-column>
 
@@ -586,8 +585,12 @@ import {
 import pcaa from 'area-data/pcaa';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
+import VueAudio from '@/components/Share/VueAudio';
 export default {
     name: 'customerNotes',
+    components: {
+        VueAudio
+    },
     props: {
         followFlag: {
             type: Boolean,
