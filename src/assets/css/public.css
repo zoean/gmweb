@@ -514,5 +514,11 @@ div.el-dialog__body{
     top: 2px;
 }
 
-
+.el-tooltip__popper{
+    max-width: 300px;
+    opacity: 0.9 !important;
+    background-color: #555555 !important;
+    line-height: 1.8;
+    padding: 10px !important;
+}
 

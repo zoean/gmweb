@@ -334,7 +334,7 @@
                                         v-model="ruleForm.remarks" 
                                         size="small" 
                                         show-word-limit
-                                        maxlength='100'
+                                        maxlength='300'
                                         placeholder="请输入其他备注"
 
                                     ></el-input>
@@ -363,6 +363,8 @@
                           :prop="item.prop"
                           :label="item.label"
                           v-for="(item, index) in notesColumnListFollow"
+                          :show-overflow-tooltip="item.prop == 'remarks' ? true : false"
+                          :min-width="item.width"
                           :key="index"
                           >
                         </el-table-column>
@@ -710,15 +712,15 @@ export default {
                 { 'prop': 'entryPerson', 'label': '录入人' },
                 { 'prop': 'comMode', 'label': '沟通方式' },
                 { 'prop': 'classType', 'label': '主推班型' },
-                { 'prop': 'classOffer', 'label': '班型报价 (元)' },
+                { 'prop': 'classOffer', 'label': '班型报价 (元)', 'width': 100 },
                 { 'prop': 'intentionLevel', 'label': '意向等级' },
                 { 'prop': 'runOutPromise', 'label': '截杀承诺' },
                 { 'prop': 'classType2', 'label': '兴趣班型' },
-                { 'prop': 'classOffer2', 'label': '班型报价 (元)' },
+                { 'prop': 'classOffer2', 'label': '班型报价 (元)', 'width': 100 },
                 { 'prop': 'intentionLevel2', 'label': '意向等级' },
                 { 'prop': 'runOutPromise2', 'label': '截杀承诺' },
-                { 'prop': 'nextContactTime', 'label': '下次联系时间' },
-                { 'prop': 'remarks', 'label': '其他备注' },
+                { 'prop': 'nextContactTime', 'label': '下次联系时间', 'width': 100 },
+                { 'prop': 'remarks', 'label': '其他备注', 'width': 150 },
             ],
             notesColumnListCall: [
                 { 'prop': 'createTime', 'label': '创建时间' },

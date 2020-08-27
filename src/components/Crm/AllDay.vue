@@ -130,6 +130,8 @@
 
                 <el-button type="primary" size="small" @click="getClueDataAllClick">查 询</el-button>
 
+                <!-- <el-button plain size="small" @click="getCallPopClick">Click</el-button> -->
+
             </el-col>
 
             <el-col :span="16">
@@ -169,6 +171,7 @@
               :prop="item.props"
               v-for="(item, index) in columnList"
               :min-width="item.width"
+              :show-overflow-tooltip="item.props == 'notes' ? true : false"
               :key="index"
               >
               <template slot="header">
@@ -236,6 +239,13 @@
         >
         </CustomerNotes>
 
+        <CallPop 
+            v-if="callpopFlag"
+            @changecallpopFlag="changecallpopFlag"
+            :callpopFlag.sync='callpopFlag'
+        >
+        </CallPop>
+
         <PageFieldManage :setPageNum="setPageNum" />
 
     </el-main>
@@ -265,12 +275,14 @@ import {
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
+import CallPop from '../Share/CallPop';
 export default {
     name: 'AllDay',
     components: {
         Start, 
         CustomerNotes,
-        PageFieldManage
+        PageFieldManage,
+        CallPop
     },
     // watch:{
     //     '$store.state.editFieldVisible'(val){
@@ -336,6 +348,8 @@ export default {
             examItem: '',
             userCDARUuid: '',
 
+            // callpopFlag: true,
+
             enumList: {},
             fullscreenLoading: false,
             clueDataNumberList: [],
@@ -371,6 +385,9 @@ export default {
         // this.jqStart = jsmc.noConflict();
     },
     methods: {
+        getCallPopClick() {
+            this.callpopFlag = true;
+        },
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
         },
@@ -482,6 +499,9 @@ export default {
         },
         changeDrawer(val){
             this.drawer = val;
+        },
+        changecallpopFlag(val) {
+            this.callpopFlag = val;
         },
         getClueDataNumber() {
             let arr = [];
