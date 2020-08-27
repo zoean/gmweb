@@ -3,7 +3,17 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
     <el-timeline>
-      <el-timeline-item timestamp="v 1.2.0 -- 2020/08/24" placement="top">
+      <el-timeline-item timestamp="v 1.1.11 -- 2020/08/27" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、修改推广配置页面一键分配显示逻辑</p>
+          <p>2、发短信功能入口从我的学员页面调整到所辖学员页面</p>
+          <p>3、客户信息录录音组件替换</p>
+          <p>4、销售跟进备注改为限制300字以内</p>
+          <p>5、全部客户页面备注字段列表显示字数限制，鼠标移入折行显示全部内容</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.10 -- 2020/08/24" placement="top">
         <el-card>
           <h4>新增功能</h4>
           <p>1、全部客户页面新增成单状态字段，新增意向等级、成单状态筛选项</p>
