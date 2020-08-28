@@ -178,7 +178,6 @@ export default{
       sessionStorage.setItem('orgUuid', this.orgUuid)
       this.setFormOrgUuid()
     }    
-    this.getYearTargetList()
   },  
   computed: {
     total: function (){
@@ -198,11 +197,11 @@ export default{
     setFormOrgUuid: function (){
       this.searchForm.orgUuid = this.orgUuid
       this.yearDetailForm.orgUuid = this.orgUuid
-      this.addEditYearForm.orgUuid = this.orgUuid
+      this.addEditYearForm.orgUuid = this.orgUuid      
+      this.getYearTargetList()
     },
     changeOrg: function (){
       this.setFormOrgUuid()
-      this.getYearTargetList()
     },
     getOrgInfo: function (){
       this.$smoke_post(getManageOrgList).then(res => {
@@ -308,6 +307,8 @@ export default{
       this.getDeptYearDetail()
     },
     submitAddEditYear: function (){
+      const searchYear = timestampToTime(Number(this.addEditYearForm.time)).slice(0, 4),
+      addEditYear = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 4)
       this.$refs['addEditYearForm'].validate((valid) => {
         if(valid){
           if(this.deptDetailData.target > this.total){
@@ -320,7 +321,7 @@ export default{
                   message: '添加成功',
                   type: 'success'
                 })
-                if(this.addEditYearForm.time == this.searchForm.yearOrMonths[0]){
+                if(searchYear == addEditYear){
                   this.getYearTargetList()
                 }
               }else{

@@ -307,6 +307,8 @@ export default{
       this.getMonthDetail()
     },
     submitAddEditMonth: function (){
+      const searchMonth = timestampToTime(Number(this.addEditMonthForm.time)).slice(0, 7),
+      addEditMonth = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 7)
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
           if(this.monthDetailData.target > this.total){
@@ -315,7 +317,7 @@ export default{
             this.$smoke_post(addOrEditDeptMonth, this.addEditMonthForm).then(res => {
               if(res.code == 200){
                 this.addEditMonthParams.visible = false
-                if(this.addEditMonthForm.time == this.searchForm.time){
+                if(searchMonth == addEditMonth){
                   this.getMonthTargetList()
                 }              
                 this.$message({
