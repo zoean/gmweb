@@ -68,7 +68,7 @@
         </el-row>
         <el-form-item label="流水目标（万元）" prop="yearTarget">
           <el-col :span="162">
-            <el-input-number :min="0" v-model="addEditYearForm.yearTarget"></el-input-number>
+            <el-input-number size="mini" :min="0" v-model="addEditYearForm.yearTarget"></el-input-number>
           </el-col>          
         </el-form-item>     
         <el-row :gutter="20" type="flex" justify="end" class="text-right">
