@@ -225,6 +225,7 @@ export default{
       this.getCurrentMonth()
     },
     getCurrentMonth: function (){
+      this.addEditDailyForm.time = this.getMonthForm.time
       this.$smoke_post(getCurrentMonth, this.getMonthForm).then(res => {
         if(res.code == 200){
           this.currentMonthData = res.data
@@ -242,17 +243,15 @@ export default{
         }
       })
     },
-    changeAddEditDaily: function (){
-      this.addEditDailyForm.time = new Date(this.addEditDaily).getTime()
-      console.log(this.addEditDailyForm)
-    },
     submitAddEditDaily: function (){
+      const searchMonth = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 7),
+      addEditDaily = timestampToTime(Number(this.getMonthForm.time)).slice(0, 7)
       this.$refs['addEditDailyForm'].validate((valid) => {
         if(valid){
           this.$smoke_post(addOrEditDailyTarget, this.addEditDailyForm).then(res => {
             if(res.code == 200){
               this.addEditDailyParams.visible = false
-              if(this.searchForm.yearOrMonths[0] == this.getMonthForm.time){
+              if(searchMonth == addEditDaily){
                 this.getComDailyList()
               }
               this.$message({

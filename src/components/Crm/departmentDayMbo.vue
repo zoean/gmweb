@@ -105,7 +105,7 @@ export default{
     return {
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now();
+          return time.getTime() < Date.now() - 8.64e7;
         }
       },
       selectMonth: '',
@@ -290,6 +290,8 @@ export default{
       this.getDailyDetail()
     },
     submitAddEditDaily: function (){
+      const searchMonth = timestampToTime(Number(this.addEditDailyForm.time)).slice(0, 7),
+      addEditDaily = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 7)
       this.$refs['addEditDailyForm'].validate((valid) => {
         if(valid){
           if(this.currentDailyData.target > this.total){
@@ -298,7 +300,7 @@ export default{
             this.$smoke_post(addOrEditDeptDaily, this.addEditDailyForm).then(res => {
               if(res.code == 200){
                 this.addEditDailyParams.visible = false
-                if(this.searchForm.yearOrMonths[0] == this.addEditDailyForm.time){
+                if(searchMonth == addEditDaily){
                   this.getDeptDailyList()
                 }
                 this.$message({

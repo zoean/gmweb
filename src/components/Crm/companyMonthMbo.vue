@@ -143,7 +143,7 @@ export default{
         type: 1, //1-添加 2-编辑
       },
       addEditMonthForm: {
-        yearTime: this.curTime,
+        yearTime: sessionStorage.getItem('curTime'),
         months: [],
       },
       addEditMonthRules:{
@@ -254,12 +254,14 @@ export default{
       this.getCurrentYear()
     },
     submitAddEditMonth: function (){
+      const searchYear = timestampToTime(Number(this.addEditMonthForm.yearTime)).slice(0, 4),
+      addEditMonth = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 4)
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
           this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
             if(res.code == 200){
               this.addEditMonthParams.visible = false
-              if(this.addEditMonthForm.yearTime == this.searchForm.yearOrMonths[0]){
+              if(searchYear == addEditMonth){
                 this.getMonthTargetList()
               }              
               this.$message({
