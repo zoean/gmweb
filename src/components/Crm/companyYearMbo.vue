@@ -229,6 +229,8 @@ export default{
       this.getLastYear()
     },
     addYearTarget: function (){
+      const resetTime = timestampToTime(this.curTime).slice(0, 4)
+      console.log()
       this.addEditYearParams.visible = true
       this.addEditYearParams.type = 1
       this.addEditYearParams.title = '添加年目标'
@@ -241,12 +243,14 @@ export default{
       this.getLastYear()
     },
     submitAddEditYear: function (){
+      const searchYear = timestampToTime(Number(this.addEditYearForm.yearTime)).slice(0, 4),
+      addEditYear = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 4)
       this.$refs['addEditYearForm'].validate((valid) => {
         if(valid){
           this.$smoke_post(addOrEditYearTarget, this.addEditYearForm).then(res => {
             if(res.code == 200){
               this.addEditYearParams.visible = false
-              if(this.addEditYearForm.yearTime == this.searchForm.yearOrMonths[0]){
+              if(searchYear == addEditYear){
                 this.getYearTargetList()
               }
               this.$message({
