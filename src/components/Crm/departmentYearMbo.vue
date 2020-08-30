@@ -62,16 +62,16 @@
             </el-date-picker>
           </el-col>
         </el-form-item>      
-        <el-form-item label="本年度该组织总目标">
+        <el-form-item class="long-label" label="本年度该组织总目标（万元）">
           <el-input disabled :value="deptDetailData.target"></el-input>
         </el-form-item>  
+        <el-form-item label="总计(万元)">
+          <el-input disabled :value="total"></el-input>
+        </el-form-item> 
         <el-row type="flex" class="mt10">
           <el-col class="text-right" :span="12">下属组织</el-col>
           <el-col class="ml16">流水目标（万元）</el-col>
         </el-row>
-        <el-form-item label="总计(万元)">
-          <el-input disabled :value="total"></el-input>
-        </el-form-item> 
         <el-form-item v-for="(item, index) in addEditYearForm.deptList" :label="item.name" prop="targetMoney">
           <el-input-number :min="0" v-model="addEditYearForm.deptList[index].targetMoney"></el-input-number>
         </el-form-item>
@@ -353,6 +353,9 @@ export default{
     .el-input-number{
       width: 220px;
     }
+  }
+  /deep/.long-label label{
+    line-height: 20px;
   }
 }
 </style>

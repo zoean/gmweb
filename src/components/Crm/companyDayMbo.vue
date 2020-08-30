@@ -50,7 +50,8 @@
     <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="800px">
       <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules">
         <el-row type="flex" justify="start" :gutter="20">
-          <el-col :span="5">
+          <el-col :span="7">
+            月份
             <el-date-picker
               v-model="getMonthForm.time"
               type="month"
@@ -70,8 +71,6 @@
           </el-col>
         </el-row>  
         <el-row id="dialyTargetTitle" type="flex" justify="start" :gutter="10">
-          <el-col><span>日期</span>流水目标(万元)</el-col>
-          <el-col><span>日期</span>流水目标(万元)</el-col>
           <el-col><span>日期</span>流水目标(万元)</el-col>
           <el-col><span>日期</span>流水目标(万元)</el-col>
           <el-col><span>日期</span>流水目标(万元)</el-col>
@@ -308,8 +307,12 @@ export default{
   #dialyTargetTitle{
     margin-top: 20px;
     .el-col{
+      width: 238px;
       span{
-        padding: 0 8px;
+        padding-right: 10px;
+        width: 50px;
+        display: inline-block;
+        text-align: center;
       }
     }
   }

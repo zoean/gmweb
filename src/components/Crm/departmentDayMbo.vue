@@ -50,11 +50,10 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="400px">
-      <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules">
-        <el-row type="flex" style="align-items: center;" :gutter="20">
-          <el-col>
-            <el-date-picker
+    <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="500px">
+      <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules" label-width="140px !important">
+        <el-form-item label="日期">
+          <el-date-picker
               v-model="addEditDailyForm.time"
               type="date"
               placeholder="选择日期"
@@ -62,20 +61,24 @@
               value-format="timestamp"
               @change="changeDaily">
             </el-date-picker>
+        </el-form-item>
+        <el-row type="flex" style="align-items: center;" :gutter="20">
+          <el-col>
+            
           </el-col>
         </el-row> 
-        <el-form-item label="本日该组织总目标">
+        <el-form-item class="long-label" label="本日该组织总目标（万元）">
           <el-input disabled :value="currentDailyData.target"></el-input>
         </el-form-item>
-        <el-row class="mt20" :gutter="10">
-          <el-col class="text-right" :span="5">下属组织</el-col>
-          <el-col :span="8">流水目标(万元)</el-col>
-        </el-row>
         <el-form-item label="总计">
           <el-input disabled :value="total"></el-input>
         </el-form-item>
+        <el-row class="mt20" :gutter="10">
+          <el-col class="text-right" :span="8">下属组织</el-col>
+          <el-col :span="8">流水目标（万元）</el-col>
+        </el-row>
         <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
-          <el-input-number :min="0" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled"></el-input-number>
+          <el-input-number :min="0" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disable"></el-input-number>
         </el-form-item>
         <el-row :gutter="20" class="text-center">
           <el-col>
@@ -205,6 +208,7 @@ export default{
       }else if(tab.index == 1){
         this.$router.push({name: 'departmentmonthmbo' })
       }
+      sessionStorage.setItem('orgUuid', this.orgUuid)
     },
     computedPercentage(row, format){
       if(!row.complete || !row.target){
@@ -266,7 +270,7 @@ export default{
               name: item.name,
               targetMoney: item.target || 0,
               uuid: item.uuid,
-              disable: item.disable
+              disable: item.disabled
             })
           })
           this.currentDailyData.userList.map((item, index, arr)=> {
@@ -275,7 +279,8 @@ export default{
               type: item.type,
               targetMoney: item.target || 0,
               uuid: item.uuid,
-              orgUserId: item.orgUserId
+              orgUserId: item.orgUserId,
+              disable: item.disabled
               // label: item.daily.split('-')[2] + '日'
             })
           })
@@ -326,23 +331,20 @@ export default{
 }
 .el-form{
   /deep/.el-form-item{
-    .el-form-item__label{
-      width: 80px !important;
-    }
     .el-form-item__content{
       margin-left: 80px !important;
-      .el-input{
+      .el-input,.el-input-number{
         width: 220px;
-      }
-      .el-input-number{
-      width: 220px;
       }
     }
     
       .el-date-editor.el-input, .el-date-editor.el-input__inner{
-        width: 140px;
+        width: 220px;
       }
   }
+  /deep/.long-label .el-form-item__label{
+      line-height: 20px;
+    }
   #dialyTarget{
     flex-wrap: wrap;
     /deep/.el-form-item{
@@ -355,6 +357,7 @@ export default{
         margin-left: 50px !important;
       }
     }
+    
   }
 }
 
