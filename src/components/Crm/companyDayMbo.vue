@@ -7,7 +7,7 @@
       <el-tab-pane label="月" name="month">月</el-tab-pane>
       <el-tab-pane label="日" name="day">
         <el-row type="flex" justify="space-between">
-          <el-col :span="6">
+          <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="17">                
                 <el-date-picker
@@ -49,21 +49,24 @@
     </el-tabs>
     <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="800px">
       <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules">
-        <el-row type="flex" style="align-items: center;" :gutter="20">
-          <el-col :span="8">
+        <el-row type="flex" justify="start" :gutter="20">
+          <el-col :span="5">
             <el-date-picker
               v-model="getMonthForm.time"
               type="month"
               placeholder="选择月"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini"
               @change="getCurrentMonth">
             </el-date-picker>
           </el-col>
-          <el-col :span="8">
-            本月目标流水（万元）
-            <span class="target-num">{{currentMonthData.monthTarget}}</span>
+          <el-col :span="10">
+            本月目标流水(万元)
+            <el-input :value="currentMonthData.monthTarget" disabled></el-input>
+          </el-col>
+          <el-col :span="7">
+            合计
+            <el-input :value="total" disabled></el-input>
           </el-col>
         </el-row>  
         <el-row id="dialyTargetTitle" type="flex" justify="start" :gutter="10">
@@ -75,13 +78,13 @@
         </el-row>
         <el-row type="flex" id="dialyTarget">
           <el-form-item v-for="(item, index) in addEditDailyForm.dailys" :label="item.label" :key="item.uuid">
-            <el-input-number :min="0" size="mini" v-model="item.target" :value="item.target" :disabled="item.disabled"></el-input-number>
+            <el-input-number :min="0" v-model="item.target" :value="item.target" :disabled="item.disabled"></el-input-number>
           </el-form-item>
         </el-row>
-        <el-row :gutter="20" type="flex" justify="end" class="text-right">
+        <el-row :gutter="20" class="text-center">
           <el-col>
-            <el-button size="mini" @click="addEditDailyParams.visible = false">取消</el-button> 
-            <el-button type="primary" size="mini" @click="submitAddEditDaily">保存</el-button>           
+            <el-button @click="addEditDailyParams.visible = false">取消</el-button> 
+            <el-button type="primary" @click="submitAddEditDaily">保存</el-button>           
           </el-col>
         </el-row>     
       </el-form>      
@@ -161,6 +164,17 @@ export default{
       addEditDailyYear: '',
       addEditDailyMonth: '',
       currentMonthData: {}
+    }
+  },    
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditDailyForm.dailys.length > 0){
+        this.addEditDailyForm.dailys.map((item, index, arr) => {
+          total = total + Number(item.target || 0)
+        })
+      }      
+      return total
     }
   },
   created() {  
@@ -248,21 +262,26 @@ export default{
       addEditDaily = timestampToTime(Number(this.getMonthForm.time)).slice(0, 7)
       this.$refs['addEditDailyForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditDailyTarget, this.addEditDailyForm).then(res => {
-            if(res.code == 200){
-              this.addEditDailyParams.visible = false
-              if(searchMonth == addEditDaily){
-                this.getComDailyList()
+          if(this.currentMonthData.monthTarget > this.total){
+            this.$message.error('公司日目标合计需大于月目标')
+          }else{
+            this.$smoke_post(addOrEditDailyTarget, this.addEditDailyForm).then(res => {
+              if(res.code == 200){
+                this.addEditDailyParams.visible = false
+                if(searchMonth == addEditDaily){
+                  this.getComDailyList()
+                }
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
+              }else{
+                this.addEditDailyParams.visible = false
+                this.$message.error(res.msg)
               }
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditDailyParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+            })
+          }
+          
         }
       })
     }
@@ -319,8 +338,13 @@ export default{
 .el-progress{
   margin-top: 10px;
   /deep/.el-progress-bar{
-    padding-right: 66px;
-    margin-right: -66px;
+    padding-right: 68px;
+    margin-right: -68px;
+  }
+}
+.el-form{
+  .el-input{
+    width: 140px;
   }
 }
 </style>
