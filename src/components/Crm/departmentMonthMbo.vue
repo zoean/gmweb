@@ -7,7 +7,7 @@
       <el-tab-pane label="年目标" name="year">年</el-tab-pane>
       <el-tab-pane label="月目标" name="month">
         <el-row type="flex" justify="space-between">
-          <el-col :span="6">
+          <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="17">
                 <el-date-picker
@@ -28,7 +28,7 @@
             <el-button size="mini" type="primary" @click="addMonthTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -59,35 +59,32 @@
               placeholder="选择月份"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini"
               @change="changeMonth"
               >
             </el-date-picker>
           </el-col>
-        </el-form-item>       
-        <el-row>
-          <el-col class="text-right" :span="12">本年度该组织目标流水（万元）</el-col>
-          <el-col :span="8"><span class="target-num">{{monthDetailData.target || 0}}</span></el-col>
-        </el-row>            
+        </el-form-item>  
+        <el-form-item label="本年度该组织目标流水（万元）">
+          <el-input disabled :value="monthDetailData.target"></el-input>
+        </el-form-item>    
         <el-row id="targetTitle">
           <el-col :span="12">
             下属组织
           </el-col>
           <el-col class="text-left" :span="12">流水目标（万元）</el-col>
         </el-row> 
-        <el-row type="flex" class="mt10">
-          <el-col class="text-right" :span="12">总计</el-col>
-          <el-col><span class="target-num">{{total}}</span></el-col>
-        </el-row>    
+        <el-form-item label="总计(万元)">
+          <el-input disabled :value="total"></el-input>
+        </el-form-item>
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
-            <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney" size="mini"></el-input-number>
+            <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney"></el-input-number>
           </el-form-item>
         </el-row>         
-        <el-row :gutter="20" type="flex" justify="end" class="text-right">
+        <el-row :gutter="20" class="text-center">
           <el-col>
-            <el-button size="mini" @click="addEditMonthParams.visible = false">取消</el-button> 
-            <el-button type="primary" size="mini" @click="submitAddEditMonth">保存</el-button>           
+            <el-button @click="addEditMonthParams.visible = false">取消</el-button> 
+            <el-button type="primary" @click="submitAddEditMonth">保存</el-button>           
           </el-col>
         </el-row>     
       </el-form>      
@@ -351,8 +348,18 @@ export default{
 .el-progress{
   margin-top: 10px;
   /deep/.el-progress-bar{
-    padding-right: 66px;
-    margin-right: -66px;
+    padding-right: 68px;
+    margin-right: -68px;
+  }
+}
+.el-form{
+  .el-form-item{
+    .el-input{
+      width: 220px;
+    }
+    .el-input-number{
+      width: 220px;
+    }
   }
 }
 </style>
