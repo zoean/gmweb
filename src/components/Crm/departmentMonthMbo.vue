@@ -64,18 +64,18 @@
             </el-date-picker>
           </el-col>
         </el-form-item>  
-        <el-form-item label="本年度该组织目标流水（万元）">
+        <el-form-item class="long-label" label="本年度该组织目标流水（万元）">
           <el-input disabled :value="monthDetailData.target"></el-input>
-        </el-form-item>    
+        </el-form-item>   
+        <el-form-item label="总计（万元）">
+          <el-input disabled :value="total"></el-input>
+        </el-form-item> 
         <el-row id="targetTitle">
           <el-col :span="12">
             下属组织
           </el-col>
           <el-col class="text-left" :span="12">流水目标（万元）</el-col>
         </el-row> 
-        <el-form-item label="总计(万元)">
-          <el-input disabled :value="total"></el-input>
-        </el-form-item>
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
             <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney"></el-input-number>
@@ -342,7 +342,7 @@ export default{
  margin-left: 16px;
 }
 #targetTitle{
-  margin-top: 20px;
+  margin-top: 10px;
   text-align: center;
 }
 .el-progress{
@@ -353,13 +353,16 @@ export default{
   }
 }
 .el-form{
-  .el-form-item{
+  .el-form-item{    
     .el-input{
       width: 220px;
     }
     .el-input-number{
       width: 220px;
     }
+  }
+  /deep/.long-label label{
+    line-height: 20px;
   }
 }
 </style>

@@ -167,7 +167,7 @@ export default{
           total = total + Number(item.target || 0)
         })
       }      
-      return total
+      return total.toFixed(4)
     }
   },
   
