@@ -226,6 +226,7 @@ export default{
       }else if(tab.index == 2){
         this.$router.push({name: 'departmentdaymbo' })
       }
+      sessionStorage.setItem('orgUuid', this.orgUuid)
     },
     computedPercentage(row, format){
       if(!row.complete || !row.target){

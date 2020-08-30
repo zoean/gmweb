@@ -208,6 +208,7 @@ export default{
       }else if(tab.index == 1){
         this.$router.push({name: 'departmentmonthmbo' })
       }
+      sessionStorage.setItem('orgUuid', this.orgUuid)
     },
     computedPercentage(row, format){
       if(!row.complete || !row.target){
