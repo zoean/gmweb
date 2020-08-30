@@ -4,7 +4,7 @@
       <el-tab-pane label="年" name="year">年</el-tab-pane>
       <el-tab-pane label="月" name="month">
         <el-row type="flex" justify="space-between">
-          <el-col :span="6">
+          <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="17">
                 <el-date-picker
@@ -25,7 +25,7 @@
             <el-button size="mini" type="primary" @click="addMonthTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <!-- <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column> -->
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
@@ -57,33 +57,30 @@
               placeholder="选择年"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini"
               @change="getCurrentYear">
             </el-date-picker>
           </el-col>
-        </el-form-item>           
-        <el-row>
-          <el-col>
-            本年度目标流水（万元）
-            <span class="target-num">{{currentYearMonthData.yearTarget || 0}}</span>
-          </el-col>
-        </el-row>        
+        </el-form-item>  
+        <el-form-item label="本年度目标流水(万元)">
+          <el-input disabled :value="currentYearMonthData.yearTarget"></el-input>
+        </el-form-item>  
+        <el-form-item label="总计(万元)">
+          <el-input disabled :value="total"></el-input>
+        </el-form-item> 
         <el-row id="targetTitle">
           <el-col :span="12">
             月份
           </el-col>
-          <el-col :span="12">流水目标（万元）</el-col>
+          <el-col :span="12" class="text-left">流水目标（万元）</el-col>
         </el-row> 
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in currentYearMonthData.monthList" :label="item.month" :key="item.uuid" prop="target">
-            <el-input-number :min="0" :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target" size="mini"></el-input-number>
+            <el-input-number :min="0" :disabled="item.disabled" :value="item.target" v-model="addEditMonthForm.months[index].target"></el-input-number>
           </el-form-item>
         </el-row>         
-        <el-row :gutter="20" type="flex" justify="end" class="text-right">
-          <el-col>
-            <el-button size="mini" @click="addEditMonthParams.visible = false">取消</el-button> 
-            <el-button type="primary" size="mini" @click="submitAddEditMonth">保存</el-button>           
-          </el-col>
+        <el-row :gutter="20" class="text-center">
+            <el-button @click="addEditMonthParams.visible = false">取消</el-button> 
+            <el-button type="primary" @click="submitAddEditMonth">保存</el-button> 
         </el-row>     
       </el-form>      
     </el-dialog>
@@ -161,7 +158,19 @@ export default{
       },
       currentYearMonthData: {}
     }
+  },   
+  computed: {
+    total: function (){
+      let total = 0
+      if(this.addEditMonthForm.months.length > 0){
+        this.addEditMonthForm.months.map((item, index, arr) => {
+          total = total + Number(item.target || 0)
+        })
+      }      
+      return total
+    }
   },
+  
   created() {   
     this.getMonthTargetList()
   },
@@ -258,21 +267,26 @@ export default{
       addEditMonth = timestampToTime(Number(this.searchForm.yearOrMonths[0])).slice(0, 4)
       this.$refs['addEditMonthForm'].validate((valid) => {
         if(valid){
-          this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
-            if(res.code == 200){
-              this.addEditMonthParams.visible = false
-              if(searchYear == addEditMonth){
-                this.getMonthTargetList()
-              }              
-              this.$message({
-                message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
-                type: 'success'
-              })
-            }else{
-              this.addEditMonthParams.visible = false
-              this.$message.error(res.msg)
-            }
-          })
+          if(this.currentYearMonthData.yearTarget > this.total){
+            this.$message.error('公司月目标合计需大于日目标')
+          }else{
+            this.$smoke_post(addOrEditMonthTarget, this.addEditMonthForm).then(res => {
+              if(res.code == 200){
+                this.addEditMonthParams.visible = false
+                if(searchYear == addEditMonth){
+                  this.getMonthTargetList()
+                }              
+                this.$message({
+                  message: this.addEditMonthParams.type == 1 ? '添加成功' : '修改成功',
+                  type: 'success'
+                })
+              }else{
+                this.addEditMonthParams.visible = false
+                this.$message.error(res.msg)
+              }
+            })
+          }
+          
         }
       })
     }
@@ -294,8 +308,18 @@ export default{
 .el-progress{
   margin-top: 10px;
   /deep/.el-progress-bar{
-    padding-right: 66px;
-    margin-right: -66px;
+    padding-right: 68px;
+    margin-right: -68px;
+  }
+}
+.el-form{
+  .el-form-item{
+    .el-input{
+      width: 220px;
+    }
+    .el-input-number{
+      width: 220px;
+    }
   }
 }
 </style>

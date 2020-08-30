@@ -6,7 +6,7 @@
     <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年目标" name="year">
         <el-row type="flex" justify="space-between">
-          <el-col :span="6">
+          <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="17">
                 <el-date-picker
@@ -26,7 +26,7 @@
             <el-button size="mini" type="primary" @click="addYearTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="yearTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="yearTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in yearTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -58,34 +58,27 @@
               placeholder="选择年"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini"
               @change="changeYear">
             </el-date-picker>
           </el-col>
-        </el-form-item>           
-        <el-row type="flex" class="mt10">
-          <el-col class="text-right" :span="12">
-            本年度该组织总目标            
-          </el-col>
-          <el-col>
-            <span class="target-num">{{deptDetailData.target || 0}}</span>
-          </el-col>
-        </el-row>
+        </el-form-item>      
+        <el-form-item label="本年度该组织总目标">
+          <el-input disabled :value="deptDetailData.target"></el-input>
+        </el-form-item>  
         <el-row type="flex" class="mt10">
           <el-col class="text-right" :span="12">下属组织</el-col>
           <el-col class="ml16">流水目标（万元）</el-col>
         </el-row>
-        <el-row type="flex" class="mt10">
-          <el-col class="text-right" :span="12">总计</el-col>
-          <el-col><span class="target-num">{{total}}</span></el-col>
-        </el-row>
+        <el-form-item label="总计(万元)">
+          <el-input disabled :value="total"></el-input>
+        </el-form-item> 
         <el-form-item v-for="(item, index) in addEditYearForm.deptList" :label="item.name" prop="targetMoney">
-          <el-input-number :min="0" v-model="addEditYearForm.deptList[index].targetMoney" size="mini"></el-input-number>
+          <el-input-number :min="0" v-model="addEditYearForm.deptList[index].targetMoney"></el-input-number>
         </el-form-item>
-        <el-row :gutter="20" type="flex" justify="end" class="text-right">
+        <el-row :gutter="20" class="text-center">
           <el-col>
-            <el-button size="mini" @click="addEditYearParams.visible = false">取消</el-button> 
-            <el-button type="primary" size="mini" @click="submitAddEditYear">保存</el-button>           
+            <el-button @click="addEditYearParams.visible = false">取消</el-button> 
+            <el-button type="primary" @click="submitAddEditYear">保存</el-button>           
           </el-col>
         </el-row>     
       </el-form>      
@@ -347,8 +340,19 @@ export default{
 .el-progress{
   margin-top: 10px;
   /deep/.el-progress-bar{
-    padding-right: 66px;
-    margin-right: -66px;
+    padding-right: 68px;
+    margin-right: -68px;
+  }
+}
+
+.el-form{
+  .el-form-item{
+    .el-input{
+      width: 220px;
+    }
+    .el-input-number{
+      width: 220px;
+    }
   }
 }
 </style>

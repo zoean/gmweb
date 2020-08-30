@@ -10,7 +10,7 @@
       <el-tab-pane label="月目标" name="month">月</el-tab-pane>
       <el-tab-pane label="日目标" name="day">
         <el-row type="flex" justify="space-between">
-          <el-col :span="6">
+          <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="17">                
                 <el-date-picker
@@ -30,7 +30,7 @@
             <el-button size="mini" type="primary" @click="addDialyTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -60,30 +60,27 @@
               placeholder="选择日期"
               :pickerOptions="pickerOptions"
               value-format="timestamp"
-              size="mini"
               @change="changeDaily">
             </el-date-picker>
           </el-col>
         </el-row> 
-        <el-row class="mt10">
-          <el-col class="text-right" :span="12">本日该组织总目标（万元）</el-col>
-          <el-col :span="8"><span class="target-num">{{currentDailyData.target || 0}}</span></el-col>
-        </el-row>  
+        <el-form-item label="本日该组织总目标">
+          <el-input disabled :value="currentDailyData.target"></el-input>
+        </el-form-item>
         <el-row class="mt20" :gutter="10">
           <el-col class="text-right" :span="5">下属组织</el-col>
           <el-col :span="8">流水目标(万元)</el-col>
         </el-row>
-        <el-row class="mt10" type="flex" justify="start" :gutter="10">
-          <el-col class="text-right" :span="5">总计</el-col>
-          <el-col :span="8"><span class="target-num">{{total}}</span></el-col>
-        </el-row>
-        <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
-          <el-input-number :min="0" size="mini" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled"></el-input-number>
+        <el-form-item label="总计">
+          <el-input disabled :value="total"></el-input>
         </el-form-item>
-        <el-row :gutter="20" type="flex" justify="end" class="text-right">
+        <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
+          <el-input-number :min="0" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disabled"></el-input-number>
+        </el-form-item>
+        <el-row :gutter="20" class="text-center">
           <el-col>
-            <el-button size="mini" @click="addEditDailyParams.visible = false">取消</el-button> 
-            <el-button type="primary" size="mini" @click="submitAddEditDaily">保存</el-button>           
+            <el-button @click="addEditDailyParams.visible = false">取消</el-button> 
+            <el-button type="primary" @click="submitAddEditDaily">保存</el-button>           
           </el-col>
         </el-row>     
       </el-form>      
@@ -335,12 +332,10 @@ export default{
     .el-form-item__content{
       margin-left: 80px !important;
       .el-input{
-        width: 50%;
+        width: 220px;
       }
       .el-input-number{
-        .el-input{
-          width: 100%;
-        }
+      width: 220px;
       }
     }
     
@@ -366,8 +361,8 @@ export default{
 .el-progress{
   margin-top: 10px;
   /deep/.el-progress-bar{
-    padding-right: 66px;
-    margin-right: -66px;
+    padding-right: 68px;
+    margin-right: -68px;
   }
 }
 </style>
