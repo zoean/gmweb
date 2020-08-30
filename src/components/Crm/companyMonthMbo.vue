@@ -81,7 +81,7 @@
         <el-row :gutter="20" class="text-center">
             <el-button @click="addEditMonthParams.visible = false">取消</el-button> 
             <el-button type="primary" @click="submitAddEditMonth">保存</el-button> 
-        </el-row>     
+        </el-row>    
       </el-form>      
     </el-dialog>
   </el-main>
