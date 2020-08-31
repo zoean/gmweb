@@ -45,7 +45,7 @@
       <el-tab-pane label="月" name="month">月</el-tab-pane>
       <el-tab-pane label="日" name="day">日</el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="addEditYearParams.visible" :title="addEditYearParams.title" width="500px">
+    <el-dialog class="beautiful-title" :visible.sync="addEditYearParams.visible" :title="addEditYearParams.title" width="500px">
       <el-form :model="addEditYearForm" ref="addEditYearForm" label-width="160px !important" :rules="addEditYearRules">
         <el-form-item label="年度" prop="yearTime">
           <el-col :span="16">

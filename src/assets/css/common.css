@@ -53,21 +53,18 @@
 .red{
   color: red
 }
-/* Clear Fix */
-
-.clearfix:after
-{
-content:”.”;
-display:block;
-height:0;
-clear:both;
-visibility:hidden;
+@media screen and (min-width:0\0) { 
+  .fixiedialog-margin{
+    margin-bottom: 30px;
+  }
 }
-.clearfix
-{
-display:inline-block;
+.beautiful-title .el-dialog__title:before{
+  content: "";
+  width: 5px;
+  height: 16px;
+  background: #409EFF;
+  border-radius: 3px;
+  color: #409EFF;
+  margin-right: 10px;
+  display: inline-block; 
 }
-/* Hide from IE Mac */
-.clearfix {display:block;}
-/* End hide from IE Mac */
-/* end of clearfix */
