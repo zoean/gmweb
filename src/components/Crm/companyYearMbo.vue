@@ -30,7 +30,7 @@
               <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成" align="center">
+          <el-table-column label="未完成（万元）" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.yearTarget < scope.row.yearComplete ? 'red' : ''">{{scope.row.yearTarget < scope.row.yearComplete ? '超￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(4).slice(1) : '￥' + (scope.row.yearTarget - scope.row.yearComplete).toFixed(4)}}</span>
             </template>
