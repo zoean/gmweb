@@ -50,7 +50,7 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="500px">
+    <el-dialog class="beautiful-title" :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="500px">
       <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules" label-width="140px !important">
         <el-form-item label="日期">
           <el-date-picker
@@ -62,11 +62,6 @@
               @change="changeDaily">
             </el-date-picker>
         </el-form-item>
-        <el-row type="flex" style="align-items: center;" :gutter="20">
-          <el-col>
-            
-          </el-col>
-        </el-row> 
         <el-form-item class="long-label" label="本日该组织总目标（万元）">
           <el-input disabled :value="currentDailyData.target"></el-input>
         </el-form-item>
@@ -80,7 +75,7 @@
         <el-form-item v-for="(item, index) in addEditDailyForm.deptList" :label="item.name" :key="item.uuid">
           <el-input-number :min="0" v-model="addEditDailyForm.deptList[index].targetMoney" :disabled="item.disable"></el-input-number>
         </el-form-item>
-        <el-row :gutter="20" class="text-center">
+        <el-row :gutter="20" class="text-center fixiedialog-margin">
           <el-col>
             <el-button @click="addEditDailyParams.visible = false">取消</el-button> 
             <el-button type="primary" @click="submitAddEditDaily">保存</el-button>           

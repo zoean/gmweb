@@ -49,7 +49,7 @@
       </el-tab-pane>
       <el-tab-pane label="日目标" name="day">日</el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
+    <el-dialog class="beautiful-title" :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
       <el-form :model="addEditMonthForm" ref="addEditMonthForm" label-width="160px !important" :rules="addEditMonthRules">
         <el-form-item label="月份" prop="time">
           <el-col :span="16">
@@ -81,7 +81,7 @@
             <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney"></el-input-number>
           </el-form-item>
         </el-row>         
-        <el-row :gutter="20" class="text-center">
+        <el-row :gutter="20" class="text-center fixiedialog-margin">
           <el-col>
             <el-button @click="addEditMonthParams.visible = false">取消</el-button> 
             <el-button type="primary" @click="submitAddEditMonth">保存</el-button>           
