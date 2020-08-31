@@ -37,7 +37,7 @@
               <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成" align="center">
+          <el-table-column label="未完成（万元）" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
@@ -78,7 +78,7 @@
         <el-row :gutter="20" class="text-center fixiedialog-margin">
           <el-col>
             <el-button @click="addEditDailyParams.visible = false">取消</el-button> 
-            <el-button type="primary" @click="submitAddEditDaily">保存</el-button>           
+            <el-button v-if="ifAbled" type="primary" @click="submitAddEditDaily">保存</el-button>           
           </el-col>
         </el-row>     
       </el-form>      
@@ -165,7 +165,8 @@ export default{
       addEditDailyYear: '',
       addEditDailyMonth: '',
       currentDailyData: {},
-      orgUuid: sessionStorage.getItem('orgUuid')
+      orgUuid: sessionStorage.getItem('orgUuid'),
+      ifAbled: true
     }
   },
   computed: {
@@ -279,6 +280,7 @@ export default{
               // label: item.daily.split('-')[2] + '日'
             })
           })
+          this.ifAbled = !this.addEditDailyForm.deptList[0].disable
         }
       })
     },

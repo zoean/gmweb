@@ -1,8 +1,8 @@
 <template>
   <el-main class="index-main">
     <el-tabs type="border-card" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">年</el-tab-pane>
-      <el-tab-pane label="月" name="month">
+      <el-tab-pane label="年目标" name="year">年</el-tab-pane>
+      <el-tab-pane label="月目标" name="month">
         <el-row type="flex" justify="space-between">
           <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
@@ -33,7 +33,7 @@
               <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
             </template>
           </el-table-column>
-          <el-table-column label="未完成" align="center">
+          <el-table-column label="未完成（万元）" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.target < scope.row.complete ? 'red' : ''">{{scope.row.target < scope.row.complete ? '超￥' + (scope.row.target - scope.row.complete).toFixed(4).slice(1) : '￥' + (scope.row.target - scope.row.complete).toFixed(4)}}</span>
             </template>
@@ -45,7 +45,7 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="日" name="day">日</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">日</el-tab-pane>
     </el-tabs>
     <el-dialog class="beautiful-title" :visible.sync="addEditMonthParams.visible" :title="addEditMonthParams.title" width="500px">
       <el-form :model="addEditMonthForm" ref="addEditMonthForm" label-width="160px !important" :rules="addEditMonthRules">
