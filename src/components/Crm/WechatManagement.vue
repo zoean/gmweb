@@ -75,7 +75,7 @@
   <el-dialog class="beautiful-title" title="新增/编辑微信数量" :visible.sync="dialogVisible" width="400px" :close-on-click-modal="false">
     <el-form ref="addWechatNumForm" :model="addWechatNumForm" label-width="160px !important" :rules="addNumRule">
       <el-form-item label="今日添加客户微信数" prop="num">
-        <el-input-number v-model="addWechatNumForm.num" min="0"></el-input-number>
+        <el-input-number v-model="addWechatNumForm.num" :min=0></el-input-number>
       </el-form-item>
       <el-row class="text-center mt20">
         <el-col>
