@@ -78,13 +78,13 @@
         </el-row> 
         <el-row id="targetList">
           <el-form-item v-for="(item, index) in addEditMonthForm.deptList" :label="item.name" :key="item.uuid" prop="target">
-            <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney"></el-input-number>
+            <el-input-number :min="0" v-model="addEditMonthForm.deptList[index].targetMoney" :disabled="addEditMonthForm.deptList[index].disabled"></el-input-number>
           </el-form-item>
         </el-row>         
         <el-row :gutter="20" class="text-center fixiedialog-margin">
           <el-col>
             <el-button @click="addEditMonthParams.visible = false">取消</el-button> 
-            <el-button type="primary" @click="submitAddEditMonth">保存</el-button>           
+            <el-button v-if="ifAbled" type="primary" @click="submitAddEditMonth">保存</el-button>           
           </el-col>
         </el-row>     
       </el-form>      
@@ -106,7 +106,7 @@ export default{
     return {      
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now();
+          return time.getTime() < Date.now() - 8.64e7;
         }
       },
       tabActiveName: 'month',
@@ -170,7 +170,8 @@ export default{
         orgUuid: '',
         time: sessionStorage.getItem('curTime')
       },      
-      orgUuid: sessionStorage.getItem('orgUuid')
+      orgUuid: sessionStorage.getItem('orgUuid'),
+      ifAbled: true
     }
   },   
   computed: {
@@ -270,7 +271,8 @@ export default{
               targetMoney: item.target || 0,
               uuid: item.uuid,
               orgUserId: item.orgUserId,
-              type: item.type
+              type: item.type,
+              disabled: item.disabled
             })
           })
           this.monthDetailData.userList.map((item, index, arr) => {
@@ -279,9 +281,12 @@ export default{
               targetMoney: item.target || 0,
               uuid: item.uuid,
               orgUserId: item.orgUserId,
-              type: item.type
+              type: item.type,
+              disabled: item.disabled
             })
           })
+          
+          this.ifAbled = !this.addEditMonthForm.deptList[0].disabled
         }
       })
     },

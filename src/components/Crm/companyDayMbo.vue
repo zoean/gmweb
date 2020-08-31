@@ -1,11 +1,11 @@
 <template>
   <el-main class="index-main">
     <el-tabs type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
-      <el-tab-pane label="年" name="year">
+      <el-tab-pane label="年目标" name="year">
         年
       </el-tab-pane>
-      <el-tab-pane label="月" name="month">月</el-tab-pane>
-      <el-tab-pane label="日" name="day">
+      <el-tab-pane label="月目标" name="month">月</el-tab-pane>
+      <el-tab-pane label="日目标" name="day">
         <el-row type="flex" justify="space-between">
           <el-col :span="8">
             <el-row type="flex" justify="start" :gutter="20">
@@ -252,7 +252,7 @@ export default{
               label: currentValue.daily.split('-')[2] + '日',
               disabled: currentValue.disabled
             })
-          })
+          }) 
         }
       })
     },
