@@ -72,12 +72,17 @@
     :total="searchForm.total"
     style="text-align: right;">
   </el-pagination>
-  <el-dialog :visible.sync="dialogVisible" width="300px" :close-on-click-modal="false">
-    <el-form ref="addWechatNumForm" :model="addWechatNumForm" label-position="top" :rules="addNumRule">
+  <el-dialog class="beautiful-title" title="新增/编辑微信数量" :visible.sync="dialogVisible" width="400px" :close-on-click-modal="false">
+    <el-form ref="addWechatNumForm" :model="addWechatNumForm" label-width="160px !important" :rules="addNumRule">
       <el-form-item label="今日添加客户微信数" prop="num">
-        <el-input v-model="addWechatNumForm.num" type="number" min="0" onKeypress="return(/[\d]/.test(String.fromCharCode(event.keyCode)))"></el-input>
+        <el-input-number v-model="addWechatNumForm.num" min="0"></el-input-number>
       </el-form-item>
-      <el-button type="primary" @click="submitAddWechatData">保存</el-button>
+      <el-row class="text-center mt20">
+        <el-col>
+          <el-button type="primary" @click="submitAddWechatData">保存</el-button>
+        </el-col>
+      </el-row>
+      
     </el-form>    
   </el-dialog>
 </el-main>
@@ -257,8 +262,6 @@ export default {
     height: 240px !important;
   }
   .el-form-item{
-    display: flex;
-    flex-direction: column;
     /deep/.el-form-item__label{
       width: 100% !important;
       text-align: left !important;
@@ -269,9 +272,6 @@ export default {
         margin: 10px 0;
       }
     }
-  }
-  .el-button{
-    margin: 20px 0 0 80px;
   }
 }
 

@@ -47,7 +47,7 @@
         </el-table>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="800px">
+    <el-dialog class="beautiful-title" :visible.sync="addEditDailyParams.visible" :title="addEditDailyParams.title" width="800px">
       <el-form :model="addEditDailyForm" ref="addEditDailyForm" :rules="addEditDailyRules">
         <el-row type="flex" justify="start" :gutter="20">
           <el-col :span="7">
@@ -80,7 +80,7 @@
             <el-input-number :min="0" v-model="item.target" :value="item.target" :disabled="item.disabled"></el-input-number>
           </el-form-item>
         </el-row>
-        <el-row :gutter="20" class="text-center">
+        <el-row :gutter="20" class="text-center fixiedialog-margin">
           <el-col>
             <el-button @click="addEditDailyParams.visible = false">取消</el-button> 
             <el-button type="primary" @click="submitAddEditDaily">保存</el-button>           
@@ -105,7 +105,7 @@ export default{
     return {
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() < Date.now();
+          return time.getTime() < Date.now() - 8.64e7;
         }
       },
       selectMonth: '',
@@ -350,4 +350,5 @@ export default{
     width: 140px;
   }
 }
+
 </style>
