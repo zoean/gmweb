@@ -100,7 +100,7 @@ export default {
             var that = this;
             var timer = null;
             var count = 0;
-            if(newVal == '响 铃'){
+            if(newVal == '响 铃' || newVal == '接 听'){
                 timer = setInterval(function(){
                     count++;
                     that.$refs.id_S.innerHTML = that.showNum(count % 60)
