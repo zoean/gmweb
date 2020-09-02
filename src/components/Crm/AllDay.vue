@@ -350,9 +350,9 @@ export default {
             examItem: '',
             userCDARUuid: '',
 
-            callpopFlag: true,
-            call_state: '挂断',
-            caller_number: '18732015255',
+            callpopFlag: false,
+            call_state: '',
+            caller_number: '',
 
             enumList: {},
             fullscreenLoading: false,
