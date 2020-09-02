@@ -132,7 +132,7 @@ export default {
             background: #000;
             opacity: .75;
             // left: 40% !important;
-            z-index: 9999999;
+            z-index: 999;
             user-select: none;
             box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
             border-radius: 4px;
