@@ -51,7 +51,7 @@ export const everyTimeList = [
     { 'prop': 'callStyle', 'label': '拨打方式' },
     { 'prop': 'insertTime', 'label': '拨打时间' },
     { 'prop': 'isCalledPhone', 'label': '是否接通' },
-    { 'prop': 'duration', 'label': '通话时长（秒）' },
+    { 'prop': 'duration', 'label': '通话时长' },
     // { 'prop': 'dealState', 'label': '处理状态' },
     // { 'prop': 'resume', 'label': '通话备注' },
     // { 'prop': 'areaId', 'label': '号码归属' },
