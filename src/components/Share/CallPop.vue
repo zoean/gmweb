@@ -10,7 +10,7 @@
               <div>
                 <el-image
                     style="margin-top: 30px;"
-                    :src="call_state_ == '挂断' ? require('../../assets/images/call_tankuan.png') : require('../../assets/images/rain_tankuan.png')">
+                    :src="call_state_ == '挂 断' ? require('../../assets/images/call_tankuan.png') : require('../../assets/images/rain_tankuan.png')">
                 </el-image>
               </div>
               <div class="dialog_kuang_2">{{call_state_}}</div>
