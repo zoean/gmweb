@@ -10,9 +10,9 @@
       <el-tab-pane label="月目标" name="month">月</el-tab-pane>
       <el-tab-pane label="日目标" name="day">
         <el-row type="flex" justify="space-between">
-          <el-col :span="8">
+          <el-col :span="4">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col :span="17">                
+              <el-col :span="18">                
                 <el-date-picker
                 v-model="searchForm.yearOrMonths[0]"
                 type="month"
@@ -21,7 +21,7 @@
                 size="mini">
               </el-date-picker>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-button size="mini" type="primary" @click="getDeptDailyList">查询</el-button>
               </el-col>
             </el-row>
@@ -30,7 +30,7 @@
             <el-button size="mini" type="primary" @click="addDialyTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -166,7 +166,8 @@ export default{
       addEditDailyMonth: '',
       currentDailyData: {},
       orgUuid: sessionStorage.getItem('orgUuid'),
-      ifAbled: true
+      ifAbled: true,
+      loading: true
     }
   },
   computed: {
@@ -234,8 +235,10 @@ export default{
       }
     },
     getDeptDailyList: function(){
+      this.loading = true
       this.$smoke_post(getDeptDailyList, this.searchForm).then(res => {
         if(res.code == 200){
+          this.loading = false
           this.dailyTableList = res.data[0].list
         }
       })
@@ -364,5 +367,8 @@ export default{
     padding-right: 68px;
     margin-right: -68px;
   }
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100%;
 }
 </style>

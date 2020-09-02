@@ -3,9 +3,9 @@
     <el-tabs type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年目标" name="year">
         <el-row type="flex" justify="space-between">
-          <el-col :span="8">
+          <el-col :span="4">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col :span="17">
+              <el-col :span="18">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="year"
@@ -14,7 +14,7 @@
                   size="mini">
                 </el-date-picker>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-button size="mini" type="primary" @click="searchYearList">查询</el-button>
               </el-col>
             </el-row>
@@ -23,7 +23,7 @@
             <el-button size="mini" type="primary" @click="addYearTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="monthTableList">
+        <el-table class="mt20" :data="monthTableList" v-loading="loading">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -144,7 +144,8 @@ export default{
         ]
       },
       addEditYear: '',
-      lastYearComplete: ''
+      lastYearComplete: '',
+      loading: true
     }
   },
   created() {  
@@ -169,7 +170,7 @@ export default{
         }
       })
     },
-    searchYearList: function (){
+    searchYearList: function (){   
       this.getYearTargetList()
     },
     tabClick(tab, event){
@@ -203,8 +204,10 @@ export default{
       return timestampToTime(Number(cellValue)).slice(0, 4)
     },
     getYearTargetList: function(){
+      this.loading = true
       this.$smoke_post(getYearTargetList, this.searchForm).then(res => {
         if(res.code == 200){
+          this.loading = false
           this.monthTableList = res.data
         }
       })
@@ -247,7 +250,7 @@ export default{
             if(res.code == 200){
               this.addEditYearParams.visible = false
               if(searchYear == addEditYear){
-                this.getYearTargetList()
+                this.getYearTargetList()  
               }
               this.$message({
                 message: '添加成功',
@@ -288,5 +291,8 @@ export default{
       width: 220px;
     }
   }
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100%;
 }
 </style>

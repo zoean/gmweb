@@ -45,6 +45,7 @@
   <el-table 
   :data="list"  
   @sort-change="sortChange"
+  v-loading="loading"
   >
     <el-table-column
     v-for="(item, index) in tableProps"
@@ -155,7 +156,8 @@ export default {
           }
         ]
       },
-      countVO: {}
+      countVO: {},
+      loading: true
     }
   },
   created(){
@@ -182,8 +184,10 @@ export default {
       }
     }, 
     getWxNumList(){
+      this.loading = true
       this.$smoke_post(wxNumList, this.searchForm).then(res => {
         if(res.code == 200){
+          this.loading = false
           this.list = res.data.list
           this.countVO = res.data.countVO
           this.searchForm.total = res.data.total

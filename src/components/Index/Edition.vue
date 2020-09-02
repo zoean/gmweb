@@ -2,22 +2,7 @@
   <div class="block">
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
-    <el-timeline>      
-      <el-timeline-item timestamp="v 1.1.10 -- 2020/08/31" placement="top">
-        <el-card>
-          <h4>新增功能</h4>
-          <p>1、全部客户页面新增成单状态字段，新增意向等级、成单状态筛选项</p>
-          <p>2、全部客户页面增加【意向等级】筛选项</p>
-          <p>3、坐席数据管理页面增加【所属坐席】、【意向等级】筛选项</p>
-          <p>4、坐席管理页面增加数据按进入时间筛选选项卡</p>
-          <p>5、个人线索和主管线索页面入库时间默认当天时间00:00:00-23:59:59</p>
-          <p>6、个人线索和主管线索页面入库时间筛选器上增加今日、近7天、本月、近30天快捷键</p>
-          <h4>修复bug</h4>
-          <p>1、修复复制电话号码bug</p>
-          <p>2、修复选项卡时间组件转化时间戳的bug</p>
-        </el-card>
-      </el-timeline-item>
-      
+    <el-timeline>
       <el-timeline-item timestamp="v 1.1.11 -- 2020/08/27" placement="top">
         <el-card>
           <h4>新增功能</h4>

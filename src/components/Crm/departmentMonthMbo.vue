@@ -7,9 +7,9 @@
       <el-tab-pane label="年目标" name="year">年</el-tab-pane>
       <el-tab-pane label="月目标" name="month">
         <el-row type="flex" justify="space-between">
-          <el-col :span="8">
+          <el-col :span="4">
             <el-row type="flex" justify="start" :gutter="20">
-              <el-col :span="17">
+              <el-col :span="18">
                 <el-date-picker
                   v-model="searchForm.yearOrMonths[0]"
                   type="month"
@@ -19,7 +19,7 @@
                   :clearable="false">
                 </el-date-picker>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-button size="mini" type="primary" @click="searchMonthList">查询</el-button>
               </el-col>
             </el-row>
@@ -28,7 +28,7 @@
             <el-button size="mini" type="primary" @click="addMonthTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid">
+        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -171,7 +171,8 @@ export default{
         time: sessionStorage.getItem('curTime')
       },      
       orgUuid: sessionStorage.getItem('orgUuid'),
-      ifAbled: true
+      ifAbled: true,
+      loading: true
     }
   },   
   computed: {
@@ -253,8 +254,10 @@ export default{
       return timestampToTime(Number(cellValue)).slice(0, 4)
     },
     getMonthTargetList: function(){
+      this.loading = true
       this.$smoke_post(getDeptMonthList, this.searchForm).then(res => {
         if(res.code == 200){
+          this.loading = false
           this.monthTableList = res.data[0].list
           this.monthListYear = res.data[0].yearTime
         }
@@ -370,5 +373,8 @@ export default{
   /deep/.long-label label{
     line-height: 20px;
   }
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100%;
 }
 </style>

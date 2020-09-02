@@ -15,7 +15,7 @@
           </el-col>
 
       </el-row>
-      <el-table :data="pageManageList.list">
+      <el-table :data="pageManageList.list" v-loading="loading">
         <el-table-column v-for="(item, index) in pageManageListColumn" :prop="item.prop" :key="index" :label="item.label" :formatter="item.formatter">
         </el-table-column> 
         <el-table-column label="操作" width="70">
@@ -215,6 +215,7 @@ export default {
           'prop':'ifSort', 'label': '是否排序', formatter: this.statusFormatter
         }
       ],
+      loading: true
     }
   },
   created(){
@@ -228,8 +229,10 @@ export default {
       return cellValue ? '是' : '否'
     },
     getPageManageList(){
+      this.loading = true
       this.$smoke_post(getPage, this.getPageManageListForm).then(res => {
         if(res.code == 200){
+          this.loading = false
           this.pageManageList = res.data
         }
       })
