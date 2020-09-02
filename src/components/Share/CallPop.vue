@@ -7,12 +7,18 @@
           </div>
           <div class="dialog_kuang">
               <div class="dialog_kuang_1">{{caller_number_}}</div>
-              <div class="dialog_kuang_2">{{call_state_}}</div>
-              <div class="dialog_kuang_3">
-                  <span ref="id_H">00</span>:
-                  <span ref="id_M">00</span>:
-                  <span ref="id_S">00</span>
+              <div>
+                <el-image
+                    style="margin-top: 30px;"
+                    :src="call_state_ == '挂断' ? require('../../assets/images/call_tankuan.png') : require('../../assets/images/rain_tankuan.png')">
+                </el-image>
               </div>
+              <div class="dialog_kuang_2">{{call_state_}}</div>
+          </div>
+          <div class="dialog_kuang_3">
+              <span ref="id_H">00</span>:
+              <span ref="id_M">00</span>:
+              <span ref="id_S">00</span>
           </div>
         </div>
     </div>
@@ -118,11 +124,13 @@ export default {
         position: relative;
         left: 50%;
         margin-left: -200px;
+        color: #fff;
         .callpop_div{
-            width: 400px;
-            height: 180px;
-            background: #ffffff;
+            width: 360px;
+            height: 330px;
             position: fixed;
+            background: #000;
+            opacity: .75;
             // left: 40% !important;
             z-index: 9999999;
             user-select: none;
@@ -145,29 +153,35 @@ export default {
                 }
             }
             .dialog_kuang{
+                width: 223px;
+                height: 188px;
+                background: #FFFFFF;
+                border-radius: 20px;
+                opacity: 0.8;
+                margin: 0 auto;
+                margin-top: 30px;
+                color: #000;
+                text-align: center;
                 .dialog_kuang_1{
                     height: 40px;
-                    line-height: 60px;
-                    padding-left: 20px;
-                    font-size: 16px;
+                    line-height: 70px;
+                    font-size: 18px;
                     font-weight: bold;
                 }
                 .dialog_kuang_2{
                     height: 50px;
-                    line-height: 50px;
-                    padding-left: 20px;
-                    font-size: 20px;
+                    line-height: 30px;
+                    font-size: 18px;
                     font-weight: bold;
                     text-align: center;
                 }
-                .dialog_kuang_3{
-                    height: 30px;
-                    line-height: 20px;
-                    padding-left: 20px;
-                    font-size: 16px;
-                    font-weight: bold;
-                    text-align: center;
-                }
+            }
+            .dialog_kuang_3{
+                height: 60px;
+                line-height: 60px;
+                font-size: 24px;
+                font-weight: bold;
+                text-align: center;
             }
         }
     }

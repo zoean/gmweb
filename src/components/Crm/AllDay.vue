@@ -350,9 +350,9 @@ export default {
             examItem: '',
             userCDARUuid: '',
 
-            callpopFlag: false,
-            call_state: '',
-            caller_number: '',
+            callpopFlag: true,
+            call_state: '挂断',
+            caller_number: '18732015255',
 
             enumList: {},
             fullscreenLoading: false,
@@ -673,9 +673,9 @@ export default {
                                 console.log('监听成功-callEvent');
                                 console.log(message);
                                 // console.log(jsonObject);
-                                that.callpopFlag = true;
-                                that.caller_number = message.call_event.caller_number;
                                 if(message.call_event.call_state == 'caller_ring') {
+                                    that.callpopFlag = true;
+                                    that.caller_number = message.call_event.caller_number;
                                     that.call_state = '响 铃';
                                 }else if(message.call_event.call_state == 'caller_answer') {
                                     that.call_state = '接 听';
