@@ -2,7 +2,15 @@
   <div class="block">
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
-    <el-timeline>
+
+    <el-timeline>      
+      <el-timeline-item timestamp="v 1.1.12 -- 2020/08/31" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、增加销售目标管理功能模块</p>
+          <p>2、优化新增微信数量页面UI</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.11 -- 2020/08/27" placement="top">
         <el-card>
           <h4>新增功能</h4>
