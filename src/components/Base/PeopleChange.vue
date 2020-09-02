@@ -91,13 +91,13 @@
 
                 </div>
 
-                <div style="height: 60px; width: 100%;"></div>
+                <div style="height: 70px; width: 100%;"></div>
 
                 <span class="bullets"></span>
             
                 <el-row>
                     <el-col :span="6">
-                        <el-select v-model="selectValue" placeholder="请选择JQ账号" @change="changeItem" style="width: 100%;">
+                        <el-select v-model="selectValue" size="small" placeholder="请选择JQ账号" @change="changeItem" style="width: 100%;">
                             <el-option
                               v-for="item in selectOptions"
                               :key="item.type"
@@ -107,19 +107,19 @@
                         </el-select>
                     </el-col>
                     <el-col :span="6" :offset="1">
-                        <el-input v-model="searchForm.name" placeholder="请输入JQ姓名"></el-input>
+                        <el-input v-model="searchForm.name" size="small" placeholder="请输入JQ姓名"></el-input>
                     </el-col>
                     <el-col :span="6" :offset="1">
-                        <el-input v-model="searchForm.userName" placeholder="请输入JQ用户名"></el-input>
+                        <el-input v-model="searchForm.userName" size="small" placeholder="请输入JQ用户名"></el-input>
                     </el-col>
                     <el-col :span="3" :offset="1">
-                        <el-button type="primary" @click="searchBtn">搜索</el-button>
+                        <el-button type="primary" size="small" @click="searchBtn">搜索</el-button>
                     </el-col>
                 </el-row>
     
                 <el-table
                     :data="tableData"
-                    style="width: 96%; margin: 0 auto; margin-top: .2rem;">
+                    style="width: 96%; margin: 0 auto; margin-top: 16px;">
     
                     <el-table-column
                         :prop="item.props"
@@ -533,6 +533,9 @@ export default {
                 width: 90%;
             }
         }
+    }
+    .el-col-6{
+        height: auto !important;
     }
     .el-pagination{
         text-align: right;

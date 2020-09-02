@@ -243,6 +243,8 @@
             v-if="callpopFlag"
             @changecallpopFlag="changecallpopFlag"
             :callpopFlag.sync='callpopFlag'
+            :call_state='call_state'
+            :caller_number='caller_number'
         >
         </CallPop>
 
@@ -267,8 +269,8 @@ import {
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-// import jsmc from '@/assets/js/jsmc.min.js';
-// import json2 from '@/assets/js/json2.js';
+import jsmc from '@/assets/js/jsmc.min.js';
+import json2 from '@/assets/js/json2.js';
 import { 
     menuNumberFunc,
     receiveTimeFun
@@ -337,7 +339,7 @@ export default {
                 {'label': '' }
             ],
             initOptions: {},
-            // jqStart: null,
+            jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -348,7 +350,9 @@ export default {
             examItem: '',
             userCDARUuid: '',
 
-            // callpopFlag: true,
+            callpopFlag: false,
+            call_state: '',
+            caller_number: '',
 
             enumList: {},
             fullscreenLoading: false,
@@ -382,12 +386,12 @@ export default {
         let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
-        // this.jqStart = jsmc.noConflict();
+        this.jqStart = jsmc.noConflict();
     },
     methods: {
-        getCallPopClick() {
-            this.callpopFlag = true;
-        },
+        // getCallPopClick() {
+        //     this.callpopFlag = true;
+        // },
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
         },
@@ -662,6 +666,24 @@ export default {
                             this.followFlag = true;
                             this.comMode = '座机外呼';
                             this.examItem = scope.examItem;
+
+                            var that = this;
+
+                            this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
+                                console.log('监听成功-callEvent');
+                                console.log(message);
+                                // console.log(jsonObject);
+                                that.callpopFlag = true;
+                                that.caller_number = message.call_event.caller_number;
+                                if(message.call_event.call_state == 'caller_ring') {
+                                    that.call_state = '响 铃';
+                                }else if(message.call_event.call_state == 'caller_answer') {
+                                    that.call_state = '接 听';
+                                }else if(message.call_event.call_state == 'agent_hangup') {
+                                    that.call_state = '挂 断';
+                                }
+                            });
+
                         }else{
                             this.$message({
                                 type: 'error',
@@ -679,11 +701,7 @@ export default {
                     //     console.log(message);
                     //     console.log(jsonObject);
                     // }); 
-                    // this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                    //     console.log('监听成功-callEvent');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
+                    
                     // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
                     //     console.log('监听成功-callTip');
                     //     console.log(message);

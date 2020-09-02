@@ -46,7 +46,7 @@
                 <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
-                      :key="item.name"
+                      :key="item.number"
                       v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
