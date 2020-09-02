@@ -289,7 +289,7 @@ export default {
                             this.saleAimsForm.aims_entry = ((res.data.aims - res.data.entry) / 10000).toFixed(2); 
                         }
                         if(res.data.aims != 0) {
-                            this.saleAimsForm.aims_entry_lv = Number(((res.data.entry / res.data.aims) * 100).toFixed(2));
+                            this.saleAimsForm.aims_entry_lv = ((res.data.entry / res.data.aims) * 100).toFixed(2);
                         }else{
                             this.saleAimsForm.aims_entry_lv = (0).toFixed(2);
                         }
@@ -301,7 +301,7 @@ export default {
                             this.saleAimsForm.monthAims_monthEntry = ((res.data.monthAims - res.data.monthEntry) / 10000).toFixed(2); 
                         }
                         if(res.data.monthAims != 0) {
-                            this.saleAimsForm.monthAims_monthEntry_lv = Number(((res.data.monthEntry / res.data.monthAims) * 100).toFixed(2));
+                            this.saleAimsForm.monthAims_monthEntry_lv = ((res.data.monthEntry / res.data.monthAims) * 100).toFixed(2);
                         }else{
                             this.saleAimsForm.monthAims_monthEntry_lv = (0).toFixed(2);
                         }

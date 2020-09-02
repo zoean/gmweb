@@ -4,7 +4,9 @@
     <el-container :class="paddingClass" id="el-container">
       <Aside v-if="$store.state.commonFlag" :toggleSidebar="toggleSidebar" v-scroll-lock="scrollLockFlag" @mouseenter.native="scrollLockFlag = true" @mouseleave.native="scrollLockFlag = false"></Aside>
       <div :class="[widthClass]">
-        <router-view/>
+        <keep-alive include="people">
+          <router-view />
+        </keep-alive>
       </div>
     </el-container>
   </div>

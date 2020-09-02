@@ -336,16 +336,15 @@
                                         show-word-limit
                                         maxlength='300'
                                         placeholder="请输入其他备注"
-
                                     ></el-input>
-
+                                        
                                 </el-form-item>
                             </el-col>
 
                         </el-row>
                         
                         <el-form-item style="text-align: center;">
-                          <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
+                          <el-button type="primary" @keyup.enter="submitForm('ruleForm')" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
                           <el-button @click="quxiao" plain size="small" style="width: 100px;" v-if="!routePathFlag">取消</el-button>
                         </el-form-item>
 
@@ -785,6 +784,7 @@ export default {
             pcaa: null, //省市数据
             restaurants: [],
             routePathFlag: false,
+            isDisable: true
         }
     },
     created() {
@@ -826,6 +826,18 @@ export default {
         this.getGoodsList2();
         if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("peopleClues") != -1 || this.$route.path.indexOf("manageClues") != -1 || this.$route.path.indexOf("recoverData") != -1 || this.$route.path.indexOf("toallocate") != -1){
             this.routePathFlag = true;
+        }
+
+        var _self = this;
+        document.onkeydown = function(e){
+            if(window.event == undefined){
+                var key = e.keyCode;
+            }else{
+                var key = window.event.keyCode;
+            }
+            if(key == 13){
+                _self.submitForm('ruleForm');
+            }
         }
     },
     methods: {
@@ -931,13 +943,17 @@ export default {
             this.getClueCallLog();
         },
         submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-              if (valid) {
-                this.addClueDataNotes();
-              } else {
-                return false;
-              }
-            });
+            if(this.isDisable) {
+                this.isDisable = false;
+                this.$refs[formName].validate((valid) => {
+                  if (valid) {
+                    this.addClueDataNotes();
+                  } else {
+                    this.isDisable = true;
+                    return false;
+                  }
+                });
+            }
         },
         addClueDataNotes() {
             this.$smoke_post(addClueDataNotes, {
@@ -982,7 +998,7 @@ export default {
                     this.$emit("changeDrawer", false)
                     // this.tabs_active = 'second';
                     // this.getClueDataNotes();
-
+                    document.onkeydown = undefined;
                 }else{
                     this.$message({
                         type: 'error',
