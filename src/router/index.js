@@ -120,7 +120,10 @@ export default new Router({
         {
             path: '/base/people',
             name: 'people',
-            component: people
+            component: people,
+            // meta:{
+            //     keepAlive:true //需要被缓存的组件
+            // },
         },     
         {
             path: '/base/people/default',
