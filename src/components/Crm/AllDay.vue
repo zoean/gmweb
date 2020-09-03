@@ -503,6 +503,7 @@ export default {
         },
         changeDrawer(val){
             this.drawer = val;
+            this.getClueDataAll();
         },
         changecallpopFlag(val) {
             this.callpopFlag = val;
