@@ -4,7 +4,7 @@
 
             <el-row class="people-screen">
 
-                <el-col :span="6">
+                <el-col :span="4">
 
                     <el-cascader
                         style="width: 90%;"
@@ -21,7 +21,7 @@
 
                 </el-col>
 
-                <el-col :span="6">
+                <el-col :span="4">
 
                     <el-date-picker
                         style="width: 90%;"
@@ -36,7 +36,7 @@
 
                 </el-col>
 
-                <el-col :span="6">
+                <el-col :span="4">
 
                     <el-select v-model="form.classType" placeholder="请选择组织列表或人员列表" style="width: 90%;" size="small" clearable>
                         <el-option
@@ -49,7 +49,7 @@
 
                 </el-col>
 
-                <el-col :span="6">
+                <el-col :span="12">
                 
                     <el-button type="primary" @click="salesOrgBoardClick" size="small">查 询</el-button>
 

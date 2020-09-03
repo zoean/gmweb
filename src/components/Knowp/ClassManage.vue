@@ -30,7 +30,7 @@
                     <el-button size="mini" type="text" @click="scope._self.$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                     <el-button type="primary" size="mini" @click="deleteAll(scope)">确定</el-button>
                   </div>
-                  <svg-icon v-if="scope.row.level == '考试项目'" slot="reference" @click="editClick(scope.row)" icon-title="删除" icon-class="del" />
+                  <svg-icon v-if="scope.row.level == '考试项目'" slot="reference" icon-title="删除" icon-class="del" />
                 </el-popover>
 
                 <svg-icon v-if="scope.row.level == '二级分类'" slot="reference" @click="addClick(scope.row)" :icon-title="scope.row.level == '科目' ? '科目章节' : '添加'" :icon-class="scope.row.level == '科目' ? 'addnotes' : 'add'" />

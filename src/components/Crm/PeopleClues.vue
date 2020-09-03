@@ -159,19 +159,19 @@
             v-loading="fullscreenLoading"
             style="width: 100%; margin-top: 22px;">
     
-            <af-table-column
+            <el-table-column
                 :prop="item.prop"
                 :label="item.label"
-                :show-overflow-tooltip="item.props == 'notes' ? true : false"
+                :show-overflow-tooltip="item.prop == 'notes' ? true : false"
                 v-for="(item, index) in columnList"
-                :width="item.prop == 'examItemName' ? '150px' : ''"
+                :min-width="item.width"
                 :key="index">
 
                 <template slot-scope="scope">
                   <span>{{scope.row[item.prop] || '- -'}}</span>
                 </template>
 
-            </af-table-column>
+            </el-table-column>
 
             <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
               <template slot-scope="scope">
@@ -305,19 +305,20 @@ export default {
             },
             tableData: [],
             columnList: [
-              { 'prop': 'tel', 'label': '手机号码' },
+              { 'prop': 'tel', 'label': '手机号码', 'width': 90},
               { 'prop': 'name', 'label': '客户姓名' },
-              { 'prop': 'examItemName', 'label': '考试项目' },
-              { 'prop': 'spread', 'label': '来源渠道' },
-              { 'prop': 'acc', 'label': '推广账号' },
+              { 'prop': 'examItemName', 'label': '考试项目', 'width': 120},
+              { 'prop': 'spread', 'label': '来源渠道', 'width': 120 },
+              { 'prop': 'acc', 'label': '推广账号', 'width': 120 },
+              { 'prop': 'exteName', 'label': '推广人' },
               { 'prop': 'isAllocation', 'label': '是否分配' },
               { 'prop': 'dialState', 'label': '是否拨打' },
-              { 'prop': 'createTime', 'label': '入库时间' },
-              { 'prop': 'allocationTime', 'label': '分配时间' },
+              { 'prop': 'createTime', 'label': '入库时间', 'width': 140  },
+              { 'prop': 'allocationTime', 'label': '分配时间', 'width': 140  },
               { 'prop': 'belongingSeat', 'label': '所属坐席' },
               { 'prop': 'intentionLevel', 'label': '意向等级' },
               { 'prop': 'inputMode', 'label': '属性' },
-              { 'prop': 'notes', 'label': '备注' },
+              { 'prop': 'notes', 'label': '备注', 'width': 180},
             ],
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
