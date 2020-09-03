@@ -4,6 +4,17 @@
     </el-page-header>
 
     <el-timeline>      
+      <el-timeline-item timestamp="v 1.1.14 -- 2020/09/03" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、主管线索页面增加列表字段及筛选项</p>
+          <p>2、个人线索页面增加列表字段及筛选项</p>
+          <p>3、优化销售主管看板通话明细弹框显示及数据准确性</p>
+          <p>4、全部客户页面，导入成单数据去掉高亮显示</p>
+          <h4>修复bug</h4>
+          <p>1、修复优化座机外拨通话弹框</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.13 -- 2020/09/02" placement="top">
         <el-card>
           <h4>新增功能</h4>
