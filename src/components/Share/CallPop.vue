@@ -58,7 +58,21 @@ export default {
         }
     },
     created() {
-        console.log(this.callpopFlag);
+        var that = this;
+        var timer = null;
+        var count = 0;
+        timer = setInterval(function(){
+            count++;
+            that.$refs.id_S.innerHTML = that.showNum(count % 60)
+            that.$refs.id_M.innerHTML = that.showNum(parseInt(count / 60) % 60)
+            that.$refs.id_H.innerHTML = that.showNum(parseInt(count / 60 / 60))
+            if(that.call_state_ == '挂 断'){
+                setTimeout(() => {
+                    clearInterval(timer);
+                    that.$emit("changecallpopFlag", false)
+                }, 3000);
+            }
+        },1000);
     },
     methods: {
         handleClose() {
@@ -94,28 +108,6 @@ export default {
             },
         },
     },
-    watch: {
-        'call_state_': function(newVal,oldVal){
-            console.log(newVal);
-            var that = this;
-            var timer = null;
-            var count = 0;
-            if(newVal == '响 铃' || newVal == '接 听'){
-                timer = setInterval(function(){
-                    count++;
-                    that.$refs.id_S.innerHTML = that.showNum(count % 60)
-                    that.$refs.id_M.innerHTML = that.showNum(parseInt(count / 60) % 60)
-                    that.$refs.id_H.innerHTML = that.showNum(parseInt(count / 60 / 60))
-                    if(that.call_state_ == '挂 断'){
-                        setTimeout(() => {
-                            clearInterval(timer);
-                            that.$emit("changecallpopFlag", false)
-                        }, 3000);
-                    }
-                },1000);
-            }
-        },
-    }
 }
 </script>
 
