@@ -79,11 +79,11 @@
                     clearable
                     style="width: 95%;"
                     size="small"
-                    v-model="dataPicker"
+                    v-model="dataPickerku"
                     type="datetimerange"
                     range-separator="至"
                     :default-time="['00:00:00', '23:59:59']"
-                    @change="datePickerChange"
+                    @change="datePickerChangeku"
                     :picker-options="pickerOptions"
                     start-placeholder="入库时间"
                     end-placeholder="入库时间">
@@ -115,10 +115,38 @@
                     </el-option>
                 </el-select>
             </el-col>
+
+            <el-col :span="4">
+                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
     
         </el-row>
 
         <el-row>
+
+            <el-col :span="8">
+                <el-date-picker
+                    clearable
+                    style="width: 95%;"
+                    size="small"
+                    v-model="dataPickerpei"
+                    type="datetimerange"
+                    range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
+                    @change="datePickerChangepei"
+                    :picker-options="pickerOptions"
+                    start-placeholder="分配时间"
+                    end-placeholder="分配时间">
+                </el-date-picker>
+            </el-col>
 
             <el-col :span="4">
                 <el-input v-model="form.exteName" size="small" placeholder="请输入推广人" style="width: 90%;" clearable></el-input>
@@ -138,6 +166,7 @@
             <af-table-column
                 :prop="item.prop"
                 :label="item.label"
+                :show-overflow-tooltip="item.props == 'notes' ? true : false"
                 v-for="(item, index) in columnList"
                 :width="item.prop == 'examItemName' ? '150px' : ''"
                 :key="index">
@@ -195,7 +224,7 @@ import {
   getExamBasic,
   enumByEnumNums,
 } from '../../request/api';
-import { MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
+import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import { timestampToTime, input_mode_Text, isAllocationText, dialStateText } from '../../assets/js/common'
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -224,7 +253,10 @@ export default {
                 inputMode: "",
                 exteName: "",
                 startCreateTime: "",
-                total: null
+                total: null,
+                receiveStartTime: '', //分配时间的查询开始时间（13位）
+                receiveEndTime: '', //分配时间的查询结束时间（13位）
+                intentionLevel: '', 
             },
             isAllocationArr: [
                 { label: '未分配', value: 0 },
@@ -238,7 +270,9 @@ export default {
                 { label: '线上', value: 0 },
                 { label: '录入', value: 1 },
             ],
-            dataPicker: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
+            enumList: {},
+            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
+            dataPickerpei: [],
             pickerOptions: {
                 disabledDate(time) {
                   return time.getTime() > new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1;
@@ -292,6 +326,7 @@ export default {
               { 'prop': 'belongingSeat', 'label': '所属坐席' },
               { 'prop': 'intentionLevel', 'label': '意向等级' },
               { 'prop': 'inputMode', 'label': '属性' },
+              { 'prop': 'notes', 'label': '备注' },
             ],
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
@@ -312,7 +347,7 @@ export default {
         this.form.endCreateTime = new Date().getTime();
         this.getExteAllClueData();
         this.getExamBasic();
-        let arr = [MJ_6, MJ_7, MJ_9];
+        let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
 
     },
@@ -441,13 +476,22 @@ export default {
                 }
             })
         },
-        datePickerChange(value) { 
+        datePickerChangeku(value) { 
             if (value == null) {
                 this.form.startCreateTime = '';
                 this.form.endCreateTime = '';
             }else{
                 this.form.startCreateTime = value[0].getTime();
                 this.form.endCreateTime = value[1].getTime();
+            }
+        },
+        datePickerChangepei(value) { 
+            if (value == null) {
+                this.form.receiveStartTime = '';
+                this.form.receiveEndTime = '';
+            }else{
+                this.form.receiveStartTime = value[0].getTime();
+                this.form.receiveEndTime = value[1].getTime();
             }
         },
         handleCurrentChange(index) {

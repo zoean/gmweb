@@ -679,7 +679,7 @@ export default {
                                     that.caller_number = message.call_event.caller_number;
                                     that.call_state = '响 铃';
                                 }else if(message.call_event.call_state == 'caller_answer') {
-                                    that.call_state = '接 听';
+                                    that.call_state = '通 话 中';
                                 }else if(message.call_event.call_state == 'agent_hangup') {
                                     that.call_state = '挂 断';
                                 }
@@ -717,7 +717,7 @@ export default {
             }
         },
         tableRowClassName({row}) {
-            if (row.dialState == 0) {
+            if (row.dialState == 0 && row.orderState == 0) {
                 return 'dialState';
             }
             return '';
