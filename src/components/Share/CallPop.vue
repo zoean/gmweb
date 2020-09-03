@@ -58,6 +58,20 @@ export default {
         }
     },
     created() {
+        console.log(this.callpopFlag);
+    },
+    methods: {
+        handleClose() {
+            this.$emit("changecallpopFlag", false)
+        },
+        showNum(num) {
+            if (num < 10) {
+                return '0' + num
+            }
+            return num
+        }
+    },
+    mounted() {
         var that = this;
         var timer = null;
         var count = 0;
@@ -73,20 +87,6 @@ export default {
                 }, 3000);
             }
         },1000);
-    },
-    methods: {
-        handleClose() {
-            this.$emit("changecallpopFlag", false)
-        },
-        showNum(num) {
-            if (num < 10) {
-                return '0' + num
-            }
-            return num
-        }
-    },
-    mounted() {
-        
     },
     computed: {
         callpopFlag_:{
@@ -124,7 +124,7 @@ export default {
             background: #000;
             opacity: .75;
             // left: 40% !important;
-            z-index: 999;
+            z-index: 999999;
             user-select: none;
             box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
             border-radius: 4px;
