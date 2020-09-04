@@ -61,6 +61,7 @@
                 :data="list"
                 ref="tableSelect1"
                 v-loading="fullscreenLoading"
+                :height="height"
                 style="width: 100%; margin-top: 16px;">
 
                 <el-table-column
@@ -109,7 +110,7 @@ export default {
             form: {
                 orgList: [],
                 time: '',
-                classType: '',
+                classType: 1,
             },
             fullscreenLoading: false,
             list: [],
@@ -125,7 +126,7 @@ export default {
                 { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
                 { 'prop': 'callOpenLv', 'label': '接通率', width: 120 },
             ],
-            timeDate: '',
+            timeDate: [new Date(new Date().toLocaleDateString()).getTime()],
             pickerOptions: {
                 disabledDate(time) {
                   return time.getTime() > Date.now();
@@ -171,11 +172,13 @@ export default {
             classTypeList: [
                 { value: 0, label: '组织列表' },
                 { value: 1, label: '人员列表' },
-            ]
+            ],
+            height: document.documentElement.clientHeight - 150,
         }
     },
     created() {
         this.saleDataOrg();
+
     },
     methods: {
         handleZuzhiChange(arr) {
@@ -295,7 +298,7 @@ export default {
         }
     }
     .board /deep/ div.el-dialog__body{
-        height: 55vh;
+        height: 92vh;
         overflow: auto;
         padding: 10px 20px;
     }

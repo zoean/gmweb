@@ -522,3 +522,6 @@ div.el-dialog__body{
     padding: 10px !important;
 }
 
+.el-progress-bar{
+    width: 96% !important;
+}
