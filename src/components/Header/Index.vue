@@ -794,7 +794,7 @@ export default {
     }
     .index-hleft{
         width: 3rem;
-        min-width: 200px;
+        min-width: 240px;
         max-width: 256px;
         float: left;
         height: 60px;
