@@ -2,7 +2,7 @@
     <div>
         <div class="login-bg"></div>
         <div class="login-contain">
-            <el-image style="width: 2.4rem; height: .42rem; position: absolute; top: 1.2rem; left: .7rem;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+            <el-image style="width: 2.4rem; position: absolute; top: 1.2rem; left: .7rem;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
             <div class="contain-model">
 
                 <div class="contain-title">欢迎登录</div>

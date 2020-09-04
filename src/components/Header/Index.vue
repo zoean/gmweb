@@ -111,7 +111,7 @@
             <el-col :span="18" style="height: 60px !important;">
                 <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
                 
-                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                <el-image style="width: 240px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                 </div>
 
