@@ -818,7 +818,7 @@ export default {
         width: calc( 100% - 400px );
         padding-left: 20px;
         font-weight: 500 !important;
-        // border-left: 1px solid #eeeeee;
+        min-width: 460px;
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;
