@@ -167,15 +167,16 @@ export default {
         }else{
           this.routersFlag = true;
         }
-        window.onresize = () => {
-          if(document.documentElement.clientWidth < 980){
-            this.close_click()
-          console.log(document.documentElement.clientWidth, this.iscollapse, 'close')
-          }else{
-            this.open_click()
-          console.log(document.documentElement.clientWidth, this.iscollapse, 'open')
+        if((this.$route.path.indexOf('url') == -1) && (this.$route.path != '/') && (this.$route.path != '/login') && (this.$route.path != '/forget') && (this.$route.path != '/edition') && ((this.$route.path != '/404') && (this.$route.path.indexOf('agreeMentDetails') == -1))){
+          window.onresize = () => {
+            if(document.documentElement.clientWidth < 980){
+              this.close_click()
+            }else{
+              this.open_click()
+            }
           }
         }
+        
     }
 }
 </script>
@@ -183,11 +184,11 @@ export default {
   .aside-all{
     position: fixed;
     z-index: 99;
-    // min-height: calc(100vh - 60px);
+    /* min-height: calc(100vh - 60px); */
     display: flex;
     flex: 1;
     height: 100%;
-    // background: url('../../assets/images/aside_backg.png') left bottom no-repeat #4794FE;
+    /*  background: url('../../assets/images/aside_backg.png') left bottom no-repeat #4794FE; */
     background: #fff;
     .scrollbar-wrapper {
       overflow-x: hidden !important;
