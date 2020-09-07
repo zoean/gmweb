@@ -8,20 +8,20 @@
         <el-row class="user-info" type="flex" justify="center">
             <el-col class="user-info-content">
                 <el-row type="flex" justify="space-between">
-                    <el-col :span="12" type="flex" justify="space-between" class="user-info-left">
+                    <el-col :span="14" type="flex" justify="space-between" class="user-info-left">
                         <el-row type="flex">
-                        <el-col :span="6">
-                        <img class="avator" :src="$store.state.avatar ? $store.state.avatar : require('../../assets/images/header_img.png')" alt="">
+                            <el-col :span="6">
+                                <img class="avator" :src="$store.state.avatar ? $store.state.avatar : require('../../assets/images/header_img.png')" alt="">
+                            </el-col>
+                            <el-col :xs="0">
+                                <section>
+                                    <h2>早安，{{$store.state.name}}，祝你开心每一天！</h2>
+                                    <p>{{$store.state.userRole}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.userDepartment}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.curDate}}</p>
+                                </section>
+                            </el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :xs="0">
-                        <section>
-                            <h2>早安，{{$store.state.name}}，祝你开心每一天！</h2>
-                            <p>{{$store.state.userRole}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.userDepartment}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.curDate}}</p>
-                        </section>
-                    </el-col>
-                </el-row>
-                    </el-col>
-                    <el-col :span="12" class="user-info-right">
+                    <el-col :span="10" class="user-info-right">
                         <dl>
                             <dt>今日线索量</dt>
                             <dd>
