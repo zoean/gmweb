@@ -3,7 +3,16 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
 
-    <el-timeline>      
+    <el-timeline>   
+      <el-timeline-item timestamp="v 1.1.15 -- 2020/09/07" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、个人线索页面、主管线索页面新增导出功能</p>
+          <p>2、优化不同尺寸显示器显示效果</p>
+          <h4>修复bug</h4>
+          <p>1、通话详情页面样式优化</p>
+        </el-card>
+      </el-timeline-item>   
       <el-timeline-item timestamp="v 1.1.14 -- 2020/09/03" placement="top">
         <el-card>
           <h4>新增功能</h4>

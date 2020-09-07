@@ -1,12 +1,12 @@
 <template>
     <el-main class="index-main">
         <el-row class="people-screen">
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-cascader
                     size="small"
                     ref="cascader"
                     class="screen-li"
-                    placeholder="请选择组织架构"
+                    placeholder="选择组织架构"
                     :show-all-levels=false
                     :options="zuzhiOptions"
                     @change='handleZuzhiChange'
@@ -14,7 +14,7 @@
                     clearable>
                 </el-cascader>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-select v-model="roleUuidText" placeholder="请选择角色" size="small" @change='handleRoleUuidChange' class="screen-li" clearable>
                     <el-option
                       v-for="item in roleOptions"
@@ -24,7 +24,7 @@
                     </el-option>
                 </el-select>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-select v-model="jobStatusText" placeholder="请选择员工状态" size="small" @change='handleJobStatusChange' class="screen-li" clearable>
                     <el-option
                       v-for="item in jobStatusOptions"
@@ -34,51 +34,48 @@
                     </el-option>
                 </el-select>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
                 <el-date-picker
                     clearable
+                    style="width: 97%"
                     size="small"
                     v-model="dataPicker"
                     :default-time="['00:00:00', '23:59:59']"
                     type="daterange"
                     range-separator="至"
                     @change="datePickerChange"
-                    start-placeholder="入职开始日期"
-                    end-placeholder="入职结束日期">
+                    start-placeholder="入职时间"
+                    end-placeholder="入职时间">
                 </el-date-picker>
             </el-col>
+
+            <el-col :span="3">
+                <el-input v-model="screenForm.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="3">
+                <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
+            </el-col>
+
+            <el-col :span="3">
+                <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
+                <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->               
+                <svg-icon v-if="exportPeople" class='smoke-fr border-icon' style="margin-right: 0;" @click="export_Staff" icon-title="导出员工" icon-class="export" />
+            </el-col>
+
         </el-row>
 
-        <el-row class="people-screen" type="flex" align="middle">
-            <el-col :span="4">
-                <el-input v-model="screenForm.name" size="small" placeholder="请输入要查询的姓名" class="screen-li"></el-input>
-            </el-col>
-            <el-col :span="4">
-                <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>                            
-            </el-col>
-            <el-col :span="5">
-                <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
-            </el-col>
-            <el-col :span="11">
-                <el-row type="flex" justify="end">
-                    <el-col>
-                    <svg-icon v-if="exportPeople" class='smoke-fr border-icon' @click="export_Staff" icon-title="导出员工" icon-class="export" />
-                    </el-col>
-                </el-row>
-                <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->               
-                 
-            </el-col>
-        </el-row>
-        
         <el-table
           :data="userList"
           @sort-change="sortChange"
           v-loading="fullscreenLoading"
-          style="width: 99.9%">
+          >
           <el-table-column
             :prop="item.prop"
+            show-overflow-tooltip
             :label="item.label"
             v-for="(item, index) in columnList"
+            :min-width="item.width"
             :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
             :key="index"
             >
@@ -133,8 +130,8 @@ export default {
                 { 'prop': 'name', 'label': '姓名' },
                 { 'prop': 'accountNumber', 'label': '手机号' },
                 { 'prop': 'jobStatus', 'label': '状态' },
-                { 'prop': 'orgUuidList', 'label': '部门' },
-                { 'prop': 'roleUuidList', 'label': '角色' },
+                { 'prop': 'orgUuidList', 'label': '部门', 'width': 180 },
+                { 'prop': 'roleUuidList', 'label': '角色', 'width': 180 },
                 { 'prop': 'hiredDate', 'label': '入职时间' },
             ],
             total: null, //总条目数
@@ -366,10 +363,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-    .el-main{
-        // background: grey;
-    }
     .index-main{
+        .el-col-6{
+            height: auto !important;
+        }
         height: auto;
         .people-title{
             width: 100%;
@@ -383,9 +380,9 @@ export default {
             font-weight: 700;
         }
         .people-screen{
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             .screen-li{
-                width: 90%;
+                width: 94%;
             }
         }
         /deep/ .el-table{

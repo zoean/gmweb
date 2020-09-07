@@ -1,13 +1,13 @@
 <template>
     <el-main class="index-main">
         <el-row class="people-screen">
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -17,8 +17,8 @@
                     end-placeholder="最新回收时间">
                 </el-date-picker>
             </el-col>
-            <el-col :span="4">
-                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
                       :key="item.name"
@@ -28,17 +28,14 @@
                     </el-option>
                 </el-select>
             </el-col>
-            <el-col :span="4" class="seatData">
-                <area-cascader style="width: 90%;" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+            <el-col :span="3" class="seatData">
+                <area-cascader class="screen-li" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
-        </el-row>
-
-        <el-row class="people-screen">
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-autocomplete
                     ref="autocomplete"
                     size="small"
-                    style="width: 90%;"
+                    class="screen-li"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
@@ -48,10 +45,10 @@
                     @select="handleSelect"
                 ></el-autocomplete>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="3">
                 <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="3">
                 <el-button size="small" @click="obtainRPCD" style="float: right;" plain>确认领取</el-button>
             </el-col>
         </el-row>
@@ -372,6 +369,9 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        .el-col-6{
+            height: auto !important;
+        }
         height: auto;
         .people-title{
             width: 100%;
@@ -384,9 +384,9 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             .screen-li{
-                width: 90%;
+                width: 94%;
             }
         }
     }

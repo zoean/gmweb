@@ -178,7 +178,7 @@
                 </el-badge>
                     
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.14</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.15</span>
     
             </el-col>
         </el-row>
@@ -450,20 +450,27 @@ export default {
         },
         logout() {
             this.$smoke_post(logOut, {}).then(res => {
-                if(res.code == 200) {
-                    localStorage.removeItem('jhToken');
-                    localStorage.removeItem('userMenuList');
-                    localStorage.removeItem('initOptions');
-                    localStorage.removeItem('studentsPageSize');
-                    sessionStorage.clear()
-                    this.$store.dispatch('actionsSetCommonFlag', false);
-                    this.$router.push({ path: '/login'});
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
+                // if(res.code == 200) {
+                //     localStorage.removeItem('jhToken');
+                //     localStorage.removeItem('userMenuList');
+                //     localStorage.removeItem('initOptions');
+                //     localStorage.removeItem('studentsPageSize');
+                //     sessionStorage.clear()
+                //     this.$store.dispatch('actionsSetCommonFlag', false);
+                //     this.$router.push({ path: '/login'});
+                // }else{
+                //     this.$message({
+                //         type: 'error',
+                //         message: res.msg
+                //     })
+                // }
+                localStorage.removeItem('jhToken');
+                localStorage.removeItem('userMenuList');
+                localStorage.removeItem('initOptions');
+                localStorage.removeItem('studentsPageSize');
+                sessionStorage.clear()
+                this.$store.dispatch('actionsSetCommonFlag', false);
+                this.$router.push({ path: '/login'});
             })
         },
         dialog_cancel() {
