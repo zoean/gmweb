@@ -318,7 +318,8 @@ a:link,a:active,a:visited,a:hover {
 .el-main{
     padding: 20px;
     background: #fff;
-    margin: 20px;
+    margin: 20px;    
+    min-width: 600px;
 }
 
 .el-menu--collapse  .el-submenu__title span{
