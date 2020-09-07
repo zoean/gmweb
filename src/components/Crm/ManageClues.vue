@@ -360,10 +360,15 @@ export default {
         directorClueExport() {
             let tmp = (new Date()).getTime();
             let exportTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() - 3600 * 1000 * 24 * 31;
-            if(this.form.startCreateTime < exportTime) {
+            if(this.form.startCreateTime == '' || this.form.endCreateTime == '') {
                 this.$message({
                     type: 'error',
-                    message: '入库时间不能为空，且时间间隔不能超过31天'
+                    message: '入库时间不能为空'
+                })
+            }else if(this.form.startCreateTime < exportTime) {
+                this.$message({
+                    type: 'error',
+                    message: '入库时间间隔不能超过31天'
                 })
             }else{
                 tmp = timestampToTime(tmp);
