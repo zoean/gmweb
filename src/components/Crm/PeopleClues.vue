@@ -350,8 +350,16 @@ export default {
     methods: {
         personalClueExport() {
             let tmp = (new Date()).getTime();
-            tmp = timestampToTime(tmp);
-            filepostDown(personalClueExport, this.form, '线索-' + tmp + '.xlsx');
+            let exportTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() - 3600 * 1000 * 24 * 31;
+            if(this.form.startCreateTime < exportTime) {
+                this.$message({
+                    type: 'error',
+                    message: '入库时间不能为空，且时间间隔不能超过31天'
+                })
+            }else{
+                tmp = timestampToTime(tmp);
+                filepostDown(personalClueExport, this.form, '线索-' + tmp + '.xlsx');
+            }
         },
         changeDrawer(val){
             this.drawer = val;

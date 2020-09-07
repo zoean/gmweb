@@ -4,17 +4,17 @@
         <Start></Start>
         <el-row class="people-screen">
 
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入查询的手机号" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.name" size="small" placeholder="请输入查询的客户姓名" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 
-                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li" clearable>
+                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
                     <el-option
                       v-for="item in dialStateList"
                       :key="item.name"
@@ -25,9 +25,9 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
-                <el-select v-model="form.education" size="small" placeholder="请选择最高学历" class="screen-li" clearable>
+                <el-select v-model="form.education" size="small" placeholder="选择最高学历" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-1']"
                       :key="item.name"
@@ -39,9 +39,9 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
-                <el-select v-model="form.workingLife" size="small" placeholder="请选择工作年限" class="screen-li" clearable>
+                <el-select v-model="form.workingLife" size="small" placeholder="选择工作年限" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-2']"
                       :key="item.name"
@@ -53,8 +53,8 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 100%;" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
                       :key="item.name"
@@ -65,26 +65,9 @@
                 </el-select>
             </el-col>
 
-        </el-row>
+            <el-col :span="3">
 
-        <el-row class="people-screen" type="flex" align="middle">
-
-            <el-col :span="4">
-
-                <el-select @change="selectTimeChange" size="small" v-model="form.selectTime" placeholder="请选择未联间隔" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in selectTimeList"
-                      :key="item.name"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
-
-            </el-col>
-
-            <el-col :span="4">
-
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -95,27 +78,26 @@
 
             </el-col>
 
-            <el-col :span="14">
+            <el-col :span="3">
 
-                <el-tag 
-                    v-for="(item,index) in searchList" :key="item.id"
-                    style="margin-left: 4px; cursor: pointer;"
-                    :class="tag_id == item.id ? 'tag_class' : ''"
-                    type="info"
-                    effect="plain"
-                    @click="tagClick(item)"
-                    >{{item.name}}
-                </el-tag>
+                <el-select @change="selectTimeChange" size="small" v-model="form.selectTime" placeholder="选择未联间隔" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in selectTimeList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
 
             </el-col>
-            
+
         </el-row>
 
         <el-row class="people-screen">
 
-            <el-col :span="4">
+            <el-col :span="3">
 
-                <el-select v-model="form.orderState" size="small" placeholder="请选择成单状态" class="screen-li" clearable>
+                <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable>
                     <el-option
                       v-for="item in orderStateList"
                       :key="item.name"
@@ -126,20 +108,27 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="16">
 
-                <el-button type="primary" size="small" @click="getClueDataAllClick">查 询</el-button>
+                <el-tag 
+                    v-for="(item,index) in searchList" :key="item.id"
+                    :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
+                    type="info"
+                    effect="plain"
+                    @click="tagClick(item)"
+                    >{{item.name}}
+                </el-tag>
+
+                <el-button type="primary" style="margin-left: 8px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
                 <!-- <el-button plain size="small" @click="getCallPopClick">Click</el-button> -->
 
             </el-col>
-
-            <el-col :span="16">
-                <el-row type="flex" justify="end">
-                    <svg-icon class="border-icon" @click="editFieldHandle" style="margin-right: 0px" icon-title="表头管理" icon-class="field" />
-                </el-row>
+            
+            <el-col :span="5">
+                <svg-icon class="border-icon" @click="editFieldHandle" style="float: right;" icon-title="表头管理" icon-class="field" />
             </el-col>
-
+            
         </el-row>
 
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
@@ -773,9 +762,9 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             .screen-li{
-                width: 90%;
+                width: 94%;
             }
         }
         .el-button{
