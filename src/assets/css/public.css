@@ -316,9 +316,9 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-main{
-    padding: 20px;
+    padding: 12px;
     background: #fff;
-    margin: 20px;
+    margin: 16px;
 }
 
 .el-menu--collapse  .el-submenu__title span{
@@ -472,6 +472,13 @@ div.el-dialog__body{
     color: #333 !important;
     background-color: #EFF7FF !important;
 }
+.tag_default_class{
+    cursor: pointer;
+    margin-left: 10px;
+}
+.tag_default_class:first-of-type{
+    margin-left: 0px;
+}
 .number_search{
     height: 36px !important;
     line-height: 36px !important;
@@ -524,4 +531,8 @@ div.el-dialog__body{
 
 .el-progress-bar{
     width: 96% !important;
+}
+
+.el-input__inner{
+    font-size: 12px;
 }
