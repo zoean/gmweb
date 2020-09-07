@@ -77,9 +77,9 @@ export default {
   methods: {
     toggleSidebar(num){
       if(num && num == 2){
-        this.sideBarOpen = true
+        this.sideBarOpen = true       
       }else if(num && num == 1){
-        this.sideBarOpen = false
+        this.sideBarOpen = false 
       }else{
         this.sideBarOpen = !this.sideBarOpen
       }
@@ -130,7 +130,6 @@ export default {
   width: calc( 100vw - 3rem );
   position: absolute;
   left: 3rem;
-  min-width: 400px;
 }
 .sidebar-close{
   width: calc( 100vw - 84px );
