@@ -83,7 +83,6 @@ export default {
       }else{
         this.sideBarOpen = !this.sideBarOpen
       }
-      console.log(this.sideBarOpen)
       if(this.sideBarOpen){
         this.widthClass = 'sidebar-open'
       }else{
