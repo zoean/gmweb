@@ -90,7 +90,15 @@ export default {
     },
     created() {
       this.router_index();
-      
+      if((this.$route.path.indexOf('url') == -1) && (this.$route.path != '/') && (this.$route.path != '/login') && (this.$route.path != '/forget') && (this.$route.path != '/edition') && ((this.$route.path != '/404') && (this.$route.path.indexOf('agreeMentDetails') == -1))){
+          window.onresize = () => {
+            if(document.documentElement.clientWidth < 980){
+              this.close_click()
+            }else{
+              this.open_click()
+            }
+          }
+        }
     },
     methods: {
       open_click() {
@@ -166,17 +174,7 @@ export default {
           this.userMenuList = userMenuList[3].includeSubsetList;
         }else{
           this.routersFlag = true;
-        }
-        if((this.$route.path.indexOf('url') == -1) && (this.$route.path != '/') && (this.$route.path != '/login') && (this.$route.path != '/forget') && (this.$route.path != '/edition') && ((this.$route.path != '/404') && (this.$route.path.indexOf('agreeMentDetails') == -1))){
-          window.onresize = () => {
-            if(document.documentElement.clientWidth < 980){
-              this.close_click()
-            }else{
-              this.open_click()
-            }
-          }
-        }
-        
+        }        
     }
 }
 </script>

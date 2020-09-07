@@ -70,7 +70,7 @@ export default {
     }
 </style>
 
-<style lang="less">
+<style lang="less" scoped>
 @media screen and (max-width: 1000px) {
   /* .sidebar-open{
     left: 0px !important;
