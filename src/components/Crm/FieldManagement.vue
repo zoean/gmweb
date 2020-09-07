@@ -3,11 +3,11 @@
       <el-row class="search-area">
 
           <el-col :span="5">
-              <el-input placeholder="请输入搜索项" size="small" class="screen-li"></el-input>
+              <el-input placeholder="请输入页面名称" v-model="getPageManageListForm.name" size="small" class="screen-li"></el-input>
           </el-col>
 
           <el-col :span="5">
-              <el-button type="primary" size="small">查 询</el-button>
+              <el-button type="primary" size="small" @click="getPageManageList">查 询</el-button>
           </el-col>
 
           <el-col :span="14">
@@ -124,7 +124,9 @@ import {timestampToTime} from '@/assets/js/common'
 export default {
   data(){
     return {
-      getPageManageListForm: {},
+      getPageManageListForm: {
+        name: ''
+      },
       pageManageList: [],
       pageManageListColumn:[
         {
