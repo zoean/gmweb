@@ -89,16 +89,7 @@ export default {
         }
     },
     created() {
-      this.router_index();
-      if((this.$route.path.indexOf('url') == -1) && (this.$route.path != '/') && (this.$route.path != '/login') && (this.$route.path != '/forget') && (this.$route.path != '/edition') && ((this.$route.path != '/404') && (this.$route.path.indexOf('agreeMentDetails') == -1))){
-          window.onresize = () => {
-            if(document.documentElement.clientWidth < 980){
-              this.close_click()
-            }else{
-              this.open_click()
-            }
-          }
-        }
+      this.router_index();      
     },
     methods: {
       open_click() {
@@ -150,7 +141,16 @@ export default {
           this.routersFlag = true;
           // this.activeIndex = newVal;
         }
-        
+
+        window.onresize = () => {
+          if(((newVal.indexOf('url') == -1) && (newVal != '/') && (newVal != '/login') && (newVal != '/forget') && (newVal != '/edition') && (newVal != '/404') && (newVal.indexOf('agreeMentDetails') == -1))){
+            if(document.documentElement.clientWidth < 980){
+              this.close_click()
+            }else{
+              this.open_click()
+            }
+          }
+        }
       }
     },
     mounted() {
@@ -174,7 +174,7 @@ export default {
           this.userMenuList = userMenuList[3].includeSubsetList;
         }else{
           this.routersFlag = true;
-        }        
+        } 
     }
 }
 </script>
