@@ -227,7 +227,8 @@ import {
   getExteAllClueData,
   getExamBasic,
   enumByEnumNums,
-  directorClueExport
+  directorClueExport,
+  testAllClueExport
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
@@ -354,13 +355,13 @@ export default {
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
-
     },
     methods: {
         directorClueExport() {
             let tmp = (new Date()).getTime();
             tmp = timestampToTime(tmp);
             filepostDown(directorClueExport, this.form, '线索-' + tmp + '.xlsx');
+            // this.$smoke_post(testAllClueExport, this.form).then(res => {})
         },
         changeDrawer(val){
             this.drawer = val;

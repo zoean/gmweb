@@ -260,6 +260,8 @@ export const readExcelClueData = '/api/phone/excel/readExcelClueData';//模板�
 export const registerExportExcel = '/api/phone/excel/registerExportExcel';//报考信息导出Excel
 export const registerExportZip = '/api/phone/excel/registerExportZip';//报考信息导出Zip
 export const directorClueExport = '/api/phone/excel/directorClueExport';//主管线索导出Excel
+export const personalClueExport = '/api/phone/excel/personalClueExport';//个人线索导出Excel
+export const testAllClueExport = '/api/phone/testUtil/testAllClueExport';//test-查询主管线索导出数据
 export const uploadFile = '/upload-service/upload/file';//模板录入
 
 //lovestudy

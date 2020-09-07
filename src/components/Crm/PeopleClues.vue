@@ -60,7 +60,7 @@
             </el-col>
     
             <el-col :span="4">
-                <el-select v-model="form.isAllocation" size="small" placeholder="请选择是否分配" style="width: 90%;" clearable>
+                <el-select v-model="form.isAllocation" size="small" placeholder="请选择是否分配" style="width: 100%;" clearable>
                     <el-option
                       v-for="item in isAllocationArr"
                       :key="item.value"
@@ -152,6 +152,10 @@
                 <el-button type="primary" size="small" @click="getExteClueDataClick">查询</el-button>
             </el-col>
 
+            <el-col :span="8">
+                <el-button size="small" style="float:right;" plain @click="personalClueExport">导 出</el-button>
+            </el-col>
+
         </el-row>
     
         <el-table
@@ -219,9 +223,10 @@ import {
   getExteClueData,
   getExamBasic,
   enumByEnumNums,
+  personalClueExport
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
-import { timestampToTime, input_mode_Text, isAllocationText, dialStateText } from '../../assets/js/common'
+import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'peopleClues',
@@ -343,6 +348,11 @@ export default {
         this.enumByEnumNums(arr);
     },
     methods: {
+        personalClueExport() {
+            let tmp = (new Date()).getTime();
+            tmp = timestampToTime(tmp);
+            filepostDown(personalClueExport, this.form, '线索-' + tmp + '.xlsx');
+        },
         changeDrawer(val){
             this.drawer = val;
         },
