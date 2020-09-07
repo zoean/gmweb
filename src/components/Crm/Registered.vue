@@ -10,8 +10,7 @@
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
-                    style="margin-left: 4px; cursor: pointer;"
-                    :class="tag_id == item.id ? 'tag_class' : ''"
+                    :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
                     type="info"
                     effect="plain"
                     @click="tagClick(item)"
@@ -459,9 +458,9 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             .screen-li{
-                width: 90%;
+                width: 94%;
             }
         }
     }

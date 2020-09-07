@@ -119,7 +119,7 @@
                     >{{item.name}}
                 </el-tag>
 
-                <el-button type="primary" style="margin-left: 8px;" size="small" @click="getClueDataAllClick">查 询</el-button>
+                <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
                 <!-- <el-button plain size="small" @click="getCallPopClick">Click</el-button> -->
 

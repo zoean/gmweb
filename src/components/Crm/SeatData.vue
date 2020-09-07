@@ -2,10 +2,10 @@
     <el-main class="index-main">
         <el-row class="people-screen">
 
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -16,12 +16,12 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-autocomplete
                     ref="autocomplete"
                     size="small"
-                    style="width: 90%;"
+                    class="screen-li"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
@@ -33,17 +33,17 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4" class="seatData">
+            <el-col :span="3" class="seatData">
                 <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 
-                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
+                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.number"
@@ -54,14 +54,10 @@
                 </el-select>
 
             </el-col>
-            
-        </el-row>
 
-        <el-row class="people-screen" type="flex" align="middle">
-
-            <el-col :span="4">
+            <el-col :span="3">
                 
-                <el-select v-model="form.dialState" size="small" placeholder="请选择是否首咨" class="screen-li" clearable>
+                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
                     <el-option
                       v-for="item in dialStateList"
                       :key="item.name"
@@ -72,9 +68,9 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -84,9 +80,13 @@
                 </el-select>
 
             </el-col>
+            
+        </el-row>
 
-            <el-col :span="4">
-                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" class="screen-li" clearable>
+        <el-row class="people-screen">
+
+            <el-col :span="3">
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
                       :key="item.name"
@@ -97,37 +97,30 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="12">
+            <el-col :span="3">
+
+                <el-input v-model="form.saleName" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+
+            </el-col>
+
+            <el-col :span="15">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
-                    style="margin-left: 4px; cursor: pointer;"
-                    :class="tag_id == item.id ? 'tag_class' : ''"
+                    :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
                     type="info"
                     effect="plain"
                     @click="tagClick(item)"
                     >{{item.name}}
                 </el-tag>
 
+                <el-button type="primary" size="small" style="margin-left: 10px;" @click="getAllUserClueDataClick">查 询</el-button>
+
             </el-col>
 
-            
-        </el-row>
-
-        <el-row class="people-screen">
-
-            <el-col :span="4">
-                <el-input v-model="form.saleName" size="small" placeholder="请输入坐席姓名" class="screen-li"></el-input>
-            </el-col>
-
-            <el-col :span="4">
-                <el-button type="primary" size="small" @click="getAllUserClueDataClick">查 询</el-button>
-            </el-col>
-            <el-col :span="16">
-                <el-row type="flex" justify="end">
-                    <svg-icon class="border-icon" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
-                    <svg-icon class="border-icon" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
-                </el-row>
+            <el-col :span="3">
+                <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
             </el-col>
 
         </el-row>
@@ -570,6 +563,9 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        .el-col-6{
+            height: auto !important;
+        }
         height: auto;
         .people-title{
             width: 100%;
@@ -582,9 +578,9 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             .screen-li{
-                width: 90%;
+                width: 94%;
             }
         }
     }
