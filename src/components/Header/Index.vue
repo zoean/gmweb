@@ -107,35 +107,38 @@
             </span>
         </el-dialog>
 
-        <el-row>
-            <el-col :span="18" style="height: 60px !important;">
-                <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
-                
-                <el-image style="width: 200px; height: 35px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+        <el-row :xs="0">
+            <el-col :lg="18" :md="18" :sm="20" :xs="24" style="height: 60px !important;">
+                <el-row type="flex" justify="start">
+                    <el-col :lg="6" :md="8" :sm="10" style="min-width: 220px;">
+                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
+                        
+                        <el-image style="width: 217px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
-                </div>
-
-                <el-menu
-                    :default-active="defaultActive"
-                    class="el-menu-demo"
-                    mode="horizontal"
-                    @select="handleSelect"
-                    background-color="#fff"
-                    text-color="#333333"
-                    active-text-color="#488FF7">
-                    <el-menu-item 
-                        v-for="(item,index) in $store.state.userMenuList"
-                        v-if="item.disabled"
-                        :index="`${item.url}`"
-                        :key="index">
-                        {{item.name}}
-                    </el-menu-item>
-                </el-menu>
-
+                        </div>
+                    </el-col>
+                    <el-col :xs="0">
+                        <el-menu
+                            :default-active="defaultActive"
+                            class="el-menu-demo"
+                            mode="horizontal"
+                            @select="handleSelect"
+                            background-color="#fff"
+                            text-color="#333333"
+                            active-text-color="#488FF7">
+                            <el-menu-item 
+                                v-for="(item,index) in $store.state.userMenuList"
+                                v-if="item.disabled"
+                                :index="`${item.url}`"
+                                :key="index">
+                                {{item.name}}
+                            </el-menu-item>
+                        </el-menu>
+                    </el-col>
+            </el-row>
             </el-col>
 
-            <el-col :span="6">
-                
+            <el-col :lg="6" :md="6" :sm="4" :xs="0" style="min-width: 200px;">
                 <el-dropdown>
                     <div class="el-dropdown-link index-hright">
                         {{$store.state.name}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -794,7 +797,7 @@ export default {
     }
     .index-hleft{
         width: 3rem;
-        min-width: 200px;
+        min-width: 240px;
         max-width: 256px;
         float: left;
         height: 60px;
@@ -818,7 +821,7 @@ export default {
         width: calc( 100% - 400px );
         padding-left: 20px;
         font-weight: 500 !important;
-        // border-left: 1px solid #eeeeee;
+        min-width: 460px;
     }
     .el-menu.el-menu--horizontal{
         border-bottom: none;

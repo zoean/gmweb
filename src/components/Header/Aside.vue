@@ -85,19 +85,21 @@ export default {
           routersFlag: '',
           userMenuList: [],
           iscollapse: false,
+          screeenWidth: document.documentElement.clientWidth
         }
     },
     created() {
       this.router_index();
+      
     },
     methods: {
       open_click() {
         this.iscollapse = false;
-        this.toggleSidebar()
+        this.toggleSidebar(2)
       },
       close_click() {
         this.iscollapse = true;
-        this.toggleSidebar()
+        this.toggleSidebar(1)
       },
       active_router(index) {
         this.$store.commit('setPageNum', index.pageNum)
@@ -164,6 +166,15 @@ export default {
           this.userMenuList = userMenuList[3].includeSubsetList;
         }else{
           this.routersFlag = true;
+        }
+        window.onresize = () => {
+          if(document.documentElement.clientWidth < 980){
+            this.close_click()
+          console.log(document.documentElement.clientWidth, this.iscollapse, 'close')
+          }else{
+            this.open_click()
+          console.log(document.documentElement.clientWidth, this.iscollapse, 'open')
+          }
         }
     }
 }

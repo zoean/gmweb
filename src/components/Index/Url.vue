@@ -72,9 +72,9 @@ export default {
 
 <style lang="less">
 @media screen and (max-width: 1000px) {
-  .sidebar-open{
+  /* .sidebar-open{
     left: 0px !important;
-  }
+  } */
   .header-padding{
     padding-top: 0 !important;
   }

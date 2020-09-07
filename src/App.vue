@@ -75,8 +75,15 @@ export default {
     }
   },
   methods: {
-    toggleSidebar(){
-      this.sideBarOpen = !this.sideBarOpen
+    toggleSidebar(num){
+      if(num && num == 2){
+        this.sideBarOpen = true
+      }else if(num && num == 1){
+        this.sideBarOpen = false
+      }else{
+        this.sideBarOpen = !this.sideBarOpen
+      }
+      console.log(this.sideBarOpen)
       if(this.sideBarOpen){
         this.widthClass = 'sidebar-open'
       }else{
@@ -105,7 +112,11 @@ export default {
   flex-direction: column;
 }
 .el-container{
+  width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .header-padding{
   padding-top: 60px;
@@ -120,6 +131,7 @@ export default {
   width: calc( 100vw - 3rem );
   position: absolute;
   left: 3rem;
+  min-width: 400px;
 }
 .sidebar-close{
   width: calc( 100vw - 84px );
