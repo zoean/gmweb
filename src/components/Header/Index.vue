@@ -449,13 +449,22 @@ export default {
             // this.$router.push({path: '/base/people/default'});
         },
         logout() {
-            localStorage.removeItem('jhToken');
-            localStorage.removeItem('userMenuList');
-            localStorage.removeItem('initOptions');
-            localStorage.removeItem('studentsPageSize');
-            sessionStorage.clear()
-            this.$store.dispatch('actionsSetCommonFlag', false);
-            this.$router.push({ path: '/login'});
+            this.$smoke_post(logOut, {}).then(res => {
+                if(res.code == 200) {
+                    localStorage.removeItem('jhToken');
+                    localStorage.removeItem('userMenuList');
+                    localStorage.removeItem('initOptions');
+                    localStorage.removeItem('studentsPageSize');
+                    sessionStorage.clear()
+                    this.$store.dispatch('actionsSetCommonFlag', false);
+                    this.$router.push({ path: '/login'});
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
         },
         dialog_cancel() {
             this.centerDialogVisible = false;
