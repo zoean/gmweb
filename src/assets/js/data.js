@@ -49,7 +49,7 @@ export const everyTimeList = [
     { 'prop': 'seatName', 'label': '拨打人姓名' },
     { 'prop': 'seatOrgName', 'label': '拨打人部门' },
     { 'prop': 'callStyle', 'label': '拨打方式' },
-    { 'prop': 'insertTime', 'label': '拨打时间' },
+    { 'prop': 'insertTime', 'label': '拨打时间', 'width': 100 },
     { 'prop': 'isCalledPhone', 'label': '是否接通' },
     { 'prop': 'duration', 'label': '通话时长' },
     // { 'prop': 'dealState', 'label': '处理状态' },

@@ -2,13 +2,26 @@
     <el-main class="index-main allStudents">
 
         <el-row class="people-screen">
-            <el-col :span="4">
+            <el-col :span="6">
+                <el-date-picker
+                    size="small"
+                    style="width: 97%;"
+                    v-model="dataPickerValue"
+                    type="datetimerange"
+                    range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
+                    @change="datePickerChangeValue"
+                    start-placeholder="领取时间"
+                    end-placeholder="领取时间">
+                </el-date-picker>
+            </el-col>
+            <el-col :span="3">
                 <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-autocomplete
                     v-scroll-lock="scrollLockFlag"
                     clearable
@@ -25,8 +38,8 @@
                     @blur="scrollLockFlag = false"
                 ></el-autocomplete>
             </el-col>
-            <el-col :span="4">
-                <el-select v-model="form.classType" placeholder="请选择班型等级" class="screen-li" size="small" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.classType" placeholder="选择班型等级" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in classTypeList"
                       :key="item.value"
@@ -35,14 +48,13 @@
                     </el-option>
                 </el-select>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.teaName" placeholder="请输入班主任姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 100%;"></el-input>
             </el-col>
-
         </el-row>
 
         <el-row class="people-screen">
@@ -50,21 +62,7 @@
             <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 94%;"
-                    v-model="dataPickerValue"
-                    type="datetimerange"
-                    range-separator="至"
-                    :default-time="['00:00:00', '23:59:59']"
-                    @change="datePickerChangeValue"
-                    start-placeholder="领取时间"
-                    end-placeholder="领取时间">
-                </el-date-picker>
-            </el-col>
-
-            <el-col :span="6">
-                <el-date-picker
-                    size="small"
-                    style="width: 94%;"
+                    style="width: 97%;"
                     v-model="dataPickerValueSignUp"
                     type="datetimerange"
                     :default-time="['00:00:00', '23:59:59']"
@@ -75,29 +73,10 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="6">
-
-                <el-cascader
-                    class="smoke-cascader1"
-                    ref="cascader"
-                    size="small"
-                    style="width: 94%;"
-                    placeholder="请选择坐席组织架构"
-                    collapse-tags
-                    :show-all-levels='true'
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
-                    clearable>
-                </el-cascader>
-
-            </el-col>
-
-            <el-col :span="6">
+            <el-col :span="4">
                 
                 <el-date-picker
-                  style="width: 100%;"
+                  class="screen-li"
                   v-model="dataPicker"
                   type="date"
                   align="right"
@@ -110,12 +89,26 @@
 
             </el-col>
 
-        </el-row>
+            <el-col :span="3">
 
-        <el-row class="people-screen">
+                <el-cascader
+                    ref="cascader"
+                    size="small"
+                    class="smoke-cascader1 screen-li"
+                    placeholder="坐席组织架构"
+                    collapse-tags
+                    :show-all-levels='true'
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
+                    clearable>
+                </el-cascader>
 
-            <el-col :span="4">
-                <el-select v-model="form.examProvince" placeholder="请选择报考省份" style="width: 90%;" size="small" clearable>
+            </el-col>
+
+            <el-col :span="3">
+                <el-select v-model="form.examProvince" placeholder="选择报考省份" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in provinceList"
                       :key="item.provinceName"
@@ -125,22 +118,16 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="2">
+            <el-col :span="4">
 
                 <el-button type="primary" @click="getSupStuListClick" size="small">查 询</el-button>
-
-            </el-col>
-
-            <el-col :span="2">
 
                 <el-button type="primary" @click="getSendMsgClassTeaStudentClick" size="small">发 短 信</el-button>
 
             </el-col>
 
-            <el-col :span="16">
-                <el-row type="flex" justify="end">
-                    <svg-icon style="margin-right: 0;" class="border-icon" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
-                </el-row>
+            <el-col :span="4">
+                <svg-icon style="margin-right: 0;" class="border-icon smoke-fr" @click="moveStudents('all', null)" icon-title="批量转移" icon-class="move" />
             </el-col>
 
         </el-row>

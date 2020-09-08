@@ -2,10 +2,10 @@
     <el-main class="index-main">
         <el-row class="people-screen">
 
-            <el-col :span="8">
+            <el-col :span="5">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -16,16 +16,15 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-autocomplete
                     clearable
                     size="small"
                     class="screen-li"
-                    style="width: 90%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
+                    placeholder="输入考试项目"
                     :trigger-on-focus="true"
                     @select="handleSelect"
                     @clear="autocompleteClear"
@@ -33,17 +32,17 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4" class="seatData">
+            <el-col :span="3" class="seatData">
                 <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 
-                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
+                <el-select v-model="form.spread" size="small" class="screen-li" placeholder="请选择渠道" clearable>
                     <el-option
                       v-for="item in enumList['MJ-6']"
                       :key="item.number"
@@ -54,12 +53,8 @@
                 </el-select>
 
             </el-col>
-            
-        </el-row>
 
-        <el-row class="people-screen" type="flex" align="middle">
-
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
                     <el-option
@@ -72,27 +67,13 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="2">
                 <el-button type="primary" size="small" @click="getSpillPoolClueDataClick">查 询</el-button>
             </el-col>
 
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="4">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="3">
-                <div style="color: #fff; user-select: none;">1</div>
-            </el-col>
-
-            <el-col :span="5">
-            <el-row type="flex" justify="end">
-                <svg-icon class="border-icon" @click="pushArrClick" icon-title="分配至组" icon-class="togroup" />
-                <svg-icon class="border-icon" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
-            </el-row>
+            <el-col :span="2">
+                <svg-icon class="border-icon smoke-fr" @click="pushArrClick" icon-title="分配至组" icon-class="togroup" />
+                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
             </el-col>
 
         </el-row>
@@ -575,6 +556,9 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        .el-col-6{
+            height: auto !important;
+        }
         height: auto;
         .people-title{
             width: 100%;
@@ -587,9 +571,9 @@ export default {
             color: #666666;
         }
         .people-screen{
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             .screen-li{
-                width: 90%;
+                width: 94%;
             }
             .smoke-cascader{
                 height: 40px !important;

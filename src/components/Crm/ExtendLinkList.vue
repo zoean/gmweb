@@ -2,9 +2,9 @@
     <el-main class="index-main">
         <el-row class="people-screen">
 
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
-                    style="width: 95%;"
+                    style="width: 97%;"
                     size="small"
                     v-model="dataPicker"
                     type="datetimerange"
@@ -16,7 +16,7 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-select v-model="form.ruleId" size="small" placeholder="请选择分配组" class="screen-li" clearable>
                     <el-option
@@ -29,16 +29,15 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-autocomplete
                     clearable
                     size="small"
                     class="screen-li"
-                    style="width: 90%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
+                    placeholder="输入考试项目"
                     :trigger-on-focus="true"
                     @select="handleSelect"
                     @clear="autocompleteClear"
@@ -46,7 +45,7 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 
                 <el-select v-model="form.spreadId" size="small" placeholder="请选择渠道" class="screen-li" clearable>
                     <el-option
@@ -60,9 +59,9 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
-                <el-select v-model="form.accId" size="small" placeholder="请选择推广账号" clearable="">
+                <el-select v-model="form.accId" size="small" class="screen-li" placeholder="选择推广账号" clearable="">
                     <el-option
                       v-for="item in enumList['MJ-7']"
                       :key="item.name"
@@ -74,17 +73,13 @@
 
             </el-col>
 
-        </el-row>
+            <el-col :span="3">
 
-        <el-row class="people-screen">
-
-            <el-col :span="4">
-
-                <el-input v-model="form.userName" size="small" placeholder="请输入创建人姓名" class="screen-li"></el-input>
+                <el-input v-model="form.userName" size="small" placeholder="输入创建人姓名" class="screen-li"></el-input>
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-button type="primary" size="small" @click="getPopularizeUrlClick">查 询</el-button>
             </el-col>
 
@@ -313,6 +308,9 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;

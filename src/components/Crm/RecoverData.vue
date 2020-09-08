@@ -2,10 +2,10 @@
     <el-main class="index-main">
         <el-row class="people-screen">
 
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
@@ -16,13 +16,26 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="6">
+                <el-date-picker
+                    size="small"
+                    style="width: 97%;"
+                    v-model="dataPickerReturn"
+                    type="datetimerange"
+                    range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
+                    @change="datePickerChangeReturn"
+                    start-placeholder="最新回收时间"
+                    end-placeholder="最新回收时间">
+                </el-date-picker>
+            </el-col>
+
+            <el-col :span="3">
 
                 <el-autocomplete
                     clearable
                     size="small"
                     class="screen-li"
-                    style="width: 90%;"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
                     placeholder="请输入考试项目"
@@ -33,15 +46,15 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4" class="seatData">
+            <el-col :span="3" class="seatData">
                 <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 
                 <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
                     <el-option
@@ -57,24 +70,10 @@
             
         </el-row>
 
-        <el-row class="people-screen" type="flex" align="middle">
+        <el-row class="people-screen">
 
-            <el-col :span="8">
-                <el-date-picker
-                    size="small"
-                    style="width: 95%;"
-                    v-model="dataPickerReturn"
-                    type="datetimerange"
-                    range-separator="至"
-                    :default-time="['00:00:00', '23:59:59']"
-                    @change="datePickerChangeReturn"
-                    start-placeholder="最新回收时间"
-                    end-placeholder="最新回收时间">
-                </el-date-picker>
-            </el-col>
-
-            <el-col :span="4">
-                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 90%;" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
                       :key="item.name"
@@ -85,9 +84,9 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="请选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleNumberName" size="small" placeholder="选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -98,14 +97,13 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-button type="primary" @click="getRecoveryPoolDataListClick" size="small">查 询</el-button>
             </el-col>
-            <el-col :span="4">
-                <el-row type="flex" justify="end">
-                    <svg-icon class="border-icon" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
-                    <svg-icon class="border-icon" style="margin-right: 0;" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
-                </el-row>
+
+            <el-col :span="15">
+                <svg-icon class="border-icon smoke-fr" style="margin-right: 0;" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
             </el-col>
 
         </el-row>
@@ -587,6 +585,9 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        .el-col-6{
+            height: auto !important;
+        }
         height: auto;
         .people-title{
             width: 100%;

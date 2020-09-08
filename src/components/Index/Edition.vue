@@ -3,7 +3,15 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
 
-    <el-timeline>   
+    <el-timeline>  
+      <el-timeline-item timestamp="v 1.1.16 -- 2020/09/08" placement="top">
+        <el-card>
+          <h4>修复bug</h4>
+          <p>1、优化数据权限响应速度</p>
+          <p>2、优化数据看板响应速度</p>
+          <p>3、退出功能优化</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.15 -- 2020/09/07" placement="top">
         <el-card>
           <h4>新增功能</h4>

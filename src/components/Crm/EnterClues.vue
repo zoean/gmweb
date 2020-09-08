@@ -226,13 +226,13 @@
 
                 <el-button type="primary" @click="upImport" size="small" style="width: 120px; display: inline-block; float: right;">确定导入</el-button>
 
-                <div style="margin-top: 20px;" v-if="validDataNumFlag">
+                <div style="margin-top: 12px;" v-if="validDataNumFlag">
                     <span>{{validDataNum}}条有效数据，{{inValidDataNum}}条无效数据</span>
                     <span style="color: #F56C6C">（红色字体为无效数据）</span>
                 </div>
 
                 <el-table
-                    style="margin-top: 20px;"
+                    style="margin-top: 12px;"
                     :data="importDataForm.list"
                     :row-class-name="tableRowClassName"
                     v-loading="fullscreenLoadingTable"
