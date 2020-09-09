@@ -1,24 +1,23 @@
 <template>
     <el-main class="index-main students">
         
-        <el-row style="margin-bottom: 6px;">
+        <el-row class="people-screen">
             
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号"  class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名"  class="screen-li"></el-input>
             </el-col>
             
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-cascader
-                    class="smoke-cascader"
+                    class="smoke-cascader screen-li"
                     ref="cascader"
                     size="small"
-                    style="width: 90%;"
-                    placeholder="请选择坐席组织架构"
+                    placeholder="坐席组织架构"
                     collapse-tags
                     :show-all-levels=false
                     :options="zuzhiOptions"
@@ -30,29 +29,40 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="6">
                 
                 <el-date-picker
-                  class="smoke-cascader"
-                  style="width: 90%;"
+                  class="smoke-cascader screen-li"
+                  style="width: 97%;"
                   v-model="dataPicker"
                   type="date"
                   align="right"
                   size="small"
                   clearable
                   @change="datePickerChange"
-                  placeholder="请选择最后联系时间"
+                  placeholder="最后联系时间"
                   :picker-options="pickerOptions">
                 </el-date-picker>
 
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.studentStatus" placeholder="请选择学籍状态" style="width: 100%;" size="small" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.classType" placeholder="选择班型等级" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in classTypeList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="3">
+                <el-select v-model="form.studentStatus" placeholder="选择学籍状态" style="width: 100%;" size="small" clearable>
                     <el-option
                         v-for="item in enumList['MJ-10']"
                         :key="item.name"
@@ -65,12 +75,12 @@
 
         </el-row>
 
-        <el-row style="margin-top: 16px;">
+        <el-row class="people-screen">
 
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     v-model="dataPickerValue"
                     type="datetimerange"
                     :default-time="['00:00:00', '23:59:59']"
@@ -81,10 +91,10 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     v-model="dataPickerValueSignUp"
                     type="datetimerange"
                     :default-time="['00:00:00', '23:59:59']"
@@ -95,11 +105,11 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-autocomplete
                     clearable
                     size="small"
-                    style="width: 90%;"
+                     class="screen-li"
                     ref="autocomplete"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
@@ -110,23 +120,8 @@
                 ></el-autocomplete>
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.classType" placeholder="请选择班型等级" size="small" clearable>
-                    <el-option
-                      v-for="item in classTypeList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-
-        </el-row>
-
-        <el-row style="margin-top: 16px;">
-
-            <el-col :span="4">
-                <el-select v-model="form.examProvince" placeholder="请选择报考省份" style="width: 90%;" size="small" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.examProvince" placeholder="请选择报考省份"  class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in provinceList"
                       :key="item.provinceName"
@@ -136,11 +131,13 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-button type="primary" style="float: left;" size="small" @click="getClassTeaStudentClick">查 询</el-button>
             </el-col>
 
-            <el-col :span="2" style="float: right; text-align: right;"><svg-icon class="border-icon" style="margin-right: 0;" @click="editFieldHandle" icon-title="表头管理" icon-class="field" /></el-col>
+            <el-col :span="3" style="float: right; text-align: right;">
+                <svg-icon class="border-icon" style="margin-right: 0;" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+            </el-col>
 
         </el-row>
 
@@ -148,7 +145,7 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
-            style="margin-top: 16px;">
+        >
             <el-table-column
               :prop="item.props"
               v-for="(item, index) in columnList"
@@ -657,6 +654,9 @@ export default {
 <style lang="less" scoped>
     .index-main{
         flex: 1;
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;

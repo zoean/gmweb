@@ -1,16 +1,16 @@
 <template>
   <el-main class="index-main">
-      <el-row class="search-area">
+      <el-row class="search-area people-screen">
 
-          <el-col :span="5">
-              <el-input placeholder="请输入页面名称" v-model="getPageManageListForm.name" size="small" class="screen-li"></el-input>
+          <el-col :span="3">
+              <el-input placeholder="输入页面名称" v-model="getPageManageListForm.name" size="small" class="screen-li"></el-input>
           </el-col>
 
-          <el-col :span="5">
+          <el-col :span="3">
               <el-button type="primary" size="small" @click="getPageManageList">查 询</el-button>
           </el-col>
 
-          <el-col :span="14">
+          <el-col :span="18">
               <el-button type="primary" size="small" @click="addPageHandle" style="float: right;">新增页面</el-button>
           </el-col>
 
@@ -410,15 +410,15 @@ export default {
     .search-area{
       display: flex;
       flex-direction: row;
-      *{
-        margin-right: 10px;
-      }
       .el-input{
         width: 220px;
       }
     }
-    .el-table{
-      margin-top: 20px;
+    .people-screen{
+      margin-bottom: 10px;
+      .screen-li{
+          width: 94%;
+      }
     }
     .ml20{
       margin-left: 20px;

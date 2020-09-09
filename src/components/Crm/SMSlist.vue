@@ -7,7 +7,7 @@
             :data="tableData"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 20px;">
+            style="width: 100%; margin-top: 10px;">
             <el-table-column
               :prop="item.prop"
               :label="item.label"

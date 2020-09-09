@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row style="margin-bottom: 20px;" v-if="addDataAllocation">
+        <el-row style="margin-bottom: 10px;" v-if="addDataAllocation">
 
             <el-col style="width: 140px;"><el-button style="width: 90%;" size="small" type="primary" @click="addAlloZu">添加分配组</el-button></el-col>
 

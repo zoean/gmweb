@@ -6,10 +6,10 @@
             <el-tab-pane label="学员">
 
                 <el-row class="people-screen">
-                    <el-col :span="4">
-                        <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+                    <el-col :span="3">
+                        <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="21">
                         <el-button type="primary" size="small" @click="orderCallDataListClick">查 询</el-button>
                     </el-col>
                 </el-row>
@@ -58,10 +58,10 @@
                 </el-pagination>
             </el-tab-pane>
             <el-tab-pane label="订单">
-                <el-row type="flex" :gutter="20">
+                <el-row type="flex" :gutter="10">
                     
-                    <el-col :span="4">
-                        <el-select v-model="orderForm.classType" size="small" placeholder="请选择商品班型" clearable>
+                    <el-col :span="3">
+                        <el-select v-model="orderForm.classType" size="small" placeholder="选择商品班型" clearable>
                             <el-option
                             v-for="item in classTypeList"
                             :key="item.id"
@@ -70,8 +70,8 @@
                             </el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="4">
-                        <el-select v-model="orderForm.orderType" size="small" placeholder="请选择购买状态" clearable>
+                    <el-col :span="3">
+                        <el-select v-model="orderForm.orderType" size="small" placeholder="选择购买状态" clearable>
                             <el-option
                             v-for="(item, index) in purchaseOptions"
                             :key="index"
@@ -81,7 +81,7 @@
                         </el-select>
                     </el-col>
 
-                    <el-col :span="8">
+                    <el-col :span="6">
                         <el-date-picker
                             style="width: 100%;"
                             size="small"
@@ -105,7 +105,7 @@
                 
                 <el-table
                 :data="userOrderList"
-                style="width: 100%; margin-top: 16px;">
+                style="width: 100%; margin-top: 10px;">
                     <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index">
                     <template slot-scope="scope">
                         <span>{{scope.row[item.prop]}}</span>
@@ -538,7 +538,9 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-           
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;

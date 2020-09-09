@@ -1,13 +1,28 @@
 <template>
     <el-main class="index-main">
-        <el-row style="margin-bottom: 20px;">
+        <el-row class="people-screen">
 
-            <el-col :span="4">
+            <el-col :span="6">
+                <el-date-picker
+                    clearable
+                    style="width: 97%;"
+                    size="small"
+                    v-model="dataPicker"
+                    type="datetimerange"
+                    range-separator="至"
+                    :default-time="['00:00:00', '23:59:59']"
+                    @change="datePickerChange"
+                    start-placeholder="拨打时间"
+                    end-placeholder="拨打时间">
+                </el-date-picker>
+            </el-col>
+
+            <el-col :span="3">
                 <el-cascader
                     ref="cascader"
                     size="small"
-                    style="width: 90%;"
-                    placeholder="请选择拨打人部门"
+                    class="screen-li"
+                    placeholder="选拨打人部门"
                     collapse-tags
                     :show-all-levels=false
                     :options="zuzhiOptions"
@@ -17,8 +32,8 @@
                 </el-cascader>
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.callStyle" size="small" placeholder="请选择拨打方式" style="width: 90%;" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.callStyle" size="small" placeholder="选择拨打方式" class="screen-li" clearable>
                     <el-option
                       v-for="item in callStyleArr"
                       :key="item.value"
@@ -28,16 +43,16 @@
                 </el-select>
             </el-col>
     
-            <el-col :span="4">
-                <el-input v-model="form.calledId" size="small" placeholder="请输入拨打人电话" style="width: 90%;" clearable></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.calledId" size="small" placeholder="输入拨打电话" class="screen-li" clearable></el-input>
             </el-col>
     
-            <el-col :span="4">
-                <el-input v-model="form.callerId" size="small" placeholder="请输入客户电话" style="width: 90%;" clearable></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.callerId" size="small" placeholder="输入客户电话" class="screen-li" clearable></el-input>
             </el-col>
     
-            <el-col :span="4">
-                <el-select v-model="form.isCalledPhone" size="small" placeholder="请选择是否接通" style="width: 90%;" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.isCalledPhone" size="small" placeholder="选择是否接通" class="screen-li" clearable>
                     <el-option
                       v-for="item in isCalledPhoneArr"
                       :key="item.value"
@@ -47,8 +62,8 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.pathway" size="small" placeholder="请选择呼叫途径" style="width: 100%;" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.pathway" size="small" placeholder="选择呼叫途径" class="screen-li" clearable>
                     <el-option
                       v-for="item in pathwayArr"
                       :key="item.value"
@@ -60,28 +75,13 @@
     
         </el-row>
     
-        <el-row>
+        <el-row class="people-screen">
         
-            <el-col :span="8">
-                <el-date-picker
-                    clearable
-                    style="width: 95%;"
-                    size="small"
-                    v-model="dataPicker"
-                    type="datetimerange"
-                    range-separator="至"
-                    :default-time="['00:00:00', '23:59:59']"
-                    @change="datePickerChange"
-                    start-placeholder="拨打时间"
-                    end-placeholder="拨打时间">
-                </el-date-picker>
+            <el-col :span="3">
+                <el-input v-model="form.seatName" size="small" placeholder="输入拨打姓名" class="screen-li" clearable></el-input>
             </el-col>
     
-            <el-col :span="4">
-                <el-input v-model="form.seatName" size="small" placeholder="请输入拨打人姓名" style="width: 90%;" clearable></el-input>
-            </el-col>
-    
-            <el-col :span="8">
+            <el-col :span="21">
                 <el-button type="primary" size="small" @click="timeClick">查询</el-button>
             </el-col>
     
@@ -92,12 +92,13 @@
             fit
             :key="Math.random()"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 20px;">
+            style="width: 100%; margin-top: 10px;">
     
             <el-table-column
                 :prop="item.prop"
                 :label="item.label"
                 v-for="(item, index) in columnList"
+                :min-width="item.width"
                 :key="index">
             </el-table-column>
     
@@ -288,6 +289,9 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;

@@ -3,10 +3,10 @@
 
         <Start></Start>
         <el-row class="people-screen">
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入要查询的手机号" class="screen-li"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="21">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"

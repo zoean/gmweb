@@ -1,24 +1,10 @@
 <template>
   <el-main class="index-main eduData">
-    <el-row>
-      <!-- <el-col :span="4">
-        <el-select
-          v-model="form.date"
-          placeholder="请选择查看时间段"
-          size="small"
-          clearable
-          style="width:90%"
-        >
-          <el-option label="昨天" value="1"></el-option>
-          <el-option label="近7天" value="7"></el-option>
-          <el-option label="近14天" value="14"></el-option>
-          <el-option label="近30天" value="30"></el-option>
-        </el-select>
-      </el-col>-->
+    <el-row class="people-screen">
       <el-col :span="6">
         <el-date-picker
           value-format="timestamp"
-          style="width:90%"
+          style="width: 97%;"
           size="small"
           v-model="form.time"
           type="daterange"
@@ -30,16 +16,16 @@
           :picker-options="pickerOptions"
         ></el-date-picker>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="18">
         <el-button type="primary" size="small" @click="query">查询</el-button>
       </el-col>
     </el-row>
     <el-table
-    max-height="600"
+      max-height="600"
       :summary-method="getSummaries"
       show-summary
       :data="tableData"
-      style="width: 100%"
+      style="width: 100%; margin-top: 10px;"
       v-loading="loading"
     >
       <el-table-column prop="classTeaName" label="姓名" fixed width="100" align="center"></el-table-column>
@@ -308,6 +294,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.eduData{
+  .el-col-6{
+    height: auto !important;
+  }
+}
 .eduData /deep/ .is-leaf .cell {
   line-height: 20px;
 }

@@ -1,21 +1,35 @@
 <template>
     <el-main class="index-main newStudents">
 
-        <el-row style="margin-bottom: 16px;">
+        <el-row class="people-screen">
 
-            <el-col :span="4">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" style="width: 90%;"></el-input>
+            <el-col :span="6">
+                <el-date-picker
+                    size="small"
+                    style="width: 97%;"
+                    v-model="dataPickerValueSignUp"
+                    type="datetimerange"
+                    :default-time="['00:00:00', '23:59:59']"
+                    range-separator="至"
+                    @change="datePickerChangeValueSignUp"
+                    start-placeholder="报名时间"
+                    end-placeholder="报名时间">
+                </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.name" size="small" placeholder="请输入姓名" style="width: 90%;"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
+                <el-input v-model="form.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+            </el-col>
+
+            <el-col :span="3">
                 <el-autocomplete
                     clearable
                     size="small"
-                    style="width: 90%;"
+                    class="screen-li"
                     ref="autocomplete"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
@@ -26,8 +40,8 @@
                 ></el-autocomplete>
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.classType" placeholder="请选择班型等级" style="width: 90%;" size="small" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.classType" placeholder="选择班型等级" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in classTypeList"
                       :key="item.value"
@@ -37,21 +51,21 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" style="width: 90%;"></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
             </el-col>
 
         </el-row>
 
-        <el-row style="margin-bottom: 16px;">
+        <el-row class="people-screen">
 
-            <el-col :span="5">
+            <el-col :span="6">
 
                 <el-cascader
                     class="smoke-cascader"
                     ref="cascader"
                     size="small"
-                    style="width: 95%;"
+                    style="width: 97%;"
                     placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels=false
@@ -64,25 +78,11 @@
 
             </el-col>
 
-            <el-col :span="5">
-                <el-date-picker
-                    size="small"
-                    style="width: 95%;"
-                    v-model="dataPickerValueSignUp"
-                    type="datetimerange"
-                    :default-time="['00:00:00', '23:59:59']"
-                    range-separator="至"
-                    @change="datePickerChangeValueSignUp"
-                    start-placeholder="报名时间"
-                    end-placeholder="报名时间">
-                </el-date-picker>
-            </el-col>
-
             <el-col :span="2">
                 <el-button type="primary" size="small" @click="getWaitStudentListClick">查 询</el-button>
             </el-col>
 
-            <el-col :span="4" style="float: right; text-align: right;"><el-button type="primary" size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
+            <el-col :span="4" style="float: right; text-align: right;"><el-button plain size="small" @click="classTeaGetWaitStudent('all', null)">确认领取</el-button></el-col>
 
         </el-row>
 
@@ -561,6 +561,9 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;

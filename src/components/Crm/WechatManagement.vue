@@ -1,7 +1,7 @@
 <template>
 <el-main class="index-main">
-  <el-row>
-    <el-col :span="8">
+  <el-row class="people-screen">
+    <el-col :span="6">
       <el-date-picker
         v-model="dateRange"
         size="small"
@@ -11,35 +11,35 @@
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        style="width: 95%"
+        style="width: 97%"
         @change="changeDateRange">
       </el-date-picker>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="3">
       <el-cascader
         size="small"
         placeholder="请选择坐席组织架构"
         :options="orgOptions"
         :props="props"
-        style="width: 90%"
+        class="screen-li"
         collapse-tags
         :show-all-levels=false
         @change="orgChange"
         ref="cascaderOrg">
       </el-cascader>
     </el-col>
-    <el-col :span="4">
-      <el-input size="small" v-model="searchForm.saleName" style="width: 90%" placeholder="请输入坐席名字"></el-input>
+    <el-col :span="3">
+      <el-input size="small" v-model="searchForm.saleName" class="screen-li" placeholder="请输入坐席名字"></el-input>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="3">
       <el-button type="primary" size="small" @click="searchList">查询</el-button>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="9">
       <el-button v-if="buttonMap.addWechatNum" type="primary" size="small" @click="addWechatData" style="float: right;">新增</el-button>
     </el-col>
   </el-row>
 
-  <div class="number_search" style="margin-top: 16px;"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />
+  <div class="number_search" style="margin-top: 10px;"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />
 本次查询【新增客户微信数量】合计：{{countVO.num || 0}}，【累计客户微信数量】合计：{{countVO.countNum || 0}}</div>
 
   <el-table 
@@ -257,8 +257,16 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.el-table, .el-pagination{
-  margin-top: 20px;
+.index-main{
+  .el-col-6{
+    height: auto !important;
+  }
+  .people-screen{
+    margin-bottom: 10px;
+    .screen-li{
+        width: 94%;
+    }
+  }
 }
 
 /deep/.el-dialog{

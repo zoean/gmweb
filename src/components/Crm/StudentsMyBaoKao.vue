@@ -2,16 +2,16 @@
     <el-main class="index-main">
 
         <el-row class="people-screen">
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
             </el-col>
-            <el-col :span="4">
-                <el-input v-model="form.examLable" placeholder="请输入考试项目" class="screen-li" size="small" clearable></el-input>
+            <el-col :span="3">
+                <el-input v-model="form.examLable" placeholder="输入考试项目" class="screen-li" size="small" clearable></el-input>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-autocomplete
                     clearable
                     size="small"
@@ -19,14 +19,14 @@
                     ref="autocomplete"
                     v-model="form.itemNameText"
                     :fetch-suggestions="querySearchBaoKao"
-                    placeholder="请输入报考项目"
+                    placeholder="输入报考项目"
                     :trigger-on-focus="true"
                     @select="handleSelectItemName"
                     @clear="autocompleteClearItemName"
                 ></el-autocomplete>
             </el-col>
-            <el-col :span="4">
-                <el-select v-model="form.province" placeholder="请选择所在省份" class="screen-li" size="small" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.province" placeholder="选择所在省份" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in provinceList"
                       :key="item.provinceName"
@@ -35,8 +35,22 @@
                     </el-option>
                 </el-select>
             </el-col>
-            <el-col :span="4">
-                <el-select v-model="form.examProvince" placeholder="请选择报考省份" style="width: 100%" size="small" clearable>
+            <el-col :span="3">
+                <el-input v-model="form.customerId" placeholder="请输入用户id" class="screen-li" size="small" clearable></el-input>
+            </el-col>
+
+            <el-col :span="3">
+                <el-select v-model="form.basicInfoStatus" placeholder="基本信息情况" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in basicInfoStatusList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="3">
+                <el-select v-model="form.examProvince" placeholder="选择报考省份" style="width: 100%" size="small" clearable>
                     <el-option
                       v-for="item in provinceList"
                       :key="item.provinceName"
@@ -47,45 +61,8 @@
             </el-col>
         </el-row>
 
-        <el-row class="people-screen" type="flex" align="middle">
-
-            <el-col :span="4">
-                <el-input v-model="form.customerId" placeholder="请输入用户id" class="screen-li" size="small" clearable></el-input>
-            </el-col>
-
-            <el-col :span="4">
-                <el-select v-model="form.basicInfoStatus" placeholder="请选择基本信息情况" class="screen-li" size="small" clearable>
-                    <el-option
-                      v-for="item in basicInfoStatusList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-
-            <el-col :span="4">
-                <el-select v-model="form.pictureStatus" placeholder="请选择照片情况" class="screen-li" size="small" clearable>
-                    <el-option
-                      v-for="item in pictureStatusList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-
-            <el-col :span="4">
-                <el-select v-model="form.checkStatus" placeholder="请选择审核情况" class="screen-li" size="small" clearable>
-                    <el-option
-                      v-for="item in checkStatusList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="6" style="height: 32px !important;">
+        <el-row class="people-screen">
+            <el-col :span="6">
                 <el-date-picker
                     class="screen-li"
                     v-model="dateRange"
@@ -99,12 +76,31 @@
                     @change="changeDateRange">
                 </el-date-picker>
             </el-col>
-        </el-row>
 
-        <el-row class="people-screen">
+            <el-col :span="3">
+                <el-select v-model="form.pictureStatus" placeholder="选择照片情况" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in pictureStatusList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.paymentStatus" placeholder="请选择交费情况" class="screen-li" size="small" clearable>
+            <el-col :span="3">
+                <el-select v-model="form.checkStatus" placeholder="选择审核情况" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in checkStatusList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="3">
+                <el-select v-model="form.paymentStatus" placeholder="选择交费情况" class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in paymentStatusList"
                       :key="item.value"
@@ -114,17 +110,16 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="16">
+            <el-col :span="6">
                 <el-button style="float: right;" @click="downloadListClick" size="small" plain>查看下载任务</el-button>
-                <el-button style="float: right; margin-right: 20px;" @click="exportClick" size="small" plain>导 出</el-button>
+                <el-button style="float: right; margin-right: 10px;" @click="exportClick" size="small" plain>导 出</el-button>
             </el-col>
-
         </el-row>
 
         <el-table
@@ -530,6 +525,9 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;

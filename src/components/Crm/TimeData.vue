@@ -7,7 +7,7 @@
                     ref="cascader"
                     size="small"
                     class="screen-li"
-                    placeholder="请选择统计单元"
+                    placeholder="选择统计单元"
                     collapse-tags
                     :show-all-levels=false
                     :options="zuzhiOptions"
@@ -20,7 +20,7 @@
             <el-col :span="4">
                 
                 <el-date-picker
-                    style="width: 90%;"
+                    class="screen-li"
                     size="small"
                     v-model="timeDate"
                     type="date"
@@ -30,12 +30,8 @@
 
             </el-col>
 
-            <el-col :span="4">
-                <el-button 
-                    type="primary" 
-                    size="small"
-                    @click="countCallRecord"
-                >查询</el-button>
+            <el-col :span="3">
+                <el-button type="primary" size="small" @click="countCallRecord">查询</el-button>
             </el-col>
 
         </el-row>
@@ -43,7 +39,7 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 20px;">
+            style="width: 100%; margin-top: 10px;">
 
             <el-table-column
                 :prop="item.prop"
@@ -165,7 +161,7 @@ export default {
             color: #666666;
         }
         .screen-li{
-            width: 90%;
+            width: 96%;
         }
     }
     .index-main /deep/ .el-table .cell{

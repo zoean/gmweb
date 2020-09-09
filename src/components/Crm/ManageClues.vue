@@ -1,16 +1,16 @@
 <template>
     <el-main class="index-main">
-        <el-row style="margin-bottom: 20px;" class="people-screen">
+        <el-row class="people-screen">
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
             
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.name" placeholder="请输入姓名" class="screen-li" size="small"></el-input>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-autocomplete
                   clearable
                   size="small"
@@ -18,24 +18,23 @@
                   ref="autocomplete"
                   v-model="form.examItemText"
                   :fetch-suggestions="querySearch"
-                  placeholder="请输入考试项目"
+                  placeholder="输入考试项目"
                   :trigger-on-focus="true"
                   @select="handleSelect"
                   @clear="autocompleteClear"
                 ></el-autocomplete>
             </el-col>
     
-            <el-col :span="4">
+            <el-col :span="3">
                 
                 <el-autocomplete
                   clearable
                   size="small"
                   ref="autocompleteSpread"
-                  class="inline-input"
-                  style="width: 90%;"
+                  class="inline-input screen-li"
                   v-model="form.spreadText"
                   :fetch-suggestions="querySearchSpread"
-                  placeholder="请输入来源渠道"
+                  placeholder="输入来源渠道"
                   :trigger-on-focus="true"
                   @select="handleSelectSpread"
                   @clear="autocompleteClearSpread"
@@ -43,24 +42,38 @@
 
             </el-col>
     
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-autocomplete
                   clearable
                   size="small"
                   ref="autocompleteAcc"
-                  class="inline-input"
-                  style="width: 90%;"
+                  class="inline-input screen-li"
                   v-model="form.accText"
                   :fetch-suggestions="querySearchAcc"
-                  placeholder="请输入推广账号"
+                  placeholder="输入推广账号"
                   :trigger-on-focus="true"
                   @select="handleSelectAcc"
                   @clear="autocompleteClearAcc"
                 ></el-autocomplete>
             </el-col>
+
+            <el-col :span="3">
+                <el-select v-model="form.dialState" size="small" placeholder="选择是否拨打" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in dialStateArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
     
-            <el-col :span="4">
-                <el-select v-model="form.isAllocation" size="small" placeholder="请选择是否分配" style="width: 100%;" clearable>
+            <el-col :span="3">
+                <el-input v-model="form.belongingSeat" size="small" placeholder="请输入坐席" class="screen-li" clearable></el-input>
+            </el-col>
+    
+            <el-col :span="3">
+                <el-select v-model="form.isAllocation" size="small" placeholder="选择是否分配" style="width: 100%;" clearable>
                     <el-option
                       v-for="item in isAllocationArr"
                       :key="item.value"
@@ -72,12 +85,12 @@
             
         </el-row>
     
-        <el-row style="margin-bottom: 20px;">
+        <el-row class="people-screen">
         
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     clearable
-                    style="width: 95%;"
+                    style="width: 97%;"
                     size="small"
                     v-model="dataPickerku"
                     type="datetimerange"
@@ -90,52 +103,10 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
-                <el-select v-model="form.dialState" size="small" placeholder="请选择是否拨打" style="width: 90%;" clearable>
-                    <el-option
-                      v-for="item in dialStateArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-    
-            <el-col :span="4">
-                <el-input v-model="form.belongingSeat" size="small" placeholder="请输入坐席" style="width: 90%;" clearable></el-input>
-            </el-col>
-
-            <el-col :span="4">
-                <el-select v-model="form.inputMode" size="small" placeholder="请选择属性" style="width: 90%;" clearable>
-                    <el-option
-                      v-for="item in inputModeArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-
-            <el-col :span="4">
-                <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" size="small" style="width: 100%;" clearable>
-                    <el-option
-                      v-for="item in enumList['MJ-5']"
-                      :key="item.name"
-                      v-if="item.enable"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
-            </el-col>
-    
-        </el-row>
-
-        <el-row>
-
-            <el-col :span="8">
+            <el-col :span="6">
                 <el-date-picker
                     clearable
-                    style="width: 95%;"
+                    style="width: 97%;"
                     size="small"
                     v-model="dataPickerpei"
                     type="datetimerange"
@@ -148,24 +119,45 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="4">
-                <el-input v-model="form.exteName" size="small" placeholder="请输入推广人" style="width: 90%;" clearable></el-input>
+            <el-col :span="3">
+                <el-select v-model="form.inputMode" size="small" placeholder="请选择属性" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in inputModeArr"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                </el-select>
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in enumList['MJ-5']"
+                      :key="item.name"
+                      v-if="item.enable"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="3">
+                <el-input v-model="form.exteName" size="small" placeholder="请输入推广人" class="screen-li" clearable></el-input>
+            </el-col>
+
+            <el-col :span="3">
                 <el-button type="primary" size="small" @click="getExteAllClueDataClick">查 询</el-button>
-            </el-col>
 
-            <el-col :span="8">
                 <el-button size="small" style="float:right;" plain @click="directorClueExport">导 出</el-button>
             </el-col>
-
-        </el-row>
     
+        </el-row>
+
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 22px;">
+        >
     
             <el-table-column
                 :prop="item.prop"
@@ -537,6 +529,9 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        .el-col-6{
+            height: auto !important;
+        }
         .people-title{
             width: 100%;
             height: 40px;
