@@ -3,10 +3,10 @@
 
         <el-row class="people-screen">
 
-            <el-col :span="4">
+            <el-col :span="3">
                 
                 <el-date-picker
-                    style="width: 90%;"
+                    class="screen-li"
                     size="small"
                     v-model="timeDate"
                     type="date"
@@ -18,7 +18,7 @@
 
             </el-col>
 
-            <el-col :span="4">
+            <el-col :span="3">
 
                 <el-button type="primary" @click="returnVisitClick" size="small">查 询</el-button>
 

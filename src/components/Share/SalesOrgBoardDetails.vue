@@ -178,7 +178,7 @@ export default {
     },
     created() {
         this.saleDataOrg();
-
+        this.form.time = new Date(new Date().toLocaleDateString()).getTime();
     },
     methods: {
         handleZuzhiChange(arr) {

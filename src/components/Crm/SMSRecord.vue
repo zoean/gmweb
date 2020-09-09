@@ -1,26 +1,22 @@
 <template>
     <el-main class="index-main">
-
-        <el-row>
-
-            <el-col :span="4">
+        <el-row class="people-screen">
+            <el-col :span="3">
                 <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="3">
                 <el-input v-model="form.sendName" placeholder="请输入发送人" class="screen-li" size="small"></el-input>
             </el-col>
-
             <el-col :span="2">
                 <el-button type="primary" @click="getSMSRecordListClick" size="small">查 询</el-button>
             </el-col>
-
         </el-row>
         
         <el-table
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 20px;">
+        >
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -158,8 +154,11 @@ export default {
             margin-bottom: .3rem;
             color: #666666;
         }
-        .screen-li{
-            width: 90%;
+        .people-screen{
+            margin-bottom: 10px;
+            .screen-li{
+                width: 94%;
+            }
         }
     }
     // .index-main /deep/ .el-table .cell{
