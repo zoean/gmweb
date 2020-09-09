@@ -33,18 +33,17 @@
                 <el-input v-model="form.stuId" size="small" placeholder="请输入用户id" class="screen-li"></el-input>
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="4">
                 
                 <el-date-picker
                   class="smoke-cascader screen-li"
-                  style="width: 97%;"
                   v-model="dataPicker"
                   type="date"
                   align="right"
                   size="small"
                   clearable
                   @change="datePickerChange"
-                  placeholder="最后联系时间"
+                  placeholder="请选择最后联系时间"
                   :picker-options="pickerOptions">
                 </el-date-picker>
 
@@ -121,7 +120,7 @@
             </el-col>
 
             <el-col :span="3">
-                <el-select v-model="form.examProvince" placeholder="请选择报考省份"  class="screen-li" size="small" clearable>
+                <el-select v-model="form.examProvince" placeholder="选择报考省份"  class="screen-li" size="small" clearable>
                     <el-option
                       v-for="item in provinceList"
                       :key="item.provinceName"

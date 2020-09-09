@@ -155,9 +155,9 @@
                 </el-row>
 
 
-                <div class="tab-right-title">推广线索</div>
+                <!-- <div class="tab-right-title">推广线索</div> -->
 
-                <div class="tab-xian"></div>
+                <!-- <div class="tab-xian"></div>
 
                 <el-row style="margin-bottom: 20px;">
                 
@@ -181,7 +181,7 @@
 
                     <el-button plain size="small" @click="editSpreadClick" style="position: absolute; right: 40px; top: -44px; width: 116px;">修改推广账号</el-button>
 
-                </el-row>
+                </el-row> -->
 
 
                 <div style="text-align: center;">

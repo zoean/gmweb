@@ -59,13 +59,12 @@
 
         <el-row class="people-screen">
 
-            <el-col :span="6">
+            <el-col :span="4">
 
                 <el-cascader
-                    class="smoke-cascader"
+                    class="smoke-cascader screen-li"
                     ref="cascader"
                     size="small"
-                    style="width: 97%;"
                     placeholder="请选择坐席组织架构"
                     collapse-tags
                     :show-all-levels=false

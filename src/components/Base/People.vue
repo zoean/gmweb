@@ -25,7 +25,7 @@
                 </el-select>
             </el-col>
             <el-col :span="3">
-                <el-select v-model="jobStatusText" placeholder="请选择员工状态" size="small" @change='handleJobStatusChange' class="screen-li" clearable>
+                <el-select v-model="jobStatusText" placeholder="选择员工状态" size="small" @change='handleJobStatusChange' class="screen-li" clearable>
                     <el-option
                       v-for="item in jobStatusOptions"
                       :key="item.value"
