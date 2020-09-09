@@ -238,6 +238,12 @@
 
                     </el-form-item>
 
+                    <el-form-item label="推广人" prop="jobnum">
+                      
+                        <el-input :value="ruleFormLink.jobNameNum" readonly class="borderNone" size="small"></el-input>
+
+                    </el-form-item>
+
                     <!-- <el-form-item label="jq平台账号" prop="jqadmin">
                       
                         <el-select v-model="ruleFormLink.jqadmin" placeholder="请选择jq平台账号" size="small">
@@ -366,6 +372,8 @@ export default {
                 projectId: '',  //考试项 id
                 projectText: '',  //考试项 
                 // jqadmin: '', //jq账号
+                jobnum: '',
+                jobNameNum: '',
             },
             creatUrlForm: {},
             rulesLink: {
@@ -466,7 +474,7 @@ export default {
             }).then(res => {
                 if(res.code == 200) {
                     this.createLinkUrl = '?ruleid=' + this.creatUrlForm.ruleid + '&project=' + this.ruleFormLink.projectId
-                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc;
+                     + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc + '&jobnum=' + this.ruleFormLink.jobnum;
                     //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
                 }else{
                     this.$message({
@@ -478,6 +486,8 @@ export default {
         },
         createLinksClick(row) {
             this.drawerFlagLink = true;
+            this.ruleFormLink.jobNameNum = this.$store.state.name + '（' + this.$store.state.jobNumber + '）';
+            this.ruleFormLink.jobnum = this.$store.state.jobNumber;
             this.creatUrlForm = {
                 ruleid: row.id,//分配组ID
                 ruleName: row.name,//分配组Name

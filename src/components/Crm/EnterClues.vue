@@ -1,5 +1,5 @@
 <template>
-    <el-main class="index-main">
+    <el-main class="index-main enterClues">
         <el-tabs v-model="activeName" @tab-click="handleTabsClick">
 
             <el-tab-pane label="手动录入" name="first" v-loading="fullscreenLoading">
@@ -301,6 +301,12 @@
 
                         </el-form-item>
 
+                        <el-form-item label="推广人" prop="jobnum">
+                      
+                            <el-input :value="importDataForm.jobNameNum" readonly class="borderNone" size="small"></el-input>
+
+                        </el-form-item>
+
                     </el-form>
 
                     <span slot="footer" class="dialog-footer">
@@ -419,7 +425,9 @@ export default {
                 examItemText: '',
                 acc: '',
                 accText: '',
-                list: []
+                list: [],
+                jobnum: '',
+                jobNameNum: '',
             },
             validDataNum: '',
             inValidDataNum: '',
@@ -560,11 +568,12 @@ export default {
             this.$refs[formName].validate((valid) => {
               if (valid) {
                 let obj = urlFun(this.ruleForm.url);
-                if(obj.project && obj.ruleid && obj.spread && obj.acc){
+                if(obj.project && obj.ruleid && obj.spread && obj.acc && obj.jobnum){
                     this.ruleForm.examItemId = obj.project;
                     this.ruleForm.clueRuleNumber = obj.ruleid;
                     this.ruleForm.spread = obj.spread;
                     this.ruleForm.acc = obj.acc;
+                    this.ruleForm.jobNum = obj.jobnum;
                     this.entryClueData();
                 }else{
                     this.$message({
@@ -594,6 +603,8 @@ export default {
                 })
             }else{
                 this.dialogVisible = true;
+                this.importDataForm.jobNameNum = this.$store.state.name + '（' + this.$store.state.jobNumber + '）';
+                this.importDataForm.jobnum = this.$store.state.jobNumber;
             }
         },
         bulkImportClueData() {
@@ -681,6 +692,9 @@ export default {
                 width: 94%;
             }
         }
+    }
+    .enterClues /deep/ div.el-dialog__body{
+        height: auto;
     }
     .el-pagination{
         text-align: right;

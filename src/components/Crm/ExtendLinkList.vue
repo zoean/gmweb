@@ -165,7 +165,7 @@ export default {
             columnList: [
                 { 'prop': 'url', 'label': '链接' },
                 { 'prop': 'copy', 'label': '' },
-                { 'prop': 'userName', 'label': '创建人' },
+                { 'prop': 'jobNumName', 'label': '推广人' },
                 { 'prop': 'acc', 'label': '推广账号' },
                 { 'prop': 'rule', 'label': '分配组' },
                 { 'prop': 'examItems', 'label': '考试项目' },
@@ -220,7 +220,7 @@ export default {
                         res.data.list.map(sll => {
                             sll.createTime = timestampToTime(Number(sll.createTime));
                             sll.url = '?ruleid=' + sll.ruleId + '&project=' + sll.examItemsId
-                            + '&spread=' + sll.spreadId + '&acc=' + sll.accId;
+                            + '&spread=' + sll.spreadId + '&acc=' + sll.accId + '&jobnum=' + sll.jobNum;
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;

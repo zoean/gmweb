@@ -15,7 +15,7 @@
         @change="changeDateRange">
       </el-date-picker>
     </el-col>
-    <el-col :span="3">
+    <el-col :span="4">
       <el-cascader
         size="small"
         placeholder="请选择坐席组织架构"
@@ -34,7 +34,7 @@
     <el-col :span="3">
       <el-button type="primary" size="small" @click="searchList">查询</el-button>
     </el-col>
-    <el-col :span="9">
+    <el-col :span="8">
       <el-button v-if="buttonMap.addWechatNum" type="primary" size="small" @click="addWechatData" style="float: right;">新增</el-button>
     </el-col>
   </el-row>
