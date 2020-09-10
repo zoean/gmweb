@@ -1,66 +1,65 @@
 <template>
     <div v-if="routersFlag" class="aside-all">
-      <el-scrollbar wrap-class="scrollbar-wrapper">
-        <el-menu
-          :default-active="activeIndex"
-          ref="elmenu"
-          class="el-menu-vertical-demo"
-          :default-openeds="openedsIndex"
-          :collapse="iscollapse"
-          :collapse-transition="false"
-          :unique-opened="false"
+      <el-menu
+        :default-active="activeIndex"
+        ref="elmenu"
+        class="el-menu-vertical-demo"
+        :default-openeds="openedsIndex"
+        :collapse="iscollapse"
+        :collapse-transition="false"
+        :unique-opened="false"
+        >
+
+        <div v-for="(item,index) in userMenuList" :key="index">
+
+          <el-submenu 
+            class="el-submenu-smoke" 
+            :index="`${item.url}`" 
+            v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'"
+            :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
           >
-
-          <div v-for="(item,index) in userMenuList" :key="index">
-
-            <el-submenu 
-              class="el-submenu-smoke" 
-              :index="`${item.url}`" 
-              v-if="item.includeSubsetList.length != 0 && item.disabled && item.url != '/base/people'"
-              :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
-            >
-              <template slot="title">
-                <svg-icon :icon-class="item.icon" />
-                <span class="menu-titles">{{item.name}}</span>
-              </template>
-              <div v-for="(res,num) in item.includeSubsetList" :key="num">
-                <el-menu-item 
-                  :index="`${res.url}`" 
-                  @click="active_router(res)"
-                  v-if="res.disabled && res.menuComponent != 'button'"
-                  :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
-                >
-                <div class="el-menu-item-div">
-                  <i :class="res.icon"></i>
-                  <span class="menu-titles">{{res.name}}</span>
-                </div>
-                </el-menu-item>
-              </div>
-            </el-submenu>
-
-            <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke" :style="iscollapse ? 'min-width: auto; width: auto;' : ''">
+            <template slot="title">
               <svg-icon :icon-class="item.icon" />
-              <span class="menu-titles" slot="title">{{item.name}}</span>
-            </el-menu-item>
+              <span class="menu-titles">{{item.name}}</span>
+            </template>
+            <div v-for="(res,num) in item.includeSubsetList" :key="num">
+              <el-menu-item 
+                :index="`${res.url}`" 
+                @click="active_router(res)"
+                v-if="res.disabled && res.menuComponent != 'button'"
+                :style="iscollapse ? 'min-width: auto; width: auto;' : ''"
+              >
+              <div class="el-menu-item-div">
+                <i :class="res.icon"></i>
+                <span class="menu-titles">{{res.name}}</span>
+              </div>
+              </el-menu-item>
+            </div>
+          </el-submenu>
 
-            <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
-              <i :class="item.icon"></i>
-              <span slot="title">{{item.name}}</span>
-            </el-menu-item> -->
+          <el-menu-item :index="`${item.url}`" v-else-if="item.disabled" @click="active_router(item)" class="el-menu-item-smoke" :style="iscollapse ? 'min-width: auto; width: auto;' : ''">
+            <svg-icon :icon-class="item.icon" />
+            <span class="menu-titles" slot="title">{{item.name}}</span>
+          </el-menu-item>
 
-          </div>
-              
-        </el-menu>
-      </el-scrollbar>
+          <!-- <el-menu-item :index="`${item.url}`" v-if="item.disabled" @click="active_router(item)">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.name}}</span>
+          </el-menu-item> -->
+
+        </div>
+
+      </el-menu>
+      
       <el-image
-        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%; cursor: pointer;"
+        style="width: 15px; height: 45px; position: absolute; right: -13px; top: 40%; cursor: pointer;"
         v-show="iscollapse"
         @click="open_click"
         :src="require('../../assets/images/aside_open.png')">
       </el-image>
 
       <el-image
-        style="width: 15px; height: 45px; position: absolute; right: -14px; top: 40%; cursor: pointer;"
+        style="width: 15px; height: 45px; position: absolute; right: -13px; top: 40%; cursor: pointer;"
         v-show="!iscollapse"
         @click="close_click"
         :src="require('../../assets/images/aside_close.png')">
@@ -73,11 +72,6 @@
 import { getMenuDetailsSubsetByUuid } from '../../request/api';
 export default {
     name: '',
-    props:{
-      toggleSidebar:{
-        type: Function
-      }
-    },
     data() {
         return {
           activeIndex: '',
@@ -94,11 +88,9 @@ export default {
     methods: {
       open_click() {
         this.iscollapse = false;
-        this.toggleSidebar(2)
       },
       close_click() {
         this.iscollapse = true;
-        this.toggleSidebar(1)
       },
       active_router(index) {
         this.$store.commit('setPageNum', index.pageNum)
@@ -180,121 +172,30 @@ export default {
 </script>
 <style lang="less" scoped>
   .aside-all{
-    position: fixed;
-    z-index: 99;
-    /* min-height: calc(100vh - 60px); */
-    display: flex;
-    flex: 1;
+    position: relative;
     height: 100%;
-    /*  background: url('../../assets/images/aside_backg.png') left bottom no-repeat #4794FE; */
-    background: #fff;
-    .scrollbar-wrapper {
-      overflow-x: hidden !important;
-    }
-
-    .el-scrollbar__bar.is-vertical {
-      right: 0px;
-    }
-
-    .el-scrollbar {
-      height: 94%;
-    }
-    .el-submenu-smoke{
-      position: relative;
-      z-index: 9;
-      color: #fff;
-      width: 3rem;
-      min-width: 200px;
-      max-width: 256px;
-      border-radius: none;
-      background: #fff;
-      .el-submenu__title{
-        svg{
-          color:#909399;
-          font-size: 18px;
-        }
-      }
-      span.menu-titles{
-        color: #303133;
-      }
-      .el-menu-item{
-        &:hover{
-          color:#4794FE;
-          i,span.menu-titles{
-            color: #4794FE;
-          }
-        }
-      }
-      
-      .el-menu-item.is-active .el-menu-item-div{
-        width: calc(3rem - 24px);
-        min-width: 176px;
-        max-width: 232px;
-        margin-left: -16px;
-        padding-left: 16px;
-        border-radius: 50px 0 0 50px;
-        background: #F2F3F7;
-        color:#4794FE;
-        span.menu-titles{
-          color: #4794FE;
-        }
-      }
-
-     .el-menu-item{
-        background: #fff;
-        color: #303133;
-          .el-menu-item-div{
-            background: #fff;
-            flex-direction: row;
-            align-items: center;
-            &:hover{
-              width: calc(3rem - 24px);
-              min-width: 176px;
-              max-width: 232px;
-              margin-left: -16px;
-              padding-left: 16px;
-              border-radius: 50px 0 0 50px;
-              background: #F2F3F7 !important;
-              color: #4794FE;
-              
-            }
-          }
-        }
-
+    .svg-icon{
+      margin-left: 4px !important;
+      color: #909399;
+      font-size: 18px;
     }
     .el-menu-vertical-demo{
-      position: relative;
-      z-index: 9;
-      border-right: none;
-      background-color: #fff !important;
-    }
-    .el-menu-item-smoke{
-      width: calc(3rem - 12px);
-      border-radius: 50px 0px 0px 50px;
-      margin-left: 12px;
-      min-width: 188px;
-      max-width: 244px;
-      svg{
-        color:#909399;
-        font-size: 16px;
-      }
-    }
-    .el-menu-item-smoke:hover{
-      background: #F2F3F7 !important;
-      color: #4794FE;
-      i,svg{
-        color: #4794FE;
-      }
-    }
-    .el-menu-item-smoke.is-active{
-      background: #F2F3F7;
-      color: #4794FE;
-      i,svg{
-        color: #4794FE;
-      }
-      span.menu-titles{
-        color: #4794FE;
+      height: calc(100vh - 60px);
+      overflow-y: scroll;
+      .el-menu-item.is-active{
+        color: #409EFF;
+        background: #f2f3f7;
       }
     }
   }
+  
+/* //element-ui table的去除右侧滚动条的样式 */
+::-webkit-scrollbar {
+    width: 1px;
+    height: 1px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
 </style>

@@ -364,9 +364,9 @@ export default {
                 tel: [
                   { pattern:/^1\d{10}$/, required: true, message: '请输入客户手机', trigger: 'blur' },
                 ],
-                name: [
-                  { required: true, message: '请输入客户姓名', trigger: 'blur' }
-                ],
+                // name: [
+                //   { required: true, message: '请输入客户姓名', trigger: 'blur' }
+                // ],
                 // examItemText: [
                 //   { required: true, message: '请选择考试项目', trigger: 'change' }
                 // ],
@@ -700,14 +700,5 @@ export default {
         text-align: right;
         margin-top: .4rem;
     }
-    /* //element-ui table的去除右侧滚动条的样式 */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 1px;
-    }
-        /* // 滚动条的滑块 */
-    ::-webkit-scrollbar-thumb {
-        background-color: #a1a3a9;
-        border-radius: 8px;
-    }
+    
 </style>
