@@ -22,8 +22,7 @@ body {
     font: 12px/1.5 Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #555;
     background-color: #F1F1F1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 em, i {
     font-style: normal;
@@ -318,9 +317,12 @@ a:link,a:active,a:visited,a:hover {
 
 .el-main{
     padding: 12px;
+    padding-bottom: 30px;
     background: #fff;
     margin: 16px;
-    min-width: 600px;
+    margin-right: 10px;
+    height: calc(100vh - 92px) !important;
+    overflow-y: scroll;
 }
 
 .el-menu--collapse  .el-submenu__title span{
@@ -501,16 +503,15 @@ div.el-dialog__body{
 }
 
 /* //element-ui table的去除右侧滚动条的样式 */
-/* ::-webkit-scrollbar {
-    width: 12px;
-    height: 1px;
-} */
-    /* // 滚动条的滑块 */
-/* ::-webkit-scrollbar-thumb {
-    background-color: #a1a3a9;
-    border-radius: 0px;
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+/* // 滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
     border-radius: 8px;
-} */
+}
 
 .kanban_dian{
     width:5px;
@@ -531,8 +532,18 @@ div.el-dialog__body{
     padding: 10px !important;
 }
 
+.el-progress{
+    text-align: center;
+}
+
 .el-progress-bar{
     width: 96% !important;
+    padding-right: 68px;
+    margin-right: -68px;
+}
+
+.el-progress__text{
+    font-size: 16px !important;
 }
 
 .el-input__inner{

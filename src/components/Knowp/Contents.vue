@@ -441,15 +441,4 @@ export default {
         margin-top: 30px;
         margin-bottom: 30px;
     }
-
-/* //element-ui table的去除右侧滚动条的样式 */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 1px;
-}
-    /* // 滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-    background-color: #a1a3a9;
-    border-radius: 8px;
-}
 </style>
