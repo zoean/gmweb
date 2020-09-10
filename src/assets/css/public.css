@@ -319,7 +319,7 @@ a:link,a:active,a:visited,a:hover {
     padding: 12px;
     background: #fff;
     margin: 16px;
-    min-width: 600px;
+    min-width: 700px;
 }
 
 .el-menu--collapse  .el-submenu__title span{

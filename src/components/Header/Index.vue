@@ -1,5 +1,5 @@
 <template>
-    <el-header style="height: 60px; box-shadow:0px 1px 4px 0px rgba(0,21,41,0.12);">
+    <el-header style="min-width: 900px; height: 60px; box-shadow:0px 1px 4px 0px rgba(0,21,41,0.12);">
         <el-dialog
             title="设置密码"
             :visible.sync="centerDialogVisible"
@@ -107,17 +107,17 @@
             </span>
         </el-dialog>
 
-        <el-row :xs="0">
-            <el-col :lg="18" :md="18" :sm="20" :xs="24" style="height: 60px !important;">
+        <el-row>
+            <el-col :span="18" style="height: 60px !important;">
                 <el-row type="flex" justify="start">
-                    <el-col :lg="6" :md="8" :sm="10" style="min-width: 220px;">
+                    <el-col :span="5" style="min-width: 220px;">
                         <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
                         
                         <el-image style="width: 217px; position: relative; top: 12px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
                     </el-col>
-                    <el-col :xs="0">
+                    <el-col :span="19">
                         <el-menu
                             :default-active="defaultActive"
                             class="el-menu-demo"
@@ -138,7 +138,7 @@
             </el-row>
             </el-col>
 
-            <el-col :lg="6" :md="6" :sm="4" :xs="0" style="min-width: 200px;">
+            <el-col :span="6" style="min-width: 200px;">
                 <el-dropdown>
                     <div class="el-dropdown-link index-hright">
                         {{$store.state.name}}<i class="el-icon-arrow-down el-icon--right"></i>
