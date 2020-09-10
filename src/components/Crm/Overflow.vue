@@ -89,11 +89,18 @@
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
-                <el-col :span="10">
+                <el-tag 
+                    v-for="(item,index) in tableData" :key="index"
+                    style="margin: 0 10px 10px 0;"
+                    >{{item.orgName}}</span> 
+                </el-tag>
+
+                <el-col>
 
                     <el-input
                         placeholder="输入您想查找的人员"
                         style="margin-bottom: 10px;"
+                        size="small"
                         v-model="filterText">
                     </el-input>
 
@@ -108,24 +115,6 @@
                         :props="defaultProps"
                     >
                     </el-tree>
-
-                </el-col>
-
-                <el-col :span="13" :offset="1">
-                
-                    <el-table
-                        border
-                        :data="tableData"
-                    >
-
-                        <el-table-column
-                            :prop="item.props"
-                            :label="item.label"
-                            v-for="(item, index) in columnListTree"
-                            :key="index">
-                        </el-table-column>
-
-                    </el-table>
 
                 </el-col>
 
