@@ -20,7 +20,15 @@
 
 <script>
 import { login, getUserLoginMessage } from '../../request/api';
-export default {
+export default {	
+	metaInfo: {
+        title: '登录',
+        meta: [
+            {
+                name: 'viewport', content: ''
+            }
+        ]
+    },    
     data() {
         return {
             accountNumber: '',
