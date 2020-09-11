@@ -153,7 +153,7 @@
             :title="drawerTitle2"
             :visible.sync="drawerFlag2"
             :direction="direction"
-            size="40%"
+            size="60%"
             :before-close="handleClose">
             <span class="bullets"></span>
             
