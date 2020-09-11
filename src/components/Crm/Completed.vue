@@ -306,8 +306,8 @@ export default {
                 this.orderForm.startTime = '';
                 this.orderForm.endTime = '';
             }else{
-                this.orderForm.startTime = value[0];
-                this.orderForm.endTime = value[1];
+                this.orderForm.startTime = value[0] / 1000;
+                this.orderForm.endTime = value[1] / 1000;
             }
         },
         getOrderList4Teacher(){
