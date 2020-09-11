@@ -142,6 +142,8 @@ export default {
                 { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
                 { 'prop': 'callOpenLv', 'label': '接通率', width: 120, formatter: this.lvFormatter },
             ],
+            callOpenStuNumAll: 0,
+            callStuNumAll: 0,
             timeDate: [new Date(new Date().toLocaleDateString()).getTime()],
             pickerOptions: {
                 disabledDate(time) {
@@ -238,7 +240,11 @@ export default {
                 sums[index] = this.timeReturn(sums[index]);
             }
             if(index === 9) {
-                sums[index] = '- -';
+                if(this.callStuNumAll == 0) {
+                    sums[index] = (0).toFixed(2) + '%'
+                }else{
+                    sums[index] = ((this.callOpenStuNumAll / this.callStuNumAll) * 100).toFixed(2) + '%';
+                }
             }
           });   
 
@@ -288,8 +294,16 @@ export default {
             this.fullscreenLoading = true;
             this.$smoke_post(orgSaleDayWork, this.form).then(res => {
                 if(res.code == 200) {
+                    let callOpenStuNumAll = 0;
+                    let callStuNumAll = 0;
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            callOpenStuNumAll = callOpenStuNumAll + sll.callOpenStuNum;
+                            callStuNumAll = callStuNumAll + sll.callStuNum;
+                        });
+                        this.callOpenStuNumAll = callOpenStuNumAll;
+                        this.callStuNumAll = callStuNumAll;
                         this.list = res.data.list;
                     }, 300);
                 }else{
