@@ -68,10 +68,10 @@
                     <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_all.png')"></el-image>
                     <span style="position: relative; top: -5px; left: 8px;">今日流水 (￥)</span>
                 </div>
-                <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayEntry}}</div>
+                <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayEntry.toFixed(2)}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
-                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry}}</div>
-                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthEntry}}</div>
+                    <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry.toFixed(2)}}</div>
+                    <div style="width: 50%; display: inline-block;">本月 {{dataJson.thisMonthEntry.toFixed(2)}}</div>
                 </div>
             </div>
 
