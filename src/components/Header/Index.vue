@@ -178,7 +178,7 @@
                 </el-badge>
                     
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.16</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.17</span>
     
             </el-col>
         </el-row>

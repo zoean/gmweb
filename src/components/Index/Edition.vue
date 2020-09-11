@@ -4,6 +4,20 @@
     </el-page-header>
 
     <el-timeline>  
+      <el-timeline-item timestamp="v 1.1.17 -- 2020/09/11" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、修改推广线索归属逻辑</p>
+          <p>2、录音下载组件功能优化</p>
+          <p>3、今日流水统一修改为保留两位小数</p>
+          <p>4、销售看板、销售主管看板目标进度UI优化</p>
+          <p>5、座机外呼弹框UI优化</p>
+          <h4>修复bug</h4>
+          <p>1.修复已成单订单页面的筛选项问题</p>
+          <p>2.修复通时明细页面的日期筛选问题</p>
+          <p>3.修复回首池、溢出池组织架构不显示问题</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.16 -- 2020/09/08" placement="top">
         <el-card>
           <h4>修复bug</h4>
