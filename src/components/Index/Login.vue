@@ -21,14 +21,14 @@
 <script>
 import { login, getUserLoginMessage } from '../../request/api';
 export default {	
-	metaInfo: {
-        title: '登录',
-        meta: [
-            {
-                name: 'viewport', content: ''
-            }
-        ]
-    },    
+	// metaInfo: {
+  //       title: '登录',
+  //       meta: [
+  //           {
+  //               name: 'viewport', content: ''
+  //           }
+  //       ]
+  //   },    
     data() {
         return {
             accountNumber: '',

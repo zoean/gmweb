@@ -77,14 +77,14 @@ export default {
     components: {
         countTo
     },
-    metaInfo: {
-        title: '首页',
-        meta: [
-            {
-                name: 'viewport', content: 'maximum-scale=3.0'
-            }
-        ]
-    },    
+    // metaInfo: {
+    //     title: '首页',
+    //     meta: [
+    //         {
+    //             name: 'viewport', content: 'maximum-scale=3.0'
+    //         }
+    //     ]
+    // },    
     data() {
         return {
             currentDate: getCurrentDate('-'),
