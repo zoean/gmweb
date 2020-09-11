@@ -86,15 +86,14 @@
                             style="width: 100%;"
                             size="small"
                             v-model="orderForm.time"
-                            type="daterange"
-                            align="right"
+                            :default-time="['00:00:00', '23:59:59']"
+                            type="datetimerange"
                             unlink-panels
                             range-separator="至"
                             start-placeholder="下单时间"
                             end-placeholder="下单时间"
                             @change="changeTime"
-
-                            value-format="timestamp">
+                        >
                         </el-date-picker>
                     </el-col>
 
