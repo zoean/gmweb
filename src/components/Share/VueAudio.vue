@@ -34,7 +34,7 @@
 
       <el-slider v-show="!controlList.noVolume" v-model="volume" :format-tooltip="formatVolumeToolTip" @change="changeVolume" class="slider"></el-slider>
       
-      <a :href="url" v-show="!controlList.noDownload" target="_blank" class="download" download><i class="el-icon-download" style="font-size: 20px; position: relative; top:2px;"></i></a>
+      <a :href="downLoadUrl" v-show="!controlList.noDownload" class="download"><i class="el-icon-download" style="font-size: 20px; position: relative; top:2px;"></i></a>
     </div>
   </div>
 </template>
@@ -74,6 +74,7 @@
     data() {
       return {
         url: this.theUrl,
+        downLoadUrl: this.theUrl.replace('voice.jhwx.com', 'dvoice.jhwx.com'),
         audio: {
           currentTime: 0,
           maxTime: 0,
