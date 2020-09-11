@@ -16,6 +16,7 @@ import './assets/js/rem'
 import '@/icons' // icon
 import VueClipboard from 'vue-clipboard2'
 import 'default-passive-events'
+import Meta from 'vue-meta'
 // import VueAudio from 'vue-audio-better'
  
 // Vue.use(VueAudio)
@@ -26,6 +27,7 @@ Vue.use(AFTableColumn);
 Vue.use(VScrollLock);
 Vue.use(VueAreaLinkage);
 Vue.use(Vuex);
+Vue.use(Meta)
 Vue.prototype.$smoke_get = smoke_get;
 Vue.prototype.$smoke_post = smoke_post;
 

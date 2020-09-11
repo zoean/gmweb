@@ -2,7 +2,7 @@
     <div>
         <div class="login-bg"></div>
         <div class="login-contain">
-            <el-image style="width: 2.4rem; position: absolute; top: 1.2rem; left: .7rem;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+            <el-image :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
             <div class="contain-model">
 
                 <div class="contain-title">欢迎登录</div>
@@ -20,7 +20,15 @@
 
 <script>
 import { login, getUserLoginMessage } from '../../request/api';
-export default {
+export default {	
+	// metaInfo: {
+  //       title: '登录',
+  //       meta: [
+  //           {
+  //               name: 'viewport', content: ''
+  //           }
+  //       ]
+  //   },    
     data() {
         return {
             accountNumber: '',
@@ -107,7 +115,7 @@ export default {
 
 <style scoped lang="less">
 
-// @media screen and (max-width: 1200px) {
+/* // @media screen and (max-width: 1200px) {
 //     .login-contain{
 //         width: 10rem !important;
 //         height: 10rem !important;
@@ -119,8 +127,7 @@ export default {
 //             margin-bottom: 1.5rem !important;
 //         }
 //     }
-// }
-
+// } */
 .login-bg{
     position:fixed;
     top: 0;
@@ -131,11 +138,9 @@ export default {
     z-index:-10;
     zoom: 1;
     background-color: #fff;
-    background-repeat: no-repeat;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
-    background-position: center 0;
     background: url("../../assets/images/login_bg.png") no-repeat center;
 }
 .login-contain{
@@ -146,22 +151,29 @@ export default {
     -o-background-size: cover;
     background-position: center 0;
     border-radius: 10px;
-    position: absolute;
-    width: 10rem;
-    height: 6.4rem;
+		position: absolute;
+		width: 800px;
+		height: 514px;
+    /* width: 10rem;
+    height: 6.4rem; */
     z-index: 999;
-    margin-left: -5rem;
+    margin-left: -400px;
     left: 50%;
     top: 50%;
-    margin-top: 1.3rem;
+		margin-top: 1.3rem;
+		.el-image{
+			width: 200px;
+			top:100px;
+			left: 60px;
+		}
     .contain-model{
-        width: 2.6rem;
-        height: 2.6rem;
+        width: 250px;
+        height: 250px;
         position: absolute;
-        top: 2.4rem;
-        left: 1.4rem;
+        top: 170px;
+        left: 102px;
         .contain-title{
-            font-size: .24rem;
+            font-size: 18px;
             color: #409EFF;
         }
         .login-btn{
@@ -189,5 +201,209 @@ export default {
             margin-top: 10px;
         }
     }
+}
+
+@media screen and (max-width: 1440px){
+	.login-contain{
+		width: 800px;
+		height: 514px;
+		.el-image{
+			width: 200px;
+			top: 100px;
+			left: 60px;
+		}
+		.contain-model{
+			width: 250px;
+			height: 250px;
+			left: 102px;
+			top: 170px;
+		}
+	}
+}
+@media screen and (max-width: 1280px){
+	.login-contain{
+		width: 720px;
+		height: 463px;
+		margin-left: -360px;
+		.el-image{
+			width: 200px;
+			top: 100px;
+			left: 38px;
+		}
+		.contain-model{
+			width: 230px;
+			height: 230px;
+			left: 86px;
+			top: 160px;
+		}		
+	}
+
+}
+@media screen and (max-width: 1024px){
+	.login-contain{
+		width: 640px;
+		height: 411px;
+		margin-left: -320px;
+		.el-image{
+			width: 180px;
+			top: 80px;
+			left: 36px;
+		}
+		.contain-model{
+			width: 200px;
+			height: 200px;
+			left: 76px;
+			top: 140px;
+		}		
+	}
+
+}
+@media (max-width: 991px){
+	.login-contain{
+		width: 640px;
+		height: 411px;
+		margin-left: -320px;
+		margin-top: 120px;
+		.el-image{
+			width: 180px;
+			top: 80px;
+			left: 36px;
+		}
+		.contain-model{
+			width: 200px;
+			height: 200px;
+			left: 76px;
+			top: 140px;
+		}		
+	}
+}
+@media (max-width: 800px){
+	.login-contain{
+		width: 640px;
+		height: 411px;
+		margin-left: -320px;
+		margin-top: 110px;
+		.el-image{
+			width: 180px;
+			top: 80px;
+			left: 36px;
+		}
+		.contain-model{
+			width: 200px;
+			height: 200px;
+			left: 76px;
+			top: 140px;
+		}		
+	}
+
+}
+@media (max-width: 768px){
+	.login-contain{
+		width: 640px;
+		height: 411px;
+		margin-left: -320px;
+		margin-top: 120px;
+		.el-image{
+			width: 180px;
+			top: 80px;
+			left: 36px;
+		}
+		.contain-model{
+			width: 200px;
+			height: 200px;
+			left: 76px;
+			top: 140px;
+		}		
+	}
+
+}
+@media (max-width: 568px){
+	.login-contain{
+		width: 500px;
+		height: 321px;
+		margin-left: -250px;
+		margin-top: 160px;
+		.el-image{
+			width: 140px;
+			top: 60px;
+			left: 30px;
+		}
+		.contain-model{
+			width: 160px;
+			height: 160px;
+			left: 56px;
+			top: 100px;
+			.contain-title{
+				font-size: 14px;
+			}
+			.el-input--medium .el-input__inner{
+				height: 22px;
+				line-height: 22px;
+				color: #000;
+			}
+		}		
+	}
+}
+@media (max-width: 480px){
+	.login-contain{
+		width: 400px;
+		height: 257px;
+		margin-left: -200px;
+		margin-top: 160px;
+		.el-image{
+			width: 110px;
+			top: 40px;
+			left: 20px;
+		}
+		.contain-model{
+			width: 130px;
+			height: 130px;
+			left: 40px;
+			top: 66px;
+			.contain-title{
+				font-size: 12px;
+			}
+			.el-input{
+				/deep/.el-input--medium .el-input__inner,.el-input--medium .el-input__icon{
+					height: 20px;
+					line-height: 20px;
+				}
+			}
+			
+		}		
+	}
+}
+@media (max-device-width: 414px){
+	.login-bg{
+		background: url(../../assets/images/login_bg_mobile.png) center;
+	}
+	.login-contain{
+		width: 900px;
+		height: 579px;
+		margin-left: -450px;
+		margin-top: 400px;
+		.el-image{
+			width: 220px;
+			top: 80px;
+			left: 60px;
+		}
+		.contain-model{
+			width: 260px;
+			height: 260px;
+			left: 80px;
+			top: 160px;
+			.contain-title{
+				font-size: 18px;
+			}
+			.el-input{
+				margin-bottom: 10px;
+				/deep/.el-input--medium .el-input__inner,.el-input--medium .el-input__icon{
+					height: 36px;
+					line-height: 36px;
+				}
+			}
+			
+		}		
+	}
 }
 </style>
