@@ -4,13 +4,32 @@
 
         <el-button type="primary" size="small" style="margin: 0 20px 20px 0;" @click="btnOk">确定</el-button>
 
+        <el-table
+            :data="tableData"
+        >
+
+            <el-table-column
+                :prop="item.props"
+                :label="item.label"
+                v-for="(item, index) in columnList"
+                :key="index">
+            </el-table-column>
+
+            <el-table-column prop="limitLimit" label="本组上限">
+                <template slot-scope="scope">
+                    <el-input-number class="inputNum" v-model="scope.row.limitLimit" :min="0" size="mini" :controls="false"></el-input-number>
+                </template>
+            </el-table-column>
+
+        </el-table>
+
         <el-row>
 
-            <el-col :span="12">
+            <el-col>
 
                 <el-input
                     placeholder="输入您想查找的人员"
-                    style="margin-bottom: 10px;"
+                    style="margin: 10px 0;"
                     v-model="filterText">
                 </el-input>
 
@@ -29,29 +48,6 @@
 		                <span :title="node.label">{{ node.label }}</span>
 	                </span>
                 </el-tree>
-
-            </el-col>
-
-            <el-col :span="11" :offset="1">
-
-                <el-table
-                    :data="tableData"
-                >
-
-                    <el-table-column
-                        :prop="item.props"
-                        :label="item.label"
-                        v-for="(item, index) in columnList"
-                        :key="index">
-                    </el-table-column>
-
-                    <el-table-column prop="limitLimit" label="本组上限">
-                        <template slot-scope="scope">
-                            <el-input-number class="inputNum" v-model="scope.row.limitLimit" :min="0" size="mini" :controls="false"></el-input-number>
-                        </template>
-                    </el-table-column>
-
-                </el-table>
 
             </el-col>
 
