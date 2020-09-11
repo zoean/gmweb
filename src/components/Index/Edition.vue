@@ -213,6 +213,9 @@ export default {
 
 <style lang="less">
     .block{
+      width: 70%;
+      margin: 0 auto;
+      margin-left: 20%;
       .title{
         font-size: 20px;
         font-weight: bold;
