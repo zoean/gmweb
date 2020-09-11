@@ -666,7 +666,7 @@ export default {
                                 if(message.call_event.call_state == 'caller_ring') {
                                     that.callpopFlag = true;
                                     that.caller_number = message.call_event.caller_number;
-                                    that.call_state = '响 铃';
+                                    that.call_state = '响 铃 中';
                                 }else if(message.call_event.call_state == 'caller_answer') {
                                     that.call_state = '通 话 中';
                                 }else if(message.call_event.call_state == 'agent_hangup') {
