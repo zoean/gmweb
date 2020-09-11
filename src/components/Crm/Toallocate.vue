@@ -150,9 +150,9 @@ export default {
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '来源渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间'},
-                { 'prop': 'dataCreateTime', 'label': '最新回收时间'},
-                { 'prop': 'intentionLevel', 'label': '意向等级'},
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间' },
+                { 'prop': 'dataCreateTime', 'label': '最新回收时间' },
+                { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
             ],
             ruleForm: {
                 age: '',

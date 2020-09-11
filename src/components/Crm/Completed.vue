@@ -64,9 +64,9 @@
                         <el-select v-model="orderForm.classType" size="small" placeholder="选择商品班型" clearable>
                             <el-option
                             v-for="item in classTypeList"
-                            :key="item.id"
+                            :key="item.number"
                             :label="item.name"
-                            :value="item.id">
+                            :value="item.number">
                             </el-option>
                         </el-select>
                     </el-col>
@@ -90,9 +90,10 @@
                             align="right"
                             unlink-panels
                             range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            start-placeholder="下单时间"
+                            end-placeholder="下单时间"
                             @change="changeTime"
+
                             value-format="timestamp">
                         </el-date-picker>
                     </el-col>
@@ -300,9 +301,14 @@ export default {
                 this.orderCallDataList();
             }
         },
-        changeTime(val){
-            this.orderForm.startTime = val[0]
-            this.orderForm.endTime = val[1]
+        changeTime(value){
+            if (value == null) {
+                this.orderForm.startTime = '';
+                this.orderForm.endTime = '';
+            }else{
+                this.orderForm.startTime = value[0];
+                this.orderForm.endTime = value[1];
+            }
         },
         getOrderList4Teacher(){
             this.$smoke_post(getOrderList4Teacher, this.orderForm).then(res => {

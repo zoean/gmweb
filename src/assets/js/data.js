@@ -179,31 +179,7 @@ export const nationAll = [
 	{id:56,value:'基诺族'},
 ]
 
-export const columnList1 = [
-    { 'prop': 'orgName', 'label': '统计单位', width: 120 },
-    { 'prop': 'callTime', 'label': '总通话时长', width: 120 },
-    { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
-    { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120 },
-    { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
-    { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120 },
-    { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
-    { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140 },
-    { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
-    { 'prop': 'callOpenLv', 'label': '接通率', width: 120 },
-]
 
-export const columnList2 = [
-    { 'prop': 'saleName', 'label': '统计单位', width: 120 },
-    { 'prop': 'callTime', 'label': '总通话时长', width: 120 },
-    { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
-    { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120 },
-    { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
-    { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120 },
-    { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
-    { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140 },
-    { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
-    { 'prop': 'callOpenLv', 'label': '接通率', width: 120 },
-]
 
 
 

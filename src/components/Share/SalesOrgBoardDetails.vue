@@ -60,13 +60,16 @@
             <el-table
                 :data="list"
                 ref="tableSelect1"
+                :summary-method="getSummaries"
+                show-summary
                 v-loading="fullscreenLoading"
-                :height="height"
+                :max-height="height"
                 style="width: 100%; margin-top: 16px;">
 
                 <el-table-column
                   :prop="item.prop"
                   :label="item.label"
+                  :formatter="item.formatter"
                   :min-width="item.width"
                   v-for="(item, index) in columnList"
                   :key="index"
@@ -95,7 +98,7 @@ import {
     timestampToTime, timeReturn
 } from '../../assets/js/common';
 import { 
-    columnList1, columnList2
+    
 } from '../../assets/js/data';
 export default {
     name: 'salesOrgBoardDetails',
@@ -114,17 +117,30 @@ export default {
             },
             fullscreenLoading: false,
             list: [],
-            columnList: [
+            columnList: [],
+            columnList1: [
                 { 'prop': 'orgName', 'label': '统计单位', width: 120 },
-                { 'prop': 'callTime', 'label': '总通话时长', width: 120 },
+                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter },
                 { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
-                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120 },
+                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter },
                 { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
-                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120 },
+                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120, formatter: this.timeFormatter },
                 { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
-                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140 },
+                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140, formatter: this.timeFormatter },
                 { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
-                { 'prop': 'callOpenLv', 'label': '接通率', width: 120 },
+                { 'prop': 'callOpenLv', 'label': '接通率', width: 120, formatter: this.lvFormatter },
+            ],
+            columnList2: [
+                { 'prop': 'saleName', 'label': '统计单位', width: 120 },
+                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter },
+                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
+                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter },
+                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
+                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120, formatter: this.timeFormatter },
+                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
+                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140, formatter: this.timeFormatter },
+                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
+                { 'prop': 'callOpenLv', 'label': '接通率', width: 120, formatter: this.lvFormatter },
             ],
             timeDate: [new Date(new Date().toLocaleDateString()).getTime()],
             pickerOptions: {
@@ -177,10 +193,57 @@ export default {
         }
     },
     created() {
+        this.columnList = this.columnList2;
+        this.timeReturn = timeReturn;
         this.saleDataOrg();
         this.form.time = new Date(new Date().toLocaleDateString()).getTime();
     },
     methods: {
+        timeFormatter(row, column, cellValue){
+            return timeReturn(Number(cellValue))
+        },
+        lvFormatter(row, column, cellValue){
+            if(row.callStuNum == 0) {
+                return (0).toFixed(2) + '%'
+            }else{
+                return ((row.callOpenStuNum / row.callStuNum) * 100).toFixed(2) + '%'
+            }
+        },
+        getSummaries(param) {
+          //合计
+          const { columns, data } = param;
+          // console.log(columns, data);
+          const sums = [];
+          columns.forEach((column, index) => {
+            if (index === 0) {
+              sums[index] = "合计";
+              return;
+            }
+            const values = data.map((item) => {
+              // console.log(item, item[column.property], column, column.property);
+              return Number(item[column.property]); //如果直接取值a[a.b]取不到
+            });
+            // console.log(values);
+            if (!values.every((value) => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr);
+                if (!isNaN(value)) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              }, 0);
+            }
+            if (index === 1 || index === 3 || index === 5 || index === 7) {
+                sums[index] = this.timeReturn(sums[index]);
+            }
+            if(index === 9) {
+                sums[index] = '- -';
+            }
+          });   
+
+          return sums;
+        },
         handleZuzhiChange(arr) {
             let brr = [];
             arr.map(res => {
@@ -203,12 +266,19 @@ export default {
             })
         },
         salesOrgBoardClick() {
-            if(this.form.classType == 0) {
-                this.columnList = columnList1;
-                this.orgDayWorkSum();
+            if(this.form.orgList.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择统计单元'
+                })
             }else{
-                this.columnList = columnList2;
-                this.orgSaleDayWork();
+                if(this.form.classType == 0) {
+                    this.columnList = this.columnList1;
+                    this.orgDayWorkSum();
+                }else{
+                    this.columnList = this.columnList2;
+                    this.orgSaleDayWork();
+                }
             }
         },
         handleClose() {
@@ -220,17 +290,6 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.firstConTime = timeReturn(sll.firstConTime);
-                            sll.callTime = timeReturn(sll.callTime);
-                            sll.daysTime1 = timeReturn(sll.daysTime1);
-                            sll.daysTime2 = timeReturn(sll.daysTime2);
-                            if(sll.callStuNum == 0) {
-                                sll.callOpenLv = 0 + '%';
-                            }else{
-                                sll.callOpenLv = ((sll.callOpenStuNum / sll.callStuNum) * 100).toFixed(2) + '%';
-                            }
-                        })
                         this.list = res.data.list;
                     }, 300);
                 }else{
@@ -250,17 +309,6 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            sll.firstConTime = timeReturn(sll.firstConTime);
-                            sll.callTime = timeReturn(sll.callTime);
-                            sll.daysTime1 = timeReturn(sll.daysTime1);
-                            sll.daysTime2 = timeReturn(sll.daysTime2);
-                            if(sll.callStuNum == 0) {
-                                sll.callOpenLv = 0 + '%';
-                            }else{
-                                sll.callOpenLv = ((sll.callOpenStuNum / sll.callStuNum) * 100).toFixed(2) + '%';
-                            }
-                        })
                         this.list = res.data.list;
                     }, 300);
                 }else{
