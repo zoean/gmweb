@@ -345,9 +345,9 @@ export default {
                         }else{
                             res.data.thisMonthHighIntention_thisMonthFirstCon = ((res.data.thisMonthHighIntention / res.data.thisMonthFirstCon) * 100).toFixed(2) + '%';
                         }
-                        res.data.todayEntry = (res.data.todayEntry / 10000).toFixed(2);
-                        res.data.thisWeekEntry = (res.data.thisWeekEntry / 10000).toFixed(2);
-                        res.data.thisMonthEntry = (res.data.thisMonthEntry / 10000).toFixed(2);
+                        res.data.todayEntry = res.data.todayEntry.toFixed(2);
+                        res.data.thisWeekEntry = res.data.thisWeekEntry.toFixed(2);
+                        res.data.thisMonthEntry = res.data.thisMonthEntry.toFixed(2);
                         this.dataJson = res.data;
                     }, 300);
                 }else {

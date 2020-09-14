@@ -308,9 +308,9 @@ export default {
                         res.data.todayTalkTime = timeReturn(res.data.todayTalkTime);
                         res.data.thisWeekTalkTime = timeReturn(res.data.thisWeekTalkTime);
                         res.data.thisMonthTalkTime = timeReturn(res.data.thisMonthTalkTime);
-                        res.data.todayEntry = (res.data.todayEntry / 10000).toFixed(2);
-                        res.data.thisWeekEntry = (res.data.thisWeekEntry / 10000).toFixed(2);
-                        res.data.thisMonthEntry = (res.data.thisMonthEntry / 10000).toFixed(2);
+                        res.data.todayEntry = res.data.todayEntry.toFixed(2);
+                        res.data.thisWeekEntry = res.data.thisWeekEntry.toFixed(2);
+                        res.data.thisMonthEntry = res.data.thisMonthEntry.toFixed(2);
                         this.dataJson = res.data;
                     }, 300);
                 }else {
