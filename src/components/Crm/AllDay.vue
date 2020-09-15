@@ -121,6 +121,8 @@
 
                 <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
+                <el-button plain style="margin-left: 10px;" size="small" @click="clueDataReleaseAllClick">全部释放</el-button>
+
                 <!-- <el-button plain size="small" @click="getCallPopClick">Click</el-button> -->
 
             </el-col>
@@ -138,7 +140,13 @@
             v-loading="fullscreenLoading"
             :row-class-name="tableRowClassName"
             style="width: 100%"
+            ref="tableSelect"
             >
+
+            <el-table-column
+              type="selection"
+              width="45">
+            </el-table-column>
 
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
                 <template slot-scope="scope">
@@ -583,15 +591,40 @@ export default {
         release(scope) {
             let arr = [];
             arr.push(scope.userCDARUuid);
+            this.clueDataRelease(arr);
+        },
+        clueDataReleaseAllClick() {
+            let arr = [];
+            this.$refs.tableSelect.selection.map(sll => {
+                arr.push(sll.userCDARUuid);
+            });
+            if(arr.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要释放的数据'
+                })
+            }else{
+                this.clueDataRelease(arr);
+            }
+        },
+        clueDataRelease(arr) {
             this.$smoke_post(clueDataRelease, {
                 list: arr
             }).then(res => {
                 if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '释放数据成功'
-                    })
-                    this.getClueDataAll();
+                    if(res.data.result){
+                        this.$message({
+                            type: 'success',
+                            message: res.data.msg + '，提交的线索数量' + res.data.submitSize + '条' + '，实际获取的线索数量' + res.data.releaseSize + '条'
+                        });
+                        this.getClueDataAll();
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.data.msg
+                        });
+                        this.getClueDataAll();
+                    }
                 }else{
                     this.$message({
                         type: 'error',

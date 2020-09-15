@@ -162,7 +162,7 @@
             <el-table-column
                 :prop="item.prop"
                 :label="item.label"
-                :show-overflow-tooltip="item.prop == 'notes' ? true : false"
+                :show-overflow-tooltip="item.prop == 'notes' ? true : item.prop == 'referencePage' ? true : false"
                 v-for="(item, index) in columnList"
                 :min-width="item.width"
                 :key="index">
@@ -317,6 +317,7 @@ export default {
               { 'prop': 'spread', 'label': '来源渠道', 'width': 120 },
               { 'prop': 'acc', 'label': '推广账号', 'width': 120 },
               { 'prop': 'exteName', 'label': '推广人' },
+              { 'prop': 'referencePage', 'label': '推广落地页', 'width': 150 },
               { 'prop': 'isAllocation', 'label': '是否分配' },
               { 'prop': 'dialState', 'label': '是否拨打' },
               { 'prop': 'createTime', 'label': '入库时间', 'width': 140  },
