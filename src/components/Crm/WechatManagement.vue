@@ -143,7 +143,7 @@ export default {
       props: {
         value: 'uuid',
         label: 'name',
-        children: 'list',
+        children: 'includeSubsetList',
         multiple: true,
         checkStrictly: true
       },
@@ -190,7 +190,7 @@ export default {
         if(res.code == 200){
           this.loading = false
           this.list = res.data.list
-          this.countVO = res.data.countVO
+          this.countVO = res.data.countVO || 0;
           this.searchForm.total = res.data.total
         }
       })
