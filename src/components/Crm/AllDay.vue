@@ -121,14 +121,13 @@
 
                 <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
-                <el-button plain style="margin-left: 10px;" size="small" @click="clueDataReleaseAllClick">全部释放</el-button>
-
                 <!-- <el-button plain size="small" @click="getCallPopClick">Click</el-button> -->
 
             </el-col>
             
             <el-col :span="5">
-                <svg-icon class="border-icon" @click="editFieldHandle" style="float: right;" icon-title="表头管理" icon-class="field" />
+                <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                <svg-icon class="border-icon smoke-fr" @click="clueDataReleaseAllClick" icon-title="释放数据" icon-class="release-grey" />
             </el-col>
             
         </el-row>
@@ -347,9 +346,9 @@ export default {
             examItem: '',
             userCDARUuid: '',
 
-            callpopFlag: false,
-            call_state: '',
-            caller_number: '',
+            callpopFlag: true,
+            call_state: '响 铃 中',
+            caller_number: '13718195083',
 
             enumList: {},
             fullscreenLoading: false,
@@ -365,6 +364,7 @@ export default {
             tag_id: '',
             tag_name: '',
             tag_flag: false,
+            tag_gonghai_flag: false,
             SeatWorkObj: {},
         }
     },
@@ -412,6 +412,7 @@ export default {
         },
         tagClick(item){
             this.tag_flag = false;
+            this.tag_gonghai_flag = false;
             if(this.tag_id == item.id) {
                 this.tag_id = '';
                 this.tag_name = '';
@@ -526,6 +527,7 @@ export default {
             this.form.receiveEndTime = obj.receiveEndTime;
             if(this.tag_id == 6) {
                 this.form.dataType = 2;
+                this.tag_gonghai_flag = true;
                 this.geSeatWork();
             }else if(this.tag_id == ''){
                 this.form.dataType = '';
@@ -595,16 +597,23 @@ export default {
         },
         clueDataReleaseAllClick() {
             let arr = [];
-            this.$refs.tableSelect.selection.map(sll => {
-                arr.push(sll.userCDARUuid);
-            });
-            if(arr.length == 0) {
+            if(this.tag_gonghai_flag) {
+                this.$refs.tableSelect.selection.map(sll => {
+                    arr.push(sll.userCDARUuid);
+                });
+                if(arr.length == 0) {
+                    this.$message({
+                        type: 'error',
+                        message: '请您先勾选您要释放的数据'
+                    })
+                }else{
+                    this.clueDataRelease(arr);
+                }
+            }else{
                 this.$message({
                     type: 'error',
-                    message: '请您先勾选您要释放的数据'
+                    message: '请您先查询公海领取的数据'
                 })
-            }else{
-                this.clueDataRelease(arr);
             }
         },
         clueDataRelease(arr) {
