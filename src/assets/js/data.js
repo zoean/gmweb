@@ -2,6 +2,11 @@ export let pass_word = /^(\w){6,12}$/; //密码必须由6-12位数字或者字�
 
 export const phone_vailData = /^1\d{10}$/;
 
+//正式
+export const wechatOrgUuidProd = 'e8a5d18f191c4ea09e888ff9dfdc565c';
+//测试
+export const wechatOrgUuidTest = '9549125d9a2f4aedb8768d701eb643f5';
+
 export const columnListYes = [
     { 'prop': 'orgName', 'label': '统计单元' },
     { 'prop': 'title0', 'label': '0--1' },

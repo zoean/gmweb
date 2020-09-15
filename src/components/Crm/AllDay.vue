@@ -624,7 +624,7 @@ export default {
                     if(res.data.result){
                         this.$message({
                             type: 'success',
-                            message: res.data.msg + '，提交的线索数量' + res.data.submitSize + '条' + '，实际获取的线索数量' + res.data.releaseSize + '条'
+                            message: res.data.msg + '，提交的线索数量' + res.data.submitSize + '条' + '，实际释放的线索数量' + res.data.releaseSize + '条'
                         });
                         this.getClueDataAll();
                     }else{
