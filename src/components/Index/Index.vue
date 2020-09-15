@@ -184,6 +184,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+body{
+    zoom: 1;
+    transform: scale(1);
+    -moz-transform: scale(1);
+    transform-origin: 'center top';
+}
 .main-area{
     width: 100%;
     display: flex;
