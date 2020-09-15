@@ -4,6 +4,16 @@
     </el-page-header>
 
     <el-timeline>  
+      <el-timeline-item timestamp="v 1.1.18 -- 2020/09/15" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、优化通话弹窗UI</p>
+          <p>2、全部客户新增公海数据批量释放功能</p>
+          <p>3、主管线索和个人线索页面新增推广落地页字段</p>
+          <p>4、微信管理页面组织架构筛选替换筛选项</p>
+          <p>5、新增南昌分校</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.17 -- 2020/09/11" placement="top">
         <el-card>
           <h4>新增功能</h4>
