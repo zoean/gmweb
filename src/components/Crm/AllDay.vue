@@ -346,9 +346,9 @@ export default {
             examItem: '',
             userCDARUuid: '',
 
-            callpopFlag: true,
-            call_state: '响 铃 中',
-            caller_number: '13718195083',
+            callpopFlag: false,
+            call_state: '',
+            caller_number: '',
 
             enumList: {},
             fullscreenLoading: false,
