@@ -2,7 +2,7 @@
     <el-main class="index-main enterClues">
         <el-tabs v-model="activeName" @tab-click="handleTabsClick">
 
-            <el-tab-pane label="手动录入" name="first" v-loading="fullscreenLoading">
+            <el-tab-pane label="手动录入" name="first">
 
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
 
@@ -208,7 +208,7 @@
 
             </el-tab-pane>
 
-            <el-tab-pane label="模板录入" name="second">
+            <el-tab-pane label="模板录入" name="second" v-loading="loading" element-loading-text="线索导入中...">
 
                 <el-upload
                     style="width: 130px; display: inline-block;"
@@ -434,7 +434,8 @@ export default {
             validDataNumFlag: false,
             fullscreenLoading: false,
             fullscreenLoadingTable: false,
-            readExcelClueData: readExcelClueData
+            readExcelClueData: readExcelClueData,
+            loading: false
         }
     },
     created() {
@@ -479,6 +480,7 @@ export default {
             }
         },
         handleAvatarSuccess(res, file) {
+            this.loading = false
             let num1 = 0;
             let num2 = 0;
             let str = '';
@@ -664,6 +666,7 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
+            this.loading = true
             // console.log(file);
         },
     },
