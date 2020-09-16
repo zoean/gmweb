@@ -4,6 +4,15 @@
     </el-page-header>
 
     <el-timeline>  
+      <el-timeline-item timestamp="v 1.1.19 -- 2020/09/16" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、优化login登录页</p>
+          <p>2、优化销售看板在Safari浏览器下的布局兼容性问题</p>
+          <h4>修复bug</h4>
+          <p>1、修复了首咨释放功能</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.18 -- 2020/09/15" placement="top">
         <el-card>
           <h4>新增功能</h4>
