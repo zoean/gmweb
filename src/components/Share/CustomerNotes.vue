@@ -33,8 +33,12 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="最近联系" prop="callLastTime">
-                                    <el-input v-model="ruleForm.callLastTime" readonly size="small" class="borderNone"></el-input>
+                                <el-form-item label="所在省市" prop="provinceCity">
+
+                                    <area-cascader type="text" placeholder="请选择地区" v-model="ruleForm.provinceCity" @change="cityChange" :data="pcaa" v-if="!routePathFlag"></area-cascader>
+
+                                    <el-input v-model="ruleForm.provinceCity" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''" v-if="routePathFlag"></el-input>
+
                                 </el-form-item>
                             </el-col>
 
@@ -50,6 +54,12 @@
                         </el-row>
 
                         <el-row>
+
+                            <el-col :span="6">
+                                <el-form-item label="最近联系" prop="callLastTime">
+                                    <el-input v-model="ruleForm.callLastTime" readonly size="small" class="borderNone"></el-input>
+                                </el-form-item>
+                            </el-col>
 
                             <el-col :span="6">
                                 <el-form-item label="客户姓名" prop="name">
@@ -88,15 +98,6 @@
                                           :value="item.number">
                                         </el-option>
                                     </el-select>
-
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="6">
-                                <el-form-item label="所在省市" prop="provinceCity">
-
-                                    <area-cascader type="text" placeholder="请选择地区" v-model="ruleForm.provinceCity" @change="cityChange" :data="pcaa" v-if="!routePathFlag"></area-cascader>
-
-                                    <el-input v-model="ruleForm.provinceCity" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''" v-if="routePathFlag"></el-input>
 
                                 </el-form-item>
                             </el-col>
