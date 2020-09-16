@@ -66,15 +66,14 @@ export default {
                         password: this.password
                     }).then(res => {
                         if(res.code == 200){
-                            this.$store.dispatch('actionsSetCommonFlag', true);                        
                             localStorage.setItem("jhToken", res.data.token);
                             this.getUserLoginMessage();
                             document.onkeydown = undefined;
                             setTimeout(() => {
+                            	this.$store.dispatch('actionsSetCommonFlag', true);                        
                                 this.fullscreenLoading = false;
                                 this.$router.push({ path: '/'});
                             }, 2500);
-    
                         }else{
                             setTimeout(() => {
                                 this.fullscreenLoading = false;

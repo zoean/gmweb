@@ -64,10 +64,10 @@
         <div class="board-details" v-loading="fullscreenLoadingBoard">
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_all.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">今日流水 (￥)</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_all.png')" alt=""/>
+                    <span class="left_item">今日流水 (￥)</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayEntry}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry}}</div>
@@ -76,10 +76,10 @@
             </div>
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_1.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">今日首咨/机会</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_1.png')" alt=""/>
+                    <span class="left_item">今日首咨/机会</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayFirstCon}}/{{dataJson.todayChance}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekFirstCon}} / {{dataJson.thisWeekChance}}</div>
@@ -88,10 +88,10 @@
             </div>
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_2.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">今日回访（2-3天数据/3天以上数据）</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_2.png')" alt=""/>
+                    <span class="left_item">今日回访（2-3天数据/3天以上数据）</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayReturnVisit1}}/{{dataJson.todayReturnVisit2}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekReturnVisit1}} / {{dataJson.thisWeekReturnVisit2}}</div>
@@ -100,10 +100,10 @@
             </div>
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_3.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">今日通话时长</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_3.png')" alt=""/>
+                    <span class="left_item">今日通话时长</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayTalkTime}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周平均时长 {{dataJson.thisWeekTalkTime}}</div>
@@ -420,6 +420,29 @@ export default {
                 &:last-of-type{
                     border-right: none !important;
                 }
+                .left_item {
+                    height: 100%;
+                    margin-left: 8px;
+                    display: inline-block;
+                    box-sizing: border-box;
+                    vertical-align: middle; }                  
+
+                .right_item {
+                    height: 100%;
+                    display: inline-block;
+                    box-sizing: border-box;
+                    vertical-align: middle; }                  
+
+                .item_img{
+                    width: 20px;
+                    height: 20px; }                
+
+                li {
+                    width: 100%;
+                    vertical-align: middle;
+                    box-sizing: border-box;
+                    margin-top: 10px;
+                    display: block; }
             }
         }
     }

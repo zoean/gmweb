@@ -89,7 +89,8 @@ export default {
             tableData: [],
             columnList: [
                 { props: 'userName', label: '已选组员'},
-                { props: 'userUin', label: '主JQ账号'},
+                // { props: 'userUin', label: '主JQ账号'},
+                { props: 'toDayTotal', label: '今日已分'},
                 { props: 'limitLimitTotal', label: '他组上限'},
             ],
             uuid: '',
