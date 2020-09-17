@@ -400,10 +400,10 @@ export default {
 <style lang="less" scoped>
     .index-main{
         position: relative;
+        overflow-y: hidden;
         .el-col-6{
             height: auto !important;
         }
-        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
