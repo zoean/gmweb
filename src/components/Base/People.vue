@@ -179,7 +179,7 @@ export default {
             dataPermiss: null,
             exportPeople: null,
             hideSearch: false,
-            tableHeight: 0
+            tableHeight: document.documentElement.clientHeight - 226
         }
     },
     created() {     
@@ -393,6 +393,31 @@ export default {
         }
     },
     mounted() {
+        const paginationHeight = document.getElementById('pagination').offsetHeight,
+            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
+            windowHeight = document.documentElement.clientHeight;
+            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+            const maxHeight = this.tableHeight + searchAreaHeight + 10;
+            const minHeight = this.tableHeight;
+            console.log(maxHeight)
+            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
+            tableList.addEventListener('scroll', _.throttle(() =>{
+                // console.log(tableList.scrollTop)
+                if(tableList.scrollTop > 55){
+                    this.hideSearch = true
+                    if(this.tableHeight < maxHeight){
+                       this.tableHeight = maxHeight
+                    }
+                    // console.log('收起搜索', this.tableHeight)
+                }
+                if(tableList.scrollTop < 55){
+                    this.hideSearch = false 
+                    if(this.tableHeight >= maxHeight){                   
+                        this.tableHeight = minHeight 
+                    }                    
+                    // console.log('展开搜索', this.tableHeight)
+                }
+            }), 500)
     }
 }
 </script>
@@ -400,7 +425,7 @@ export default {
 <style lang="less" scoped>
     .index-main{
         position: relative;
-        overflow-y: hidden;
+        /* overflow-y: hidden; */
         .el-col-6{
             height: auto !important;
         }
