@@ -89,8 +89,9 @@
 </el-main>
 </template>
 <script>
-import {clTeaOrgFilterBox, wxNumList, upWxNum} from '@/request/api';
+import {getOrgSubsetByUuid, wxNumList, upWxNum} from '@/request/api';
 import {sortTextNum} from '@/assets/js/common';
+import {wechatOrgUuidProd, wechatOrgUuidTest} from '@/assets/js/data'
 export default {
   data() {
     var validateNumber = (rule, value, callback) => {
@@ -142,7 +143,7 @@ export default {
       props: {
         value: 'uuid',
         label: 'name',
-        children: 'list',
+        children: 'includeSubsetList',
         multiple: true,
         checkStrictly: true
       },
@@ -162,7 +163,7 @@ export default {
   },
   created(){
     this.getWxNumList()
-    this.clTeaOrgFilterBox()
+    this.getOrgSubsetByUuid()
     this.searchForm.userUuid = localStorage.getItem('userUuid')
     this.buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
   },
@@ -189,7 +190,7 @@ export default {
         if(res.code == 200){
           this.loading = false
           this.list = res.data.list
-          this.countVO = res.data.countVO
+          this.countVO = res.data.countVO || 0;
           this.searchForm.total = res.data.total
         }
       })
@@ -198,8 +199,17 @@ export default {
       this.searchForm.startTime = this.dateRange ? this.dateRange[0] : ''
       this.searchForm.endTime =this.dateRange ? this.dateRange[1] : ''
     },
-    clTeaOrgFilterBox() {
-      this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
+    getOrgSubsetByUuid() {
+      console.log(process.env.VUE_APP_GM_JHWX);
+      let uuid = '';
+      if(process.env.VUE_APP_GM_JHWX == 'https://testgm.jhwx.com'){
+        uuid = wechatOrgUuidTest;
+      }else{
+        uuid = wechatOrgUuidProd;
+      }
+      this.$smoke_post(getOrgSubsetByUuid, {
+        uuid: uuid
+      }).then(res => {
         if(res.code == 200) {
           this.orgOptions = res.data;
         }

@@ -1,11 +1,7 @@
 <template>
     <div class="callpop" v-if="callpopFlag_">
         <div v-dragable class="callpop_div">
-          <div class="dialog_header">
-             <span>通话弹框</span>
-             <i class="el-icon-close" @click="handleClose"></i> 
-          </div>
-          <div class="dialog_kuang">
+          <div class="dialog_kuang dialog_header">
               <div>{{caller_number_}}</div>
               <div>
                 <el-image
@@ -117,50 +113,36 @@ export default {
         left: 50%;
         margin-left: -200px;
         .callpop_div{
-            width: 360px;
-            height: 330px;
+            width: 223px;
+            height: 196px;
             position: fixed;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
             background: #fff;
             // left: 40% !important;
             z-index: 999999;
             user-select: none;
-            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-            border-radius: 4px;
+            border-radius: 20px;
             border: 1px solid #ebeef5;
-            .dialog_header{
-                width: 100%;
-                height: 48px;
-                line-height: 54px;
-                border-bottom: 1px solid #ebeef5;
-                font-size: 16px;
-                padding-left: 20px;
-                i{
-                    float: right;
-                    margin-top: 16px;
-                    font-size: 20px;
-                    margin-right: 16px;
-                    cursor: pointer;
-                }
-            }
             .dialog_kuang{
                 width: 223px;
-                height: 180px;
+                height: 150px;
                 background: #FFFFFF;
                 border-radius: 20px;
                 margin: 0 auto;
-                margin-top: 20px;
-                font-size: 22px;
+                margin-top: 10px;
+                font-size: 16px;
                 color: #333;
                 text-align: center;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
+                // font-weight: bold;
             }
             .dialog_kuang_li{
-                margin-top: 10px;
-                font-size: 22px;
+                font-size: 16px;
                 color: #333;
                 text-align: center;
+                // font-weight: bold;
             }
         }
     }

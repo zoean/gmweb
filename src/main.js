@@ -33,11 +33,6 @@ Vue.prototype.$smoke_post = smoke_post;
 
 Vue.config.productionTip = false
 
-// 移动dialogDrag
-Vue.directive('dialogDrag', {
-    
-})
-
 //路由守卫
 router.beforeEach((to, from, next) => {
 

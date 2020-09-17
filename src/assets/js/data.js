@@ -2,6 +2,11 @@ export let pass_word = /^(\w){6,12}$/; //密码必须由6-12位数字或者字�
 
 export const phone_vailData = /^1\d{10}$/;
 
+//正式
+export const wechatOrgUuidProd = 'e8a5d18f191c4ea09e888ff9dfdc565c';
+//测试
+export const wechatOrgUuidTest = '9549125d9a2f4aedb8768d701eb643f5';
+
 export const columnListYes = [
     { 'prop': 'orgName', 'label': '统计单元' },
     { 'prop': 'title0', 'label': '0--1' },
@@ -43,13 +48,13 @@ export const columnListNo = [
 ]
 
 export const everyTimeList = [
-    { 'prop': 'callerId', 'label': '客户电话' },
-    { 'prop': 'callerArea', 'label': '客户归属' },
-    { 'prop': 'calledId', 'label': '拨打人电话' },
-    { 'prop': 'seatName', 'label': '拨打人姓名' },
-    { 'prop': 'seatOrgName', 'label': '拨打人部门' },
+    { 'prop': 'callerId', 'label': '客户电话', 'width': 100 },
+    { 'prop': 'callerArea', 'label': '客户归属', 'width': 140 },
+    { 'prop': 'calledId', 'label': '拨打人电话', 'width': 100 },
+    { 'prop': 'seatName', 'label': '拨打人姓名', 'width': 100 },
+    { 'prop': 'seatOrgName', 'label': '拨打人部门', 'width': 120 },
     { 'prop': 'callStyle', 'label': '拨打方式' },
-    { 'prop': 'insertTime', 'label': '拨打时间', 'width': 100 },
+    { 'prop': 'insertTime', 'label': '拨打时间', 'width': 140 },
     { 'prop': 'isCalledPhone', 'label': '是否接通' },
     { 'prop': 'duration', 'label': '通话时长' },
     // { 'prop': 'dealState', 'label': '处理状态' },

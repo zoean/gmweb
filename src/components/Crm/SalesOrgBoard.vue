@@ -64,10 +64,10 @@
         <div class="board-details" v-loading="fullscreenLoadingBoard">
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_all.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">今日流水 (￥)</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_all.png')" alt=""/>
+                    <span class="left_item">今日流水 (￥)</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayEntry}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.thisWeekEntry}}</div>
@@ -76,10 +76,10 @@
             </div>
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_1.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">今日人均首咨</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_1.png')" alt=""/>
+                    <span class="left_item">今日人均首咨</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.todayFirstAverage}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 30%; display: inline-block; border-right: 1px solid #E9E9E9;">人均机会 {{dataJson.todayChanceAverage}}</div>
@@ -88,10 +88,10 @@
             </div>
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_2.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">高意向率</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_2.png')" alt=""/>
+                    <span class="left_item">高意向率</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.highIntentionNum_thisDayFirstCon}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">本周 {{dataJson.weekHighIntention_thisWeekFirstCon}}</div>
@@ -100,10 +100,10 @@
             </div>
 
             <div class="target-four">
-                <div>
-                    <el-image style="width: 20px; height: 20px" :src="require('../../assets/images/board_3.png')"></el-image>
-                    <span style="position: relative; top: -5px; left: 8px;">出勤/通话人数</span>
-                </div>
+                <li>
+                    <img class="right_item item_img" :src="require('../../assets/images/board_3.png')" alt=""/>
+                    <span class="left_item">出勤/通话人数</span>
+                </li>
                 <div style="font-size: 28px; color: #333333; margin-top: 6px;">{{dataJson.attendanceNum}}/{{dataJson.callUserNum}}</div>
                 <div style="height: 42px; background: #F7F9FA; padding-top: 12px; border:1px solid rgba(233,233,233,1); border-left: none; border-right: none; position: absolute; width: 100%; bottom: 0;">
                     <div style="width: 50%; display: inline-block; border-right: 1px solid #E9E9E9;">人均拨打 {{dataJson.userCallAverageNum}}</div>
@@ -456,6 +456,29 @@ export default {
                 &:last-of-type{
                     border-right: none !important;
                 }
+                .left_item {
+                    height: 100%;
+                    margin-left: 8px;
+                    display: inline-block;
+                    box-sizing: border-box;
+                    vertical-align: middle; }                  
+
+                .right_item {
+                    height: 100%;
+                    display: inline-block;
+                    box-sizing: border-box;
+                    vertical-align: middle; }                  
+
+                .item_img{
+                    width: 20px;
+                    height: 20px; }                
+
+                li {
+                    width: 100%;
+                    vertical-align: middle;
+                    box-sizing: border-box;
+                    margin-top: 10px;
+                    display: block; }
             }
         }
     }

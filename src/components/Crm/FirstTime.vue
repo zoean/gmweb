@@ -269,11 +269,19 @@ export default {
                 list: arr
             }).then(res => {
                 if(res.code == 200) {
-                    this.$message({
-                        type: 'success',
-                        message: '释放数据成功'
-                    })
-                    this.firstConDataList();
+                    if(res.data.result){
+                        this.$message({
+                            type: 'success',
+                            message: '释放成功，提交的线索数量' + res.data.submitSize + '条' + '，实际释放的线索数量' + res.data.releaseSize + '条'
+                        });
+                        this.firstConDataList();
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.data.msg
+                        });
+                        this.firstConDataList();
+                    }
                 }else{
                     this.$message({
                         type: 'error',
