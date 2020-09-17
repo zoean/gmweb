@@ -126,8 +126,8 @@
 <script>
 import { getUserDetailedList, getRoleList, getOrgSubsetByUuid, exportUserDetailedList } from '../../request/api';
 import { getTextByJs, getTextByState, sortTextNum } from '../../assets/js/common'
-import _ from 'lodash';
-// import { add } from 'lodash/fp';
+import _ from 'lodash'
+import { add } from 'lodash/fp';
 export default {
     name: 'people',
     data() {
@@ -179,30 +179,35 @@ export default {
             dataPermiss: null,
             exportPeople: null,
             hideSearch: false,
-            tableHeight: 712
+            tableHeight: 0
         }
     },
-    created() { 
-        // const addOne = add(1);
-        console.log(_);      
+    created() {     
         this.$nextTick(() => {
             const paginationHeight = document.getElementById('pagination').offsetHeight,
-        searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-        windowHeight = document.documentElement.clientHeight;
-        console.log(paginationHeight, searchAreaHeight, windowHeight)
-        this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
+            windowHeight = document.documentElement.clientHeight;
+            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+            const maxHeight = this.tableHeight + searchAreaHeight + 10;
+            const minHeight = this.tableHeight;
             const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-            tableList.addEventListener('scroll', () =>{
+            tableList.addEventListener('scroll', _.throttle(() =>{
                 // console.log(tableList.scrollTop)
                 if(tableList.scrollTop > 55){
                     this.hideSearch = true
-                    // this.tableHeight += 10
+                    if(this.tableHeight < maxHeight){
+                       this.tableHeight = maxHeight
+                    }
+                    // console.log('收起搜索', this.tableHeight)
                 }
                 if(tableList.scrollTop < 55){
-                    this.hideSearch = false
-                    // this.tableHeight += 10
+                    this.hideSearch = false 
+                    if(this.tableHeight >= maxHeight){                   
+                        this.tableHeight = minHeight 
+                    }                    
+                    // console.log('展开搜索', this.tableHeight)
                 }
-            })
+            }), 500)
         })
         this.getUserDetailedList();
         this.getRoleList();
@@ -388,10 +393,7 @@ export default {
         }
     },
     mounted() {
-    },
-    directives: {
-        'sticky': VueSticky,
-    },
+    }
 }
 </script>
 
