@@ -260,12 +260,6 @@ export default {
   mounted() {}
 };
 </script>
-<style>
-.el-table{ 
-  width:99.9%; 
-  /*width: 100%!important;*/ 
-}
-</style>
 <style lang="less" scoped>
 .index-main {
   height: calc(100vh - 60px);

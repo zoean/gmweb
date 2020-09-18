@@ -75,7 +75,7 @@ import countTo from 'vue-count-to';
 export default {
     name: 'index',
     components: {
-        countTo
+        countTo,
     },
     // metaInfo: {
     //     title: '首页',
@@ -115,7 +115,10 @@ export default {
         }
     },
     created() {
-        this.getUinOutConfigMessage();
+        this.getUinOutConfigMessage()
+        setInterval(() => {
+            this.getUinOutConfigMessage();
+        }, 3600000);
         this.getSeatDataVolume();
     },
     methods: {
@@ -136,6 +139,18 @@ export default {
                     this.form.appId = res.data.appId;
                     this.form.serverUrl = res.data.serverUrl;
                     this.form.uin = res.data.uin;
+
+                    var demo = browserfly.noConflict();
+                    var initOptions = {
+		                debug: true, // 日志是否输出 default false
+  		                strid: '',
+  		                uin: this.form.uin , // tq号 / 用户名 必填
+  		                admin_uin: this.form.adminUin , // 主管理员TQ号
+  		                appid: this.form.appId, // 唯一凭证
+  		                access_token: this.form.accessToken, // 密文
+  		                server_url: this.form.serverUrl
+                    };
+                    demo.init(initOptions);
     
                     localStorage.setItem("initOptions", JSON.stringify(this.form));
                 }

@@ -21,7 +21,7 @@ export default {
   data() {
     return{
       isNormalPage: false,
-      unNormalPage: ['/login', '/'],
+      unNormalPage: ['/login', '/', '/forget'],
       paddingClass: '',
     }
   },
