@@ -191,6 +191,9 @@ a:link,a:active,a:visited,a:hover {
     height: 44px !important;
     line-height: 44px !important;
 }
+.el-submenu__title{
+    min-width: 175px;
+}
 
 .el-form-item{
     margin-bottom: 12px !important;
