@@ -67,12 +67,18 @@
             </el-row>
             <div>
                 <div>
-                    <el-table
+                    <!-- <el-table
                     id="tableList"
                     :data="userList"
                     @sort-change="sortChange"
                     v-loading="fullscreenLoading"
                     :height="tableHeight"
+                    > -->
+                    <el-table
+                    id="tableList"
+                    :data="userList"
+                    @sort-change="sortChange"
+                    v-loading="fullscreenLoading"
                     >
                     <el-table-column
                         :prop="item.prop"
@@ -183,32 +189,32 @@ export default {
         }
     },
     created() {     
-        this.$nextTick(() => {
-            const paginationHeight = document.getElementById('pagination').offsetHeight,
-            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-            windowHeight = document.documentElement.clientHeight;
-            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
-            const maxHeight = this.tableHeight + searchAreaHeight + 10;
-            const minHeight = this.tableHeight;
-            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-            tableList.addEventListener('scroll', _.throttle(() =>{
-                // console.log(tableList.scrollTop)
-                if(tableList.scrollTop > 55){
-                    this.hideSearch = true
-                    if(this.tableHeight < maxHeight){
-                       this.tableHeight = maxHeight
-                    }
-                    // console.log('收起搜索', this.tableHeight)
-                }
-                if(tableList.scrollTop < 55){
-                    this.hideSearch = false 
-                    if(this.tableHeight >= maxHeight){                   
-                        this.tableHeight = minHeight 
-                    }                    
-                    // console.log('展开搜索', this.tableHeight)
-                }
-            }), 500)
-        })
+        // this.$nextTick(() => {
+        //     const paginationHeight = document.getElementById('pagination').offsetHeight,
+        //     searchAreaHeight = document.getElementById('searchArea').offsetHeight,
+        //     windowHeight = document.documentElement.clientHeight;
+        //     this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+        //     const maxHeight = this.tableHeight + searchAreaHeight + 10;
+        //     const minHeight = this.tableHeight;
+        //     const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
+        //     tableList.addEventListener('scroll', _.throttle(() =>{
+        //         // console.log(tableList.scrollTop)
+        //         if(tableList.scrollTop > 55){
+        //             this.hideSearch = true
+        //             if(this.tableHeight < maxHeight){
+        //                this.tableHeight = maxHeight
+        //             }
+        //             // console.log('收起搜索', this.tableHeight)
+        //         }
+        //         if(tableList.scrollTop < 55){
+        //             this.hideSearch = false 
+        //             if(this.tableHeight >= maxHeight){                   
+        //                 this.tableHeight = minHeight 
+        //             }                    
+        //             // console.log('展开搜索', this.tableHeight)
+        //         }
+        //     }), 500)
+        // })
         this.getUserDetailedList();
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -393,31 +399,31 @@ export default {
         }
     },
     mounted() {
-        const paginationHeight = document.getElementById('pagination').offsetHeight,
-            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-            windowHeight = document.documentElement.clientHeight;
-            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
-            const maxHeight = this.tableHeight + searchAreaHeight + 10;
-            const minHeight = this.tableHeight;
-            console.log(maxHeight)
-            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-            tableList.addEventListener('scroll', _.throttle(() =>{
-                // console.log(tableList.scrollTop)
-                if(tableList.scrollTop > 55){
-                    this.hideSearch = true
-                    if(this.tableHeight < maxHeight){
-                       this.tableHeight = maxHeight
-                    }
-                    // console.log('收起搜索', this.tableHeight)
-                }
-                if(tableList.scrollTop < 55){
-                    this.hideSearch = false 
-                    if(this.tableHeight >= maxHeight){                   
-                        this.tableHeight = minHeight 
-                    }                    
-                    // console.log('展开搜索', this.tableHeight)
-                }
-            }), 500)
+        // const paginationHeight = document.getElementById('pagination').offsetHeight,
+        //     searchAreaHeight = document.getElementById('searchArea').offsetHeight,
+        //     windowHeight = document.documentElement.clientHeight;
+        //     this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+        //     const maxHeight = this.tableHeight + searchAreaHeight + 10;
+        //     const minHeight = this.tableHeight;
+        //     console.log(maxHeight)
+        //     const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
+        //     tableList.addEventListener('scroll', _.throttle(() =>{
+        //         // console.log(tableList.scrollTop)
+        //         if(tableList.scrollTop > 55){
+        //             this.hideSearch = true
+        //             if(this.tableHeight < maxHeight){
+        //                this.tableHeight = maxHeight
+        //             }
+        //             // console.log('收起搜索', this.tableHeight)
+        //         }
+        //         if(tableList.scrollTop < 55){
+        //             this.hideSearch = false 
+        //             if(this.tableHeight >= maxHeight){                   
+        //                 this.tableHeight = minHeight 
+        //             }                    
+        //             // console.log('展开搜索', this.tableHeight)
+        //         }
+        //     }), 500)
     }
 }
 </script>
