@@ -23,6 +23,7 @@ export default {
       isNormalPage: false,
       unNormalPage: ['/login', '/', '/forget'],
       paddingClass: '',
+      initOptions: {}
     }
   },
   created() {
@@ -30,6 +31,20 @@ export default {
       this.$store.dispatch('actionsSetCommonFlag', false);
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
+    }
+    this.initOptions = JSON.parse(localStorage.getItem('initOptions'));
+    if(this.initOptions) {
+      var demo = browserfly.noConflict();
+      var initOptions = {
+		    debug: true, // 日志是否输出 default false
+  		  strid: '',
+  		  uin: this.initOptions.uin , // tq号 / 用户名 必填
+  		  admin_uin: this.initOptions.adminUin , // 主管理员TQ号
+  		  appid: this.initOptions.appId, // 唯一凭证
+  		  access_token: this.initOptions.accessToken, // 密文
+  		  server_url: this.initOptions.serverUrl
+      };
+      demo.init(initOptions);
     }
   },
   watch:{

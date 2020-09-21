@@ -183,7 +183,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="140" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="110" class-name="table_active">
                 <template slot-scope="scope">
                 <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                 <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
@@ -198,7 +198,7 @@
                   >
                 <svg-icon slot="reference" icon-title="释放数据" icon-class="release" />
                   </el-popconfirm>
-                    <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                    <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
                     <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
               </template>
             </el-table-column>
@@ -221,6 +221,11 @@
         <CustomerNotes 
             v-if="drawer"
             @changeDrawer="changeDrawer"
+            @phoneCopy="phoneCopy"
+            @phoneOut='phoneOut'
+            @seatOut='seatOut'
+            @release='release'
+            :scopeRow='scopeRow'
             :followFlag='followFlag' 
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
@@ -330,6 +335,7 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+            scopeRow: {},
 
             enumList: {},
             fullscreenLoading: false,
@@ -475,6 +481,7 @@ export default {
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
             this.examItem = row.examItemId;
+            this.scopeRow = row;
         },
         changeDrawer(val){
             this.drawer = val;
