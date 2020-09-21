@@ -316,12 +316,12 @@ a:link,a:active,a:visited,a:hover {
 
 .el-main{
     padding: 12px;
-    padding-bottom: 30px;
+    /* padding-bottom: 30px; */
     background: #fff;
     margin: 16px;
     height: calc(100vh - 92px) !important;
     overflow-y: scroll;
-    min-width: 700px;
+    min-width: 980px;
 }
 
 .el-menu--collapse  .el-submenu__title span{

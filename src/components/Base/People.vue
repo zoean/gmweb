@@ -1,125 +1,133 @@
 <template>
-    <el-main class="index-main">
-        <el-row class="people-screen">
-            <el-col :span="3">
-                <el-cascader
-                    size="small"
-                    ref="cascader"
-                    class="screen-li"
-                    placeholder="选择组织架构"
-                    :show-all-levels=false
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList' }"
-                    clearable>
-                </el-cascader>
-            </el-col>
-            <el-col :span="3">
-                <el-select v-model="roleUuidText" placeholder="请选择角色" size="small" @change='handleRoleUuidChange' class="screen-li" clearable>
-                    <el-option
-                      v-for="item in roleOptions"
-                      :key="item.uuid"
-                      :label="item.name"
-                      :value="item.uuid">
-                    </el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="3">
-                <el-select v-model="jobStatusText" placeholder="选择员工状态" size="small" @change='handleJobStatusChange' class="screen-li" clearable>
-                    <el-option
-                      v-for="item in jobStatusOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="6">
-                <el-date-picker
-                    clearable
-                    style="width: 97%"
-                    size="small"
-                    v-model="dataPicker"
-                    :default-time="['00:00:00', '23:59:59']"
-                    type="daterange"
-                    range-separator="至"
-                    @change="datePickerChange"
-                    start-placeholder="入职时间"
-                    end-placeholder="入职时间">
-                </el-date-picker>
-            </el-col>
+    
+    <el-main class="index-main" id="indexMain">
+            <el-row class="people-screen" id="searchArea" :style="hideSearch ? 'display: none' : 'display: block'">
+                <el-col :span="3">
+                    <el-cascader
+                        size="small"
+                        ref="cascader"
+                        class="screen-li"
+                        placeholder="选择组织架构"
+                        :show-all-levels=false
+                        :options="zuzhiOptions"
+                        @change='handleZuzhiChange'
+                        :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList' }"
+                        clearable>
+                    </el-cascader>
+                </el-col>
+                <el-col :span="3">
+                    <el-select v-model="roleUuidText" placeholder="请选择角色" size="small" @change='handleRoleUuidChange' class="screen-li" clearable>
+                        <el-option
+                        v-for="item in roleOptions"
+                        :key="item.uuid"
+                        :label="item.name"
+                        :value="item.uuid">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col :span="3">
+                    <el-select v-model="jobStatusText" placeholder="选择员工状态" size="small" @change='handleJobStatusChange' class="screen-li" clearable>
+                        <el-option
+                        v-for="item in jobStatusOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col :span="6">
+                    <el-date-picker
+                        clearable
+                        style="width: 97%"
+                        size="small"
+                        v-model="dataPicker"
+                        :default-time="['00:00:00', '23:59:59']"
+                        type="daterange"
+                        range-separator="至"
+                        @change="datePickerChange"
+                        start-placeholder="入职时间"
+                        end-placeholder="入职时间">
+                    </el-date-picker>
+                </el-col>
 
-            <el-col :span="3">
-                <el-input v-model="screenForm.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
-            </el-col>
+                <el-col :span="3">
+                    <el-input v-model="screenForm.name" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+                </el-col>
 
-            <el-col :span="3">
-                <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
-            </el-col>
+                <el-col :span="3">
+                    <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
+                </el-col>
 
-            <el-col :span="3">
-                <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
-                <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->               
-                <svg-icon v-if="exportPeople" class='smoke-fr border-icon' style="margin-right: 0;" @click="export_Staff" icon-title="导出员工" icon-class="export" />
-            </el-col>
+                <el-col :span="3">
+                    <el-button type="primary" @click="smoke_search" size="small">查 询</el-button>
+                    <!-- <el-button plain class='smoke-fr' @click="smoke_clear" size="small">清 空 条 件</el-button> -->               
+                    <svg-icon v-if="exportPeople" class='smoke-fr border-icon' style="margin-right: 0;" @click="export_Staff" icon-title="导出员工" icon-class="export" />
+                </el-col>
 
-        </el-row>
-
-        <el-table
-          :data="userList"
-          @sort-change="sortChange"
-          v-loading="fullscreenLoading"
-          >
-          <el-table-column
-            :prop="item.prop"
-            show-overflow-tooltip
-            :label="item.label"
-            v-for="(item, index) in columnList"
-            :min-width="item.width"
-            :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
-            :key="index"
-            >
-            <template slot-scope="scope">
+            </el-row>
+            <div>
                 <div>
+                    <el-table
+                    id="tableList"
+                    :data="userList"
+                    @sort-change="sortChange"
+                    v-loading="fullscreenLoading"
+                    :height="tableHeight"
+                    >
+                    <el-table-column
+                        :prop="item.prop"
+                        show-overflow-tooltip
+                        :label="item.label"
+                        v-for="(item, index) in columnList"
+                        :min-width="item.width"
+                        :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
+                        :key="index"
+                        >
+                        <template slot-scope="scope">
+                            <div>
 
-                    <p class="job-status" v-if="item.prop == 'jobStatus'">
-                        <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
-                        <span v-else class="quit"></span>
-                        <!-- {{userList[index][item.prop]}} -->
-                        {{scope.row[item.prop]}}
-                    </p>
+                                <p class="job-status" v-if="item.prop == 'jobStatus'">
+                                    <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
+                                    <span v-else class="quit"></span>
+                                    <!-- {{userList[index][item.prop]}} -->
+                                    {{scope.row[item.prop]}}
+                                </p>
 
-                    <p v-else>{{scope.row[item.prop]}}</p>
+                                <p v-else>{{scope.row[item.prop]}}</p>
 
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
+                        <template slot-scope="scope">
+                            <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
+                            <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
+                        </template>
+                    </el-table-column>
+                    </el-table>
+                    <el-pagination
+                        id="pagination"
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total='total'
+                        :page-size='screenForm.pageSize'
+                        :page-sizes="[10, 20, 30, 50, 100]"
+                        :hide-on-single-page="totalFlag"
+                        @current-change="handleCurrentChange"
+                        @size-change="handleSizeChange"
+                    >
+                    </el-pagination>
                 </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
-            <template slot-scope="scope">
-                <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
-                <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-pagination
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :total='total'
-            :page-size='screenForm.pageSize'
-            :page-sizes="[10, 20, 30, 50, 100]"
-            :hide-on-single-page="totalFlag"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
-        >
-        </el-pagination>
-
+            </div>
+            
     </el-main>
 </template>
 
 <script>
 import { getUserDetailedList, getRoleList, getOrgSubsetByUuid, exportUserDetailedList } from '../../request/api';
 import { getTextByJs, getTextByState, sortTextNum } from '../../assets/js/common'
+import _ from 'lodash'
+import { add } from 'lodash/fp';
 export default {
     name: 'people',
     data() {
@@ -170,9 +178,37 @@ export default {
             peopleEdit: null,
             dataPermiss: null,
             exportPeople: null,
+            hideSearch: false,
+            tableHeight: document.documentElement.clientHeight - 226
         }
     },
-    created() {
+    created() {     
+        this.$nextTick(() => {
+            const paginationHeight = document.getElementById('pagination').offsetHeight,
+            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
+            windowHeight = document.documentElement.clientHeight;
+            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+            const maxHeight = this.tableHeight + searchAreaHeight + 10;
+            const minHeight = this.tableHeight;
+            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
+            tableList.addEventListener('scroll', _.throttle(() =>{
+                // console.log(tableList.scrollTop)
+                if(tableList.scrollTop > 55){
+                    this.hideSearch = true
+                    if(this.tableHeight < maxHeight){
+                       this.tableHeight = maxHeight
+                    }
+                    // console.log('收起搜索', this.tableHeight)
+                }
+                if(tableList.scrollTop < 55){
+                    this.hideSearch = false 
+                    if(this.tableHeight >= maxHeight){                   
+                        this.tableHeight = minHeight 
+                    }                    
+                    // console.log('展开搜索', this.tableHeight)
+                }
+            }), 500)
+        })
         this.getUserDetailedList();
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -357,17 +393,42 @@ export default {
         }
     },
     mounted() {
-        
+        const paginationHeight = document.getElementById('pagination').offsetHeight,
+            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
+            windowHeight = document.documentElement.clientHeight;
+            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
+            const maxHeight = this.tableHeight + searchAreaHeight + 10;
+            const minHeight = this.tableHeight;
+            console.log(maxHeight)
+            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
+            tableList.addEventListener('scroll', _.throttle(() =>{
+                // console.log(tableList.scrollTop)
+                if(tableList.scrollTop > 55){
+                    this.hideSearch = true
+                    if(this.tableHeight < maxHeight){
+                       this.tableHeight = maxHeight
+                    }
+                    // console.log('收起搜索', this.tableHeight)
+                }
+                if(tableList.scrollTop < 55){
+                    this.hideSearch = false 
+                    if(this.tableHeight >= maxHeight){                   
+                        this.tableHeight = minHeight 
+                    }                    
+                    // console.log('展开搜索', this.tableHeight)
+                }
+            }), 500)
     }
 }
 </script>
 
 <style lang="less" scoped>
     .index-main{
+        position: relative;
+        /* overflow-y: hidden; */
         .el-col-6{
             height: auto !important;
         }
-        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
