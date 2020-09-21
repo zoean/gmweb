@@ -648,7 +648,7 @@ export default {
                         this.fullscreenLoading = false;
                         this.$message({
                             type: 'error',
-                            message: res.msg
+                            message: '录入失败，电话号码错误或已经存在。'
                         })
                     }, 300)
                 }
