@@ -17,21 +17,7 @@
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
 
                         <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px; margin-top: 20px;">
-                            <span style="margin-right: 10px;">客户信息：</span>
-                            <svg-icon icon-class="copy" icon-title="复制手机号码" @click="phoneCopy()" />
-                            <svg-icon icon-title="手机外拨" @click="phoneOut()" icon-class="takephone" />
-                            <svg-icon icon-title="座机外拨" @click="seatOut()" icon-class="landline" />
-                            <el-popconfirm
-                                confirmButtonText='确定'
-                                cancelButtonText='取消'
-                                icon="el-icon-info"
-                                iconColor="red"
-                                placement="top"
-                                title="确认释放该数据吗？"
-                                @onConfirm="release()"
-                              >
-                                <svg-icon slot="reference" icon-title="释放数据" icon-class="release" />
-                            </el-popconfirm>
+                            客户信息：
                         </el-row>
                 
                         <el-row>
@@ -40,6 +26,22 @@
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="ruleForm.tel" readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
+                                <div style="position: relative; left: 226px; top: -42px;" v-if="!routePathFlag">
+                                    <svg-icon icon-class="copy" icon-title="复制手机号码" @click="phoneCopy()" />
+                                    <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOut()" icon-class="takephone" />
+                                    <svg-icon style="color: #409EFF" icon-title="座机外拨" @click="seatOut()" icon-class="landline" />
+                                    <el-popconfirm
+                                        confirmButtonText='确定'
+                                        cancelButtonText='取消'
+                                        icon="el-icon-info"
+                                        iconColor="red"
+                                        placement="top"
+                                        title="确认释放该数据吗？"
+                                        @onConfirm="release()"
+                                      >
+                                        <svg-icon style="color: #409EFF" slot="reference" icon-title="释放数据" icon-class="release" />
+                                    </el-popconfirm>
+                                </div>
                             </el-col>
 
                             <el-col :span="6">

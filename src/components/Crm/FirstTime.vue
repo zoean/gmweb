@@ -83,6 +83,11 @@
         <CustomerNotes 
             v-if="drawer"
             @changeDrawer="changeDrawer"
+            @phoneCopy="phoneCopy"
+            @phoneOut='phoneOut'
+            @seatOut='seatOut'
+            @release='release'
+            :scopeRow='scopeRow'
             :followFlag='followFlag' 
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
@@ -147,6 +152,7 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+            scopeRow: {},
 
             fullscreenLoading: false,
 
@@ -227,6 +233,7 @@ export default {
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
             this.examItem = row.examItemId;
+            this.scopeRow = row;
         },
         changeDrawer(val){
             this.drawer = val;
