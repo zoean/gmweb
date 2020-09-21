@@ -2,6 +2,7 @@
     <el-main class="index-main">
 
         <Start></Start>
+
         <el-row class="people-screen">
 
             <el-col :span="3">
@@ -121,8 +122,6 @@
 
                 <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
-                <!-- <el-button plain size="small" @click="getCallPopClick">Click</el-button> -->
-
             </el-col>
             
             <el-col :span="5">
@@ -235,15 +234,6 @@
         >
         </CustomerNotes>
 
-        <CallPop 
-            v-if="callpopFlag"
-            @changecallpopFlag="changecallpopFlag"
-            :callpopFlag.sync='callpopFlag'
-            :call_state='call_state'
-            :caller_number='caller_number'
-        >
-        </CallPop>
-
         <PageFieldManage :setPageNum="setPageNum" />
 
     </el-main>
@@ -265,22 +255,18 @@ import {
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-import jsmc from '@/assets/js/jsmc.min.js';
-import json2 from '@/assets/js/json2.js';
 import { 
     menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
-import CallPop from '../Share/CallPop';
 export default {
     name: 'AllDay',
     components: {
-        Start, 
+        Start,
         CustomerNotes,
         PageFieldManage,
-        CallPop
     },
     // watch:{
     //     '$store.state.editFieldVisible'(val){
@@ -335,7 +321,6 @@ export default {
                 {'label': '' }
             ],
             initOptions: {},
-            jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -345,10 +330,6 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
-
-            callpopFlag: false,
-            call_state: '',
-            caller_number: '',
 
             enumList: {},
             fullscreenLoading: false,
@@ -383,12 +364,8 @@ export default {
         let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
-        this.jqStart = jsmc.noConflict();
     },
     methods: {
-        // getCallPopClick() {
-        //     this.callpopFlag = true;
-        // },
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
         },
@@ -502,9 +479,6 @@ export default {
         changeDrawer(val){
             this.drawer = val;
             this.getClueDataAll();
-        },
-        changecallpopFlag(val) {
-            this.callpopFlag = val;
         },
         getClueDataNumber() {
             let arr = [];
@@ -670,10 +644,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
                 })
             }else{
                 this.$message({
@@ -698,24 +668,6 @@ export default {
                             this.followFlag = true;
                             this.comMode = '座机外呼';
                             this.examItem = scope.examItem;
-
-                            var that = this;
-
-                            this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                                console.log('监听成功-callEvent');
-                                console.log(message);
-                                // console.log(jsonObject);
-                                if(message.call_event.call_state == 'caller_ring') {
-                                    that.callpopFlag = true;
-                                    that.caller_number = message.call_event.caller_number;
-                                    that.call_state = '响 铃 中';
-                                }else if(message.call_event.call_state == 'caller_answer') {
-                                    that.call_state = '通 话 中';
-                                }else if(message.call_event.call_state == 'agent_hangup') {
-                                    that.call_state = '挂 断';
-                                }
-                            });
-
                         }else{
                             this.$message({
                                 type: 'error',
@@ -728,17 +680,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
-                    //     console.log('监听成功-seatState');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // }); 
-                    
-                    // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // })
                 })
             }else{
                 this.$message({

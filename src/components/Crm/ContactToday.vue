@@ -1,6 +1,5 @@
 <template>
     <el-main class="index-main">
-
         <Start></Start>
         <el-row class="people-screen">
             <el-col :span="3">
@@ -120,11 +119,11 @@ import {
     clueContactSign,
     enumByEnumNums
 } from '../../request/api';
-import Start from '../../components/Share/Start';
 import { 
     timestampToTime, receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_16 } from '../../assets/js/data';
+import Start from '../../components/Share/Start';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'contactToday',
@@ -153,7 +152,6 @@ export default {
                 { 'prop': 'school', 'label': '注册平台' },
             ],
             initOptions: {},
-            //jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -180,7 +178,8 @@ export default {
         }
     },
     components: {
-        Start, CustomerNotes
+        CustomerNotes,
+        Start,
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -194,7 +193,6 @@ export default {
         this.todayCallDataList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        //this.jqStart = browserfly.noConflict();
         let arr = [MJ_16];
         this.enumByEnumNums(arr);
     },
@@ -361,11 +359,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
                 })
             }else{
                 this.$message({
@@ -402,21 +395,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
-                    //     console.log('监听成功-seatState');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // }); 
-                    // this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                    //     console.log('监听成功-callEvent');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
-                    // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // })
                 })
             }else{
                 this.$message({

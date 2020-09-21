@@ -12,27 +12,28 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+  <script src="<%= BASE_URL %>assets/jsmc.min.js"></script>
   <script type="text/javascript">
     function getBrowser() {  
-        var ua = window.navigator.userAgent;  
-        var isIE = window.ActiveXObject != undefined && ua.indexOf("MSIE") != -1;  
-        var isFirefox = ua.indexOf("Firefox") != -1;  
-        var isOpera = window.opr != undefined;  
-        var isChrome = ua.indexOf("Chrome") && window.chrome;  
-        var isSafari = ua.indexOf("Safari") != -1 && ua.indexOf("Version") != -1;  
-        if (isIE) {  
-            return "IE";  
-        } else if (isFirefox) {  
-            return "Firefox";  
-        } else if (isOpera) {  
-            return "Opera";  
-        } else if (isChrome) {  
-            return "Chrome";  
-        } else if (isSafari) {  
-            return "Safari";  
-        } else {  
-            return "Unkown";  
-        }  
+      var ua = window.navigator.userAgent;  
+      var isIE = window.ActiveXObject != undefined && ua.indexOf("MSIE") != -1;  
+      var isFirefox = ua.indexOf("Firefox") != -1;  
+      var isOpera = window.opr != undefined;  
+      var isChrome = ua.indexOf("Chrome") && window.chrome;  
+      var isSafari = ua.indexOf("Safari") != -1 && ua.indexOf("Version") != -1;  
+      if (isIE) {  
+          return "IE";  
+      } else if (isFirefox) {  
+          return "Firefox";  
+      } else if (isOpera) {  
+          return "Opera";  
+      } else if (isChrome) {  
+          return "Chrome";  
+      } else if (isSafari) {  
+          return "Safari";  
+      } else {  
+          return "Unkown";  
+      }  
     }
      
     var linkNode = document.createElement("link"),

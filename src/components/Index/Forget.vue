@@ -1,30 +1,44 @@
 <template>
   
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" style="width: 700px; border: 1px dashed #ccc; position: absolute; left: 50%; margin-left: -480px; top: 100px; padding: 30px;">
+  <div class="forget">
 
-    <div style="text-align: center; font-size: 16px;">忘记密码</div>
-      
-    <el-form-item label="手机号" :label-width="formLabelWidth" prop="accountNumber">
-      <el-input v-model="ruleForm.accountNumber" :readonly="readonlyFlag" @focus="readonlyFlag = false" placeholder="请输入手机号" style="width: 80%;" size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPassword">
-      <el-input v-model="ruleForm.newPassword" @input="input_change_password($event)" placeholder="请输入新密码" type="password" style="width: 80%;" size="small"></el-input>
-    </el-form-item>
-    <el-form-item label="验证码" :label-width="formLabelWidth" prop="verCode">
-      <el-input :value="ruleForm.verCode" style="width: 40%;" placeholder="请输入验证码" size="small" @input="input_change($event)"></el-input>
-      <el-button size="small" style="display: inline-block; max-width: 150px; float: right; margin-right: 20%; width: 34%; height: 100%; margin-top: 4px; margin-left: 6%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
-    </el-form-item>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="forget-form">
 
-    <el-form-item label="" :label-width="formLabelWidth">
-      <div style="font-size: 12px; float: right; margin-right: 20%;">@：获取验证码后，请去钉钉查看</div>
-    </el-form-item>
+      <div style="text-align: center;">
+        <el-image style="width: 217px;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+      </div>
 
-    <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 80px;">保 存</el-button>
-      <el-button @click="loginBack" size="small" plain style="width: 80px;">返回登录</el-button>
-    </el-form-item>
-    
-  </el-form>
+      <div style="text-align: center; margin-top: 20px; font-size: 20px; color: #218EFF;">忘记密码</div>
+
+      <el-form-item label="手机号" :label-width="formLabelWidth" prop="accountNumber">
+        <el-input v-model="ruleForm.accountNumber" :readonly="readonlyFlag" @focus="readonlyFlag = false" placeholder="请输入手机号" style="width: 80%;" size="small"></el-input>
+      </el-form-item>
+      <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPassword">
+        <el-input v-model="ruleForm.newPassword" @input="input_change_password($event)" placeholder="请输入新密码" type="password" style="width: 80%;" size="small"></el-input>
+      </el-form-item>
+      <el-form-item label="验证码" :label-width="formLabelWidth" prop="verCode">
+        <el-input :value="ruleForm.verCode" style="width: 40%;" placeholder="请输入验证码" size="small" @input="input_change($event)"></el-input>
+        <el-button size="small" style="display: inline-block; max-width: 150px; float: right; margin-right: 20%; width: 34%; height: 100%; margin-top: 4px; margin-left: 6%; text-align: center;" plain @click="sendDingVerCode" :disabled="form_rule_flag">{{form_rule_name}}</el-button>
+      </el-form-item>
+
+      <el-form-item label="" :label-width="formLabelWidth">
+        <div style="font-size: 12px; float: right; margin-right: 20%; color: #E6A23C;">@：获取验证码后，请去钉钉查看</div>
+      </el-form-item>
+
+      <div style="text-align: center;">
+        <el-button type="primary" @click="submitForm('ruleForm')" size="small" style="width: 146px; margin-left: 44px;">保 存</el-button>
+        <el-button @click="loginBack" size="small" plain style="width: 146px;">返回登录</el-button>
+      </div>
+
+    </el-form>
+
+    <div class="forget-back">
+      <el-image
+        :src="require('../../assets/images/forget_back.png')">
+      </el-image>
+    </div>
+
+  </div>
   
 </template>
 
@@ -162,5 +176,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  
+  .forget{
+    width: 100vw;
+    height: 100vh;
+    background: #fff;
+    .forget-form{
+      width: 500px;
+      margin: 0 auto;
+      margin-top: 10%;
+      position: relative;
+      z-index: 999;
+    }
+    .forget-back{
+      width: 1200px;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -600px;
+    }
+  }
 </style>
