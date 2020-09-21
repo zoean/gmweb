@@ -354,6 +354,6 @@ export default{
   }
 }
 .el-date-editor.el-input, .el-date-editor.el-input__inner{
-  width: 100%;
+  width: 160px;
 }
 </style>
