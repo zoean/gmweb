@@ -629,7 +629,7 @@ export default {
         entryClueData() {
             this.fullscreenLoading = true;
             this.$smoke_post(jqEntryClueData + this.ruleForm.url, {data: this.ruleForm}).then(res => {
-                if(res.code == 200) {
+                if(res.code == 0) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                             this.$message({
