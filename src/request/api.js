@@ -240,11 +240,13 @@ export const getStudentDetails = '/api/phone/student/getStudentDetails'; //获�
 //数据查看权限
 export const getPermission = '/api/phone/dataViewPermission/getPermission' //获取数据权限
 export const getPermissionUpdate = '/api/phone/dataViewPermission/update' //更新数据权限
+export const dataViewPermissionUserList = '/api/phone/dataViewPermission/userList' //获取数据权限==》人员
 
 //线索流转
 export const spillPoolActSeat = '/api/phone/theCirculation/spillPoolActSeat' //溢出池线索数据分配给指定坐席
 export const recPoolActSeat = '/api/phone/theCirculation/recPoolActSeat' //回收池线索数据分配给指定坐席
 export const spillPoolActClueRule = '/api/phone/theCirculation/spillPoolActClueRule' //溢出池线索数据分配给指定分配组
+export const seatActSeat = '/api/phone/theCirculation/seatActSeat' //坐席线索数据分配给指定坐席
 
 //主推班型
 export const getGoodsList = '/order-service/goods/getGoodsList' //主推班型
