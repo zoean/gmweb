@@ -9,8 +9,8 @@
                 <el-row>
 
                     <el-col :span="6">
-                        <el-form-item label="客户手机" prop="tel">
-                            <el-input v-model="ruleForm.tel" size="small" placeholder="请输入客户手机"></el-input>
+                        <el-form-item label="客户手机" prop="mobile">
+                            <el-input v-model="ruleForm.mobile" size="small" placeholder="请输入客户手机"></el-input>
                         </el-form-item>
                     </el-col>
 
@@ -76,9 +76,9 @@
 
                     <el-col :span="6">
 
-                        <el-form-item label="工作年限" prop="workingLife">
+                        <el-form-item label="工作年限" prop="workinglife">
 
-                            <el-select v-model="ruleForm.workingLife" placeholder="请选择工作年限" size="small">
+                            <el-select v-model="ruleForm.workinglife" placeholder="请选择工作年限" size="small">
                                 <el-option
                                   v-for="item in enumList['MJ-2']"
                                   :key="item.name"
@@ -208,7 +208,7 @@
 
             </el-tab-pane>
 
-            <el-tab-pane label="模板录入" name="second" v-loading="loading" element-loading-text="线索导入中...">
+            <!-- <el-tab-pane label="模板录入" name="second" v-loading="loading" element-loading-text="线索导入中...">
 
                 <el-upload
                     style="width: 130px; display: inline-block;"
@@ -315,7 +315,7 @@
                     </span>
                 </el-dialog>
 
-            </el-tab-pane>
+            </el-tab-pane> -->
         </el-tabs>
 
     </el-main>
@@ -324,6 +324,7 @@
 <script>
 import { 
     entryClueData,
+    jqEntryClueData,
     bulkImportClueData,
     enumByEnumNums,
     getExamBasic,
@@ -341,7 +342,8 @@ export default {
             activeName: 'first',
             ruleForm: {
                 age: "",
-                city: "",
+                // city: "",
+                adress: "",
                 clueRuleNumber: "",
                 education: "",
                 evidencePurpose: "",
@@ -353,15 +355,16 @@ export default {
                 province: "",
                 provinceCity: "",
                 spread: "",
-                tel: "",
+                mobile: "",
                 twoTel: "",
                 work: "",
-                workingLife: "",
+                workinglife: "",
                 acc: "",
-                wx: ""
+                wx: "",
+                intype: 1
             },
             rules: {
-                tel: [
+                mobile: [
                   { pattern:/^1\d{10}$/, required: true, message: '请输入客户手机', trigger: 'blur' },
                 ],
                 // name: [
@@ -384,9 +387,9 @@ export default {
                 examItemText: [
                   { required: true, message: '请选择考试项', trigger: 'change' }
                 ],
-                clueRuleNumber: [
-                  { required: true, message: '请选择分配组', trigger: 'change' }
-                ],
+                // clueRuleNumber: [
+                //   { required: true, message: '请选择分配组', trigger: 'change' }
+                // ],
                 accText: [
                   { required: true, message: '请选择推广账号', trigger: 'change' }
                 ],
@@ -410,9 +413,9 @@ export default {
                 { 'prop': 'gradMajor', 'label': '毕业专业' },
                 { 'prop': 'education', 'label': '最高学历' },
                 { 'prop': 'work', 'label': '客户工作' },
-                { 'prop': 'workingLife', 'label': '工作年限' },
+                { 'prop': 'workinglife', 'label': '工作年限' },
                 { 'prop': 'province', 'label': '所在省' },
-                { 'prop': 'city', 'label': '所在市' },
+                { 'prop': 'adress', 'label': '所在市' },
                 { 'prop': 'evidencePurpose', 'label': '取证目的' },
                 { 'prop': 'twoTel', 'label': '第二电话' },
                 { 'prop': 'wx', 'label': '客户微信' },
@@ -536,7 +539,8 @@ export default {
         },
         cityChange() {
             this.ruleForm.province = this.ruleForm.provinceCity[0];
-            this.ruleForm.city = this.ruleForm.provinceCity[1];
+            // this.ruleForm.city = this.ruleForm.provinceCity[1];
+            this.ruleForm.adress = this.ruleForm.provinceCity[1];
         },
         handleSelect(item) {
             this.ruleForm.examItemId = item.id;
@@ -571,11 +575,11 @@ export default {
               if (valid) {
                 let obj = urlFun(this.ruleForm.url);
                 if(obj.project && obj.ruleid && obj.spread && obj.acc && obj.jobnum){
-                    this.ruleForm.examItemId = obj.project;
-                    this.ruleForm.clueRuleNumber = obj.ruleid;
+                    this.ruleForm.project = obj.project;
+                    this.ruleForm.ruleid = obj.ruleid;
                     this.ruleForm.spread = obj.spread;
                     this.ruleForm.acc = obj.acc;
-                    this.ruleForm.jobNum = obj.jobnum;
+                    this.ruleForm.jobnum = obj.jobnum;
                     this.entryClueData();
                 }else{
                     this.$message({
@@ -624,7 +628,7 @@ export default {
         },
         entryClueData() {
             this.fullscreenLoading = true;
-            this.$smoke_post(entryClueData, this.ruleForm).then(res => {
+            this.$smoke_post(jqEntryClueData + this.ruleForm.url, {data: this.ruleForm}).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -636,7 +640,7 @@ export default {
                             this.$refs['ruleForm'].resetFields();
                         }) 
                         this.ruleForm.provinceCity = ["", ""];
-                        this.ruleForm.city = "";
+                        this.ruleForm.adress = "";
                         this.ruleForm.province = "";
                     }, 300);
                 }else{
