@@ -39,7 +39,7 @@
                                         title="确认释放该数据吗？"
                                         @onConfirm="release()"
                                       >
-                                        <svg-icon style="color: #409EFF" slot="reference" icon-title="释放数据" icon-class="release" />
+                                        <svg-icon v-if="!releaseFlag" style="color: #409EFF" slot="reference" icon-title="释放数据" icon-class="release" />
                                     </el-popconfirm>
                                 </div>
                             </el-col>
@@ -807,6 +807,7 @@ export default {
             pcaa: null, //省市数据
             restaurants: [],
             routePathFlag: false,
+            releaseFlag: false,
             isDisable: true
         }
     },
@@ -849,6 +850,10 @@ export default {
         this.getGoodsList2();
         if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("peopleClues") != -1 || this.$route.path.indexOf("manageClues") != -1 || this.$route.path.indexOf("recoverData") != -1 || this.$route.path.indexOf("toallocate") != -1){
             this.routePathFlag = true;
+        }
+
+        if(this.$route.path.indexOf("registered") != -1 || this.$route.path.indexOf("completed") != -1) {
+            this.releaseFlag = true;
         }
 
         var _self = this;

@@ -36,7 +36,7 @@
                         <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                         <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
                         <!-- <el-button @click="release(scope.row)" type="text" >释放数据</el-button> -->
-                        <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                        <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
                         <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
                     </template>
                     </el-table-column>

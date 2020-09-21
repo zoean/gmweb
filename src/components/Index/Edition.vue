@@ -4,6 +4,18 @@
     </el-page-header>
 
     <el-timeline>  
+      <el-timeline-item timestamp="v 1.1.20 -- 2020/09/21" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、去掉全部客户页面客户信息按钮</p>
+          <p>2、增加溢出池数据自动分配功能</p>
+          <p>3、客户信息弹框手机号码增加复制电话号码按钮、手机外呼按钮、座机外呼按钮、释放数据按钮</p>
+          <p>4、优化左侧菜单栏UI</p>
+          <p>5、录入线索数据与JQ系统数据排重</p>
+          <p>6、增加默认权限</p>
+          <p>7、员工信息页面员工手机号规则隐藏</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.19 -- 2020/09/16" placement="top">
         <el-card>
           <h4>新增功能</h4>
