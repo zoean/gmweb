@@ -103,7 +103,7 @@
 
             </el-col>
 
-            <el-col :span="15">
+            <el-col :span="14">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
@@ -118,9 +118,10 @@
 
             </el-col>
 
-            <el-col :span="3">
+            <el-col :span="4">
                 <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
+                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
             </el-col>
 
         </el-row>
@@ -202,6 +203,37 @@
 
         <PageFieldManage :setPageNum="setPageNum" />
 
+        <el-drawer
+            :title="drawerTitle1"
+            :visible.sync="drawer1"
+            :direction="direction1"
+            size="40%"
+            :before-close="handleClose"
+        >
+            <span class="bullets"></span>
+
+            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+
+                <el-tag 
+                    v-for="(item,index) in tagList" :key="item.id"
+                    :class="tagId == item.userUuid ? 'tag_class tag_default_class' : 'tag_default_class'"
+                    type="info"
+                    effect="plain"
+                    @click="tagClickItem(item)"
+                    >{{item.userName}}
+                </el-tag>
+
+            </el-row>
+
+            <div style="text-align: center;">
+
+                <el-button type="primary" style="margin-left: 20px;" size="small" @click="seatActSeat">确定</el-button>
+                <el-button plain size="small" @click="handleClose">取消</el-button>
+
+            </div>
+
+        </el-drawer>
+
     </el-main>
 </template>
 
@@ -213,7 +245,9 @@ import {
     getRuleItem,
     clueDataRelease,
     copyTel,
-    geSeatWork
+    geSeatWork,
+    seatActSeat,
+    dataViewPermissionUserList
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { receiveTimeFun } from '../../assets/js/common';
@@ -288,6 +322,13 @@ export default {
             tag_name: '',
             tag_flag: false,
             SeatWorkObj: {},
+
+            drawerTitle1: '分配至人',
+            drawer1: false,
+            direction1: 'rtl',
+            tagList: [],
+            tableSelectList: [],
+            tagId: '',
         }
     },
     // watch:{
@@ -314,6 +355,64 @@ export default {
         this.getRuleItem();
     },
     methods: {
+        seatActSeat() {
+            this.$smoke_post(seatActSeat, {
+                seatUuid: this.tagId,
+                userCDARUuid: this.tableSelectList
+            }).then(res => {
+                if(res.code == 200) {
+                    if(res.data.result) {
+                        this.$message({
+                            type: 'success',
+                            message: res.data.msg + '，提交分配的线索数量' + res.data.submitSize + '条' + '，实际分配的线索数量' + res.data.transferSize + '条'
+                        });
+                        this.getAllUserClueData();
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.data.msg
+                        });
+                        this.getAllUserClueData();
+                    }
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    }) 
+                }
+            })
+        },
+        tagClickItem(item){
+            this.tagId = item.userUuid;
+        },
+        pushPeopleClick() {
+            let clueDataSUuidArr = [];
+            this.$refs.tableSelect.selection.map(sll => {
+                clueDataSUuidArr.push(sll.userCDARUuid);
+            });
+            if(clueDataSUuidArr.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要分配的数据'
+                })
+            }else{
+                this.drawer1 = true;
+                this.dataViewPermissionUserList();
+                this.tableSelectList = clueDataSUuidArr;
+            }
+        },
+        dataViewPermissionUserList() {
+            this.$smoke_post(dataViewPermissionUserList, {}).then(res => {
+                if(res.code == 200) {
+                    this.tagList = res.data;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         tagClick(item){
             this.tag_flag = false;
             if(this.tag_id == item.id) {
@@ -390,6 +489,7 @@ export default {
         },
         getAllUserClueData() {
             this.fullscreenLoading = true;
+            this.drawer1 = false;
             this.$smoke_post(getAllUserClueData, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {

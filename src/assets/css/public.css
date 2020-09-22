@@ -481,7 +481,8 @@ div.el-dialog__body{
 }
 .tag_default_class{
     cursor: pointer;
-    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 .tag_default_class:first-of-type{
     margin-left: 0px;
