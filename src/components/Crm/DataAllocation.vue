@@ -417,20 +417,18 @@ export default {
     },
     methods: {
         handleCopy() {
-            this.$copyText(this.createLinkUrl).then(
-		        res => {
-		            this.$message({
-                        type: 'success',
-                        message: '复制成功',
-                    })
-		        },
-		        err => {
-		            this.$message({
-                        type: 'error',
-                        message: '复制失败',
-                    })
-		        }
-		    )
+            Copy(this.createLinkUrl);
+            if(Copy(this.createLinkUrl)) {
+                this.$message({
+                    type: 'success',
+                    message: '复制成功'
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '复制失败'
+                })
+            }
         },
         getSchoolList() {
             this.$smoke_get(getSchoolList, {}).then(res => {

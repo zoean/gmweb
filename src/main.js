@@ -14,7 +14,6 @@ import 'vue-area-linkage/dist/index.css';
 import VueAreaLinkage from 'vue-area-linkage';
 import './assets/js/rem'
 import '@/icons' // icon
-import VueClipboard from 'vue-clipboard2'
 import 'default-passive-events'
 import Meta from 'vue-meta'
 // import VueAudio from 'vue-audio-better'
@@ -22,7 +21,6 @@ import Meta from 'vue-meta'
 // Vue.use(VueAudio)
 
 Vue.use(ElementUI, { zIndex: 1000});
-Vue.use(VueClipboard);
 Vue.use(AFTableColumn);
 Vue.use(VScrollLock);
 Vue.use(VueAreaLinkage);

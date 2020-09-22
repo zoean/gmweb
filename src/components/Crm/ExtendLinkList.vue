@@ -242,20 +242,18 @@ export default {
             this.followFlag = false;
         },
         copyUrlClick(row) {
-            this.$copyText(row.url).then(
-		        res => {
-		            this.$message({
-                        type: 'success',
-                        message: '复制成功',
-                    })
-		        },
-		        err => {
-		            this.$message({
-                        type: 'error',
-                        message: '复制失败',
-                    })
-		        }
-		    )
+            Copy(row.url);
+            if(Copy(row.url)) {
+                this.$message({
+                    type: 'success',
+                    message: '复制成功'
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '复制失败'
+                })
+            }
         },
         datePickerChange(value) {
             if (value == null) {

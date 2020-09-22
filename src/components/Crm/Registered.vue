@@ -54,12 +54,12 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="120" fixed="right" class-name="table_active">
+            <el-table-column prop="active" label="操作" width="100" fixed="right" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                 <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
                   <!-- <el-button @click="release(scope.row)" type="text" >释放数据</el-button> -->
-                <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
                 <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
               </template>
             </el-table-column>
@@ -343,6 +343,7 @@ export default {
                             this.followFlag = true;
                             this.comMode = '手机外呼';
                             this.examItem = scope.examItemId;
+                            this.scopeRow = scope;
                         }else{
                             this.$message({
                                 type: 'error',
@@ -379,6 +380,7 @@ export default {
                             this.followFlag = true;
                             this.comMode = '座机外呼';
                             this.examItem = scope.examItemId;
+                            this.scopeRow = scope;
                         }else{
                             this.$message({
                                 type: 'error',
@@ -408,20 +410,18 @@ export default {
                 uuid: id
             }).then(res => {
                 if(res.code == 200) {
-                    this.$copyText(res.data).then(
-		                res => {
-		                    this.$message({
-                                type: 'success',
-                                message: '复制成功',
-                            })
-		                },
-		                err => {
-		                    this.$message({
-                                type: 'error',
-                                message: '复制失败',
-                            })
-		                }
-		            )
+                    Copy(res.data);
+                    if(Copy(res.data)) {
+                        this.$message({
+                            type: 'success',
+                            message: '复制成功'
+                        })
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '复制失败'
+                        })
+                    }
                 }else{
                     this.$message({
                         type: 'error',

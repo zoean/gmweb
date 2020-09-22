@@ -954,20 +954,18 @@ export default {
               uuid: id
           }).then(res => {
               if(res.code == 200) {
-                  this.$copyText(res.data).then(
-		                res => {
-		                    this.$message({
-                            type: 'success',
-                            message: '复制成功',
-                        })
-		                },
-		                err => {
-		                    this.$message({
-                            type: 'error',
-                            message: '复制失败',
-                        })
-		                }
-		            )
+                  Copy(res.data);
+                  if(Copy(res.data)) {
+                      this.$message({
+                          type: 'success',
+                          message: '复制成功'
+                      })
+                  }else{
+                      this.$message({
+                          type: 'error',
+                          message: '复制失败'
+                      })
+                  }
               }else{
                   this.$message({
                       type: 'error',
