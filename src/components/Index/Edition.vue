@@ -9,6 +9,7 @@
           <h4>修复bug</h4>
           <p>1、修复添加备注页面操作失败的bug</p>
           <p>2、我的工作台模块页面取消客户信息入口</p>
+          <p>3、修复系统复制功能在浏览器方面的兼容性问题</p>
         </el-card>
       </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.20 -- 2020/09/21" placement="top">
