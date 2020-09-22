@@ -356,31 +356,38 @@ export default {
     },
     methods: {
         seatActSeat() {
-            this.$smoke_post(seatActSeat, {
-                seatUuid: this.tagId,
-                userCDARUuid: this.tableSelectList
-            }).then(res => {
-                if(res.code == 200) {
-                    if(res.data.result) {
-                        this.$message({
-                            type: 'success',
-                            message: res.data.msg + '，提交分配的线索数量' + res.data.submitSize + '条' + '，实际分配的线索数量' + res.data.transferSize + '条'
-                        });
-                        this.getAllUserClueData();
+            if(this.tagId == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择要分配的人员'
+                })
+            }else{
+                this.$smoke_post(seatActSeat, {
+                    seatUuid: this.tagId,
+                    userCDARUuid: this.tableSelectList
+                }).then(res => {
+                    if(res.code == 200) {
+                        if(res.data.result) {
+                            this.$message({
+                                type: 'success',
+                                message: res.data.msg + '，提交分配的线索数量' + res.data.submitSize + '条' + '，实际分配的线索数量' + res.data.transferSize + '条'
+                            });
+                            this.getAllUserClueData();
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: res.data.msg
+                            });
+                            this.getAllUserClueData();
+                        }
                     }else{
                         this.$message({
                             type: 'error',
-                            message: res.data.msg
-                        });
-                        this.getAllUserClueData();
+                            message: res.msg
+                        }) 
                     }
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    }) 
-                }
-            })
+                })
+            }
         },
         tagClickItem(item){
             this.tagId = item.userUuid;
@@ -397,6 +404,7 @@ export default {
                 })
             }else{
                 this.drawer1 = true;
+                this.tagId = '';
                 this.dataViewPermissionUserList();
                 this.tableSelectList = clueDataSUuidArr;
             }
