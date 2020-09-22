@@ -228,7 +228,7 @@
             <div style="text-align: center;">
 
                 <el-button type="primary" style="margin-left: 20px;" size="small" @click="seatActSeat">确定</el-button>
-                <el-button plain size="small" @click="handleClose">取消</el-button>
+                <el-button plain size="small" @click="handleCloseTag">取消</el-button>
 
             </div>
 
@@ -550,6 +550,10 @@ export default {
         },
         handleClose(done) {
             done();
+        },
+        handleCloseTag() {
+            this.drawer1 = false;
+            this.tagId = '';
         },
         handleCurrentChange(index) {
             this.form.currentPage = index;
