@@ -3,7 +3,14 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
 
-    <el-timeline>  
+    <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.22 -- 2020/09/22" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、坐席数据管理新增线索转移</p>
+          <p>2、推广配置页面配置组员弹框增加今日已分字段</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.21 -- 2020/09/22" placement="top">
         <el-card>
           <h4>修复bug</h4>
