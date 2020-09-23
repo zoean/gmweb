@@ -90,8 +90,8 @@ export default {
             demo.monitorEvent("callTip",function(message, jsonObject){
                 // console.log('监听成功-callTip');
                 // console.log(message);
-                console.log(decodeURIComponent(message.call_tip.location))
-                this.call_location = decodeURIComponent(message.call_tip.location);
+                that.call_location = decodeURIComponent(message.call_tip.location);
+                console.log(that.call_location);
                 // console.log(jsonObject);
             })
         },
