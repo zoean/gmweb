@@ -108,6 +108,7 @@
             >
                 <template slot-scope="scope">
                     <VueAudio 
+                        :key="Math.random()"
                         :theUrl="scope.row.recordFile" 
                         v-if="scope.row.recordFile"
                         theControlList="onlyOnePlaying noMuted noVolume"
