@@ -320,8 +320,8 @@ a:link,a:active,a:visited,a:hover {
     background: #fff;
     margin: 16px;
     height: calc(100vh - 92px) !important;
-    overflow-y: scroll;
     min-width: 980px;
+    overflow: visible;
 }
 
 .el-menu--collapse  .el-submenu__title span{

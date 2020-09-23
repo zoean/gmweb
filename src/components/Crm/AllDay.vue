@@ -2,7 +2,7 @@
     <el-main class="index-main">
 
         <Start></Start>
-        <el-row class="people-screen">
+        <el-row class="people-screen" id="searchArea">
 
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>

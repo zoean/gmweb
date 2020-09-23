@@ -9,11 +9,11 @@
             <el-col class="user-info-content">
                 <el-row type="flex" justify="space-between">
                     <el-col :span="14" type="flex" justify="space-between" class="user-info-left">
-                        <el-row type="flex">
-                            <el-col :span="6">
+                        <el-row type="flex" style="width: 100%;">
+                            <el-col :span="4">
                                 <img class="avator" :src="$store.state.avatar ? $store.state.avatar : require('../../assets/images/header_img.png')" alt="">
                             </el-col>
-                            <el-col :xs="0">
+                            <el-col :span="20" :xs="0">
                                 <section>
                                     <h2>早安，{{$store.state.name}}，祝你开心每一天！</h2>
                                     <p>{{$store.state.userRole}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.userDepartment}}&nbsp;&nbsp;|&nbsp;&nbsp;{{$store.state.curDate}}</p>

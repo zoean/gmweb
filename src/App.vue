@@ -2,9 +2,10 @@
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container :class="paddingClass" id="el-container">
+      <p id="toggleSearch" @click="toggleSearch">打开/关闭</p>
       <Aside v-if="$store.state.commonFlag"></Aside>
       <keep-alive include="people">
-        <router-view />
+        <router-view @setTableHeight="setTableHeight" @toggleSearch="toggleSearch" :tableHeight="tableHeight" :toggleAction="toggleAction" :hideSearch="hideSearch" />
       </keep-alive>
     </el-container>
   </div>
@@ -13,6 +14,7 @@
 <script>
 import Header from './components/Header/Index';
 import Aside from './components/Header/Aside';
+import _ from 'lodash'
 export default {
   name: 'app',
   components: {
@@ -23,6 +25,10 @@ export default {
       isNormalPage: false,
       unNormalPage: ['/login', '/'],
       paddingClass: '',
+      tableHeight: 0,
+      toggleAction: false,
+      hideSearch: false,
+      searchAreaHeight: 0
     }
   },
   created() {
@@ -31,6 +37,10 @@ export default {
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
     }
+    this.resizeHandle()
+  },
+  distroyed(){
+    window.removeEventListener('resize')
   },
   watch:{
     '$route.path': function(newVal){
@@ -45,7 +55,7 @@ export default {
       }else{
         this.isNormalPage = true
         this.paddingClass = 'header-padding'
-      }
+      }      
     }
   },
   mounted(){
@@ -58,7 +68,27 @@ export default {
     }
   },
   methods: {
-    
+    toggleSearch(){
+      this.toggleAction = !this.toggleAction
+      setTimeout(()=>{
+          this.hideSearch = !this.hideSearch 
+          this.setTableHeight()
+      }, 400)
+    },
+    setTableHeight(total){//计算数据列表高度
+      const paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight,
+      searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight,
+      windowHeight = document.documentElement.clientHeight;
+      this.searchAreaHeight = this.searchAreaHeight
+      if(total <= 14){
+          this.tableHeight = total * 45
+      }else{
+          this.tableHeight = this.hideSearch ? windowHeight - 200 + searchAreaHeight : windowHeight - 210
+      }
+    },
+    resizeHandle(){
+      window.addEventListener('resize', _.throttle(this.setTableHeight, 500))
+    }
   }
 }
 </script>
@@ -77,6 +107,12 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+#toggleSearch{
+  position: absolute;
+  left: 5rem;
+  top: 60px;
+  cursor: pointer;
 }
 .header-padding{
   padding-top: 60px;

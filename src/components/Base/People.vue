@@ -1,7 +1,7 @@
 <template>
     
     <el-main class="index-main" id="indexMain">
-            <el-row class="people-screen" id="searchArea" :style="hideSearch ? 'display: none' : 'display: block'">
+            <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
                 <el-col :span="3">
                     <el-cascader
                         size="small"
@@ -106,7 +106,6 @@
                     </el-table-column>
                     </el-table>
                     <el-pagination
-                        id="pagination"
                         background
                         layout="total, sizes, prev, pager, next, jumper"
                         :total='total'
@@ -126,10 +125,15 @@
 <script>
 import { getUserDetailedList, getRoleList, getOrgSubsetByUuid, exportUserDetailedList } from '../../request/api';
 import { getTextByJs, getTextByState, sortTextNum } from '../../assets/js/common'
-import _ from 'lodash'
 import { add } from 'lodash/fp';
 export default {
     name: 'people',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
+    watch: {
+        tableHeight: (val) => {
+            console.log(val, 'table高度发生变化')
+        }
+    },
     data() {
         return {
             userList: [],
@@ -177,38 +181,10 @@ export default {
             fullscreenLoading: false,
             peopleEdit: null,
             dataPermiss: null,
-            exportPeople: null,
-            hideSearch: false,
-            tableHeight: document.documentElement.clientHeight - 226
+            exportPeople: null
         }
     },
-    created() {     
-        this.$nextTick(() => {
-            const paginationHeight = document.getElementById('pagination').offsetHeight,
-            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-            windowHeight = document.documentElement.clientHeight;
-            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
-            const maxHeight = this.tableHeight + searchAreaHeight + 10;
-            const minHeight = this.tableHeight;
-            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-            tableList.addEventListener('scroll', _.throttle(() =>{
-                // console.log(tableList.scrollTop)
-                if(tableList.scrollTop > 55){
-                    this.hideSearch = true
-                    if(this.tableHeight < maxHeight){
-                       this.tableHeight = maxHeight
-                    }
-                    // console.log('收起搜索', this.tableHeight)
-                }
-                if(tableList.scrollTop < 55){
-                    this.hideSearch = false 
-                    if(this.tableHeight >= maxHeight){                   
-                        this.tableHeight = minHeight 
-                    }                    
-                    // console.log('展开搜索', this.tableHeight)
-                }
-            }), 500)
-        })
+    created() {   
         this.getUserDetailedList();
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -334,6 +310,7 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         this.total = res.data.total;
+                        this.$emit('setTableHeight', this.total)
                         // 用户列表
                         res.data.list.map(data => {
                             data.orgUuidList = getTextByJs(data.orgUuidList);
@@ -390,34 +367,7 @@ export default {
             }
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
-        }
-    },
-    mounted() {
-        const paginationHeight = document.getElementById('pagination').offsetHeight,
-            searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-            windowHeight = document.documentElement.clientHeight;
-            this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
-            const maxHeight = this.tableHeight + searchAreaHeight + 10;
-            const minHeight = this.tableHeight;
-            console.log(maxHeight)
-            const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-            tableList.addEventListener('scroll', _.throttle(() =>{
-                // console.log(tableList.scrollTop)
-                if(tableList.scrollTop > 55){
-                    this.hideSearch = true
-                    if(this.tableHeight < maxHeight){
-                       this.tableHeight = maxHeight
-                    }
-                    // console.log('收起搜索', this.tableHeight)
-                }
-                if(tableList.scrollTop < 55){
-                    this.hideSearch = false 
-                    if(this.tableHeight >= maxHeight){                   
-                        this.tableHeight = minHeight 
-                    }                    
-                    // console.log('展开搜索', this.tableHeight)
-                }
-            }), 500)
+        },
     }
 }
 </script>
@@ -425,7 +375,11 @@ export default {
 <style lang="less" scoped>
     .index-main{
         position: relative;
-        /* overflow-y: hidden; */
+        #toggleSearch{
+            position: absolute;
+            top: -10px;
+            left: 100px;
+        }
         .el-col-6{
             height: auto !important;
         }
@@ -472,7 +426,8 @@ export default {
     }
     .el-pagination{
         text-align: right;
-        margin-top: .4rem;
+        margin-top: 20px;
     }
+
 
 </style>
