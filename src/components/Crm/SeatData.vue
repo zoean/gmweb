@@ -709,7 +709,7 @@ export default {
         margin-top: .4rem;
     }
     .index-main /deep/ div.el-dialog__body{
-        height: 32vh;
+        height: 42vh;
         overflow: auto;
     }
 </style>
