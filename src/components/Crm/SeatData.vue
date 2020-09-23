@@ -203,40 +203,26 @@
 
         <PageFieldManage :setPageNum="setPageNum" />
 
-        <el-drawer
-            :title="drawerTitle1"
-            :visible.sync="drawer1"
-            :direction="direction1"
-            size="40%"
-            :before-close="handleClose"
-        >
-            <span class="bullets"></span>
+        <el-dialog width="30%" title="线索转移" :visible.sync="drawer1">
 
-            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+            <el-autocomplete
+                ref="autocompleteTag"
+                size="small"
+                class="screen-li"
+                v-model="tagIdText"
+                :fetch-suggestions="querySearchTag"
+                placeholder="请您选择要分配的人员"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClearTag"
+                @select="handleSelectTag"
+            ></el-autocomplete>
 
-                <el-autocomplete
-                    ref="autocompleteTag"
-                    size="small"
-                    class="screen-li"
-                    v-model="tagIdText"
-                    :fetch-suggestions="querySearchTag"
-                    placeholder="请您选择要分配的人员"
-                    :trigger-on-focus="true"
-                    clearable
-                    @clear="autocompleteClearTag"
-                    @select="handleSelectTag"
-                ></el-autocomplete>
-
-                <div style="margin-top: 20px;">
-
-                    <el-button type="primary" size="small" @click="seatActSeat">确定</el-button>
-                    <el-button plain size="small" @click="handleCloseTag">取消</el-button>
-
-                </div>
-
-            </el-row>
-
-        </el-drawer>
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="seatActSeat" size="small">确 定</el-button>
+            <el-button @click="handleCloseTag" size="small" plain>取 消</el-button>
+          </div>
+        </el-dialog>
 
     </el-main>
 </template>
@@ -327,7 +313,7 @@ export default {
             tag_flag: false,
             SeatWorkObj: {},
 
-            drawerTitle1: '分配至人',
+            drawerTitle1: '线索转移',
             drawer1: false,
             direction1: 'rtl',
             tagList: [],
@@ -722,5 +708,8 @@ export default {
         text-align: right;
         margin-top: .4rem;
     }
-    
+    .index-main /deep/ div.el-dialog__body{
+        height: 32vh;
+        overflow: auto;
+    }
 </style>
