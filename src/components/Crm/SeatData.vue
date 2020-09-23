@@ -24,7 +24,7 @@
                     class="screen-li"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
+                    placeholder="输入考试项目"
                     :trigger-on-focus="true"
                     clearable
                     @clear="autocompleteClear"
@@ -99,7 +99,7 @@
 
             <el-col :span="3">
 
-                <el-input v-model="form.saleName" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+                <el-input v-model="form.saleName" size="small" placeholder="请输入所属坐席" class="screen-li"></el-input>
 
             </el-col>
 
@@ -121,7 +121,7 @@
             <el-col :span="4">
                 <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
-                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="分配至人" icon-class="toperson" />
+                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
             </el-col>
 
         </el-row>
@@ -214,23 +214,27 @@
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
-                <el-tag 
-                    v-for="(item,index) in tagList" :key="item.id"
-                    :class="tagId == item.userUuid ? 'tag_class tag_default_class' : 'tag_default_class'"
-                    type="info"
-                    effect="plain"
-                    @click="tagClickItem(item)"
-                    >{{item.userName}}
-                </el-tag>
+                <el-autocomplete
+                    ref="autocompleteTag"
+                    size="small"
+                    class="screen-li"
+                    v-model="tagIdText"
+                    :fetch-suggestions="querySearchTag"
+                    placeholder="请您选择要分配的人员"
+                    :trigger-on-focus="true"
+                    clearable
+                    @clear="autocompleteClearTag"
+                    @select="handleSelectTag"
+                ></el-autocomplete>
+
+                <div style="margin-top: 20px;">
+
+                    <el-button type="primary" size="small" @click="seatActSeat">确定</el-button>
+                    <el-button plain size="small" @click="handleCloseTag">取消</el-button>
+
+                </div>
 
             </el-row>
-
-            <div style="text-align: center;">
-
-                <el-button type="primary" style="margin-left: 20px;" size="small" @click="seatActSeat">确定</el-button>
-                <el-button plain size="small" @click="handleCloseTag">取消</el-button>
-
-            </div>
 
         </el-drawer>
 
@@ -329,6 +333,7 @@ export default {
             tagList: [],
             tableSelectList: [],
             tagId: '',
+            tagIdText: '',
         }
     },
     // watch:{
@@ -389,9 +394,6 @@ export default {
                 })
             }
         },
-        tagClickItem(item){
-            this.tagId = item.userUuid;
-        },
         pushPeopleClick() {
             let clueDataSUuidArr = [];
             this.$refs.tableSelect.selection.map(sll => {
@@ -410,8 +412,11 @@ export default {
             }
         },
         dataViewPermissionUserList() {
-            this.$smoke_post(dataViewPermissionUserList, {}).then(res => {
+            this.$smoke_get(dataViewPermissionUserList + `/1`, {}).then(res => {
                 if(res.code == 200) {
+                    res.data.map(sll => {
+                        sll.value = sll.userName;
+                    })
                     this.tagList = res.data;
                 }else{
                     this.$message({
@@ -581,6 +586,12 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchTag(queryString, cb) {
+            var restaurants = this.tagList;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         createFilter(queryString) {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
@@ -590,12 +601,25 @@ export default {
             this.form.examItemId = item.id;
             this.form.examItemText = item.value;
         },
+        handleSelectTag(item) {
+            this.tagId = item.userUuid;
+            this.tagIdText = item.userName;
+        },
         autocompleteClear() {
             this.$nextTick(() => {
                 this.$refs.autocomplete.$children
                     .find(c => c.$el.className.includes('el-input'))
                     .blur();
                 this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
+        autocompleteClearTag() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteTag.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.tagId = '';
                 this.$refs.autocomplete.focus();
             })
         },
