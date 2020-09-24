@@ -2,7 +2,12 @@
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container :class="paddingClass" id="el-container">
-      <p id="toggleSearch" @click="toggleSearch">打开/关闭</p>
+      <p id="toggleSearch" @click="toggleSearch">
+        <svg-icon v-show="hideSearch" icon-class="openSearch" />
+        <svg-icon v-show="!hideSearch" icon-class="closeSearch" />
+        <span v-show="hideSearch">展开条件</span>
+        <span v-show="!hideSearch">收起条件</span>
+      </p>
       <Aside v-if="$store.state.commonFlag"></Aside>
       <keep-alive include="people">
         <router-view @setTableHeight="setTableHeight" @toggleSearch="toggleSearch" :tableHeight="tableHeight" :toggleAction="toggleAction" :hideSearch="hideSearch" />
@@ -76,7 +81,7 @@ export default {
       }, 400)
     },
     setTableHeight(total){//计算数据列表高度
-      const paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight,
+      const paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight?document.getElementsByClassName('el-pagination')[0].offsetHeight : 0,
       searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight,
       windowHeight = document.documentElement.clientHeight;
       this.searchAreaHeight = this.searchAreaHeight
@@ -110,9 +115,20 @@ export default {
 }
 #toggleSearch{
   position: absolute;
-  left: 5rem;
-  top: 60px;
+  width: 100%;
+  left: 0;
+  top: 78px;
   cursor: pointer;
+  color: #AAAAAA;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+#toggleSearch .svg-icon{
+  width: 10px;
+  height: 6px;
 }
 .header-padding{
   padding-top: 60px;
