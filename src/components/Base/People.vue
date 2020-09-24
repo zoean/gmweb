@@ -67,12 +67,18 @@
             </el-row>
             <div>
                 <div>
-                    <el-table
+                    <!-- <el-table
                     id="tableList"
                     :data="userList"
                     @sort-change="sortChange"
                     v-loading="fullscreenLoading"
                     :height="tableHeight"
+                    > -->
+                    <el-table
+                    id="tableList"
+                    :data="userList"
+                    @sort-change="sortChange"
+                    v-loading="fullscreenLoading"
                     >
                     <el-table-column
                         :prop="item.prop"
@@ -179,7 +185,7 @@ export default {
             exportPeople: null
         }
     },
-    created() {   
+    created() {  
         this.getUserDetailedList();
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -362,7 +368,6 @@ export default {
             }
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
-        },
     }
 }
 </script>

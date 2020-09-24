@@ -1,6 +1,5 @@
 <template>
     <el-main class="index-main">
-
         <Start></Start>
         <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
@@ -84,6 +83,11 @@
         <CustomerNotes 
             v-if="drawer"
             @changeDrawer="changeDrawer"
+            @phoneCopy="phoneCopy"
+            @phoneOut='phoneOut'
+            @seatOut='seatOut'
+            @release='release'
+            :scopeRow='scopeRow'
             :followFlag='followFlag' 
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
@@ -110,10 +114,10 @@ import {
     clueContactSign,
     enumByEnumNums
 } from '../../request/api';
-import Start from '../../components/Share/Start';
 import { 
     timestampToTime, receiveTimeFun 
 } from '../../assets/js/common';
+import Start from '../../components/Share/Start';
 import { MJ_16 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
@@ -144,7 +148,6 @@ export default {
                 { 'prop': 'school', 'label': '注册平台' },
             ],
             initOptions: {},
-            //jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -154,6 +157,7 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+            scopeRow: {},
 
             fullscreenLoading: false,
 
@@ -171,7 +175,8 @@ export default {
         }
     },
     components: {
-        Start, CustomerNotes
+        CustomerNotes,
+        Start,
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -185,7 +190,6 @@ export default {
         this.consumerCallDataList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        //this.jqStart = browserfly.noConflict();
         let arr = [MJ_16];
         this.enumByEnumNums(arr);
     },
@@ -251,6 +255,7 @@ export default {
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
             this.examItem = row.examItemId;
+            this.scopeRow = row;
         },
         changeDrawer(val){
             this.drawer = val;
@@ -352,11 +357,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
                 })
             }else{
                 this.$message({
@@ -393,21 +393,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
-                    //     console.log('监听成功-seatState');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // }); 
-                    // this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                    //     console.log('监听成功-callEvent');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
-                    // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // })
                 })
             }else{
                 this.$message({

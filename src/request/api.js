@@ -145,7 +145,8 @@ export const getSpillPoolClueData = '/api/phone/clueData/getSpillPoolClueData'; 
 export const consumerCallDataList = '/api/phone/clueData/consumerCallDataList'; //获取用户线索列表数据    
 export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获取坐席的线索数量情况    
 export const copyTel = '/api/phone/clueData/copyTel'; //复制手机号码    
-export const entryClueData = '/api/phone/clueData/entryClueData'; //手动录入线索数据    
+export const entryClueData = '/api/phone/clueData/entryClueData'; //手动录入线索数据  
+export const jqEntryClueData = '/jhservice/AddUser' //JQ系统客户入库
 export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //批量导入线索数据    
 export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户
 export const geSeatWork = '/api/phone/clueData/geSeatWork'; //获取坐席的工作情况
@@ -240,11 +241,13 @@ export const getStudentDetails = '/api/phone/student/getStudentDetails'; //获�
 //数据查看权限
 export const getPermission = '/api/phone/dataViewPermission/getPermission' //获取数据权限
 export const getPermissionUpdate = '/api/phone/dataViewPermission/update' //更新数据权限
+export const dataViewPermissionUserList = '/api/phone/dataViewPermission/userList' //获取数据权限==》人员
 
 //线索流转
 export const spillPoolActSeat = '/api/phone/theCirculation/spillPoolActSeat' //溢出池线索数据分配给指定坐席
 export const recPoolActSeat = '/api/phone/theCirculation/recPoolActSeat' //回收池线索数据分配给指定坐席
 export const spillPoolActClueRule = '/api/phone/theCirculation/spillPoolActClueRule' //溢出池线索数据分配给指定分配组
+export const seatActSeat = '/api/phone/theCirculation/seatActSeat' //坐席线索数据分配给指定坐席
 
 //主推班型
 export const getGoodsList = '/order-service/goods/getGoodsList' //主推班型

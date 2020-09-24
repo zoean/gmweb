@@ -112,8 +112,7 @@
                 <el-row type="flex" justify="start">
                     <el-col :span="5" style="min-width: 220px;">
                         <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
-                        
-                        <el-image style="width: 217px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                        <el-image style="width: 200px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
                     </el-col>
@@ -178,7 +177,7 @@
                 </el-badge>
                     
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.19</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.20</span>
     
             </el-col>
         </el-row>

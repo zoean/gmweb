@@ -1,6 +1,5 @@
 <template>
     <el-main class="index-main">
-
         <Start></Start>
         <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
@@ -56,7 +55,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作"  width="140" fixed="right" class-name="table_active">
+            <el-table-column prop="active" label="操作"  width="110" fixed="right" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                 <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
@@ -71,7 +70,7 @@
                   >
                 <svg-icon slot="reference" icon-title="释放数据" icon-class="release" />
                   </el-popconfirm>
-                <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
                 <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
               </template>
             </el-table-column>
@@ -94,6 +93,11 @@
         <CustomerNotes 
             v-if="drawer"
             @changeDrawer="changeDrawer"
+            @phoneCopy="phoneCopy"
+            @phoneOut='phoneOut'
+            @seatOut='seatOut'
+            @release='release'
+            :scopeRow='scopeRow'
             :followFlag='followFlag' 
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
@@ -120,11 +124,11 @@ import {
     clueContactSign,
     enumByEnumNums
 } from '../../request/api';
-import Start from '../../components/Share/Start';
 import { 
     timestampToTime, receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_16 } from '../../assets/js/data';
+import Start from '../../components/Share/Start';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'contactToday',
@@ -154,7 +158,6 @@ export default {
                 { 'prop': 'school', 'label': '注册平台' },
             ],
             initOptions: {},
-            //jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -164,6 +167,7 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+            scopeRow: {},
 
             fullscreenLoading: false,
 
@@ -181,7 +185,8 @@ export default {
         }
     },
     components: {
-        Start, CustomerNotes
+        CustomerNotes,
+        Start,
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -195,7 +200,6 @@ export default {
         this.todayCallDataList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        //this.jqStart = browserfly.noConflict();
         let arr = [MJ_16];
         this.enumByEnumNums(arr);
     },
@@ -261,6 +265,7 @@ export default {
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
             this.examItem = row.examItemId;
+            this.scopeRow = row;
         },
         changeDrawer(val){
             this.drawer = val;
@@ -363,11 +368,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
                 })
             }else{
                 this.$message({
@@ -404,21 +404,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
-                    //     console.log('监听成功-seatState');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // }); 
-                    // this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                    //     console.log('监听成功-callEvent');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
-                    // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // })
                 })
             }else{
                 this.$message({

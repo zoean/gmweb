@@ -16,7 +16,9 @@
 
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" >
 
-                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px; margin-top: 20px;">客户信息：</el-row>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px; margin-top: 20px;">
+                            客户信息：
+                        </el-row>
                 
                         <el-row>
                             
@@ -24,6 +26,22 @@
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="ruleForm.tel" readonly size="small" class="borderNone"></el-input>
                                 </el-form-item>
+                                <div style="position: relative; left: 226px; top: -42px;" v-if="!routePathFlag">
+                                    <svg-icon icon-class="copy" icon-title="复制手机号码" @click="phoneCopy()" />
+                                    <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOut()" icon-class="takephone" />
+                                    <svg-icon style="color: #409EFF" icon-title="座机外拨" @click="seatOut()" icon-class="landline" />
+                                    <el-popconfirm
+                                        confirmButtonText='确定'
+                                        cancelButtonText='取消'
+                                        icon="el-icon-info"
+                                        iconColor="red"
+                                        placement="top"
+                                        title="确认释放该数据吗？"
+                                        @onConfirm="release()"
+                                      >
+                                        <svg-icon v-if="!releaseFlag" style="color: #409EFF" slot="reference" icon-title="释放数据" icon-class="release" />
+                                    </el-popconfirm>
+                                </div>
                             </el-col>
 
                             <el-col :span="6">
@@ -629,6 +647,10 @@ export default {
         userCDARUuid: {
             type: String,
             default: ''
+        },
+        scopeRow: {
+            type: Object,
+            default: {}
         }
     },
     data() {
@@ -785,6 +807,7 @@ export default {
             pcaa: null, //省市数据
             restaurants: [],
             routePathFlag: false,
+            releaseFlag: false,
             isDisable: true
         }
     },
@@ -829,6 +852,10 @@ export default {
             this.routePathFlag = true;
         }
 
+        if(this.$route.path.indexOf("registered") != -1 || this.$route.path.indexOf("completed") != -1) {
+            this.releaseFlag = true;
+        }
+
         var _self = this;
         document.onkeydown = function(e){
             if(window.event == undefined){
@@ -854,6 +881,18 @@ export default {
                     this.classTypeList = res.data;
                 }
             })
+        },
+        phoneCopy() {
+            this.$emit("phoneCopy", this.scopeRow)
+        },
+        phoneOut() {
+            this.$emit("phoneOut", this.scopeRow)
+        },
+        seatOut() {
+            this.$emit("seatOut", this.scopeRow)
+        },
+        release() {
+            this.$emit("release", this.scopeRow)
         },
         quxiao() {
             this.$emit("changeDrawer", false)

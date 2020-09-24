@@ -33,6 +33,14 @@ module.exports = {
         port: 8080,//设置端口
         host: "0.0.0.0",
         proxy: {//配置跨域
+          '/jhservice': {
+            target: process.env.VUE_APP_API_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/jhservice': '/jhservice'
+            }
+          },
           '/lovestudy': {
             target: process.env.VUE_APP_JHWX,
             ws: false,
@@ -97,7 +105,7 @@ module.exports = {
             pathRewrite: {
                 '^/file_api': '/'
             }
-          },
+          }
         }
     },
 

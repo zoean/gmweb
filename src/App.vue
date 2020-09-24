@@ -28,14 +28,15 @@ export default {
   data() {
     return{
       isNormalPage: false,
-      unNormalPage: ['/login', '/'],
+      unNormalPage: ['/login', '/', '/forget'],
       paddingClass: '',
       tableHeight: 0,
       toggleAction: false,
       hideSearch: false,
       searchAreaHeight: 0,
       excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData'],
-      includeSearch: false
+      includeSearch: false,
+      initOptions: {}
     }
   },
   created() {
@@ -48,6 +49,20 @@ export default {
   },
   distroyed(){
     window.removeEventListener('resize')
+    this.initOptions = JSON.parse(localStorage.getItem('initOptions'));
+    if(this.initOptions) {
+      var demo = browserfly.noConflict();
+      var initOptions = {
+		    debug: true, // 日志是否输出 default false
+  		  strid: '',
+  		  uin: this.initOptions.uin , // tq号 / 用户名 必填
+  		  admin_uin: this.initOptions.adminUin , // 主管理员TQ号
+  		  appid: this.initOptions.appId, // 唯一凭证
+  		  access_token: this.initOptions.accessToken, // 密文
+  		  server_url: this.initOptions.serverUrl
+      };
+      demo.init(initOptions);
+    }
   },
   watch:{
     '$route.path': function(newVal){

@@ -1,6 +1,5 @@
 <template>
     <el-main class="index-main">
-
         <Start></Start>
         <el-tabs @tab-click="tabChange">
             <el-tab-pane label="学员">
@@ -37,7 +36,7 @@
                         <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                         <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
                         <!-- <el-button @click="release(scope.row)" type="text" >释放数据</el-button> -->
-                        <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                        <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
                         <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
                     </template>
                     </el-table-column>
@@ -132,6 +131,11 @@
         <CustomerNotes 
             v-if="drawer"
             @changeDrawer="changeDrawer"
+            @phoneCopy="phoneCopy"
+            @phoneOut='phoneOut'
+            @seatOut='seatOut'
+            @release='release'
+            :scopeRow='scopeRow'
             :followFlag='followFlag' 
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
@@ -164,8 +168,8 @@ import {
     getOrderPayRecord,
     getOrderCustomer
 } from '../../request/api';
-import Start from '../../components/Share/Start';
 import { timestampToTime, schoolType } from '../../assets/js/common';
+import Start from '../../components/Share/Start';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'completed',
@@ -191,7 +195,6 @@ export default {
                 { 'prop': 'school', 'label': '注册平台' },
             ],
             initOptions: {},
-            //jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -201,6 +204,7 @@ export default {
             comMode: '',
             schoolId: '',
             examItem: '',
+            scopeRow: {},
             fullscreenLoading: false,
             orderForm: {
                 userIds: [],
@@ -265,7 +269,8 @@ export default {
         }
     },
     components: {
-        Start, CustomerNotes
+        CustomerNotes,
+        Start,
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -279,7 +284,6 @@ export default {
         this.orderCallDataList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
-        //this.jqStart = browserfly.noConflict();
         this.getOrderCustomer();
     },
     methods: {
@@ -358,6 +362,7 @@ export default {
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
             this.examItem = row.examItemId;
+            this.scopeRow = row;
         },
         changeDrawer(val){
             this.drawer = val;
@@ -448,11 +453,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("callTip", function(message, jsonObject) {
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
                 })
             }else{
                 this.$message({
@@ -489,21 +489,6 @@ export default {
                             message: res.msg
                         })
                     }
-	                // this.jqStart.monitorEvent("seatState", function(message, jsonObject) {
-                    //     console.log('监听成功-seatState');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // }); 
-                    // this.jqStart.monitorEvent("callEvent", function(message, jsonObject) {
-                    //     console.log('监听成功-callEvent');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // });
-                    // this.jqStart.monitorEvent("callTip",function(message, jsonObject){
-                    //     console.log('监听成功-callTip');
-                    //     console.log(message);
-                    //     console.log(jsonObject);
-                    // })
                 })
             }else{
                 this.$message({
