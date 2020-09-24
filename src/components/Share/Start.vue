@@ -91,6 +91,7 @@ export default {
                 // console.log('监听成功-callTip');
                 // console.log(message);
                 that.call_location = decodeURIComponent(message.call_tip.location);
+                that.call_location = that.call_location.substring(0, that.call_location.length - 4);
                 console.log(that.call_location);
                 // console.log(jsonObject);
             })

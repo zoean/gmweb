@@ -4,6 +4,15 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.23 -- 2020/09/23" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、通话弹框新增手机号码归属地</p>
+          <h4>修复bug</h4>
+          <p>1、banner的UI调整</p>
+          <p>2、坐席线索管理页面转移线索功能优化</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.22 -- 2020/09/22" placement="top">
         <el-card>
           <h4>新增功能</h4>
