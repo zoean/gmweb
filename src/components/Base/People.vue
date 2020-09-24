@@ -129,11 +129,6 @@ import { add } from 'lodash/fp';
 export default {
     name: 'people',
     props: ['tableHeight','toggleAction', 'hideSearch'],
-    watch: {
-        tableHeight: (val) => {
-            console.log(val, 'table高度发生变化')
-        }
-    },
     data() {
         return {
             userList: [],
@@ -424,10 +419,4 @@ export default {
             }
         }
     }
-    .el-pagination{
-        text-align: right;
-        margin-top: 20px;
-    }
-
-
 </style>

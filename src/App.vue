@@ -2,7 +2,7 @@
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container :class="paddingClass" id="el-container">
-      <p id="toggleSearch" @click="toggleSearch">
+      <p v-if="includeSearch" id="toggleSearch" @click="toggleSearch">
         <svg-icon v-show="hideSearch" icon-class="openSearch" />
         <svg-icon v-show="!hideSearch" icon-class="closeSearch" />
         <span v-show="hideSearch">展开条件</span>
@@ -33,7 +33,9 @@ export default {
       tableHeight: 0,
       toggleAction: false,
       hideSearch: false,
-      searchAreaHeight: 0
+      searchAreaHeight: 0,
+      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData'],
+      includeSearch: false
     }
   },
   created() {
@@ -60,9 +62,17 @@ export default {
       }else{
         this.isNormalPage = true
         this.paddingClass = 'header-padding'
-      }      
+      }  
+      if(this.excludeSearch.includes(this.$route.path)){
+        this.includeSearch = false
+      }else{
+        this.includeSearch = true
+      } 
+      this.hideSearch = false
+      this.toggleAction = false
     }
   },
+
   mounted(){
     if(this.unNormalPage.includes(this.$route.path)){
       this.isNormalPage = false
@@ -71,7 +81,15 @@ export default {
       this.isNormalPage = true
       this.paddingClass = 'header-padding'
     }
+    if(this.excludeSearch.includes(this.$route.path)){
+      this.includeSearch = false
+    }else{
+      this.includeSearch = true
+    } 
+    this.hideSearch = false
+    this.toggleAction = false
   },
+
   methods: {
     toggleSearch(){
       this.toggleAction = !this.toggleAction
@@ -82,13 +100,17 @@ export default {
     },
     setTableHeight(total){//计算数据列表高度
       const paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight?document.getElementsByClassName('el-pagination')[0].offsetHeight : 0,
-      searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight,
+      searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight ? document.getElementsByClassName('people-screen')[0].offsetHeight : 0,
       windowHeight = document.documentElement.clientHeight;
       this.searchAreaHeight = this.searchAreaHeight
       if(total <= 14){
-          this.tableHeight = total * 45
+        if(total <= 1){
+          this.tableHeight = 94
+        }else{
+          this.tableHeight = total * 46
+        }
       }else{
-          this.tableHeight = this.hideSearch ? windowHeight - 200 + searchAreaHeight : windowHeight - 210
+          this.tableHeight = this.hideSearch ? windowHeight - 180 + searchAreaHeight : windowHeight - 190
       }
     },
     resizeHandle(){
@@ -117,7 +139,7 @@ export default {
   position: absolute;
   width: 100%;
   left: 0;
-  top: 78px;
+  top: 68px;
   cursor: pointer;
   color: #AAAAAA;
   display: flex;

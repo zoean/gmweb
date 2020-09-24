@@ -21,7 +21,7 @@ body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, input, textarea, select, p, dl, d
 body {
     font: 12px/1.5 Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #555;
-    background-color: #F1F1F1;
+    background-color: #FFFFFF;
 }
 em, i {
     font-style: normal;
@@ -315,10 +315,9 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-main{
-    padding: 20px 12px 12px 12px;
-    /* padding-bottom: 30px; */
+    padding: 12px 0 0 0;
     background: #fff;
-    margin: 16px;
+    margin: 16px 16px 0 16px;
     height: calc(100vh - 92px) !important;
     min-width: 980px;
     overflow: visible;

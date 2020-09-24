@@ -174,6 +174,7 @@ export default {
   .aside-all{
     position: relative;
     height: 100%;
+    z-index: 2;
     .svg-icon{
       margin-left: 4px !important;
       color: #909399;

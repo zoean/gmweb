@@ -1,6 +1,6 @@
 <template>
-    <el-main class="index-main">
-        <el-row class="people-screen">
+    <el-main>
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -92,7 +92,7 @@
             fit
             :key="Math.random()"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 10px;">
+            style="width: 100%; margin-top: 10px;" :height="tableHeight">
     
             <el-table-column
                 :prop="item.prop"
@@ -122,7 +122,6 @@
     
         <el-pagination
             background
-            style="margin-top: 30px; text-align:right; margin-right: 1.2%; margin-bottom: 50px;"
             layout="total, sizes, prev, pager, next, jumper"
             :total='total'
             :page-size='form.pageSize'
@@ -144,6 +143,7 @@ import { getTextByTime, timestampToTime, timeReturn } from '../../assets/js/comm
 import VueAudio from '../Share/VueAudio';
 export default {
     name: 'everyTime',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         VueAudio
     },
@@ -248,6 +248,7 @@ export default {
                     })
                     this.tableData = res.data.list;
                     this.total = res.data.total;
+                    this.$emit('setTableHeight', this.total)
                     this.form.currentPage = res.data.currentPage;
                 }else{
                     this.fullscreenLoading = false;

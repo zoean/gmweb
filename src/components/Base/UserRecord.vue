@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
 
-        <el-row>
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
         
             <el-col :span="8">
                 <el-date-picker
@@ -42,7 +42,8 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 20px;">
+            style="width: 100%;"
+            :height="tableHeight">
     
             <af-table-column
                 :prop="item.prop"
@@ -60,7 +61,6 @@
 
         <el-pagination
             background
-            style="margin-top: 30px; text-align:right; margin-right: 1.2%; margin-bottom: 50px;"
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
@@ -80,6 +80,7 @@ import { moduleList, systemLogList } from '../../request/api';
 import { timestampToTime } from '../../assets/js/common'
 export default {
     name: 'userRecord',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             fullscreenLoading: false,
@@ -116,11 +117,9 @@ export default {
                 if(res.code == 200){
                     setTimeout(() => {
                         this.fullscreenLoading = false;
-
-
-
                         this.tableData = res.data.list;
-                        this.form.total = res.data.total;
+                        this.form.total = res.data.total;                        
+                        this.$emit('setTableHeight', this.form.total)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -170,7 +169,6 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
@@ -190,7 +188,6 @@ export default {
     }
     .el-pagination{
         text-align: right;
-        margin-top: .4rem;
     }
     .index-main /deep/ .bofang-column{
         padding: 0 !important;

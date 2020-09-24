@@ -98,3 +98,8 @@
   75%{ opacity: 0.25;}
 100%{opacity: 0;}
 }
+
+.el-pagination{
+  padding: 16px 10px 0 0;
+  text-align: right;
+}
