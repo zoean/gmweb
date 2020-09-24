@@ -368,6 +368,7 @@ export default {
             }
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
+        }
     }
 }
 </script>
