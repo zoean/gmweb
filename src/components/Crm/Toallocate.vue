@@ -144,6 +144,7 @@ export default {
             totalFlag: false,
             columnList: [
                 { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
+                { 'prop': 'userName', 'label': '姓名', 'width': 90 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目', 'width': 130 },
                 // { 'prop': 'userName', 'label': '所属坐席' },

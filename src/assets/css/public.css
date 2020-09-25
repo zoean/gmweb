@@ -191,6 +191,12 @@ a:link,a:active,a:visited,a:hover {
     height: 44px !important;
     line-height: 44px !important;
 }
+.el-menu-item.is-active .svg-icon{
+    color: #409EFF !important;
+}
+.el-menu-item * {
+    vertical-align: middle !important;
+}
 .el-submenu__title{
     min-width: 175px;
 }
@@ -513,8 +519,7 @@ div.el-dialog__body{
 }
 /* // 滚动条的滑块 */
 ::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 8px;
+    background-color: #dddddd;
 }
 
 .kanban_dian{
