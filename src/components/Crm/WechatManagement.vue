@@ -268,6 +268,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .index-main{
+  margin-top: 0;
   .el-col-6{
     height: auto !important;
   }

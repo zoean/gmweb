@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="3">
                 <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
@@ -157,6 +157,7 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
+            :height="tableHeight"
         >
     
             <el-table-column
@@ -183,7 +184,6 @@
     
         <el-pagination
             background
-            style="margin-top: 30px; text-align:right; margin-right: 1.2%; margin-bottom: 50px;"
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
@@ -227,6 +227,7 @@ import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, file
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'manageClues',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         CustomerNotes
     },
@@ -481,6 +482,7 @@ export default {
 
                         this.tableData = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -549,10 +551,6 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
     .index-main /deep/ .bofang-column{
         padding: 0 !important;

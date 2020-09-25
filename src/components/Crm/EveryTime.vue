@@ -1,92 +1,93 @@
 <template>
     <el-main>
-        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
+        <div :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
+            <el-row :gutter="10" type="flex" justify="space-between" class="mb10">
 
-            <el-col :span="6">
-                <el-date-picker
-                    clearable
-                    style="width: 97%;"
-                    size="small"
-                    v-model="dataPicker"
-                    type="datetimerange"
-                    range-separator="至"
-                    :default-time="['00:00:00', '23:59:59']"
-                    @change="datePickerChange"
-                    start-placeholder="拨打时间"
-                    end-placeholder="拨打时间">
-                </el-date-picker>
-            </el-col>
+                <el-col :span="5">
+                    <el-date-picker
+                        clearable
+                        style="width: 97%;"
+                        size="small"
+                        v-model="dataPicker"
+                        type="datetimerange"
+                        range-separator="至"
+                        :default-time="['00:00:00', '23:59:59']"
+                        @change="datePickerChange"
+                        start-placeholder="拨打时间"
+                        end-placeholder="拨打时间">
+                    </el-date-picker>
+                </el-col>
 
-            <el-col :span="3">
-                <el-cascader
-                    ref="cascader"
-                    size="small"
-                    class="screen-li"
-                    placeholder="选拨打人部门"
-                    collapse-tags
-                    :show-all-levels=false
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
-                    clearable>
-                </el-cascader>
-            </el-col>
+                <el-col :span="3">
+                    <el-cascader
+                        ref="cascader"
+                        size="small"
+                        class="screen-li"
+                        placeholder="选拨打人部门"
+                        collapse-tags
+                        :show-all-levels=false
+                        :options="zuzhiOptions"
+                        @change='handleZuzhiChange'
+                        :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true }"
+                        clearable>
+                    </el-cascader>
+                </el-col>
 
-            <el-col :span="3">
-                <el-select v-model="form.callStyle" size="small" placeholder="选择拨打方式" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in callStyleArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-    
-            <el-col :span="3">
-                <el-input v-model="form.calledId" size="small" placeholder="输入拨打电话" class="screen-li" clearable></el-input>
-            </el-col>
-    
-            <el-col :span="3">
-                <el-input v-model="form.callerId" size="small" placeholder="输入客户电话" class="screen-li" clearable></el-input>
-            </el-col>
-    
-            <el-col :span="3">
-                <el-select v-model="form.isCalledPhone" size="small" placeholder="选择是否接通" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in isCalledPhoneArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-
-            <el-col :span="3">
-                <el-select v-model="form.pathway" size="small" placeholder="选择呼叫途径" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in pathwayArr"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-    
-        </el-row>
-    
-        <el-row class="people-screen">
+                <el-col :span="3">
+                    <el-select v-model="form.callStyle" size="small" placeholder="选择拨打方式" class="screen-li" clearable>
+                        <el-option
+                        v-for="item in callStyleArr"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
         
-            <el-col :span="3">
-                <el-input v-model="form.seatName" size="small" placeholder="输入拨打姓名" class="screen-li" clearable></el-input>
-            </el-col>
-    
-            <el-col :span="21">
-                <el-button type="primary" size="small" @click="timeClick">查询</el-button>
-            </el-col>
-    
-        </el-row>
-    
+                <el-col :span="3">
+                    <el-input v-model="form.calledId" size="small" placeholder="输入拨打电话" class="screen-li" clearable></el-input>
+                </el-col>
+        
+                <el-col :span="3">
+                    <el-input v-model="form.callerId" size="small" placeholder="输入客户电话" class="screen-li" clearable></el-input>
+                </el-col>
+        
+                <el-col :span="3">
+                    <el-select v-model="form.isCalledPhone" size="small" placeholder="选择是否接通" class="screen-li" clearable>
+                        <el-option
+                        v-for="item in isCalledPhoneArr"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+
+                <el-col :span="3">
+                    <el-select v-model="form.pathway" size="small" placeholder="选择呼叫途径" class="screen-li" clearable>
+                        <el-option
+                        v-for="item in pathwayArr"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+        
+            </el-row>
+        
+            <el-row  :gutter="10">
+            
+                <el-col :span="3">
+                    <el-input v-model="form.seatName" size="small" placeholder="输入拨打姓名" class="screen-li" clearable></el-input>
+                </el-col>
+        
+                <el-col :span="21">
+                    <el-button type="primary" size="small" @click="timeClick">查询</el-button>
+                </el-col>
+        
+            </el-row>
+        </div>
         <el-table
             :data="tableData"
             fit
@@ -309,10 +310,6 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
     .index-main /deep/ .bofang-column{
         padding: 0 !important;

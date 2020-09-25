@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -89,7 +89,8 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
 
             <el-table-column
               :prop="item.prop"
@@ -118,7 +119,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :page-sizes="[10, 20, 30, 50, 100]"
@@ -144,6 +144,7 @@ import { timestampToTime } from '../../assets/js/common';
 import { MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'seatData',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             form: {
@@ -224,6 +225,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -327,10 +329,5 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-    }
-    
+    }    
 </style>

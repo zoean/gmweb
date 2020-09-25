@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main newStudents">
 
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -90,7 +90,8 @@
             ref="tree"
             v-loading="fullscreenLoading"
             @sort-change="sortChange"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               type="selection"
               width="45">
@@ -206,6 +207,7 @@ import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../a
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'newStudents',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         StudentsNotes
     },
@@ -463,6 +465,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
 
                 }else{
@@ -578,10 +581,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
         }
     }
 

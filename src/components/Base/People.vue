@@ -67,18 +67,12 @@
             </el-row>
             <div>
                 <div>
-                    <!-- <el-table
-                    id="tableList"
-                    :data="userList"
-                    @sort-change="sortChange"
-                    v-loading="fullscreenLoading"
-                    :height="tableHeight"
-                    > -->
                     <el-table
                     id="tableList"
                     :data="userList"
                     @sort-change="sortChange"
                     v-loading="fullscreenLoading"
+                    :height="tableHeight"
                     >
                     <el-table-column
                         :prop="item.prop"
@@ -375,6 +369,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 0;
         position: relative;
         #toggleSearch{
             position: absolute;

@@ -125,7 +125,6 @@ export default {
 
 <style lang="less" scoped>
 .index-main {
-  height: calc(100vh - 60px);
   .people-title {
     width: 100%;
     height: 40px;
@@ -151,8 +150,7 @@ export default {
 .index-main /deep/ .el-table .cell {
   text-align: center !important;
 }
-/deep/ .el-pagination {
-  float: right;
-  margin-top: 0.2rem;
+.el-main{
+  margin-top: 0;
 }
 </style>

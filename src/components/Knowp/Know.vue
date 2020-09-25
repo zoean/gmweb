@@ -432,6 +432,7 @@ export default {
     }
     .index-main{
         height: auto;
+        margin-top: 0;
         .people-title{
             width: 100%;
             height: 40px;

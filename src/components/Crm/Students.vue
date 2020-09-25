@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main students">
         
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号"  class="screen-li"></el-input>
@@ -144,6 +144,7 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
+            :height="tableHeight"
         >
             <el-table-column
               :prop="item.props"
@@ -255,6 +256,7 @@ import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../a
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'students',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         PageFieldManage,
         StudentsNotes,
@@ -586,7 +588,7 @@ export default {
                         this.list = res.data.list;
                         this.columnList = res.data.filedList;
                         this.form.total = res.data.total;
-                        
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
 
                 }else{
@@ -671,11 +673,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
-            margin-right: .4rem;
         }
     }
 

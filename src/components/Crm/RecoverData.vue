@@ -414,7 +414,7 @@ export default {
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

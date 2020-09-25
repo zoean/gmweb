@@ -410,7 +410,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        height: auto;
+        margin-top: 0;
         .people-title{
             width: 100%;
             height: 40px;
@@ -427,10 +427,6 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
 
 </style>

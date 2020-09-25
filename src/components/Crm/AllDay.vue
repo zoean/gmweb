@@ -550,7 +550,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
-                        this.$emit('setTableHeight', res.data.total)
+                        this.$emit('setTableHeight', res.data.total, 1)
                         this.$nextTick(() => {
                             this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));

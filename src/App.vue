@@ -34,9 +34,16 @@ export default {
       toggleAction: false,
       hideSearch: false,
       searchAreaHeight: 0,
-      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData'],
+      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData', '/crm/dataStatistics/eduData', '/crm/crmConfig/enums', '/crm/crmConfig/FieldManagement', '/crm/eduAdmin/headMaster', '/crm/sms/smslist', '/crm/class/orgOpenClass', '/crm/class/openClass', '/crm/class/returnOrgVisit', '/crm/class/returnVisit', '/crm/wechat/wechatManagement', '/crm/mbo/companymonthmbo', '/crm/mbo/companydaymbo', '/crm/mbo/departmentmonthmbo', '/crm/mbo/departmentdaymbo', '/forget', '/edition', '/operate/activityA/createactivity', '/operate/activityA/ActivityDetail', '/operate/activityA/partinMember', '/operate/activityA/winninglist', '/operate/activityA/pricelist', '/base/people'],
       includeSearch: false,
-      initOptions: {}
+      initOptions: {},
+      total: 0,
+      paginationHeight: 0,
+      searchAreaHeight: 0,
+      windowHeight: 0,
+      initHeight: 0,
+      initSearchHeight: 0,
+      handleCount: 0
     }
   },
   created() {
@@ -110,26 +117,35 @@ export default {
       this.toggleAction = !this.toggleAction
       setTimeout(()=>{
           this.hideSearch = !this.hideSearch 
-          this.setTableHeight()
+          this.setTableHeight(this.total, this.handleCount)
       }, 400)
     },
-    setTableHeight(total){//计算数据列表高度
-      const paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight?document.getElementsByClassName('el-pagination')[0].offsetHeight : 0,
-      searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight ? document.getElementsByClassName('people-screen')[0].offsetHeight : 0,
-      windowHeight = document.documentElement.clientHeight;
-      this.searchAreaHeight = this.searchAreaHeight
-      if(total <= 14){
-        if(total <= 1){
-          this.tableHeight = 94
-        }else{
-          this.tableHeight = total * 46
-        }
-      }else{
-          this.tableHeight = this.hideSearch ? windowHeight - 180 + searchAreaHeight : windowHeight - 190
+    setTableHeight(total, handleCount){//计算数据列表高度
+      this.handleCount = handleCount || 0
+      this.total = total
+      this.paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight?document.getElementsByClassName('el-pagination')[0].offsetHeight : 0,
+      this.searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight ? document.getElementsByClassName('people-screen')[0].offsetHeight : 0,
+      this.windowHeight = document.documentElement.clientHeight;
+      if(this.searchAreaHeight > 0){
+        this.initSearchHeight =  this.searchAreaHeight
       }
+      console.log('maxHeight', this.windowHeight - this.paginationHeight - this.initSearchHeight -110)
+      // if(total <= 14){
+      //   if(total <= 1){
+      //     console.log(9)
+      //     this.tableHeight = 90
+      //   }else{
+      //     console.log(10)
+      //     this.tableHeight = total * 45 + 47
+      //   }
+      // }else{
+          this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 -130: this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
+      // }
     },
     resizeHandle(){
-      window.addEventListener('resize', _.throttle(this.setTableHeight, 500))
+      window.addEventListener('resize', _.throttle(()=>{
+        this.setTableHeight(this.total,this.handleCount)
+      }, 500))
     }
   }
 }
