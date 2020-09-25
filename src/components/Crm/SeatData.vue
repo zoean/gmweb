@@ -43,15 +43,18 @@
 
             <el-col :span="3">
                 
-                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in enumList['MJ-6']"
-                      :key="item.number"
-                      v-if="item.enable"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    ref="autocompleteSpread"
+                    class="screen-li"
+                    v-model="form.spreadText"
+                    :fetch-suggestions="querySearchSpread"
+                    placeholder="输入推广渠道"
+                    :trigger-on-focus="true"
+                    @select="handleSelectSpread"
+                    @clear="autocompleteClearSpread"
+                ></el-autocomplete>
 
             </el-col>
 
@@ -268,6 +271,7 @@ export default {
                 city: '',
                 provinceCity: [], //所在省市
                 spread: '',
+                spreadText: '',
                 userUuid: '',
                 num: '',
                 sortSet: [],
@@ -572,6 +576,12 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchSpread(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-6']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         querySearchTag(queryString, cb) {
             var restaurants = this.tagList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -591,6 +601,10 @@ export default {
             this.tagId = item.userUuid;
             this.tagIdText = item.userName;
         },
+        handleSelectSpread(item) {
+            this.form.spread = item.number;
+            this.form.spreadText = item.value;
+        },
         autocompleteClear() {
             this.$nextTick(() => {
                 this.$refs.autocomplete.$children
@@ -607,6 +621,15 @@ export default {
                     .blur();
                 this.tagId = '';
                 this.$refs.autocomplete.focus();
+            })
+        },
+        autocompleteClearSpread() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteSpread.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.spread = '';
+                this.$refs.autocompleteSpread.focus();
             })
         },
         cityChange() {

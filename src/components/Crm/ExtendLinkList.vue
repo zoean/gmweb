@@ -47,15 +47,18 @@
 
             <el-col :span="3">
                 
-                <el-select v-model="form.spreadId" size="small" placeholder="请选择渠道" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in enumList['MJ-6']"
-                      :key="item.number"
-                      v-if="item.enable"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    ref="autocompleteSpread"
+                    class="screen-li"
+                    v-model="form.spreadText"
+                    :fetch-suggestions="querySearchSpread"
+                    placeholder="输入推广渠道"
+                    :trigger-on-focus="true"
+                    @select="handleSelectSpread"
+                    @clear="autocompleteClearSpread"
+                ></el-autocomplete>
 
             </el-col>
 
@@ -64,7 +67,7 @@
                 <el-select v-model="form.accId" size="small" class="screen-li" placeholder="选择推广账号" clearable="">
                     <el-option
                       v-for="item in enumList['MJ-7']"
-                      :key="item.name"
+                      :key="item.number"
                       v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
@@ -156,6 +159,7 @@ export default {
                 examItemsId: '', //考试项目
                 ruleId: '', //分配组Id
                 spreadId: '', //渠道
+                spreadText: '',
                 userName: '', //创建人
                 // userUuid: ''
             },
@@ -285,6 +289,12 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchSpread(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-6']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         createFilter(queryString) {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
@@ -293,9 +303,22 @@ export default {
         handleSelect(value) {
             this.form.examItemsId = value.id;
         },
+        handleSelectSpread(item) {
+            this.form.spreadId = item.number;
+            this.form.spreadText = item.value;
+        },
         autocompleteClear() {
             this.form.examItemsId = '';
-        }
+        },
+        autocompleteClearSpread() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteSpread.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.spreadId = '';
+                this.$refs.autocompleteSpread.focus();
+            })
+        },
     },
     mounted() {
         

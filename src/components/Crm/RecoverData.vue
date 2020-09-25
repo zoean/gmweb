@@ -38,7 +38,7 @@
                     class="screen-li"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
+                    placeholder="输入考试项目"
                     :trigger-on-focus="true"
                     @select="handleSelect"
                     @clear="autocompleteClear"
@@ -55,25 +55,7 @@
             </el-col>
 
             <el-col :span="3">
-                
-                <el-select v-model="form.spread" size="small" placeholder="请选择渠道" clearable>
-                    <el-option
-                      v-for="item in enumList['MJ-6']"
-                      :key="item.number"
-                      v-if="item.enable"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
-
-            </el-col>
-            
-        </el-row>
-
-        <el-row class="people-screen">
-
-            <el-col :span="3">
-                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" style="width: 100%;" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
                       :key="item.name"
@@ -82,6 +64,27 @@
                       :value="item.number">
                     </el-option>
                 </el-select>
+            </el-col>
+            
+        </el-row>
+
+        <el-row class="people-screen">
+
+            <el-col :span="3">
+                
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    ref="autocompleteSpread"
+                    class="screen-li"
+                    v-model="form.spreadText"
+                    :fetch-suggestions="querySearchSpread"
+                    placeholder="输入推广渠道"
+                    :trigger-on-focus="true"
+                    @select="handleSelectSpread"
+                    @clear="autocompleteClearSpread"
+                ></el-autocomplete>
+
             </el-col>
 
             <el-col :span="3">
@@ -261,6 +264,7 @@ export default {
                 province: '',
                 provinceCity: [], //所在省市
                 spread: '',
+                spreadText: '',
                 userUuid: '',
                 num: '',
                 dataStartTime: '',
@@ -440,6 +444,12 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchSpread(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-6']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         createFilter(queryString) {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
@@ -448,8 +458,21 @@ export default {
         handleSelect(item) {
             this.form.examItemId = item.id;
         },
+        handleSelectSpread(item) {
+            this.form.spread = item.number;
+            this.form.spreadText = item.value;
+        },
         autocompleteClear() {
             this.form.examItemId = '';
+        },
+        autocompleteClearSpread() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteSpread.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.spread = '';
+                this.$refs.autocompleteSpread.focus();
+            })
         },
         cityChange() {
             
