@@ -34,7 +34,7 @@
                   class="inline-input screen-li"
                   v-model="form.spreadText"
                   :fetch-suggestions="querySearchSpread"
-                  placeholder="输入来源渠道"
+                  placeholder="输入推广渠道"
                   :trigger-on-focus="true"
                   @select="handleSelectSpread"
                   @clear="autocompleteClearSpread"
@@ -305,7 +305,7 @@ export default {
               { 'prop': 'tel', 'label': '手机号码', 'width': 90 },
               { 'prop': 'name', 'label': '客户姓名' },
               { 'prop': 'examItemName', 'label': '考试项目', 'width': 120 },
-              { 'prop': 'spread', 'label': '来源渠道', 'width': 120 },
+              { 'prop': 'spread', 'label': '推广渠道', 'width': 120 },
               { 'prop': 'acc', 'label': '推广账号', 'width': 120 },
             //   { 'prop': 'exteName', 'label': '推广人' },
               { 'prop': 'referencePage', 'label': '推广落地页', 'width': 200 },

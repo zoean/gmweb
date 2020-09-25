@@ -173,7 +173,7 @@ export default {
                 { 'prop': 'acc', 'label': '推广账号' },
                 { 'prop': 'rule', 'label': '分配组' },
                 { 'prop': 'examItems', 'label': '考试项目' },
-                { 'prop': 'spread', 'label': '来源渠道' },
+                { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '创建时间' },
             ],
             dataPicker: [],

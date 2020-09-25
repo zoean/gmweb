@@ -170,9 +170,9 @@
 
                     <!-- <el-col :span="6">
 
-                        <el-form-item label="来源渠道" prop="spread">
+                        <el-form-item label="推广渠道" prop="spread">
                       
-                            <el-select v-model="ruleForm.spread" placeholder="请选择来源渠道" size="small">
+                            <el-select v-model="ruleForm.spread" placeholder="请选择推广渠道" size="small">
                                 <el-option
                                   v-for="item in enumList['MJ-6']"
                                   :key="item.name"
@@ -377,7 +377,7 @@ export default {
                 //   { required: true, message: '请选择分配组', trigger: 'change' }
                 // ],
                 // spread: [
-                //   { required: true, message: '请选择来源渠道', trigger: 'change' }
+                //   { required: true, message: '请选择推广渠道', trigger: 'change' }
                 // ],
                 url: [
                   { required: true, message: '请输入推广链接', trigger: 'blur' }

@@ -149,7 +149,7 @@ export default {
                 { 'prop': 'examItem', 'label': '所属项目', 'width': 130 },
                 // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
-                { 'prop': 'spread', 'label': '来源渠道' },
+                { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
                 { 'prop': 'lastCallTime', 'label': '最近一次联系时间' },
                 { 'prop': 'dataCreateTime', 'label': '最新回收时间' },

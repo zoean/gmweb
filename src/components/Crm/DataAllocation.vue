@@ -202,7 +202,7 @@
 
                     </el-form-item>
 
-                    <el-form-item label="来源渠道" prop="spreadText">
+                    <el-form-item label="推广渠道" prop="spreadText">
 
                         <el-autocomplete
                             clearable
@@ -212,7 +212,7 @@
                             style="width: 100%;"
                             v-model="ruleFormLink.spreadText"
                             :fetch-suggestions="querySearchSpread"
-                            placeholder="请输入来源渠道"
+                            placeholder="请输入推广渠道"
                             :trigger-on-focus="true"
                             @select="handleSelectSpread"
                             @clear="autocompleteClearSpread"
@@ -230,7 +230,7 @@
                             style="width: 100%;"
                             v-model="ruleFormLink.accText"
                             :fetch-suggestions="querySearchAcc"
-                            placeholder="请输入来源渠道"
+                            placeholder="请输入推广渠道"
                             :trigger-on-focus="true"
                             @select="handleSelectAcc"
                             @clear="autocompleteClearAcc"
@@ -381,7 +381,7 @@ export default {
                   { required: true, message: '请选择考试项目', trigger: 'change' }
                 ],
                 spreadText: [
-                  { required: true, message: '请选择来源渠道', trigger: 'change' }
+                  { required: true, message: '请选择推广渠道', trigger: 'change' }
                 ],
                 // acc: [
                 //   { required: true, message: '请选择推广账号', trigger: 'blur' }

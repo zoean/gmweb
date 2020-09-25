@@ -236,7 +236,7 @@ export default {
                 { 'prop': 'tel', 'label': '手机号码' },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '考试项' },
-                { 'prop': 'spread', 'label': '来源渠道' },
+                { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
                 { 'prop': 'ruleNumberName', 'label': '所属分配组' },
             ],
