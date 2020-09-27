@@ -9,6 +9,7 @@
           row-key="uuid"
           default-expand-all
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"  
+          :height="tableHeight"
         >
           <el-table-column
             :prop="item.prop"
@@ -100,6 +101,7 @@ import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu, itemList }
 import { levelFunc } from '../../assets/js/common';
 export default {
     name: 'menua',
+    props: ['tableHeight'],
     data() {
         return {
             menuList: [],
@@ -244,6 +246,7 @@ export default {
                         this.fullscreenLoading = false;
                         arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
                         this.menuList = levelFunc(arr);
+                        this.$emit('setTableHeight', this.menuList.length, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

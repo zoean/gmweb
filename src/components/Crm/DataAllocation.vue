@@ -48,7 +48,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='dataAlloForm.total'
             :page-size='dataAlloForm.pageSize'
             :page-sizes="[10, 20, 30, 50, 100]"

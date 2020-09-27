@@ -5,7 +5,9 @@
         <el-table
           :data="roleList"
           v-loading="fullscreenLoading"
-          style="width: 100%">
+          style="width: 100%"
+          :height="tableHeight"
+          >
           <el-table-column
             :prop="item.prop"
             :label="item.label"
@@ -190,6 +192,7 @@ import {
 import { deteleObject, removeObject } from '../../assets/js/common'
 export default {
     name: 'role',
+    props: ['tableHeight'],
     data() {
         return {
             roleList: [],
@@ -278,7 +281,8 @@ export default {
                         res.data.map((res,index) => {
                             res['visible'] = false;
                         })
-                        this.roleList = res.data;
+                        this.roleList = res.data;                        
+                        this.$emit('setTableHeight', this.roleList.length)
                     }, 300);
                 }else{
                     setTimeout(() => {

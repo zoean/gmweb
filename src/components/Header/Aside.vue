@@ -50,6 +50,10 @@
         </div>
 
       </el-menu>
+      <p class="menuHandle">
+        <svg-icon class="hopen" icon-class="hopen" icon-title="展开/收缩菜单" @click="open_click" />
+        <svg-icon class="hclose" icon-class="hclose" icon-title="展开/收缩菜单" @click="open_click" />
+      </p>
       
       <el-image
         style="width: 15px; height: 45px; position: absolute; right: -13px; top: 40%; cursor: pointer;"
@@ -187,6 +191,11 @@ export default {
         color: #409EFF;
         background: #f2f3f7;
       }
+    }
+    .menuHandle{
+      position: absolute;
+      bottom: 0;
+      left: 0;
     }
   }
   

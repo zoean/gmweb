@@ -39,7 +39,8 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 10px;">
+            style="width: 100%; margin-top: 10px;"
+            :height="tableHeight">
 
             <el-table-column
                 :prop="item.prop"
@@ -61,6 +62,7 @@ import { countDownTime } from '../../assets/js/common';
 import { columnListYes, columnListNo } from '../../assets/js/data';
 export default {
     name: 'timeData',
+    props: ['tableHeight'],
     data() {
         return {
             zuzhiOptions: [],
@@ -119,6 +121,7 @@ export default {
                             })
                             this.tableData = res.data;
                             this.columnList = columnListYes;
+                            this.$emit('setTableHeight', this.tableData.length, 1)
                         }, 300);
                     }else{
                         setTimeout(() => {

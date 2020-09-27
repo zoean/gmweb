@@ -121,26 +121,21 @@ export default {
       }, 400)
     },
     setTableHeight(total, handleCount){//计算数据列表高度
+      console.log(total, '----------')
       this.handleCount = handleCount || 0
       this.total = total
-      this.paginationHeight = document.getElementsByClassName('el-pagination')[0].offsetHeight?document.getElementsByClassName('el-pagination')[0].offsetHeight : 0,
-      this.searchAreaHeight = document.getElementsByClassName('people-screen')[0].offsetHeight ? document.getElementsByClassName('people-screen')[0].offsetHeight : 0,
+      var elPagination = document.getElementsByClassName('el-pagination')[0],
+      searchArea = document.getElementsByClassName('people-screen')[0];
+      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
+      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
       this.windowHeight = document.documentElement.clientHeight;
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
       }
-      console.log('maxHeight', this.windowHeight - this.paginationHeight - this.initSearchHeight -110)
-      // if(total <= 14){
-      //   if(total <= 1){
-      //     console.log(9)
-      //     this.tableHeight = 90
-      //   }else{
-      //     console.log(10)
-      //     this.tableHeight = total * 45 + 47
-      //   }
-      // }else{
-          this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 -130: this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
-      // }
+      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 -130: this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
+      if(this.total * 45 < this.tableHeight){
+        this.tableHeight = this.total * 45 + 45
+      }
     },
     resizeHandle(){
       window.addEventListener('resize', _.throttle(()=>{
