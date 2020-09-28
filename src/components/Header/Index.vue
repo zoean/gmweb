@@ -849,7 +849,6 @@ export default {
         color: #488FF7!important;
     }
     .back_Change{
-        // background: #3687FA;
         background: #fff;
     }
     .pagination{

@@ -701,7 +701,7 @@ export default {
         }
     }
     .enterClues{
-        margin-top: -10px;
+        margin-top: 5px;
     }
     .enterClues /deep/ div.el-dialog__body{
         height: auto;

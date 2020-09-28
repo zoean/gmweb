@@ -369,7 +369,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        margin-top: 0;
+        margin-top: 24px;
         position: relative;
         #toggleSearch{
             position: absolute;

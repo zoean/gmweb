@@ -369,7 +369,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        margin-top: 0;
+        margin-top: 15px;
         .el-col-6{
             height: auto !important;
         }

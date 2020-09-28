@@ -2,13 +2,16 @@
   <div id="app">
     <Header v-if="$store.state.commonFlag"></Header>
     <el-container :class="paddingClass" id="el-container">
-      <p v-if="includeSearch" id="toggleSearch" @click="toggleSearch">
-        <svg-icon v-show="hideSearch" icon-class="openSearch" />
-        <svg-icon v-show="!hideSearch" icon-class="closeSearch" />
-        <span v-show="hideSearch">展开条件</span>
-        <span v-show="!hideSearch">收起条件</span>
-      </p>
-      <Aside v-if="$store.state.commonFlag"></Aside>
+      <div id="mainHandle">
+        <p id="pageTitle" v-if="isNormalPage" :style="{left: pageTitleLeft + 'px'}">{{pageTitle}}</p>
+        <p v-if="includeSearch" id="toggleSearch" @click="toggleSearch">
+          <svg-icon v-show="hideSearch" icon-class="openSearch" />
+          <svg-icon v-show="!hideSearch" icon-class="closeSearch" />
+          <span v-show="hideSearch">展开条件</span>
+          <span v-show="!hideSearch">收起条件</span>
+        </p>
+      </div>
+      <Aside v-if="$store.state.commonFlag" @setPageTitleLeft="setPageTitleLeft"></Aside>
       <keep-alive include="people">
         <router-view @setTableHeight="setTableHeight" @toggleSearch="toggleSearch" :tableHeight="tableHeight" :toggleAction="toggleAction" :hideSearch="hideSearch" />
       </keep-alive>
@@ -43,7 +46,9 @@ export default {
       windowHeight: 0,
       initHeight: 0,
       initSearchHeight: 0,
-      handleCount: 0
+      handleCount: 0,
+      pageTitle: '',
+      pageTitleLeft: 232
     }
   },
   created() {
@@ -72,30 +77,35 @@ export default {
     }
   },
   watch:{
-    '$route.path': function(newVal){
-      if(newVal == '/404' || newVal == '/edition' || newVal == '/login' || newVal == '/forget' || (this.$route.path.indexOf('agreeMentDetails') !== -1) || (this.$route.path.indexOf('url') !== -1)){
+    '$route': function(route){
+      var path = route.path
+      if(path == '/404' || path == '/edition' || path == '/login' || path == '/forget' || (path.indexOf('agreeMentDetails') !== -1) || (path.indexOf('url') !== -1)){
         this.$store.dispatch('actionsSetCommonFlag', false);
       }else{
         this.$store.dispatch('actionsSetCommonFlag', true);
       }
-      if(this.unNormalPage.includes(this.$route.path)){
+      if(this.unNormalPage.includes(path)){
         this.isNormalPage = false
         this.paddingClass = 'noheader-padding'
       }else{
         this.isNormalPage = true
         this.paddingClass = 'header-padding'
       }  
-      if(this.excludeSearch.includes(this.$route.path)){
+      if(this.excludeSearch.includes(path)){
         this.includeSearch = false
       }else{
         this.includeSearch = true
       } 
       this.hideSearch = false
       this.toggleAction = false
+      this.pageTitle = route.meta.title      
+      this.setPageTitleLeft(false) 
     }
   },
 
   mounted(){
+    this.pageTitle = this.$route.meta.title    
+    this.setPageTitleLeft(false) 
     if(this.unNormalPage.includes(this.$route.path)){
       this.isNormalPage = false
       this.paddingClass = 'noheader-padding'
@@ -120,8 +130,18 @@ export default {
           this.setTableHeight(this.total, this.handleCount)
       }, 400)
     },
+    setPageTitleLeft(iscollapse){ 
+      if(!iscollapse){        
+        if(/^\/crm/.test(this.$route.path)){
+          this.pageTitleLeft = 234
+        }else{
+          this.pageTitleLeft = 168
+        }
+      }else{
+        this.pageTitleLeft = 86
+      }
+    },
     setTableHeight(total, handleCount){//计算数据列表高度
-      console.log(total, '----------')
       this.handleCount = handleCount || 0
       this.total = total
       var elPagination = document.getElementsByClassName('el-pagination')[0],
@@ -129,12 +149,17 @@ export default {
       this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
       this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
       this.windowHeight = document.documentElement.clientHeight;
+      this.setPageTitleLeft(false) 
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
       }
-      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 -130: this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
+      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 -130: this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110      
       if(this.total * 45 < this.tableHeight){
-        this.tableHeight = this.total * 45 + 45
+        if(this.total == 0){
+          this.tableHeight = 90
+        }else{
+          this.tableHeight = this.total * 45 + 45
+        }
       }
     },
     resizeHandle(){
@@ -146,37 +171,66 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-direction: column;
-}
-.el-container{
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-#toggleSearch{
-  position: absolute;
-  width: 100%;
-  left: 0;
-  top: 68px;
-  cursor: pointer;
-  color: #AAAAAA;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
-#toggleSearch .svg-icon{
-  width: 10px;
-  height: 6px;
+  .el-container{
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    #mainHandle{
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 68px;
+      #pageTitle{
+        font-size: 14px;
+        color: #666;
+        min-width: 300px;
+        position: absolute;
+        height: 16px;
+        line-height: 16px;
+        top: 0;
+        display: flex;
+        align-item: center;
+      }
+      #pageTitle:before{
+        content: "";
+        width: 5px;
+        height: 16px;
+        background: #409EFF;
+        border-radius: 3px;
+        color: #409EFF;
+        margin-right: 10px;
+        display: inline-block;
+      }
+      #toggleSearch{
+        cursor: pointer;
+        color: #AAAAAA;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        z-index: 1;
+        width: 70px;
+        left: 50%;
+        top: 0;
+        position: absolute;
+        margin-left: 35px;
+        .svg-icon{
+          width: 10px;
+          height: 6px;
+        }
+      }
+    }
+    
+  }
 }
 .header-padding{
   padding-top: 60px;

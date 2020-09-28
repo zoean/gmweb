@@ -481,7 +481,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
-        margin-top: 0;
+        margin-top: 15px;
         height: auto;
         .people-title{
             width: 100%;

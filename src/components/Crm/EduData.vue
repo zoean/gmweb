@@ -295,7 +295,7 @@ export default {
 
 <style lang="less" scoped>
 .eduData{
-  margin-top: 0;
+  margin-top: 15px;
   .el-col-6{
     height: auto !important;
   }

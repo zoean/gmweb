@@ -170,7 +170,12 @@ a:link,a:active,a:visited,a:hover {
 .el-table .readState {
     font-weight: 700;
 }
-
+.el-table__empty-text{
+    line-height: 46px;
+}
+.el-table__empty-block{
+    min-height: 46px;
+}
 .el-notification {white-space:pre !important; width: auto !important; }
 
 .el-drawer__header{
@@ -318,7 +323,7 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-main{
-    padding: 12px 0 0 0;
+    padding: 16px 0 0 0;
     background: #fff;
     margin: 16px 16px 0 16px;
     height: calc(100vh - 92px) !important;

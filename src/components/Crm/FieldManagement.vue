@@ -394,7 +394,7 @@ export default {
 </script>
 <style lang="less" scoped>
   .index-main{
-    margin-top: 0;
+    margin-top: 15px;
     height: calc( 100vh - 60px);
     display: flex;
     flex-direction: column;
