@@ -29,7 +29,7 @@
                 </el-select>
             </el-col>
             <el-col :span="3" class="seatData">
-                <area-cascader class="screen-li" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
             <el-col :span="3">
                 <el-autocomplete
@@ -82,7 +82,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"

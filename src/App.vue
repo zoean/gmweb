@@ -11,7 +11,7 @@
           <span v-show="!hideSearch">收起条件</span>
         </p>
       </div>
-      <Aside v-if="$store.state.commonFlag" @setPageTitleLeft="setPageTitleLeft"></Aside>
+      <Aside v-if="$store.state.commonFlag" @setPageTitleLeft="setPageTitleLeft" @changeIscollapse="changeIscollapse"></Aside>
       <keep-alive include="people">
         <router-view @setTableHeight="setTableHeight" @toggleSearch="toggleSearch" :tableHeight="tableHeight" :toggleAction="toggleAction" :hideSearch="hideSearch" />
       </keep-alive>
@@ -48,7 +48,8 @@ export default {
       initSearchHeight: 0,
       handleCount: 0,
       pageTitle: '',
-      pageTitleLeft: 232
+      pageTitleLeft: 232,
+      iscollapse: false
     }
   },
   created() {
@@ -98,14 +99,14 @@ export default {
       } 
       this.hideSearch = false
       this.toggleAction = false
-      this.pageTitle = route.meta.title      
-      this.setPageTitleLeft(false) 
+      this.pageTitle = route.meta.title    
+      this.setPageTitleLeft() 
     }
   },
 
   mounted(){
     this.pageTitle = this.$route.meta.title    
-    this.setPageTitleLeft(false) 
+    this.setPageTitleLeft() 
     if(this.unNormalPage.includes(this.$route.path)){
       this.isNormalPage = false
       this.paddingClass = 'noheader-padding'
@@ -123,6 +124,10 @@ export default {
   },
 
   methods: {
+    changeIscollapse(val){
+      console.log(val)
+      this.iscollapse = val
+    },
     toggleSearch(){
       this.toggleAction = !this.toggleAction
       setTimeout(()=>{
@@ -130,8 +135,8 @@ export default {
           this.setTableHeight(this.total, this.handleCount)
       }, 400)
     },
-    setPageTitleLeft(iscollapse){ 
-      if(!iscollapse){        
+    setPageTitleLeft(){ 
+      if(!this.iscollapse){        
         if(/^\/crm/.test(this.$route.path)){
           this.pageTitleLeft = 234
         }else{
@@ -141,25 +146,33 @@ export default {
         this.pageTitleLeft = 86
       }
     },
-    setTableHeight(total, handleCount){//计算数据列表高度
+    setTableHeight(total, handleCount, trH){//计算数据列表高度
       this.handleCount = handleCount || 0
       this.total = total
+      var trHeight = 45
       var elPagination = document.getElementsByClassName('el-pagination')[0],
       searchArea = document.getElementsByClassName('people-screen')[0];
       this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
       this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
       this.windowHeight = document.documentElement.clientHeight;
-      this.setPageTitleLeft(false) 
+      this.setPageTitleLeft() 
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
       }
-      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 -130: this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110      
-      if(this.total * 45 < this.tableHeight){
+      if(trH){
+        trHeight = trH
+      }else{
+        trHeight = 45
+      }
+      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 130 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
+      if(this.total * trHeight < this.tableHeight){
         if(this.total == 0){
-          this.tableHeight = 90
+          this.tableHeight = trHeight + 45
         }else{
-          this.tableHeight = this.total * 45 + 45
+          this.tableHeight = this.total * trHeight + 45
         }
+      }else{
+        this.tableHeight = this.hideSearch && this.total > 15 ? this.tableHeight - 45 : this.tableHeight
       }
     },
     resizeHandle(){
@@ -194,16 +207,16 @@ export default {
         color: #666;
         min-width: 300px;
         position: absolute;
-        height: 16px;
-        line-height: 16px;
+        height: 14px;
+        line-height: 14px;
         top: 0;
         display: flex;
         align-item: center;
       }
       #pageTitle:before{
         content: "";
-        width: 5px;
-        height: 16px;
+        width: 4px;
+        height: 14px;
         background: #409EFF;
         border-radius: 3px;
         color: #409EFF;

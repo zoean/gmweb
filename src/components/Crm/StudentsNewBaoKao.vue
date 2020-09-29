@@ -229,7 +229,7 @@ export default {
             columnList: [
                 { 'prop': 'telephone', 'label': '手机号码', width: 120},
                 { 'prop': 'name', 'label': '姓名' },
-                { 'prop': 'examLable', 'label': '考试项目' },
+                { 'prop': 'examLable', 'label': '考试项目', width: 120 },
                 { 'prop': 'itemName', 'label': '报考项目', width: 120 },
                 { 'prop': 'itemGradeName', 'label': '报考等级/专业', width: 120 },
                 { 'prop': 'province', 'label': '所在省份', width: 120},

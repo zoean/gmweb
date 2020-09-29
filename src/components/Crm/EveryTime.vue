@@ -76,7 +76,7 @@
         
             </el-row>
         
-            <el-row  :gutter="10">
+            <el-row class="mb10" :gutter="10">
             
                 <el-col :span="3">
                     <el-input v-model="form.seatName" size="small" placeholder="输入拨打姓名" class="screen-li" clearable></el-input>
@@ -93,7 +93,7 @@
             fit
             :key="Math.random()"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 10px;" :height="tableHeight">
+            style="width: 100%;" :height="tableHeight">
     
             <el-table-column
                 :prop="item.prop"

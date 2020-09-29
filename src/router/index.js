@@ -136,7 +136,7 @@ export default new Router({
             // meta:{
             //     keepAlive:true //需要被缓存的组件}
             meta: {
-                title: '全部客户'
+                title: '员工管理'
             }
         },     
         {

@@ -89,7 +89,8 @@ export default {
       }
     },
     watch:{
-      'iscollapse': function(newVal){        
+      'iscollapse': function(newVal){ 
+        this.$emit('changeIscollapse', newVal)
         this.$emit('setPageTitleLeft', newVal)
       },
       '$route.path': function(newVal){
@@ -122,8 +123,7 @@ export default {
         }else{
           this.routersFlag = true;
           // this.activeIndex = newVal;
-        }
-
+        }       
         window.onresize = () => {
           if(((newVal.indexOf('url') == -1) && (newVal != '/') && (newVal != '/login') && (newVal != '/forget') && (newVal != '/edition') && (newVal != '/404') && (newVal.indexOf('agreeMentDetails') == -1))){
             if(document.documentElement.clientWidth < 980){
@@ -137,6 +137,7 @@ export default {
     },
     mounted() {
         // const userMenuList = this.$store.state.userMenuList;
+        this.$emit('setPageTitleLeft', this.iscollapse)
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){

@@ -256,8 +256,14 @@ a:link,a:active,a:visited,a:hover {
     line-height: 32px !important;
     position: relative;
     top: 4px;
+    
 }
-
+.seatData .areaDefault .area-select .area-selected-trigger{
+    color: #aaa;
+}
+.seatData .areaSelected .area-select .area-selected-trigger{
+    color: #606266;
+}
 .area-select .area-selected-trigger{
     padding: 0px 20px 7px 12px !important;
     font-size: 12px !important;
@@ -272,6 +278,7 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .seatData .area-select .area-selected-trigger{
+    color: #aaa;
     /* padding: 4px 20px 7px 12px !important; */
 }
 .seatData{
