@@ -46,6 +46,7 @@
   :data="list"  
   @sort-change="sortChange"
   v-loading="loading"
+  :height="tableHeight"
   >
     <el-table-column
     v-for="(item, index) in tableProps"
@@ -93,6 +94,7 @@ import {getOrgSubsetByUuid, wxNumList, upWxNum} from '@/request/api';
 import {sortTextNum} from '@/assets/js/common';
 import {wechatOrgUuidProd, wechatOrgUuidTest} from '@/assets/js/data'
 export default {
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -192,6 +194,7 @@ export default {
           this.list = res.data.list
           this.countVO = res.data.countVO || 0;
           this.searchForm.total = res.data.total
+          this.$emit('setTableHeight', this.searchForm.total, 1)
         }
       })
     },

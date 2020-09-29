@@ -20,7 +20,8 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -147,6 +148,7 @@ import { addEnum, addEnumItem, enumItemSort, getEnum, getEnumItem, getEnumList, 
 import { backEnable } from '../../assets/js/common';
 export default {
     name: 'enum',
+    props: ['tableHeight'],
     data() {
         return {
             form: {
@@ -290,7 +292,8 @@ export default {
                             sll.enableText = backEnable(sll.enable);
                         })
                         this.list = res.data.list;
-                        this.total = res.data.total;
+                        this.total = res.data.total;                        
+                        this.$emit('setTableHeight', this.total)
                     }, 300);
 
                 }else{

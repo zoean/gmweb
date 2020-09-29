@@ -322,7 +322,7 @@ export default {
                         sll.schoolName = schoolType(sll.schoolName);
                     })
                     this.userOrderList = res.data.orderList                    
-                    this.$emit('setTableHeight', this.userOrderList.length, 1)
+                    this.$emit('setTableHeight', this.userOrderList.length, 3)
                 }
             })
         },

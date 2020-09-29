@@ -99,10 +99,10 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'goodsName' ? '220px' : '' "
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
+              :min-width="item.width"
               >
 
               <template slot-scope="scope">
@@ -233,13 +233,13 @@ export default {
             list: [],
             columnList: [
                 { 'prop': 'name', 'label': '姓名' },
-                { 'prop': 'tel', 'label': '手机号码' },
-                { 'prop': 'examItemName', 'label': '考试项目' },
+                { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
+                { 'prop': 'examItemName', 'label': '考试项目', 'width': 150 },
                 { 'prop': 'classType', 'label': '班型' },
                 { 'prop': 'singlePlatform', 'label': '成单平台' },
-                { 'prop': 'createTime', 'label': '报名时间' },
-                { 'prop': 'seatName', 'label': '成单坐席' },
-                { 'prop': 'goodsName', 'label': '购买商品' },
+                { 'prop': 'createTime', 'label': '报名时间', 'width': 180},
+                { 'prop': 'seatName', 'label': '成单坐席', 'width': 300},
+                { 'prop': 'goodsName', 'label': '购买商品', 'width': 250 },
             ],
             fullscreenLoading: false,
             sortSetList: [

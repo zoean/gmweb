@@ -10,7 +10,7 @@
             :data="dataAlloList"
             v-loading="fullscreenLoading"
             style="width: 100%"
-        >
+            :height="tableHeight">
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -296,6 +296,7 @@ import { MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import Tree from '../Share/Tree';
 export default {
     name: 'dataAllocation',
+    props: ['tableHeight'],
     components: {
         Tree
     },
@@ -517,7 +518,8 @@ export default {
                             sll.state = stateText(sll.state);
                         })
                         this.dataAlloList = res.data.list;
-                        this.dataAlloForm.total = res.data.total;
+                        this.dataAlloForm.total = res.data.total;                        
+                    this.$emit('setTableHeight', this.dataAlloForm.total, 1)
                     }, 300);
 
                 }else{

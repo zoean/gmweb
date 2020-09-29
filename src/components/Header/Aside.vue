@@ -91,7 +91,7 @@ export default {
     watch:{
       'iscollapse': function(newVal){ 
         this.$emit('changeIscollapse', newVal)
-        this.$emit('setPageTitleLeft', newVal)
+        this.$emit('setPageTitleLeft')
       },
       '$route.path': function(newVal){
         this.activeIndex = this.$route.path
@@ -137,7 +137,7 @@ export default {
     },
     mounted() {
         // const userMenuList = this.$store.state.userMenuList;
-        this.$emit('setPageTitleLeft', this.iscollapse)
+        this.$emit('setPageTitleLeft')
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){

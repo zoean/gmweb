@@ -125,7 +125,6 @@ export default {
 
   methods: {
     changeIscollapse(val){
-      console.log(val)
       this.iscollapse = val
     },
     toggleSearch(){
@@ -173,6 +172,9 @@ export default {
         }
       }else{
         this.tableHeight = this.hideSearch && this.total > 15 ? this.tableHeight - 45 : this.tableHeight
+      }
+      if(/^\/base\/menu/.test(this.$route.path)){
+        this.tableHeight = this.windowHeight - this.handleCount * 42 - 110
       }
     },
     resizeHandle(){

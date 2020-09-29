@@ -31,7 +31,8 @@
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -255,6 +256,7 @@ import { timestampToTime, classTypeString, teacherTreeFunc, teacherArrExp, remov
 
 export default {
     name: 'reCoverData',
+    props: ['tableHeight'],
     data() {
         return {
             form: {
@@ -464,7 +466,8 @@ export default {
                             sll.classType = classTypeString(sll.classType);
                         })
                         this.list = res.data.list;
-                        this.form.total = res.data.total;
+                        this.form.total = res.data.total;                        
+                        this.$emit('setTableHeight', this.form.total)
                     }, 300);
 
                 }else{
