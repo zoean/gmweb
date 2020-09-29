@@ -170,6 +170,7 @@ export default {
       height: calc(100vh - 60px);
       overflow-y: scroll;
       background: #F5F5F5;
+      padding-bottom: 40px;
       .el-menu-item{
         i, span{
         color: #555;

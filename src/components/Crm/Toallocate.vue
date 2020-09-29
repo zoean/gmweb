@@ -57,7 +57,8 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               type="selection"
               width="45">
@@ -119,6 +120,7 @@ import pcaa from 'area-data/pcaa';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'toAllocate',
+    props: ['tableHeight'],
     components: {
         CustomerNotes,
     },
@@ -293,6 +295,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 0, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
