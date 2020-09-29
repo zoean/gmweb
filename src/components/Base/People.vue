@@ -305,7 +305,7 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         this.total = res.data.total;
-                        this.$emit('setTableHeight', this.total)
+                        this.$emit('setTableHeight', this.total, 1)
                         // 用户列表
                         res.data.list.map(data => {
                             data.orgUuidList = getTextByJs(data.orgUuidList);

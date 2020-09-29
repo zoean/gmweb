@@ -282,7 +282,7 @@ export default {
                             res['visible'] = false;
                         })
                         this.roleList = res.data;                        
-                        this.$emit('setTableHeight', this.roleList.length, 1)
+                        this.$emit('setTableHeight', this.roleList.length, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

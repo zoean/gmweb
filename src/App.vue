@@ -49,6 +49,7 @@ export default {
       handleCount: 0,
       pageTitle: '',
       pageTitleLeft: 232,
+      trHeight: 1,
       iscollapse: false
     }
   },
@@ -131,7 +132,7 @@ export default {
       this.toggleAction = !this.toggleAction
       setTimeout(()=>{
           this.hideSearch = !this.hideSearch 
-          this.setTableHeight(this.total, this.handleCount)
+          this.setTableHeight(this.total, this.handleCount, this.trHeight)
       }, 400)
     },
     setPageTitleLeft(){ 
@@ -148,7 +149,6 @@ export default {
     setTableHeight(total, handleCount, trH){//计算数据列表高度
       this.handleCount = handleCount || 0
       this.total = total
-      var trHeight = 45
       var elPagination = document.getElementsByClassName('el-pagination')[0],
       searchArea = document.getElementsByClassName('people-screen')[0];
       this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
@@ -158,20 +158,16 @@ export default {
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
       }
-      if(trH){
-        trHeight = trH
-      }else{
-        trHeight = 45
-      }
+      this.trHeight = trH
       this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 130 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
-      if(this.total * trHeight < this.tableHeight){
+      if(this.total * this.trHeight * 45 < this.tableHeight){
         if(this.total == 0){
-          this.tableHeight = trHeight + 45
+          this.tableHeight = this.trHeight * 45 + 45
         }else{
-          this.tableHeight = this.total * trHeight + 45
+          this.tableHeight = this.total * this.trHeight * 45 + 45
         }
       }else{
-        this.tableHeight = this.hideSearch && this.total > 15 ? this.tableHeight - 45 : this.tableHeight
+        this.tableHeight = this.hideSearch && this.total > 15 ? this.tableHeight * 45 - 45 : this.tableHeight
       }
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleCount * 42 - 110
@@ -179,7 +175,7 @@ export default {
     },
     resizeHandle(){
       window.addEventListener('resize', _.throttle(()=>{
-        this.setTableHeight(this.total,this.handleCount)
+        this.setTableHeight(this.total,this.handleCount, this.trHeight)
       }, 500))
     }
   }

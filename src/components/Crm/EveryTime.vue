@@ -249,7 +249,7 @@ export default {
                     })
                     this.tableData = res.data.list;
                     this.total = res.data.total;
-                    this.$emit('setTableHeight', this.total)
+                    this.$emit('setTableHeight', this.total, 0, 1)
                     this.form.currentPage = res.data.currentPage;
                 }else{
                     this.fullscreenLoading = false;

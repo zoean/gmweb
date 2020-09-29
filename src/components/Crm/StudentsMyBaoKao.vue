@@ -452,7 +452,7 @@ export default {
 
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1)
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

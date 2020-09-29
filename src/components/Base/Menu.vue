@@ -246,7 +246,7 @@ export default {
                         this.fullscreenLoading = false;
                         arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
                         this.menuList = levelFunc(arr);
-                        this.$emit('setTableHeight', this.menuList.length, 1)
+                        this.$emit('setTableHeight', this.menuList.length, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

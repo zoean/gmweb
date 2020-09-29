@@ -487,7 +487,7 @@ export default {
                 })
                 this.vedioList = res.data.list;
                 this.total = res.data.total;
-                this.$emit('setTableHeight', this.total, 3)
+                this.$emit('setTableHeight', this.total, 3, 1)
             })
         },
         handleCurrentChange(index) {

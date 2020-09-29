@@ -194,7 +194,7 @@ export default {
           this.list = res.data.list
           this.countVO = res.data.countVO || 0;
           this.searchForm.total = res.data.total
-          this.$emit('setTableHeight', this.searchForm.total, 1)
+          this.$emit('setTableHeight', this.searchForm.total, 1, 1)
         }
       })
     },

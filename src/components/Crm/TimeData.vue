@@ -121,7 +121,7 @@ export default {
                             })
                             this.tableData = res.data;
                             this.columnList = columnListYes;
-                            this.$emit('setTableHeight', this.tableData.length, 1)
+                            this.$emit('setTableHeight', this.tableData.length, 1, 1)
                         }, 300);
                     }else{
                         setTimeout(() => {

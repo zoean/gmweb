@@ -519,7 +519,7 @@ export default {
                         })
                         this.dataAlloList = res.data.list;
                         this.dataAlloForm.total = res.data.total;                        
-                    this.$emit('setTableHeight', this.dataAlloForm.total, 1)
+                    this.$emit('setTableHeight', this.dataAlloForm.total, 1, 1)
                     }, 300);
 
                 }else{
