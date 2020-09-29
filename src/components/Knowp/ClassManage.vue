@@ -471,7 +471,7 @@ export default {
                 })
                 this.total = res.data.total;
                 this.classForm.pageSize = res.data.pageSize;                
-                this.$emit('setTableHeight', this.total)
+                this.$emit('setTableHeight', this.total, 0, 1)
             })
         },
         getClassifyByUuid(uuid) {

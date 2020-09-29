@@ -168,7 +168,6 @@ export default {
         }
       }else{
         this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -68 : this.tableHeight
-      console.log('超出',this.initSearchHeight)
       }
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleCount * 42 - 110

@@ -166,6 +166,9 @@ export default {
     position: relative;
     height: 100%;
     z-index: 2;
+    .svg-icon{
+      font-size: 18px;
+    }
     .el-menu-vertical-demo{
       height: calc(100vh - 60px);
       overflow-y: scroll;
