@@ -24,7 +24,7 @@
                     class="screen-li"
                     v-model="form.examItemText"
                     :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
+                    placeholder="输入考试项目"
                     :trigger-on-focus="true"
                     clearable
                     @clear="autocompleteClear"
@@ -99,11 +99,11 @@
 
             <el-col :span="3">
 
-                <el-input v-model="form.saleName" size="small" placeholder="请输入姓名" class="screen-li"></el-input>
+                <el-input v-model="form.saleName" size="small" placeholder="请输入所属坐席" class="screen-li"></el-input>
 
             </el-col>
 
-            <el-col :span="15">
+            <el-col :span="14">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
@@ -118,9 +118,10 @@
 
             </el-col>
 
-            <el-col :span="3">
+            <el-col :span="4">
                 <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
+                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
             </el-col>
 
         </el-row>
@@ -202,6 +203,27 @@
 
         <PageFieldManage :setPageNum="setPageNum" />
 
+        <el-dialog width="30%" title="线索转移" :visible.sync="drawer1">
+
+            <el-autocomplete
+                ref="autocompleteTag"
+                size="small"
+                class="screen-li"
+                v-model="tagIdText"
+                :fetch-suggestions="querySearchTag"
+                placeholder="请您选择要分配的人员"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClearTag"
+                @select="handleSelectTag"
+            ></el-autocomplete>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="seatActSeat" size="small">确 定</el-button>
+            <el-button @click="handleCloseTag" size="small" plain>取 消</el-button>
+          </div>
+        </el-dialog>
+
     </el-main>
 </template>
 
@@ -213,7 +235,9 @@ import {
     getRuleItem,
     clueDataRelease,
     copyTel,
-    geSeatWork
+    geSeatWork,
+    seatActSeat,
+    dataViewPermissionUserList
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { receiveTimeFun } from '../../assets/js/common';
@@ -289,6 +313,14 @@ export default {
             tag_name: '',
             tag_flag: false,
             SeatWorkObj: {},
+
+            drawerTitle1: '线索转移',
+            drawer1: false,
+            direction1: 'rtl',
+            tagList: [],
+            tableSelectList: [],
+            tagId: '',
+            tagIdText: '',
         }
     },
     // watch:{
@@ -315,6 +347,72 @@ export default {
         this.getRuleItem();
     },
     methods: {
+        seatActSeat() {
+            if(this.tagId == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择要分配的人员'
+                })
+            }else{
+                this.$smoke_post(seatActSeat, {
+                    seatUuid: this.tagId,
+                    userCDARUuid: this.tableSelectList
+                }).then(res => {
+                    if(res.code == 200) {
+                        if(res.data.result) {
+                            this.$message({
+                                type: 'success',
+                                message: res.data.msg + '，提交分配的线索数量' + res.data.submitSize + '条' + '，实际分配的线索数量' + res.data.transferSize + '条'
+                            });
+                            this.getAllUserClueData();
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: res.data.msg
+                            });
+                            this.getAllUserClueData();
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        }) 
+                    }
+                })
+            }
+        },
+        pushPeopleClick() {
+            let clueDataSUuidArr = [];
+            this.$refs.tableSelect.selection.map(sll => {
+                clueDataSUuidArr.push(sll.userCDARUuid);
+            });
+            if(clueDataSUuidArr.length == 0) {
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要分配的数据'
+                })
+            }else{
+                this.drawer1 = true;
+                this.tagId = '';
+                this.dataViewPermissionUserList();
+                this.tableSelectList = clueDataSUuidArr;
+            }
+        },
+        dataViewPermissionUserList() {
+            this.$smoke_get(dataViewPermissionUserList + `/1`, {}).then(res => {
+                if(res.code == 200) {
+                    res.data.map(sll => {
+                        sll.value = sll.userName;
+                    })
+                    this.tagList = res.data;
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         tagClick(item){
             this.tag_flag = false;
             if(this.tag_id == item.id) {
@@ -391,6 +489,7 @@ export default {
         },
         getAllUserClueData() {
             this.fullscreenLoading = true;
+            this.drawer1 = false;
             this.$smoke_post(getAllUserClueData, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
@@ -445,6 +544,10 @@ export default {
         handleClose(done) {
             done();
         },
+        handleCloseTag() {
+            this.drawer1 = false;
+            this.tagId = '';
+        },
         handleCurrentChange(index) {
             this.form.currentPage = index;
             this.getAllUserClueData();
@@ -471,6 +574,12 @@ export default {
             // 调用 callback 返回建议列表的数据
             cb(results);
         },
+        querySearchTag(queryString, cb) {
+            var restaurants = this.tagList;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
         createFilter(queryString) {
             return (restaurant) => {
               return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
@@ -480,12 +589,25 @@ export default {
             this.form.examItemId = item.id;
             this.form.examItemText = item.value;
         },
+        handleSelectTag(item) {
+            this.tagId = item.userUuid;
+            this.tagIdText = item.userName;
+        },
         autocompleteClear() {
             this.$nextTick(() => {
                 this.$refs.autocomplete.$children
                     .find(c => c.$el.className.includes('el-input'))
                     .blur();
                 this.form.examItemId = '';
+                this.$refs.autocomplete.focus();
+            })
+        },
+        autocompleteClearTag() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteTag.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.tagId = '';
                 this.$refs.autocomplete.focus();
             })
         },
@@ -534,20 +656,18 @@ export default {
                 uuid: id
             }).then(res => {
                 if(res.code == 200) {
-                    this.$copyText(res.data).then(
-		                res => {
-		                    this.$message({
-                                type: 'success',
-                                message: '复制成功',
-                            })
-		                },
-		                err => {
-		                    this.$message({
-                                type: 'error',
-                                message: '复制失败',
-                            })
-		                }
-		            )
+                    Copy(res.data);
+                    if(Copy(res.data)) {
+                        this.$message({
+                            type: 'success',
+                            message: '复制成功'
+                        })
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '复制失败'
+                        })
+                    }
                 }else{
                     this.$message({
                         type: 'error',
@@ -585,5 +705,5 @@ export default {
                 width: 94%;
             }
         }
-    }    
+    }  
 </style>

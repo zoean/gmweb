@@ -3,6 +3,7 @@
         <div v-dragable class="callpop_div">
           <div class="dialog_kuang dialog_header">
               <div>{{caller_number}}</div>
+              <div style="font-size: 12px;">{{call_location}}</div>
               <div>
                 <el-image
                     style="width: 134px; height: 60px;"
@@ -33,6 +34,7 @@ export default {
             callpopFlag: false,
             call_state: '',
             caller_number: '',
+            call_location: '',
             time: '',
         }
     },
@@ -51,8 +53,8 @@ export default {
             // });
 
             demo.monitorEvent("callEvent", function(message, jsonObject) {
-                console.log('监听成功-callEvent');
-                console.log(message);
+                // console.log('监听成功-callEvent');
+                // console.log(message);
                 // console.log(jsonObject);
                 if(message.call_event.call_state == 'caller_ring') {
                     that.callpopFlag = true;
@@ -85,11 +87,14 @@ export default {
             //     console.log(jsonObject);
             // }); 
             
-            // demo.monitorEvent("callTip",function(message, jsonObject){
-            //     console.log('监听成功-callTip');
-            //     console.log(message);
-            //     console.log(jsonObject);
-            // })
+            demo.monitorEvent("callTip",function(message, jsonObject){
+                // console.log('监听成功-callTip');
+                // console.log(message);
+                that.call_location = decodeURIComponent(message.call_tip.location);
+                that.call_location = that.call_location.substring(0, that.call_location.length - 4);
+                console.log(that.call_location);
+                // console.log(jsonObject);
+            })
         },
         showNum(num) {
             if (num < 10) {

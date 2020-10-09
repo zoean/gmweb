@@ -90,8 +90,6 @@
         </div>
         <el-table
             :data="tableData"
-            fit
-            :key="Math.random()"
             v-loading="fullscreenLoading"
             style="width: 100%;" :height="tableHeight">
     
@@ -111,6 +109,7 @@
             >
                 <template slot-scope="scope">
                     <VueAudio 
+                        :key="Math.random()"
                         :theUrl="scope.row.recordFile" 
                         v-if="scope.row.recordFile"
                         theControlList="onlyOnePlaying noMuted noVolume"

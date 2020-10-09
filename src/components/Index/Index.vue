@@ -1,8 +1,8 @@
 <template>
     <div class="main-area">
-        <el-carousel trigger="click" height="300px">
-            <el-carousel-item v-for="item in bannerList" :key="item.url" style="background: #F1F1F1;">
-                <img :src="item.url" alt="">
+        <el-carousel trigger="click" height="360px">
+            <el-carousel-item v-for="item in bannerList" :key="item.url">
+                <img :src="item.url" alt="" style="margin-top: 60px;">
             </el-carousel-item>
         </el-carousel>
         <el-row class="user-info" type="flex" justify="center">
@@ -210,14 +210,6 @@ body{
     display: flex;
     flex-direction: column;
     margin-left: 0 !important;
-    .el-carousel{
-        .el-carousel-item{
-            text-align: center;
-            img{
-                height: 300px;
-            }
-        }
-    }
     .user-info{
         height: 136px;
         background: #fff;
@@ -304,12 +296,35 @@ body{
             margin-top: 18px;
         }
     }
-}
 
-    @media screen and (max-width: 1640px) {
+    @media screen and (max-width: 1366px) {
         .el-carousel__item{
             img{
-                margin-left: -2rem !important;
+                margin-left: -4rem !important;
+            }
+        }
+    }
+
+    @media screen and (min-width: 1366px) {
+        .el-carousel__item{
+            img{
+                margin-left: -4rem !important;
+            }
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        .el-carousel__item{
+            img{
+                margin-left: -2.6rem !important;
+            }
+        }
+    }
+
+    @media screen and (min-width: 1640px) {
+        .el-carousel__item{
+            img{
+                margin-left: -1rem !important;
             }
         }
     }
@@ -318,10 +333,10 @@ body{
             img{
                 // border-radius: 8px;
                 width: 100%;
-                height: 100%;
+                height: 300px;
                 margin-left: 0rem !important;
             }
         }
     }
-
+}
 </style>

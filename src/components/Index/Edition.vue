@@ -3,7 +3,31 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
 
-    <el-timeline>  
+    <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.23 -- 2020/09/23" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、通话弹框新增手机号码归属地</p>
+          <h4>修复bug</h4>
+          <p>1、banner的UI调整</p>
+          <p>2、坐席线索管理页面转移线索功能优化</p>
+        </el-card>
+      </el-timeline-item> 
+      <el-timeline-item timestamp="v 1.1.22 -- 2020/09/22" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、坐席数据管理新增线索转移</p>
+          <p>2、推广配置页面配置组员弹框增加今日已分字段</p>
+        </el-card>
+      </el-timeline-item> 
+      <el-timeline-item timestamp="v 1.1.21 -- 2020/09/22" placement="top">
+        <el-card>
+          <h4>修复bug</h4>
+          <p>1、修复添加备注页面操作失败的bug</p>
+          <p>2、我的工作台模块页面取消客户信息入口</p>
+          <p>3、修复系统复制功能在浏览器方面的兼容性问题</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.20 -- 2020/09/21" placement="top">
         <el-card>
           <h4>新增功能</h4>
