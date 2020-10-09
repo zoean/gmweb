@@ -68,6 +68,7 @@
               v-for="(item, index) in columnList"
               :key="index"
               :width="item.width"
+              :sortable = "item.sortable"
               >
             </af-table-column>
 
@@ -144,15 +145,15 @@ export default {
             totalFlag: false,
             columnList: [
                 { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
-                { 'prop': 'userName', 'label': '姓名', 'width': 90 },
+                { 'prop': 'name', 'label': '姓名', 'width': 90 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目', 'width': 130 },
                 // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '推广渠道' },
-                { 'prop': 'createTime', 'label': '入库时间' },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间' },
-                { 'prop': 'dataCreateTime', 'label': '最新回收时间' },
+                { 'prop': 'createTime', 'label': '入库时间', 'sortable': true },
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'sortable': true },
+                { 'prop': 'dataCreateTime', 'label': '最新回收时间', 'sortable': true },
                 { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
             ],
             ruleForm: {
