@@ -168,24 +168,32 @@ export default {
     z-index: 2;
     .svg-icon{
       font-size: 18px;
+      color: #909399;
     }
     .el-menu-vertical-demo{
       height: calc(100vh - 60px);
       overflow-y: scroll;
       background: #F5F5F5;
       padding-bottom: 40px;
-      .el-menu-item{
-        i, span{
-        color: #555;
+      .el-submenu__title{
+        .menu-titles{
+          color: #555;
+        }
+        .el-menu-item{
+          i{
+            color: #909399;
+          }
+          span{
+            color: #555;  
+          }
+        }
+        .el-menu-item.is-active{
+          background: #DEDEDE;
+          i, span{          
+          color: #409EFF;
+          }
         }
       }
-      .el-menu-item.is-active{
-        background: #DEDEDE;
-        i, span{          
-        color: #409EFF;
-        }
-      }
-      
     }
     .menuHandle{
       position: absolute;
