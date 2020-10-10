@@ -161,7 +161,7 @@ export default {
     top: 50%;
 		margin-top: 1.3rem;
 		.el-image{
-			width: 200px;
+			width: 130px;
 			top:100px;
 			left: 60px;
 		}

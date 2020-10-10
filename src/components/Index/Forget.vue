@@ -5,7 +5,7 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="forget-form">
 
       <div style="text-align: center;">
-        <el-image style="width: 217px;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+        <el-image style="width: 130px;" :src="require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
       </div>
 
       <div style="text-align: center; margin-top: 20px; font-size: 20px; color: #218EFF;">忘记密码</div>
