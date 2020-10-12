@@ -580,6 +580,7 @@ export default {
                 this.ruleForm.spread = obj.spread;
                 this.ruleForm.acc = obj.acc;
                 this.ruleForm.jobnum = obj.jobnum;
+                this.ruleForm.url = `?project=${obj.project}&ruleid=${obj.ruleid}&spread=${obj.spread}&acc=${obj.acc}&jobnum=${obj.jobnum}`
                 this.entryClueData();
               } else {
                 return false;
