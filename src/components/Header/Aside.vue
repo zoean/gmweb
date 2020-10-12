@@ -31,7 +31,7 @@
               >
               <div class="el-menu-item-div">
                 <i :class="res.icon"></i>
-                <span class="menu-titles">{{res.name}}</span>
+                <span class="menu-titles">{{res.name}}999</span>
               </div>
               </el-menu-item>
             </div>
