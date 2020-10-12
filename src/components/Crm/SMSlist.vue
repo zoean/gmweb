@@ -248,7 +248,6 @@ export default {
         this.sms_default_content = this.sms_content = '';
       },
       smsTemChange(id) {
-        console.log(id);
         this.$smoke_post(getSMSTem, {
           id: id
         }).then(res => {
@@ -302,7 +301,6 @@ export default {
         })
       },
       schoolChange(item) {
-        console.log(item);
         this.createForm.list.map(sll => {
           if(sll.type == 2) {
             sll.variableValue = item.variableId == 1 ? '京华' : item.variableId == 2 ? '胜学' : item.variableId == 3 ? '集团' : '';

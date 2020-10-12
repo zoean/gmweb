@@ -845,7 +845,6 @@ export const menuNumberFunc = (arr, brr) => {
         arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[3] + ')';
 
     }
-    console.log(arr)
     return arr;
 
 }

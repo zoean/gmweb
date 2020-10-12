@@ -69,7 +69,7 @@
               v-for="(item, index) in columnList"
               :key="index"
               :width="item.width"
-              :sortable = "item.sortable"
+              :sortable = "item.sortable"          
               >
             </af-table-column>
 
@@ -182,7 +182,6 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
-
             dataPicker: [],
             enumList: {},
             restaurants: [],

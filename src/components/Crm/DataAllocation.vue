@@ -538,7 +538,6 @@ export default {
             this.getDataAllocationRulesByUuid(scope);
         },
         handleOneKeyClick(row) {
-            console.log(row);
             if((row.totalAlreadyAllocated < row.totalAllocatedLeads) && (row.totalOverflowAllocated > 0)) {
                 this.$smoke_post(oneKeyDistribution, {
                     ruleNumber: row.id

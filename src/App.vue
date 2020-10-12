@@ -31,7 +31,7 @@ export default {
   data() {
     return{
       isNormalPage: false,
-      unNormalPage: ['/login', '/', '/forget'],
+      unNormalPage: ['/login', '/', '/forget', '/edition'],
       paddingClass: '',
       tableHeight: 0,
       toggleAction: false,

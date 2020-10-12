@@ -404,7 +404,6 @@ export default {
             }
         },
         phoneCopy(row) {
-            console.log(row.clueDataSUuid);
             this.copyTel(row.clueDataSUuid);
         },
         copyTel(id) {

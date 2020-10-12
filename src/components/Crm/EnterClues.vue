@@ -333,7 +333,7 @@ import {
     readExcelClueData
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, urlFun, getQueryObject } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, getQueryObject } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'enterClues',
@@ -580,7 +580,6 @@ export default {
                 this.ruleForm.spread = obj.spread;
                 this.ruleForm.acc = obj.acc;
                 this.ruleForm.jobnum = obj.jobnum;
-                this.ruleForm.url = `?project=${obj.project}&ruleid=${obj.ruleid}&spread=${obj.spread}&acc=${obj.acc}&jobnum=${obj.jobnum}`
                 this.entryClueData();
               } else {
                 return false;
@@ -623,7 +622,8 @@ export default {
         },
         entryClueData() {
             this.fullscreenLoading = true;
-            this.$smoke_post(jqEntryClueData + this.ruleForm.url, {data: this.ruleForm}).then(res => {
+            let concatUrl = `?project=${this.ruleForm.project}&ruleid=${this.ruleForm.ruleid}&spread=${this.ruleForm.spread}&acc=${this.ruleForm.acc}&jobnum=${this.ruleForm.jobnum}`
+            this.$smoke_post(jqEntryClueData + concatUrl, {data: this.ruleForm}).then(res => {
                 if(res.code == 0) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;

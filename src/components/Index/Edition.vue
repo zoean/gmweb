@@ -4,6 +4,16 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.24 -- 2020/10/12" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、UI优化</p>
+          <p>2、可领取公海数据时间相关字段增加排序功能</p>
+          <p>3、录入线索支持多种链接格式</p>
+          <p>4、优化菜单栏收起按钮展示</p>
+          <p>5、页面增加页面名称</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.23 -- 2020/09/23" placement="top">
         <el-card>
           <h4>新增功能</h4>
@@ -269,7 +279,7 @@ export default {
 <style lang="less">
     .block{
       width: 70%;
-      margin: 0 auto;
+      margin: 20px auto 0;
       margin-left: 20%;
       .title{
         font-size: 20px;

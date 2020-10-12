@@ -203,7 +203,6 @@ export default {
       this.searchForm.endTime =this.dateRange ? this.dateRange[1] : ''
     },
     getOrgSubsetByUuid() {
-      console.log(process.env.VUE_APP_GM_JHWX);
       let uuid = '';
       if(process.env.VUE_APP_GM_JHWX == 'https://testgm.jhwx.com'){
         uuid = wechatOrgUuidTest;
