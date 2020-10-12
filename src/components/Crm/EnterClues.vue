@@ -333,7 +333,7 @@ import {
     readExcelClueData
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
-import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, urlFun } from '../../assets/js/common';
+import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, urlFun, getQueryObject } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'enterClues',
@@ -573,20 +573,14 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                let obj = urlFun(this.ruleForm.url);
-                if(obj.project && obj.ruleid && obj.spread && obj.acc && obj.jobnum){
-                    this.ruleForm.project = obj.project;
-                    this.ruleForm.ruleid = obj.ruleid;
-                    this.ruleForm.spread = obj.spread;
-                    this.ruleForm.acc = obj.acc;
-                    this.ruleForm.jobnum = obj.jobnum;
-                    this.entryClueData();
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: '推广链接错误，请重新输入'
-                    })
-                }
+                // let obj = urlFun(this.ruleForm.url);
+                let obj = getQueryObject(this.ruleForm.url)
+                this.ruleForm.project = obj.project;
+                this.ruleForm.ruleid = obj.ruleid;
+                this.ruleForm.spread = obj.spread;
+                this.ruleForm.acc = obj.acc;
+                this.ruleForm.jobnum = obj.jobnum;
+                this.entryClueData();
               } else {
                 return false;
               }
