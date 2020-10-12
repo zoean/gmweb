@@ -137,11 +137,11 @@ export default {
     },
     setPageTitleLeft(){ 
       if(!this.iscollapse){        
-        if(/^\/crm/.test(this.$route.path)){
+        // if(/^\/crm/.test(this.$route.path)){
           this.pageTitleLeft = 234
-        }else{
-          this.pageTitleLeft = 168
-        }
+        // }else{
+        //   this.pageTitleLeft = 168
+        // }
       }else{
         this.pageTitleLeft = 86
       }
