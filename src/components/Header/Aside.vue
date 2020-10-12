@@ -1,5 +1,5 @@
 <template>
-    <div v-if="routersFlag" class="aside-all">
+    <div v-if="routersFlag" class="aside-all" :style="{minWidth: iscollapse ? 'auto' : '214px'}">
       <el-menu
         :default-active="activeIndex"
         ref="elmenu"
@@ -76,6 +76,9 @@ export default {
       this.router_index();      
     },
     methods: {
+      closeMenu(index){        
+        this.$emit('setPageTitleLeft')
+      },
       toggleMenu(){
         this.iscollapse = !this.iscollapse
       },
