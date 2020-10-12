@@ -286,6 +286,7 @@ export default {
 }
 .index-main {
   height: calc(100vh - 60px);
+  margin-top: 0;
   .people-title {
     width: 100% !important;
     height: 40px;

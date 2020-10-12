@@ -2,8 +2,7 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <el-row class="people-screen">
+        <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" id="searchArea">
 
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
@@ -139,6 +138,7 @@
             :row-class-name="tableRowClassName"
             style="width: 100%"
             ref="tableSelect"
+            :height="tableHeight"
             >
 
             <el-table-column
@@ -207,7 +207,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"
@@ -269,6 +268,7 @@ import CustomerNotes from '../Share/CustomerNotes';
 import Copy from 'copy-util';
 export default {
     name: 'AllDay',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         Start,
         CustomerNotes,
@@ -551,6 +551,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
+                        this.$emit('setTableHeight', res.data.total, 1, 1)
                         this.$nextTick(() => {
                             this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));

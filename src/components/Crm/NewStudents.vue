@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main newStudents">
 
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -90,7 +90,8 @@
             ref="tree"
             v-loading="fullscreenLoading"
             @sort-change="sortChange"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               type="selection"
               width="45">
@@ -98,10 +99,10 @@
             <el-table-column
               :prop="item.prop"
               :label="item.label"
-              :min-width="item.prop == 'seatName' ? '300px' : item.prop == 'createTime' ? '180px' : item.prop == 'examItemName' ? '150px' : item.prop == 'tel' ? '100px' : item.prop == 'goodsName' ? '220px' : '' "
               v-for="(item, index) in columnList"
               :sortable="item.prop == 'createTime' ? 'custom' : item.prop == 'school' ? 'custom' : false"
               :key="index"
+              :min-width="item.width"
               >
 
               <template slot-scope="scope">
@@ -206,6 +207,7 @@ import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../a
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'newStudents',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         StudentsNotes
     },
@@ -231,13 +233,13 @@ export default {
             list: [],
             columnList: [
                 { 'prop': 'name', 'label': '姓名' },
-                { 'prop': 'tel', 'label': '手机号码' },
-                { 'prop': 'examItemName', 'label': '考试项目' },
+                { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
+                { 'prop': 'examItemName', 'label': '考试项目', 'width': 150 },
                 { 'prop': 'classType', 'label': '班型' },
                 { 'prop': 'singlePlatform', 'label': '成单平台' },
-                { 'prop': 'createTime', 'label': '报名时间' },
-                { 'prop': 'seatName', 'label': '成单坐席' },
-                { 'prop': 'goodsName', 'label': '购买商品' },
+                { 'prop': 'createTime', 'label': '报名时间', 'width': 180},
+                { 'prop': 'seatName', 'label': '成单坐席', 'width': 300},
+                { 'prop': 'goodsName', 'label': '购买商品', 'width': 250 },
             ],
             fullscreenLoading: false,
             sortSetList: [
@@ -463,6 +465,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
 
                 }else{
@@ -578,10 +581,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
         }
     }
 

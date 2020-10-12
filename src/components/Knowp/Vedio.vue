@@ -49,7 +49,8 @@
           :data="vedioList"
           row-key="uuid"
           default-expand-all
-          style="width: 100%">
+          style="width: 100%"         
+          :height="tableHeight">
           <af-table-column
             :prop="item.prop"
             :width="item.label == '视频链接' ? '200px' : ''"
@@ -279,6 +280,7 @@ import { timestampToTime, formatSeconds, vedioTypeText } from '../../assets/js/c
 import { vedioTypeArr } from '../../assets/js/data';
 export default {
     name: 'subject',
+    props: ['tableHeight'],
     data() {
         return {
             vedioList: [],
@@ -485,6 +487,7 @@ export default {
                 })
                 this.vedioList = res.data.list;
                 this.total = res.data.total;
+                this.$emit('setTableHeight', this.total, 3, 1)
             })
         },
         handleCurrentChange(index) {
@@ -651,6 +654,7 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        margin-top: 15px;
         .people-title{
             width: 100%;
             height: 40px;
@@ -664,9 +668,5 @@ export default {
         .people-screen{
             margin-bottom: 16px;
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
 </style>

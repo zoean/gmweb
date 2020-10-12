@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
@@ -16,6 +16,7 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
+            :height="tableHeight"
         >
             <el-table-column
               :prop="item.prop"
@@ -35,7 +36,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -59,6 +59,7 @@ import {
 } from '../../assets/js/common';
 export default {
     name: 'timeData',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
       return {
         fullscreenLoading: false,
@@ -111,6 +112,7 @@ export default {
 
                 this.list = res.data.list;
                 this.form.total = res.data.total;
+                this.$emit('setTableHeight', this.form.total, 0, 1)
               }, 300);
             }else{
               setTimeout(() => {

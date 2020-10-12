@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -51,7 +51,7 @@
             </el-col>
 
             <el-col :span="3" class="seatData">
-                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="3">
@@ -116,6 +116,7 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%"
+            :height="tableHeight"
             >
             <el-table-column
               type="selection"
@@ -247,6 +248,7 @@ import { MJ_6, zuzhiUuid, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'reCoverData',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             form: {
@@ -416,6 +418,7 @@ export default {
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -617,9 +620,5 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
 </style>

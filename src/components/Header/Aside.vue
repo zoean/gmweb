@@ -50,21 +50,11 @@
         </div>
 
       </el-menu>
-      
-      <el-image
-        style="width: 15px; height: 45px; position: absolute; right: -13px; top: 40%; cursor: pointer;"
-        v-show="iscollapse"
-        @click="open_click"
-        :src="require('../../assets/images/aside_open.png')">
-      </el-image>
-
-      <el-image
-        style="width: 15px; height: 45px; position: absolute; right: -13px; top: 40%; cursor: pointer;"
-        v-show="!iscollapse"
-        @click="close_click"
-        :src="require('../../assets/images/aside_close.png')">
-      </el-image>
-
+      <p class="menuHandle" @click="toggleMenu">
+        <svg-icon v-show="!iscollapse" class="hopen" icon-class="hopen" icon-title="收起菜单" />
+        <span v-show="!iscollapse">收起菜单</span>
+        <svg-icon v-show="iscollapse" class="hclose" icon-class="hclose" icon-title="展开菜单" />
+      </p>
     </div>
 </template>
 
@@ -86,11 +76,8 @@ export default {
       this.router_index();      
     },
     methods: {
-      open_click() {
-        this.iscollapse = false;
-      },
-      close_click() {
-        this.iscollapse = true;
+      toggleMenu(){
+        this.iscollapse = !this.iscollapse
       },
       active_router(index) {
         this.$store.commit('setPageNum', index.pageNum)
@@ -102,6 +89,10 @@ export default {
       }
     },
     watch:{
+      'iscollapse': function(newVal){ 
+        this.$emit('changeIscollapse', newVal)
+        this.$emit('setPageTitleLeft')
+      },
       '$route.path': function(newVal){
         this.activeIndex = this.$route.path
         if(newVal == '/'){
@@ -132,14 +123,13 @@ export default {
         }else{
           this.routersFlag = true;
           // this.activeIndex = newVal;
-        }
-
+        }       
         window.onresize = () => {
           if(((newVal.indexOf('url') == -1) && (newVal != '/') && (newVal != '/login') && (newVal != '/forget') && (newVal != '/edition') && (newVal != '/404') && (newVal.indexOf('agreeMentDetails') == -1))){
             if(document.documentElement.clientWidth < 980){
-              this.close_click()
+              this.toggleMenu()
             }else{
-              this.open_click()
+              this.toggleMenu()
             }
           }
         }
@@ -147,6 +137,7 @@ export default {
     },
     mounted() {
         // const userMenuList = this.$store.state.userMenuList;
+        this.$emit('setPageTitleLeft')
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){
@@ -174,17 +165,52 @@ export default {
   .aside-all{
     position: relative;
     height: 100%;
+    z-index: 2;
     .svg-icon{
-      margin-left: 4px !important;
-      color: #909399;
       font-size: 18px;
+      color: #909399;
     }
     .el-menu-vertical-demo{
       height: calc(100vh - 60px);
       overflow-y: scroll;
-      .el-menu-item.is-active{
-        color: #409EFF;
-        background: #f2f3f7;
+      background: #F5F5F5;
+      padding-bottom: 40px;
+      .el-submenu__title{
+        .menu-titles{
+          color: #555;
+        }
+        .el-menu-item{
+          i{
+            color: #909399;
+          }
+          span{
+            color: #555;  
+          }
+        }
+        .el-menu-item.is-active{
+          background: #DEDEDE;
+          i, span{          
+          color: #409EFF;
+          }
+        }
+      }
+    }
+    .menuHandle{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 34px;
+      width: 100%;
+      background: #F0F0F0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999999;
+      cursor: pointer;
+      border-right: 1px solid #e6e6e6;
+      .svg-icon{
+        width: 13px;
+        height: 12px;
       }
     }
   }

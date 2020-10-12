@@ -21,8 +21,7 @@ body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, input, textarea, select, p, dl, d
 body {
     font: 12px/1.5 Helvetica Neue,Helvetica,Arial,sans-serif;
     color: #555;
-    background-color: #F1F1F1;
-    min-width: 1300px;
+    background-color: #FFFFFF;
 }
 em, i {
     font-style: normal;
@@ -171,7 +170,12 @@ a:link,a:active,a:visited,a:hover {
 .el-table .readState {
     font-weight: 700;
 }
-
+.el-table__empty-text{
+    line-height: 46px;
+}
+.el-table__empty-block{
+    min-height: 46px;
+}
 .el-notification {white-space:pre !important; width: auto !important; }
 
 .el-drawer__header{
@@ -258,8 +262,14 @@ a:link,a:active,a:visited,a:hover {
     line-height: 32px !important;
     position: relative;
     top: 4px;
+    
 }
-
+.seatData .areaDefault .area-select .area-selected-trigger{
+    color: #aaa;
+}
+.seatData .areaSelected .area-select .area-selected-trigger{
+    color: #606266;
+}
 .area-select .area-selected-trigger{
     padding: 0px 20px 7px 12px !important;
     font-size: 12px !important;
@@ -274,6 +284,7 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .seatData .area-select .area-selected-trigger{
+    color: #aaa;
     /* padding: 4px 20px 7px 12px !important; */
 }
 .seatData{
@@ -325,13 +336,12 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-main{
-    padding: 12px;
-    /* padding-bottom: 30px; */
+    padding: 16px 0 0 0;
     background: #fff;
-    margin: 16px;
+    margin: 16px 16px 0 16px;
     height: calc(100vh - 92px) !important;
-    overflow-y: scroll;
     min-width: 980px;
+    overflow: visible;
 }
 
 .el-menu--collapse  .el-submenu__title span{

@@ -292,6 +292,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-main{  
+  margin-top: 0;
+}
 .line {
   text-align: center;
 }

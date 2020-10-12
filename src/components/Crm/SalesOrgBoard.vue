@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
 
-        <div class="people-title"><span class="kanban_dian"></span>目标完成情况</div>
+        <div class="people-title">目标完成情况</div>
 
         <div class="board-target" v-loading="loadingNum">
 
@@ -59,7 +59,7 @@
 
         </div>
 
-        <div class="people-title"><span class="kanban_dian"></span>基本情况</div>
+        <div class="people-title">基本情况</div>
 
         <div class="board-details" v-loading="fullscreenLoadingBoard">
 
@@ -113,9 +113,9 @@
 
         </div>
 
-        <div style="background: #fff;">
+        <div class="call-detail">
             
-            <div class="people-title"><span class="kanban_dian"></span>通话明细</div>
+            <div class="people-title">通话明细</div>
     
             <el-row class="people-screen">
             
@@ -413,6 +413,11 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 30px;
+        max-height: 800px;
+        overflow-y: scroll;
+        padding: 0;
+        background-color: #fff;
         .people-title{
             width: 100%;
             height: 40px;
@@ -421,7 +426,9 @@ export default {
             background: #fff;
             color: #333333;
             padding-left: 16px;
-            border-bottom: 1px solid #dddddd;
+            border: 1px solid #dddddd;
+            border-bottom: none;
+            background: #F1F1F1;
         }
         .screen-li{
             width: 90%;
@@ -431,6 +438,7 @@ export default {
             justify-content: space-between;
             margin-bottom: 10px;
             height: 170px;
+            border: 1px solid #ddd;
             .target-two{
                 height: 100%;
                 width: 50%;
@@ -445,6 +453,8 @@ export default {
             justify-content: space-between;
             margin-bottom: 10px;
             height: 146px;
+            border: 1px solid #ddd;
+            border-right: none;
             .target-four{
                 height: 146px;
                 width: 25%;
@@ -481,6 +491,14 @@ export default {
                     display: block; }
             }
         }
+        .call-detail{
+            border: 1px solid #ddd;
+            border-bottom: none;
+            .people-title{
+                border: none;
+                border-bottom: 1px solid #ddd;
+            }
+        }
     }
     .people-screen{
         margin: 10px 20px;
@@ -490,9 +508,5 @@ export default {
     }
     .timeData /deep/ .el-table .cell{
         text-align: center !important;
-    }
-    .el-main{
-        padding: 0;
-        background: #F1F1F1;
     }
 </style>

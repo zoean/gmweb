@@ -51,9 +51,9 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="所在省市" prop="provinceCity">
+                                <el-form-item label="所在省市" prop="provinceCity"  class="seatData">
 
-                                    <area-cascader type="text" placeholder="请选择地区" v-model="ruleForm.provinceCity" @change="cityChange" :data="pcaa" v-if="!routePathFlag"></area-cascader>
+                                    <area-cascader type="text" placeholder="请选择地区" v-model="ruleForm.provinceCity" @change="cityChange" :data="pcaa" v-if="!routePathFlag" :class="['screen-li', {'areaSelected': ruleForm.city, 'areaDefault': !ruleForm.city}]"></area-cascader>
 
                                     <el-input v-model="ruleForm.provinceCity" :readonly="routePathFlag" :class="routePathFlag ? 'borderNone' : ''" v-if="routePathFlag"></el-input>
 

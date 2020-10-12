@@ -700,12 +700,11 @@ export default {
             }
         }
     }
+    .enterClues{
+        margin-top: 5px;
+    }
     .enterClues /deep/ div.el-dialog__body{
         height: auto;
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
     
 </style>

@@ -266,6 +266,7 @@ export default {
 <style scoped lang='less'>
 .index-main {
   height: calc(100vh - 60px);
+  margin-top: 0;
   .people-title {
     width: 100%;
     height: 40px;

@@ -16,7 +16,8 @@
                 <el-table
                     :data="list"
                     v-loading="fullscreenLoading"
-                    style="width: 100%">
+                    style="width: 100%"
+                    :height="tableHeight">
 
                     <el-table-column
                     :prop="item.prop"
@@ -45,7 +46,6 @@
                 <el-pagination
                     background
                     layout="total, sizes, prev, pager, next, jumper"
-                    style="text-align: right; margin-top: 20px;"
                     :total='form.total'
                     :page-size='form.pageSize'
                     :current-page="form.currentPage"
@@ -173,6 +173,7 @@ import Start from '../../components/Share/Start';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'completed',
+    props: ['tableHeight'],
     data() {
         return {
             form: {
@@ -320,7 +321,8 @@ export default {
                         sll.addTime = timestampToTime(Number(sll.addTime * 1000));
                         sll.schoolName = schoolType(sll.schoolName);
                     })
-                    this.userOrderList = res.data.orderList
+                    this.userOrderList = res.data.orderList                    
+                    this.$emit('setTableHeight', this.userOrderList.length, 3, 1)
                 }
             })
         },
@@ -385,6 +387,7 @@ export default {
                         this.list = res.data.list;
                         this.form.total = res.data.total;
                         this.schoolId = res.data.schoolId;
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -536,6 +539,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 5px;
         .el-col-6{
             height: auto !important;
         }

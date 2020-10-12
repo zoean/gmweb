@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="5">
                 <el-date-picker
@@ -37,7 +37,7 @@
             </el-col>
 
             <el-col :span="3" class="seatData">
-                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="3">
@@ -156,7 +156,8 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%;">
+            style="width: 100%;"
+            :height="tableHeight">
             <el-table-column
               type="selection"
               width="45">
@@ -211,6 +212,7 @@ import pcaa from 'area-data/pcaa';
 import { MJ_6, zuzhiUuid } from '../../assets/js/data';
 export default {
     name: 'overflow',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             form: {
@@ -308,6 +310,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 0, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -568,10 +571,11 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 15px;
+        height: auto;
         .el-col-6{
             height: auto !important;
         }
-        height: auto;
         .people-title{
             width: 100%;
             height: 40px;
@@ -606,10 +610,6 @@ export default {
         }
         .tagActive{
             color: red !important;
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
         }
     }
 </style>

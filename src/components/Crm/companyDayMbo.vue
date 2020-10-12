@@ -292,6 +292,9 @@ export default{
 }
 </script>
 <style lang="less" scoped>
+.index-main{
+  margin-top: 15px;
+}
 .target-num{
  padding: 5px;
  background-color: #999;

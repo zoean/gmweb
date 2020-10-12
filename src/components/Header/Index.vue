@@ -111,9 +111,8 @@
             <el-col :span="18" style="height: 60px !important;">
                 <el-row type="flex" justify="start">
                     <el-col :span="5" style="min-width: 220px;">
-                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
-                        
-                        <el-image style="width: 130px; position: relative; top: 15px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">                        
+                        <el-image style="width: 130px; position: relative; top: 0px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
                     </el-col>
@@ -814,6 +813,11 @@ export default {
         letter-spacing: .04rem;
         cursor: pointer;
         padding-left: 12px;
+        /deep/.el-image{
+            img{
+                margin-top: 12px;
+            }
+        }
     }
     .el-dropdown{
         float: right;
@@ -845,7 +849,6 @@ export default {
         color: #488FF7!important;
     }
     .back_Change{
-        // background: #3687FA;
         background: #fff;
     }
     .pagination{

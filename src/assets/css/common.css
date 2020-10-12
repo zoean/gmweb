@@ -47,6 +47,9 @@
 .mt10{
   margin-top: 10px;
 }
+.mb10{
+  margin-bottom: 10px;
+}
 .mt20{
   margin-top: 20px;
 }
@@ -67,4 +70,39 @@
   color: #409EFF;
   margin-right: 10px;
   display: inline-block; 
+}
+.actionHide{
+  animation: hideSearch .5s;
+  -moz-animation: hideSearch .5s;
+  -webkit-animation: hideSearch .5s;
+  -o-animation: hideSearch .5s;
+}
+.actionShow{
+  display: block;
+  animation: showSearch .3s;
+  -moz-animation: showSearch .3s;
+  -webkit-animation: showSearch .3s;
+  -o-animation: showSearch .3s;
+}
+.noSearch{
+  display: none;
+}
+@keyframes showSearch {
+  0%{ opacity: 0;}
+  25%{ opacity: 0.25;}
+  50%{ opacity: 0.5;}
+  75%{ opacity: 0.75;}
+100%{opacity: 1;}
+}
+@keyframes hideSearch {
+  0%{ opacity: 1;}
+  25%{ opacity: 0.75;}
+  50%{ opacity: 0.5;}
+  75%{ opacity: 0.25;}
+100%{opacity: 0;}
+}
+
+.el-pagination{
+  padding: 16px 10px 10px 0;
+  text-align: right;
 }

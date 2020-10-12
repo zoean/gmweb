@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main allStudents">
 
-        <el-row class="people-screen">
+        <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="6">
                 <el-date-picker
                     size="small"
@@ -138,7 +138,8 @@
             @sort-change="sortChange"
             :key="this.tableKey"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               type="selection"
               width="45">
@@ -172,7 +173,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -248,6 +248,7 @@ import { MJ_1, MJ_2, MJ_3, MJ_10, MJ_11, MJ_12, MJ_15, nationAll } from '../../a
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'allStudents',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         StudentsNotes,
         StudentsSMS
@@ -538,6 +539,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1, 2)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -668,10 +670,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
         }
         .el-col-6{
             height: auto !important;

@@ -26,7 +26,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -402,6 +401,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+      margin-top: 15px;
         height: auto;
         .people-title{
             width: 100%;

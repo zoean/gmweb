@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
 
-        <div class="people-title"><span class="kanban_dian"></span>目标完成情况</div>
+        <div class="people-title">目标完成情况</div>
 
         <div class="board-target" v-loading="loadingNum">
 
@@ -59,7 +59,7 @@
 
         </div>
 
-        <div class="people-title"><span class="kanban_dian"></span>基本情况</div>
+        <div class="people-title">基本情况</div>
 
         <div class="board-details" v-loading="fullscreenLoadingBoard">
 
@@ -113,10 +113,9 @@
 
         </div>
 
-        <div style="background: #fff;">
+        <div class="call-detail">
 
-            <div class="people-title"><span class="kanban_dian"></span>通话明细</div>
-
+            <div class="people-title">通话明细</div>
             <el-row class="people-screen" style="margin-top: 10px;">
 
                 <el-col :span="4">
@@ -159,7 +158,6 @@
                 </el-table-column>
 
             </el-table>
-
         </div>
 
     </el-main>
@@ -377,15 +375,19 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        padding: 0;
+        margin-top: 30px;
+        max-height: 600px;
+        overflow-y: scroll;
         .people-title{
             width: 100%;
             height: 40px;
             line-height: 40px;
             font-size: 15px;
-            background: #fff;
             color: #333333;
             padding-left: 16px;
-            border-bottom: 1px solid #dddddd;
+            border: 1px solid #dddddd;
+            background: #F1F1F1;
         }
         .screen-li{
             width: 90%;
@@ -393,8 +395,9 @@ export default {
         .board-target{
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
             height: 170px;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
             .target-two{
                 height: 100%;
                 width: 50%;
@@ -409,6 +412,7 @@ export default {
             justify-content: space-between;
             margin-bottom: 10px;
             height: 146px;
+            border-right: 1px solid #ddd;
             .target-four{
                 height: 146px;
                 width: 25%;
@@ -416,7 +420,7 @@ export default {
                 text-align: center;
                 padding-top: 10px;
                 position: relative;
-                border-right: 1px solid #dddddd;
+                border-left: 1px solid #dddddd;
                 &:last-of-type{
                     border-right: none !important;
                 }
@@ -445,6 +449,15 @@ export default {
                     display: block; }
             }
         }
+        .call-detail{
+            border: 1px solid #ddd;
+            border-bottom: none;
+            .people-title{
+                border-left: none;
+                border-right: none;
+                border-top: none;
+            }
+        }
     }
     .people-screen{
         margin: 10px 20px;
@@ -454,9 +467,5 @@ export default {
     }
     .timeData /deep/ .el-table .cell{
         text-align: center !important;
-    }
-    .el-main{
-        padding: 0;
-        background: #F1F1F1;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
 
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
             </el-col>
@@ -126,7 +126,8 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
 
             <el-table-column
               type="selection"
@@ -181,7 +182,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -248,6 +248,7 @@ import {
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'studentsMyBaoKao',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         StudentsNotes,
         BaoKaoMessage,
@@ -451,6 +452,7 @@ export default {
 
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -543,10 +545,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
         }
     }
 </style>
