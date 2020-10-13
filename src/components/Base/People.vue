@@ -65,59 +65,55 @@
                 </el-col>
 
             </el-row>
-            <div>
-                <div>
-                    <el-table
-                    id="tableList"
-                    :data="userList"
-                    @sort-change="sortChange"
-                    v-loading="fullscreenLoading"
-                    :height="tableHeight"
-                    >
-                    <el-table-column
-                        :prop="item.prop"
-                        show-overflow-tooltip
-                        :label="item.label"
-                        v-for="(item, index) in columnList"
-                        :min-width="item.width"
-                        :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
-                        :key="index"
-                        >
-                        <template slot-scope="scope">
-                            <div>
+            <el-table
+            id="tableList"
+            :data="userList"
+            @sort-change="sortChange"
+            v-loading="fullscreenLoading"
+            :height="tableHeight"
+            >
+            <el-table-column
+                :prop="item.prop"
+                show-overflow-tooltip
+                :label="item.label"
+                v-for="(item, index) in columnList"
+                :min-width="item.width"
+                :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
+                :key="index"
+                >
+                <template slot-scope="scope">
+                    <div>
 
-                                <p class="job-status" v-if="item.prop == 'jobStatus'">
-                                    <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
-                                    <span v-else class="quit"></span>
-                                    <!-- {{userList[index][item.prop]}} -->
-                                    {{scope.row[item.prop]}}
-                                </p>
+                        <p class="job-status" v-if="item.prop == 'jobStatus'">
+                            <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
+                            <span v-else class="quit"></span>
+                            <!-- {{userList[index][item.prop]}} -->
+                            {{scope.row[item.prop]}}
+                        </p>
 
-                                <p v-else>{{scope.row[item.prop]}}</p>
+                        <p v-else>{{scope.row[item.prop]}}</p>
 
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
-                        <template slot-scope="scope">
-                            <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
-                            <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
-                        </template>
-                    </el-table-column>
-                    </el-table>
-                    <el-pagination
-                        background
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total='total'
-                        :page-size='screenForm.pageSize'
-                        :page-sizes="[10, 20, 30, 50, 100]"
-                        :hide-on-single-page="totalFlag"
-                        @current-change="handleCurrentChange"
-                        @size-change="handleSizeChange"
-                    >
-                    </el-pagination>
-                </div>
-            </div>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
+                <template slot-scope="scope">
+                    <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
+                    <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
+                </template>
+            </el-table-column>
+            </el-table>
+            <el-pagination
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total='total'
+                :page-size='screenForm.pageSize'
+                :page-sizes="[10, 20, 30, 50, 100]"
+                :hide-on-single-page="totalFlag"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+            >
+            </el-pagination>
             
     </el-main>
 </template>
@@ -371,6 +367,7 @@ export default {
     .index-main{
         margin-top: 24px;
         position: relative;
+        overflow: hidden;
         #toggleSearch{
             position: absolute;
             top: -10px;

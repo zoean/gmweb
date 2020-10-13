@@ -168,7 +168,7 @@ export default {
           // this.tableHeight = this.total * this.trHeight * 46 + 46
         }
       }else{
-        this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -68 : this.tableHeight
+        this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -78 : this.tableHeight
       }
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleCount * 42 - 116
@@ -230,11 +230,11 @@ export default {
         justify-content: center;
         align-items: center;
         z-index: 1;
-        width: 70px;
+        width: 100px;
         left: 50%;
         top: 0;
         position: absolute;
-        margin-left: 35px;
+        margin-left: 0;
         .svg-icon{
           width: 10px;
           height: 6px;
