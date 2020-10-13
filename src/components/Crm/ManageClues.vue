@@ -356,6 +356,7 @@ export default {
         delCludes(row){
             this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
                 if(res.code == 200){
+                    this.getExteAllClueData();
                     this.$message({
                         type: 'success',
                         message: '线索删除成功'
