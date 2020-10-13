@@ -562,7 +562,7 @@ export default {
             this.getDataAllocationRulesList();
         },
         handleSizeChange(index) {
-            this.dataAlloForm.currentPage = index;
+            this.dataAlloForm.currentPage = 1;
             this.getDataAllocationRulesList();
         },
         handleDeleteClick(scope) {
