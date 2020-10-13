@@ -171,6 +171,7 @@ export const getUserRPCDList = '/api/phone/clueData/getUserRPCDList'; //获取�
 export const obtainRPCD = '/api/phone/clueData/obtainRPCD'; //员工获取回收池线索数据
 export const getExteClueData = '/api/phone/clueData/getExteClueData'; //获取推广人员的线索数据
 export const getExteAllClueData = '/api/phone/clueData/getExteAllClueData'; //获取推广人员的所有线索数据
+export const deleteClueDatas = '/api/phone/clueData/deleteClueDatas/';//删除线索
 
 //渠道管理
 export const channelGetList = '/api/phone/channel/getList'; //渠道列表

@@ -170,9 +170,10 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="80" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                <svg-icon style="margin-left: 4px;" @click="delCludes(scope.row)" icon-title="删除线索" icon-class="del" />
               </template>
             </el-table-column>
     
@@ -215,7 +216,8 @@ import {
   getExteClueData,
   getExamBasic,
   enumByEnumNums,
-  personalClueExport
+  personalClueExport,
+  deleteClueDatas
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
@@ -341,7 +343,23 @@ export default {
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
     },
-    methods: {
+    methods: {        
+        delCludes(row){
+            this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
+                if(res.code == 200){
+                    this.$message({
+                        type: 'success',
+                        message: '线索删除成功'
+                    })
+                    this.getExteClueData();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         personalClueExport() {
             let tmp = (new Date()).getTime();
             let exportTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() - 3600 * 1000 * 24 * 31;
