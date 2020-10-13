@@ -176,6 +176,9 @@ a:link,a:active,a:visited,a:hover {
 .el-table__empty-block{
     min-height: 46px;
 }
+/* .el-table tr:last-child td{
+    border: none;
+} */
 .el-notification {white-space:pre !important; width: auto !important; }
 
 .el-drawer__header{
