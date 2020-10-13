@@ -221,7 +221,8 @@ import {
   getExamBasic,
   enumByEnumNums,
   directorClueExport,
-  testAllClueExport
+  testAllClueExport,
+  deleteClueDatas
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
@@ -353,7 +354,19 @@ export default {
     },
     methods: {
         delCludes(row){
-
+            this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
+                if(res.code == 200){
+                    this.$message({
+                        type: 'success',
+                        message: '线索删除成功'
+                    })
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
         },
         directorClueExport() {
             let tmp = (new Date()).getTime();
