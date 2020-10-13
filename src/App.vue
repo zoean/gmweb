@@ -37,7 +37,7 @@ export default {
       toggleAction: false,
       hideSearch: false,
       searchAreaHeight: 0,
-      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData', '/crm/dataStatistics/eduData', '/crm/crmConfig/enums', '/crm/crmConfig/FieldManagement', '/crm/eduAdmin/headMaster', '/crm/sms/smslist', '/crm/class/orgOpenClass', '/crm/class/openClass', '/crm/class/returnOrgVisit', '/crm/class/returnVisit', '/crm/wechat/wechatManagement', '/crm/mbo/companymonthmbo', '/crm/mbo/companydaymbo', '/crm/mbo/departmentmonthmbo', '/crm/mbo/departmentdaymbo', '/forget', '/edition', '/operate/activityA/createactivity', '/operate/activityA/ActivityDetail', '/operate/activityA/partinMember', '/operate/activityA/winninglist', '/operate/activityA/pricelist', '/base/people', '/base/people/change'],
+      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData', '/crm/dataStatistics/eduData', '/crm/crmConfig/enums', '/crm/crmConfig/FieldManagement', '/crm/eduAdmin/headMaster', '/crm/sms/smslist', '/crm/class/orgOpenClass', '/crm/class/openClass', '/crm/class/returnOrgVisit', '/crm/class/returnVisit', '/crm/wechat/wechatManagement', '/crm/mbo/companymonthmbo', '/crm/mbo/companydaymbo', '/crm/mbo/departmentmonthmbo', '/crm/mbo/departmentdaymbo', '/forget', '/edition', '/operate/activityA/createactivity', '/operate/activityA/ActivityDetail', '/operate/activityA/partinMember', '/operate/activityA/winninglist', '/operate/activityA/pricelist', '/base/people', '/base/people/change', '/base/people/permiss'],
       includeSearch: false,
       initOptions: {},
       total: 0,
@@ -108,7 +108,6 @@ export default {
   mounted(){
     this.pageTitle = this.$route.meta.title    
     this.setPageTitleLeft() 
-    this.setTableHeight(this.total,this.handleCount, this.trHeight)
     if(this.unNormalPage.includes(this.$route.path)){
       this.isNormalPage = false
       this.paddingClass = 'noheader-padding'
@@ -160,19 +159,19 @@ export default {
         this.initSearchHeight =  this.searchAreaHeight
       }
       this.trHeight = trH
-      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 130 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 110
+      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 116
       if(this.total * this.trHeight * 45 < this.tableHeight){
         if(this.total == 0){
-          this.tableHeight = this.trHeight * 47 + 47
+          this.tableHeight = this.trHeight * 46 + 46
         }else{
-          // this.tableHeight = this.total * this.trHeight * 47 + 47
-          // this.tableHeight = this.total * this.trHeight * 47 + 47
+          // this.tableHeight = this.total * this.trHeight * 46 + 46
+          // this.tableHeight = this.total * this.trHeight * 46 + 46
         }
       }else{
         this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -68 : this.tableHeight
       }
       if(/^\/base\/menu/.test(this.$route.path)){
-        this.tableHeight = this.windowHeight - this.handleCount * 42 - 110
+        this.tableHeight = this.windowHeight - this.handleCount * 42 - 116
       }
     },
     resizeHandle(){

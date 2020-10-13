@@ -526,7 +526,7 @@ export default {
                 receiveEndTime: this.form.receiveEndTime,
             }).then(res => {
                 if(res.code == 200) {
-                    this.tag_flag = true;
+                    this.tag_flag = true;                    
                     this.SeatWorkObj = res.data;
                 }else{
                     this.tag_flag = false;
@@ -551,7 +551,11 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
-                        this.$emit('setTableHeight', res.data.total, 1, 1)
+                        if(this.tag_flag){
+                            this.$emit('setTableHeight', res.data.total, 2.2, 1)
+                        }else{
+                            this.$emit('setTableHeight', res.data.total, 1, 1)
+                        }                        
                         this.$nextTick(() => {
                             this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
