@@ -177,6 +177,18 @@
             <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    iconColor="red"                    
+                    placement="top"
+                    title="删除后该线索进入线索垃圾站，是否继续？"
+                    @onConfirm="delCludes(scope.row)"
+                >
+                    <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
+                
+                </el-popconfirm>
               </template>
             </el-table-column>
     
@@ -358,7 +370,7 @@ export default {
                     this.getExteAllClueData();
                     this.$message({
                         type: 'success',
-                        message: '线索删除成功'
+                        message: '线索删除成功，可在线索垃圾站回收该线索。'
                     })
                 }else{
                     this.$message({
@@ -367,6 +379,7 @@ export default {
                     })
                 }
             })
+            
         },
         directorClueExport() {
             let tmp = (new Date()).getTime();

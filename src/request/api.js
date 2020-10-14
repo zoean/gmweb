@@ -151,6 +151,8 @@ export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //�
 export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户
 export const geSeatWork = '/api/phone/clueData/geSeatWork'; //获取坐席的工作情况
 export const clueContactSign = '/api/phone/clueData/clueContactSign'; //线索联系标记
+export const getClueDatasStashList = '/api/phone/clueData/getClueDatasStashList';//线索数据回收列表
+export const rollbackClueDatas = '/api/phone/clueData/rollbackClueDatas/';//线索数据还原
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）
