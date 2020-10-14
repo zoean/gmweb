@@ -148,7 +148,7 @@
               v-for="(item, index) in columnList"
               :min-width="item.width"
               :key="index"
-              :show-overflow-tooltip="item.props == remarks ? true : false"
+              show-overflow-tooltip
               >
               <template slot="header">
                 {{item.label}}

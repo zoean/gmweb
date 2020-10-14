@@ -398,7 +398,9 @@ a:link,a:active,a:visited,a:hover {
 .smoke-cascader .el-input .el-input__inner {
     height: 32px !important;
 }
-
+.el-range-editor--small .el-range-input{
+    font-size: 12px;
+}
 /* .smoke_seatName1{
     top: 416px !important;
 }
