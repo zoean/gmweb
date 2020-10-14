@@ -174,7 +174,7 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="100" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
                 <el-popconfirm
@@ -187,6 +187,18 @@
                     @onConfirm="delCludes(scope.row)"
                 >
                     <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
+                
+                </el-popconfirm>
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    iconColor="red"                    
+                    placement="top"
+                    title="是否确认转移该线索？"
+                    @onConfirm="transferClude(scope.row)"
+                >
+                    <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" />
                 
                 </el-popconfirm>
               </template>
@@ -222,7 +234,20 @@
             @fatherDataList='getExteAllClueData'
         >
         </CustomerNotes>
-
+        <el-dialog :visible="transferSeatVisible">
+            <el-select v-model="value" filterable placeholder="请选择">
+                <!-- <el-option
+                  v-for="item in seatList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"> -->
+                </el-option>
+              </el-select>
+            <div slot="footer" class="dialog-footer">
+            <!-- <el-button type="primary" @click="seatActSeat" size="small">确 定</el-button>
+            <el-button @click="handleCloseTag" size="small" plain>取 消</el-button> -->
+            </div>
+        </el-dialog>
     </el-main>
 </template>
 
@@ -233,7 +258,8 @@ import {
   enumByEnumNums,
   directorClueExport,
   testAllClueExport,
-  deleteClueDatas
+  deleteClueDatas,
+  dataViewPermissionUserList
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
 import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
@@ -353,6 +379,8 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
+            transferSeatVisible: false,
+            seatList: []
         }
     },
     created() {
@@ -380,6 +408,24 @@ export default {
                 }
             })
             
+        },
+        transferClude(row){
+            if(row.clueDataType == 1){//溢出池
+                this.transferSeatVisible = true
+                this.getSeatList()
+            }else if(row.clueDataType == 2){//公海
+
+            }else if(row.clueDataType == 3){//坐席名下
+
+            }
+        },
+        getSeatList(){
+            this.$smoke_post(dataViewPermissionUserList + '/1', {}).then(res => {
+                if(res.code == 200){
+                    this.seatList = res.data.data
+                    
+                }
+            })
         },
         directorClueExport() {
             let tmp = (new Date()).getTime();
