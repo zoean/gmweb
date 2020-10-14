@@ -44,6 +44,7 @@ import allStudents from '@/components/Crm/AllStudents';
 import fieldManagement from '@/components/Crm/FieldManagement';
 import manageClues from '@/components/Crm/ManageClues';
 import peopleClues from '@/components/Crm/PeopleClues';
+import refuseClues from '@/components/Crm/RefuseCludes';
 import sendSMS from '@/components/Crm/SendSMS';
 import smslist from '@/components/Crm/SMSlist';
 import smsRecord from '@/components/Crm/SMSRecord';
@@ -423,6 +424,15 @@ export default new Router({
             component: peopleClues,
             meta: {
                 title: '个人线索'
+            }
+        },        
+
+        {
+            path: '/crm/dataClues/refuseClues',
+            name: 'refuseClues',
+            component: refuseClues,
+            meta: {
+                title: '线索垃圾站'
             }
         },
 

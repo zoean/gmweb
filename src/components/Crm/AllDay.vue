@@ -97,7 +97,7 @@
 
             <el-col :span="3">
 
-                <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable>
+                <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable >
                     <el-option
                       v-for="item in orderStateList"
                       :key="item.name"
@@ -304,7 +304,7 @@ export default {
                 receiveStartTime: '', //领取时间的查询开始时间（13位）
                 receiveEndTime: '', //领取时间的查询结束时间（13位）
                 intentionLevel: '', //意向等级
-                orderState: '',//成单状态
+                orderState: 0,//成单状态
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
