@@ -127,15 +127,15 @@ export default {
           this.routersFlag = true;
           // this.activeIndex = newVal;
         }       
-        window.onresize = () => {
-          if(((newVal.indexOf('url') == -1) && (newVal != '/') && (newVal != '/login') && (newVal != '/forget') && (newVal != '/edition') && (newVal != '/404') && (newVal.indexOf('agreeMentDetails') == -1))){
-            if(document.documentElement.clientWidth < 980){
-              this.toggleMenu()
-            }else{
-              this.toggleMenu()
-            }
-          }
-        }
+        // window.onresize = () => {
+        //   if(((newVal.indexOf('url') == -1) && (newVal != '/') && (newVal != '/login') && (newVal != '/forget') && (newVal != '/edition') && (newVal != '/404') && (newVal.indexOf('agreeMentDetails') == -1))){
+        //     if(document.documentElement.clientWidth < 980){
+        //       this.toggleMenu()
+        //     }else{
+        //       this.toggleMenu()
+        //     }
+        //   }
+        // }
       }
     },
     mounted() {

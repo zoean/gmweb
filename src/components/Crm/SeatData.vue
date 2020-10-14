@@ -137,6 +137,7 @@
             v-loading="fullscreenLoading"
             style="width: 100%"
             :height="tableHeight"
+            class="table-fixed"
             >
 
             <el-table-column
@@ -169,7 +170,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="50" class-name="table_active">
+            <el-table-column prop="active" label="操作" width="60" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
@@ -708,6 +709,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.table-fixed {
+    /deep/.el-table__body-wrapper {
+    height: calc(100% - 44px) !important;
+  }
+}
     .index-main{
         .el-col-6{
             height: auto !important;

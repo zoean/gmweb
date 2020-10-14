@@ -91,7 +91,8 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
-            style="width: 100%;" :height="tableHeight">
+            style="width: 100%;" :height="tableHeight"
+            class="table-fixed">
     
             <el-table-column
                 :prop="item.prop"
@@ -103,7 +104,6 @@
     
             <el-table-column
                 prop="bofang" label="录音播放"
-                fixed="right"
                 :width="columnWidth"
                 v-if="columnFlag"
             >
@@ -288,6 +288,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+    
+.table-fixed {
+    /deep/.el-table__body-wrapper {
+    height: calc(100% - 44px) !important;
+  }
+}
     .index-main{
         height: auto;
         .el-col-6{
