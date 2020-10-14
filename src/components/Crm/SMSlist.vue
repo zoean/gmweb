@@ -7,7 +7,8 @@
             :data="tableData"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 10px;">
+            style="width: 100%; margin-top: 10px;"            
+            :height="tableHeight">
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -144,6 +145,7 @@ import { timestampToTime } from '../../assets/js/common';
 import { MJ_8 } from '../../assets/js/data';
 export default {
     name: 'timeData',
+    props: ['tableHeight'],
     data() {
       return {
         fullscreenLoading: false,
@@ -206,7 +208,8 @@ export default {
               })
 
               this.tableData = res.data.list;
-              this.form.total = res.data.total;
+              this.form.total = res.data.total;              
+              this.$emit('setTableHeight', this.form.total, 0, 1)
             }, 300);
           }else{
             setTimeout(() => {

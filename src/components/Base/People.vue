@@ -1,7 +1,7 @@
 <template>
     
     <el-main class="index-main" id="indexMain">
-            <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
+            <el-row class="people-screen">
                 <el-col :span="3">
                     <el-cascader
                         size="small"
@@ -124,7 +124,7 @@ import { getTextByJs, getTextByState, sortTextNum } from '../../assets/js/common
 import { add } from 'lodash/fp';
 export default {
     name: 'people',
-    props: ['tableHeight','toggleAction', 'hideSearch'],
+    props: ['tableHeight'],
     data() {
         return {
             userList: [],
@@ -174,6 +174,9 @@ export default {
             dataPermiss: null,
             exportPeople: null
         }
+    },
+    mounted(){        
+        this.getUserDetailedList();
     },
     created() {  
         this.getUserDetailedList();

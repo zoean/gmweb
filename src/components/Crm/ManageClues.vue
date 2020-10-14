@@ -174,7 +174,7 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="100" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="80" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
                 <el-popconfirm
@@ -189,7 +189,7 @@
                     <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
                 
                 </el-popconfirm>
-                <el-popconfirm
+                <!-- <el-popconfirm
                     confirmButtonText='确定'
                     cancelButtonText='取消'
                     icon="el-icon-info"
@@ -200,7 +200,7 @@
                 >
                     <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" />
                 
-                </el-popconfirm>
+                </el-popconfirm> -->
               </template>
             </el-table-column>
     
@@ -234,20 +234,20 @@
             @fatherDataList='getExteAllClueData'
         >
         </CustomerNotes>
-        <el-dialog :visible="transferSeatVisible">
+        <!-- <el-dialog :visible="transferSeatVisible">
             <el-select v-model="value" filterable placeholder="请选择">
-                <!-- <el-option
+                <el-option
                   v-for="item in seatList"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value"> -->
+                  :value="item.value">
                 </el-option>
               </el-select>
             <div slot="footer" class="dialog-footer">
-            <!-- <el-button type="primary" @click="seatActSeat" size="small">确 定</el-button>
-            <el-button @click="handleCloseTag" size="small" plain>取 消</el-button> -->
+            <el-button type="primary" @click="seatActSeat" size="small">确 定</el-button>
+            <el-button @click="handleCloseTag" size="small" plain>取 消</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
     </el-main>
 </template>
 

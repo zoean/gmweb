@@ -177,8 +177,8 @@
                 </el-badge>
                     
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.24</span>
-    
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.25</span>
+                <a class="guide" href="https://www.jhwx.com/staff_open.php" target="_blank">使用教程</a>
             </el-col>
         </el-row>
         
@@ -828,6 +828,12 @@ export default {
         cursor: pointer;
         color: #333;
         height: 44px;
+    }
+    .guide{
+        color: #666;
+        float: right;
+        padding-right: 20px;
+        font-size: 16px;
     }
     .el-menu-demo{
         float: left;

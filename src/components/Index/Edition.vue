@@ -4,6 +4,22 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.25 -- 2020/10/14" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、修复短信内容记录页面滑动问题</p>
+          <p>2、修复员工列表显示问题</p>
+          <p>3、修复全部客户、主管线索列表中的数据半屏展示问题</p>
+          <p>4、修复分配引擎切换页码无数据问题</p>
+          <p>5、修复员工列表编辑后无数据问题</p>
+          <h4>修复bug</h4>
+          <p>1、增加个人线索、主管线索删除功能</p>
+          <p>2、增加线索回收站页面</p>
+          <p>3、全部客户页面是否成单筛选项默认选中未成单</p>
+          <p>4、电话记录查询页面时间筛选项默认选中近30天</p>
+          <p>5、增加用户使用教程入口</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.24 -- 2020/10/12" placement="top">
         <el-card>
           <h4>新增功能</h4>

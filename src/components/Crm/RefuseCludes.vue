@@ -2,7 +2,7 @@
   <el-main class="index-main">
     <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" :gutter="20">
       <el-col :span="3">
-          <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
+          <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
       </el-col>
       <el-col :span="6">
         <el-button type="primary" size="small" @click="getClueDatasStashList">查询</el-button>

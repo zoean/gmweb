@@ -188,7 +188,7 @@ export default {
                 { label: '呼叫中心', value: 1 },
                 { label: '工作手机', value: 2 },
             ],
-            dataPicker: [],
+            dataPicker: [new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 29), new Date()],
             tableData: [],
             columnList: everyTimeList,
             total: null, //总条目数
