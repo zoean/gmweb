@@ -714,6 +714,9 @@ export default {
     height: calc(100% - 44px) !important;
   }
 }
+
+
+
     .index-main{
         .el-col-6{
             height: auto !important;
