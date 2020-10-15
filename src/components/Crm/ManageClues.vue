@@ -529,7 +529,7 @@ export default {
         getSeatList(){
             this.$smoke_get(dataViewPermissionUserList + '/1', {}).then(res => {
                 if(res.code == 200){
-                    this.seatList = res.data
+                    this.tagList = res.data
                     
                 }
             })
