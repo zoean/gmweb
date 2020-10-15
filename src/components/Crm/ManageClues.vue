@@ -540,7 +540,8 @@ export default {
                             type: 'success',
                             message: '线索转移成功'
                         })
-                    }
+                    }                    
+                    this.getExteAllClueData();
                     this.transferSeatVisible = false
                 })
             }
