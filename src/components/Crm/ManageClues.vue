@@ -189,18 +189,7 @@
                     <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
                 
                 </el-popconfirm>
-                <el-popconfirm
-                    confirmButtonText='确定'
-                    cancelButtonText='取消'
-                    icon="el-icon-info"
-                    iconColor="red"                    
-                    placement="top"
-                    title="是否确认转移该线索？"
-                    @onConfirm="transferClude(scope.row)"
-                >
-                    <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" />
-                
-                </el-popconfirm>
+                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" @click="transferClude(scope.row)" />
               </template>
             </el-table-column>
     
@@ -307,7 +296,6 @@ export default {
     },
     data() {
         return {
-            checkedData: [],
             form: {
                 accId: "",
                 accText: "",
@@ -413,7 +401,8 @@ export default {
             comMode: '',
             schoolId: '',
             examItem: '',
-            userCDARUuid: '',
+            userCDARUuid: '',            
+            checkedData: [],
             transferSeatVisible: false,
             overflowRecoverVisible: false,
             seatList: [],
@@ -422,13 +411,13 @@ export default {
                 userCDARUuid: []
             },
             overflowRecoverForm: {
-                clueDataUuid: '',
+                clueDataSUuid: [],
                 seatUuid: []
             },
             filterText: '',
             defaultProps: {
-            children: 'list',
-            label: 'orgName'
+                children: 'list',
+                label: 'orgName'
             },
             orgList: [],
             clueDataType: 0,            
@@ -507,22 +496,25 @@ export default {
         },   
         transferClude(row){
             this.clueDataType = row.clueDataType
-            if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
+            if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海                
+                this.filterText = ''
+                this.checkedData = []
                 this.overflowRecoverVisible = true
-                this.overflowRecoverForm.clueDataUuid = row.clueDataUuid
-                this.$smoke_post(getRuleUserStructureLimit, {
-                    uuid: zuzhiUuid
-                }).then(res => {
-                    if(res.code == 200) {
-                        this.orgList = pushPeopleFunc(res.data.list);
-                    }
-                })
+                this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid                
             }else if(row.clueDataType == 3){//坐席名下
                 this.transferSeatForm.seatUuid = ''
+                this.tagIdText = ''
                 this.transferSeatVisible = true
                 this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid
                 this.getSeatList()
             }
+            this.$smoke_post(getRuleUserStructureLimit, {
+                uuid: zuzhiUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.orgList = pushPeopleFunc(res.data.list);
+                }
+            })
         },
         transferSeat(){
             if(this.tagId == '') {
@@ -536,13 +528,25 @@ export default {
                     userCDARUuid: this.transferSeatForm.userCDARUuid
                 }).then(res => {
                     if(res.code == 200){
+                        if(res.data.result){
+                            this.$message({
+                                type: 'success',
+                                message: '线索转移成功'
+                            })          
+                            this.getExteAllClueData();
+                            this.transferSeatVisible = false
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    }else{
                         this.$message({
-                            type: 'success',
-                            message: '线索转移成功'
-                        })
-                    }                    
-                    this.getExteAllClueData();
-                    this.transferSeatVisible = false
+                            type: 'error',
+                            message: '线索转移失败'
+                        })  
+                    }          
                 })
             }
         },
@@ -572,23 +576,47 @@ export default {
                 if(this.clueDataType == 1){
                     this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(res => {
                         if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteAllClueData();
+                                this.overflowRecoverVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '线索转移失败'
+                                })  
+                            }
+                        }else{
                             this.$message({
-                                type: 'success',
-                                message: '线索转移成功'
-                            })
-                            this.getExteAllClueData();
-                            this.overflowRecoverVisible = false
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
                         }
                     })
                 }else{
                     this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(res => {
                         if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteAllClueData();
+                                this.overflowRecoverVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '线索转移失败'
+                                })  
+                            }
+                        }else{
                             this.$message({
-                                type: 'success',
-                                message: '线索转移成功'
-                            })
-                            this.getExteAllClueData();
-                            this.overflowRecoverVisible = false
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
                         }
                     })
                 }
@@ -795,10 +823,5 @@ export default {
     }
     .index-main /deep/ .bofang-column{
         padding: 0 !important;
-    }
-    .transferSeat{
-       /deep/div.el-dialog__body {
-           height: 100px;
-       }
     }
 </style>

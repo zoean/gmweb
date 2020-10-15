@@ -59,7 +59,7 @@ export default {
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
     }
-    this.resizeHandle()
+    this.setTableHeight(this.total,this.handleCount, this.trHeight)
   },
   distroyed(){
     window.removeEventListener('resize')
@@ -162,7 +162,7 @@ export default {
       this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 116
       if(this.total * this.trHeight * 45 < this.tableHeight){
         // if(this.total == 0){
-        //   this.tableHeight = this.trHeight * 46 + 46
+          // this.tableHeight = this.trHeight * 46 + 46
         // }else{
           // this.tableHeight = this.total * this.trHeight * 46 + 46
           // this.tableHeight = this.total * this.trHeight * 46 + 46
