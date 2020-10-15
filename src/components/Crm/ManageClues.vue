@@ -515,7 +515,7 @@ export default {
             }else{
                 this.$smoke_post(seatActSeat, {
                     seatUuid: this.tagId,
-                    userCDARUuid: this.tableSelectList
+                    userCDARUuid: this.transferSeatForm.userCDARUuid
                 }).then(res => {
                     if(res.code == 200){
                         this.$message({
@@ -523,14 +523,17 @@ export default {
                             message: '线索转移成功'
                         })
                     }
+                    this.transferSeatVisible = false
                 })
             }
         },
         getSeatList(){
             this.$smoke_get(dataViewPermissionUserList + '/1', {}).then(res => {
                 if(res.code == 200){
-                    this.tagList = res.data
-                    
+                    res.data.map(sll => {
+                        sll.value = sll.userName;
+                    })
+                    this.tagList = res.data                    
                 }
             })
         },
