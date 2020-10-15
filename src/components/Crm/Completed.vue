@@ -104,7 +104,8 @@
                 
                 <el-table
                 :data="userOrderList"
-                style="width: 100%; margin-top: 10px;">
+                style="width: 100%; margin-top: 10px;"
+                :height="tableHeight">
                     <el-table-column v-for="(item, index) in userOrderColumn" :width="item.width" :prop="item.prop" :label="item.label" :key="index">
                     <template slot-scope="scope">
                         <span>{{scope.row[item.prop]}}</span>
@@ -124,7 +125,6 @@
                     </template>
                     </el-table-column>
                 </el-table>
-                
             </el-tab-pane>
         </el-tabs>
 
@@ -212,7 +212,10 @@ export default {
                 orderType: '',
                 classType: '',
                 startTime: '',
-                endTime: ''
+                endTime: '',                
+                // currentPage: 1,
+                // pageSize: 20,
+                // total: 0
             },
             classTypeList: [
                 { name: '普通班', number: 0},
@@ -321,8 +324,8 @@ export default {
                         sll.addTime = timestampToTime(Number(sll.addTime * 1000));
                         sll.schoolName = schoolType(sll.schoolName);
                     })
-                    this.userOrderList = res.data.orderList                    
-                    this.$emit('setTableHeight', this.userOrderList.length, 3, 1)
+                    this.userOrderList = res.data.orderList 
+                    this.$emit('setTableHeight', this.userOrderList.length, 1, 1)
                 }
             })
         },

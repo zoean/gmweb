@@ -170,7 +170,7 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="80" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="100" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
                 <el-popconfirm
@@ -182,8 +182,9 @@
                     title="删除后该线索进入线索垃圾站，是否继续？"
                     @onConfirm="delCludes(scope.row)"
                 >
-                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
+                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />                
                 </el-popconfirm>
+                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" @click="transferClude(scope.row)" />
               </template>
             </el-table-column>
     
@@ -217,7 +218,51 @@
             @fatherDataList='getExteClueData'
         >
         </CustomerNotes>
+        <el-dialog class="transferSeat" :visible="transferSeatVisible" width="300px" title="转移线索" @close="transferSeatVisible=false">
+            <el-autocomplete
+                ref="autocompleteTag"
+                size="small"
+                class="screen-li"
+                v-model="tagIdText"
+                :fetch-suggestions="querySearchTag"
+                placeholder="请您选择要分配的人员"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClearTag"
+                @select="handleSelectTag"
+            ></el-autocomplete>
+            <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="transferSeat" size="small">确 定</el-button>
+            <el-button @click="transferSeatVisible=false" size="small" plain>取 消</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog class="transferOverflow" :visible="overflowRecoverVisible" width="300px" title="转移线索" @close="overflowRecoverVisible=false">
+            <el-tag 
+                v-for="(item,index) in checkedData" :key="index"
+                style="margin: 0 10px 10px 0;"
+                >{{item.orgName}}</span> 
+            </el-tag>
+            <el-input
+            placeholder="输入关键字进行过滤"
+            v-model="filterText">
+            </el-input>
 
+            <el-tree
+            class="filter-tree"
+            node-key="orgUuid"            
+            show-checkbox
+            :data="orgList"
+            :props="defaultProps"
+            default-expand-all
+            :filter-node-method="filterNode"
+            @check="handleCheckChange"
+            ref="tree">
+            </el-tree>
+            <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="transferOverflow" size="small">确 定</el-button>
+            <el-button @click="overflowRecoverVisible=false" size="small" plain>取 消</el-button>
+            </div>
+        </el-dialog>
     </el-main>
 </template>
 
@@ -227,10 +272,15 @@ import {
   getExamBasic,
   enumByEnumNums,
   personalClueExport,
-  deleteClueDatas
+  deleteClueDatas,
+  dataViewPermissionUserList,
+  seatActSeat,
+  getRuleUserStructureLimit,
+  spillPoolActSeat,
+  recPoolActSeat
 } from '../../request/api';
-import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
-import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
+import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid } from '../../assets/js/data';
+import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown, pushPeopleFunc } from '../../assets/js/common'
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'peopleClues',
@@ -334,7 +384,6 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
             fullscreenLoading: false,
-
             followFlag: false,
             drawer: false,
             clueDataSUuid: '',
@@ -342,7 +391,29 @@ export default {
             comMode: '',
             schoolId: '',
             examItem: '',
-            userCDARUuid: '',
+            userCDARUuid: '',           
+            checkedData: [],
+            transferSeatVisible: false,
+            overflowRecoverVisible: false,
+            seatList: [],
+            transferSeatForm: {
+                seatUuid: '',
+                userCDARUuid: []
+            },
+            overflowRecoverForm: {
+                clueDataSUuid: [],
+                seatUuid: []
+            },
+            filterText: '',
+            defaultProps: {
+                children: 'list',
+                label: 'orgName'
+            },
+            orgList: [],
+            clueDataType: 0,            
+            tagId: '',
+            tagIdText: '',
+            tagList: []
         }
     },
     created() {
@@ -353,7 +424,180 @@ export default {
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
     },
-    methods: {        
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
+    methods: {  
+               
+        querySearchTag(queryString, cb) {
+            var restaurants = this.tagList;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        getCheckedNodes() {
+            let arr = [];
+            this.$nextTick(() => {
+                this.$refs.tree.getCheckedNodes().map(sll => {
+                    if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
+                        arr.push(sll);
+                    }
+                })
+                this.checkedData = arr;
+            })
+        },
+        handleCheckChange(data, value){
+            this.getCheckedNodes();
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+                return data.orgName.indexOf(value) !== -1;
+        },
+        autocompleteClearTag() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteTag.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.tagId = '';
+                this.$refs.autocomplete.focus();
+            })
+        }, 
+        handleSelectTag(item) {
+            this.tagId = item.userUuid;
+            this.tagIdText = item.userName;
+        },   
+        transferClude(row){
+            this.clueDataType = row.clueDataType
+            if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
+                this.filterText = ''
+                this.checkedData = []
+                this.overflowRecoverVisible = true
+                this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid
+                this.$smoke_post(getRuleUserStructureLimit, {
+                    uuid: zuzhiUuid
+                }).then(res => {
+                    if(res.code == 200) {
+                        this.orgList = pushPeopleFunc(res.data.list);
+                    }
+                })
+            }else if(row.clueDataType == 3){//坐席名下
+                this.transferSeatForm.seatUuid = ''
+                this.tagIdText = ''
+                this.transferSeatVisible = true
+                this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid
+                this.getSeatList()
+            }
+        },
+        transferSeat(){
+            if(this.tagId == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择要分配的人员'
+                })
+            }else{
+                this.$smoke_post(seatActSeat, {
+                    seatUuid: this.tagId,
+                    userCDARUuid: this.transferSeatForm.userCDARUuid
+                }).then(res => {
+                    if(res.code == 200){
+                        if(res.data.result){
+                            this.$message({
+                                type: 'success',
+                                message: '线索转移成功'
+                            })          
+                            this.getExteClueData();
+                            this.transferSeatVisible = false
+                            console.log(this.transferSeatVisible)
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '线索转移失败'
+                        })  
+                    }          
+                })
+            }
+        },
+        getSeatList(){
+            this.$smoke_get(dataViewPermissionUserList + '/1', {}).then(res => {
+                if(res.code == 200){
+                    res.data.map(sll => {
+                        sll.value = sll.userName;
+                    })
+                    this.tagList = res.data
+                    
+                }
+            })
+        },
+        transferOverflow(){
+            let seatUuidArr = [];
+            this.checkedData.map(sll => {
+                seatUuidArr.push(sll.userUuid);
+            })
+            this.overflowRecoverForm.seatUuid[0] = seatUuidArr
+            if(seatUuidArr.length == 0){
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要转移的目标人员'
+                })
+            }else{
+                if(this.clueDataType == 1){
+                    this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(res => {
+                        if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteClueData();
+                                this.overflowRecoverVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '线索转移失败'
+                                })  
+                            }
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    })
+                }else{
+                    this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(res => {
+                        if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteClueData();
+                                this.overflowRecoverVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '线索转移失败'
+                                })  
+                            }
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    })
+                }
+                
+            }
+        },                      
         delCludes(row){
             this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
                 if(res.code == 200){
