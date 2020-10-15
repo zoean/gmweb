@@ -536,10 +536,17 @@ export default {
                     userCDARUuid: this.transferSeatForm.userCDARUuid
                 }).then(res => {
                     if(res.code == 200){
+                        if(res.data.result){
+                            this.$message({
+                                type: 'success',
+                                message: '线索转移成功'
+                            })
+                        }
+                    }else{
                         this.$message({
-                            type: 'success',
-                            message: '线索转移成功'
-                        })
+                            type: 'error',
+                            message: '线索转移失败'
+                        })  
                     }                    
                     this.getExteAllClueData();
                     this.transferSeatVisible = false
@@ -572,23 +579,37 @@ export default {
                 if(this.clueDataType == 1){
                     this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(res => {
                         if(res.code == 200){
-                            this.$message({
-                                type: 'success',
-                                message: '线索转移成功'
-                            })
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                            }
                             this.getExteAllClueData();
                             this.overflowRecoverVisible = false
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
                         }
                     })
                 }else{
                     this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(res => {
                         if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteAllClueData();
+                                this.overflowRecoverVisible = false
+                            }
+                        }else{
                             this.$message({
-                                type: 'success',
-                                message: '线索转移成功'
-                            })
-                            this.getExteAllClueData();
-                            this.overflowRecoverVisible = false
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
                         }
                     })
                 }
