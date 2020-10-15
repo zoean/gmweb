@@ -153,7 +153,7 @@ export default {
       searchArea = document.getElementsByClassName('people-screen')[0];
       this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
       this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
-      this.windowHeight = document.documentElement.clientHeight;
+      this.windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
       this.setPageTitleLeft() 
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
@@ -168,7 +168,7 @@ export default {
           // this.tableHeight = this.total * this.trHeight * 46 + 46
         // }
       }else{
-        this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -78 : this.tableHeight
+        // this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -78 : this.tableHeight
       }
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleCount * 42 - 116
