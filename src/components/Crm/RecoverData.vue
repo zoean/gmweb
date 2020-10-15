@@ -539,6 +539,7 @@ export default {
                 
             })
         },
+        selectSeat(){},
         addPeople() {
             let seatUuidArr = [];
             this.tableData.map(sll => {
