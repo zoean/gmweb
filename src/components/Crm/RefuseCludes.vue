@@ -12,7 +12,7 @@
     :height="tableHeight">
       <el-table-column v-for="(item, index) in columnList" :prop="item.prop" :min-width="item.width" :label="item.label">
       </el-table-column>
-      <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
+      <!-- <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
         <template slot-scope="scope">   
           <el-popconfirm
                     confirmButtonText='确定'
@@ -26,7 +26,7 @@
           <svg-icon slot="reference" style="margin-left: 4px;" icon-title="还原线索" icon-class="release-grey" />
           </el-popconfirm>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <el-pagination
         background
@@ -74,7 +74,7 @@ export default{
         if(res.code == 200){
           this.listData = res.data.list
           this.form.total = res.data.total
-          this.$emit('setTableHeight', this.form.total, 0.5, 1)
+          this.$emit('setTableHeight', this.form.total, 0, 1)
           this.loadding = false
         }
       })
