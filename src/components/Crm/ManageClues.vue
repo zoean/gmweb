@@ -174,7 +174,7 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="80" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="100" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
                 <el-popconfirm
@@ -189,7 +189,7 @@
                     <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
                 
                 </el-popconfirm>
-                <!-- <el-popconfirm
+                <el-popconfirm
                     confirmButtonText='确定'
                     cancelButtonText='取消'
                     icon="el-icon-info"
@@ -200,7 +200,7 @@
                 >
                     <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" />
                 
-                </el-popconfirm> -->
+                </el-popconfirm>
               </template>
             </el-table-column>
     
@@ -234,6 +234,24 @@
             @fatherDataList='getExteAllClueData'
         >
         </CustomerNotes>
+        <el-dialog class="transferSeat" :visible="transferSeatVisible" width="300px" title="转移线索" @close="transferSeatVisible=false">
+            <el-autocomplete
+                ref="autocompleteTag"
+                size="small"
+                class="screen-li"
+                v-model="tagIdText"
+                :fetch-suggestions="querySearchTag"
+                placeholder="请您选择要分配的人员"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClearTag"
+                @select="handleSelectTag"
+            ></el-autocomplete>
+            <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="transferSeat" size="small">确 定</el-button>
+            <el-button @click="transferSeatVisible=false" size="small" plain>取 消</el-button>
+            </div>
+        </el-dialog>
         <el-dialog class="transferOverflow" :visible="overflowRecoverVisible" width="300px" title="转移线索" @close="overflowRecoverVisible=false">
             <el-tag 
                 v-for="(item,index) in checkedData" :key="index"
@@ -534,7 +552,8 @@ export default {
                     res.data.map(sll => {
                         sll.value = sll.userName;
                     })
-                    this.tagList = res.data                    
+                    this.tagList = res.data
+                    
                 }
             })
         },
