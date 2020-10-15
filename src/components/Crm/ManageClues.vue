@@ -17,7 +17,7 @@
                   class="screen-li"
                   ref="autocomplete"
                   v-model="form.examItemText"
-                  :fetch-suggestions="querySearch"
+                  :fetch-suggestions="querySearchTag"
                   placeholder="输入考试项目"
                   :trigger-on-focus="true"
                   @select="handleSelect"
@@ -234,18 +234,49 @@
             @fatherDataList='getExteAllClueData'
         >
         </CustomerNotes>
-        <el-dialog :visible="transferSeatVisible">
-            <el-select v-model="value" filterable placeholder="请选择">
-                <!-- <el-option
-                  v-for="item in seatList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"> -->
-                </el-option>
-              </el-select>
+        <el-dialog class="transferSeat" :visible="transferSeatVisible" width="300px" title="转移线索" @close="transferSeatVisible=false">
+            <el-autocomplete
+                ref="autocompleteTag"
+                size="small"
+                class="screen-li"
+                v-model="tagIdText"
+                :fetch-suggestions="querySearchTag"
+                placeholder="请您选择要分配的人员"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClearTag"
+                @select="handleSelectTag"
+            ></el-autocomplete>
             <div slot="footer" class="dialog-footer">
-            <!-- <el-button type="primary" @click="seatActSeat" size="small">确 定</el-button>
-            <el-button @click="handleCloseTag" size="small" plain>取 消</el-button> -->
+            <el-button type="primary" @click="transferSeat" size="small">确 定</el-button>
+            <el-button @click="transferSeatVisible=false" size="small" plain>取 消</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog class="transferOverflow" :visible="overflowRecoverVisible" width="300px" title="转移线索" @close="overflowRecoverVisible=false">
+            <el-tag 
+                v-for="(item,index) in checkedData" :key="index"
+                style="margin: 0 10px 10px 0;"
+                >{{item.orgName}}</span> 
+            </el-tag>
+            <el-input
+            placeholder="输入关键字进行过滤"
+            v-model="filterText">
+            </el-input>
+
+            <el-tree
+            class="filter-tree"
+            node-key="orgUuid"            
+            show-checkbox
+            :data="orgList"
+            :props="defaultProps"
+            default-expand-all
+            :filter-node-method="filterNode"
+            @check="handleCheckChange"
+            ref="tree">
+            </el-tree>
+            <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="transferOverflow" size="small">确 定</el-button>
+            <el-button @click="overflowRecoverVisible=false" size="small" plain>取 消</el-button>
             </div>
         </el-dialog>
     </el-main>
@@ -259,10 +290,14 @@ import {
   directorClueExport,
   testAllClueExport,
   deleteClueDatas,
-  dataViewPermissionUserList
+  dataViewPermissionUserList,
+  seatActSeat,
+  getRuleUserStructureLimit,
+  spillPoolActSeat,
+  recPoolActSeat
 } from '../../request/api';
-import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
-import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
+import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid} from '../../assets/js/data';
+import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown, pushPeopleFunc } from '../../assets/js/common'
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'manageClues',
@@ -272,6 +307,7 @@ export default {
     },
     data() {
         return {
+            checkedData: [],
             form: {
                 accId: "",
                 accText: "",
@@ -370,7 +406,6 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
             fullscreenLoading: false,
-
             followFlag: false,
             drawer: false,
             clueDataSUuid: '',
@@ -380,7 +415,26 @@ export default {
             examItem: '',
             userCDARUuid: '',
             transferSeatVisible: false,
-            seatList: []
+            overflowRecoverVisible: false,
+            seatList: [],
+            transferSeatForm: {
+                seatUuid: '',
+                userCDARUuid: []
+            },
+            overflowRecoverForm: {
+                clueDataSUuid: '',
+                seatUuid: []
+            },
+            filterText: '',
+            defaultProps: {
+            children: 'list',
+            label: 'orgName'
+            },
+            orgList: [],
+            clueDataType: 0,            
+            tagId: '',
+            tagIdText: '',
+            tagList: []
         }
     },
     created() {
@@ -391,7 +445,36 @@ export default {
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
     },
-    methods: {
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
+    methods: {        
+        querySearchTag(queryString, cb) {
+            var restaurants = this.tagList;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        getCheckedNodes() {
+            let arr = [];
+            this.$nextTick(() => {
+                this.$refs.tree.getCheckedNodes().map(sll => {
+                    if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
+                        arr.push(sll);
+                    }
+                })
+                this.checkedData = arr;
+            })
+        },
+        handleCheckChange(data, value){
+            this.getCheckedNodes();
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+                return data.orgName.indexOf(value) !== -1;
+        },
         delCludes(row){
             this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
                 if(res.code == 200){
@@ -408,24 +491,104 @@ export default {
                 }
             })
             
-        },
+        }, 
+        autocompleteClearTag() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteTag.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.tagId = '';
+                this.$refs.autocomplete.focus();
+            })
+        }, 
+        handleSelectTag(item) {
+            this.tagId = item.userUuid;
+            this.tagIdText = item.userName;
+        },   
         transferClude(row){
-            if(row.clueDataType == 1){//溢出池
-                this.transferSeatVisible = true
-                this.getSeatList()
-            }else if(row.clueDataType == 2){//公海
-
+            this.clueDataType = row.clueDataType
+            if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
+                this.overflowRecoverVisible = true
+                this.overflowRecoverForm.clueDataSUuid = row.clueDataSUuid
+                this.$smoke_post(getRuleUserStructureLimit, {
+                    uuid: zuzhiUuid
+                }).then(res => {
+                    if(res.code == 200) {
+                        this.orgList = pushPeopleFunc(res.data.list);
+                    }
+                })
             }else if(row.clueDataType == 3){//坐席名下
-
+                this.transferSeatForm.seatUuid = ''
+                this.transferSeatVisible = true
+                this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid
+                this.getSeatList()
+            }
+        },
+        transferSeat(){
+            if(this.tagId == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择要分配的人员'
+                })
+            }else{
+                this.$smoke_post(seatActSeat, {
+                    seatUuid: this.tagId,
+                    userCDARUuid: this.tableSelectList
+                }).then(res => {
+                    if(res.code == 200){
+                        this.$message({
+                            type: 'success',
+                            message: '线索转移成功'
+                        })
+                    }
+                })
             }
         },
         getSeatList(){
-            this.$smoke_post(dataViewPermissionUserList + '/1', {}).then(res => {
+            this.$smoke_get(dataViewPermissionUserList + '/1', {}).then(res => {
                 if(res.code == 200){
-                    this.seatList = res.data.data
+                    this.seatList = res.data
                     
                 }
             })
+        },
+        transferOverflow(){
+            let seatUuidArr = [];
+            this.checkedData.map(sll => {
+                seatUuidArr.push(sll.userUuid);
+            })
+            this.overflowRecoverForm.seatUuid = seatUuidArr
+            if(seatUuidArr.length == 0){
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要转移的目标人员'
+                })
+            }else{
+                if(this.clueDataType == 1){
+                    this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(res => {
+                        if(res.code == 200){
+                            this.$message({
+                                type: 'success',
+                                message: '线索转移成功'
+                            })
+                            this.getExteAllClueData();
+                            this.overflowRecoverVisible = false
+                        }
+                    })
+                }else{
+                    this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(res => {
+                        if(res.code == 200){
+                            this.$message({
+                                type: 'success',
+                                message: '线索转移成功'
+                            })
+                            this.getExteAllClueData();
+                            this.overflowRecoverVisible = false
+                        }
+                    })
+                }
+                
+            }
         },
         directorClueExport() {
             let tmp = (new Date()).getTime();
@@ -597,10 +760,7 @@ export default {
             this.form.pageSize = index;
             this.form.currentPage = 1;
             this.getExteAllClueData();
-        },
-    },
-    mounted() {
-        
+        }
     }
 }
 </script>
@@ -630,5 +790,10 @@ export default {
     }
     .index-main /deep/ .bofang-column{
         padding: 0 !important;
+    }
+    .transferSeat{
+       /deep/div.el-dialog__body {
+           height: 100px;
+       }
     }
 </style>
