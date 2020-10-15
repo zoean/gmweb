@@ -422,7 +422,7 @@ export default {
                 userCDARUuid: []
             },
             overflowRecoverForm: {
-                clueDataSUuid: '',
+                clueDataUuid: '',
                 seatUuid: []
             },
             filterText: '',
@@ -509,7 +509,7 @@ export default {
             this.clueDataType = row.clueDataType
             if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
                 this.overflowRecoverVisible = true
-                this.overflowRecoverForm.clueDataSUuid = row.clueDataSUuid
+                this.overflowRecoverForm.clueDataUuid = row.clueDataUuid
                 this.$smoke_post(getRuleUserStructureLimit, {
                     uuid: zuzhiUuid
                 }).then(res => {
