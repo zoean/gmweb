@@ -59,7 +59,8 @@ export default {
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
     }
-    this.setTableHeight(this.total,this.handleCount, this.trHeight)
+    // this.setTableHeight(this.total,this.handleCount, this.trHeight)
+    this.resizeHandle()
   },
   distroyed(){
     window.removeEventListener('resize')
@@ -176,6 +177,7 @@ export default {
     },
     resizeHandle(){
       window.addEventListener('resize', _.throttle(()=>{
+        console.log(999)
         this.setTableHeight(this.total,this.handleCount, this.trHeight)
       }, 100))
     }
