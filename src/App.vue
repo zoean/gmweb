@@ -177,7 +177,6 @@ export default {
     },
     resizeHandle(){
       window.addEventListener('resize', _.throttle(()=>{
-        console.log(999)
         this.setTableHeight(this.total,this.handleCount, this.trHeight)
       }, 100))
     }
