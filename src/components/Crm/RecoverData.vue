@@ -567,7 +567,7 @@ export default {
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '目前服务线路忙，请稍后重试'
+                                message: res.data.msg
                             })
                             this.getRecoveryPoolDataList();
                         }
@@ -575,7 +575,7 @@ export default {
                     }else{
                         this.$message({
                             type: 'error',
-                            message: '目前服务线路忙，请稍后重试'
+                            message: res.data.msg
                         })
                         this.drawer1 = false;
                     }
