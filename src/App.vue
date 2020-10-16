@@ -160,16 +160,16 @@ export default {
       }
       this.trHeight = trH
       this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 116
-      if(this.total * this.trHeight * 45 < this.tableHeight){
+      // if(this.total * this.trHeight * 45 < this.tableHeight){
         // if(this.total == 0){
           // this.tableHeight = this.trHeight * 46 + 46
         // }else{
           // this.tableHeight = this.total * this.trHeight * 46 + 46
           // this.tableHeight = this.total * this.trHeight * 46 + 46
         // }
-      }else{
+      // }else{
         // this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -78 : this.tableHeight
-      }
+      // }
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleCount * 42 - 116
       }

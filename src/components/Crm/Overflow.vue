@@ -389,7 +389,7 @@ export default {
                     }else{
                         this.$message({
                             type: 'error',
-                            message: '目前服务线路忙，请稍后重试'
+                            message: res.data.msg
                         })
                         this.getSpillPoolClueData();
                     }
@@ -397,7 +397,7 @@ export default {
                 }else{
                     this.$message({
                         type: 'error',
-                        message: '目前服务线路忙，请稍后重试'
+                        message: res.data.msg
                     })
                     this.drawer2 = false;
                 }
@@ -539,7 +539,7 @@ export default {
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '目前服务线路忙，请稍后重试'
+                                message: res.data.msg
                             })
                             this.getSpillPoolClueData();
                         }
@@ -547,7 +547,7 @@ export default {
                     }else{
                         this.$message({
                             type: 'error',
-                            message: '目前服务线路忙，请稍后重试'
+                            message: res.data.msg
                         })
                         this.drawer1 = false;
                     }

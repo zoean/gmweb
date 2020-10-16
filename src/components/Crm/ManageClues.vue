@@ -487,7 +487,7 @@ export default {
                     .find(c => c.$el.className.includes('el-input'))
                     .blur();
                 this.tagId = '';
-                this.$refs.autocomplete.focus();
+                this.$refs.autocompleteTag.focus();
             })
         }, 
         handleSelectTag(item) {
@@ -538,13 +538,13 @@ export default {
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '线索转移失败'
+                                message: res.data.msg
                             })  
                         }
                     }else{
                         this.$message({
                             type: 'error',
-                            message: '线索转移失败'
+                            message:  res.data.msg
                         })  
                     }          
                 })

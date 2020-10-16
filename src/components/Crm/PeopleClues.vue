@@ -461,7 +461,7 @@ export default {
                     .find(c => c.$el.className.includes('el-input'))
                     .blur();
                 this.tagId = '';
-                this.$refs.autocomplete.focus();
+                this.$refs.autocompleteTag.focus();
             })
         }, 
         handleSelectTag(item) {
