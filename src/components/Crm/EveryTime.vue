@@ -188,7 +188,7 @@ export default {
                 { label: '呼叫中心', value: 1 },
                 { label: '工作手机', value: 2 },
             ],
-            dataPicker: [new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 29), new Date()],
+            dataPicker: [new Date().getTime() - 3600 * 1000 * 24 * 30, new Date().getTime()],
             tableData: [],
             columnList: everyTimeList,
             total: null, //总条目数
@@ -196,11 +196,12 @@ export default {
             columnWidth: 90,
             columnFlag: false,
             fullscreenLoading: false,
-
             zuzhiOptions: [],
         }
     },
     created() {
+        this.form.insertTimeStartTime = Math.floor((new Date().getTime() - 3600 * 1000 * 24 * 30)/1000), //电话开始呼叫开始时间；时间戳10位
+        this.form.insertTimeEndTime = Math.floor((new Date().getTime())/1000)
         this.getCallRecord();
         this.getOrgSubsetByUuid();
     },

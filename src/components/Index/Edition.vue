@@ -4,6 +4,19 @@
     </el-page-header>
 
     <el-timeline> 
+      
+      <el-timeline-item timestamp="v 1.1.26 -- 2020/10/16" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、增加批量导入功能</p>
+          <p>2、坐席数据管理页面增加成单状态、线索状态字段</p>
+          <p>3、全部客户页面增加线索状态字段</p>
+          <h4>修复bug</h4>
+          <p>1、优化溢出池/回收池，无法分配到坐席名下的提示语</p>
+          <p>2、优化主管线索、个人线索分配至人的弹框</p>
+          <p>3、修复电话记录查询时间筛选项</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.25 -- 2020/10/15" placement="top">
         <el-card>
           <h4>新增功能</h4>

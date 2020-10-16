@@ -316,6 +316,69 @@
                 </el-dialog>
 
             </el-tab-pane> -->
+            <el-tab-pane label="批量导入" name="third">
+              <div class="batch-import">
+                <el-upload
+                  class="upload-demo"
+                  :action="uploadFile"
+                  :data="uploadData"
+                  multiple
+                  :limit="1"
+                  :on-exceed="exceedBatchImport"
+                  :show-file-list="false"
+                  :before-upload="verifyUpload" 
+                  :on-success="successBatchImport"
+                  :on-error="errorBatchImport"
+                  :file-list="batchFileList"
+                  >
+                  <el-button size="small" type="primary">添加导入表格</el-button>
+                  <!-- <div slot="tip" class="el-upload__tip">
+                    <p>只能上传jpg/png文件，且不超过500kb</p>                    
+                  </div>                   -->
+                </el-upload>
+                <p class="down-temp ml16">
+                  <span>点击范例下载可<a href="https://file.jhwx.com/default/img/20201016/fd9c9d207c5d43d896a139fe04f91049.xlsx">下载导入表格</a></span>
+                </p>
+              </div>
+              
+                <el-table :data="taskList" 
+                :height="tableHeight">
+                    <el-table-column v-for="(item, index) in taskColumnList"
+                    :prop="item.prop"
+                    :label="item.label"
+                    :key="index"
+                    :formatter="item.formatter"
+                    >
+
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-popconfirm
+                            confirmButtonText='确定'
+                            cancelButtonText='取消'
+                            icon="el-icon-info"
+                            iconColor="red"
+                            placement="top"
+                            title="确认取消该任务吗？"
+                            @onConfirm="delTask(scope.row)"
+                        >
+                            <svg-icon v-if="scope.row.state != 4" slot="reference" icon-title="取消任务" icon-class="del" />
+                        </el-popconfirm>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total='getTaskForm.total'
+                :page-size='getTaskForm.pageSize'
+                :current-page="getTaskForm.currentPage"
+                :page-sizes="[10, 20, 30, 50, 100]"
+                @current-change="handleCurrentTaskChange"
+                @size-change="handleSizeTaskChange"
+            >
+        </el-pagination>
+            </el-tab-pane>
         </el-tabs>
 
     </el-main>
@@ -330,13 +393,18 @@ import {
     getExamBasic,
     getRuleItem,
     clueDataTem,
-    readExcelClueData
+    readExcelClueData,    
+    uploadFile,
+    addTask,
+    upTask,
+    getTaskList
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery, getQueryObject } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5, MJ_6, MJ_7 } from '../../assets/js/data';
 export default {
     name: 'enterClues',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             activeName: 'first',
@@ -438,7 +506,26 @@ export default {
             fullscreenLoading: false,
             fullscreenLoadingTable: false,
             readExcelClueData: readExcelClueData,
-            loading: false
+            loading: false,
+            batchFileList: [],            
+            uploadFile: uploadFile,                    
+            uploadData: { fileType: 'xls'},
+            getTaskForm: {
+              currentPage: 1,
+              pageSize: 20,
+              total: 0,
+              sortSet: [{createTime: "DESC"}]
+            },
+            taskList: [],
+            taskColumnList: [
+              {
+                'prop': 'url', 'label': '文件名', formatter: this.getFileName
+              },
+              {
+                'prop': 'createTime', 'label': '任务创建时间', 'formatter': this.timeFormatter
+              },
+              {  'prop': 'state', 'label': '状态', formatter: this.statusFormatter}
+            ]
         }
     },
     created() {
@@ -449,8 +536,101 @@ export default {
         this.getRuleItem();
         const jhToken = localStorage.getItem('jhToken');
         this.headersObj.Authorization = jhToken;
+        this.getTaskList()
     },
     methods: {
+        timeFormatter(row, column, cellValue){
+          return timestampToTime(Number(cellValue))
+        },
+        statusFormatter(row, column, cellValue){
+          if(cellValue == 1){
+            return '导入中'
+          }else if(cellValue == 2){
+            return '导入成功'
+          }else if(cellValue == 3){
+            return '导入失败'
+          }else if(cellValue == 4){
+            return '取消'
+          }
+        },
+        errorBatchImport(err, file, fileList){
+          console.log(err)
+        },
+        verifyUpload(file){
+          console.log(file)
+          const isXls = file.name.includes('xlsx') || file.name.includes('xls')
+          const isLt1M = file.size / 1024 / 1024 < 1;
+          if (!isXls) {
+            this.$message.error('请上传Excle文件');
+          }
+          if (!isLt1M) {
+            this.$message.error('文件大小不能超过 1MB');
+          }
+          return isXls && isLt1M;
+        },
+        exceedBatchImport(files, fileList){
+          this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        },
+        successBatchImport(response, file, fileList){
+          if(response.code == 0){
+            this.$smoke_post(addTask, {fileUrl: process.env.VUE_APP_GM_JHWX + response.data.fileUrl}).then(res => {
+              if(res.code == 200){
+                this.$message({
+                  type: 'success',
+                  message: '导入成功'
+                })
+                this.batchFileList = []
+                this.getTaskList()
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: res.msg
+                })
+              }
+            })
+          }else{
+            this.$message({
+              type:'error',
+              message: response.msg
+            })
+          }
+        },
+        getTaskList(){
+          this.$smoke_post(getTaskList, this.getTaskForm).then(res => {
+            if(res.code == 200){
+              this.taskList = res.data.list
+              this.getTaskForm.total = res.data.total              
+              this.$emit('setTableHeight', res.data.total, 1.5, 1)
+            }
+          })
+        },
+        getFileName(row){
+          return row.url.substring(row.url.lastIndexOf('/') + 1)
+        },
+        handleCurrentTaskChange(page){
+          this.getTaskForm.currentPage = page
+          this.getTaskList()
+        },
+        handleSizeTaskChange(size){
+          this.getTaskForm.pageSize = size
+          this.getTaskList()
+        },
+        delTask(row){
+            this.$smoke_post(upTask, {id: row.id, state: 4}).then(res => {
+              if(res.code == 200){
+                this.$message({
+                  type: 'success',
+                  message: '该任务已取消'
+                })
+                this.getTaskList()
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: res.msg
+                })
+              }
+            })
+        },
         querySearchAcc(queryString, cb){
             var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-7']).replace(/name/g,"value"));
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -524,6 +704,9 @@ export default {
             })
         },
         handleTabsClick(tab, event) {
+          if(tab.name == 'third'){
+            this.getTaskList()
+          }
         },
         enumByEnumNums(arr) {
             this.$smoke_post(enumByEnumNums, {
@@ -700,6 +883,33 @@ export default {
     }
     .enterClues /deep/ div.el-dialog__body{
         height: auto;
+    }
+    .batch-import{
+      display: flex;
+      align-items: center;
+      .upload-demo{
+        display: flex;
+        /deep/.el-upload-list__item:first-child{
+          margin-top: 5px;
+        }
+      }
+      .el-upload__tip{
+        /* flex: 1; */
+        display: flex;
+        justify-content: space-between;
+        p{
+          margin-right: 10px;
+          a{
+            color: #409EFF;
+          }
+        }
+      }
+      .down-temp{
+        align-items: center;
+        a{
+          color: #409EFF;
+        }
+      }
     }
     
 </style>

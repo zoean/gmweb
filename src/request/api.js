@@ -153,6 +153,9 @@ export const geSeatWork = '/api/phone/clueData/geSeatWork'; //获取坐席的工
 export const clueContactSign = '/api/phone/clueData/clueContactSign'; //线索联系标记
 export const getClueDatasStashList = '/api/phone/clueData/getClueDatasStashList';//线索数据回收列表
 export const rollbackClueDatas = '/api/phone/clueData/rollbackClueDatas/';//线索数据还原
+export const addTask = '/api/phone/clueDataFileUp/addTask';//新增线索文件上传任务
+export const upTask = '/api/phone/clueDataFileUp/upTask'; //更新线索文件上传任务
+export const getTaskList = '/api/phone/clueDataFileUp/getTaskList';//查询线索文件上传任务列表
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）
