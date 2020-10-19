@@ -4,7 +4,13 @@
     </el-page-header>
 
     <el-timeline> 
-      
+      <el-timeline-item timestamp="v 1.1.27 -- 2020/10/19" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、销售主管看板增加统计字段和各自段排序</p>
+          <p>2、今日联系、三日未联、已注册、可领取公池数据页面新增备注字段</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.26 -- 2020/10/16" placement="top">
         <el-card>
           <h4>新增功能</h4>
