@@ -48,6 +48,7 @@
               :label="item.label"
               :width="item.width"
               v-for="(item, index) in columnList"
+              :show-overflow-tooltip="item.prop == 'clueDataNotes' ? true : false"
               :key="index"
               >
               <template slot-scope="scope">
