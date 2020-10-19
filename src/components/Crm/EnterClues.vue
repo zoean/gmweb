@@ -573,7 +573,7 @@ export default {
         },
         successBatchImport(response, file, fileList){
           if(response.code == 0){
-            this.$smoke_post(addTask, {fileUrl: process.env.VUE_APP_GM_JHWX + response.data.fileUrl}).then(res => {
+            this.$smoke_post(addTask, {fileUrl: process.env.VUE_APP_FILE_JHWX + response.data.fileUrl}).then(res => {
               if(res.code == 200){
                 this.$message({
                   type: 'success',
