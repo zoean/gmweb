@@ -68,7 +68,7 @@
               :label="item.label"
               v-for="(item, index) in columnList"
               :key="index"
-              :width="item.width"
+              :min-width="item.width"
               :sortable = "item.sortable"          
               >
             </af-table-column>
@@ -147,9 +147,9 @@ export default {
             columnList: [
                 { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
                 { 'prop': 'name', 'label': '姓名', 'width': 90 },
+                { 'prop': 'clueDataNotes', 'label': '备注', 'width': 120 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目', 'width': 130 },
-                // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '入库时间', 'sortable': true },

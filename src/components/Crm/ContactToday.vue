@@ -150,10 +150,10 @@ export default {
             columnList: [
                 { 'prop': 'phone', 'label': '手机号码', width: 150 },
                 { 'prop': 'name', 'label': '姓名' },
+                { 'prop': 'clueDataNotes', 'label': '备注' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
                 { 'prop': 'lastCallTime', 'label': '最近一次联系时间', width: 230 },
-                // { 'prop': 'dataType', 'label': '下次联系时间' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
                 { 'prop': 'school', 'label': '注册平台' },
             ],
