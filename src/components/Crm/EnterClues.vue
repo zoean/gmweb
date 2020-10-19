@@ -360,9 +360,9 @@
                             iconColor="red"
                             placement="top"
                             title="确认取消该任务吗？"
-                            @onConfirm="delTask(scope.row)"
+                            @onConfirm="delTask(scope.row)" v-if="scope.row.state != 4"
                         >
-                            <svg-icon v-if="scope.row.state != 4" slot="reference" icon-title="取消任务" icon-class="del" />
+                            <svg-icon slot="reference" icon-title="取消任务" icon-class="del" />
                         </el-popconfirm>
                         </template>
                     </el-table-column>
@@ -557,7 +557,6 @@ export default {
           console.log(err)
         },
         verifyUpload(file){
-          console.log(file)
           const isXls = file.name.includes('xlsx') || file.name.includes('xls')
           const isLt1M = file.size / 1024 / 1024 < 1;
           if (!isXls) {
@@ -573,7 +572,7 @@ export default {
         },
         successBatchImport(response, file, fileList){
           if(response.code == 0){
-            this.$smoke_post(addTask, {fileUrl: process.env.VUE_APP_GM_JHWX + response.data.fileUrl}).then(res => {
+            this.$smoke_post(addTask, {fileUrl: process.env.VUE_APP_FILE_JHWX + '/' + response.data.fileUrl}).then(res => {
               if(res.code == 200){
                 this.$message({
                   type: 'success',
@@ -600,7 +599,7 @@ export default {
             if(res.code == 200){
               this.taskList = res.data.list
               this.getTaskForm.total = res.data.total              
-              this.$emit('setTableHeight', res.data.total, 1.5, 1)
+              this.$emit('setTableHeight', res.data.total, 1, 1)
             }
           })
         },
