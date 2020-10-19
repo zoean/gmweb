@@ -360,9 +360,9 @@
                             iconColor="red"
                             placement="top"
                             title="确认取消该任务吗？"
-                            @onConfirm="delTask(scope.row)"
+                            @onConfirm="delTask(scope.row)" v-if="scope.row.state != 4"
                         >
-                            <svg-icon v-if="scope.row.state != 4" slot="reference" icon-title="取消任务" icon-class="del" />
+                            <svg-icon slot="reference" icon-title="取消任务" icon-class="del" />
                         </el-popconfirm>
                         </template>
                     </el-table-column>
@@ -557,7 +557,6 @@ export default {
           console.log(err)
         },
         verifyUpload(file){
-          console.log(file)
           const isXls = file.name.includes('xlsx') || file.name.includes('xls')
           const isLt1M = file.size / 1024 / 1024 < 1;
           if (!isXls) {
