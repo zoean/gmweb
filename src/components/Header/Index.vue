@@ -112,7 +112,7 @@
                 <el-row type="flex" justify="start">
                     <el-col :span="5" style="min-width: 220px;">
                         <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">                        
-                        <el-image style="width: 130px; position: relative; top: 0px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                        <el-image style="width: 130px; position: relative; top: 2px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
                     </el-col>

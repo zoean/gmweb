@@ -146,14 +146,14 @@ export default {
               value: 0,
               label: '离职'
             }],
-            jobStatusText: '', //状态选择文案
+            jobStatusText: '在职', //状态选择文案
             roleUuidText: '', //角色选择文案
             roleOptions: [], //筛选项角色列表
             zuzhiOptions: [], //组织列表
             screenForm: {
                 accountNumber: '', //账号（手机号）
                 currentPage: 1, //当前页
-                jobStatus: '', // 状态选择value
+                jobStatus: 1, // 状态选择value
                 name: '', //姓名
                 orgUuidList: [], //组织唯一标识集合
                 pageSize: 20, //单页请求的数量
@@ -176,10 +176,9 @@ export default {
         }
     },
     mounted(){        
-        this.getUserDetailedList();
+        
     },
     created() {  
-        this.getUserDetailedList();
         this.getRoleList();
         this.getOrgSubsetByUuid();
         let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
@@ -187,14 +186,15 @@ export default {
         this.dataPermiss = buttonMap.dataPermiss;
         this.exportPeople = buttonMap.exportPeople;
 
-        this.screenForm.accountNumber = this.$route.params.accountNumber
-        this.screenForm.jobStatus = this.$route.params.jobStatus
-        this.screenForm.name = this.$route.params.name
-        this.screenForm.orgUuidList = this.$route.params.orgUuidList
-        this.screenForm.roleUuid = this.$route.params.roleUuid
-        this.screenForm.sortSet = this.$route.params.sortSet
-        this.screenForm.startHiredDate = this.$route.params.startHiredDate
-        this.screenForm.endHiredDate = this.$route.params.endHiredDate
+        // this.screenForm.accountNumber = this.$route.params.accountNumber
+        // this.screenForm.jobStatus = this.$route.params.jobStatus
+        // this.screenForm.name = this.$route.params.name
+        // this.screenForm.orgUuidList = this.$route.params.orgUuidList
+        // this.screenForm.roleUuid = this.$route.params.roleUuid
+        // this.screenForm.sortSet = this.$route.params.sortSet
+        // this.screenForm.startHiredDate = this.$route.params.startHiredDate
+        // this.screenForm.endHiredDate = this.$route.params.endHiredDate
+        this.getUserDetailedList();
     },
     methods: {
         sortChange(data) {
