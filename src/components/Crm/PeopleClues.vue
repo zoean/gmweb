@@ -323,7 +323,7 @@ export default {
                 { label: '录入', value: 1 },
             ],
             enumList: {},
-            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
+            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date(new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1)],
             dataPickerpei: [],
             pickerOptions: {
                 disabledDate(time) {
