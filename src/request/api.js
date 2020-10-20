@@ -352,10 +352,6 @@ export const getDeptDailyList = '/api/data/deptTarget/getDailyList' //公司—�
 export const getDeptDailyDetail = '/api/data/deptTarget/getDailyDetail' //部门 - 日 -查询日目标详情
 export const addOrEditDeptDaily = '/api/data/deptTarget/addOrEditDaily' //部门 - 日 -新增 | 修改 日目标
 
-
-
-
-
 //数据看板
 export const dayWork = '/api/data/saleStatistics/dayWork' //获取销售每天的工作情况的数据看板
 export const orgDayWork = '/api/data/saleStatistics/orgDayWork' //获取组织下销售人员工作情况的数据看板
@@ -366,3 +362,8 @@ export const orgSaleDayWork = '/api/data/saleStatistics/orgSaleDayWork' //获取
 export const saleDataOrg = '/api/data/saleStatistics/saleDataOrg' //获取销售的数据组织权限
 export const orgSaleAims = '/api/data/saleStatistics/orgSaleAims' //获取组织的销售人员的今日目标完成情况
 export const saleAims = '/api/data/saleStatistics/saleAims' //获取销售的今日目标完成情况
+
+export const workDetail = '/api/data/saleStatistics/workDetail' //销售看板工作明细查询
+export const orgWorkDetail = '/api/data/saleStatistics/orgWorkDetail' //销售主管看板工作明细查询
+export const orgWorkDetailByOrg = '/api/data/saleStatistics/orgWorkDetailByOrg' //销售主管看板工作明细详情按组织查询
+export const orgWorkDetailBySeat = '/api/data/saleStatistics/orgWorkDetailBySeat' //销售主管看板工作明细详情按坐席查询

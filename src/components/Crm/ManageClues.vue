@@ -17,7 +17,7 @@
                   class="screen-li"
                   ref="autocomplete"
                   v-model="form.examItemText"
-                  :fetch-suggestions="querySearchTag"
+                  :fetch-suggestions="querySearch"
                   placeholder="输入考试项目"
                   :trigger-on-focus="true"
                   @select="handleSelect"
@@ -325,15 +325,15 @@ export default {
                 { label: '已分配', value: 1 },
             ],
             dialStateArr: [
-                { label: '处理', value: 1 },
-                { label: '未处理', value: 0 },
+                { label: '已拨打', value: 1 },
+                { label: '未拨打', value: 0 },
             ],
             inputModeArr: [
                 { label: '线上', value: 0 },
                 { label: '录入', value: 1 },
             ],
             enumList: {},
-            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
+            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date(new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1)],
             dataPickerpei: [],
             pickerOptions: {
                 disabledDate(time) {
@@ -428,7 +428,7 @@ export default {
     },
     created() {
         this.form.startCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-        this.form.endCreateTime = new Date().getTime();
+        this.form.endCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1);
         this.getExteAllClueData();
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];

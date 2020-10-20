@@ -4,6 +4,15 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.28 -- 2020/10/20" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、员工管理页面是否在职默认选中在职</p>
+          <p>2、主管线索和个人线索页面入库时间默认时间调整为当日0:00:00-23:59:59</p>
+          <h4>修复bug</h4>
+          <p>1、修复主管线索、个人线索考试项目筛选未起作用问题</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.27 -- 2020/10/19" placement="top">
         <el-card>
           <h4>新增功能</h4>
