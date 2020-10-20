@@ -428,7 +428,7 @@ export default {
     },
     created() {
         this.form.startCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-        this.form.endCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1);
+        this.form.endCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() + 3600 * 1000 * 24 - 1;
         this.getExteAllClueData();
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
