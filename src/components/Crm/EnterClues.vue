@@ -2,7 +2,7 @@
     <el-main class="index-main enterClues">
         <el-tabs v-model="activeName" @tab-click="handleTabsClick">
 
-            <el-tab-pane label="手动录入" name="first">
+            <el-tab-pane v-if="buttonMap.handleImport" label="手动录入" name="first">
 
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
 
@@ -316,7 +316,7 @@
                 </el-dialog>
 
             </el-tab-pane> -->
-            <el-tab-pane v-if="batchImportRole" label="批量导入" name="third">
+            <el-tab-pane v-if="buttonMap.batchImport" label="批量导入" name="third">
               <div class="batch-import">
                 <el-upload
                   class="upload-demo"
@@ -377,7 +377,7 @@
                 @current-change="handleCurrentTaskChange"
                 @size-change="handleSizeTaskChange"
             >
-        </el-pagination>
+                </el-pagination>
             </el-tab-pane>
         </el-tabs>
 
@@ -407,7 +407,7 @@ export default {
     props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
-            activeName: 'first',
+            activeName:  'first',
             ruleForm: {
                 age: "",
                 // city: "",
@@ -526,7 +526,7 @@ export default {
               },
               {  'prop': 'state', 'label': '状态', formatter: this.statusFormatter}
             ],
-            batchImportRole: false
+            buttonMap: {}
         }
     },
     created() {
@@ -538,8 +538,8 @@ export default {
         const jhToken = localStorage.getItem('jhToken');
         this.headersObj.Authorization = jhToken;
         this.getTaskList()        
-        let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
-        this.batchImportRole = buttonMap.batchImport
+        this.buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
+        this.activeName = this.buttonMap.handleImport ? 'first' : 'third'
     },
     methods: {
         timeFormatter(row, column, cellValue){
