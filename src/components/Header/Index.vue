@@ -112,7 +112,7 @@
                 <el-row type="flex" justify="start">
                     <el-col :span="5" style="min-width: 220px;">
                         <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">                        
-                        <el-image style="width: 130px; position: relative; top: 0px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                        <el-image style="width: 130px; position: relative; top: 2px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
                     </el-col>
@@ -177,7 +177,7 @@
                 </el-badge>
                     
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.26</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.27</span>
                 <a class="guide" href="https://www.jhwx.com/staff_open.php" target="_blank">使用教程</a>
             </el-col>
         </el-row>
