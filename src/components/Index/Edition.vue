@@ -6,8 +6,11 @@
     <el-timeline> 
       <el-timeline-item timestamp="v 1.1.29 -- 2020/10/21" placement="top">
         <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增批量导入数据权限</p>
           <h4>修复bug</h4>
           <p>1、修复回收池页面请求超时问题</p>
+          <p>2、修改个人线索页面、主管线索页面线索转移人员范围</p>
         </el-card>
       </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.28 -- 2020/10/20" placement="top">
