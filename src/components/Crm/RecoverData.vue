@@ -429,6 +429,8 @@ export default {
                         })
                     }, 300)
                 }
+            }).catch(err => {
+                this.fullscreenLoading = false;
             })
         },
         handleClose(done) {
@@ -494,6 +496,8 @@ export default {
                 })
             }else{
                 this.drawer1 = true;
+                this.filterText = '';
+                this.tableData = [];
                 this.getRuleUserStructureLimit();
                 this.tableSelectList = clueDataSUuidArr;
             }
@@ -563,13 +567,13 @@ export default {
                                 type: 'success',
                                 message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
                             });
-                            this.getRecoveryPoolDataList();
+                            // this.getRecoveryPoolDataList();
                         }else{
                             this.$message({
                                 type: 'error',
                                 message: res.data.msg
                             })
-                            this.getRecoveryPoolDataList();
+                            // this.getRecoveryPoolDataList();
                         }
                         this.drawer1 = false;
                     }else{
