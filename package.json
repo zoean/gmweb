@@ -12,6 +12,7 @@
     "af-table-column": "^1.0.3",
     "area-data": "^5.0.6",
     "axios": "^0.19.0",
+    "axios-retry": "^3.1.9",
     "copy-util": "^1.0.1",
     "core-js": "^2.6.5",
     "default-passive-events": "^2.0.0",

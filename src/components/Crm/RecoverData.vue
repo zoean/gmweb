@@ -404,7 +404,7 @@ export default {
         },
         getRecoveryPoolDataList() {
             this.fullscreenLoading = true;
-            this.$smoke_post(getRecoveryPoolDataList, this.form).then(res => {
+            this.$smoke_post_big(getRecoveryPoolDataList, this.form, 30000).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
