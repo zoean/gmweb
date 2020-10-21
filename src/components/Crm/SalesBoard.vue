@@ -322,7 +322,7 @@ export default {
         this.saleAims();
         this.form.time = this.workForm.time = this.timeDate;
         this.dayWork();
-        this.workDetail();
+        // this.workDetail();
     },
     methods: {
         workDetail() {

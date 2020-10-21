@@ -50,8 +50,8 @@ module.exports = {
             }
           },
           '/api': {
-              target: process.env.VUE_APP_GM_JHWX,
-              // target: 'https://gm.jhwx.com',
+              // target: process.env.VUE_APP_GM_JHWX,
+              target: 'https://gm.jhwx.com',
               ws: false,
               changOrigin: true,//允许跨域
               pathRewrite: {

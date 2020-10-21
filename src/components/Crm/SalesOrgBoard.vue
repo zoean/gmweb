@@ -139,6 +139,12 @@
 
                 </el-col>
 
+                <el-col :span="16">
+                
+                    <el-button @click="salesOrgBoardDetailsClickWork" style="float:right;" plain size="small">详 情</el-button>
+    
+                </el-col>
+
             </el-row>
 
             <el-table

@@ -7,7 +7,7 @@ import ElementUI from 'element-ui';
 import AFTableColumn from 'af-table-column'
 import 'element-ui/lib/theme-chalk/index.css';
 import VScrollLock from 'v-scroll-lock'
-import { smoke_get, smoke_post } from './request/http' //引入js文件默认是js的后缀
+import { smoke_get, smoke_post, smoke_post_big } from './request/http' //引入js文件默认是js的后缀
 import './assets/css/public.css' //引入css文件要加后缀
 import '@/assets/css/common.css'
 import 'vue-area-linkage/dist/index.css';
@@ -28,6 +28,7 @@ Vue.use(Vuex);
 Vue.use(Meta)
 Vue.prototype.$smoke_get = smoke_get;
 Vue.prototype.$smoke_post = smoke_post;
+Vue.prototype.$smoke_post_big = smoke_post_big;
 
 Vue.config.productionTip = false
 
