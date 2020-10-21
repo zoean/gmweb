@@ -316,7 +316,7 @@
                 </el-dialog>
 
             </el-tab-pane> -->
-            <el-tab-pane label="批量导入" name="third">
+            <el-tab-pane v-if="batchImportRole" label="批量导入" name="third">
               <div class="batch-import">
                 <el-upload
                   class="upload-demo"
@@ -525,7 +525,8 @@ export default {
                 'prop': 'createTime', 'label': '任务创建时间', 'formatter': this.timeFormatter
               },
               {  'prop': 'state', 'label': '状态', formatter: this.statusFormatter}
-            ]
+            ],
+            batchImportRole: false
         }
     },
     created() {
@@ -536,7 +537,9 @@ export default {
         this.getRuleItem();
         const jhToken = localStorage.getItem('jhToken');
         this.headersObj.Authorization = jhToken;
-        this.getTaskList()
+        this.getTaskList()        
+        let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
+        this.batchImportRole = buttonMap.batchImport
     },
     methods: {
         timeFormatter(row, column, cellValue){

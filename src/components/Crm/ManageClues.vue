@@ -477,7 +477,6 @@ export default {
         },        
         queryUserList(queryString, cb) {
             var restaurants = JSON.parse(JSON.stringify(this.getUserList(this.orgList)).replace(/userName/g,"value"));
-            console.log(restaurants, queryString)
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
