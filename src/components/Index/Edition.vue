@@ -6,8 +6,11 @@
     <el-timeline> 
       <el-timeline-item timestamp="v 1.1.29 -- 2020/10/21" placement="top">
         <el-card>
+          <h4>新增功能</h4>
+          <p>1、分配组设置增加分校权限管理</p>
           <h4>修复bug</h4>
           <p>1、修复回收池页面请求超时问题</p>
+          <p>2、修复回收池页面分配至人渲染问题</p>
         </el-card>
       </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.28 -- 2020/10/20" placement="top">
