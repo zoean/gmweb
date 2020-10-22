@@ -502,7 +502,7 @@ div.el-dialog__body{
 }
 .tag_default_class{
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 8px;
     margin-bottom: 10px;
 }
 .tag_default_class:first-of-type{

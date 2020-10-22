@@ -4,7 +4,7 @@ import {
   Message
 } from 'element-ui'
 axios.defaults.baseURL = "";
-axios.defaults.timeout = 6000;
+axios.defaults.timeout = 10000;
 
 // axiosRetry(axios, {
 //   retries: 3, // 设置自动发送请求次数
