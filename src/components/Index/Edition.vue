@@ -4,6 +4,12 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.30 -- 2020/10/22" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增今日首咨页面</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.29 -- 2020/10/21" placement="top">
         <el-card>
           <h4>新增功能</h4>
