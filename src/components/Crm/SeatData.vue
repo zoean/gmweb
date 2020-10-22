@@ -60,10 +60,11 @@
 
             <el-col :span="3">
                 
-                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
-                      v-for="item in dialStateList"
+                      v-for="item in enumList['MJ-5']"
                       :key="item.name"
+                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
@@ -88,25 +89,46 @@
 
         <el-row class="people-screen">
 
+            
+
             <el-col :span="3">
-                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
+
+                <el-cascader
+                    ref="cascader"
+                    size="small"
+                    class="smoke-cascader1 screen-li"
+                    placeholder="坐席组织架构"
+                    collapse-tags
+                    :show-all-levels='true'
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
+                    clearable>
+                </el-cascader>
+
+            </el-col>
+
+            <el-col :span="3">
+
+                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
                     <el-option
-                      v-for="item in enumList['MJ-5']"
+                      v-for="item in dialStateList"
                       :key="item.name"
-                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
                 </el-select>
+                
             </el-col>
 
-            <el-col :span="3">
+            <el-col :span="2">
 
-                <el-input v-model="form.saleName" size="small" placeholder="请输入所属坐席" class="screen-li"></el-input>
+                <el-input v-model="form.saleName" size="small" placeholder="输入坐席" class="screen-li"></el-input>
 
             </el-col>
-
-            <el-col :span="14">
+            
+            <el-col :span="16">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
@@ -117,14 +139,12 @@
                     >{{item.name}}
                 </el-tag>
 
-                <el-button type="primary" size="small" style="margin-left: 10px;" @click="getAllUserClueDataClick">查 询</el-button>
+                <el-button type="primary" size="small" style="margin-left: 2px;" @click="getAllUserClueDataClick">查 询</el-button>
 
-            </el-col>
-
-            <el-col :span="4">
                 <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
                 <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
+
             </el-col>
 
         </el-row>
@@ -242,7 +262,8 @@ import {
     copyTel,
     geSeatWork,
     seatActSeat,
-    dataViewPermissionUserList
+    dataViewPermissionUserList,
+    clTeaOrgFilterBox
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { receiveTimeFun } from '../../assets/js/common';
@@ -280,6 +301,7 @@ export default {
                 sortSet: [],
                 intentionLevel: '',
                 saleName: '',
+                seatOrgList: [],
                 receiveStartTime: '',
                 receiveEndTime: '',
             },
@@ -309,9 +331,9 @@ export default {
             userCDARUuid: '',
             searchList: [
                 { name: '今日首咨', id: 1 },
-                { name: '2~3天数据', id: 2 },
-                { name: '4~7天数据', id: 3 },
-                { name: '8~14天数据', id: 4 },
+                { name: '2-3天数据', id: 2 },
+                { name: '4-7天数据', id: 3 },
+                { name: '8-14天数据', id: 4 },
                 { name: '14天以上数据', id: 5 },
                 { name: '公海领取数据', id: 6 },
             ],
@@ -327,6 +349,7 @@ export default {
             tableSelectList: [],
             tagId: '',
             tagIdText: '',
+            zuzhiOptions: [],
         }
     },
     // watch:{
@@ -351,8 +374,27 @@ export default {
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getRuleItem();
+        this.clTeaOrgFilterBox();
     },
     methods: {
+        clTeaOrgFilterBox() {
+            this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
+                if(res.code == 200) {
+                    this.zuzhiOptions = res.data;
+                }
+            })
+        },
+        handleZuzhiChange(arr) {
+            let brr = [];
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            this.form.seatOrgList = brr;
+        },
         seatActSeat() {
             if(this.tagId == '') {
                 this.$message({
