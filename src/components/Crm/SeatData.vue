@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -38,7 +38,7 @@
             </el-col>
 
             <el-col :span="3" class="seatData">
-                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="3">
@@ -136,6 +136,8 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%"
+            :height="tableHeight"
+            class="table-fixed"
             >
 
             <el-table-column
@@ -147,6 +149,7 @@
               v-for="(item, index) in columnList"
               :min-width="item.width"
               :key="index"
+              show-overflow-tooltip
               >
               <template slot="header">
                 {{item.label}}
@@ -167,7 +170,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="50" class-name="table_active">
+            <el-table-column prop="active" label="操作" width="60" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
@@ -177,7 +180,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"
@@ -249,6 +251,7 @@ import { MJ_6, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'seatData',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         CustomerNotes,
         PageFieldManage
@@ -508,6 +511,7 @@ export default {
                         this.list = res.data.list;
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -705,6 +709,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.table-fixed {
+    /deep/.el-table__body-wrapper {
+    height: calc(100% - 44px) !important;
+  }
+}
+
+
+
     .index-main{
         .el-col-6{
             height: auto !important;
@@ -726,13 +738,5 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-    }
-    .index-main /deep/ div.el-dialog__body{
-        height: 42vh;
-        overflow: auto;
-    }
+    }  
 </style>

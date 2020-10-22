@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="3">
                 <el-input v-model="form.tel" placeholder="请输入手机号" class="screen-li" size="small"></el-input>
@@ -153,6 +153,7 @@
         <el-table
             :data="tableData"
             v-loading="fullscreenLoading"
+            :height="tableHeight"
         >
     
             <el-table-column
@@ -169,9 +170,21 @@
 
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
+            <el-table-column prop="active" label="操作" fixed="right" width="100" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon style="margin-left: 4px;" @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" />
+                <el-popconfirm
+                    confirmButtonText='确定'
+                    cancelButtonText='取消'
+                    icon="el-icon-info"
+                    iconColor="red"                    
+                    placement="top"
+                    title="删除后该线索进入线索垃圾站，是否继续？"
+                    @onConfirm="delCludes(scope.row)"
+                >
+                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />                
+                </el-popconfirm>
+                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" @click="transferClude(scope.row)" />
               </template>
             </el-table-column>
     
@@ -179,7 +192,6 @@
     
         <el-pagination
             background
-            style="margin-top: 30px; text-align:right; margin-right: 1.2%; margin-bottom: 50px;"
             layout="total, sizes, prev, pager, next, jumper"
             :total='form.total'
             :page-size='form.pageSize'
@@ -206,7 +218,51 @@
             @fatherDataList='getExteClueData'
         >
         </CustomerNotes>
+        <el-dialog class="transferSeat" :visible="transferSeatVisible" width="300px" title="转移线索" @close="transferSeatVisible=false">
+            <el-autocomplete
+                ref="autocompleteTag"
+                size="small"
+                class="screen-li"
+                v-model="tagIdText"
+                :fetch-suggestions="queryUserList"
+                placeholder="请您选择要分配的人员"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClearTag"
+                @select="handleSelectTag"
+            ></el-autocomplete>
+            <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="transferSeat" size="small">确 定</el-button>
+            <el-button @click="transferSeatVisible=false" size="small" plain>取 消</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog class="transferOverflow" :visible="overflowRecoverVisible" width="300px" title="转移线索" @close="overflowRecoverVisible=false">
+            <el-tag 
+                v-for="(item,index) in checkedData" :key="index"
+                style="margin: 0 10px 10px 0;"
+                >{{item.orgName}}</span> 
+            </el-tag>
+            <el-input
+            placeholder="输入关键字进行过滤"
+            v-model="filterText">
+            </el-input>
 
+            <el-tree
+            class="filter-tree"
+            node-key="orgUuid"            
+            show-checkbox
+            :data="orgList"
+            :props="defaultProps"
+            default-expand-all
+            :filter-node-method="filterNode"
+            @check="handleCheckChange"
+            ref="tree">
+            </el-tree>
+            <div slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="transferOverflow" size="small">确 定</el-button>
+            <el-button @click="overflowRecoverVisible=false" size="small" plain>取 消</el-button>
+            </div>
+        </el-dialog>
     </el-main>
 </template>
 
@@ -215,13 +271,20 @@ import {
   getExteClueData,
   getExamBasic,
   enumByEnumNums,
-  personalClueExport
+  personalClueExport,
+  deleteClueDatas,
+  dataViewPermissionUserList,
+  seatActSeat,
+  getRuleUserStructureLimit,
+  spillPoolActSeat,
+  recPoolActSeat
 } from '../../request/api';
-import { MJ_5, MJ_6, MJ_7, MJ_9 } from '../../assets/js/data';
-import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown } from '../../assets/js/common'
+import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid } from '../../assets/js/data';
+import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown, pushPeopleFunc } from '../../assets/js/common'
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'peopleClues',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         CustomerNotes
     },
@@ -252,15 +315,15 @@ export default {
                 { label: '已分配', value: 1 },
             ],
             dialStateArr: [
-                { label: '处理', value: 1 },
-                { label: '未处理', value: 0 },
+                { label: '已拨打', value: 1 },
+                { label: '未拨打', value: 0 },
             ],
             inputModeArr: [
                 { label: '线上', value: 0 },
                 { label: '录入', value: 1 },
             ],
             enumList: {},
-            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date()],
+            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date(new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1)],
             dataPickerpei: [],
             pickerOptions: {
                 disabledDate(time) {
@@ -321,7 +384,6 @@ export default {
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
             fullscreenLoading: false,
-
             followFlag: false,
             drawer: false,
             clueDataSUuid: '',
@@ -329,18 +391,264 @@ export default {
             comMode: '',
             schoolId: '',
             examItem: '',
-            userCDARUuid: '',
+            userCDARUuid: '',           
+            checkedData: [],
+            transferSeatVisible: false,
+            overflowRecoverVisible: false,
+            seatList: [],
+            transferSeatForm: {
+                seatUuid: '',
+                userCDARUuid: []
+            },
+            overflowRecoverForm: {
+                clueDataSUuid: [],
+                seatUuid: []
+            },
+            filterText: '',
+            defaultProps: {
+                children: 'list',
+                label: 'orgName'
+            },
+            orgList: [],
+            clueDataType: 0,            
+            tagId: '',
+            tagIdText: '',
+            tagList: []
         }
     },
     created() {
         this.form.startCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-        this.form.endCreateTime = new Date().getTime();
+        this.form.endCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() + 3600 * 1000 * 24 - 1;
         this.getExteClueData();
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
     },
-    methods: {
+    watch: {
+      filterText(val) {
+        this.$refs.tree.filter(val);
+      }
+    },
+    methods: {            
+        getUserList(obj){
+            let userList = []
+            function getLeaf(obj){
+                obj.forEach(item => {
+                    if(item.userList){
+                        item.userList.forEach(leafItem => {
+                            userList.push({
+                                userName: leafItem.userName,
+                                userUuid: leafItem.userUuid
+                            })
+                        })                        
+                        // console.log(userList)
+                    }
+                    if(item.list){
+                        getLeaf(item.list)
+                    }
+                })
+            }
+            getLeaf(obj)
+            return this.uniqArray(userList)
+        },
+        uniqArray(arr){
+          var obj = {}
+          var result = arr.reduce(function(a, b){
+            obj[b.userName] ? '' : obj[b.userName] = true && a.push(b)
+            return a
+          }, [])
+          return result
+        },        
+        queryUserList(queryString, cb) {
+            var restaurants = JSON.parse(JSON.stringify(this.getUserList(this.orgList)).replace(/userName/g,"value"));            
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },        
+        querySearchTag(queryString, cb) {
+            var restaurants = this.tagList;
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        getCheckedNodes() {
+            let arr = [];
+            this.$nextTick(() => {
+                this.$refs.tree.getCheckedNodes().map(sll => {
+                    if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
+                        arr.push(sll);
+                    }
+                })
+                this.checkedData = arr;
+            })
+        },
+        handleCheckChange(data, value){
+            this.getCheckedNodes();
+        },
+        filterNode(value, data) {
+            if (!value) return true;
+                return data.orgName.indexOf(value) !== -1;
+        },
+        autocompleteClearTag() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteTag.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.tagId = '';
+                this.$refs.autocompleteTag.focus();
+            })
+        }, 
+        handleSelectTag(item) {
+            this.tagId = item.userUuid;
+            this.tagIdText = item.value;
+        },   
+        transferClude(row){
+            this.clueDataType = row.clueDataType
+            if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
+                this.filterText = ''
+                this.checkedData = []
+                this.overflowRecoverVisible = true
+                this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid
+                
+            }else if(row.clueDataType == 3){//坐席名下
+                this.transferSeatForm.seatUuid = ''
+                this.tagIdText = ''
+                this.transferSeatVisible = true
+                this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid
+            }
+            this.$smoke_post(getRuleUserStructureLimit, {
+                uuid: zuzhiUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.orgList = pushPeopleFunc(res.data.list);
+                    this.getUserList(this.orgList)
+                }
+            })
+        },
+        transferSeat(){
+            if(this.tagId == '') {
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择要分配的人员'
+                })
+            }else{
+                this.$smoke_post(seatActSeat, {
+                    seatUuid: this.tagId,
+                    userCDARUuid: this.transferSeatForm.userCDARUuid
+                }).then(res => {
+                    if(res.code == 200){
+                        if(res.data.result){
+                            this.$message({
+                                type: 'success',
+                                message: '线索转移成功'
+                            })          
+                            this.getExteClueData();
+                            this.transferSeatVisible = false
+                            
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: '线索转移失败'
+                        })  
+                    }          
+                })
+            }
+        },
+        getSeatList(){
+            this.$smoke_get(dataViewPermissionUserList + '/1', {}).then(res => {
+                if(res.code == 200){
+                    res.data.map(sll => {
+                        sll.value = sll.userName;
+                    })
+                    this.tagList = res.data
+                    
+                }
+            })
+        },
+        transferOverflow(){
+            let seatUuidArr = [];
+            this.checkedData.map(sll => {
+                seatUuidArr.push(sll.userUuid);
+            })
+            this.overflowRecoverForm.seatUuid[0] = seatUuidArr
+            if(seatUuidArr.length == 0){
+                this.$message({
+                    type: 'error',
+                    message: '请您先勾选您要转移的目标人员'
+                })
+            }else{
+                if(this.clueDataType == 1){
+                    this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(res => {
+                        if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteClueData();
+                                this.overflowRecoverVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '线索转移失败'
+                                })  
+                            }
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    })
+                }else{
+                    this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(res => {
+                        if(res.code == 200){
+                            if(res.data.result){
+                                this.$message({
+                                    type: 'success',
+                                    message: '线索转移成功'
+                                })
+                                this.getExteClueData();
+                                this.overflowRecoverVisible = false
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: '线索转移失败'
+                                })  
+                            }
+                        }else{
+                            this.$message({
+                                type: 'error',
+                                message: '线索转移失败'
+                            })  
+                        }
+                    })
+                }
+                
+            }
+        },                      
+        delCludes(row){
+            this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
+                if(res.code == 200){
+                    this.$message({
+                        type: 'success',
+                        message: '线索删除成功，可在线索垃圾站回收该线索。'
+                    })
+                    this.getExteClueData();
+                }else{
+                    this.$message({
+                        type: 'error',
+                        message: res.msg
+                    })
+                }
+            })
+        },
         personalClueExport() {
             let tmp = (new Date()).getTime();
             let exportTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() - 3600 * 1000 * 24 * 31;
@@ -471,6 +779,7 @@ export default {
 
                         this.tableData = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -539,10 +848,6 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
     .index-main /deep/ .bofang-column{
         padding: 0 !important;

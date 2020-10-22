@@ -31,7 +31,8 @@
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -50,7 +51,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -256,6 +256,7 @@ import { timestampToTime, classTypeString, teacherTreeFunc, teacherArrExp, remov
 
 export default {
     name: 'reCoverData',
+    props: ['tableHeight'],
     data() {
         return {
             form: {
@@ -465,7 +466,8 @@ export default {
                             sll.classType = classTypeString(sll.classType);
                         })
                         this.list = res.data.list;
-                        this.form.total = res.data.total;
+                        this.form.total = res.data.total;                        
+                        this.$emit('setTableHeight', this.form.total, 0, 1)
                     }, 300);
 
                 }else{
@@ -608,6 +610,7 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        margin-top: 15px;
         .people-title{
             width: 100%;
             height: 40px;

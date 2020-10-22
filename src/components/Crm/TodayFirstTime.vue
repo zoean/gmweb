@@ -1,23 +1,12 @@
 <template>
     <el-main class="index-main">
-
         <Start></Start>
         <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
             <el-col :span="21">
-
-                <el-tag 
-                    v-for="(item,index) in searchList" :key="item.id"
-                    :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
-                    type="info"
-                    effect="plain"
-                    @click="tagClick(item)"
-                    >{{item.name}}
-                </el-tag>
-
-                <el-button style="margin-left: 20px;" type="primary" size="small" @click="threeDaysNoCallDataListClick">查 询</el-button>
+                <el-button type="primary" size="small" @click="firstConDataListClick">查 询</el-button>
             </el-col>
         </el-row>
 
@@ -48,7 +37,6 @@
               :label="item.label"
               :width="item.width"
               v-for="(item, index) in columnList"
-              :show-overflow-tooltip="item.prop == 'clueDataNotes' ? true : false"
               :key="index"
               >
               <template slot-scope="scope">
@@ -57,7 +45,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" fixed="right" width="110" class-name="table_active">
+            <el-table-column prop="active" label="操作" width="110" fixed="right" class-name="table_active">
               <template slot-scope="scope">
                 <svg-icon icon-title="手机外拨" @click="phoneOut(scope.row)" icon-class="takephone" />
                 <svg-icon icon-title="座机外拨" @click="seatOut(scope.row)" icon-class="landline" />
@@ -72,8 +60,8 @@
                   >
                 <svg-icon slot="reference" icon-title="释放数据" icon-class="release" />
                   </el-popconfirm>
-                <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
-                <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
+                    <!-- <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="members" /> -->
+                    <svg-icon @click="handleAddClick(scope.row)" icon-title="添加备注" icon-class="addnotes" />
               </template>
             </el-table-column>
 
@@ -109,7 +97,7 @@
             :userCDARUuid='userCDARUuid'
             :comMode='comMode'
             :callLogUuid='callLogUuid'
-            @fatherDataList='threeDaysNoCallDataList'
+            @fatherDataList='firstConDataList'
         >
         </CustomerNotes>
 
@@ -118,22 +106,21 @@
 
 <script>
 import { 
-    threeDaysNoCallDataList,
+    firstConDataList,
     phoneOut,
     seatOut,
-    clueDataRelease,  
+    clueDataRelease,
     copyTel,
     clueContactSign,
-    enumByEnumNums
+    enumByEnumNums,
+    todayFirstConDataList
 } from '../../request/api';
+import { timestampToTime } from '../../assets/js/common';
 import Start from '../../components/Share/Start';
-import { 
-    timestampToTime, receiveTimeFun
-} from '../../assets/js/common';
 import { MJ_16 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
-    name: 'sevenDay',
+    name: 'firstTime',
     props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
@@ -143,23 +130,21 @@ export default {
                 userUuid: '',
                 total: null,
                 tel: '',
-                dataType: '', //数据类型（1：首咨 2：回收池）
-                receiveStartTime: '', //领取时间的查询开始时间（13位）
-                receiveEndTime: '', //领取时间的查询结束时间（13位）
             },
             totalFlag: false,
             list: [],
             columnList: [
                 { 'prop': 'phone', 'label': '手机号码', width: 150 },
                 { 'prop': 'name', 'label': '姓名' },
-                { 'prop': 'clueDataNotes', 'label': '备注' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
                 { 'prop': 'lastCallTime', 'label': '最近一次联系时间', width: 230 },
+                // { 'prop': 'dataType', 'label': '下次联系时间' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
                 { 'prop': 'school', 'label': '注册平台' },
             ],
             initOptions: {},
+            //jqStart: null,
 
             followFlag: false,
             drawer: false,
@@ -173,19 +158,12 @@ export default {
 
             fullscreenLoading: false,
 
-            searchList: [
-                { name: '4~7天数据', id: 3 },
-                { name: '8~14天数据', id: 4 },
-                { name: '14天以上数据', id: 5 },
-                { name: '公海领取数据', id: 6 },
-            ],
-            tag_id: '',
-
             enumList: {}
         }
     },
     components: {
-        Start, CustomerNotes
+        CustomerNotes,
+        Start,
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -196,7 +174,7 @@ export default {
         }
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
-        this.threeDaysNoCallDataList();
+        this.firstConDataList();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         let arr = [MJ_16];
@@ -233,22 +211,15 @@ export default {
                 }
             })
         },
-        tagClick(item){
-            if(this.tag_id == item.id) {
-                this.tag_id = '';
-            }else{
-                this.tag_id = item.id;
-            }
-        },
         handleCurrentChange(index) {
             this.form.currentPage = index;
-            this.threeDaysNoCallDataList();
+            this.firstConDataList();
         },
         handleSizeChange(index) {
             this.form.pageSize = index;
             this.form.currentPage = 1;
             localStorage.setItem('seatDataPageSize', index);
-            this.threeDaysNoCallDataList();
+            this.firstConDataList();
         },
         //客户信息
         customerInfo(row) {
@@ -269,24 +240,14 @@ export default {
         changeDrawer(val){
             this.drawer = val;
         },
-        threeDaysNoCallDataListClick() {
+        firstConDataListClick() {
             this.form.currentPage = 1;
-            const obj = receiveTimeFun(this.tag_id);
-            this.form.receiveStartTime = obj.receiveStartTime;
-            this.form.receiveEndTime = obj.receiveEndTime;
-            if(this.tag_id == 6) {
-                this.form.dataType = 2;
-            }else if(this.tag_id == ''){
-                this.form.dataType = '';
-            }else{
-                this.form.dataType = 1;
-            }
-            this.threeDaysNoCallDataList();
+            this.firstConDataList();
         },
-        threeDaysNoCallDataList() {
+        firstConDataList() {
             this.fullscreenLoading = true;
             this.drawer = false;
-            this.$smoke_post(threeDaysNoCallDataList, this.form).then(res => {
+            this.$smoke_post(todayFirstConDataList, this.form).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -296,7 +257,7 @@ export default {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
                         this.list = res.data.list;
-                        this.form.total = res.data.total;
+                        this.form.total = res.data.total;                        
                         this.$emit('setTableHeight', this.form.total, 0, 1)
                         this.schoolId = res.data.schoolId;
                     }, 300);
@@ -323,13 +284,13 @@ export default {
                             type: 'success',
                             message: '释放成功，提交的线索数量' + res.data.submitSize + '条' + '，实际释放的线索数量' + res.data.releaseSize + '条'
                         });
-                        this.threeDaysNoCallDataList();
+                        this.firstConDataList();
                     }else{
                         this.$message({
                             type: 'error',
                             message: res.data.msg
                         });
-                        this.threeDaysNoCallDataList();
+                        this.firstConDataList();
                     }
                 }else{
                     this.$message({
@@ -466,9 +427,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-button{
-          margin-left: 10px;
         }
         .edit-field-icon{
           color: #5cb6ff;

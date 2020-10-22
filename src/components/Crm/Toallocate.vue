@@ -29,7 +29,7 @@
                 </el-select>
             </el-col>
             <el-col :span="3" class="seatData">
-                <area-cascader class="screen-li" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
             <el-col :span="3">
                 <el-autocomplete
@@ -57,20 +57,22 @@
             :data="list"
             ref="tree"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
             <el-table-column
               type="selection"
               width="45">
             </el-table-column>
-            <af-table-column
+            <el-table-column
               :prop="item.prop"
               :label="item.label"
               v-for="(item, index) in columnList"
               :key="index"
-              :width="item.width"
-              :sortable = "item.sortable"
+              :show-overflow-tooltip="item.prop == 'clueDataNotes' ? true : false"
+              :min-width="item.width"
+              :sortable = "item.sortable"          
               >
-            </af-table-column>
+            </el-table-column>
 
             <el-table-column prop="active" label="操作" fixed="right" width="60" class-name="table_active">
                 <template slot-scope="scope">
@@ -83,7 +85,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"
@@ -121,6 +122,7 @@ import pcaa from 'area-data/pcaa';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'toAllocate',
+    props: ['tableHeight'],
     components: {
         CustomerNotes,
     },
@@ -146,14 +148,14 @@ export default {
             columnList: [
                 { 'prop': 'tel', 'label': '手机号码', 'width': 100 },
                 { 'prop': 'name', 'label': '姓名', 'width': 90 },
+                { 'prop': 'clueDataNotes', 'label': '备注', 'width': 120 },
                 { 'prop': 'provinceCity', 'label': '所在地区' },
                 { 'prop': 'examItem', 'label': '所属项目', 'width': 130 },
-                // { 'prop': 'userName', 'label': '所属坐席' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '推广渠道' },
-                { 'prop': 'createTime', 'label': '入库时间', 'sortable': true },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'sortable': true },
-                { 'prop': 'dataCreateTime', 'label': '最新回收时间', 'sortable': true },
+                { 'prop': 'createTime', 'label': '入库时间', 'sortable': true, 'width': 140 },
+                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'sortable': true, 'width': 140 },
+                { 'prop': 'dataCreateTime', 'label': '最新回收时间', 'sortable': true, 'width': 140 },
                 { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
             ],
             ruleForm: {
@@ -181,7 +183,6 @@ export default {
             schoolId: '',
             examItem: '',
             userCDARUuid: '',
-
             dataPicker: [],
             enumList: {},
             restaurants: [],
@@ -296,6 +297,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 0, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -371,6 +373,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 15px;
         .el-col-6{
             height: auto !important;
         }

@@ -2,8 +2,7 @@
     <el-main class="index-main">
 
         <Start></Start>
-
-        <el-row class="people-screen">
+        <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" id="searchArea">
 
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
@@ -98,7 +97,7 @@
 
             <el-col :span="3">
 
-                <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable>
+                <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable >
                     <el-option
                       v-for="item in orderStateList"
                       :key="item.name"
@@ -139,6 +138,7 @@
             :row-class-name="tableRowClassName"
             style="width: 100%"
             ref="tableSelect"
+            :height="tableHeight"
             >
 
             <el-table-column
@@ -207,7 +207,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"
@@ -269,6 +268,7 @@ import CustomerNotes from '../Share/CustomerNotes';
 import Copy from 'copy-util';
 export default {
     name: 'AllDay',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         Start,
         CustomerNotes,
@@ -304,7 +304,7 @@ export default {
                 receiveStartTime: '', //领取时间的查询开始时间（13位）
                 receiveEndTime: '', //领取时间的查询结束时间（13位）
                 intentionLevel: '', //意向等级
-                orderState: '',//成单状态
+                orderState: 0,//成单状态
             },
             totalFlag: false,
             ruleNumberNameList: [], //分配组数组
@@ -526,7 +526,7 @@ export default {
                 receiveEndTime: this.form.receiveEndTime,
             }).then(res => {
                 if(res.code == 200) {
-                    this.tag_flag = true;
+                    this.tag_flag = true;                    
                     this.SeatWorkObj = res.data;
                 }else{
                     this.tag_flag = false;
@@ -551,6 +551,11 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = this.clueDataNumberList[0] = res.data.total;
+                        if(this.tag_flag){
+                            this.$emit('setTableHeight', res.data.total, 2.2, 1)
+                        }else{
+                            this.$emit('setTableHeight', res.data.total, 1, 1)
+                        }                        
                         this.$nextTick(() => {
                             this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
@@ -734,7 +739,6 @@ export default {
         },
     },
     mounted() {
-        
     }
 }
 </script>

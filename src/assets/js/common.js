@@ -835,6 +835,7 @@ export const levelFunc = (arr) => {
 //菜单num统计
 
 export const menuNumberFunc = (arr, brr) => {
+    console.log(arr,brr)
     if(arr[1].includeSubsetList[0].includeSubsetList[0].name.indexOf('(') == -1) { //避免name重复加()
 
         arr[1].includeSubsetList[0].includeSubsetList[0].name = brr[0] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
@@ -844,8 +845,9 @@ export const menuNumberFunc = (arr, brr) => {
         arr[1].includeSubsetList[0].includeSubsetList[4].name = brr[4] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[3] + ')';
 
+        arr[1].includeSubsetList[0].includeSubsetList[7].name = brr[6] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + brr[6] + ')';
+
     }
-    console.log(arr)
     return arr;
 
 }
@@ -864,6 +866,23 @@ export const urlFun = (url) => {
     }
 }
 
+// export const urlParamsParse = (url) => {
+//     console.log(url)
+// }
+export const getQueryObject = (url) => {
+    url = url == null ? window.location.href : url
+    const search = url.lastIndexOf('?') != -1 ? url.substring(url.lastIndexOf('?') + 1) : url
+    const obj = {}
+    const reg = /([^?&=]+)=([^?&=]*)/g
+    search.replace(reg, (rs, $1, $2) => {
+      const name = decodeURIComponent($1)
+      let val = decodeURIComponent($2)
+      val = String(val)
+      obj[name] = val
+      return rs
+    })
+    return obj
+  }
 export const input_mode_Text = (text) => {
     let str;
     switch (text) {

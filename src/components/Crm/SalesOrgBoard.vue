@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
 
-        <div class="people-title"><span class="kanban_dian"></span>目标完成情况</div>
+        <div class="people-title">目标完成情况</div>
 
         <div class="board-target" v-loading="loadingNum">
 
@@ -59,7 +59,7 @@
 
         </div>
 
-        <div class="people-title"><span class="kanban_dian"></span>基本情况</div>
+        <div class="people-title">基本情况</div>
 
         <div class="board-details" v-loading="fullscreenLoadingBoard">
 
@@ -113,9 +113,62 @@
 
         </div>
 
-        <div style="background: #fff;">
+        <!-- <div class="call-detail">
+
+            <div class="people-title">工作明细</div>
+            <el-row class="people-screen" style="margin-top: 10px;">
+
+                <el-col :span="4">
+
+                    <el-date-picker
+                        style="width: 90%;"
+                        size="small"
+                        v-model="timeDateWork"
+                        type="date"
+                        value-format='timestamp'
+                        :picker-options="pickerOptions"
+                        @change="timeChangeWork"
+                        placeholder="请选择日期">
+                    </el-date-picker>
+
+                </el-col>
+
+                <el-col :span="4">
+
+                    <el-button type="primary" @click="salesBoardClickWork" size="small">查 询</el-button>
+
+                </el-col>
+
+                <el-col :span="16">
+                
+                    <el-button @click="salesOrgBoardDetailsClickWork" style="float:right;" plain size="small">详 情</el-button>
+    
+                </el-col>
+
+            </el-row>
+
+            <el-table
+                :data="listWork"
+                ref="tableSelect"
+                v-loading="fullscreenLoadingWork"
+                style="width: 100%; padding: 0 20px 20px 20px;">
+
+                <el-table-column
+                  :prop="item.prop"
+                  :label="item.label"
+                  :min-width="item.width"
+                  v-for="(item, index) in columnListWork"
+                  :key="index"
+                  >
+
+                </el-table-column>
+
+            </el-table>
+        </div> -->
+
+        <div class="call-detail" style="margin-top: 10px;">
             
-            <div class="people-title"><span class="kanban_dian"></span>通话明细</div>
+            <div class="people-title">通话明细</div>
     
             <el-row class="people-screen">
             
@@ -152,7 +205,7 @@
                 :data="list"
                 ref="tableSelect"
                 v-loading="fullscreenLoading"
-                style="width: 100%; padding: 0 20px 20px 20px;">
+                style="width: 100%; padding: 0 20px 20px 20px; margin-bottom: 15px;">
                 
                 <el-table-column
                   :prop="item.prop"
@@ -182,7 +235,8 @@
 import { 
     orgDayWork,
     orgTodayWork,
-    orgSaleAims
+    orgSaleAims,
+    orgWorkDetail
 } from '../../request/api';
 import {  } from '../../assets/js/data';
 import { timeReturn } from '../../assets/js/common';
@@ -197,7 +251,11 @@ export default {
             form: {
                 time: '',
             },
+            workForm: {
+                time: '',
+            },
             list: [],
+            listWork: [],
             totalFlag: false,
             columnList: [
                 { 'prop': 'heji', 'label': '' },
@@ -211,9 +269,26 @@ export default {
                 { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
                 { 'prop': 'callOpenLv', 'label': '接通率', width: 120 },
             ],
+            columnListWork: [
+                { 'prop': 'totalFirstNum', 'label': '总首咨数' },
+                { 'prop': 'todayFirstNum', 'label': '今日首咨' },
+                { 'prop': 'todayChanceNum', 'label': '机会人数' },
+                { 'prop': 'todayrvNum', 'label': '回访人数' },
+                { 'prop': 'todayRvNum1', 'label': '2-3天数据回访', width: 120},
+                { 'prop': 'todayRvNum2', 'label': '3天以上数据回访', width: 120},
+                { 'prop': 'cjNum', 'label': '报名' },
+                { 'prop': 'todayTotalMoney', 'label': '今日总流水' },
+                { 'prop': 'todayTotalMoney1', 'label': '1-3天数据流水', width: 120},
+                { 'prop': 'todayTotalMoney2', 'label': '3天以上数据流水', width: 120},
+                { 'prop': 'totalARPU', 'label': '总ARPU' },
+                { 'prop': 'refund', 'label': '退费' },
+                { 'prop': 'performance', 'label': '业绩' },
+            ],
             fullscreenLoading: false,
+            fullscreenLoadingWork: false,
             fullscreenLoadingBoard: false,
             timeDate: '',
+            timeDateWork: '',
             pickerOptions: {
                 disabledDate(time) {
                   return time.getTime() > Date.now();
@@ -275,6 +350,27 @@ export default {
         this.orgSaleAims();
     },
     methods: {
+        orgWorkDetail() {
+            let arr = [];
+            this.fullscreenLoadingWork = true;
+            this.$smoke_post(orgWorkDetail, this.workForm).then(res => {
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoadingWork = false;
+                        arr.push(res.data);
+                        this.listWork = arr;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoadingWork = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
+            })
+        },
         orgSaleAims() {
             this.loadingNum = true;
             this.$smoke_get(orgSaleAims, {}).then(res => {
@@ -364,9 +460,22 @@ export default {
         timeChange() {
             this.form.time = this.timeDate;
         },
+        timeChangeWork() {
+            this.workForm.time = this.timeDateWork;
+        },
         salesOrgBoardClick() {
             if(this.form.time){
                 this.orgDayWork();
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '请您先选择查询日期'
+                })
+            }
+        },
+        salesBoardClickWork() {
+            if(this.workForm.time){
+                this.orgWorkDetail();
             }else{
                 this.$message({
                     type: 'error',
@@ -413,6 +522,10 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 30px;
+        overflow-y: scroll;
+        padding: 0;
+        background-color: #fff;
         .people-title{
             width: 100%;
             height: 40px;
@@ -421,7 +534,9 @@ export default {
             background: #fff;
             color: #333333;
             padding-left: 16px;
-            border-bottom: 1px solid #dddddd;
+            border: 1px solid #dddddd;
+            border-bottom: none;
+            background: #F1F1F1;
         }
         .screen-li{
             width: 90%;
@@ -431,6 +546,7 @@ export default {
             justify-content: space-between;
             margin-bottom: 10px;
             height: 170px;
+            border: 1px solid #ddd;
             .target-two{
                 height: 100%;
                 width: 50%;
@@ -445,6 +561,8 @@ export default {
             justify-content: space-between;
             margin-bottom: 10px;
             height: 146px;
+            border: 1px solid #ddd;
+            border-right: none;
             .target-four{
                 height: 146px;
                 width: 25%;
@@ -481,6 +599,14 @@ export default {
                     display: block; }
             }
         }
+        .call-detail{
+            border: 1px solid #ddd;
+            border-bottom: none;
+            .people-title{
+                border: none;
+                border-bottom: 1px solid #ddd;
+            }
+        }
     }
     .people-screen{
         margin: 10px 20px;
@@ -490,9 +616,5 @@ export default {
     }
     .timeData /deep/ .el-table .cell{
         text-align: center !important;
-    }
-    .el-main{
-        padding: 0;
-        background: #F1F1F1;
     }
 </style>

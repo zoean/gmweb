@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
                 <el-date-picker
@@ -51,7 +51,7 @@
             </el-col>
 
             <el-col :span="3" class="seatData">
-                <area-cascader type="text" placeholder="请选择地区" class="screen-li" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
+                <area-cascader type="text" placeholder="请选择地区" :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>
 
             <el-col :span="3">
@@ -116,6 +116,7 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%"
+            :height="tableHeight"
             >
             <el-table-column
               type="selection"
@@ -247,6 +248,7 @@ import { MJ_6, zuzhiUuid, MJ_5 } from '../../assets/js/data';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'reCoverData',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             form: {
@@ -402,7 +404,7 @@ export default {
         },
         getRecoveryPoolDataList() {
             this.fullscreenLoading = true;
-            this.$smoke_post(getRecoveryPoolDataList, this.form).then(res => {
+            this.$smoke_post_big(getRecoveryPoolDataList, this.form, 30000).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -416,6 +418,7 @@ export default {
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -426,6 +429,8 @@ export default {
                         })
                     }, 300)
                 }
+            }).catch(err => {
+                this.fullscreenLoading = false;
             })
         },
         handleClose(done) {
@@ -491,6 +496,8 @@ export default {
                 })
             }else{
                 this.drawer1 = true;
+                this.filterText = '';
+                this.tableData = [];
                 this.getRuleUserStructureLimit();
                 this.tableSelectList = clueDataSUuidArr;
             }
@@ -536,6 +543,7 @@ export default {
                 
             })
         },
+        selectSeat(){},
         addPeople() {
             let seatUuidArr = [];
             this.tableData.map(sll => {
@@ -559,19 +567,19 @@ export default {
                                 type: 'success',
                                 message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
                             });
-                            this.getRecoveryPoolDataList();
+                            // this.getRecoveryPoolDataList();
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '目前服务线路忙，请稍后重试'
+                                message: res.data.msg
                             })
-                            this.getRecoveryPoolDataList();
+                            // this.getRecoveryPoolDataList();
                         }
                         this.drawer1 = false;
                     }else{
                         this.$message({
                             type: 'error',
-                            message: '目前服务线路忙，请稍后重试'
+                            message: res.data.msg
                         })
                         this.drawer1 = false;
                     }
@@ -617,9 +625,5 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
 </style>

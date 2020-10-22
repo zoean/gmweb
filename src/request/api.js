@@ -130,9 +130,9 @@ export const popularizeUrl = '/api/phone/DataAutDis/popularizeUrl'; //生成推�
 export const getClueDataByUserUuid = '/api/phone/clueData/getClueDataByUserUuid'; //获取员工的线索数据
 export const getListField = '/api/phone/pageFieldsMag/getUserPageField';//获取页面字段
 export const updateListField = '/api/phone/pageFieldsMag/upUserPageField';//更新页面字段排序、选中状态
-
 export const getClueDataAll = '/api/phone/clueData/getClueDataAll'; //获取员工的全部客户
 export const firstConDataList = '/api/phone/clueData/firstConDataList'; //获取员工的首咨线索数据
+export const todayFirstConDataList = '/api/phone/clueData/todayFirstConDataList';//获取员工的今日首咨线索数据
 export const todayCallDataList = '/api/phone/clueData/todayCallDataList'; //获取员工今日联系的线索数据
 export const threeDaysNoCallDataList = '/api/phone/clueData/threeDaysNoCallDataList'; //获取员工三日未联系的线索数据
 export const clueDataRelease = '/api/phone/clueData/clueDataRelease'; //释放线索数据    
@@ -151,6 +151,11 @@ export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //�
 export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户
 export const geSeatWork = '/api/phone/clueData/geSeatWork'; //获取坐席的工作情况
 export const clueContactSign = '/api/phone/clueData/clueContactSign'; //线索联系标记
+export const getClueDatasStashList = '/api/phone/clueData/getClueDatasStashList';//线索数据回收列表
+export const rollbackClueDatas = '/api/phone/clueData/rollbackClueDatas/';//线索数据还原
+export const addTask = '/api/phone/clueDataFileUp/addTask';//新增线索文件上传任务
+export const upTask = '/api/phone/clueDataFileUp/upTask'; //更新线索文件上传任务
+export const getTaskList = '/api/phone/clueDataFileUp/getTaskList';//查询线索文件上传任务列表
 
 //外呼接口
 export const getAdminUinToken = '/api/phone/outbound/getAdminUinToken'; //获取主账号token（9814692）
@@ -171,6 +176,7 @@ export const getUserRPCDList = '/api/phone/clueData/getUserRPCDList'; //获取�
 export const obtainRPCD = '/api/phone/clueData/obtainRPCD'; //员工获取回收池线索数据
 export const getExteClueData = '/api/phone/clueData/getExteClueData'; //获取推广人员的线索数据
 export const getExteAllClueData = '/api/phone/clueData/getExteAllClueData'; //获取推广人员的所有线索数据
+export const deleteClueDatas = '/api/phone/clueData/deleteClueDatas/';//删除线索
 
 //渠道管理
 export const channelGetList = '/api/phone/channel/getList'; //渠道列表
@@ -346,10 +352,6 @@ export const getDeptDailyList = '/api/data/deptTarget/getDailyList' //公司—�
 export const getDeptDailyDetail = '/api/data/deptTarget/getDailyDetail' //部门 - 日 -查询日目标详情
 export const addOrEditDeptDaily = '/api/data/deptTarget/addOrEditDaily' //部门 - 日 -新增 | 修改 日目标
 
-
-
-
-
 //数据看板
 export const dayWork = '/api/data/saleStatistics/dayWork' //获取销售每天的工作情况的数据看板
 export const orgDayWork = '/api/data/saleStatistics/orgDayWork' //获取组织下销售人员工作情况的数据看板
@@ -360,3 +362,8 @@ export const orgSaleDayWork = '/api/data/saleStatistics/orgSaleDayWork' //获取
 export const saleDataOrg = '/api/data/saleStatistics/saleDataOrg' //获取销售的数据组织权限
 export const orgSaleAims = '/api/data/saleStatistics/orgSaleAims' //获取组织的销售人员的今日目标完成情况
 export const saleAims = '/api/data/saleStatistics/saleAims' //获取销售的今日目标完成情况
+
+export const workDetail = '/api/data/saleStatistics/workDetail' //销售看板工作明细查询
+export const orgWorkDetail = '/api/data/saleStatistics/orgWorkDetail' //销售主管看板工作明细查询
+export const orgWorkDetailByOrg = '/api/data/saleStatistics/orgWorkDetailByOrg' //销售主管看板工作明细详情按组织查询
+export const orgWorkDetailBySeat = '/api/data/saleStatistics/orgWorkDetailBySeat' //销售主管看板工作明细详情按坐席查询

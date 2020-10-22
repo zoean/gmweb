@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
 
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model="form.telephone" placeholder="请输入手机号" class="screen-li" size="small" clearable></el-input>
             </el-col>
@@ -103,7 +103,8 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
 
             <el-table-column
               type="selection"
@@ -135,7 +136,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -200,6 +200,7 @@ import {
 import pcaa from 'area-data/pcaa';
 export default {
     name: 'studentsNewBaoKao',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         StudentsNotes
     },
@@ -228,7 +229,7 @@ export default {
             columnList: [
                 { 'prop': 'telephone', 'label': '手机号码', width: 120},
                 { 'prop': 'name', 'label': '姓名' },
-                { 'prop': 'examLable', 'label': '考试项目' },
+                { 'prop': 'examLable', 'label': '考试项目', width: 120 },
                 { 'prop': 'itemName', 'label': '报考项目', width: 120 },
                 { 'prop': 'itemGradeName', 'label': '报考等级/专业', width: 120 },
                 { 'prop': 'province', 'label': '所在省份', width: 120},
@@ -365,6 +366,7 @@ export default {
 
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 1, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -462,10 +464,6 @@ export default {
             .screen-li{
                 width: 94%;
             }
-        }
-        .el-pagination{
-            text-align: right;
-            margin-top: .4rem;
         }
     }
 </style>

@@ -7,7 +7,8 @@
           row-key="uuid"
           :indent="35"
           :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-          style="width: 100%">
+          style="width: 100%"
+          :height="tableHeight">
           <af-table-column
             :prop="item.prop"
             :label="item.label"
@@ -275,6 +276,7 @@ import {
 import { classTextById, sortNumberMove } from '../../assets/js/common';
 export default {
     name: 'index',
+    props: ['tableHeight'],
     data() {
         return {
             classForm: {
@@ -468,7 +470,8 @@ export default {
                     }
                 })
                 this.total = res.data.total;
-                this.classForm.pageSize = res.data.pageSize;
+                this.classForm.pageSize = res.data.pageSize;                
+                this.$emit('setTableHeight', this.total, 0, 1)
             })
         },
         getClassifyByUuid(uuid) {
@@ -825,6 +828,7 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        margin-top: 15px;
         .people-title{
             width: 100%;
             height: 40px;
@@ -841,10 +845,6 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
 
 </style>

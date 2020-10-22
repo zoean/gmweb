@@ -232,8 +232,7 @@ export default {
 .index-main /deep/ .el-table .cell {
   text-align: center !important;
 }
-/deep/ .el-pagination{
-  float:right;
-  margin-top: .2rem;
+.el-main{
+  margin-top: 0;
 }
 </style>

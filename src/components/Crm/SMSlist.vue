@@ -7,7 +7,8 @@
             :data="tableData"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%; margin-top: 10px;">
+            style="width: 100%; margin-top: 10px;"            
+            :height="tableHeight">
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -26,7 +27,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page='form.currentPage'
@@ -145,6 +145,7 @@ import { timestampToTime } from '../../assets/js/common';
 import { MJ_8 } from '../../assets/js/data';
 export default {
     name: 'timeData',
+    props: ['tableHeight'],
     data() {
       return {
         fullscreenLoading: false,
@@ -207,7 +208,8 @@ export default {
               })
 
               this.tableData = res.data.list;
-              this.form.total = res.data.total;
+              this.form.total = res.data.total;              
+              this.$emit('setTableHeight', this.form.total, 0, 1)
             }, 300);
           }else{
             setTimeout(() => {
@@ -249,7 +251,6 @@ export default {
         this.sms_default_content = this.sms_content = '';
       },
       smsTemChange(id) {
-        console.log(id);
         this.$smoke_post(getSMSTem, {
           id: id
         }).then(res => {
@@ -303,7 +304,6 @@ export default {
         })
       },
       schoolChange(item) {
-        console.log(item);
         this.createForm.list.map(sll => {
           if(sll.type == 2) {
             sll.variableValue = item.variableId == 1 ? '京华' : item.variableId == 2 ? '胜学' : item.variableId == 3 ? '集团' : '';
@@ -402,6 +402,7 @@ export default {
 
 <style lang="less" scoped>
     .index-main{
+      margin-top: 15px;
         height: auto;
         .people-title{
             width: 100%;

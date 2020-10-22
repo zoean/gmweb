@@ -1,7 +1,7 @@
 <template>
     <el-main class="index-main">
         <Start></Start>
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
@@ -23,7 +23,8 @@
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
-            style="width: 100%">
+            style="width: 100%"
+            :height="tableHeight">
 
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
                 <template slot-scope="scope">
@@ -46,6 +47,7 @@
               :label="item.label"
               :width="item.width"
               v-for="(item, index) in columnList"
+              :show-overflow-tooltip="item.prop == 'clueDataNotes' ? true : false"
               :key="index"
               >
               <template slot-scope="scope">
@@ -79,7 +81,6 @@
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
-            style="text-align: right; margin-top: 20px;"
             :total='form.total'
             :page-size='form.pageSize'
             :current-page="form.currentPage"
@@ -132,6 +133,7 @@ import Start from '../../components/Share/Start';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'contactToday',
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     data() {
         return {
             form: {
@@ -149,10 +151,10 @@ export default {
             columnList: [
                 { 'prop': 'phone', 'label': '手机号码', width: 150 },
                 { 'prop': 'name', 'label': '姓名' },
+                { 'prop': 'clueDataNotes', 'label': '备注' },
                 { 'prop': 'education', 'label': '学历' },
                 { 'prop': 'workingLife', 'label': '工作年限' },
                 { 'prop': 'lastCallTime', 'label': '最近一次联系时间', width: 230 },
-                // { 'prop': 'dataType', 'label': '下次联系时间' },
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
                 { 'prop': 'school', 'label': '注册平台' },
             ],
@@ -297,6 +299,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
+                        this.$emit('setTableHeight', this.form.total, 0, 1)
                         this.schoolId = res.data.schoolId;
                     }, 300);
                 }else{

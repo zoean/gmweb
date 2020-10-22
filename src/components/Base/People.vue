@@ -1,7 +1,7 @@
 <template>
     
     <el-main class="index-main" id="indexMain">
-            <el-row class="people-screen" id="searchArea" :style="hideSearch ? 'display: none' : 'display: block'">
+            <el-row class="people-screen">
                 <el-col :span="3">
                     <el-cascader
                         size="small"
@@ -65,66 +65,55 @@
                 </el-col>
 
             </el-row>
-            <div>
-                <div>
-                    <!-- <el-table
-                    id="tableList"
-                    :data="userList"
-                    @sort-change="sortChange"
-                    v-loading="fullscreenLoading"
-                    :height="tableHeight"
-                    > -->
-                    <el-table
-                    id="tableList"
-                    :data="userList"
-                    @sort-change="sortChange"
-                    v-loading="fullscreenLoading"
-                    >
-                    <el-table-column
-                        :prop="item.prop"
-                        show-overflow-tooltip
-                        :label="item.label"
-                        v-for="(item, index) in columnList"
-                        :min-width="item.width"
-                        :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
-                        :key="index"
-                        >
-                        <template slot-scope="scope">
-                            <div>
+            <el-table
+            id="tableList"
+            :data="userList"
+            @sort-change="sortChange"
+            v-loading="fullscreenLoading"
+            :height="tableHeight"
+            >
+            <el-table-column
+                :prop="item.prop"
+                show-overflow-tooltip
+                :label="item.label"
+                v-for="(item, index) in columnList"
+                :min-width="item.width"
+                :sortable="item.prop == 'jobNumber' ? 'custom' : item.prop == 'name' ? 'custom' : item.prop == 'hiredDate' ? 'custom' : item.prop == 'jobStatus' ? 'custom' : false"
+                :key="index"
+                >
+                <template slot-scope="scope">
+                    <div>
 
-                                <p class="job-status" v-if="item.prop == 'jobStatus'">
-                                    <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
-                                    <span v-else class="quit"></span>
-                                    <!-- {{userList[index][item.prop]}} -->
-                                    {{scope.row[item.prop]}}
-                                </p>
+                        <p class="job-status" v-if="item.prop == 'jobStatus'">
+                            <span v-if="scope.row.jobStatus == '在职'" class="on-job"></span>
+                            <span v-else class="quit"></span>
+                            <!-- {{userList[index][item.prop]}} -->
+                            {{scope.row[item.prop]}}
+                        </p>
 
-                                <p v-else>{{scope.row[item.prop]}}</p>
+                        <p v-else>{{scope.row[item.prop]}}</p>
 
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
-                        <template slot-scope="scope">
-                            <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
-                            <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
-                        </template>
-                    </el-table-column>
-                    </el-table>
-                    <el-pagination
-                        id="pagination"
-                        background
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total='total'
-                        :page-size='screenForm.pageSize'
-                        :page-sizes="[10, 20, 30, 50, 100]"
-                        :hide-on-single-page="totalFlag"
-                        @current-change="handleCurrentChange"
-                        @size-change="handleSizeChange"
-                    >
-                    </el-pagination>
-                </div>
-            </div>
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="active" label="操作" v-if="peopleEdit || dataPermiss" width="70">
+                <template slot-scope="scope">
+                    <svg-icon icon-title="编辑" v-if="peopleEdit" @click="handleEditClick(scope.row)" icon-class="edit" class="svg-handle" />
+                    <svg-icon icon-title="数据权限"  v-if="dataPermiss" @click="handlePermissClick(scope.row)" icon-class="permission" />
+                </template>
+            </el-table-column>
+            </el-table>
+            <el-pagination
+                background
+                layout="total, sizes, prev, pager, next, jumper"
+                :total='total'
+                :page-size='screenForm.pageSize'
+                :page-sizes="[10, 20, 30, 50, 100]"
+                :hide-on-single-page="totalFlag"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+            >
+            </el-pagination>
             
     </el-main>
 </template>
@@ -132,10 +121,10 @@
 <script>
 import { getUserDetailedList, getRoleList, getOrgSubsetByUuid, exportUserDetailedList } from '../../request/api';
 import { getTextByJs, getTextByState, sortTextNum } from '../../assets/js/common'
-import _ from 'lodash'
 import { add } from 'lodash/fp';
 export default {
     name: 'people',
+    props: ['tableHeight'],
     data() {
         return {
             userList: [],
@@ -157,14 +146,14 @@ export default {
               value: 0,
               label: '离职'
             }],
-            jobStatusText: '', //状态选择文案
+            jobStatusText: '在职', //状态选择文案
             roleUuidText: '', //角色选择文案
             roleOptions: [], //筛选项角色列表
             zuzhiOptions: [], //组织列表
             screenForm: {
                 accountNumber: '', //账号（手机号）
                 currentPage: 1, //当前页
-                jobStatus: '', // 状态选择value
+                jobStatus: 1, // 状态选择value
                 name: '', //姓名
                 orgUuidList: [], //组织唯一标识集合
                 pageSize: 20, //单页请求的数量
@@ -183,39 +172,13 @@ export default {
             fullscreenLoading: false,
             peopleEdit: null,
             dataPermiss: null,
-            exportPeople: null,
-            hideSearch: false,
-            tableHeight: document.documentElement.clientHeight - 226
+            exportPeople: null
         }
     },
-    created() {     
-        // this.$nextTick(() => {
-        //     const paginationHeight = document.getElementById('pagination').offsetHeight,
-        //     searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-        //     windowHeight = document.documentElement.clientHeight;
-        //     this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
-        //     const maxHeight = this.tableHeight + searchAreaHeight + 10;
-        //     const minHeight = this.tableHeight;
-        //     const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-        //     tableList.addEventListener('scroll', _.throttle(() =>{
-        //         // console.log(tableList.scrollTop)
-        //         if(tableList.scrollTop > 55){
-        //             this.hideSearch = true
-        //             if(this.tableHeight < maxHeight){
-        //                this.tableHeight = maxHeight
-        //             }
-        //             // console.log('收起搜索', this.tableHeight)
-        //         }
-        //         if(tableList.scrollTop < 55){
-        //             this.hideSearch = false 
-        //             if(this.tableHeight >= maxHeight){                   
-        //                 this.tableHeight = minHeight 
-        //             }                    
-        //             // console.log('展开搜索', this.tableHeight)
-        //         }
-        //     }), 500)
-        // })
-        this.getUserDetailedList();
+    mounted(){        
+        
+    },
+    created() {  
         this.getRoleList();
         this.getOrgSubsetByUuid();
         let buttonMap = JSON.parse(localStorage.getItem("buttonMap"));
@@ -223,14 +186,15 @@ export default {
         this.dataPermiss = buttonMap.dataPermiss;
         this.exportPeople = buttonMap.exportPeople;
 
-        this.screenForm.accountNumber = this.$route.params.accountNumber
-        this.screenForm.jobStatus = this.$route.params.jobStatus
-        this.screenForm.name = this.$route.params.name
-        this.screenForm.orgUuidList = this.$route.params.orgUuidList
-        this.screenForm.roleUuid = this.$route.params.roleUuid
-        this.screenForm.sortSet = this.$route.params.sortSet
-        this.screenForm.startHiredDate = this.$route.params.startHiredDate
-        this.screenForm.endHiredDate = this.$route.params.endHiredDate
+        // this.screenForm.accountNumber = this.$route.params.accountNumber
+        // this.screenForm.jobStatus = this.$route.params.jobStatus
+        // this.screenForm.name = this.$route.params.name
+        // this.screenForm.orgUuidList = this.$route.params.orgUuidList
+        // this.screenForm.roleUuid = this.$route.params.roleUuid
+        // this.screenForm.sortSet = this.$route.params.sortSet
+        // this.screenForm.startHiredDate = this.$route.params.startHiredDate
+        // this.screenForm.endHiredDate = this.$route.params.endHiredDate
+        this.getUserDetailedList();
     },
     methods: {
         sortChange(data) {
@@ -340,6 +304,7 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
                         this.total = res.data.total;
+                        this.$emit('setTableHeight', this.total, 0, 1)
                         // 用户列表
                         res.data.list.map(data => {
                             data.orgUuidList = getTextByJs(data.orgUuidList);
@@ -397,41 +362,20 @@ export default {
             this.screenForm.currentPage = 1;
             this.getUserDetailedList();
         }
-    },
-    mounted() {
-        // const paginationHeight = document.getElementById('pagination').offsetHeight,
-        //     searchAreaHeight = document.getElementById('searchArea').offsetHeight,
-        //     windowHeight = document.documentElement.clientHeight;
-        //     this.tableHeight = windowHeight - paginationHeight - searchAreaHeight - 160
-        //     const maxHeight = this.tableHeight + searchAreaHeight + 10;
-        //     const minHeight = this.tableHeight;
-        //     console.log(maxHeight)
-        //     const tableList = document.getElementsByClassName('el-table__body-wrapper')[0]
-        //     tableList.addEventListener('scroll', _.throttle(() =>{
-        //         // console.log(tableList.scrollTop)
-        //         if(tableList.scrollTop > 55){
-        //             this.hideSearch = true
-        //             if(this.tableHeight < maxHeight){
-        //                this.tableHeight = maxHeight
-        //             }
-        //             // console.log('收起搜索', this.tableHeight)
-        //         }
-        //         if(tableList.scrollTop < 55){
-        //             this.hideSearch = false 
-        //             if(this.tableHeight >= maxHeight){                   
-        //                 this.tableHeight = minHeight 
-        //             }                    
-        //             // console.log('展开搜索', this.tableHeight)
-        //         }
-        //     }), 500)
     }
 }
 </script>
 
 <style lang="less" scoped>
     .index-main{
+        margin-top: 24px;
         position: relative;
-        /* overflow-y: hidden; */
+        overflow: hidden;
+        #toggleSearch{
+            position: absolute;
+            top: -10px;
+            left: 100px;
+        }
         .el-col-6{
             height: auto !important;
         }
@@ -476,9 +420,4 @@ export default {
             }
         }
     }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
-    }
-
 </style>

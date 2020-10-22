@@ -23,6 +23,7 @@ import dataAllocation from '@/components/Crm/DataAllocation';
 import proChannel from '@/components/Crm/ProChannel'; //推广渠道管理
 import setMembers from '@/components/Crm/SetMembers';
 import addMembers from '@/components/Crm/AddMembers';
+import todayFirstTime from '@/components/Crm/TodayFirstTime'
 import firstDay from '@/components/Crm/FirstTime'; //首次咨询
 import contactToday from '@/components/Crm/ContactToday'; //今日联系
 import sevenDay from '@/components/Crm/SevenDay'; //七日未联系
@@ -44,6 +45,7 @@ import allStudents from '@/components/Crm/AllStudents';
 import fieldManagement from '@/components/Crm/FieldManagement';
 import manageClues from '@/components/Crm/ManageClues';
 import peopleClues from '@/components/Crm/PeopleClues';
+import refuseClues from '@/components/Crm/RefuseCludes';
 import sendSMS from '@/components/Crm/SendSMS';
 import smslist from '@/components/Crm/SMSlist';
 import smsRecord from '@/components/Crm/SMSRecord';
@@ -99,410 +101,648 @@ export default new Router({
         {
             path: '/',
             name: 'index',
-            component: index
+            component: index,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/login',
             name: 'login',
-            component: login
+            component: login,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/forget',
             name: 'forget',
-            component: forget
+            component: forget,
+            meta: {
+                title: '全部客户'
+            }
         },
         
         {
             path: '/url/:id',
             name: 'url',
-            component: url
+            component: url,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/base/people',
             name: 'people',
             component: people,
             // meta:{
-            //     keepAlive:true //需要被缓存的组件
-            // },
+            //     keepAlive:true //需要被缓存的组件}
+            meta: {
+                title: '员工管理'
+            }
         },     
         {
             path: '/base/people/default',
             name: 'peopleDefault',
-            component: peopleDefault
+            component: peopleDefault,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/base/people/change',
             name: 'peopleChange',
-            component: peopleChange
+            component: peopleChange,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/base/people/permiss',
             name: 'peopledataPermiss',
-            component: peopledataPermiss
+            component: peopledataPermiss,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/base/menu',
             name: 'menu',
-            component: menu
+            component: menu,
+            meta: {
+                title: '菜单管理'
+            }
         },
         {
             path: '/base/role',
             name: 'role',
-            component: role
+            component: role,
+            meta: {
+                title: '角色管理'
+            }
         },
         {
             path: '/base/zuzhi',
             name: 'zuzhi',
-            component: zuzhi
+            component: zuzhi,
+            meta: {
+                title: '组织结构管理'
+            }
         },
         {
             path: '/base/userRecord',
             name: 'userRecord',
-            component: userRecord
+            component: userRecord,
+            meta: {
+                title: '用户操作记录'
+            }
         },
 
         {
             path: '/crm/dataStatistics/timeData',
             name: 'timeData',
-            component: timeData
+            component: timeData,
+            meta: {
+                title: '通时数据统计'
+            }
         },
         {
             path: '/crm/dataStatistics/everyTime',
             name: 'everyTime',
-            component: everyTime
+            component: everyTime,
+            meta: {
+                title: '电话记录查询'
+            }
         },
         {
             path: '/crm/dataStatistics/eduData',
             name: 'eduData',
-            component: eduData
+            component: eduData,
+            meta: {
+                title: '教务统计'
+            }
         },
 
         {
             path: '/crm/salesBoard/salesBoard',
             name: 'salesBoard',
-            component: salesBoard
+            component: salesBoard,
+            meta: {
+                title: '销售看板'
+            }
         },
         {
             path: '/crm/salesBoard/salesOrgBoard',
             name: 'salesOrgBoard',
-            component: salesOrgBoard
+            component: salesOrgBoard,
+            meta: {
+                title: '销售主管看板'
+            }
         },
 
         {
             path: '/crm/dataStatistics/recoverData',
             name: 'recoverData',
-            component: recoverData
+            component: recoverData,
+            meta: {
+                title: '回收池数据管理'
+            }
         },
         {
             path: '/crm/myClient/toallocate',
             name: 'toallocate',
-            component: toallocate
+            component: toallocate,
+            meta: {
+                title: '可领取公池数据'
+            }
         },
         {
             path: '/crm/dataStatistics/seatData',
             name: 'seatData',
-            component: seatData
+            component: seatData,
+            meta: {
+                title: '坐席数据管理'
+            }
         },
         {
             path: '/crm/dataStatistics/overflow',
             name: 'overflow',
-            component: overflow
+            component: overflow,
+            meta: {
+                title: '溢出池数据管理'
+            }
         },
         {
             path: '/crm/promotion/dataAllocation',
             name: 'dataAllocation',
-            component: dataAllocation
+            component: dataAllocation,
+            meta: {
+                title: '分配引擎配置'
+            }
         },
         {
             path: '/crm/promotion/proChannel',
             name: 'proChannel',
-            component: proChannel
+            component: proChannel,
+            meta: {
+                title: '全部客户'
+            }
+        },
+        {
+            path: '/crm/myClient/todayFirstTime',
+            name: 'todayFirstTime',
+            component: todayFirstTime,
+            meta: {
+                title: '今日首咨'
+            }
         },
         {
             path: '/crm/myClient/firstTime',
             name: 'firstDay',
-            component: firstDay
+            component: firstDay,
+            meta: {
+                title: '首次咨询'
+            }
         },
         {
             path: '/crm/myClient/contactToday',
             name: 'contactToday',
-            component: contactToday
+            component: contactToday,
+            meta: {
+                title: '今日联系'
+            }
         },
         {
             path: '/crm/myClient/sevenDay',
             name: 'sevenDay',
-            component: sevenDay
+            component: sevenDay,
+            meta: {
+                title: '三日未联'
+            }
         },
         {
             path: '/crm/myClient/allDay',
             name: 'allDay',
-            component: allDay
+            component: allDay,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/crm/myClient/completed',
             name: 'completed',
-            component: completed
+            component: completed,
+            meta: {
+                title: '已成单'
+            }
         },
 
         {
             path: '/crm/crmConfig/enums',
             name: 'enums',
-            component: enums
+            component: enums,
+            meta: {
+                title: '枚举类型管理'
+            }
         },
 
         {
             path: '/crm/promotion/extendLinkList',
             name: 'extendLinkList',
-            component: extendLinkList
+            component: extendLinkList,
+            meta: {
+                title: '推广链接记录'
+            }
         },
 
         {
             path: '/crm/promotion/enterClues',
             name: 'enterClues',
-            component: enterClues
+            component: enterClues,
+            meta: {
+                title: '录入线索'
+            }
         },
         
         {
             path: '/crm/crmConfig/fieldManagement',
             name: 'fieldManagement',
-            component: fieldManagement
+            component: fieldManagement,
+            meta: {
+                title: '页面字段管理'
+            }
         },
         
         {
             path: '/crm/myStudents/students',
             name: 'students',
-            component: students
+            component: students,
+            meta: {
+                title: '我的学员'
+            }
         },
 
         {
             path: '/crm/myStudents/newStudents',
             name: 'newStudents',
-            component: newStudents
+            component: newStudents,
+            meta: {
+                title: '新学员管理'
+            }
         },
 
         {
             path: '/crm/myStudents/agreeMentDetails',
             name: 'agreeMentDetails',
-            component: agreeMentDetails
+            component: agreeMentDetails,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/eduAdmin/headMaster',
             name: 'headMaster',
-            component: headMaster
+            component: headMaster,
+            meta: {
+                title: '班级管理'
+            }
         },
 
         {
             path: '/crm/eduAdmin/allStudents',
             name: 'allStudents',
-            component: allStudents
+            component: allStudents,
+            meta: {
+                title: '所辖学员'
+            }
         },
 
         {
             path: '/crm/dataClues/manageClues',
             name: 'manageClues',
-            component: manageClues
+            component: manageClues,
+            meta: {
+                title: '主管线索'
+            }
         },
 
         {
             path: '/crm/dataClues/peopleClues',
             name: 'peopleClues',
-            component: peopleClues
+            component: peopleClues,
+            meta: {
+                title: '个人线索'
+            }
+        },        
+
+        {
+            path: '/crm/dataClues/refuseClues',
+            name: 'refuseClues',
+            component: refuseClues,
+            meta: {
+                title: '线索垃圾站'
+            }
         },
 
         {
             path: '/crm/sms/sendSMS',
             name: 'sendSMS',
-            component: sendSMS
+            component: sendSMS,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/sms/smslist',
             name: 'smslist',
-            component: smslist
+            component: smslist,
+            meta: {
+                title: '短信内容记录'
+            }
         },
 
         {
             path: '/crm/sms/smsRecord',
             name: 'smsRecord',
-            component: smsRecord
+            component: smsRecord,
+            meta: {
+                title: '短信发送记录'
+            }
         },
 
         {
             path: '/crm/baokao/new',
             name: 'studentsNewBaoKao',
-            component: studentsNewBaoKao
+            component: studentsNewBaoKao,
+            meta: {
+                title: '报考学员管理'
+            }
         },
 
         {
             path: '/crm/baokao/all',
             name: 'studentsAllBaoKao',
-            component: studentsAllBaoKao
+            component: studentsAllBaoKao,
+            meta: {
+                title: '报考员管理'
+            }
         },
 
         {
             path: '/crm/baokao/my',
             name: 'studentsMyBaoKao',
-            component: studentsMyBaoKao
+            component: studentsMyBaoKao,
+            meta: {
+                title: '报考管理'
+            }
         },
 
         {
             path: '/crm/class/orgOpenClass',
             name: 'orgOpenClass',
-            component: orgOpenClass
+            component: orgOpenClass,
+            meta: {
+                title: '开班监控'
+            }
         },
 
         {
             path: '/crm/class/openClass',
             name: 'openClass',
-            component: openClass
+            component: openClass,
+            meta: {
+                title: '开班及时度'
+            }
         },
 
         {
             path: '/crm/class/returnOrgVisit',
             name: 'returnOrgVisit',
-            component: returnOrgVisit
+            component: returnOrgVisit,
+            meta: {
+                title: '回访监控'
+            }
         },
 
         {
             path: '/crm/class/returnVisit',
             name: 'returnVisit',
-            component: returnVisit
+            component: returnVisit,
+            meta: {
+                title: '回访及时度'
+            }
         },
 
         {
             path: '/crm/wechat/wechatManagement',
             name: 'wechatManagement',
-            component: wechatManagement
+            component: wechatManagement,
+            meta: {
+                title: '微信管理'
+            }
         },
 
         {
             path: '/crm/mbo/companyyearmbo',
             name: 'companyyearmbo',
-            component: companyYearMbo
+            component: companyYearMbo,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/mbo/companymonthmbo',
             name: 'companymonthmbo',
-            component: companyMonthMbo
+            component: companyMonthMbo,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/mbo/companydaymbo',
             name: 'companydaymbo',
-            component: companyDayMbo
+            component: companyDayMbo,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/mbo/departmentyearmbo',
             name: 'departmentyearmbo',
-            component: departmentYearMbo
+            component: departmentYearMbo,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/mbo/departmentmonthmbo',
             name: 'departmentmonthmbo',
-            component: departmentMonthMbo
+            component: departmentMonthMbo,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/mbo/departmentdaymbo',
             name: 'departmentdaymbo',
-            component: departmentDayMbo
+            component: departmentDayMbo,
+            meta: {
+                title: '全部客户'
+            }
         },
 
         {
             path: '/crm/myClient/registered',
             name: 'registered',
-            component: registered
+            component: registered,
+            meta: {
+                title: '已注册'
+            }
         },
 
         {
             path: '/crm/setMembers',
             name: 'setMembers',
-            component: setMembers
+            component: setMembers,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/crm/addMembers',
             name: 'addMembers',
-            component: addMembers
+            component: addMembers,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/knowp',
             name: 'knowp',
-            component: knowp
+            component: knowp,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/knowp/classManage',
             name: 'classManage',
-            component: classManage
+            component: classManage,
+            meta: {
+                title: '项目结构管理'
+            }
         },
         {
             path: '/knowp/subject',
             name: 'subject',
-            component: subject
+            component: subject,
+            meta: {
+                title: '科目管理'
+            }
         },
         {
             path: '/knowp/contents',
             name: 'contents',
-            component: contents
+            component: contents,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/knowp/know',
             name: 'know',
-            component: know
+            component: know,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/knowp/vedio',
             name: 'vedio',
-            component: vedio
+            component: vedio,
+            meta: {
+                title: '视频资源管理'
+            }
         },
 
         {
             path: '/operate/activityA',
             name: 'activity',
-            component: activityA
+            component: activityA,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path:'/operate/activityA/createactivity',
             name:'CreateActivity',
-            component:CreateActivity
+            component:CreateActivity,
+            meta: {
+                title: '全部客户'
+            }
         },  
         {
             path:'/operate/activityA/ActivityDetail',
             name:'activitydetail',
-            component:ActivityDetail
+            component:ActivityDetail,
+            meta: {
+                title: '全部客户'
+            }
         },  
         {
             path:'/operate/activityA/partinMember',
             name:'partinMember',
-            component:partinMember
+            component:partinMember,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path:'/operate/activityA/winninglist',
             name:'WinningList',
-            component:WinningList
+            component:WinningList,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path:'/operate/activityA/pricelist',
             name:'PriceList',
-            component:PriceList
+            component:PriceList,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path:'/operate/activityA/pricedetail',
             name:'pricedetail',
-            component:PriceDetail
+            component:PriceDetail,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/404',
             name: '404',
             component: four,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '/edition',
             name: 'edition',
             component: edition,
+            meta: {
+                title: '全部客户'
+            }
         },
         {
             path: '*',

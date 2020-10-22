@@ -355,8 +355,7 @@ export default {
 .form_style /deep/ .el-input {
   width: 50%;
 }
-/deep/ .el-pagination {
-  float: right;
-  margin-top: 0.2rem;
+.el-main{
+  margin-top: 0;
 }
 </style>

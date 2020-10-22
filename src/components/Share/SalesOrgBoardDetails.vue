@@ -73,6 +73,7 @@
                   :min-width="item.width"
                   v-for="(item, index) in columnList"
                   :key="index"
+                  :sortable = "item.sortable"
                   >
 
                 </el-table-column>
@@ -120,27 +121,31 @@ export default {
             columnList: [],
             columnList1: [
                 { 'prop': 'orgName', 'label': '统计单位', width: 120 },
-                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter },
-                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
-                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter },
-                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
-                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120, formatter: this.timeFormatter },
-                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
-                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140, formatter: this.timeFormatter },
-                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
-                { 'prop': 'callOpenLv', 'label': '接通率', width: 120, formatter: this.lvFormatter },
+                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120, 'sortable': true },
+                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 150, 'sortable': true },
+                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 150, 'sortable': true },
+                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callNum', 'label': '总通话次数', width: 120, 'sortable': true },
+                // { 'prop': 'callStuNum', 'label': '拨打总人数', width: 120, 'sortable': true },
+                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120, 'sortable': true },
+                { 'prop': 'callOpenLv', 'label': '接通率(人数)', width: 120, formatter: this.lvFormatter, 'sortable': true },
             ],
             columnList2: [
                 { 'prop': 'saleName', 'label': '统计单位', width: 120 },
-                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter },
-                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120 },
-                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter },
-                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 120 },
-                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 120, formatter: this.timeFormatter },
-                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 140 },
-                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 140, formatter: this.timeFormatter },
-                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120 },
-                { 'prop': 'callOpenLv', 'label': '接通率', width: 120, formatter: this.lvFormatter },
+                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120, 'sortable': true },
+                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 150, 'sortable': true },
+                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 150, 'sortable': true },
+                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
+                { 'prop': 'callNum', 'label': '总通话次数', width: 120, 'sortable': true },
+                // { 'prop': 'callStuNum', 'label': '拨打总人数', width: 120, 'sortable': true },
+                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120, 'sortable': true },
+                { 'prop': 'callOpenLv', 'label': '接通率(人数)', width: 120, formatter: this.lvFormatter, 'sortable': true },
             ],
             callOpenStuNumAll: 0,
             callStuNumAll: 0,
@@ -233,13 +238,13 @@ export default {
                   return prev + curr;
                 } else {
                   return prev;
-                }
+                } 
               }, 0);
             }
             if (index === 1 || index === 3 || index === 5 || index === 7) {
                 sums[index] = this.timeReturn(sums[index]);
             }
-            if(index === 9) {
+            if(index === 11) {
                 if(this.callStuNumAll == 0) {
                     sums[index] = (0).toFixed(2) + '%'
                 }else{

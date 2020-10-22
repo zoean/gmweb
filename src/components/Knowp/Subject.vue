@@ -28,7 +28,8 @@
           :data="subjectList"
           row-key="uuid"
           default-expand-all
-          style="width: 100%">
+          style="width: 100%"          
+          :height="tableHeight">
           <el-table-column
             :prop="item.prop"
             :label="item.label"
@@ -116,6 +117,7 @@ import {
 import { getTextByJs } from '../../assets/js/common';
 export default {
     name: 'subject',
+    props: ['tableHeight'],
     data() {
         return {
             subjectList: [],
@@ -217,7 +219,8 @@ export default {
                     sll.examList = getTextByJs(sll.examList);
                 })
                 this.subjectList = res.data.list;
-                this.total = res.data.total;
+                this.total = res.data.total;               
+                this.$emit('setTableHeight', this.total, 3, 1)
             })
         },
         handleCurrentChange(index) {
@@ -281,6 +284,7 @@ export default {
 <style lang="less" scoped>
     .index-main{
         height: auto;
+        margin-top: 15px;
         .people-title{
             width: 100%;
             height: 40px;
@@ -297,9 +301,5 @@ export default {
                 width: 94%;
             }
         }
-    }
-    .el-pagination{
-        text-align: right;
-        margin-top: .4rem;
     }
 </style>

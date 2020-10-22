@@ -111,9 +111,8 @@
             <el-col :span="18" style="height: 60px !important;">
                 <el-row type="flex" justify="start">
                     <el-col :span="5" style="min-width: 220px;">
-                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
-                        
-                        <el-image style="width: 130px; position: relative; top: 15px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
+                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">                        
+                        <el-image style="width: 130px; position: relative; top: 2px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
                     </el-col>
@@ -178,8 +177,8 @@
                 </el-badge>
                     
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.23</span>
-    
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.29</span>
+                <a class="guide" href="https://www.jhwx.com/staff_open.php" target="_blank">使用教程</a>
             </el-col>
         </el-row>
         
@@ -814,6 +813,11 @@ export default {
         letter-spacing: .04rem;
         cursor: pointer;
         padding-left: 12px;
+        /deep/.el-image{
+            img{
+                margin-top: 12px;
+            }
+        }
     }
     .el-dropdown{
         float: right;
@@ -824,6 +828,12 @@ export default {
         cursor: pointer;
         color: #333;
         height: 44px;
+    }
+    .guide{
+        color: #666;
+        float: right;
+        padding-right: 20px;
+        font-size: 16px;
     }
     .el-menu-demo{
         float: left;
@@ -845,7 +855,6 @@ export default {
         color: #488FF7!important;
     }
     .back_Change{
-        // background: #3687FA;
         background: #fff;
     }
     .pagination{

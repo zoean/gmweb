@@ -4,6 +4,73 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.29 -- 2020/10/21" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增批量导入数据权限</p>
+          <p>2、分配组设置增加分校权限管理</p>
+          <h4>修复bug</h4>
+          <p>1、修复回收池页面请求超时问题</p>
+          <p>2、修复回收池页面分配至人渲染问题</p>
+          <p>3、修改个人线索页面、主管线索页面线索转移人员范围</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.28 -- 2020/10/20" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、员工管理页面是否在职默认选中在职</p>
+          <p>2、主管线索和个人线索页面入库时间默认时间调整为当日0:00:00-23:59:59</p>
+          <h4>修复bug</h4>
+          <p>1、修复主管线索、个人线索考试项目筛选未起作用问题</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.27 -- 2020/10/19" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、销售主管看板增加统计字段和各自段排序</p>
+          <p>2、今日联系、三日未联、已注册、可领取公池数据页面新增备注字段</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.26 -- 2020/10/16" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、增加批量导入功能</p>
+          <p>2、坐席数据管理页面增加成单状态、线索状态字段</p>
+          <p>3、全部客户页面增加线索状态字段</p>
+          <h4>修复bug</h4>
+          <p>1、优化溢出池/回收池，无法分配到坐席名下的提示语</p>
+          <p>2、优化主管线索、个人线索分配至人的弹框</p>
+          <p>3、修复电话记录查询时间筛选项</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.25 -- 2020/10/15" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、增加个人线索、主管线索删除功能</p>
+          <p>2、增加线索回收站页面</p>
+          <p>3、全部客户页面是否成单筛选项默认选中未成单</p>
+          <p>4、电话记录查询页面时间筛选项默认选中近30天</p>
+          <p>5、增加用户使用教程入口</p>
+          <p>6、个人线索、主管线索增加线索转移功能</p>
+          <h4>修复bug</h4>
+          <p>1、修复短信内容记录页面滑动问题</p>
+          <p>2、修复员工列表显示问题</p>
+          <p>3、修复全部客户、主管线索列表中的数据半屏展示问题</p>
+          <p>4、修复分配引擎切换页码无数据问题</p>
+          <p>5、修复员工列表编辑后无数据问题</p>
+          <p>6、优化已成单订单列表页面的显示</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.24 -- 2020/10/12" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、UI优化</p>
+          <p>2、可领取公海数据时间相关字段增加排序功能</p>
+          <p>3、录入线索支持多种链接格式</p>
+          <p>4、优化菜单栏收起按钮展示</p>
+          <p>5、页面增加页面名称</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.23 -- 2020/09/23" placement="top">
         <el-card>
           <h4>新增功能</h4>
@@ -269,7 +336,7 @@ export default {
 <style lang="less">
     .block{
       width: 70%;
-      margin: 0 auto;
+      margin: 20px auto 0;
       margin-left: 20%;
       .title{
         font-size: 20px;
