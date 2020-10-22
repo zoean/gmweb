@@ -130,9 +130,9 @@ export const popularizeUrl = '/api/phone/DataAutDis/popularizeUrl'; //生成推�
 export const getClueDataByUserUuid = '/api/phone/clueData/getClueDataByUserUuid'; //获取员工的线索数据
 export const getListField = '/api/phone/pageFieldsMag/getUserPageField';//获取页面字段
 export const updateListField = '/api/phone/pageFieldsMag/upUserPageField';//更新页面字段排序、选中状态
-
 export const getClueDataAll = '/api/phone/clueData/getClueDataAll'; //获取员工的全部客户
 export const firstConDataList = '/api/phone/clueData/firstConDataList'; //获取员工的首咨线索数据
+export const todayFirstConDataList = '/api/phone/clueData/todayFirstConDataList';//获取员工的今日首咨线索数据
 export const todayCallDataList = '/api/phone/clueData/todayCallDataList'; //获取员工今日联系的线索数据
 export const threeDaysNoCallDataList = '/api/phone/clueData/threeDaysNoCallDataList'; //获取员工三日未联系的线索数据
 export const clueDataRelease = '/api/phone/clueData/clueDataRelease'; //释放线索数据    

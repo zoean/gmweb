@@ -807,7 +807,7 @@ export default {
         },
         entryClueData() {
             this.fullscreenLoading = true;
-            let concatUrl = `?project=${this.ruleForm.project}&ruleid=${this.ruleForm.ruleid}&spread=${this.ruleForm.spread}&acc=${this.ruleForm.acc}&jobnum=${this.ruleForm.jobnum}`
+            let concatUrl = `?project=${this.ruleForm.project}&ruleid=${this.ruleForm.ruleid}&spread=${this.ruleForm.spread}&acc=${this.ruleForm.acc}&jobnum=${this.ruleForm.jobnum}&intype=1`
             this.$smoke_post(jqEntryClueData + concatUrl, {data: this.ruleForm}).then(res => {
                 if(res.code == 0) {
                     setTimeout(() => {

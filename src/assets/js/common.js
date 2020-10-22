@@ -835,6 +835,7 @@ export const levelFunc = (arr) => {
 //菜单num统计
 
 export const menuNumberFunc = (arr, brr) => {
+    console.log(arr,brr)
     if(arr[1].includeSubsetList[0].includeSubsetList[0].name.indexOf('(') == -1) { //避免name重复加()
 
         arr[1].includeSubsetList[0].includeSubsetList[0].name = brr[0] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
@@ -843,6 +844,8 @@ export const menuNumberFunc = (arr, brr) => {
         arr[1].includeSubsetList[0].includeSubsetList[3].name = brr[2] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + brr[2] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[4].name = brr[4] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
         arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[3] + ')';
+
+        arr[1].includeSubsetList[0].includeSubsetList[7].name = brr[6] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + brr[6] + ')';
 
     }
     return arr;
