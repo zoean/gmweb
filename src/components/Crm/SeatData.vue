@@ -60,10 +60,11 @@
 
             <el-col :span="3">
                 
-                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
+                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
-                      v-for="item in dialStateList"
+                      v-for="item in enumList['MJ-5']"
                       :key="item.name"
+                      v-if="item.enable"
                       :label="item.name"
                       :value="item.number">
                     </el-option>
@@ -88,17 +89,7 @@
 
         <el-row class="people-screen">
 
-            <el-col :span="3">
-                <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in enumList['MJ-5']"
-                      :key="item.name"
-                      v-if="item.enable"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
-            </el-col>
+            
 
             <el-col :span="3">
 
@@ -120,11 +111,24 @@
 
             <el-col :span="3">
 
-                <el-input v-model="form.saleName" size="small" placeholder="请输入所属坐席" class="screen-li"></el-input>
-
+                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in dialStateList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.number">
+                    </el-option>
+                </el-select>
+                
             </el-col>
 
-            <el-col :span="15">
+            <el-col :span="2">
+
+                <el-input v-model="form.saleName" size="small" placeholder="输入所属坐席" class="screen-li"></el-input>
+
+            </el-col>
+            
+            <el-col :span="16">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
@@ -137,13 +141,9 @@
 
                 <el-button type="primary" size="small" style="margin-left: 2px;" @click="getAllUserClueDataClick">查 询</el-button>
 
-                <div>
-
-                    <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
-                    <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
-                    <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
-
-                </div>
+                <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
+                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
 
             </el-col>
 
