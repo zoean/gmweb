@@ -1,9 +1,21 @@
 import axios from 'axios';
+// import axiosRetry from 'axios-retry'
 import {
   Message
 } from 'element-ui'
 axios.defaults.baseURL = "";
-axios.defaults.timeout = 15000
+axios.defaults.timeout = 6000;
+
+// axiosRetry(axios, {
+//   retries: 3, // 设置自动发送请求次数
+//   retryDelay: () => 6000, // 重新请求的间隔
+//   shouldResetTimeout: true, //  重置超时时间
+//   retryCondition: (error) => { // true为打开自动发送请求，false为关闭自动发送请求
+//     // if (error.message.includes('timeout')) return true
+//     // 如果你要在请求出错的时候重新发送请求（返回400以上的状态码时） 你应该像下面这样写
+//     // if (error.message.includes('timeout') || error.message.includes('status code')) return true
+//   }
+// })
 
 //http request 拦截器
 axios.interceptors.request.use(
@@ -19,10 +31,7 @@ axios.interceptors.request.use(
       return config;
     },
     error => {
-      Message({
-        message: '服务返回错误，请重试',
-        type: 'error'
-      })
+      
       return Promise.reject(error);
     }
 );
@@ -46,7 +55,10 @@ axios.interceptors.response.use(response => {
           break;
       }
     } else {
-      console.log('连接到服务器失败')
+      Message({
+        message: '服务器连接超时，请重试',
+        type: 'error'
+      })
     }
     return Promise.resolve(err.response)
 })
@@ -74,4 +86,15 @@ export const smoke_post = (url,params = {}) => {
             reject(err)
         })
     })
+}
+
+export const smoke_post_big = (url,params = {},time) => {
+  return new Promise((resolve,reject) => {
+    axios.post(url, params, {timeout: time})
+      .then(response => {
+        response && response.data ? resolve(response.data) : resolve(response)
+      },err => {
+          reject(err)
+      })
+  })
 }

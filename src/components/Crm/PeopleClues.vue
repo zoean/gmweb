@@ -224,7 +224,7 @@
                 size="small"
                 class="screen-li"
                 v-model="tagIdText"
-                :fetch-suggestions="querySearchTag"
+                :fetch-suggestions="queryUserList"
                 placeholder="请您选择要分配的人员"
                 :trigger-on-focus="true"
                 clearable
@@ -315,8 +315,8 @@ export default {
                 { label: '已分配', value: 1 },
             ],
             dialStateArr: [
-                { label: '处理', value: 1 },
-                { label: '未处理', value: 0 },
+                { label: '已拨打', value: 1 },
+                { label: '未拨打', value: 0 },
             ],
             inputModeArr: [
                 { label: '线上', value: 0 },
@@ -418,7 +418,7 @@ export default {
     },
     created() {
         this.form.startCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-        this.form.endCreateTime = new Date().getTime();
+        this.form.endCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() + 3600 * 1000 * 24 - 1;
         this.getExteClueData();
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
@@ -429,8 +429,42 @@ export default {
         this.$refs.tree.filter(val);
       }
     },
-    methods: {  
-               
+    methods: {            
+        getUserList(obj){
+            let userList = []
+            function getLeaf(obj){
+                obj.forEach(item => {
+                    if(item.userList){
+                        item.userList.forEach(leafItem => {
+                            userList.push({
+                                userName: leafItem.userName,
+                                userUuid: leafItem.userUuid
+                            })
+                        })                        
+                        // console.log(userList)
+                    }
+                    if(item.list){
+                        getLeaf(item.list)
+                    }
+                })
+            }
+            getLeaf(obj)
+            return this.uniqArray(userList)
+        },
+        uniqArray(arr){
+          var obj = {}
+          var result = arr.reduce(function(a, b){
+            obj[b.userName] ? '' : obj[b.userName] = true && a.push(b)
+            return a
+          }, [])
+          return result
+        },        
+        queryUserList(queryString, cb) {
+            var restaurants = JSON.parse(JSON.stringify(this.getUserList(this.orgList)).replace(/userName/g,"value"));            
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },        
         querySearchTag(queryString, cb) {
             var restaurants = this.tagList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -466,7 +500,7 @@ export default {
         }, 
         handleSelectTag(item) {
             this.tagId = item.userUuid;
-            this.tagIdText = item.userName;
+            this.tagIdText = item.value;
         },   
         transferClude(row){
             this.clueDataType = row.clueDataType
@@ -475,20 +509,21 @@ export default {
                 this.checkedData = []
                 this.overflowRecoverVisible = true
                 this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid
-                this.$smoke_post(getRuleUserStructureLimit, {
-                    uuid: zuzhiUuid
-                }).then(res => {
-                    if(res.code == 200) {
-                        this.orgList = pushPeopleFunc(res.data.list);
-                    }
-                })
+                
             }else if(row.clueDataType == 3){//坐席名下
                 this.transferSeatForm.seatUuid = ''
                 this.tagIdText = ''
                 this.transferSeatVisible = true
                 this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid
-                this.getSeatList()
             }
+            this.$smoke_post(getRuleUserStructureLimit, {
+                uuid: zuzhiUuid
+            }).then(res => {
+                if(res.code == 200) {
+                    this.orgList = pushPeopleFunc(res.data.list);
+                    this.getUserList(this.orgList)
+                }
+            })
         },
         transferSeat(){
             if(this.tagId == '') {
@@ -509,7 +544,7 @@ export default {
                             })          
                             this.getExteClueData();
                             this.transferSeatVisible = false
-                            console.log(this.transferSeatVisible)
+                            
                         }else{
                             this.$message({
                                 type: 'error',

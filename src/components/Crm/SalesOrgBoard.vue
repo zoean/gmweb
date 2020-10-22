@@ -113,7 +113,7 @@
 
         </div>
 
-        <div class="call-detail">
+        <!-- <div class="call-detail">
 
             <div class="people-title">工作明细</div>
             <el-row class="people-screen" style="margin-top: 10px;">
@@ -139,6 +139,12 @@
 
                 </el-col>
 
+                <el-col :span="16">
+                
+                    <el-button @click="salesOrgBoardDetailsClickWork" style="float:right;" plain size="small">详 情</el-button>
+    
+                </el-col>
+
             </el-row>
 
             <el-table
@@ -158,7 +164,7 @@
                 </el-table-column>
 
             </el-table>
-        </div>
+        </div> -->
 
         <div class="call-detail" style="margin-top: 10px;">
             

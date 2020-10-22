@@ -4,6 +4,26 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.29 -- 2020/10/21" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增批量导入数据权限</p>
+          <p>2、分配组设置增加分校权限管理</p>
+          <h4>修复bug</h4>
+          <p>1、修复回收池页面请求超时问题</p>
+          <p>2、修复回收池页面分配至人渲染问题</p>
+          <p>3、修改个人线索页面、主管线索页面线索转移人员范围</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.28 -- 2020/10/20" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、员工管理页面是否在职默认选中在职</p>
+          <p>2、主管线索和个人线索页面入库时间默认时间调整为当日0:00:00-23:59:59</p>
+          <h4>修复bug</h4>
+          <p>1、修复主管线索、个人线索考试项目筛选未起作用问题</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.27 -- 2020/10/19" placement="top">
         <el-card>
           <h4>新增功能</h4>
