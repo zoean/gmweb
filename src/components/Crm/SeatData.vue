@@ -124,7 +124,7 @@
 
             <el-col :span="2">
 
-                <el-input v-model="form.saleName" size="small" placeholder="输入所属坐席" class="screen-li"></el-input>
+                <el-input v-model="form.saleName" size="small" placeholder="输入坐席" class="screen-li"></el-input>
 
             </el-col>
             
