@@ -23,6 +23,7 @@ import dataAllocation from '@/components/Crm/DataAllocation';
 import proChannel from '@/components/Crm/ProChannel'; //推广渠道管理
 import setMembers from '@/components/Crm/SetMembers';
 import addMembers from '@/components/Crm/AddMembers';
+import todayFirstTime from '@/components/Crm/TodayFirstTime'
 import firstDay from '@/components/Crm/FirstTime'; //首次咨询
 import contactToday from '@/components/Crm/ContactToday'; //今日联系
 import sevenDay from '@/components/Crm/SevenDay'; //七日未联系
@@ -285,6 +286,14 @@ export default new Router({
             component: proChannel,
             meta: {
                 title: '全部客户'
+            }
+        },
+        {
+            path: '/crm/myClient/todayFirstTime',
+            name: 'todayFirstTime',
+            component: todayFirstTime,
+            meta: {
+                title: '今日首咨'
             }
         },
         {
