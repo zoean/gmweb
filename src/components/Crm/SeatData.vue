@@ -102,11 +102,29 @@
 
             <el-col :span="3">
 
+                <el-cascader
+                    ref="cascader"
+                    size="small"
+                    class="smoke-cascader1 screen-li"
+                    placeholder="坐席组织架构"
+                    collapse-tags
+                    :show-all-levels='true'
+                    :options="zuzhiOptions"
+                    @change='handleZuzhiChange'
+                    filterable
+                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
+                    clearable>
+                </el-cascader>
+
+            </el-col>
+
+            <el-col :span="3">
+
                 <el-input v-model="form.saleName" size="small" placeholder="请输入所属坐席" class="screen-li"></el-input>
 
             </el-col>
 
-            <el-col :span="14">
+            <el-col :span="15">
 
                 <el-tag 
                     v-for="(item,index) in searchList" :key="item.id"
@@ -117,14 +135,16 @@
                     >{{item.name}}
                 </el-tag>
 
-                <el-button type="primary" size="small" style="margin-left: 10px;" @click="getAllUserClueDataClick">查 询</el-button>
+                <el-button type="primary" size="small" style="margin-left: 2px;" @click="getAllUserClueDataClick">查 询</el-button>
 
-            </el-col>
+                <div>
 
-            <el-col :span="4">
-                <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
-                <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
-                <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
+                    <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                    <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
+                    <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
+
+                </div>
+
             </el-col>
 
         </el-row>
@@ -242,7 +262,8 @@ import {
     copyTel,
     geSeatWork,
     seatActSeat,
-    dataViewPermissionUserList
+    dataViewPermissionUserList,
+    clTeaOrgFilterBox
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { receiveTimeFun } from '../../assets/js/common';
@@ -280,6 +301,7 @@ export default {
                 sortSet: [],
                 intentionLevel: '',
                 saleName: '',
+                seatOrgList: [],
                 receiveStartTime: '',
                 receiveEndTime: '',
             },
@@ -327,6 +349,7 @@ export default {
             tableSelectList: [],
             tagId: '',
             tagIdText: '',
+            zuzhiOptions: [],
         }
     },
     // watch:{
@@ -351,8 +374,27 @@ export default {
         this.enumByEnumNums(arr);
         this.pcaa = pcaa;
         this.getRuleItem();
+        this.clTeaOrgFilterBox();
     },
     methods: {
+        clTeaOrgFilterBox() {
+            this.$smoke_get(clTeaOrgFilterBox, {}).then(res => {
+                if(res.code == 200) {
+                    this.zuzhiOptions = res.data;
+                }
+            })
+        },
+        handleZuzhiChange(arr) {
+            let brr = [];
+            arr.map(res => {
+                if(res.length == 1){
+                    brr.push(res[0]);
+                }else{
+                    brr.push(res[res.length-1]);
+                }
+            })
+            this.form.seatOrgList = brr;
+        },
         seatActSeat() {
             if(this.tagId == '') {
                 this.$message({

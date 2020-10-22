@@ -284,7 +284,7 @@ export default {
         },
         getUserRPCDList() {
             this.fullscreenLoading = true;
-            this.$smoke_post(getUserRPCDList, this.form).then(res => {
+            this.$smoke_post_big(getUserRPCDList, this.form, 20000).then(res => {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -308,6 +308,8 @@ export default {
                         })
                     }, 300)
                 }
+            }).catch(err => {
+                this.fullscreenLoading = false;
             })
         },
         obtainRPCD() {
