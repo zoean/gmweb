@@ -83,6 +83,16 @@
                 </el-col>
         
                 <el-col :span="21">
+                    
+                    <el-tag 
+                        v-for="(item,index) in searchList" :key="item.id"
+                        :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
+                        type="info"
+                        effect="plain"
+                        @click="tagClick(item)"
+                        >{{item.name}}
+                    </el-tag>
+
                     <el-button type="primary" size="small" @click="timeClick">查询</el-button>
                 </el-col>
         
@@ -139,7 +149,7 @@
 <script>
 import { getCallRecord, getOrgSubsetByUuid } from '../../request/api';
 import { everyTimeList } from '../../assets/js/data'
-import { getTextByTime, timestampToTime, timeReturn } from '../../assets/js/common'
+import { getTextByTime, timestampToTime, timeReturn, everyTimeFun } from '../../assets/js/common'
 import VueAudio from '../Share/VueAudio';
 export default {
     name: 'everyTime',
@@ -166,7 +176,9 @@ export default {
                     {insert_time: 'DESC'}
                 ], //排序集合
                 seatName: '',
-                seatOrgList: []
+                seatOrgList: [],
+                timeLengthStart: null,
+                timeLengthEnd: null
             },
             callStyleArr: [
                 { label: '外呼电话', value: 3 },
@@ -197,6 +209,14 @@ export default {
             columnFlag: false,
             fullscreenLoading: false,
             zuzhiOptions: [],
+
+            searchList: [
+                { name: '0-3分钟', id: 1 },
+                { name: '3-5分钟', id: 2 },
+                { name: '5-8分钟', id: 3 },
+                { name: '8分钟以上', id: 4 },
+            ],
+            tag_id: '',
         }
     },
     created() {
@@ -206,6 +226,16 @@ export default {
         this.getOrgSubsetByUuid();
     },
     methods: {
+        tagClick(item){
+            if(this.tag_id == item.id) {
+                this.tag_id = '';
+            }else{
+                this.tag_id = item.id;
+            }
+            var obj = everyTimeFun(item.id);
+            this.form.timeLengthStart = obj.timeLengthStart;
+            this.form.timeLengthEnd = obj.timeLengthEnd;
+        },
         getOrgSubsetByUuid() {
             this.$smoke_post(getOrgSubsetByUuid, {
                 uuid: ""

@@ -1080,3 +1080,27 @@ export const receiveTimeFun = (id) => {
     return obj;
 }
 
+export const everyTimeFun = (id) => {
+    let obj = {
+        timeLengthStart: '',
+        timeLengthEnd: null,
+    };
+    switch (id) {
+        case 1:
+            obj.timeLengthStart = 0;
+            obj.timeLengthEnd = 3;
+            break;
+        case 2:
+            obj.timeLengthStart = 3;
+            obj.timeLengthEnd = 5;
+            break;
+        case 3:
+            obj.timeLengthStart = 5;
+            obj.timeLengthEnd = 8;
+            break;
+        case 4:
+            obj.timeLengthStart = 8;
+            break;
+    }
+    return obj;
+}

@@ -331,9 +331,9 @@ export default {
             userCDARUuid: '',
             searchList: [
                 { name: '今日首咨', id: 1 },
-                { name: '2~3天数据', id: 2 },
-                { name: '4~7天数据', id: 3 },
-                { name: '8~14天数据', id: 4 },
+                { name: '2-3天数据', id: 2 },
+                { name: '4-7天数据', id: 3 },
+                { name: '8-14天数据', id: 4 },
                 { name: '14天以上数据', id: 5 },
                 { name: '公海领取数据', id: 6 },
             ],
