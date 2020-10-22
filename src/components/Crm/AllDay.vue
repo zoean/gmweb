@@ -365,7 +365,8 @@ export default {
         }
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
-        this.getClueDataNumber();
+        // this.getClueDataNumber();        
+        this.getClueDataAll();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
