@@ -113,7 +113,7 @@
 
         </div>
 
-        <!-- <div class="call-detail">
+        <div class="call-detail">
 
             <div class="people-title">工作明细</div>
             <el-row class="people-screen" style="margin-top: 10px;">
@@ -164,7 +164,7 @@
                 </el-table-column>
 
             </el-table>
-        </div> -->
+        </div>
 
         <div class="call-detail" style="margin-top: 10px;">
             
@@ -227,6 +227,13 @@
             :boardFlag.sync='boardFlag'
         >
         </SalesOrgBoardDetails>
+
+        <SalesOrgBoardDetailsWork 
+            v-if="boardWorkFlag"
+            @changeBoardWorkFlag="changeBoardWorkFlag"
+            :boardWorkFlag.sync='boardWorkFlag'
+        >
+        </SalesOrgBoardDetailsWork>
         
     </el-main>
 </template>
@@ -241,10 +248,11 @@ import {
 import {  } from '../../assets/js/data';
 import { timeReturn } from '../../assets/js/common';
 import SalesOrgBoardDetails from '@/components/Share/SalesOrgBoardDetails';
+import SalesOrgBoardDetailsWork from '@/components/Share/SalesOrgBoardDetailsWork';
 export default {
     name: 'salesOrgBoard',
     components: {
-        SalesOrgBoardDetails
+        SalesOrgBoardDetails, SalesOrgBoardDetailsWork
     },
     data() {
         return {
@@ -332,6 +340,7 @@ export default {
             },
             dataJson: {},
             boardFlag: false,
+            boardWorkFlag: false,
             saleAimsForm: {
                 aims: '',
                 entry: '',
@@ -416,12 +425,15 @@ export default {
         changeBoardFlag(val){
             this.boardFlag = val;
         },
+        changeBoardWorkFlag(val){
+            this.boardWorkFlag = val;
+        },
         salesOrgBoardDetailsClick() {
             this.boardFlag = true;
         },
-        // salesOrgBoardDetailsClickWork() {
-            
-        // },
+        salesOrgBoardDetailsClickWork() {
+            this.boardWorkFlag = true;
+        },
         orgTodayWork() {
             this.fullscreenLoadingBoard = true;
             this.$smoke_get(orgTodayWork, {}).then(res => {
