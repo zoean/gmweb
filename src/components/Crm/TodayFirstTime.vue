@@ -241,7 +241,7 @@ export default {
             this.scopeRow = row;
         },
         changeDrawer(val){
-            this.drawer = val;
+            this.drawer = val; 
             this.firstConDataList();
         },
         firstConDataListClick() {

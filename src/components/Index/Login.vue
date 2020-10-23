@@ -96,7 +96,7 @@ export default {
                     localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
                     localStorage.setItem("userUuid", res.data.uuid);
                     this.$store.commit('setUserRole', res.data.roleName)
-                    this.$store.commit('setUserDepartment', res.data.orgName)
+										this.$store.commit('setUserDepartment', res.data.orgName)										
                 }
             })
         },

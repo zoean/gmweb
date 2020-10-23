@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import { getMenuDetailsSubsetByUuid } from '../../request/api';
+import { getMenuDetailsSubsetByUuid, getClueDataNumber} from '../../request/api';
+import { menuNumberFunc }  from '../../assets/js/common'
 export default {
     name: '',
     data() {
@@ -69,11 +70,13 @@ export default {
           routersFlag: '',
           userMenuList: [],
           iscollapse: false,
-          screeenWidth: document.documentElement.clientWidth
+          screeenWidth: document.documentElement.clientWidth,
+          clueDataNumberList: [],
         }
     },
     created() {
-      this.router_index();      
+      this.router_index();  
+      this.updateClueDataNumber()    
     },
     methods: {
       closeMenu(index){        
@@ -89,6 +92,24 @@ export default {
       },
       router_index() {
         this.activeIndex = this.$route.path;
+      },
+      getClueDataNumber() {
+            let arr = [];
+            this.$smoke_get(getClueDataNumber, {}).then(res => {
+                if(res.code == 200) {
+                    for(let i in res.data) {
+                        arr.push(res.data[i]);
+                    }
+                    this.clueDataNumberList = arr;
+                    this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
+                    localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
+                    console.log('aside',JSON.parse(localStorage.getItem("userMenuList"))[1].includeSubsetList[0].includeSubsetList[0].name) 
+                }else{
+                }
+            })
+        },
+      updateClueDataNumber(){
+        this.getClueDataNumber()
       }
     },
     watch:{
@@ -97,7 +118,7 @@ export default {
         this.$emit('setPageTitleLeft')
       },
       '$route.path': function(newVal){
-        this.activeIndex = this.$route.path
+        this.activeIndex = this.$route.path 
         if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
@@ -106,7 +127,9 @@ export default {
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[0].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[0].includeSubsetList;
-        }else if(newVal.indexOf("/crm") != -1){
+        }else if(newVal.indexOf("/crm") != -1){     
+          
+        this.updateClueDataNumber()
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[1].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[1].includeSubsetList;
@@ -141,6 +164,7 @@ export default {
     mounted() {
         // const userMenuList = this.$store.state.userMenuList;
         this.$emit('setPageTitleLeft')
+        this.updateClueDataNumber()
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){
