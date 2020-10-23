@@ -1,6 +1,6 @@
 <template>
     <div class="board">
-        <el-dialog fullscreen title="工作明细" :visible.sync="boardFlag_" :before-close="handleClose">
+        <el-dialog fullscreen title="工作明细" :visible.sync="boardWorkFlag_" :before-close="handleClose">
 
             <el-row class="people-screen">
 
@@ -51,7 +51,7 @@
 
                 <el-col :span="12">
                 
-                    <el-button type="primary" @click="salesOrgBoardClick" size="small">查 询</el-button>
+                    <el-button type="primary" @click="salesOrgBoardClickWork" size="small">查 询</el-button>
 
                 </el-col>
 
@@ -69,7 +69,6 @@
                 <el-table-column
                   :prop="item.prop"
                   :label="item.label"
-                  :formatter="item.formatter"
                   :min-width="item.width"
                   v-for="(item, index) in columnList"
                   :key="index"
@@ -91,9 +90,9 @@
 
 <script>
 import { 
-    orgSaleDayWork,
+    orgWorkDetailBySeat,
     saleDataOrg,
-    orgDayWorkSum
+    orgWorkDetailByOrg
 } from '../../request/api';
 import { 
     timestampToTime, timeReturn
@@ -104,7 +103,7 @@ import {
 export default {
     name: 'salesOrgBoardDetails',
     props: {
-        boardFlag: {
+        boardWorkFlag: {
           type: Boolean,
           default: false
         },
@@ -121,34 +120,37 @@ export default {
             columnList: [],
             columnList1: [
                 { 'prop': 'orgName', 'label': '统计单位', width: 120 },
-                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120, 'sortable': true },
-                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 150, 'sortable': true },
-                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 150, 'sortable': true },
-                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callNum', 'label': '总通话次数', width: 120, 'sortable': true },
-                // { 'prop': 'callStuNum', 'label': '拨打总人数', width: 120, 'sortable': true },
-                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120, 'sortable': true },
-                { 'prop': 'callOpenLv', 'label': '接通率(人数)', width: 120, formatter: this.lvFormatter, 'sortable': true },
+
+                { 'prop': 'totalFirstNum', 'label': '总首咨数' },
+                { 'prop': 'todayFirstNum', 'label': '今日首咨' },
+                { 'prop': 'todayChanceNum', 'label': '机会人数' },
+                { 'prop': 'todayrvNum', 'label': '回访人数' },
+                { 'prop': 'todayRvNum1', 'label': '2-3天数据回访', width: 120},
+                { 'prop': 'todayRvNum2', 'label': '3天以上数据回访', width: 120},
+                { 'prop': 'cjNum', 'label': '报名' },
+                { 'prop': 'todayTotalMoney', 'label': '今日总流水' },
+                { 'prop': 'todayTotalMoney1', 'label': '1-3天数据流水', width: 120},
+                { 'prop': 'todayTotalMoney2', 'label': '3天以上数据流水', width: 120},
+                { 'prop': 'totalARPU', 'label': '总ARPU' },
+                { 'prop': 'refund', 'label': '退费' },
+                { 'prop': 'performance', 'label': '业绩' },
             ],
             columnList2: [
                 { 'prop': 'saleName', 'label': '统计单位', width: 120 },
-                { 'prop': 'callTime', 'label': '总通话时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callFirstNum', 'label': '首咨总次数', width: 120, 'sortable': true },
-                { 'prop': 'firstConTime', 'label': '首咨总时长', width: 120, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callFirstNum1', 'label': '2-3天数据总次数', width: 150, 'sortable': true },
-                { 'prop': 'daysTime1', 'label': '2-3天数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callFirstNum2', 'label': '3天以上数据总次数', width: 150, 'sortable': true },
-                { 'prop': 'daysTime2', 'label': '3天以上数据总时长', width: 150, formatter: this.timeFormatter, 'sortable': true },
-                { 'prop': 'callNum', 'label': '总通话次数', width: 120, 'sortable': true },
-                // { 'prop': 'callStuNum', 'label': '拨打总人数', width: 120, 'sortable': true },
-                { 'prop': 'callOpenStuNum', 'label': '接通人数', width: 120, 'sortable': true },
-                { 'prop': 'callOpenLv', 'label': '接通率(人数)', width: 120, formatter: this.lvFormatter, 'sortable': true },
+                { 'prop': 'totalFirstNum', 'label': '总首咨数' },
+                { 'prop': 'todayFirstNum', 'label': '今日首咨' },
+                { 'prop': 'todayChanceNum', 'label': '机会人数' },
+                { 'prop': 'todayrvNum', 'label': '回访人数' },
+                { 'prop': 'todayRvNum1', 'label': '2-3天数据回访', width: 120},
+                { 'prop': 'todayRvNum2', 'label': '3天以上数据回访', width: 120},
+                { 'prop': 'cjNum', 'label': '报名' },
+                { 'prop': 'todayTotalMoney', 'label': '今日总流水' },
+                { 'prop': 'todayTotalMoney1', 'label': '1-3天数据流水', width: 120},
+                { 'prop': 'todayTotalMoney2', 'label': '3天以上数据流水', width: 120},
+                { 'prop': 'totalARPU', 'label': '总ARPU' },
+                { 'prop': 'refund', 'label': '退费' },
+                { 'prop': 'performance', 'label': '业绩' },
             ],
-            callOpenStuNumAll: 0,
-            callStuNumAll: 0,
             timeDate: [new Date(new Date().toLocaleDateString()).getTime()],
             pickerOptions: {
                 disabledDate(time) {
@@ -206,16 +208,6 @@ export default {
         this.form.time = new Date(new Date().toLocaleDateString()).getTime();
     },
     methods: {
-        timeFormatter(row, column, cellValue){
-            return timeReturn(Number(cellValue))
-        },
-        lvFormatter(row, column, cellValue){
-            if(row.callStuNum == 0) {
-                return (0).toFixed(2) + '%'
-            }else{
-                return ((row.callOpenStuNum / row.callStuNum) * 100).toFixed(2) + '%'
-            }
-        },
         getSummaries(param) {
           //合计
           const { columns, data } = param;
@@ -240,16 +232,6 @@ export default {
                   return prev;
                 } 
               }, 0);
-            }
-            if (index === 1 || index === 3 || index === 5 || index === 7) {
-                sums[index] = this.timeReturn(sums[index]);
-            }
-            if(index === 11) {
-                if(this.callStuNumAll == 0) {
-                    sums[index] = (0).toFixed(2) + '%'
-                }else{
-                    sums[index] = ((this.callOpenStuNumAll / this.callStuNumAll) * 100).toFixed(2) + '%';
-                }
             }
           });   
 
@@ -276,7 +258,7 @@ export default {
                 }
             })
         },
-        salesOrgBoardClick() {
+        salesOrgBoardClickWork() {
             if(this.form.orgList.length == 0) {
                 this.$message({
                     type: 'error',
@@ -285,73 +267,65 @@ export default {
             }else{
                 if(this.form.classType == 0) {
                     this.columnList = this.columnList1;
-                    this.orgDayWorkSum();
+                    this.orgWorkDetailByOrg();
                 }else{
                     this.columnList = this.columnList2;
-                    this.orgSaleDayWork();
+                    this.orgWorkDetailBySeat();
                 }
             }
         },
+        orgWorkDetailByOrg() {
+            this.fullscreenLoading = true;
+            this.$smoke_post(orgWorkDetailByOrg, this.form).then(res => {
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.list = res.data.list;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
+            })
+        },
+        orgWorkDetailBySeat() {
+            this.fullscreenLoading = true;
+            this.$smoke_post(orgWorkDetailBySeat, this.form).then(res => {
+                if(res.code == 200) {
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.list = res.data.list;
+                    }, 300);
+                }else{
+                    setTimeout(() => {
+                        this.fullscreenLoading = false;
+                        this.$message({
+                            type: 'error',
+                            message: res.msg
+                        })
+                    }, 300)
+                }
+            })
+        },
         handleClose() {
-            this.$emit("changeBoardFlag", false)
+            this.$emit("changeBoardWorkFlag", false)
         },
-        orgSaleDayWork() {
-            this.fullscreenLoading = true;
-            this.$smoke_post(orgSaleDayWork, this.form).then(res => {
-                if(res.code == 200) {
-                    let callOpenStuNumAll = 0;
-                    let callStuNumAll = 0;
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        res.data.list.map(sll => {
-                            callOpenStuNumAll = callOpenStuNumAll + sll.callOpenStuNum;
-                            callStuNumAll = callStuNumAll + sll.callStuNum;
-                        });
-                        this.callOpenStuNumAll = callOpenStuNumAll;
-                        this.callStuNumAll = callStuNumAll;
-                        this.list = res.data.list;
-                    }, 300);
-                }else{
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }, 300)
-                }
-            })
-        },
-        orgDayWorkSum() {
-            this.fullscreenLoading = true;
-            this.$smoke_post(orgDayWorkSum, this.form).then(res => {
-                if(res.code == 200) {
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        this.list = res.data.list;
-                    }, 300);
-                }else{
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }, 300)
-                }
-            })
-        }
     },
     mounted() {
         
     },
     computed: {
-        boardFlag_:{
+        boardWorkFlag_:{
             get(){
-                return this.boardFlag
+                return this.boardWorkFlag
             },
             set(val){
-                this.$emit("changeBoardFlag",val)
+                this.$emit("changeBoardWorkFlag",val)
             }
         }
     },
