@@ -64,7 +64,7 @@
 
             <el-col :span="3">
 
-                <el-select v-model="form.accId" size="small" class="screen-li" placeholder="选择推广账号" filterable clearable="">
+                <el-select v-model="form.accId" size="small" class="screen-li" placeholder="输入推广账号" filterable clearable="">
                     <el-option
                       v-for="item in enumList['MJ-7']"
                       :key="item.number"
