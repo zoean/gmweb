@@ -765,9 +765,9 @@ export default {
                 // classType: [
                 //   { required: true, message: '请选择主推班型', trigger: 'blur' }
                 // ],
-                nextContactTime: [
-                  { required: true, message: '请选择下次联系时间', trigger: 'blur' }
-                ],
+                // nextContactTime: [
+                //   { required: true, message: '请选择下次联系时间', trigger: 'blur' }
+                // ],
                 // runOutPromise: [
                 //   { required: true, message: '请输入截杀承诺', trigger: 'blur' }
                 // ],

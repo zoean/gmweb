@@ -46,7 +46,7 @@
             </el-col>
 
             <el-col :span="3">
-                
+
                 <el-autocomplete
                     clearable
                     size="small"
@@ -64,7 +64,7 @@
 
             <el-col :span="3">
 
-                <el-select v-model="form.accId" size="small" class="screen-li" placeholder="选择推广账号" clearable="">
+                <el-select v-model="form.accId" size="small" class="screen-li" placeholder="选择推广账号" filterable clearable="">
                     <el-option
                       v-for="item in enumList['MJ-7']"
                       :key="item.number"
@@ -135,10 +135,10 @@
 </template>
 
 <script>
-import { 
-    getPopularizeUrl, 
-    getExamBasic, 
-    enumByEnumNums, 
+import {
+    getPopularizeUrl,
+    getExamBasic,
+    enumByEnumNums,
     getRuleItem,
     clueDataRelease,
     copyTel,
@@ -178,7 +178,7 @@ export default {
                 { 'prop': 'createTime', 'label': '创建时间' },
             ],
             dataPicker: [],
-            
+
             restaurants: [],
             enumList: {},
             fullscreenLoading: false,
@@ -323,7 +323,7 @@ export default {
         },
     },
     mounted() {
-        
+
     }
 }
 </script>
@@ -350,5 +350,5 @@ export default {
                 width: 94%;
             }
         }
-    }    
+    }
 </style>
