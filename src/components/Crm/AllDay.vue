@@ -554,16 +554,12 @@ export default {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
                         this.list = res.data.list;
-                        this.form.total = this.clueDataNumberList[0] = res.data.total;
+                        this.form.total = res.data.total;
                         if(this.tag_flag){
                             this.$emit('setTableHeight', res.data.total, 2.2, 1)
                         }else{
                             this.$emit('setTableHeight', res.data.total, 1, 1)
                         }
-                        this.$nextTick(() => {
-                            this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
-                            localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
-                        })
                     }, 300);
                 }else{
                     setTimeout(() => {
