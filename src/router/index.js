@@ -122,7 +122,7 @@ export default new Router({
                 title: '全部客户'
             }
         },
-        
+
         {
             path: '/url/:id',
             name: 'url',
@@ -140,7 +140,7 @@ export default new Router({
             meta: {
                 title: '员工管理'
             }
-        },     
+        },
         {
             path: '/base/people/default',
             name: 'peopleDefault',
@@ -245,7 +245,7 @@ export default new Router({
             name: 'recoverData',
             component: recoverData,
             meta: {
-                title: '回收池数据管理'
+                title: '公共池数据管理'
             }
         },
         {
@@ -363,7 +363,7 @@ export default new Router({
                 title: '录入线索'
             }
         },
-        
+
         {
             path: '/crm/crmConfig/fieldManagement',
             name: 'fieldManagement',
@@ -372,7 +372,7 @@ export default new Router({
                 title: '页面字段管理'
             }
         },
-        
+
         {
             path: '/crm/myStudents/students',
             name: 'students',
@@ -434,7 +434,7 @@ export default new Router({
             meta: {
                 title: '个人线索'
             }
-        },        
+        },
 
         {
             path: '/crm/dataClues/refuseClues',
@@ -687,7 +687,7 @@ export default new Router({
             meta: {
                 title: '全部客户'
             }
-        },  
+        },
         {
             path:'/operate/activityA/ActivityDetail',
             name:'activitydetail',
@@ -695,7 +695,7 @@ export default new Router({
             meta: {
                 title: '全部客户'
             }
-        },  
+        },
         {
             path:'/operate/activityA/partinMember',
             name:'partinMember',

@@ -42,7 +42,7 @@
             </el-col>
 
             <el-col :span="3">
-                
+
                 <el-autocomplete
                     clearable
                     size="small"
@@ -59,7 +59,7 @@
             </el-col>
 
             <el-col :span="3">
-                
+
                 <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
                     <el-option
                       v-for="item in enumList['MJ-5']"
@@ -84,12 +84,12 @@
                 </el-select>
 
             </el-col>
-            
+
         </el-row>
 
         <el-row class="people-screen">
 
-            
+
 
             <el-col :span="3">
 
@@ -119,7 +119,7 @@
                       :value="item.number">
                     </el-option>
                 </el-select>
-                
+
             </el-col>
 
             <el-col :span="2">
@@ -127,10 +127,10 @@
                 <el-input v-model="form.saleName" size="small" placeholder="输入坐席" class="screen-li"></el-input>
 
             </el-col>
-            
+
             <el-col :span="16">
 
-                <el-tag 
+                <el-tag
                     v-for="(item,index) in searchList" :key="item.id"
                     :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
                     type="info"
@@ -210,12 +210,13 @@
         >
         </el-pagination>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
+            :userId="userId"
             :schoolId='schoolId'
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
@@ -253,10 +254,10 @@
 </template>
 
 <script>
-import { 
-    getAllUserClueData, 
-    getExamBasic, 
-    enumByEnumNums, 
+import {
+    getAllUserClueData,
+    getExamBasic,
+    enumByEnumNums,
     getRuleItem,
     clueDataRelease,
     copyTel,
@@ -316,7 +317,7 @@ export default {
                 { 'label': '' }
             ],
             dataPicker: [],
-            
+
             restaurants: [],
             enumList: {},
             fullscreenLoading: false,
@@ -327,6 +328,7 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
             userCDARUuid: '',
             searchList: [
@@ -424,7 +426,7 @@ export default {
                         this.$message({
                             type: 'error',
                             message: res.msg
-                        }) 
+                        })
                     }
                 })
             }
@@ -570,6 +572,7 @@ export default {
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.userCDARUuid = row.userCDARUuid;
+            this.userId = row.customerId;
             this.followFlag = false;
         },
         handleAddClick(row) {
@@ -745,7 +748,7 @@ export default {
         },
     },
     mounted() {
-        
+
     }
 }
 </script>
@@ -780,5 +783,5 @@ export default {
                 width: 94%;
             }
         }
-    }  
+    }
 </style>

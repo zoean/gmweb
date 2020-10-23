@@ -58,7 +58,7 @@
             </el-tab-pane>
             <el-tab-pane label="订单">
                 <el-row type="flex" :gutter="10">
-                    
+
                     <el-col :span="3">
                         <el-select v-model="orderForm.classType" size="small" placeholder="选择商品班型" clearable>
                             <el-option
@@ -99,9 +99,9 @@
                     <el-col :span="4">
                         <el-button type="primary" size="small" @click="getOrderList4Teacher">搜索</el-button>
                     </el-col>
-                    
+
                 </el-row>
-                
+
                 <el-table
                 :data="userOrderList"
                 style="width: 100%; margin-top: 10px;"
@@ -117,7 +117,7 @@
                             </el-image>
                         </el-tooltip>
                     </template>
-                    
+
                     </el-table-column>
                     <el-table-column prop="active" label="操作">
                     <template slot-scope="scope">
@@ -128,7 +128,7 @@
             </el-tab-pane>
         </el-tabs>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
             @phoneCopy="phoneCopy"
@@ -136,9 +136,10 @@
             @seatOut='seatOut'
             @release='release'
             :scopeRow='scopeRow'
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
+            :userId="userId"
             :schoolId='schoolId'
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
@@ -158,11 +159,11 @@
 </template>
 
 <script>
-import { 
+import {
     orderCallDataList,
     phoneOut,
     seatOut,
-    clueDataRelease,  
+    clueDataRelease,
     copyTel,
     getOrderList4Teacher,
     getOrderPayRecord,
@@ -204,6 +205,7 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
             scopeRow: {},
             fullscreenLoading: false,
@@ -212,7 +214,7 @@ export default {
                 orderType: '',
                 classType: '',
                 startTime: '',
-                endTime: '',                
+                endTime: '',
                 // currentPage: 1,
                 // pageSize: 20,
                 // total: 0
@@ -324,7 +326,7 @@ export default {
                         sll.addTime = timestampToTime(Number(sll.addTime * 1000));
                         sll.schoolName = schoolType(sll.schoolName);
                     })
-                    this.userOrderList = res.data.orderList 
+                    this.userOrderList = res.data.orderList
                     this.$emit('setTableHeight', this.userOrderList.length, 1, 1)
                 }
             })
@@ -361,11 +363,13 @@ export default {
             this.followFlag = false;
         },
         handleAddClick(row) {
+            console.log(row, 'row detail');
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.followFlag = true;
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
+            this.userId = row.customerId;
             this.examItem = row.examItemId;
             this.scopeRow = row;
         },
@@ -535,7 +539,7 @@ export default {
         },
     },
     mounted() {
-        
+
     }
 }
 </script>
@@ -577,6 +581,6 @@ export default {
                 height: 1px;
             }
         }
-        
+
     }
 </style>

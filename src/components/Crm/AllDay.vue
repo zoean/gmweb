@@ -13,7 +13,7 @@
             </el-col>
 
             <el-col :span="3">
-                
+
                 <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
                     <el-option
                       v-for="item in dialStateList"
@@ -110,7 +110,7 @@
 
             <el-col :span="16">
 
-                <el-tag 
+                <el-tag
                     v-for="(item,index) in searchList" :key="item.id"
                     :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
                     type="info"
@@ -122,12 +122,12 @@
                 <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
             </el-col>
-            
+
             <el-col :span="5">
                 <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 <svg-icon class="border-icon smoke-fr" @click="clueDataReleaseAllClick" icon-title="释放数据" icon-class="release-grey" />
             </el-col>
-            
+
         </el-row>
 
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
@@ -148,7 +148,7 @@
 
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
                 <template slot-scope="scope">
-                
+
                 <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
                     <option
                       v-for="item in enumList['MJ-16']"
@@ -179,7 +179,7 @@
               <template slot-scope="scope">
                     <span>{{scope.row[item.props]}}</span>
                     <span><svg-icon class="copy-tel" v-if="item.props == 'tel'" icon-class="copy" icon-title="复制手机号码" @click="phoneCopy(scope.row)" /></span>
-                    
+
               </template>
             </el-table-column>
 
@@ -217,7 +217,7 @@
         >
         </el-pagination>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
             @phoneCopy="phoneCopy"
@@ -225,9 +225,10 @@
             @seatOut='seatOut'
             @release='release'
             :scopeRow='scopeRow'
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
+            :userId="userId"
             :schoolId='schoolId'
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
@@ -241,15 +242,15 @@
         <PageFieldManage :setPageNum="setPageNum" />
 
     </el-main>
-    
+
 </template>
 
 <script>
-import { 
+import {
     getClueDataAll,
     phoneOut,
     seatOut,
-    clueDataRelease,  
+    clueDataRelease,
     enumByEnumNums,
     getRuleItem,
     getClueDataNumber,
@@ -259,7 +260,7 @@ import {
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
-import { 
+import {
     menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
@@ -292,7 +293,7 @@ export default {
                 tel: '',
                 endTime: '', //筛选条件结束条件
                 startTime: '', //筛选条件开始条件
-                name: '', 
+                name: '',
                 dialState: '', //是否首咨（0：首咨 1：非首咨）
                 education: '', //最高学历
                 workingLife: '', //工作年限
@@ -334,6 +335,7 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
             userCDARUuid: '',
             scopeRow: {},
@@ -420,7 +422,7 @@ export default {
             this.form.currentPage = 1;
             localStorage.setItem('seatDataPageSize', index);
             this.getClueDataAll();
-        }, 
+        },
         selectTimeChange(value) {
             const time = new Date(new Date().toLocaleDateString()).getTime();
             const oneTime = time - ( 3600 * 1000 * 24 * 1 );
@@ -481,6 +483,7 @@ export default {
             this.followFlag = true;
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
+            this.userId = row.customerId;
             this.examItem = row.examItemId;
             this.scopeRow = row;
         },
@@ -526,7 +529,7 @@ export default {
                 receiveEndTime: this.form.receiveEndTime,
             }).then(res => {
                 if(res.code == 200) {
-                    this.tag_flag = true;                    
+                    this.tag_flag = true;
                     this.SeatWorkObj = res.data;
                 }else{
                     this.tag_flag = false;
@@ -555,7 +558,7 @@ export default {
                             this.$emit('setTableHeight', res.data.total, 2.2, 1)
                         }else{
                             this.$emit('setTableHeight', res.data.total, 1, 1)
-                        }                        
+                        }
                         this.$nextTick(() => {
                             this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
                             localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));

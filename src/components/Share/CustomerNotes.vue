@@ -1,5 +1,5 @@
 <template>
-    
+
     <div>
 
         <el-drawer
@@ -19,9 +19,9 @@
                         <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px; margin-top: 20px;">
                             客户信息：
                         </el-row>
-                
+
                         <el-row>
-                            
+
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="ruleForm.tel" readonly size="small" class="borderNone"></el-input>
@@ -86,13 +86,13 @@
                             </el-col>
                             <el-col :span="6">
                                 <el-form-item label="客户年龄" prop="age">
-                                    <el-input-number 
-                                        v-model="ruleForm.age" 
-                                        :precision="0" 
-                                        :step="1" 
-                                        :min="1" 
-                                        :max="150" 
-                                        size="small" 
+                                    <el-input-number
+                                        v-model="ruleForm.age"
+                                        :precision="0"
+                                        :step="1"
+                                        :min="1"
+                                        :max="150"
+                                        size="small"
                                         style="width: 100%;"
                                         v-if="!routePathFlag"
                                     ></el-input-number>
@@ -102,9 +102,9 @@
                             <el-col :span="6">
                                 <el-form-item label="最高学历" prop="education">
 
-                                    <el-select 
-                                        v-model="ruleForm.education" 
-                                        placeholder="请选择最高学历" 
+                                    <el-select
+                                        v-model="ruleForm.education"
+                                        placeholder="请选择最高学历"
                                         size="small"
                                         :disabled="routePathFlag"
                                     >
@@ -119,9 +119,9 @@
 
                                 </el-form-item>
                             </el-col>
-  
+
                         </el-row>
-                        
+
                         <el-row>
 
                             <el-col :span="6">
@@ -132,9 +132,9 @@
                             <el-col :span="6">
                                 <el-form-item label="取证目的" prop="evidencePurpose">
 
-                                    <el-select 
-                                        v-model="ruleForm.evidencePurpose" 
-                                        placeholder="请选择取证目的" 
+                                    <el-select
+                                        v-model="ruleForm.evidencePurpose"
+                                        placeholder="请选择取证目的"
                                         size="small"
                                         :disabled="routePathFlag"
                                     >
@@ -149,14 +149,14 @@
 
                                 </el-form-item>
                             </el-col>
-         
+
                             <el-col :span="6">
 
                                 <el-form-item label="工作年限" prop="workingLife">
 
-                                    <el-select 
-                                        v-model="ruleForm.workingLife" 
-                                        placeholder="请选择工作年限" 
+                                    <el-select
+                                        v-model="ruleForm.workingLife"
+                                        placeholder="请选择工作年限"
                                         size="small"
                                         :disabled="routePathFlag"
                                     >
@@ -170,7 +170,7 @@
                                     </el-select>
 
                                 </el-form-item>
-                                
+
                             </el-col>
 
                             <el-col :span="6">
@@ -187,9 +187,9 @@
 
                                 <el-form-item label="客户性别" prop="gender">
 
-                                    <el-select 
-                                        v-model="ruleForm.gender" 
-                                        placeholder="请选择性别" 
+                                    <el-select
+                                        v-model="ruleForm.gender"
+                                        placeholder="请选择性别"
                                         size="small"
                                         :disabled="routePathFlag"
                                     >
@@ -212,7 +212,7 @@
                             </el-col>
 
                         </el-row>
-        
+
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
 
                         <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">跟进信息：</el-row>
@@ -241,7 +241,7 @@
                                     <el-input-number v-model="ruleForm.classOffer" :precision="2" :step="1" :min="0" size="small" style="width: 100%;"></el-input-number>
                                 </el-form-item>
                             </el-col>
-                            
+
                             <el-col :span="6">
 
                                 <el-form-item label="意向等级" prop="intentionLevel">
@@ -290,7 +290,7 @@
                                     <el-input-number v-model="ruleForm.classOffer2" :precision="2" :step="1" :min="0" size="small" style="width: 100%;"></el-input-number>
                                 </el-form-item>
                             </el-col>
-                            
+
                             <el-col :span="6">
 
                                 <el-form-item label="意向等级" prop="intentionLevel2">
@@ -315,8 +315,8 @@
                             </el-col>
                         </el-row>
 
-                        <el-row v-if="followFlag">           
-                            
+                        <el-row v-if="followFlag">
+
                             <el-col :span="6">
                                 <el-form-item label="下次联系时间" prop="nextContactTime">
 
@@ -331,7 +331,7 @@
 
                                 </el-form-item>
                             </el-col>
-                            
+
                             <el-col :span="6">
 
                                 <el-form-item label="沟通方式" prop="comModeName">
@@ -348,20 +348,20 @@
                             <el-col :span="18">
                                 <el-form-item label="其他备注" prop="remarks">
 
-                                    <el-input 
-                                        type="textarea" 
-                                        v-model="ruleForm.remarks" 
-                                        size="small" 
+                                    <el-input
+                                        type="textarea"
+                                        v-model="ruleForm.remarks"
+                                        size="small"
                                         show-word-limit
                                         maxlength='300'
                                         placeholder="请输入其他备注"
                                     ></el-input>
-                                        
+
                                 </el-form-item>
                             </el-col>
 
                         </el-row>
-                        
+
                         <el-form-item style="text-align: center;">
                           <el-button type="primary" @keyup.enter="submitForm('ruleForm')" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
                           <el-button @click="quxiao" plain size="small" style="width: 100px;" v-if="!routePathFlag">取消</el-button>
@@ -371,8 +371,29 @@
 
                 </el-tab-pane>
 
-                <el-tab-pane label="跟进记录" name="second">
-                    
+                <el-tab-pane label="订单记录" name="second">
+                    <el-table :data="orderList"
+                              v-loading = "pictLoading"
+                    >
+                        <el-table-column
+                            v-for="(item, index) in orderListColumn"
+                            :label="item.label"
+                            :prop="item.prop"
+                            :key="index"
+                            :formatter="item.formatter"
+                        ></el-table-column>
+
+                        <el-table-column prop="active" fixed="right" label="操作" width="70" class-name="table_active">
+                            <template slot-scope="scope">
+                                <svg-icon icon-title="查看协议" @click="lookAgreementDetailsClick(scope.row)" icon-class="info" class="svg-handle" />
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+                </el-tab-pane>
+
+                <el-tab-pane label="跟进记录" name="third">
+
                     <el-table
                         :data="notesList"
                         style="margin: 0 auto; margin-bottom: 30px;"
@@ -408,8 +429,8 @@
 
                 </el-tab-pane>
 
-                <el-tab-pane label="通话记录" name="third">
-                    
+                <el-tab-pane label="通话记录" name="four">
+
                     <el-table
                         :data="notesCallList"
                         style="margin: 0 auto; margin-bottom: 30px;"
@@ -428,8 +449,8 @@
                             v-if="columnFlag"
                         >
                             <template slot-scope="scope">
-                                <VueAudio 
-                                  :theUrl="scope.row.recordUrl" 
+                                <VueAudio
+                                  :theUrl="scope.row.recordUrl"
                                   v-if="scope.row.recordUrl"
                                   theControlList="onlyOnePlaying noMuted noVolume"
                                 >
@@ -475,9 +496,9 @@
                     <el-col :span="5" :offset="2">姓名：</el-col>
                     <el-col :span="5">{{notesDetailsForm.form.name}}</el-col>
 
-                    <el-col 
-                        :span="5" 
-                        v-if="notesDetailsForm.form.name == notesDetailsForm.form.nameOld" 
+                    <el-col
+                        :span="5"
+                        v-if="notesDetailsForm.form.name == notesDetailsForm.form.nameOld"
                         style="text-decoration:line-through;"
                     >( {{notesDetailsForm.form.nameOld}} )</el-col>
 
@@ -488,9 +509,9 @@
                     <el-col :span="5" :offset="2">微信：</el-col>
                     <el-col :span="5">{{notesDetailsForm.form.wx}}</el-col>
 
-                    <el-col 
-                        :span="5" 
-                        v-if="notesDetailsForm.form.wx == notesDetailsForm.form.wxOld" 
+                    <el-col
+                        :span="5"
+                        v-if="notesDetailsForm.form.wx == notesDetailsForm.form.wxOld"
                         style="text-decoration:line-through;"
                     >( {{notesDetailsForm.form.wxOld}} )</el-col>
 
@@ -534,7 +555,7 @@
                     <el-col :span="15">{{notesDetailsForm.notes.classOffer}}</el-col>
 
                 </el-row>
-                
+
                 <!-- <el-row>
 
                     <el-col :span="5" :offset="2">主推班型：</el-col>
@@ -593,19 +614,21 @@
 </template>
 
 <script>
-import { 
+import {
     enumByEnumNums,
     addClueDataNotes,
     getClueCallLog,
-    getClueDataNotes, 
+    getClueDataNotes,
     getClueDataDetails,
-    getClueDataNotesDetails, 
+    getClueDataNotesDetails,
     getGoodsList,
+    getOrderList,
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import { timestampToTime, backType, smoke_MJ_4, smoke_MJ_5, pathWayText, classTypeText, quchong, removeEvery } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_3, MJ_4, MJ_5 } from '../../assets/js/data';
 import VueAudio from '@/components/Share/VueAudio';
+import {xieyi} from "@/request/api";
 export default {
     name: 'customerNotes',
     components: {
@@ -621,6 +644,10 @@ export default {
             default: false
         },
         userUuid: {
+            type: String,
+            default: ''
+        },
+        userId: {
             type: String,
             default: ''
         },
@@ -658,6 +685,43 @@ export default {
             drawerTitle: '',
             direction: 'btt',
             tabs_active: 'first',
+            orderList: [],
+            pictLoading: false,
+            // 订单记录参数
+            getOrderForm: {
+                userId: this.userId,
+                itemId: '',
+                classType: '',
+            },
+            orderListColumn: [{
+                prop: 'goodsName', label:"商品名称"
+            },{
+                prop: 'orderNo', label:"订单号"
+            },{
+                prop: 'payMoney', label:"支付金额"
+            },{
+                prop: 'refer', label:"订单来源"
+            },{
+                prop: 'orderType', label:"订单类型"
+            },{
+                prop: 'addTime', label:"下单时间", formatter: (row, column, cellValue) =>{
+                    return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
+                }
+            },{
+                prop: 'payTime', label:"支付时间", formatter: (row, column, cellValue) =>{
+                    return cellValue ? timestampToTime(Number(cellValue) * 1000) : '--'
+                }
+            },{
+                prop: 'userInfo', label:"收货地址"
+            },{
+                prop: 'hasDelivery', label:"是否发货", formatter: (row, column, cellValue) =>{
+                    return cellValue ? '是' : '否'
+                }
+            },{
+                prop: 'shippingId', label:"快递号", formatter: (row, column, cellValue) => {
+                    return cellValue ? cellValue : '--'
+                }
+            }],
             ruleForm: {
                 callLogUuid: this.callLogUuid, //通话记录唯一标识
                 clueDataSUuid: this.clueDataSUuid, //线索数据的唯一标识
@@ -827,7 +891,7 @@ export default {
         this.ruleForm.classOffer2 = '';
         this.ruleForm.classType = '';
         this.ruleForm.classType2 = '';
-        
+
         this.ruleForm.comModeName = this.comMode;
 
         if(this.comMode == '座机外呼') {
@@ -869,6 +933,10 @@ export default {
         }
     },
     methods: {
+        lookAgreementDetailsClick(row) {
+            const href = '/onelogin' + xieyi + row.orderNo;
+            window.open(href, '_blank');
+        },
         getGoodsList() {
             this.$smoke_post(getGoodsList, {
                 itemId: Number(this.examItem),
@@ -944,6 +1012,13 @@ export default {
                 this.$nextTick(() => {//重新渲染分页
                     this.pageshow = true;
                 });
+            }else if(tab.label == '订单记录'){
+                this.geOrderRecord();
+                this.notesCallForm.currentPage = 1;
+                this.pageshow = false;//让分页隐藏
+                this.$nextTick(() => {//重新渲染分页
+                    this.pageshow = true;
+                });
             }
         },
         getClueDataNotes() {
@@ -957,7 +1032,7 @@ export default {
                     this.notesList = res.data.list;
                     this.notesForm.total = res.data.total;
                 }
-            }) 
+            })
         },
         cityChange() {
             this.ruleForm.province = this.ruleForm.provinceCity[0];
@@ -1073,7 +1148,20 @@ export default {
                     this.notesCallList = res.data.list;
                     this.notesCallForm.total = res.data.total;
                 }
-            }) 
+            })
+        },
+        // 订单记录
+        geOrderRecord(){
+            this.$smoke_post(getOrderList, this.getOrderForm).then(res => {
+                this.pictLoading = true
+                if(res.code == 200){
+                    res.data.map(sll => {
+                        sll.userInfo = sll.userName + ' / '  + sll.phone + ' / ' +  sll.location + sll.address ;
+                    })
+                    this.orderList = res.data;
+                    this.pictLoading = false
+                }
+            })
         },
         getClueDataNotesDetails(id) {
             this.$smoke_post(getClueDataNotesDetails, {
@@ -1111,17 +1199,17 @@ export default {
                     if(this.classTypeList) {
                         this.classTypeList.map(sll => {
                             if(res.data.notes.classType = sll.number) {
-                                this.notesDetailsForm.notes.classType = sll.name;       
+                                this.notesDetailsForm.notes.classType = sll.name;
                             }
                         })
                     }
 
-                    this.notesDetailsForm.notes.comMode = smoke_MJ_4(res.data.notes.comMode);              
-                    this.notesDetailsForm.notes.entryPerson = res.data.notes.entryPerson;              
-                    this.notesDetailsForm.notes.intentionLevel = smoke_MJ_5(res.data.notes.intentionLevel);              
-                    this.notesDetailsForm.notes.nextContactTime = timestampToTime(Number(res.data.notes.nextContactTime));              
-                    this.notesDetailsForm.notes.remarks = res.data.notes.remarks;              
-                    this.notesDetailsForm.notes.runOutPromise = res.data.notes.runOutPromise;              
+                    this.notesDetailsForm.notes.comMode = smoke_MJ_4(res.data.notes.comMode);
+                    this.notesDetailsForm.notes.entryPerson = res.data.notes.entryPerson;
+                    this.notesDetailsForm.notes.intentionLevel = smoke_MJ_5(res.data.notes.intentionLevel);
+                    this.notesDetailsForm.notes.nextContactTime = timestampToTime(Number(res.data.notes.nextContactTime));
+                    this.notesDetailsForm.notes.remarks = res.data.notes.remarks;
+                    this.notesDetailsForm.notes.runOutPromise = res.data.notes.runOutPromise;
                 }
             })
         },
@@ -1161,7 +1249,7 @@ export default {
                 schoolName: this.schoolId
             }).then(res => {
                 if(res.code == 200) {
-                    arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value")); 
+                    arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                     this.restaurants = arr;
                     this.restaurants = quchong(this.restaurants, 'value');
                 }
@@ -1212,7 +1300,7 @@ export default {
         },
     },
     mounted() {
-        
+
     },
     computed: {
         drawer_:{

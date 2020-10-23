@@ -18,7 +18,7 @@
 
             <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
                 <template slot-scope="scope">
-                
+
                 <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
                     <option
                       v-for="item in enumList['MJ-16']"
@@ -80,7 +80,7 @@
         >
         </el-pagination>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
             @phoneCopy="phoneCopy"
@@ -88,10 +88,11 @@
             @seatOut='seatOut'
             @release='release'
             :scopeRow='scopeRow'
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
             :schoolId='schoolId'
+            :userId="userId"
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
             :userCDARUuid='userCDARUuid'
@@ -105,7 +106,7 @@
 </template>
 
 <script>
-import { 
+import {
     firstConDataList,
     phoneOut,
     seatOut,
@@ -152,6 +153,7 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
             userCDARUuid: '',
             scopeRow: {},
@@ -234,11 +236,12 @@ export default {
             this.followFlag = true;
             this.comMode = '微信沟通';
             this.userCDARUuid = row.userCDARUuid;
+            this.userId = row.customerId;
             this.examItem = row.examItemId;
             this.scopeRow = row;
         },
         changeDrawer(val){
-            this.drawer = val;           
+            this.drawer = val;
             this.firstConDataList();
         },
         firstConDataListClick() {
@@ -258,7 +261,7 @@ export default {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
                         this.list = res.data.list;
-                        this.form.total = res.data.total;                        
+                        this.form.total = res.data.total;
                         this.$emit('setTableHeight', this.form.total, 0, 1)
                         this.schoolId = res.data.schoolId;
                     }, 300);
@@ -405,7 +408,7 @@ export default {
         },
     },
     mounted() {
-        
+
     }
 }
 </script>
