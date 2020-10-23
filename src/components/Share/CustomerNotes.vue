@@ -732,7 +732,7 @@ export default {
             notesColumnListFollow: [
                 { 'prop': 'createTime', 'label': '创建时间' },
                 { 'prop': 'entryPerson', 'label': '录入人' },
-                { 'prop': 'comMode', 'label': '沟通方式' },
+                { 'prop': 'remarks', 'label': '其他备注', 'width': 500 },
                 { 'prop': 'classType', 'label': '主推班型' },
                 { 'prop': 'classOffer', 'label': '班型报价 (元)', 'width': 100 },
                 { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
@@ -742,7 +742,7 @@ export default {
                 { 'prop': 'intentionLevel2', 'label': '意向等级', 'width': 150 },
                 { 'prop': 'runOutPromise2', 'label': '截杀承诺' },
                 { 'prop': 'nextContactTime', 'label': '下次联系时间', 'width': 100 },
-                { 'prop': 'remarks', 'label': '其他备注', 'width': 150 },
+                { 'prop': 'comMode', 'label': '沟通方式' },
             ],
             notesColumnListCall: [
                 { 'prop': 'createTime', 'label': '创建时间' },
