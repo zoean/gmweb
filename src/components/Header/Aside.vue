@@ -100,10 +100,11 @@ export default {
                     for(let i in res.data) {
                         arr.push(res.data[i]);
                     }
-                    this.clueDataNumberList = arr;
-                    this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
-                    localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
-                    console.log('aside',JSON.parse(localStorage.getItem("userMenuList"))[1].includeSubsetList[0].includeSubsetList[0].name) 
+                    this.clueDataNumberList = arr;                    
+                    const userMenuList = JSON.parse(localStorage.getItem('userMenuList'));
+                    this.$store.commit('setUserMenuList', menuNumberFunc(userMenuList, this.clueDataNumberList));
+                    localStorage.setItem('userMenuList', JSON.stringify(menuNumberFunc(userMenuList, this.clueDataNumberList)));
+                    this.userMenuList = JSON.parse(localStorage.getItem('userMenuList'))[1].includeSubsetList
                 }else{
                 }
             })
@@ -149,16 +150,7 @@ export default {
         }else{
           this.routersFlag = true;
           // this.activeIndex = newVal;
-        }       
-        // window.onresize = () => {
-        //   if(((newVal.indexOf('url') == -1) && (newVal != '/') && (newVal != '/login') && (newVal != '/forget') && (newVal != '/edition') && (newVal != '/404') && (newVal.indexOf('agreeMentDetails') == -1))){
-        //     if(document.documentElement.clientWidth < 980){
-        //       this.toggleMenu()
-        //     }else{
-        //       this.toggleMenu()
-        //     }
-        //   }
-        // }
+        }  
       }
     },
     mounted() {
