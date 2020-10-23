@@ -4,7 +4,7 @@
         <el-row class="people-screen">
 
             <el-col :span="3">
-                
+
                 <el-date-picker
                     class="screen-li"
                     size="small"
@@ -31,7 +31,7 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%">
-            
+
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -52,19 +52,19 @@
 </template>
 
 <script>
-import { 
+import {
     orgOpenClass,
 } from '../../request/api';
-import { 
-    timestampToTime, 
+import {
+    timestampToTime,
     genderText,
     classTypeString,
     getTextByJs,
     sortTextNum,
     schoolType,
 } from '../../assets/js/common';
-import { 
-    
+import {
+
 } from '../../assets/js/data';
 export default {
     name: 'studentsNewBaoKao',
@@ -132,7 +132,7 @@ export default {
         }
     },
     created() {
-        
+
     },
     methods: {
         timeChange() {
@@ -189,7 +189,7 @@ export default {
         },
     },
     mounted() {
-        
+
     },
 }
 </script>

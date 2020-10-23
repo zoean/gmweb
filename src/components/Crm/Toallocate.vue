@@ -70,7 +70,7 @@
               :key="index"
               :show-overflow-tooltip="item.prop == 'clueDataNotes' ? true : false"
               :min-width="item.width"
-              :sortable = "item.sortable"          
+              :sortable = "item.sortable"
               >
             </el-table-column>
 
@@ -95,13 +95,14 @@
         >
         </el-pagination>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
             :schoolId='schoolId'
+            :userId="userId"
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
             :userCDARUuid='userCDARUuid'
@@ -181,6 +182,7 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
             userCDARUuid: '',
             dataPicker: [],
@@ -272,11 +274,12 @@ export default {
             this.form.currentPage = 1;
             localStorage.setItem('seatDataPageSize', index);
             this.getUserRPCDList();
-        }, 
+        },
         customerInfo( row ) {
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.userCDARUuid = row.userCDARUuid;
+            this.userId = row.customerId;
             this.followFlag = false;
         },
         handleClose(done) {
@@ -364,11 +367,11 @@ export default {
                 })
 
             }
-            
+
         }
     },
     mounted() {
-        
+
     }
 }
 </script>

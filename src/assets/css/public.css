@@ -148,7 +148,9 @@ a:link,a:active,a:visited,a:hover {
     cursor: pointer;
 }
 
-
+.el-loading-mask {
+    top: 50px;
+}
 .el-table .one-row {
     color: #009933;
     font-size: 18px;
@@ -265,7 +267,7 @@ a:link,a:active,a:visited,a:hover {
     line-height: 32px !important;
     position: relative;
     top: 4px;
-    
+
 }
 .seatData .areaDefault .area-select .area-selected-trigger{
     color: #aaa;
@@ -317,7 +319,7 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .copy-icon-style{
-    position: relative; 
+    position: relative;
     left: 10px;
     top: 2px;
     cursor: pointer;
@@ -477,7 +479,7 @@ input::-moz-placeholder{   /* Mozilla Firefox 19+ */
 input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
     color:#aaaaaa !important;
 }
-input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
     color:#aaaaaa !important;
 }
 
@@ -520,9 +522,9 @@ div.el-dialog__body{
 .smoke-select{
     border-color: #999 !important;
     color: #999 !important;
-    width: 60px !important; 
-    font-size: 10px !important; 
-    height: 22px !important; 
+    width: 60px !important;
+    font-size: 10px !important;
+    height: 22px !important;
     line-height: 22px !important;
     border-radius: 4px !important;
 }

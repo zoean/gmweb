@@ -74,7 +74,7 @@
             </el-col>
 
             <el-col :span="4">
-                
+
                 <el-date-picker
                   class="screen-li"
                   v-model="dataPicker"
@@ -191,7 +191,7 @@
         >
             <span class="bullets"></span>
 
-            <el-tag 
+            <el-tag
                 v-for="(item,index) in teacherMoveList" :key="index"
                 style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
                 @click="tagClick(item)"
@@ -200,7 +200,7 @@
 
         </el-drawer>
 
-        <StudentsNotes 
+        <StudentsNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
             :drawer.sync='drawer'
@@ -211,7 +211,7 @@
         >
         </StudentsNotes>
 
-        <StudentsSMS 
+        <StudentsSMS
             v-if="studentsSMSFlag"
             @changeStudentsSMSFlag="changeStudentsSMSFlag"
             :studentsSMSFlag.sync='studentsSMSFlag'
@@ -223,7 +223,7 @@
 </template>
 
 <script>
-import { 
+import {
     getSupStuList,
     getExamBasic,
     getTransferStuCTList,
@@ -235,8 +235,8 @@ import {
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import StudentsSMS from '@/components/Share/StudentsSMS';
-import { 
-    timestampToTime, 
+import {
+    timestampToTime,
     genderText,
     classTypeString,
     getTextByJs,
@@ -467,7 +467,7 @@ export default {
                 }else{
                     this.$message({
                         type: 'error',
-                        message: res.msg, 
+                        message: res.msg,
                     });
                 }
             })
@@ -482,7 +482,7 @@ export default {
             this.form.currentPage = 1;
             localStorage.setItem('studentsPageSize', index);
             this.getSupStuList();
-        }, 
+        },
         getExamBasic() {
             let arr;
             this.$smoke_get(getExamBasic, {}).then(res => {
@@ -647,7 +647,7 @@ export default {
         },
     },
     mounted() {
-        
+
     },
 }
 </script>

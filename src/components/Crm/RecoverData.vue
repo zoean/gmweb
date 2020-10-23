@@ -65,13 +65,13 @@
                     </el-option>
                 </el-select>
             </el-col>
-            
+
         </el-row>
 
         <el-row class="people-screen">
 
             <el-col :span="3">
-                
+
                 <el-autocomplete
                     clearable
                     size="small"
@@ -168,10 +168,10 @@
 
             <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
 
-                <el-tag 
+                <el-tag
                     v-for="(item,index) in tableData" :key="index"
                     style="margin: 0 10px 10px 0;"
-                    >{{item.orgName}}</span> 
+                    >{{item.orgName}}</span>
                 </el-tag>
 
                 <el-col>
@@ -208,13 +208,14 @@
 
         </el-drawer>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
             :schoolId='schoolId'
+            :userId="userId"
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
             :userCDARUuid='userCDARUuid'
@@ -231,15 +232,15 @@
 
 <script>
 import PageFieldManage from '@/components/Base/PageFieldManage';
-import { 
-    getRecoveryPoolDataList, 
+import {
+    getRecoveryPoolDataList,
     getExamBasic,
     enumByEnumNums,
     getRuleItem,
     getRuleUserStructureLimit,
     recPoolActSeat,
 } from '../../request/api';
-import {  
+import {
     pushPeopleFunc,
     removeEvery
 } from '../../assets/js/common';
@@ -305,6 +306,7 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
             userCDARUuid: '',
 
@@ -385,6 +387,7 @@ export default {
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
             this.userCDARUuid = row.userCDARUuid;
+            this.userId = row.customerId;
             this.followFlag = false;
         },
         handleAddClick(row) {
@@ -480,7 +483,7 @@ export default {
             })
         },
         cityChange() {
-            
+
             this.form.province = this.form.provinceCity[0];
             this.form.city = this.form.provinceCity[1];
         },
@@ -512,14 +515,14 @@ export default {
             })
         },
         handleSizeChange(index) {
-            
+
             this.form.pageSize = index;
             this.form.currentPage = 1;
             localStorage.setItem('seatDataPageSize', index);
             this.getRecoveryPoolDataList();
         },
         handleCurrentChange(index) {
-            
+
             this.form.currentPage = index;
             this.getRecoveryPoolDataList();
         },
@@ -533,14 +536,14 @@ export default {
         getCheckedNodes() {
             let arr = [];
             this.$nextTick(() => {
-                
+
                 this.$refs.tree.getCheckedNodes().map(sll => {
                     if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
                         arr.push(sll);
                     }
                 })
                 this.tableData = arr;
-                
+
             })
         },
         selectSeat(){},

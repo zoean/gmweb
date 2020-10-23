@@ -24,9 +24,9 @@
                   @clear="autocompleteClear"
                 ></el-autocomplete>
             </el-col>
-    
+
             <el-col :span="3">
-                
+
                 <el-autocomplete
                   clearable
                   size="small"
@@ -41,7 +41,7 @@
                 ></el-autocomplete>
 
             </el-col>
-    
+
             <el-col :span="3">
                 <el-autocomplete
                   clearable
@@ -67,11 +67,11 @@
                     </el-option>
                 </el-select>
             </el-col>
-    
+
             <el-col :span="3">
                 <el-input v-model="form.belongingSeat" size="small" placeholder="请输入坐席" class="screen-li" clearable></el-input>
             </el-col>
-    
+
             <el-col :span="3">
                 <el-select v-model="form.isAllocation" size="small" placeholder="选择是否分配" style="width: 100%;" clearable>
                     <el-option
@@ -82,11 +82,11 @@
                     </el-option>
                 </el-select>
             </el-col>
-    
+
         </el-row>
-    
+
         <el-row class="people-screen">
-        
+
             <el-col :span="6">
                 <el-date-picker
                     clearable
@@ -147,7 +147,7 @@
 
                 <el-button size="small" style="float:right;" plain @click="personalClueExport">导 出</el-button>
             </el-col>
-    
+
         </el-row>
 
         <el-table
@@ -155,7 +155,7 @@
             v-loading="fullscreenLoading"
             :height="tableHeight"
         >
-    
+
             <el-table-column
                 :prop="item.prop"
                 :label="item.label"
@@ -177,19 +177,19 @@
                     confirmButtonText='确定'
                     cancelButtonText='取消'
                     icon="el-icon-info"
-                    iconColor="red"                    
+                    iconColor="red"
                     placement="top"
                     title="删除后该线索进入线索垃圾站，是否继续？"
                     @onConfirm="delCludes(scope.row)"
                 >
-                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />                
+                <svg-icon slot="reference" style="margin-left: 4px;" icon-title="删除线索" icon-class="del" />
                 </el-popconfirm>
                 <svg-icon slot="reference" style="margin-left: 4px;" icon-title="转移线索" icon-class="distribute" @click="transferClude(scope.row)" />
               </template>
             </el-table-column>
-    
+
         </el-table>
-    
+
         <el-pagination
             background
             layout="total, sizes, prev, pager, next, jumper"
@@ -203,13 +203,14 @@
         >
         </el-pagination>
 
-        <CustomerNotes 
+        <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
-            :followFlag='followFlag' 
+            :followFlag='followFlag'
             :drawer.sync='drawer'
             :userUuid='form.userUuid'
             :schoolId='schoolId'
+            :userId="userId"
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
             :userCDARUuid='userCDARUuid'
@@ -237,10 +238,10 @@
             </div>
         </el-dialog>
         <el-dialog class="transferOverflow" :visible="overflowRecoverVisible" width="300px" title="转移线索" @close="overflowRecoverVisible=false">
-            <el-tag 
+            <el-tag
                 v-for="(item,index) in checkedData" :key="index"
                 style="margin: 0 10px 10px 0;"
-                >{{item.orgName}}</span> 
+                >{{item.orgName}}</span>
             </el-tag>
             <el-input
             placeholder="输入关键字进行过滤"
@@ -249,7 +250,7 @@
 
             <el-tree
             class="filter-tree"
-            node-key="orgUuid"            
+            node-key="orgUuid"
             show-checkbox
             :data="orgList"
             :props="defaultProps"
@@ -267,7 +268,7 @@
 </template>
 
 <script>
-import { 
+import {
   getExteClueData,
   getExamBasic,
   enumByEnumNums,
@@ -390,8 +391,9 @@ export default {
             callLogUuid: '',
             comMode: '',
             schoolId: '',
+            userId: '',
             examItem: '',
-            userCDARUuid: '',           
+            userCDARUuid: '',
             checkedData: [],
             transferSeatVisible: false,
             overflowRecoverVisible: false,
@@ -410,7 +412,7 @@ export default {
                 label: 'orgName'
             },
             orgList: [],
-            clueDataType: 0,            
+            clueDataType: 0,
             tagId: '',
             tagIdText: '',
             tagList: []
@@ -429,7 +431,7 @@ export default {
         this.$refs.tree.filter(val);
       }
     },
-    methods: {            
+    methods: {
         getUserList(obj){
             let userList = []
             function getLeaf(obj){
@@ -440,7 +442,7 @@ export default {
                                 userName: leafItem.userName,
                                 userUuid: leafItem.userUuid
                             })
-                        })                        
+                        })
                         // console.log(userList)
                     }
                     if(item.list){
@@ -458,13 +460,13 @@ export default {
             return a
           }, [])
           return result
-        },        
+        },
         queryUserList(queryString, cb) {
-            var restaurants = JSON.parse(JSON.stringify(this.getUserList(this.orgList)).replace(/userName/g,"value"));            
+            var restaurants = JSON.parse(JSON.stringify(this.getUserList(this.orgList)).replace(/userName/g,"value"));
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据
             cb(results);
-        },        
+        },
         querySearchTag(queryString, cb) {
             var restaurants = this.tagList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -497,11 +499,11 @@ export default {
                 this.tagId = '';
                 this.$refs.autocompleteTag.focus();
             })
-        }, 
+        },
         handleSelectTag(item) {
             this.tagId = item.userUuid;
             this.tagIdText = item.value;
-        },   
+        },
         transferClude(row){
             this.clueDataType = row.clueDataType
             if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
@@ -509,7 +511,7 @@ export default {
                 this.checkedData = []
                 this.overflowRecoverVisible = true
                 this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid
-                
+
             }else if(row.clueDataType == 3){//坐席名下
                 this.transferSeatForm.seatUuid = ''
                 this.tagIdText = ''
@@ -541,22 +543,22 @@ export default {
                             this.$message({
                                 type: 'success',
                                 message: '线索转移成功'
-                            })          
+                            })
                             this.getExteClueData();
                             this.transferSeatVisible = false
-                            
+
                         }else{
                             this.$message({
                                 type: 'error',
                                 message: '线索转移失败'
-                            })  
+                            })
                         }
                     }else{
                         this.$message({
                             type: 'error',
                             message: '线索转移失败'
-                        })  
-                    }          
+                        })
+                    }
                 })
             }
         },
@@ -567,7 +569,7 @@ export default {
                         sll.value = sll.userName;
                     })
                     this.tagList = res.data
-                    
+
                 }
             })
         },
@@ -597,13 +599,13 @@ export default {
                                 this.$message({
                                     type: 'error',
                                     message: '线索转移失败'
-                                })  
+                                })
                             }
                         }else{
                             this.$message({
                                 type: 'error',
                                 message: '线索转移失败'
-                            })  
+                            })
                         }
                     })
                 }else{
@@ -620,19 +622,19 @@ export default {
                                 this.$message({
                                     type: 'error',
                                     message: '线索转移失败'
-                                })  
+                                })
                             }
                         }else{
                             this.$message({
                                 type: 'error',
                                 message: '线索转移失败'
-                            })  
+                            })
                         }
                     })
                 }
-                
+
             }
-        },                      
+        },
         delCludes(row){
             this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
                 if(res.code == 200){
@@ -674,6 +676,7 @@ export default {
         customerInfo(row) {
             this.drawer = true;
             this.clueDataSUuid = row.clueDataSUuid;
+            this.userId = row.customerId;
             this.followFlag = false;
         },
         getExamBasic() {
@@ -792,7 +795,7 @@ export default {
                 }
             })
         },
-        datePickerChangeku(value) { 
+        datePickerChangeku(value) {
             if (value == null) {
                 this.form.startCreateTime = '';
                 this.form.endCreateTime = '';
@@ -801,7 +804,7 @@ export default {
                 this.form.endCreateTime = value[1].getTime();
             }
         },
-        datePickerChangepei(value) { 
+        datePickerChangepei(value) {
             if (value == null) {
                 this.form.receiveStartTime = '';
                 this.form.receiveEndTime = '';
@@ -821,7 +824,7 @@ export default {
         },
     },
     mounted() {
-        
+
     }
 }
 </script>
