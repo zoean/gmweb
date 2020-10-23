@@ -1088,18 +1088,18 @@ export const everyTimeFun = (id) => {
     switch (id) {
         case 1:
             obj.timeLengthStart = 0;
-            obj.timeLengthEnd = 3;
+            obj.timeLengthEnd = 180;
             break;
         case 2:
-            obj.timeLengthStart = 3;
-            obj.timeLengthEnd = 5;
+            obj.timeLengthStart = 180;
+            obj.timeLengthEnd = 300;
             break;
         case 3:
-            obj.timeLengthStart = 5;
-            obj.timeLengthEnd = 8;
+            obj.timeLengthStart = 300;
+            obj.timeLengthEnd = 480;
             break;
         case 4:
-            obj.timeLengthStart = 8;
+            obj.timeLengthStart = 480;
             break;
     }
     return obj;
