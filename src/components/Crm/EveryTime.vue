@@ -84,14 +84,14 @@
         
                 <el-col :span="21">
                     
-                    <!-- <el-tag 
+                    <el-tag 
                         v-for="(item,index) in searchList" :key="item.id"
                         :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
                         type="info"
                         effect="plain"
                         @click="tagClick(item)"
                         >{{item.name}}
-                    </el-tag> -->
+                    </el-tag>
 
                     <el-button type="primary" size="small" @click="timeClick">查询</el-button>
                 </el-col>
