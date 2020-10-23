@@ -1013,6 +1013,10 @@ export default {
                     this.pageshow = true;
                 });
             }else if(tab.label == '订单记录'){
+                console.log('customerId : ', this.getOrderForm.userId);
+                if(this.getOrderForm.userId === '') {
+                    return
+                }
                 this.geOrderRecord();
                 this.notesCallForm.currentPage = 1;
                 this.pageshow = false;//让分页隐藏
