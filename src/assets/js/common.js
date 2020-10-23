@@ -835,18 +835,33 @@ export const levelFunc = (arr) => {
 //菜单num统计
 
 export const menuNumberFunc = (arr, brr) => {
-    if(arr[1].includeSubsetList[0].includeSubsetList[0].name.indexOf('(') == -1) { //避免name重复加()
-
-        arr[1].includeSubsetList[0].includeSubsetList[0].name = brr[0] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[1].name = brr[1] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + brr[1] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[2].name = brr[3] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[5] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[3].name = brr[2] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + brr[2] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[4].name = brr[4] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
-        arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[3] + ')';
-
-        arr[1].includeSubsetList[0].includeSubsetList[7].name = brr[6] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + brr[6] + ')';
-
+    console.log(brr)
+    var parentSub = arr[1].includeSubsetList[0]
+    var arrIndex = [0, 1, 2, 3, 4, 5, 7];
+    var brrIndex = [0, 1, 5, 2, 4, 3, 6];
+    for(var i = 0; i < 7; i++){
+        var name = parentSub.includeSubsetList[arrIndex[i]].name
+        var endIndex =  name.indexOf('(')
+        var fullName
+        if(brr[brrIndex[i]]){
+            fullName = endIndex == -1 ? name + '('+ brr[brrIndex[i]] +')' : name.substr(0, endIndex) + '('+ brr[brrIndex[i]] +')'
+        }else{
+            fullName = endIndex == -1 ? name + '('+ brr[brrIndex[i]] +')' : name.substr(0, endIndex) + '(0)'
+        }
+        
+        arr[1].includeSubsetList[0].includeSubsetList[arrIndex[i]].name = fullName
     }
+
+        // arr[1].includeSubsetList[0].includeSubsetList[0].name = brr[0] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[0].name + ' (' + brr[0] + ')';
+        // arr[1].includeSubsetList[0].includeSubsetList[1].name = brr[1] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[1].name + ' (' + brr[1] + ')';
+        // arr[1].includeSubsetList[0].includeSubsetList[2].name = brr[3] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[2].name + ' (' + brr[5] + ')';
+        // arr[1].includeSubsetList[0].includeSubsetList[3].name = brr[2] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[3].name + ' (' + brr[2] + ')';
+        // arr[1].includeSubsetList[0].includeSubsetList[4].name = brr[4] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[4].name + ' (' + brr[4] + ')';
+        // arr[1].includeSubsetList[0].includeSubsetList[5].name = brr[5] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[5].name + ' (' + brr[3] + ')';
+
+        // arr[1].includeSubsetList[0].includeSubsetList[7].name = brr[6] == undefined ? arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + '0' + ')' : arr[1].includeSubsetList[0].includeSubsetList[7].name + ' (' + brr[6] + ')';
+
+    // }
     return arr;
 
 }

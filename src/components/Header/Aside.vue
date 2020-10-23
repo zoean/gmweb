@@ -101,16 +101,15 @@ export default {
                         arr.push(res.data[i]);
                     }
                     this.clueDataNumberList = arr;
+                    this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
+                    localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
+                    console.log('aside',JSON.parse(localStorage.getItem("userMenuList"))[1].includeSubsetList[0].includeSubsetList[0].name) 
                 }else{
                 }
             })
         },
       updateClueDataNumber(){
         this.getClueDataNumber()
-        this.$nextTick(() => {
-            this.$store.commit('setUserMenuList', menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList));
-            localStorage.setItem("userMenuList", JSON.stringify(menuNumberFunc(this.$store.state.userMenuList, this.clueDataNumberList)));
-        })
       }
     },
     watch:{
@@ -119,7 +118,7 @@ export default {
         this.$emit('setPageTitleLeft')
       },
       '$route.path': function(newVal){
-        this.activeIndex = this.$route.path  
+        this.activeIndex = this.$route.path 
         if(newVal == '/'){
           this.openedsIndex = [];
           this.routersFlag = false;
@@ -128,7 +127,8 @@ export default {
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[0].defaultUrl;
           this.userMenuList = this.$store.state.userMenuList[0].includeSubsetList;
-        }else if(newVal.indexOf("/crm") != -1){      
+        }else if(newVal.indexOf("/crm") != -1){     
+          
         this.updateClueDataNumber()
           this.routersFlag = true;
           // this.activeIndex = this.$store.state.userMenuList[1].defaultUrl;
