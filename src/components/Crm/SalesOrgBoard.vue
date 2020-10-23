@@ -419,6 +419,9 @@ export default {
         salesOrgBoardDetailsClick() {
             this.boardFlag = true;
         },
+        // salesOrgBoardDetailsClickWork() {
+            
+        // },
         orgTodayWork() {
             this.fullscreenLoadingBoard = true;
             this.$smoke_get(orgTodayWork, {}).then(res => {
