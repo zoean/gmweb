@@ -280,6 +280,13 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            if(sll.cjAllNum == 0){
+                                sll.totalARPU = 0;
+                            }else{
+                                sll.totalARPU = (sll.cjAllMoney / sll.cjAllNum).toFixed(2);
+                            }
+                        })
                         this.list = res.data.list;
                     }, 300);
                 }else{
@@ -299,6 +306,13 @@ export default {
                 if(res.code == 200) {
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            if(sll.cjAllNum == 0){
+                                sll.totalARPU = 0;
+                            }else{
+                                sll.totalARPU = (sll.cjAllMoney / sll.cjAllNum).toFixed(2);
+                            }
+                        })
                         this.list = res.data.list;
                     }, 300);
                 }else{
