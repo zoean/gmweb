@@ -227,14 +227,17 @@ export default {
     },
     methods: {
         tagClick(item){
+            var obj = everyTimeFun(item.id);
             if(this.tag_id == item.id) {
                 this.tag_id = '';
+                this.form.timeLengthStart = null;
+                this.form.timeLengthEnd = null;
             }else{
                 this.tag_id = item.id;
+                this.form.timeLengthStart = obj.timeLengthStart;
+                this.form.timeLengthEnd = obj.timeLengthEnd;
             }
-            var obj = everyTimeFun(item.id);
-            this.form.timeLengthStart = obj.timeLengthStart;
-            this.form.timeLengthEnd = obj.timeLengthEnd;
+            
         },
         getOrgSubsetByUuid() {
             this.$smoke_post(getOrgSubsetByUuid, {
