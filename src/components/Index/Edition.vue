@@ -4,10 +4,23 @@
     </el-page-header>
 
     <el-timeline> 
+      <el-timeline-item timestamp="v 1.1.31 -- 2020/10/23" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、下次联系时间改为非必填</p>
+          <p>2、推广链接记录页面推广账号改成支持可输入筛选</p>
+          <p>3、客户信息增加订单记录</p>
+          <p>4、客户信息跟进记录优化显示</p>
+          <p>5、电话记录查询增加时长筛选项</p>
+          <h4>修复bug</h4>
+          <p>1、销售部分修复数值准确性</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.30 -- 2020/10/22" placement="top">
         <el-card>
           <h4>新增功能</h4>
           <p>1、新增今日首咨页面</p>
+          <p>2、优化可领取公海数据显示逻辑</p>
         </el-card>
       </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.29 -- 2020/10/21" placement="top">
