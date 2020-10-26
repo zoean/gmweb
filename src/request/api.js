@@ -367,3 +367,10 @@ export const workDetail = '/api/data/saleStatistics/workDetail' //销售看板�
 export const orgWorkDetail = '/api/data/saleStatistics/orgWorkDetail' //销售主管看板工作明细查询
 export const orgWorkDetailByOrg = '/api/data/saleStatistics/orgWorkDetailByOrg' //销售主管看板工作明细详情按组织查询
 export const orgWorkDetailBySeat = '/api/data/saleStatistics/orgWorkDetailBySeat' //销售主管看板工作明细详情按坐席查询
+
+//考期管理
+export const examPeriodList = '/api/phone/examPeriod/list' //查询考期集合
+export const examPeriodListPage = '/api/phone/examPeriod/listPage' //查询考期列表（分页）
+export const examPeriodAdd = '/api/phone/examPeriod/add' //新增考期
+export const examPeriodUpdate = '/api/phone/examPeriod/update' //修改考期
+export const examPeriodFindById = '/api/phone/examPeriod/findById' //查询考期详情
