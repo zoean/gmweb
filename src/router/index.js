@@ -34,6 +34,7 @@ import seatData from '@/components/Crm/SeatData';
 import overflow from '@/components/Crm/Overflow';
 import toallocate from '@/components/Crm/Toallocate';
 import enums from '@/components/Crm/Enum';
+import examManage from '@/components/Crm/ExamManage';
 import extendLinkList from '@/components/Crm/ExtendLinkList';
 import enterClues from '@/components/Crm/EnterClues';
 import students from '@/components/Crm/Students';
@@ -343,6 +344,15 @@ export default new Router({
             component: enums,
             meta: {
                 title: '枚举类型管理'
+            }
+        },
+
+        {
+            path: '/crm/crmConfig/examManage',
+            name: 'examManage',
+            component: examManage,
+            meta: {
+                title: '考期管理'
             }
         },
 
