@@ -113,7 +113,7 @@
 
         </div>
 
-        <!-- <div class="call-detail">
+        <div class="call-detail">
 
             <div class="people-title">工作明细</div>
             <el-row class="people-screen" style="margin-top: 10px;">
@@ -164,7 +164,7 @@
                 </el-table-column>
 
             </el-table>
-        </div> -->
+        </div>
 
         <div class="call-detail" style="margin-top: 10px;">
             
