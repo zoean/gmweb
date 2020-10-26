@@ -76,7 +76,10 @@ export default {
     },
     created() {
       this.router_index();  
-      this.updateClueDataNumber()    
+      console.log(this.$route.path)
+      if(this.$route.path.indexOf('/crm') != -1){
+        this.updateClueDataNumber() 
+      }         
     },
     methods: {
       closeMenu(index){        
@@ -156,7 +159,6 @@ export default {
     mounted() {
         // const userMenuList = this.$store.state.userMenuList;
         this.$emit('setPageTitleLeft')
-        this.updateClueDataNumber()
         const userMenuList = JSON.parse(localStorage.getItem("userMenuList"));
         const arr = this.$route.path.split("/");  
         if(this.$route.path == '/'){
@@ -166,6 +168,7 @@ export default {
           this.routersFlag = true;
           this.userMenuList = userMenuList[0].includeSubsetList;
         }else if(arr[1] == 'crm'){
+          this.updateClueDataNumber()
           this.routersFlag = true;
           this.userMenuList = userMenuList[1].includeSubsetList;
         }else if(arr[1] == 'knowp'){
