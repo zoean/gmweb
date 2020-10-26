@@ -113,7 +113,7 @@
 
         </div>
 
-        <!-- <div class="call-detail">
+        <div class="call-detail">
 
             <div class="people-title">工作明细</div>
             <el-row class="people-screen" style="margin-top: 10px;">
@@ -158,7 +158,7 @@
                 </el-table-column>
 
             </el-table>
-        </div> -->
+        </div>
 
         <div class="call-detail" style="margin-top: 10px;">
 
@@ -322,7 +322,7 @@ export default {
         this.saleAims();
         this.form.time = this.workForm.time = this.timeDate;
         this.dayWork();
-        // this.workDetail();
+        this.workDetail();
     },
     methods: {
         workDetail() {
@@ -333,6 +333,13 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoadingWork = false;
                         arr.push(res.data);
+                        arr.map(sll => {
+                            if(sll.cjAllNum == 0){
+                                sll.totalARPU = 0;
+                            }else{
+                                sll.totalARPU = (sll.cjAllMoney / sll.cjAllNum).toFixed(2);
+                            }
+                        })
                         this.listWork = arr;
                     }, 300);
                 }else{
