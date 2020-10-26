@@ -215,35 +215,7 @@
 
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
 
-                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">
-                            <span>跟进信息：</span>
-                            <span class="remark-list" @click="remarkDialogShow">备注记录</span>
-                        </el-row>
-                        <el-dialog title="备注记录" :append-to-body='true' :visible.sync="remarkDialogTableVisible">
-                            <el-table
-                                :data="remarkNotesList"
-                                style="margin: 0 auto; margin-bottom: 30px;"
-                            >
-                                <el-table-column
-                                    type="index"
-                                    width="25">
-                                </el-table-column>
-                                <el-table-column
-                                    :prop="item.prop"
-                                    :label="item.label"
-                                    v-for="(item, index) in remarkColumnList"
-                                    :show-overflow-tooltip="item.prop == 'remarks' ? true : false"
-                                    :min-width="item.width"
-                                    :key="index"
-                                >
-                                </el-table-column>
-                                <!-- <el-table-column prop="active" label="操作">
-                                  <template slot-scope="scope">
-                                      <el-button @click="notesDetails(scope.row)" type="text" >备注详情</el-button>
-                                  </template>
-                                </el-table-column> -->
-                            </el-table>
-                        </el-dialog>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">跟进信息：</el-row>
 
                         <el-row v-if="followFlag">
                             <el-col :span="6">
@@ -389,7 +361,26 @@
                             </el-col>
 
                         </el-row>
-
+                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">备注记录：</el-row>
+                        <el-table
+                            :data="remarkNotesList"
+                            style="margin: 0 auto; margin-bottom: 30px;"
+                        >
+                            <el-table-column
+                                type="index"
+                                width="25">
+                            </el-table-column>
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                v-for="(item, index) in remarkColumnList"
+                                :min-width="item.width"
+                                :key="index"
+                            >
+                            </el-table-column>
+                            <!--:show-overflow-tooltip="item.prop == 'remarks' ? true : false"-->
+                        </el-table>
                         <el-form-item style="text-align: center;">
                           <el-button type="primary" @keyup.enter="submitForm('ruleForm')" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
                           <el-button @click="quxiao" plain size="small" style="width: 100px;" v-if="!routePathFlag">取消</el-button>
@@ -823,9 +814,9 @@ export default {
             remarkNotesList: [], //备注记录
             notesCallList: [],
             remarkColumnList: [
-                { 'prop': 'createTime', 'label': '创建时间', width: 135 },
-                { 'prop': 'entryPerson', 'label': '录入人', width: 70 },
-                { 'prop': 'remarks', 'label': '其他备注', 'width': 450 },
+                { 'prop': 'remarks', 'label': '其他备注', 'width': 500 },
+                { 'prop': 'entryPerson', 'label': '录入人', width: 150 },
+                { 'prop': 'createTime', 'label': '创建时间', width: 150 }
             ],
             notesColumnListFollow: [
                 { 'prop': 'createTime', 'label': '创建时间' },
@@ -907,7 +898,6 @@ export default {
             routePathFlag: false,
             releaseFlag: false,
             isDisable: true,
-            remarkDialogTableVisible: false, //备注记录弹窗
         }
     },
     created() {
@@ -966,6 +956,7 @@ export default {
                 _self.submitForm('ruleForm');
             }
         }
+        this.getClueDataNotes()
     },
     methods: {
         lookAgreementDetailsClick(row) {
@@ -1345,11 +1336,6 @@ export default {
                 this.$refs.autocompleteMain.focus();
             })
         },
-        // 备注记录弹窗
-        remarkDialogShow() {
-            this.remarkDialogTableVisible = true
-            this.getClueDataNotes()
-        }
     },
     mounted() {
 
