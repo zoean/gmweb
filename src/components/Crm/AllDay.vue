@@ -367,7 +367,7 @@ export default {
         }
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
-        // this.getClueDataNumber();        
+        // this.getClueDataNumber();
         this.getClueDataAll();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
@@ -561,6 +561,14 @@ export default {
                             this.$emit('setTableHeight', res.data.total, 1, 1)
                         }
                     }, 300);
+                    // 提示
+                    if(res.data.userDataCount >= res.data.userDataStandard) {
+                        this.$message({
+                            message: '您的客户数量已达300，请释放，否则不能接收新数据',
+                            type: 'warning'
+                        });
+                    }
+
                 }else{
                     setTimeout(() => {
                         this.fullscreenLoading = false;
