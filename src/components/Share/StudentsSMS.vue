@@ -1,7 +1,7 @@
 <template>
     <div class="download">
         <el-dialog width="40%" title="短信发送" :visible.sync="studentsSMSFlag_" :before-close="handleClose">
-          
+
           <el-table
             :data="smsList"
             ref="smsTable"
@@ -20,7 +20,7 @@
                 :key="index">
 
                 <template slot-scope="scope">
-                
+
                     <span>{{scope.row[item.prop] || '- -'}}</span>
 
                 </template>
@@ -30,16 +30,16 @@
           </el-table>
 
           <span slot="footer" class="dialog-footer" v-if="smsSetFlag">
-
+            <span class="total-num">共 <i>{{this.smsList.length}}</i> 条</span>
             <el-button @click="handleClose" plain size="small">取 消</el-button>
             <el-button type="primary" @click="smsStuUuidListClick" size="small">确 定</el-button>
 
           </span>
 
           <el-form :model="smsForm" :rules="smsFormRules" ref="smsForm" class="demo-ruleForm" v-if="!smsSetFlag">
-                
+
               <el-form-item label="短信名字" prop="smsMsgId">
-                
+
                 <el-select @change="smsMsgChange" v-model="smsForm.smsMsgId" placeholder="请选择短信模板" size="small" >
                     <el-option
                       v-for="item in smsMsgList"
@@ -56,7 +56,7 @@
               </el-form-item>
 
               <el-form-item label="发送方式" prop="type">
-                
+
                 <el-select @change="smsTypeChange" v-model="smsForm.type" placeholder="请选择发送方式" size="small" >
                     <el-option
                       v-for="item in smsTypeList"
@@ -97,16 +97,16 @@
 </template>
 
 <script>
-import { 
+import {
     getSendMsgSupStuList,
     groupSMS,
     getSMSMsgBaseList,
 } from '../../request/api';
-import { 
+import {
     timestampToTime
 } from '../../assets/js/common';
-import { 
-    
+import {
+
 } from '../../assets/js/data';
 export default {
     name: 'DownloadList',
@@ -130,7 +130,7 @@ export default {
 
             smsForm: {
                 number: '', //每日发送数量
-                smsMsgId: '', //短信模板id	
+                smsMsgId: '', //短信模板id
                 smsMsgText: '',
                 stuList: [], //手机号码集合	(uuid)
                 time: '', //发送时间(示例：10：13：12 将其换算为毫秒)
@@ -166,7 +166,7 @@ export default {
     methods: {
         sendSmsFalse() {
             this.smsSetFlag = true;
-            
+
             this.$nextTick(() => {
                 this.smsList.map(sll => {
                     this.$refs.smsTable.toggleRowSelection(sll, true);
@@ -258,7 +258,7 @@ export default {
         },
     },
     mounted() {
-        
+
     },
     computed: {
         studentsSMSFlag_:{
@@ -278,5 +278,8 @@ export default {
         height: 55vh;
         overflow: auto;
         padding: 10px 20px;
+    }
+    .total-num {
+        padding-right: 20px;
     }
 </style>
