@@ -333,6 +333,13 @@ export default {
                     setTimeout(() => {
                         this.fullscreenLoadingWork = false;
                         arr.push(res.data);
+                        arr.map(sll => {
+                            if(sll.cjAllNum == 0){
+                                sll.totalARPU = 0;
+                            }else{
+                                sll.totalARPU = (sll.cjAllMoney / sll.cjAllNum).toFixed(2);
+                            }
+                        })
                         this.listWork = arr;
                     }, 300);
                 }else{
