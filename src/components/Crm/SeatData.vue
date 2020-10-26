@@ -2,7 +2,7 @@
     <el-main class="index-main">
         <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
-            <el-col :span="6">
+            <el-col :span="6 ">
                 <el-date-picker
                     size="small"
                     style="width: 97%;"
@@ -73,7 +73,6 @@
             </el-col>
 
             <el-col :span="3">
-
                 <el-select v-model="form.ruleNumberName" size="small" placeholder="选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
@@ -82,17 +81,22 @@
                       :value="item.ruleNumberName">
                     </el-option>
                 </el-select>
-
             </el-col>
 
         </el-row>
 
         <el-row class="people-screen">
-
-
-
+            <el-col :span="2">
+                <el-select v-model="form.orderState" size="small" placeholder="选择成单状态" class="screen-li" clearable>
+                    <el-option
+                        v-for="item in orderStateList"
+                        :key="item.name"
+                        :label="item.name"
+                        :value="item.number">
+                    </el-option>
+                </el-select>
+            </el-col>
             <el-col :span="3">
-
                 <el-cascader
                     ref="cascader"
                     size="small"
@@ -106,10 +110,9 @@
                     :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
                     clearable>
                 </el-cascader>
-
             </el-col>
 
-            <el-col :span="3">
+            <el-col :span="2">
 
                 <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
                     <el-option
@@ -128,7 +131,7 @@
 
             </el-col>
 
-            <el-col :span="16">
+            <el-col :span="15">
 
                 <el-tag
                     v-for="(item,index) in searchList" :key="item.id"
@@ -146,7 +149,6 @@
                 <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
 
             </el-col>
-
         </el-row>
 
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
@@ -305,11 +307,16 @@ export default {
                 seatOrgList: [],
                 receiveStartTime: '',
                 receiveEndTime: '',
+                orderState: 0,//成单状态
             },
             totalFlag: false,
             dialStateList: [
                 { 'name': '首咨', 'number': 0 },
                 { 'name': '非首咨', 'number': 1 },
+            ],
+            orderStateList: [
+                { 'name': '未成单', 'number': 0 },
+                { 'name': '已成单', 'number': 1 },
             ],
             ruleNumberNameList: [], //分配组数组
             list: [],
@@ -760,8 +767,6 @@ export default {
   }
 }
 
-
-
     .index-main{
         .el-col-6{
             height: auto !important;
@@ -783,5 +788,8 @@ export default {
                 width: 94%;
             }
         }
+    }
+    .mt-10 {
+        margin-top: 10px;
     }
 </style>

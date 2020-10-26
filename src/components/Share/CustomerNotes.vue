@@ -215,7 +215,35 @@
 
                         <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
 
-                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">跟进信息：</el-row>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">
+                            <span>跟进信息：</span>
+                            <span class="remark-list" @click="remarkDialogShow">备注记录</span>
+                        </el-row>
+                        <el-dialog title="备注记录" :append-to-body='true' :visible.sync="remarkDialogTableVisible">
+                            <el-table
+                                :data="remarkNotesList"
+                                style="margin: 0 auto; margin-bottom: 30px;"
+                            >
+                                <el-table-column
+                                    type="index"
+                                    width="25">
+                                </el-table-column>
+                                <el-table-column
+                                    :prop="item.prop"
+                                    :label="item.label"
+                                    v-for="(item, index) in remarkColumnList"
+                                    :show-overflow-tooltip="item.prop == 'remarks' ? true : false"
+                                    :min-width="item.width"
+                                    :key="index"
+                                >
+                                </el-table-column>
+                                <!-- <el-table-column prop="active" label="操作">
+                                  <template slot-scope="scope">
+                                      <el-button @click="notesDetails(scope.row)" type="text" >备注详情</el-button>
+                                  </template>
+                                </el-table-column> -->
+                            </el-table>
+                        </el-dialog>
 
                         <el-row v-if="followFlag">
                             <el-col :span="6">
@@ -792,7 +820,13 @@ export default {
             pageshow: true, //分页重新渲染
             totalFlag: false, //当只有一页时隐藏分页
             notesList: [],
+            remarkNotesList: [], //备注记录
             notesCallList: [],
+            remarkColumnList: [
+                { 'prop': 'createTime', 'label': '创建时间', width: 135 },
+                { 'prop': 'entryPerson', 'label': '录入人', width: 70 },
+                { 'prop': 'remarks', 'label': '其他备注', 'width': 450 },
+            ],
             notesColumnListFollow: [
                 { 'prop': 'createTime', 'label': '创建时间' },
                 { 'prop': 'entryPerson', 'label': '录入人' },
@@ -872,7 +906,8 @@ export default {
             restaurants: [],
             routePathFlag: false,
             releaseFlag: false,
-            isDisable: true
+            isDisable: true,
+            remarkDialogTableVisible: false, //备注记录弹窗
         }
     },
     created() {
@@ -1034,6 +1069,14 @@ export default {
                         // sll.classType = classTypeText(Number(sll.classType));
                     })
                     this.notesList = res.data.list;
+                    this.notesList.forEach((item, index) => {
+                        console.log(item.remarks);
+
+                    })
+                    this.remarkNotesList = this.notesList.filter((val) => {
+                        return !(val.remarks === '')
+                    })
+
                     this.notesForm.total = res.data.total;
                 }
             })
@@ -1302,6 +1345,11 @@ export default {
                 this.$refs.autocompleteMain.focus();
             })
         },
+        // 备注记录弹窗
+        remarkDialogShow() {
+            this.remarkDialogTableVisible = true
+            this.getClueDataNotes()
+        }
     },
     mounted() {
 
@@ -1331,5 +1379,10 @@ export default {
 }
 /deep/ .el-autocomplete{
     width: 200px;
+}
+.remark-list {
+    float: right;
+    color: #409EFF;
+    cursor: pointer;
 }
 </style>
