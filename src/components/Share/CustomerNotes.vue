@@ -687,6 +687,10 @@ export default {
             type: String,
             default: ''
         },
+        classTypeList3: {
+            type: Array,
+            default: []
+        },
         examItem: {
             type: String,
             default: ''
@@ -894,7 +898,6 @@ export default {
             ],
             tabs_active: 'first',
             classTypeList: [],
-            classTypeList2: [], //兴趣班型
             pcaa: null, //省市数据
             restaurants: [],
             routePathFlag: false,
@@ -903,6 +906,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.classTypeList3, '333');
         if(this.followFlag) {
             this.drawerTitle = '添加备注';
         }else{
@@ -1279,21 +1283,16 @@ export default {
                     this.ruleForm.createTime = timestampToTime(Number(res.data.createTime));
                     // 跟进信息
 
-                    this.classTypeList.forEach((item) => {
+                    this.classTypeList3.forEach((item) => {
                         if(item.id == res.data.clueNotesLatest.classType) {
                             this.ruleForm.classTypeText = item.name
+                        } else if(item.id == res.data.clueNotesLatest.classType2) {
+                            this.ruleForm.classType2Text = item.name
                         }
                     })
                     this.ruleForm.classOffer = res.data.clueNotesLatest.classOffer;
                     this.ruleForm.intentionLevel = res.data.clueNotesLatest.intentionLevel;
                     this.ruleForm.runOutPromise = res.data.clueNotesLatest.runOutPromise;
-
-                    this.classTypeList2.forEach((item) => {
-                        if(item.id == res.data.clueNotesLatest.classType2) {
-                            console.log(item.id == res.data.clueNotesLatest.classType2);
-                            this.ruleForm.classType2Text = item.name
-                        }
-                    })
                     this.ruleForm.classOffer2 = res.data.clueNotesLatest.classOffer2;
                     this.ruleForm.intentionLevel2 = res.data.clueNotesLatest.intentionLevel2;
                     this.ruleForm.runOutPromise2 = res.data.clueNotesLatest.runOutPromise2;
@@ -1309,8 +1308,6 @@ export default {
                 schoolName: this.schoolId
             }).then(res => {
                 if(res.code == 200) {
-                    this.classTypeList2 = res.data
-                    console.log(this.classTypeList2, 'res classTypeList2');
                     arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
                     this.restaurants = arr;
                     this.restaurants = quchong(this.restaurants, 'value');

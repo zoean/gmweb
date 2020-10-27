@@ -230,6 +230,7 @@
             :userUuid='form.userUuid'
             :userId="userId"
             :schoolId='schoolId'
+            :classTypeList3 = 'classTypeList3'
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
             :userCDARUuid='userCDARUuid'
@@ -256,7 +257,8 @@ import {
     getClueDataNumber,
     copyTel,
     geSeatWork,
-    clueContactSign
+    clueContactSign,
+    getGoodsList
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
@@ -284,6 +286,7 @@ export default {
     // },
     data() {
         return {
+            classTypeList3: [],
             fieldNum: [],
             form: {
                 currentPage: 1,
@@ -375,7 +378,26 @@ export default {
         this.enumByEnumNums(arr);
         this.getRuleItem();
     },
+    mounted() {
+        let that = this
+        setTimeout(function () {
+            that.getGoodsList()
+        }, 3000)
+    },
     methods: {
+        getGoodsList() {
+            this.$smoke_post(getGoodsList, {
+                itemId: Number(this.examItem),
+                schoolName: this.schoolId
+            }).then(res => {
+                if(res.code == 200) {
+                    res.data.map(sll => {
+                        sll['value'] = sll.name;
+                    })
+                    this.classTypeList3 = res.data;
+                }
+            })
+        },
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
         },
@@ -550,6 +572,7 @@ export default {
                         this.fullscreenLoading = false;
                         this.columnList = res.data.filedList;
                         this.schoolId = res.data.schoolId;
+                        console.log(this.schoolId, 'this.schoolId');
                         res.data.list.map(sll => {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
@@ -745,8 +768,6 @@ export default {
                 }
             })
         },
-    },
-    mounted() {
     }
 }
 </script>
