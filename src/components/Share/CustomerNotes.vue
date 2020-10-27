@@ -368,8 +368,9 @@
                             style="margin: 0 auto; margin-bottom: 30px;"
                         >
                             <el-table-column
+                                label="序号"
                                 type="index"
-                                width="25">
+                                width="50">
                             </el-table-column>
                             <el-table-column
                                 :prop="item.prop"
@@ -814,7 +815,7 @@ export default {
             remarkNotesList: [], //备注记录
             notesCallList: [],
             remarkColumnList: [
-                { 'prop': 'remarks', 'label': '其他备注', 'width': 500 },
+                { 'prop': 'remarks', 'label': '其他备注', 'width': 550 },
                 { 'prop': 'entryPerson', 'label': '录入人', width: 150 },
                 { 'prop': 'createTime', 'label': '创建时间', width: 150 }
             ],

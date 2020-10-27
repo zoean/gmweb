@@ -4,7 +4,7 @@
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
                 <el-date-picker
                     size="small"
                     style="width: 97%;"
@@ -46,9 +46,25 @@
                 ></el-autocomplete>
             </el-col>
             <el-col :span="3">
+
+                <el-autocomplete
+                    clearable
+                    size="small"
+                    ref="autocompleteSpread"
+                    class="screen-li"
+                    v-model="form.spreadText"
+                    :fetch-suggestions="querySearchSpread"
+                    placeholder="输入推广渠道"
+                    :trigger-on-focus="true"
+                    @select="handleSelectSpread"
+                    @clear="autocompleteClearSpread"
+                ></el-autocomplete>
+
+            </el-col>
+            <el-col :span="2">
                 <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="2">
                 <el-button size="small" @click="obtainRPCD" style="float: right;" plain>确认领取</el-button>
             </el-col>
         </el-row>
@@ -141,6 +157,8 @@ export default {
                 dataStartTime: '',
                 dataEndTime: '',
                 province: '',
+                spreadText: '',
+                spreadId: '',
                 city: '',
                 provinceCity: [],
             },
@@ -189,6 +207,7 @@ export default {
             enumList: {},
             restaurants: [],
             pcaa: null, //省市数据
+            MJ7List: []
         }
     },
     created() {
@@ -202,11 +221,42 @@ export default {
         this.form.userUuid = userUuid;
         this.getUserRPCDList();
         let arr = [MJ_5];
-        this.enumByEnumNums(arr);
+        this.enumByEnumNums(arr);        
+        this.getMJ7List()
         this.getExamBasic();
         this.pcaa = pcaa;
     },
-    methods: {
+    methods: {     
+        getMJ7List(){
+            this.$smoke_post(enumByEnumNums, {
+                numberList: ['MJ-6']
+            }).then(res => {
+                if(res.code == 200){
+                    this.MJ7List = res.data;
+                }
+            })
+        },   
+        querySearchSpread(queryString, cb){
+            var restaurants = JSON.parse(JSON.stringify(this.MJ7List['MJ-6']).replace(/name/g,"value"));
+            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+            // 调用 callback 返回建议列表的数据
+            cb(results);
+        },
+        
+        handleSelectSpread(item) {
+            this.form.spreadId = item.number;
+            this.form.spreadText = item.value;
+        },
+        
+        autocompleteClearSpread() {
+            this.$nextTick(() => {
+                this.$refs.autocompleteSpread.$children
+                    .find(c => c.$el.className.includes('el-input'))
+                    .blur();
+                this.form.spreadId = '';
+                this.$refs.autocompleteSpread.focus();
+            })
+        },
         cityChange() {
             this.form.province = this.form.provinceCity[0];
             this.form.city = this.form.provinceCity[1];

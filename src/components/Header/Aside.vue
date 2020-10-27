@@ -76,7 +76,6 @@ export default {
     },
     created() {
       this.router_index();  
-      console.log(this.$route.path)
       if(this.$route.path.indexOf('/crm') != -1){
         this.updateClueDataNumber() 
       }         
