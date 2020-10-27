@@ -68,7 +68,19 @@
         >
         </el-pagination>
 
-        
+        <el-drawer
+            :title="drawerTitle"
+            :visible.sync="drawerFlag"
+            :direction="direction"
+            :before-close="handleClose"
+        >
+            <span class="bullets"></span>
+
+            <el-input v-model="input" placeholder="请输入考期名称"></el-input>
+
+            <el-input v-model="input" placeholder="请输入考期描述"></el-input>
+
+        </el-drawer>
 
     </el-main>
 </template>
@@ -113,12 +125,27 @@ export default {
             ],
             totalFlag: false, //当只有一页时隐藏分页
             fullscreenLoading: false,
+
+            drawerTitle: '新增考期',
+            drawerFlag: false,
+            direction: 'rtl',
+
+            examForm: {
+                description: '',
+                name: '',
+                examItemIds: [],
+                status: '',
+                switches: '',
+            }
         }
     },
     created() {
         this.examPeriodListPage();
     },
     methods: {
+        handleClose(done) {
+            done();
+        },
         statusFormatter(row, column, cellValue){
             return cellValue == 1 ? '显示' : '不显示'
         },
