@@ -127,6 +127,7 @@ export const getPopularizeUrl = '/api/phone/DataAutDis/getPopularizeUrl'; //获�
 export const popularizeUrl = '/api/phone/DataAutDis/popularizeUrl'; //生成推广链接
 
 //线索数据
+export const telInquire = '/api/phone/clueData/telInquire'; //手机号查线索
 export const getClueDataByUserUuid = '/api/phone/clueData/getClueDataByUserUuid'; //获取员工的线索数据
 export const getListField = '/api/phone/pageFieldsMag/getUserPageField';//获取页面字段
 export const updateListField = '/api/phone/pageFieldsMag/upUserPageField';//更新页面字段排序、选中状态
