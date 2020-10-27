@@ -146,7 +146,7 @@
               width="45">
             </el-table-column>
 
-            <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="70" class-name="table_active">
                 <template slot-scope="scope">
 
                 <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
