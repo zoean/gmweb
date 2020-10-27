@@ -90,6 +90,14 @@ module.exports = {
                 '^/edu_api': '/'
             }
           },
+          '/kaoshi_api': {
+            target: process.env.VUE_APP_KAOSHI_JHWX,
+            ws: false,
+            changOrigin: true,//允许跨域
+            pathRewrite: {
+                '^/kaoshi_api': '/'
+            }
+          },
           '/onelogin': {
             target: process.env.VUE_APP_WWW_JHWX,
             ws: false,

@@ -44,6 +44,7 @@
               :prop="item.prop"
               :label="item.label"
               :formatter="item.formatter"
+              :min-width="item.width"
               v-for="(item, index) in columnList"
               :key="index"
               >
@@ -67,6 +68,8 @@
         >
         </el-pagination>
 
+        
+
     </el-main>
 </template>
 
@@ -78,7 +81,7 @@ import {
     examPeriodUpdate,
     examPeriodFindById
  } from '../../request/api';
-import {  } from '../../assets/js/common';
+import { getTextByJs } from '../../assets/js/common';
 export default {
     name: 'examManage',
     props: ['tableHeight'],
@@ -106,6 +109,7 @@ export default {
                 { 'prop': 'description', 'label': '考期描述' },
                 { 'prop': 'status', 'label': '前端开启状态', formatter: this.statusFormatter },
                 { 'prop': 'switches', 'label': '后端开启状态', formatter: this.statusFormatter },
+                { 'prop': 'itemsName', 'label': '关联考试项目', width: 300},
             ],
             totalFlag: false, //当只有一页时隐藏分页
             fullscreenLoading: false,
@@ -131,6 +135,9 @@ export default {
 
                     setTimeout(() => {
                         this.fullscreenLoading = false;
+                        res.data.list.map(sll => {
+                            sll.itemsName = getTextByJs(sll.items);
+                        })
                         this.list = res.data.list;
                         this.total = res.data.total;     
                         this.$emit('setTableHeight', this.total, 0, 1)                   
