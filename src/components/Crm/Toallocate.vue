@@ -4,7 +4,7 @@
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
                 <el-date-picker
                     size="small"
                     style="width: 97%;"
@@ -61,10 +61,10 @@
                 ></el-autocomplete>
 
             </el-col>
-            <el-col :span="3">
+            <el-col :span="2">
                 <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
             </el-col>
-            <el-col :span="3">
+            <el-col :span="2">
                 <el-button size="small" @click="obtainRPCD" style="float: right;" plain>确认领取</el-button>
             </el-col>
         </el-row>
