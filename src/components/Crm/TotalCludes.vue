@@ -57,7 +57,6 @@ export default {
       })
     },
     parseTime(row, column, cellValue){
-      console.log(cellValue)
       return timestampToTime(Number(cellValue))
     },
     parseOrderState(row, column, cellValue){
