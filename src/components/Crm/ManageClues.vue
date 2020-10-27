@@ -385,6 +385,7 @@ export default {
               { 'prop': 'referencePage', 'label': '推广落地页', 'width': 200 },
               { 'prop': 'isAllocation', 'label': '是否分配' },
               { 'prop': 'dialState', 'label': '是否拨打' },
+              { 'prop': 'callDialUp', 'label': '拨通 / 拨打' },
               { 'prop': 'createTime', 'label': '入库时间', 'width': 140  },
               { 'prop': 'allocationTime', 'label': '分配时间', 'width': 140 },
               { 'prop': 'belongingSeat', 'label': '所属坐席' },
