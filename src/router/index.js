@@ -32,6 +32,7 @@ import completed from '@/components/Crm/Completed'; //已成单
 import recoverData from '@/components/Crm/RecoverData';
 import seatData from '@/components/Crm/SeatData';
 import overflow from '@/components/Crm/Overflow';
+import totalCludes from '@/components/Crm/TotalCludes'
 import toallocate from '@/components/Crm/Toallocate';
 import enums from '@/components/Crm/Enum';
 import examManage from '@/components/Crm/ExamManage';
@@ -271,6 +272,14 @@ export default new Router({
             component: overflow,
             meta: {
                 title: '溢出池数据管理'
+            }
+        },
+        {
+            path: '/crm/dataStatistics/totalCludes',
+            name: 'totalCludes',
+            component: totalCludes,
+            meta: {
+                title: '全部线索'
             }
         },
         {
