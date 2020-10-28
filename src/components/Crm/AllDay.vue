@@ -568,7 +568,7 @@ export default {
                     // 提示
                     if(res.data.userDataCount >= res.data.userDataStandard) {
                         this.$message({
-                            message: '您的客户数量已达300，请释放，否则不能接收新数据',
+                            message: `您的客户数量已达${res.data.userDataStandard}，请释放，否则不能接收新数据`,
                             type: 'warning'
                         });
                     }

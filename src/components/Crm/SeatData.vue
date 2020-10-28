@@ -157,7 +157,6 @@
             :data="list"
             ref="tableSelect"
             v-loading="fullscreenLoading"
-            style="width: 100%"
             :height="tableHeight"
             class="table-fixed"
             >
@@ -562,7 +561,7 @@ export default {
                         this.list = res.data.list;
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1, 1)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -761,9 +760,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.el-table::before{
+    height: 0;
+}
 .table-fixed {
     /deep/.el-table__body-wrapper {
     height: calc(100% - 44px) !important;
+    overflow-x: scroll;
   }
 }
 

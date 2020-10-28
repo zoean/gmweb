@@ -157,7 +157,7 @@ export default {
                 dataStartTime: '',
                 dataEndTime: '',
                 province: '',
-                spreadText: '',
+                spread: '',
                 spreadId: '',
                 city: '',
                 provinceCity: [],
@@ -244,7 +244,7 @@ export default {
         },
         
         handleSelectSpread(item) {
-            this.form.spreadId = item.number;
+            this.form.spread = item.number;
             this.form.spreadText = item.value;
         },
         
