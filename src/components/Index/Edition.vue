@@ -3,7 +3,13 @@
     <el-page-header @back="goBack" class="title" content="更新日志">
     </el-page-header>
 
-    <el-timeline> 
+    <el-timeline>
+      <el-timeline-item timestamp="v 1.1.32 -- 2020/10/27" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、销售看板，销售主管看板新增工作明细模块</p>
+        </el-card>
+      </el-timeline-item> 
       <el-timeline-item timestamp="v 1.1.31 -- 2020/10/23" placement="top">
         <el-card>
           <h4>新增功能</h4>

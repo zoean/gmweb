@@ -850,7 +850,6 @@ export const menuNumberFunc = (arr, brr) => {
         arr[1].includeSubsetList[0].includeSubsetList[arrIndex[i]].name = fullName
     }
     return arr;
-
 }
 
 export const urlFun = (url) => {

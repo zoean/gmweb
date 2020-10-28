@@ -16,7 +16,7 @@
                 <el-form-item label="手机号" :label-width="formLabelWidth">
                     <el-input :value="$store.state.accountNumber" style="width: 80%;" disabled size=small></el-input>
                 </el-form-item>
-                
+
               <el-form-item label="原密码" :label-width="formLabelWidth">
                 <el-input v-model="form.password1" autocomplete="off" type="password" style="width: 80%;" size=small></el-input>
               </el-form-item>
@@ -111,7 +111,7 @@
             <el-col :span="18" style="height: 60px !important;">
                 <el-row type="flex" justify="start">
                     <el-col :span="5" style="min-width: 220px;">
-                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">                        
+                        <div class="index-hleft" @click="iconTitleClick" :class="back_Change ? 'back_Change' : ''">
                         <el-image style="width: 130px; position: relative; top: 2px;" :src="back_Change ? require('../../assets/images/logo_Name_A.png') : require('../../assets/images/logo_Name_A.png')" fit="fit"></el-image>
 
                         </div>
@@ -125,7 +125,7 @@
                             background-color="#fff"
                             text-color="#333333"
                             active-text-color="#488FF7">
-                            <el-menu-item 
+                            <el-menu-item
                                 v-for="(item,index) in $store.state.userMenuList"
                                 v-if="item.disabled"
                                 :index="`${item.url}`"
@@ -175,20 +175,20 @@
                     <el-badge slot="reference" :value="notReadNumValue" style="float: right; margin-right: 30px; cursor: pointer;" @click.native="badgeClick">
                     <i class="el-icon-bell" style="font-size: 18px;"></i>
                 </el-badge>
-                    
+
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.31</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.32</span>
                 <a class="guide" href="https://www.jhwx.com/staff_open.php" target="_blank">使用教程</a>
             </el-col>
         </el-row>
-        
+
     </el-header>
 </template>
 
 <script>
-import { 
+import {
     getUserLoginMessage,
-    logOut, 
+    logOut,
     updateUserPassword,
     readUuid,
     getStationNews,
@@ -228,7 +228,7 @@ export default {
                 wxQrcode: ''
             },
             rules_wx: {
-                
+
             },
             formLabelWidth: '120px',
             defaultActive: '',
@@ -291,7 +291,7 @@ export default {
                                 this.form_rule_flag = true;
                             }
                         },1000)
-                        
+
                     }else{
                         this.$message({
                             type: 'error',
@@ -433,14 +433,14 @@ export default {
             this.wxDialogVisible = true;
             this.$nextTick(() => {
               this.$refs['form_wx'].resetFields();
-            }) 
+            })
             this.getProfile();
         },
         change_phone() {
             this.phoneDialogVisible = true;
             this.$nextTick(() => {
               this.$refs['form_phone'].resetFields();
-            }) 
+            })
             this.getProfile();
         },
         userInfo() {
@@ -614,7 +614,7 @@ export default {
                             ws.send('消息发送');
                         };
 
-                        ws.onmessage = function (evt) { 
+                        ws.onmessage = function (evt) {
                             if(evt.data.indexOf("notReadNum") != -1) {
                                 let infoData = eval("(" + evt.data + ")");;
                                 that.$notify({
@@ -710,7 +710,7 @@ export default {
 <style lang="less">
 .message_popover{
     padding: 0 !important;
-    
+
     .el-tabs{
         .el-tabs__header{
             margin: 0;
