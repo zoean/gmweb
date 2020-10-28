@@ -230,7 +230,6 @@
             :userUuid='form.userUuid'
             :userId="userId"
             :schoolId='schoolId'
-            :classTypeList3 = 'classTypeList3'
             :examItem='examItem'
             :clueDataSUuid='clueDataSUuid'
             :userCDARUuid='userCDARUuid'
@@ -257,8 +256,7 @@ import {
     getClueDataNumber,
     copyTel,
     geSeatWork,
-    clueContactSign,
-    getGoodsList
+    clueContactSign
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
@@ -286,7 +284,6 @@ export default {
     // },
     data() {
         return {
-            classTypeList3: [],
             fieldNum: [],
             form: {
                 currentPage: 1,
@@ -379,25 +376,9 @@ export default {
         this.getRuleItem();
     },
     mounted() {
-        let that = this
-        setTimeout(function () {
-            that.getGoodsList()
-        }, 3000)
+
     },
     methods: {
-        getGoodsList() {
-            this.$smoke_post(getGoodsList, {
-                itemId: Number(this.examItem),
-                schoolName: this.schoolId
-            }).then(res => {
-                if(res.code == 200) {
-                    res.data.map(sll => {
-                        sll['value'] = sll.name;
-                    })
-                    this.classTypeList3 = res.data;
-                }
-            })
-        },
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
         },

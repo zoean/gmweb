@@ -365,6 +365,7 @@
                         <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">备注记录：</el-row>
                         <el-table
                             :data="remarkNotesList"
+                            max-height="250"
                             style="margin: 0 auto; margin-bottom: 30px;"
                         >
                             <el-table-column
@@ -687,10 +688,6 @@ export default {
             type: String,
             default: ''
         },
-        classTypeList3: {
-            type: Array,
-            default: []
-        },
         examItem: {
             type: String,
             default: ''
@@ -906,7 +903,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.classTypeList3, '333');
         if(this.followFlag) {
             this.drawerTitle = '添加备注';
         }else{
@@ -1282,22 +1278,28 @@ export default {
                     this.ruleForm.callLastTime = timestampToTime(Number(res.data.callLastTime));
                     this.ruleForm.createTime = timestampToTime(Number(res.data.createTime));
                     // 跟进信息
+                    let clueData = res.data.clueNotesLatest;
+                    this.ruleForm.classTypeText = clueData.classTypeName
+                    this.ruleForm.classType2Text = clueData.classType2Name
 
-                    this.classTypeList3.forEach((item) => {
-                        if(item.id == res.data.clueNotesLatest.classType) {
-                            this.ruleForm.classTypeText = item.name
-                        } else if(item.id == res.data.clueNotesLatest.classType2) {
-                            this.ruleForm.classType2Text = item.name
-                        }
-                    })
-                    this.ruleForm.classOffer = res.data.clueNotesLatest.classOffer;
-                    this.ruleForm.intentionLevel = res.data.clueNotesLatest.intentionLevel;
-                    this.ruleForm.runOutPromise = res.data.clueNotesLatest.runOutPromise;
-                    this.ruleForm.classOffer2 = res.data.clueNotesLatest.classOffer2;
-                    this.ruleForm.intentionLevel2 = res.data.clueNotesLatest.intentionLevel2;
-                    this.ruleForm.runOutPromise2 = res.data.clueNotesLatest.runOutPromise2;
-                    this.ruleForm.remarks = res.data.clueNotesLatest.remarks;
-                    this.ruleForm.comModeName = this.comMode;
+                    this.ruleForm.classType = clueData.classType
+                    this.ruleForm.classType2 = clueData.classType2
+
+                    this.ruleForm.classOffer = clueData.classOffer;
+                    this.ruleForm.intentionLevel = clueData.intentionLevel;
+                    this.ruleForm.runOutPromise = clueData.runOutPromise;
+                    this.ruleForm.classOffer2 = clueData.classOffer2;
+                    this.ruleForm.intentionLevel2 = clueData.intentionLevel2;
+                    this.ruleForm.runOutPromise2 = clueData.runOutPromise2;
+                    this.ruleForm.remarks = clueData.remarks;
+
+                    if(clueData.comMode == '1') {
+                        this.ruleForm.comModeName = '座机外呼';
+                    }else if(clueData.comMode == '2') {
+                        this.ruleForm.comModeName = '微信沟通';
+                    }else if(clueData.comMode == '3') {
+                        this.ruleForm.comModeName = '手机外呼';
+                    }
                 }
             })
         },
