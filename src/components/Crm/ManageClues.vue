@@ -587,7 +587,7 @@ export default {
                     }else{
                         this.$message({
                             type: 'error',
-                            message:  res.data.msg
+                            message:  res.msg
                         })
                     }
                 })
@@ -629,13 +629,13 @@ export default {
                             }else{
                                 this.$message({
                                     type: 'error',
-                                    message: '线索转移失败'
+                                    message: res.data.msg
                                 })
                             }
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '线索转移失败'
+                                message: res.msg
                             })
                         }
                     })
@@ -645,14 +645,14 @@ export default {
                             if(res.data.result){
                                 this.$message({
                                     type: 'success',
-                                    message: '线索转移成功'
+                                    message: res.data.msg
                                 })
                                 this.getExteAllClueData();
                                 this.overflowRecoverVisible = false
                             }else{
                                 this.$message({
                                     type: 'error',
-                                    message: '线索转移失败'
+                                    message: res.msg
                                 })
                             }
                         }else{
