@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-row class="people-screen" :gutter="20">
+    <el-row class="people-screen" :gutter="20" :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
       <el-col :span="3">
         <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
       </el-col>
@@ -17,6 +17,7 @@
 import { telInquire } from '@/request/api'
 import { timestampToTime } from '@/assets/js/common'
 export default {
+  props: ['toggleAction', 'hideSearch'],
   data (){
     return {
       form: {

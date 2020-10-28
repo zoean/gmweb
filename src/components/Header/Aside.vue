@@ -84,6 +84,12 @@ export default {
     closeMenu(index){        
       this.$emit('setPageTitleLeft')
     },
+    created() {
+      this.router_index();  
+      if(this.$route.path.indexOf('/crm') != -1){
+        this.updateClueDataNumber() 
+      }
+    },  
     toggleMenu(){
       this.iscollapse = !this.iscollapse
     },

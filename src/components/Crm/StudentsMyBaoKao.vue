@@ -109,14 +109,24 @@
                     </el-option>
                 </el-select>
             </el-col>
-
             <el-col :span="3">
+                <el-select v-model="form.checkResult" placeholder="审核失败原因" class="screen-li" size="small" clearable>
+                    <el-option
+                        v-for="item in checkResultList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="1">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="5">
                 <el-button style="float: right;" @click="downloadListClick" size="small" plain>查看下载任务</el-button>
                 <el-button style="float: right; margin-right: 10px;" @click="exportClick" size="small" plain>导 出</el-button>
             </el-col>
@@ -133,7 +143,7 @@
               type="selection"
               width="45">
             </el-table-column>
-            
+
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -192,7 +202,7 @@
         >
         </el-pagination>
 
-        <StudentsNotes 
+        <StudentsNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
             :drawer.sync='drawer'
@@ -203,7 +213,7 @@
         >
         </StudentsNotes>
 
-        <BaoKaoMessage 
+        <BaoKaoMessage
             v-if="baokaoFlag"
             @changebaokaoFlag="changebaokaoFlag"
             :baokaoFlag.sync='baokaoFlag'
@@ -211,7 +221,7 @@
         >
         </BaoKaoMessage>
 
-        <DownloadList 
+        <DownloadList
             v-if="downloadFlag"
             @changedownloadFlag="changedownloadFlag"
             :downloadFlag.sync='downloadFlag'
@@ -222,7 +232,7 @@
 </template>
 
 <script>
-import { 
+import {
     registerList,
     queryProvinceAll,
     queryItemList,
@@ -233,8 +243,8 @@ import {
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
 import DownloadList from '@/components/Share/DownloadList';
-import { 
-    timestampToTime, 
+import {
+    timestampToTime,
     genderText,
     classTypeString,
     getTextByJs,
@@ -242,7 +252,7 @@ import {
     citiesFun,
     filepostDown
 } from '../../assets/js/common';
-import { 
+import {
 
 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
@@ -261,13 +271,14 @@ export default {
                 checkStatus: '', //审核状态（0-待审核，1-审核通过，2-审核失败）
                 currentPage: 1,
                 examLable: '', //考试项目
-                examProvince: '', //报考省份	
+                examProvince: '', //报考省份
                 itemName: '', //报考项目
                 itemNameText: '',
                 name: '',
                 pageSize: 20,
                 pageType: 3, //页面类型（1-报考学员管理，2-报考员管理，3-报考管理）
                 paymentStatus: '', //交费状态（0-未交费，1-已交费）
+                checkResult: '',   //审核失败原因
                 pictureStatus: '', //报考材料图片状态（0-不完整，1-完整）
                 province: '', //所在省份
                 sortSet: [],
@@ -324,6 +335,11 @@ export default {
                 { value: 0, label: '未交费' },
                 { value: 1, label: '已交费' },
             ],
+            checkResultList: [
+                {label: '照片不合格', value: '照片不合格'},
+                {label: '工作证明不合格', value: '工作证明不合格'},
+                {label: '学历不合格', value: '学历不合格'},
+            ],
             checkStatusList: [
                 { value: 0, label: '待审核' },
                 { value: 1, label: '审核通过' },
@@ -348,7 +364,7 @@ export default {
         this.registerList();
         this.queryItemList();
     },
-    methods: {        
+    methods: {
         changeDateRange(){
         this.form.startTime = this.dateRange[0]
         this.form.endTime = this.dateRange[1]
@@ -393,7 +409,7 @@ export default {
         },
         registerExportExcel(tmp) {
             filepostDown(registerExportExcel, this.form, '报考数据-' + tmp + '.xlsx');
-        },  
+        },
         registerExportZip(){
             this.$smoke_post(registerExportZip, this.form).then(res => {
                 if(res.code == 200) {
@@ -482,7 +498,7 @@ export default {
             this.form.currentPage = 1;
             localStorage.setItem('studentsPageSize', index);
             this.registerList();
-        }, 
+        },
         querySearchBaoKao(queryString, cb) {
             var restaurants = this.ItemBaoKaoList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -519,7 +535,7 @@ export default {
         },
     },
     mounted() {
-        
+
     },
 }
 </script>

@@ -130,6 +130,8 @@
 
         </el-row>
 
+        <div class="full_msg">您的客户数量已达{{libStandard}}，请释放，否则不能接收新数据。</div>
+
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
 
         <el-table
@@ -146,7 +148,7 @@
               width="45">
             </el-table-column>
 
-            <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="70" class-name="table_active">
                 <template slot-scope="scope">
 
                 <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
@@ -356,6 +358,8 @@ export default {
             tag_flag: false,
             tag_gonghai_flag: false,
             SeatWorkObj: {},
+            fullLib: true,
+            libStandard: 0
         }
     },
     created() {
@@ -367,13 +371,16 @@ export default {
         }
         const uuid = localStorage.getItem('userUuid');
         this.form.userUuid = uuid;
-        // this.getClueDataNumber();        
+        // this.getClueDataNumber();
         this.getClueDataAll();
         const initOptions = localStorage.getItem('initOptions');
         this.initOptions = JSON.parse(initOptions);
         let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
+    },
+    mounted() {
+
     },
     methods: {
         clueConSignChange(row) {
@@ -550,6 +557,7 @@ export default {
                         this.fullscreenLoading = false;
                         this.columnList = res.data.filedList;
                         this.schoolId = res.data.schoolId;
+                        console.log(this.schoolId, 'this.schoolId');
                         res.data.list.map(sll => {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
@@ -561,6 +569,14 @@ export default {
                             this.$emit('setTableHeight', res.data.total, 1, 1)
                         }
                     }, 300);
+                    // 提示
+                    if(res.data.userDataCount >= res.data.userDataStandard) {
+                        this.libStandard = res.data.userDataStandard
+                        this.fullLib = true
+                    }else{
+                        this.fullLib = false
+                    }
+
                 }else{
                     setTimeout(() => {
                         this.fullscreenLoading = false;
@@ -737,8 +753,6 @@ export default {
                 }
             })
         },
-    },
-    mounted() {
     }
 }
 </script>
@@ -769,6 +783,13 @@ export default {
           color: #5cb6ff;
           font-size: 20px;
           cursor: pointer;
+        }
+        .full_msg{
+            color: #f56c6c;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #f56c6c;
+            background-color: #fef0f0;
         }
     }
 </style>

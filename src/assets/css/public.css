@@ -148,9 +148,6 @@ a:link,a:active,a:visited,a:hover {
     cursor: pointer;
 }
 
-.el-loading-mask {
-    top: 50px;
-}
 .el-table .one-row {
     color: #009933;
     font-size: 18px;
@@ -378,8 +375,10 @@ a:link,a:active,a:visited,a:hover {
 }
 
 .el-table .cell{
-    min-height: 32px;
-    line-height: 32px;
+    /*min-height: 32px;*/
+    /*line-height: 32px;*/
+    line-height: initial;
+    padding: 5px 0 5px 10px;
     font-size: 12px !important;
 }
 

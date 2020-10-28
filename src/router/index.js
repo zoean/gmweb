@@ -279,7 +279,7 @@ export default new Router({
             name: 'totalCludes',
             component: totalCludes,
             meta: {
-                title: '全部线索'
+                title: '线索检索'
             }
         },
         {

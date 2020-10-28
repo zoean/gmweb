@@ -361,7 +361,28 @@
                             </el-col>
 
                         </el-row>
-
+                        <el-row style="border-top: 1px dashed #ccc; margin-bottom: 20px; margin-top: 20px;" v-if="!routePathFlag"></el-row>
+                        <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">备注记录：</el-row>
+                        <el-table
+                            :data="remarkNotesList"
+                            max-height="250"
+                            style="margin: 0 auto; margin-bottom: 30px;"
+                        >
+                            <el-table-column
+                                label="序号"
+                                type="index"
+                                width="50">
+                            </el-table-column>
+                            <el-table-column
+                                :prop="item.prop"
+                                :label="item.label"
+                                v-for="(item, index) in remarkColumnList"
+                                :min-width="item.width"
+                                :key="index"
+                            >
+                            </el-table-column>
+                            <!--:show-overflow-tooltip="item.prop == 'remarks' ? true : false"-->
+                        </el-table>
                         <el-form-item style="text-align: center;">
                           <el-button type="primary" @keyup.enter="submitForm('ruleForm')" @click="submitForm('ruleForm')" size="small" style="width: 100px;" v-if="!routePathFlag">确定</el-button>
                           <el-button @click="quxiao" plain size="small" style="width: 100px;" v-if="!routePathFlag">取消</el-button>
@@ -792,7 +813,13 @@ export default {
             pageshow: true, //分页重新渲染
             totalFlag: false, //当只有一页时隐藏分页
             notesList: [],
+            remarkNotesList: [], //备注记录
             notesCallList: [],
+            remarkColumnList: [
+                { 'prop': 'remarks', 'label': '其他备注', 'width': 550 },
+                { 'prop': 'entryPerson', 'label': '录入人', width: 150 },
+                { 'prop': 'createTime', 'label': '创建时间', width: 150 }
+            ],
             notesColumnListFollow: [
                 { 'prop': 'createTime', 'label': '创建时间' },
                 { 'prop': 'entryPerson', 'label': '录入人' },
@@ -872,10 +899,10 @@ export default {
             restaurants: [],
             routePathFlag: false,
             releaseFlag: false,
-            isDisable: true
+            isDisable: true,
         }
     },
-    created() {
+    mounted() {
         if(this.followFlag) {
             this.drawerTitle = '添加备注';
         }else{
@@ -909,9 +936,10 @@ export default {
         this.ruleForm.remarks = '';
         this.ruleForm.runOutPromise = '';
         this.ruleForm.runOutPromise2 = '';
-        this.getClueDataDetails(this.clueDataSUuid);
         this.getGoodsList();
         this.getGoodsList2();
+
+        this.getClueDataDetails(this.clueDataSUuid);
         if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("peopleClues") != -1 || this.$route.path.indexOf("manageClues") != -1 || this.$route.path.indexOf("recoverData") != -1 || this.$route.path.indexOf("toallocate") != -1){
             this.routePathFlag = true;
         }
@@ -931,6 +959,7 @@ export default {
                 _self.submitForm('ruleForm');
             }
         }
+        this.getClueDataNotes()
     },
     methods: {
         lookAgreementDetailsClick(row) {
@@ -1034,6 +1063,11 @@ export default {
                         // sll.classType = classTypeText(Number(sll.classType));
                     })
                     this.notesList = res.data.list;
+                    // 备注记录 remarkNotesList
+                    this.remarkNotesList = this.notesList.filter((val) => {
+                        return !(val.remarks === '')
+                    })
+
                     this.notesForm.total = res.data.total;
                 }
             })
@@ -1243,6 +1277,29 @@ export default {
                     this.ruleForm.school = res.data.school;
                     this.ruleForm.callLastTime = timestampToTime(Number(res.data.callLastTime));
                     this.ruleForm.createTime = timestampToTime(Number(res.data.createTime));
+                    // 跟进信息
+                    let clueData = res.data.clueNotesLatest;
+                    this.ruleForm.classTypeText = clueData.classTypeName
+                    this.ruleForm.classType2Text = clueData.classType2Name
+
+                    this.ruleForm.classType = clueData.classType
+                    this.ruleForm.classType2 = clueData.classType2
+
+                    this.ruleForm.classOffer = clueData.classOffer;
+                    this.ruleForm.intentionLevel = clueData.intentionLevel;
+                    this.ruleForm.runOutPromise = clueData.runOutPromise;
+                    this.ruleForm.classOffer2 = clueData.classOffer2;
+                    this.ruleForm.intentionLevel2 = clueData.intentionLevel2;
+                    this.ruleForm.runOutPromise2 = clueData.runOutPromise2;
+                    this.ruleForm.remarks = clueData.remarks;
+
+                    if(clueData.comMode == '1') {
+                        this.ruleForm.comModeName = '座机外呼';
+                    }else if(clueData.comMode == '2') {
+                        this.ruleForm.comModeName = '微信沟通';
+                    }else if(clueData.comMode == '3') {
+                        this.ruleForm.comModeName = '手机外呼';
+                    }
                 }
             })
         },
@@ -1303,9 +1360,6 @@ export default {
             })
         },
     },
-    mounted() {
-
-    },
     computed: {
         drawer_:{
             get(){
@@ -1331,5 +1385,10 @@ export default {
 }
 /deep/ .el-autocomplete{
     width: 200px;
+}
+.remark-list {
+    float: right;
+    color: #409EFF;
+    cursor: pointer;
 }
 </style>
