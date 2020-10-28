@@ -73,7 +73,7 @@
             </el-col>
 
             <el-col :span="3">
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleNumberName" filterable size="small" placeholder="选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"

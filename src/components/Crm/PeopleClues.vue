@@ -543,7 +543,7 @@ export default {
                         if(res.data.result){
                             this.$message({
                                 type: 'success',
-                                message: '线索转移成功'
+                                message: res.data.msg
                             })
                             this.getExteClueData();
                             this.transferSeatVisible = false
@@ -551,7 +551,7 @@ export default {
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '线索转移失败'
+                                message: res.msg
                             })
                         }
                     }else{
@@ -592,14 +592,14 @@ export default {
                             if(res.data.result){
                                 this.$message({
                                     type: 'success',
-                                    message: '线索转移成功'
+                                    message: res.data.msg
                                 })
                                 this.getExteClueData();
                                 this.overflowRecoverVisible = false
                             }else{
                                 this.$message({
                                     type: 'error',
-                                    message: '线索转移失败'
+                                    message: res.msg
                                 })
                             }
                         }else{
@@ -615,14 +615,14 @@ export default {
                             if(res.data.result){
                                 this.$message({
                                     type: 'success',
-                                    message: '线索转移成功'
+                                    message: res.data.msg
                                 })
                                 this.getExteClueData();
                                 this.overflowRecoverVisible = false
                             }else{
                                 this.$message({
                                     type: 'error',
-                                    message: '线索转移失败'
+                                    message: res.msg
                                 })
                             }
                         }else{

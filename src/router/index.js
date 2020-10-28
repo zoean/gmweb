@@ -282,7 +282,6 @@ export default new Router({
                 title: '全部线索'
             }
         },
-
         {
             path: '/crm/promotion/dataAllocation',
             name: 'dataAllocation',

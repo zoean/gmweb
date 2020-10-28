@@ -65,7 +65,8 @@
                         <el-option
                           v-for="item in levelList"
                           :key="item.name"
-                          :value="item.number">{{item.name}}
+                          :value="item.number"
+                          :label="item.name">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -121,7 +122,7 @@ export default {
                 url: '',
                 uuid: '',
                 parentUuid: '',
-                level: '',
+                level: 0,
                 pageNum: '',
             },
             rules: {
@@ -185,7 +186,7 @@ export default {
             this.ruleForm.url = '';
             this.ruleForm.uuid = '';
             this.ruleForm.parentUuid = '';
-            this.ruleForm.level = '';
+            this.ruleForm.level = 0;
         },
         handleDeleteClick(scope) {
             this.$smoke_post(deleteMenu, {

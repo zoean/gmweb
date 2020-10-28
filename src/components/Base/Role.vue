@@ -418,38 +418,25 @@ export default {
                 }
             })
         },
+        recursionTree(arr){
+            arr.forEach(item => {
+                if(item.flag){
+                    this.checkedKeys.push(item.uuid)
+                }
+                if(item.includeSubsetList.length > 0){
+                    this.recursionTree(item.includeSubsetList)
+                }
+            })
+        },
         getRoleMenuList(id) {
             let arr;
             this.checkedKeys = [];
             this.$smoke_post(getRoleMenuList, {
                 uuid: id
             }).then(res => {
+                console.log(res)
                 arr = JSON.parse(JSON.stringify(res.data).replace(/disabled/g,"flag"));
-                arr.forEach(element => {
-                    if((element.flag) && (element.includeSubsetList.length == 0)){
-                        this.checkedKeys.push(element.uuid);
-                    }else if(element.includeSubsetList.length != 0){
-                        element.includeSubsetList.forEach(tag => {
-                            if(tag.flag && (element.includeSubsetList.length == 0)){
-                                this.checkedKeys.push(tag.uuid);
-                            }else if(tag.includeSubsetList.length != 0){
-                                tag.includeSubsetList.forEach(sll => {
-                                    if(sll.flag && sll.includeSubsetList.length == 0){
-                                        this.checkedKeys.push(sll.uuid);
-                                    }else if(sll.includeSubsetList.length != 0){
-                                        sll.includeSubsetList.forEach(wwq => {
-                                            if(wwq.flag && wwq.includeSubsetList.length == 0){
-                                                this.checkedKeys.push(wwq.uuid);
-                                            }else{
-                                                return;
-                                            }
-                                        })
-                                    }
-                                })
-                            }
-                        })
-                    }
-                });
+                this.recursionTree(arr)                
                 this.treeData = arr;
             })
         },
