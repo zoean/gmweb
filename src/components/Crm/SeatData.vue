@@ -1,5 +1,5 @@
 <template>
-    <el-main class="index-main">
+    <el-main class="index-main seat-data">
         <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6 ">
@@ -73,7 +73,7 @@
             </el-col>
 
             <el-col :span="3">
-                <el-select v-model="form.ruleNumberName" size="small" placeholder="选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleNumberName" filterable size="small" placeholder="选择分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -791,5 +791,8 @@ export default {
     }
     .mt-10 {
         margin-top: 10px;
+    }
+    .seat-data /deep/.el-cascader__search-input {
+        display: none;
     }
 </style>

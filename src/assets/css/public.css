@@ -148,9 +148,6 @@ a:link,a:active,a:visited,a:hover {
     cursor: pointer;
 }
 
-.el-loading-mask {
-    top: 50px;
-}
 .el-table .one-row {
     color: #009933;
     font-size: 18px;
