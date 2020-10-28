@@ -187,6 +187,7 @@ export default {
                 examItemIds: [],
                 status: 1,
                 switches: 1,
+                id: '',
             },
             rules: {
                 name: [
@@ -286,6 +287,7 @@ export default {
         addExamClick() {
             this.drawerFlag = true;
             this.drawerTitle = '新增考期';
+            this.ruleForm.id = '';
             this.$nextTick(() => {
                 this.$refs['ruleForm'].resetFields();
             }) 
@@ -305,6 +307,7 @@ export default {
                     this.ruleForm.description = res.data.description;
                     this.ruleForm.status = res.data.status;
                     this.ruleForm.switches = res.data.switches;
+                    this.ruleForm.id = res.data.id;
                     res.data.items.map(sll => {
                         arr.push(sll.id);
                     })
