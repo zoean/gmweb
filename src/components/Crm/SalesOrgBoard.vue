@@ -113,7 +113,7 @@
 
         </div>
 
-        <!-- <div class="call-detail">
+        <div class="call-detail">
 
             <div class="people-title">工作明细</div>
             <el-row class="people-screen" style="margin-top: 10px;">
@@ -164,7 +164,7 @@
                 </el-table-column>
 
             </el-table>
-        </div> -->
+        </div>
 
         <div class="call-detail" style="margin-top: 10px;">
             
@@ -290,7 +290,7 @@ export default {
                 { 'prop': 'todayTotalMoney2', 'label': '3天以上数据流水', width: 120},
                 { 'prop': 'totalARPU', 'label': '总ARPU' },
                 { 'prop': 'refund', 'label': '退费' },
-                { 'prop': 'performance', 'label': '业绩' },
+                { 'prop': 'performance', 'label': '业绩', width: 120},
             ],
             fullscreenLoading: false,
             fullscreenLoadingWork: false,

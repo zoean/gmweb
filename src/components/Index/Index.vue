@@ -180,7 +180,7 @@ export default {
                     }else if(id == 3) {
                         href = '/edu_api/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 4) {
-                        href = '/onelogin/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/kaoshi_api/index.php?user-app-login-avoid_login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 5) {
                         href = '/onelogin/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }
