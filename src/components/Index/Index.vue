@@ -94,8 +94,8 @@ export default {
                { name: '京华集团商城后台', https: 'https://www.jhwxedu.com/admin_jhwx/index.php', url: require('../../assets/images/inserticon06.png'), id: 3},
             ],
             list2: [
-               { name: '京华教育题库后台', https: 'http://kaoshi.jhwx.com/index.php', url: require('../../assets/images/inserticon04.png'), id: 4},
-               { name: '京华教育课程后台', https: 'https://cssc.jhwx.com', url: require('../../assets/images/inserticon03.png'), id: 5},
+               { name: '京华教育课程后台', https: 'https://cssc.jhwx.com', url: require('../../assets/images/inserticon03.png'), id: 4},
+               { name: '京华教育题库后台', https: 'http://kaoshi.jhwx.com/index.php', url: require('../../assets/images/inserticon04.png'), id: 5},
                { name: '京华教育JQ后台', https: 'http://office.jhwx.com/vip/index.do', url: require('../../assets/images/inserticon05.png'), id: 6},
             ],
             bannerList: [
@@ -180,9 +180,9 @@ export default {
                     }else if(id == 3) {
                         href = '/edu_api/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 4) {
-                        href = '/kaoshi_api/index.php?user-app-login-avoid_login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
-                    }else if(id == 5) {
                         href = '/onelogin/api_sys_login.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                    }else if(id == 5) {
+                        href = '/kaoshi_api/index.php?user-app-login-avoid_login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }
                     
                     if(res.data.loginPlatform){
