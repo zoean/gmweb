@@ -365,6 +365,7 @@
                         <el-row style="font-size: 14px; font-weight: 500; margin-bottom: 20px;" v-if="followFlag">备注记录：</el-row>
                         <el-table
                             :data="remarkNotesList"
+                            max-height="250"
                             style="margin: 0 auto; margin-bottom: 30px;"
                         >
                             <el-table-column
@@ -901,7 +902,7 @@ export default {
             isDisable: true,
         }
     },
-    created() {
+    mounted() {
         if(this.followFlag) {
             this.drawerTitle = '添加备注';
         }else{
@@ -935,9 +936,10 @@ export default {
         this.ruleForm.remarks = '';
         this.ruleForm.runOutPromise = '';
         this.ruleForm.runOutPromise2 = '';
-        this.getClueDataDetails(this.clueDataSUuid);
         this.getGoodsList();
         this.getGoodsList2();
+
+        this.getClueDataDetails(this.clueDataSUuid);
         if(this.$route.path.indexOf("SeatData") != -1 || this.$route.path.indexOf("peopleClues") != -1 || this.$route.path.indexOf("manageClues") != -1 || this.$route.path.indexOf("recoverData") != -1 || this.$route.path.indexOf("toallocate") != -1){
             this.routePathFlag = true;
         }
@@ -1061,10 +1063,7 @@ export default {
                         // sll.classType = classTypeText(Number(sll.classType));
                     })
                     this.notesList = res.data.list;
-                    this.notesList.forEach((item, index) => {
-                        console.log(item.remarks);
-
-                    })
+                    // 备注记录 remarkNotesList
                     this.remarkNotesList = this.notesList.filter((val) => {
                         return !(val.remarks === '')
                     })
@@ -1278,6 +1277,29 @@ export default {
                     this.ruleForm.school = res.data.school;
                     this.ruleForm.callLastTime = timestampToTime(Number(res.data.callLastTime));
                     this.ruleForm.createTime = timestampToTime(Number(res.data.createTime));
+                    // 跟进信息
+                    let clueData = res.data.clueNotesLatest;
+                    this.ruleForm.classTypeText = clueData.classTypeName
+                    this.ruleForm.classType2Text = clueData.classType2Name
+
+                    this.ruleForm.classType = clueData.classType
+                    this.ruleForm.classType2 = clueData.classType2
+
+                    this.ruleForm.classOffer = clueData.classOffer;
+                    this.ruleForm.intentionLevel = clueData.intentionLevel;
+                    this.ruleForm.runOutPromise = clueData.runOutPromise;
+                    this.ruleForm.classOffer2 = clueData.classOffer2;
+                    this.ruleForm.intentionLevel2 = clueData.intentionLevel2;
+                    this.ruleForm.runOutPromise2 = clueData.runOutPromise2;
+                    this.ruleForm.remarks = clueData.remarks;
+
+                    if(clueData.comMode == '1') {
+                        this.ruleForm.comModeName = '座机外呼';
+                    }else if(clueData.comMode == '2') {
+                        this.ruleForm.comModeName = '微信沟通';
+                    }else if(clueData.comMode == '3') {
+                        this.ruleForm.comModeName = '手机外呼';
+                    }
                 }
             })
         },
@@ -1337,9 +1359,6 @@ export default {
                 this.$refs.autocompleteMain.focus();
             })
         },
-    },
-    mounted() {
-
     },
     computed: {
         drawer_:{

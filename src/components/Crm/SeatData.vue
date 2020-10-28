@@ -1,5 +1,5 @@
 <template>
-    <el-main class="index-main">
+    <el-main class="index-main seat-data">
         <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6 ">
@@ -791,5 +791,8 @@ export default {
     }
     .mt-10 {
         margin-top: 10px;
+    }
+    .seat-data /deep/.el-cascader__search-input {
+        display: none;
     }
 </style>

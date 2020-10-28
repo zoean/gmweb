@@ -146,7 +146,7 @@
               width="45">
             </el-table-column>
 
-            <el-table-column prop="clueConSign" label="标记" fixed="left" width="80" class-name="table_active">
+            <el-table-column prop="clueConSign" label="标记" fixed="left" width="70" class-name="table_active">
                 <template slot-scope="scope">
 
                 <select @change="clueConSignChange(scope.row)" v-model="scope.row.clueConSign" class="smoke-select">
@@ -375,6 +375,9 @@ export default {
         this.enumByEnumNums(arr);
         this.getRuleItem();
     },
+    mounted() {
+
+    },
     methods: {
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
@@ -550,6 +553,7 @@ export default {
                         this.fullscreenLoading = false;
                         this.columnList = res.data.filedList;
                         this.schoolId = res.data.schoolId;
+                        console.log(this.schoolId, 'this.schoolId');
                         res.data.list.map(sll => {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
@@ -745,8 +749,6 @@ export default {
                 }
             })
         },
-    },
-    mounted() {
     }
 }
 </script>
