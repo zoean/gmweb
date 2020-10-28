@@ -420,7 +420,7 @@ export default {
         },
         recursionTree(arr){
             arr.forEach(item => {
-                if(item.flag){
+                if(item.disabled && item.includeSubsetList.length <= 0){
                     this.checkedKeys.push(item.uuid)
                 }
                 if(item.includeSubsetList.length > 0){
@@ -434,9 +434,8 @@ export default {
             this.$smoke_post(getRoleMenuList, {
                 uuid: id
             }).then(res => {
-                console.log(res)
                 arr = JSON.parse(JSON.stringify(res.data).replace(/disabled/g,"flag"));
-                this.recursionTree(arr)                
+                this.recursionTree(res.data)
                 this.treeData = arr;
             })
         },

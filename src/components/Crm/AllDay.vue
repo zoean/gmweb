@@ -130,6 +130,8 @@
 
         </el-row>
 
+        <div class="full_msg">您的客户数量已达{{libStandard}}，请释放，否则不能接收新数据。</div>
+
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
 
         <el-table
@@ -356,6 +358,8 @@ export default {
             tag_flag: false,
             tag_gonghai_flag: false,
             SeatWorkObj: {},
+            fullLib: true,
+            libStandard: 0
         }
     },
     created() {
@@ -567,10 +571,10 @@ export default {
                     }, 300);
                     // 提示
                     if(res.data.userDataCount >= res.data.userDataStandard) {
-                        this.$message({
-                            message: `您的客户数量已达${res.data.userDataStandard}，请释放，否则不能接收新数据`,
-                            type: 'warning'
-                        });
+                        this.libStandard = res.data.userDataStandard
+                        this.fullLib = true
+                    }else{
+                        this.fullLib = false
                     }
 
                 }else{
@@ -779,6 +783,13 @@ export default {
           color: #5cb6ff;
           font-size: 20px;
           cursor: pointer;
+        }
+        .full_msg{
+            color: #f56c6c;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #f56c6c;
+            background-color: #fef0f0;
         }
     }
 </style>
