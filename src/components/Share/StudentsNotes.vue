@@ -334,17 +334,16 @@
                             </el-col>
 
                             <el-col :span="6">
-                                <el-form-item label="考期" prop="examPeriod">
+                                <el-form-item label="报考考期" prop="examPeriodIdList">
 
-                                    <el-date-picker
-                                        style="width: 100%;"
-                                        :disabled='routePathFlag' 
-                                        v-model="customerForm.examPeriod"
-                                        size="small" 
-                                        type="month"
-                                        @change="timeChange"
-                                        placeholder="请选择日期">
-                                    </el-date-picker>
+                                    <el-select v-model="customerForm.examPeriodIdList" multiple :disabled='routePathFlag' placeholder="请选择考期" size="small" >
+                                        <el-option
+                                          v-for="item in examList"
+                                          :key="item.id"
+                                          :label="item.name"
+                                          :value="String(item.id)">
+                                        </el-option>
+                                    </el-select>
 
                                 </el-form-item>
                             </el-col>
@@ -656,7 +655,8 @@ import {
   updateAddress,
   queryRegisterProcess,
   queryProvinceAll,
-  xieyi
+  xieyi,
+  examPeriodList
 } from '../../request/api';
 import pcaa from 'area-data/pcaa';
 import VueAudio from '@/components/Share/VueAudio';
@@ -713,6 +713,7 @@ export default {
             education: '', //学历
             evidencePurpose: '', //取证目的
             examPeriod: '', //考期
+            examPeriodIdList: '',
             gender: '', //性别(0: 女，1：男)
             graduationMajor: '', //毕业专业
             name: "",
@@ -873,12 +874,14 @@ export default {
           registerList: [],
           registerColumn: [
             { 'prop': 'itemName', 'label': '报考项目名称' },
+            { 'prop': 'examPeriodName', 'label': '考期名称' },
             { 'prop': 'basicInfoStatus', 'label': '基本信息情况' },
             { 'prop': 'pictureStatus', 'label': '报考材料情况' },
             { 'prop': 'checkStatus', 'label': '审核情况' },
             { 'prop': 'checkResult', 'label': '失败原因' },
           ],
-          provinceList: []
+          provinceList: [],
+          examList: [],
         }
     },
     created() {
@@ -1254,6 +1257,7 @@ export default {
             studentUuid: id
         }).then(res => {
           if(res.code == 200) {
+            this.examPeriodList(res.data.examItemId);
             this.customerForm.age = res.data.age == 0 ? '' : res.data.age;
             this.customerForm.auxiliarySignUp = res.data.auxiliarySignUp;
             if(res.data.buyState == 0) {
@@ -1268,7 +1272,7 @@ export default {
             this.customerForm.createTime = timestampToTime(Number(res.data.createTime));
             this.customerForm.education = res.data.education == 0 || res.data.education == null ? '' : String(res.data.education);
             this.customerForm.evidencePurpose = res.data.evidencePurpose == 0 || res.data.evidencePurpose == null ? '' : String(res.data.evidencePurpose)
-            this.customerForm.examPeriod = res.data.examPeriod == "" ? '' : Number(res.data.examPeriod);
+            this.customerForm.examPeriodIdList = res.data.examPeriodIdList;
             this.customerForm.gender = res.data.gender == 2 ? '' : res.data.gender;
             this.customerForm.graduationMajor = res.data.graduationMajor;
             this.customerForm.name = res.data.name;
@@ -1303,6 +1307,16 @@ export default {
 
             this.ruleFormAddress.schoolName = res.data.signUpSchool;
             this.datasId = res.data.datasId;
+          }
+        })
+      },
+      examPeriodList(id) {
+        this.$smoke_post(examPeriodList, {
+          examItemId: id,
+          switches: 1
+        }).then(res => {
+          if(res.code == 200) {
+            this.examList = res.data;
           }
         })
       },

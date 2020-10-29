@@ -111,12 +111,23 @@
             </el-col>
 
             <el-col :span="3">
+                <el-select v-model="form.examPeriodId" placeholder="选择考期名称" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in examList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="2">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="4">
                 <el-button style="float: right;" @click="downloadListClick" size="small" plain>查看下载任务</el-button>
                 <el-button style="float: right; margin-right: 10px;" @click="exportClick" size="small" plain>导 出</el-button>
             </el-col>
@@ -228,7 +239,8 @@ import {
     queryItemList,
     registerExportExcel,
     registerExportZip,
-    updataPayment
+    updataPayment,
+    examPeriodList
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
@@ -291,6 +303,7 @@ export default {
                 { 'prop': 'examLable', 'label': '考试项目' },
                 { 'prop': 'itemName', 'label': '报考项目', width: 120 },
                 { 'prop': 'itemGradeName', 'label': '报考等级/专业', width: 120 },
+                { 'prop': 'examPeriodName', 'label': '考期名称', width: 110 },
                 { 'prop': 'province', 'label': '所在省份', width: 120},
                 { 'prop': 'examProvince', 'label': '报考省份', width: 120},
                 { 'prop': 'basicInfoStatus', 'label': '基本信息情况', width: 110},
@@ -334,7 +347,9 @@ export default {
             paymentForm: {
                 paymentStatus: '',
                 registerId: ''
-            }
+            },
+
+            examList: [],
         }
     },
     created() {
@@ -347,8 +362,18 @@ export default {
         this.queryProvinceAll();
         this.registerList();
         this.queryItemList();
+        this.examPeriodList();
     },
     methods: {        
+        examPeriodList() {
+          this.$smoke_post(examPeriodList, {
+            switches: 1
+          }).then(res => {
+            if(res.code == 200) {
+              this.examList = res.data;
+            }
+          })
+        },
         changeDateRange(){
         this.form.startTime = this.dateRange[0]
         this.form.endTime = this.dateRange[1]
