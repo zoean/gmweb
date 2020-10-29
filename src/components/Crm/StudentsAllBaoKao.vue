@@ -95,6 +95,19 @@
                     </el-option>
                 </el-select>
             </el-col>
+            <el-col :span="3">
+                <el-input v-model="form.examAssistantName" placeholder="输入报考员姓名" class="screen-li" size="small" clearable></el-input>
+            </el-col>
+            <el-col :span="3">
+                <el-select v-model="form.checkResult" placeholder="审核失败原因" class="screen-li" size="small" clearable>
+                    <el-option
+                        v-for="item in checkResultList"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-col>
 
             <el-col :span="3">
                 <el-select v-model="form.examPeriodId" placeholder="选择考期名称" class="screen-li" size="small" clearable>
@@ -107,7 +120,7 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="12">
+            <el-col :span="6">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
@@ -128,7 +141,7 @@
               type="selection"
               width="45">
             </el-table-column>
-            
+
             <el-table-column
               :prop="item.prop"
               :label="item.label"
@@ -175,7 +188,7 @@
         >
             <span class="bullets"></span>
 
-            <el-tag 
+            <el-tag
                 v-for="(item,index) in teacherMoveList" :key="index"
                 style="margin-left: 20px; cursor: pointer; margin-top: 20px;"
                 @click="tagClick(item)"
@@ -184,7 +197,7 @@
 
         </el-drawer>
 
-        <StudentsNotes 
+        <StudentsNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
             :drawer.sync='drawer'
@@ -195,7 +208,7 @@
         >
         </StudentsNotes>
 
-        <BaoKaoMessage 
+        <BaoKaoMessage
             v-if="baokaoFlag"
             @changebaokaoFlag="changebaokaoFlag"
             :baokaoFlag.sync='baokaoFlag'
@@ -207,7 +220,7 @@
 </template>
 
 <script>
-import { 
+import {
     registerList,
     queryProvinceAll,
     queryItemList,
@@ -217,15 +230,15 @@ import {
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
-import { 
-    timestampToTime, 
+import {
+    timestampToTime,
     genderText,
     classTypeString,
     getTextByJs,
     sortTextNum,
     citiesFun,
 } from '../../assets/js/common';
-import { 
+import {
     registerPeopleId
 } from '../../assets/js/data';
 import pcaa from 'area-data/pcaa';
@@ -251,6 +264,8 @@ export default {
                 pageSize: 20,
                 pageType: 2, //页面类型（1-报考学员管理，2-报考员管理，3-报考管理）
                 paymentStatus: '', //交费状态（0-未交费，1-已交费）
+                examAssistantName: '',     //报考员姓名
+                checkResult: '',    //审核失败原因
                 pictureStatus: '', //报考材料图片状态（0-不完整，1-完整）
                 province: '', //所在省份
                 sortSet: [],
@@ -298,6 +313,11 @@ export default {
             paymentStatusList: [
                 { value: 0, label: '未交费' },
                 { value: 1, label: '已交费' },
+            ],
+            checkResultList: [
+                {label: '照片不合格', value: '照片不合格'},
+                {label: '工作证明不合格', value: '工作证明不合格'},
+                {label: '学历不合格', value: '学历不合格'},
             ],
             checkStatusList: [
                 { value: 0, label: '待审核' },
@@ -460,7 +480,7 @@ export default {
             this.form.currentPage = 1;
             localStorage.setItem('studentsPageSize', index);
             this.registerList();
-        }, 
+        },
         querySearchBaoKao(queryString, cb) {
             var restaurants = this.ItemBaoKaoList;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -505,7 +525,7 @@ export default {
         },
     },
     mounted() {
-        
+
     },
 }
 </script>
@@ -528,6 +548,9 @@ export default {
             .screen-li{
                 width: 94%;
             }
+        }
+        .el-col-6{
+            height: auto !important;
         }
     }
 </style>

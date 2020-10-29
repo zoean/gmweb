@@ -166,11 +166,12 @@
                 :show-overflow-tooltip="item.prop == 'notes' ? true : item.prop == 'referencePage' ? true : false"
                 v-for="(item, index) in columnList"
                 :min-width="item.width"
-                :key="index">
+                :key="index"
+                :formatter="item.formatter">
 
-                <template slot-scope="scope">
+                <!-- <template slot-scope="scope">
                   <span>{{scope.row[item.prop] || '- -'}}</span>
-                </template>
+                </template> -->
 
             </el-table-column>
 
@@ -377,20 +378,21 @@ export default {
             tableData: [],
             columnList: [
               { 'prop': 'tel', 'label': '手机号码', 'width': 90 },
-              { 'prop': 'name', 'label': '客户姓名' },
+              { 'prop': 'name', 'label': '客户姓名', 'formatter': this.parseNull  },
               { 'prop': 'examItemName', 'label': '考试项目', 'width': 120 },
-              { 'prop': 'spread', 'label': '推广渠道', 'width': 120 },
+              { 'prop': 'spread', 'label': '推广渠道', 'width': 120, 'formatter': this.parseNull  },
               { 'prop': 'acc', 'label': '推广账号', 'width': 120 },
               { 'prop': 'exteName', 'label': '推广人' },
-              { 'prop': 'referencePage', 'label': '推广落地页', 'width': 200 },
+              { 'prop': 'referencePage', 'label': '推广落地页', 'width': 200, 'formatter': this.parseNull  },
               { 'prop': 'isAllocation', 'label': '是否分配' },
               { 'prop': 'dialState', 'label': '是否拨打' },
+              { 'prop': 'dialUpNum', 'label': '拨通 / 拨打', 'formatter': this.parseCallNumber },
               { 'prop': 'createTime', 'label': '入库时间', 'width': 140  },
               { 'prop': 'allocationTime', 'label': '分配时间', 'width': 140 },
-              { 'prop': 'belongingSeat', 'label': '所属坐席' },
-              { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
+              { 'prop': 'belongingSeat', 'label': '所属坐席', 'formatter': this.parseNull  },
+              { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150, 'formatter': this.parseNull },
               { 'prop': 'inputMode', 'label': '属性' },
-              { 'prop': 'notes', 'label': '备注', 'width': 180},
+              { 'prop': 'notes', 'label': '备注', 'width': 180, 'formatter': this.parseNull },
             ],
             totalFlag: false, //当只有一页时隐藏分页
             restaurants: [],
@@ -448,6 +450,12 @@ export default {
       }
     },
     methods: {
+        parseNull(row, column, cellValue){
+            return cellValue || '- -'
+        },
+        parseCallNumber(row){
+            return row.dialUpNum + '/' + row.callNum
+        },
         getUserList(obj){
             let userList = []
             function getLeaf(obj){
@@ -587,7 +595,7 @@ export default {
                     }else{
                         this.$message({
                             type: 'error',
-                            message:  res.data.msg
+                            message:  res.msg
                         })
                     }
                 })
@@ -629,13 +637,13 @@ export default {
                             }else{
                                 this.$message({
                                     type: 'error',
-                                    message: '线索转移失败'
+                                    message: res.data.msg
                                 })
                             }
                         }else{
                             this.$message({
                                 type: 'error',
-                                message: '线索转移失败'
+                                message: res.msg
                             })
                         }
                     })
@@ -645,14 +653,14 @@ export default {
                             if(res.data.result){
                                 this.$message({
                                     type: 'success',
-                                    message: '线索转移成功'
+                                    message: res.data.msg
                                 })
                                 this.getExteAllClueData();
                                 this.overflowRecoverVisible = false
                             }else{
                                 this.$message({
                                     type: 'error',
-                                    message: '线索转移失败'
+                                    message: res.msg
                                 })
                             }
                         }else{
