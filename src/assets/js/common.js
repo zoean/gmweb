@@ -834,20 +834,33 @@ export const levelFunc = (arr) => {
 
 //菜单num统计
 
-export const menuNumberFunc = (arr, brr) => {
-    var parentSub = arr[1].includeSubsetList[0]
+export const menuNumberFunc = (arr, obj) => {
+    var parentSub, parentMenuIndex, menuIndex;
+    arr.forEach((item, index) =>{
+        if(item.url == '/crm'){
+            parentMenuIndex = index
+        }
+    })
+    arr[parentMenuIndex].includeSubsetList.forEach((item, index) => {
+        if(item.url == '/myClient'){
+            menuIndex = index
+            parentSub = arr[1].includeSubsetList[menuIndex]
+        }
+    })
+    console.log(parentSub)
+    console.log(obj)
     var arrIndex = [0, 1, 2, 3, 4, 5, 7];
-    var brrIndex = [0, 1, 5, 2, 4, 3, 6];
+    var objIndex = [0, 1, 5, 2, 4, 3, 6];
     for(var i = 0; i < 7; i++){
         var name = parentSub.includeSubsetList[arrIndex[i]].name
         var endIndex =  name.indexOf('(')
         var fullName
-        if(brr[brrIndex[i]]){
-            fullName = endIndex == -1 ? name + '('+ brr[brrIndex[i]] +')' : name.substr(0, endIndex) + '('+ brr[brrIndex[i]] +')'
+        if(obj[objIndex[i]]){
+            fullName = endIndex == -1 ? name + '('+ obj[objIndex[i]] +')' : name.substr(0, endIndex) + '('+ obj[objIndex[i]] +')'
         }else{
-            fullName = endIndex == -1 ? name + '('+ brr[brrIndex[i]] +')' : name.substr(0, endIndex) + '(0)'
+            fullName = endIndex == -1 ? name + '('+ obj[objIndex[i]] +')' : name.substr(0, endIndex) + '(0)'
         }        
-        arr[1].includeSubsetList[0].includeSubsetList[arrIndex[i]].name = fullName
+        arr[parentMenuIndex].includeSubsetList[menuIndex].includeSubsetList[arrIndex[i]].name = fullName
     }
     return arr;
 }

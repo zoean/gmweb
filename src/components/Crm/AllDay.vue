@@ -263,7 +263,6 @@ import {
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
 import {
-    menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';

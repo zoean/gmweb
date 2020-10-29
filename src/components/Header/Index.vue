@@ -569,10 +569,7 @@ export default {
             let arr = [];
             this.$smoke_get(getClueDataNumber, {}).then(res => {
                 if(res.code == 200) {
-                    for(let i in res.data) {
-                        arr.push(res.data[i]);
-                    }
-                    this.clueDataNumberList = arr;
+                    this.clueDataNumberList = res.data;
                     this.getUserLoginMessage();
                 }else{
                     this.getUserLoginMessage();
