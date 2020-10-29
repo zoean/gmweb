@@ -130,7 +130,7 @@
 
         </el-row>
 
-        <div class="full_msg">您的客户数量已达{{libStandard}}，请释放，否则不能接收新数据。</div>
+        <div class="full_msg" v-if="fullLib">您的客户数量已达{{libStandard}}，请释放，否则不能接收新数据。</div>
 
         <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
 
@@ -358,7 +358,7 @@ export default {
             tag_flag: false,
             tag_gonghai_flag: false,
             SeatWorkObj: {},
-            fullLib: true,
+            fullLib: false,
             libStandard: 0
         }
     },
@@ -563,7 +563,9 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        if(this.tag_flag){
+                        if(this.tag_flag && this.fullLib){
+                            this.$emit('setTableHeight', res.data.total, 3.2, 1)
+                        }else if(this.tag_flag || this.fullLib){
                             this.$emit('setTableHeight', res.data.total, 2.2, 1)
                         }else{
                             this.$emit('setTableHeight', res.data.total, 1, 1)
