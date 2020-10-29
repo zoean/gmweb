@@ -563,7 +563,9 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        if(this.tag_flag){
+                        if(this.tag_flag && this.fullLib){
+                            this.$emit('setTableHeight', res.data.total, 3.2, 1)
+                        }else if(this.tag_flag || this.fullLib){
                             this.$emit('setTableHeight', res.data.total, 2.2, 1)
                         }else{
                             this.$emit('setTableHeight', res.data.total, 1, 1)
