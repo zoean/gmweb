@@ -70,6 +70,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item v-if="ruleForm.level != 3" label="菜单排序" prop="sortNo">
+                    <el-input-number v-model="ruleForm.sortNo" :min="1" label="菜单排序" placeholder="请输入菜单序号"></el-input-number>
+                </el-form-item>
                 <el-form-item label="页面字段编号" prop="pageNum">
                     <el-select v-model="ruleForm.pageNum" clearable placeholder="请选择页面字段编号">
                         <el-option
@@ -112,6 +115,7 @@ export default {
                 { 'prop': 'url', 'label': '菜单路由地址' },
                 { 'prop': 'level', 'label': '菜单类型' },
                 { 'prop': 'pageNum', 'label': '页面字段编号' },
+                { 'prop': 'sortNo', 'label': '菜单排序'}
             ],
             drawer: false,
             direction: 'rtl',
@@ -124,6 +128,7 @@ export default {
                 parentUuid: '',
                 level: 0,
                 pageNum: '',
+                sortNo: 0
             },
             rules: {
                 name: [
@@ -167,8 +172,10 @@ export default {
             })
         },
         submitForm(formName) {
+            console.log(this.ruleForm)
             this.$refs[formName].validate((valid) => {
               if (valid) {
+                  console.log(valid)
                 if(this.drawerTitle == '新建菜单'){
                     this.addMenu();
                 }else{
@@ -186,7 +193,8 @@ export default {
             this.ruleForm.url = '';
             this.ruleForm.uuid = '';
             this.ruleForm.parentUuid = '';
-            this.ruleForm.level = 0;
+            this.ruleForm.level = '';
+            this.ruleForm.sortNo = 1;
         },
         handleDeleteClick(scope) {
             this.$smoke_post(deleteMenu, {
@@ -269,11 +277,12 @@ export default {
             })
         },
         updateMenu() {
+            console.log(this.ruleForm)
             this.$smoke_post(updateMenu, this.ruleForm).then(res => {
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
-                    location.reload();
+                    // location.reload();
                 }
             })
         },

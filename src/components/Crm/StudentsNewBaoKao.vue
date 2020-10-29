@@ -86,12 +86,23 @@
             </el-col>
 
             <el-col :span="3">
+                <el-select v-model="form.examPeriodId" placeholder="选择考期名称" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in examList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="3">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
             </el-col>
 
-            <el-col :span="15">
+            <el-col :span="12">
 
                 <el-button plain @click="cationUserAllClick" size="small" style="float: right;">批量分配</el-button>
 
@@ -183,7 +194,8 @@ import {
     queryProvinceAll,
     queryItemList,
     queryUserList,
-    allocationUser
+    allocationUser,
+    examPeriodList
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import { 
@@ -212,6 +224,7 @@ export default {
                 currentPage: 1,
                 examLable: '', //考试项目
                 examProvince: '', //报考省份	
+                examPeriodId: '',
                 itemName: '', //报考项目
                 itemNameText: '',
                 name: '',
@@ -232,6 +245,7 @@ export default {
                 { 'prop': 'examLable', 'label': '考试项目', width: 120 },
                 { 'prop': 'itemName', 'label': '报考项目', width: 120 },
                 { 'prop': 'itemGradeName', 'label': '报考等级/专业', width: 120 },
+                { 'prop': 'examPeriodName', 'label': '考期名称', width: 110 },
                 { 'prop': 'province', 'label': '所在省份', width: 120},
                 { 'prop': 'examProvince', 'label': '报考省份', width: 120},
                 { 'prop': 'basicInfoStatus', 'label': '基本信息情况', width: 110},
@@ -264,7 +278,9 @@ export default {
             drawerMove: false,
             directionMove: 'rtl',
             teacherMoveList: [],
-            registerId: '' //报考信息ID
+            registerId: '', //报考信息ID
+
+            examList: [],
         }
     },
     created() {
@@ -277,8 +293,18 @@ export default {
         this.queryProvinceAll();
         this.registerList();
         this.queryItemList();
+        this.examPeriodList();
     },
     methods: {
+        examPeriodList() {
+          this.$smoke_post(examPeriodList, {
+            switches: 1
+          }).then(res => {
+            if(res.code == 200) {
+              this.examList = res.data;
+            }
+          })
+        },
         queryUserList() {
             this.$smoke_get(queryUserList, {
                 roleName: registerPeopleId

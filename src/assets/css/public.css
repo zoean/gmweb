@@ -574,3 +574,9 @@ div.el-dialog__body{
 .el-input__inner{
     font-size: 12px;
 }
+
+.el-table__footer-wrapper{
+    position: fixed;
+    bottom: 0px;
+    z-index: 999;
+}
