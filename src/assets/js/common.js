@@ -835,6 +835,7 @@ export const levelFunc = (arr) => {
 //菜单num统计
 
 export const menuNumberFunc = (arr, obj) => {
+    console.log(obj)
     var parentSub, parentMenuIndex, menuIndex;
     arr.forEach((item, index) =>{
         if(item.url == '/crm'){
@@ -847,20 +848,17 @@ export const menuNumberFunc = (arr, obj) => {
             parentSub = arr[1].includeSubsetList[menuIndex]
         }
     })
-    console.log(parentSub)
-    console.log(obj)
-    var arrIndex = [0, 1, 2, 3, 4, 5, 7];
-    var objIndex = [0, 1, 5, 2, 4, 3, 6];
-    for(var i = 0; i < 7; i++){
-        var name = parentSub.includeSubsetList[arrIndex[i]].name
-        var endIndex =  name.indexOf('(')
-        var fullName
-        if(obj[objIndex[i]]){
-            fullName = endIndex == -1 ? name + '('+ obj[objIndex[i]] +')' : name.substr(0, endIndex) + '('+ obj[objIndex[i]] +')'
+    for(var i = 0; i < parentSub.includeSubsetList.length; i++){
+        var name = parentSub.includeSubsetList[i].name
+        if(obj.hasOwnProperty(parentSub.includeSubsetList[i].menuComponent)){
+            var key = parentSub.includeSubsetList[i].menuComponent
+            var endIndex =  name.indexOf('(')
+            var fullName
+            fullName = endIndex == -1 ? name + '('+ obj[key] +')' : name.substr(0, endIndex) + '('+ obj[key] +')'
         }else{
-            fullName = endIndex == -1 ? name + '('+ obj[objIndex[i]] +')' : name.substr(0, endIndex) + '(0)'
-        }        
-        arr[parentMenuIndex].includeSubsetList[menuIndex].includeSubsetList[arrIndex[i]].name = fullName
+            fullName = name
+        }
+        arr[parentMenuIndex].includeSubsetList[menuIndex].includeSubsetList[i].name = fullName
     }
     return arr;
 }
