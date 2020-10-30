@@ -209,7 +209,14 @@ export default{
       }
     },
     searchMonthList: function (){
-      this.getMonthTargetList()
+      if(!this.searchForm.yearOrMonths[0]){
+        this.$message({
+          type: 'error',
+          message: '请选择月份'
+        })
+      }else{
+        this.getMonthTargetList()
+      }      
     },
     tabClick(tab, event){
       if(tab.index == 0){
@@ -245,7 +252,7 @@ export default{
       this.loading = true
       this.$smoke_post(getComMonthList, this.searchForm).then(res => {
         this.loading = false
-        if(res.code == 200){
+        if(res.code == 200 && res.data.length > 0){
           this.monthTableList = res.data[0].list
         }
       })

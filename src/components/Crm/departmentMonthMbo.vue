@@ -188,7 +188,7 @@ export default{
   },
   created() {   
     this.orgList = JSON.parse(sessionStorage.getItem('orgList'))
-    this.setFormOrgUuid()
+    this.setFormOrgUuid()    
     this.getMonthTargetList()
   },
   methods: {
@@ -220,7 +220,14 @@ export default{
       }
     },
     searchMonthList: function (){
-      this.getMonthTargetList()
+      if(!this.searchForm.yearOrMonths[0]){
+        this.$message({
+          type: 'error',
+          message: '请选择月份'
+        })
+      }else{
+        this.getMonthTargetList()
+      }
     },
     tabClick(tab, event){
       if(tab.index == 0){
@@ -257,7 +264,7 @@ export default{
       this.loading = true
       this.$smoke_post(getDeptMonthList, this.searchForm).then(res => {
         this.loading = false
-        if(res.code == 200){
+        if(res.code == 200 && res.data.length > 0){
           this.monthTableList = res.data[0].list
           this.monthListYear = res.data[0].yearTime
         }
