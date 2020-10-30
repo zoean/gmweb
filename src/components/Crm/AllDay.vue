@@ -263,7 +263,6 @@ import {
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
 import {
-    menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';
@@ -557,7 +556,6 @@ export default {
                         this.fullscreenLoading = false;
                         this.columnList = res.data.filedList;
                         this.schoolId = res.data.schoolId;
-                        console.log(this.schoolId, 'this.schoolId');
                         res.data.list.map(sll => {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })

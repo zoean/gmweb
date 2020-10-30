@@ -252,8 +252,8 @@ export default{
     getYearTargetList: function(){
       this.loading = true
       this.$smoke_post(getDeptYearList, this.searchForm).then(res => {
+        this.loading = false
         if(res.code == 200){
-          this.loading = false
           this.yearTableList = res.data
         }
       })

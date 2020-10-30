@@ -568,7 +568,7 @@ export default new Router({
             name: 'companyyearmbo',
             component: companyYearMbo,
             meta: {
-                title: '全部客户'
+                title: '公司年目标管理'
             }
         },
 
@@ -577,7 +577,7 @@ export default new Router({
             name: 'companymonthmbo',
             component: companyMonthMbo,
             meta: {
-                title: '全部客户'
+                title: '公司月目标管理'
             }
         },
 
@@ -586,7 +586,7 @@ export default new Router({
             name: 'companydaymbo',
             component: companyDayMbo,
             meta: {
-                title: '全部客户'
+                title: '公司日目标管理'
             }
         },
 
@@ -595,7 +595,7 @@ export default new Router({
             name: 'departmentyearmbo',
             component: departmentYearMbo,
             meta: {
-                title: '全部客户'
+                title: '主管年目标管理'
             }
         },
 
@@ -604,7 +604,7 @@ export default new Router({
             name: 'departmentmonthmbo',
             component: departmentMonthMbo,
             meta: {
-                title: '全部客户'
+                title: '主管月目标管理'
             }
         },
 
@@ -613,7 +613,7 @@ export default new Router({
             name: 'departmentdaymbo',
             component: departmentDayMbo,
             meta: {
-                title: '全部客户'
+                title: '主管日目标管理'
             }
         },
 

@@ -244,8 +244,8 @@ export default{
     getMonthTargetList: function(){
       this.loading = true
       this.$smoke_post(getComMonthList, this.searchForm).then(res => {
+        this.loading = false
         if(res.code == 200){
-          this.loading = false
           this.monthTableList = res.data[0].list
         }
       })
