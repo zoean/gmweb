@@ -835,7 +835,6 @@ export const levelFunc = (arr) => {
 //菜单num统计
 
 export const menuNumberFunc = (arr, obj) => {
-    console.log(obj)
     var parentSub, parentMenuIndex, menuIndex;
     arr.forEach((item, index) =>{
         if(item.url == '/crm'){

@@ -207,9 +207,9 @@ export default{
       this.loading = true
       this.$smoke_post(getYearTargetList, this.searchForm).then(res => {
         if(res.code == 200){
-          this.loading = false
           this.monthTableList = res.data
         }
+        this.loading = false
       })
     },
     changeYear: function (){

@@ -237,8 +237,8 @@ export default{
     getDeptDailyList: function(){
       this.loading = true
       this.$smoke_post(getDeptDailyList, this.searchForm).then(res => {
+        this.loading = false
         if(res.code == 200){
-          this.loading = false
           this.dailyTableList = res.data[0].list
         }
       })

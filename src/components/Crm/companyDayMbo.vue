@@ -221,8 +221,8 @@ export default{
     getComDailyList: function(){
       this.loading = true
       this.$smoke_post(getComDailyList, this.searchForm).then(res => {
+        this.loading = false
         if(res.code == 200){
-          this.loading = false
           this.dailyTableList = res.data[0].list
         }
       })
