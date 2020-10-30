@@ -216,7 +216,14 @@ export default{
       })
     },
     searchYearList: function (){
-      this.getYearTargetList()
+      if(!this.searchForm.yearOrMonths[0]){
+        this.$message({
+          type: 'error',
+          message: '请选择年份'
+        })
+      }else{
+        this.getYearTargetList()
+      }      
     },
     tabClick(tab, event){
       if(tab.index == 1){
@@ -253,7 +260,7 @@ export default{
       this.loading = true
       this.$smoke_post(getDeptYearList, this.searchForm).then(res => {
         this.loading = false
-        if(res.code == 200){
+        if(res.code == 200 && res.data.length > 0){
           this.yearTableList = res.data
         }
       })
