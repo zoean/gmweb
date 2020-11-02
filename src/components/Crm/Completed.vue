@@ -327,7 +327,7 @@ export default {
                         sll.schoolName = schoolType(sll.schoolName);
                     })
                     this.userOrderList = res.data.orderList
-                    this.$emit('setTableHeight', this.userOrderList.length, 1, 1)
+                    this.$emit('setTableHeight', this.userOrderList.length)
                 }
             })
         },
@@ -394,7 +394,7 @@ export default {
                         this.list = res.data.list;
                         this.form.total = res.data.total;
                         this.schoolId = res.data.schoolId;
-                        this.$emit('setTableHeight', this.form.total, 1, 1)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row style="margin-bottom: 10px;" v-if="addDataAllocation">
+        <el-row class="handle-area" style="margin-bottom: 10px;" v-if="addDataAllocation">
 
             <el-col style="width: 140px;"><el-button style="width: 90%;" size="small" type="primary" @click="addAlloZu">添加分配组</el-button></el-col>
 
@@ -517,7 +517,7 @@ export default {
                         })
                         this.dataAlloList = res.data.list;
                         this.dataAlloForm.total = res.data.total;                        
-                    this.$emit('setTableHeight', this.dataAlloForm.total, 1, 1)
+                    this.$emit('setTableHeight', this.dataAlloForm.total, 1)
                     }, 300);
 
                 }else{

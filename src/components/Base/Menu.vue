@@ -172,10 +172,8 @@ export default {
             })
         },
         submitForm(formName) {
-            console.log(this.ruleForm)
             this.$refs[formName].validate((valid) => {
               if (valid) {
-                  console.log(valid)
                 if(this.drawerTitle == '新建菜单'){
                     this.addMenu();
                 }else{
@@ -237,7 +235,9 @@ export default {
             this.ruleForm.parentUuid = row.parentUuid;
             if(row.level == '目录') {
                 this.ruleForm.level = 1;
+                this.ruleForm.sortNo = row.sortNo
             }else if(row.level == '页面') {
+                this.ruleForm.sortNo = row.sortNo
                 this.ruleForm.level = 2;
             }else if(row.level == '按钮') {
                 this.ruleForm.level = 3;
@@ -254,7 +254,7 @@ export default {
                         this.fullscreenLoading = false;
                         arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
                         this.menuList = levelFunc(arr);
-                        this.$emit('setTableHeight', this.menuList.length, 1, 1)
+                        this.$emit('setTableHeight', this.menuList.length, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -277,7 +277,6 @@ export default {
             })
         },
         updateMenu() {
-            console.log(this.ruleForm)
             this.$smoke_post(updateMenu, this.ruleForm).then(res => {
                 if(res.code == 200){
                     this.drawer = false;
