@@ -1,6 +1,8 @@
 <template>
     <el-main class="index-main newStudents">
 
+        <Start></Start>
+
         <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
@@ -198,6 +200,7 @@ import {
     seatOutTea,
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
+import Start from '@/components/Share/Start';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     timestampToTime, classTypeString, orderTypeText, getTextByJs,
@@ -209,7 +212,8 @@ export default {
     name: 'newStudents',
     props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
-        StudentsNotes
+        StudentsNotes,
+        Start,
     },
     data() {
         return {
