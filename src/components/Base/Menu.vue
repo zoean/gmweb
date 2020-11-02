@@ -70,6 +70,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item v-if="ruleForm.level != 3" label="菜单排序" prop="sortNo">
+                    <el-input-number v-model="ruleForm.sortNo" :min="1" label="菜单排序" placeholder="请输入菜单序号"></el-input-number>
+                </el-form-item>
                 <el-form-item label="页面字段编号" prop="pageNum">
                     <el-select v-model="ruleForm.pageNum" clearable placeholder="请选择页面字段编号">
                         <el-option
@@ -112,6 +115,7 @@ export default {
                 { 'prop': 'url', 'label': '菜单路由地址' },
                 { 'prop': 'level', 'label': '菜单类型' },
                 { 'prop': 'pageNum', 'label': '页面字段编号' },
+                { 'prop': 'sortNo', 'label': '菜单排序'}
             ],
             drawer: false,
             direction: 'rtl',
@@ -124,6 +128,7 @@ export default {
                 parentUuid: '',
                 level: 0,
                 pageNum: '',
+                sortNo: 0
             },
             rules: {
                 name: [
@@ -186,7 +191,8 @@ export default {
             this.ruleForm.url = '';
             this.ruleForm.uuid = '';
             this.ruleForm.parentUuid = '';
-            this.ruleForm.level = 0;
+            this.ruleForm.level = '';
+            this.ruleForm.sortNo = 1;
         },
         handleDeleteClick(scope) {
             this.$smoke_post(deleteMenu, {
@@ -229,7 +235,9 @@ export default {
             this.ruleForm.parentUuid = row.parentUuid;
             if(row.level == '目录') {
                 this.ruleForm.level = 1;
+                this.ruleForm.sortNo = row.sortNo
             }else if(row.level == '页面') {
+                this.ruleForm.sortNo = row.sortNo
                 this.ruleForm.level = 2;
             }else if(row.level == '按钮') {
                 this.ruleForm.level = 3;
@@ -246,7 +254,7 @@ export default {
                         this.fullscreenLoading = false;
                         arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
                         this.menuList = levelFunc(arr);
-                        this.$emit('setTableHeight', this.menuList.length, 1, 1)
+                        this.$emit('setTableHeight', this.menuList.length, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -273,7 +281,7 @@ export default {
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
-                    location.reload();
+                    // location.reload();
                 }
             })
         },

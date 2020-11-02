@@ -1,47 +1,46 @@
 <template>
 <el-main class="index-main">
-  <el-row class="people-screen">
-    <el-col :span="6">
-      <el-date-picker
-        v-model="dateRange"
-        size="small"
-        type="daterange"
-        value-format='timestamp'
-        :picker-options="pickerOptions"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        style="width: 97%"
-        @change="changeDateRange">
-      </el-date-picker>
-    </el-col>
-    <el-col :span="4">
-      <el-cascader
-        size="small"
-        placeholder="请选择坐席组织架构"
-        :options="orgOptions"
-        :props="props"
-        class="screen-li"
-        collapse-tags
-        :show-all-levels=false
-        @change="orgChange"
-        ref="cascaderOrg">
-      </el-cascader>
-    </el-col>
-    <el-col :span="3">
-      <el-input size="small" v-model="searchForm.saleName" class="screen-li" placeholder="请输入坐席名字"></el-input>
-    </el-col>
-    <el-col :span="3">
-      <el-button type="primary" size="small" @click="searchList">查询</el-button>
-    </el-col>
-    <el-col :span="8">
-      <el-button v-if="buttonMap.addWechatNum" type="primary" size="small" @click="addWechatData" style="float: right;">新增</el-button>
-    </el-col>
-  </el-row>
+    <el-row class="people-screen">
+      <el-col :span="6">
+        <el-date-picker
+          v-model="dateRange"
+          size="small"
+          type="daterange"
+          value-format='timestamp'
+          :picker-options="pickerOptions"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          style="width: 97%"
+          @change="changeDateRange">
+        </el-date-picker>
+      </el-col>
+      <el-col :span="4">
+        <el-cascader
+          size="small"
+          placeholder="请选择坐席组织架构"
+          :options="orgOptions"
+          :props="props"
+          class="screen-li"
+          collapse-tags
+          :show-all-levels=false
+          @change="orgChange"
+          ref="cascaderOrg">
+        </el-cascader>
+      </el-col>
+      <el-col :span="3">
+        <el-input size="small" v-model="searchForm.saleName" class="screen-li" placeholder="请输入坐席名字"></el-input>
+      </el-col>
+      <el-col :span="3">
+        <el-button type="primary" size="small" @click="searchList">查询</el-button>
+      </el-col>
+      <el-col :span="8">
+        <el-button v-if="buttonMap.addWechatNum" type="primary" size="small" @click="addWechatData" style="float: right;">新增</el-button>
+      </el-col>
+    </el-row>
 
-  <div class="number_search" style="margin-top: 10px;"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />
-本次查询【新增客户微信数量】合计：{{countVO.num || 0}}，【累计客户微信数量】合计：{{countVO.countNum || 0}}</div>
-
+    <div class="number_search handle-area" style="margin-top: 10px;"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />
+  本次查询【新增客户微信数量】合计：{{countVO.num || 0}}，【累计客户微信数量】合计：{{countVO.countNum || 0}}</div>
   <el-table 
   :data="list"  
   @sort-change="sortChange"
@@ -194,7 +193,7 @@ export default {
           this.list = res.data.list
           this.countVO = res.data.countVO || 0;
           this.searchForm.total = res.data.total
-          this.$emit('setTableHeight', this.searchForm.total, 1, 1)
+          this.$emit('setTableHeight', this.searchForm.total, 1)
         }
       })
     },

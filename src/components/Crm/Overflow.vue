@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
+        <el-row class="handle-area">
 
             <el-col :span="5">
                 <el-date-picker
@@ -157,6 +157,7 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             style="width: 100%;"
+            class="mt20"
             :height="tableHeight">
             <el-table-column
               type="selection"
@@ -310,7 +311,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 0, 1)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

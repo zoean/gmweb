@@ -61,7 +61,7 @@
             </el-col>
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen handle-area">
 
             <el-col :span="3">
                 <el-select v-model="form.pictureStatus" placeholder="选择照片情况" class="screen-li" size="small" clearable>
@@ -450,7 +450,7 @@ export default {
 
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1, 1)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {

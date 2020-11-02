@@ -327,7 +327,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.total = res.data.total;     
-                        this.$emit('setTableHeight', this.total, 0, 1)                   
+                        this.$emit('setTableHeight', this.total, 1)                   
                     }, 300);
 
                 }else{
