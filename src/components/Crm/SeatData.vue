@@ -486,7 +486,7 @@ export default {
             this.form.num = pageNum
         },
         editFieldHandle(){
-            this.$store.commit('setEditFieldVisible', true)
+            this.$store.commit('setEditFieldVisible', true, this.getAllUserClueData())
         },
         tableSort(type, props){
             this.form.sortSet = []

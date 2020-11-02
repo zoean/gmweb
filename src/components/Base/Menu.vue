@@ -1,7 +1,8 @@
 <template>
     <el-main class="index-main">
+        <div class="handle-area">
         <el-button type="primary" @click="add_menu" size="small" style="margin-bottom: .2rem;">新建菜单</el-button>
-
+        </div>
         <el-table
           :data="menuList"
           style="width: 100%"
@@ -100,7 +101,7 @@
 
 // default-expand-all 默认table要不要展开
 
-import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu, itemList } from '../../request/api';
+import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu, itemList, getUserLoginMessage } from '../../request/api';
 import { levelFunc } from '../../assets/js/common';
 export default {
     name: 'menua',
@@ -276,11 +277,23 @@ export default {
                 }
             })
         },
+        getUserLoginMessage() {
+            this.$smoke_post(getUserLoginMessage,{}).then(res => {
+                if(res.code == 200) {
+                    localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
+                    localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
+                    localStorage.setItem("userUuid", res.data.uuid);
+                    this.$store.commit('setUserRole', res.data.roleName)
+										this.$store.commit('setUserDepartment', res.data.orgName)										
+                }
+            })
+        },
         updateMenu() {
             this.$smoke_post(updateMenu, this.ruleForm).then(res => {
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
+                    this.getUserLoginMessage()
                     // location.reload();
                 }
             })
