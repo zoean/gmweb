@@ -1,5 +1,7 @@
 <template>
     <el-main class="index-main students">
+
+        <Start></Start>
         
         <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             
@@ -247,6 +249,7 @@ import {
     queryProvinceAll
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
+import Start from '@/components/Share/Start';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     timestampToTime, classTypeString, orderTypeText, getTextByJs,
@@ -260,6 +263,7 @@ export default {
     components: {
         PageFieldManage,
         StudentsNotes,
+        Start,
     },
     data() {
         return {
