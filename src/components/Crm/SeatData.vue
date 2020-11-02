@@ -162,7 +162,6 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             :height="tableHeight"
-            class="table-fixed"
             >
 
             <el-table-column
@@ -763,12 +762,6 @@ export default {
 <style lang="less" scoped>
 .el-table::before{
     height: 0;
-}
-.table-fixed {
-    /deep/.el-table__body-wrapper {
-    height: calc(100% - 44px) !important;
-    overflow-x: scroll;
-  }
 }
 
     .index-main{
