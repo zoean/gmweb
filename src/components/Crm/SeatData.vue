@@ -85,7 +85,7 @@
 
         </el-row>
 
-        <el-row class="people-screen" type="flex" justify="space-between">
+        <el-row class="people-screen handle-area" type="flex" justify="space-between">
             <el-col>
                 <el-row type="flex" class="seat-search">
                     <el-col class="seat-normal">
@@ -195,7 +195,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="60" class-name="table_active">
+            <el-table-column prop="active" label="操作" width="60" class-name="table_active" fixed="right">
               <template slot-scope="scope">
                 <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
@@ -565,7 +565,7 @@ export default {
                         this.list = res.data.list;
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1)
+                        this.$emit('setTableHeight', this.form.total, 2)
                     }, 300);
                 }else{
                     setTimeout(() => {

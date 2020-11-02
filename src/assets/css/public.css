@@ -353,7 +353,9 @@ a:link,a:active,a:visited,a:hover {
 .el-menu--collapse  .el-submenu__title .el-submenu__icon-arrow{
   display: none;
 }
-
+.el-table{
+    overflow-x: scroll;
+}
 .el-table .error-row {
     background: #fff;
     color: #F56C6C;

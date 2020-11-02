@@ -602,7 +602,7 @@ export default {
             if(res.code == 200){
               this.taskList = res.data.list
               this.getTaskForm.total = res.data.total              
-              this.$emit('setTableHeight', res.data.total, 1, 1)
+              this.$emit('setTableHeight', res.data.total, 1)
             }
           })
         },

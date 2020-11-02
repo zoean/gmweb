@@ -119,7 +119,7 @@ export default {
                         this.fullscreenLoading = false;
                         this.tableData = res.data.list;
                         this.form.total = res.data.total;                        
-                        this.$emit('setTableHeight', this.form.total, 0, 1)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
