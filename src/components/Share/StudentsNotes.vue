@@ -341,7 +341,7 @@
                                           v-for="item in examList"
                                           :key="item.id"
                                           :label="item.name"
-                                          :value="String(item.id)">
+                                          :value="item.id">
                                         </el-option>
                                     </el-select>
 
@@ -1066,6 +1066,7 @@ export default {
         });
       },
       addClassTeaStuNotes() {
+        // console.log(this.customerForm.graduationTime);
         this.$smoke_post(addClassTeaStuNotes, {
           customerForm: {
             age: this.customerForm.age,
@@ -1073,7 +1074,7 @@ export default {
             city: this.customerForm.city,
             education: this.customerForm.education,
             evidencePurpose: this.customerForm.evidencePurpose,
-            examPeriod: this.customerForm.examPeriod,
+            examPeriodIdList: this.customerForm.examPeriodIdList,
             gender: this.customerForm.gender,
             graduationMajor: this.customerForm.graduationMajor,
             name: this.customerForm.name,
