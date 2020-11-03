@@ -17,6 +17,7 @@
             :label="item.label"
             :width="item.label == '菜单名称' ? '250px' : ''"
             v-for="(item, index) in columnList"
+            :formatter="item.formatter"
             :key="index"
             >
           </el-table-column>
@@ -116,7 +117,7 @@ export default {
                 { 'prop': 'url', 'label': '菜单路由地址' },
                 { 'prop': 'level', 'label': '菜单类型' },
                 { 'prop': 'pageNum', 'label': '页面字段编号' },
-                { 'prop': 'sortNo', 'label': '菜单排序'}
+                { 'prop': 'sortNo', 'label': '菜单排序', formatter: this.sortFormatter}
             ],
             drawer: false,
             direction: 'rtl',
@@ -160,6 +161,13 @@ export default {
         this.itemList();
     },
     methods: {
+        sortFormatter(row, column, cellValue){
+          if(row.level == '按钮'){
+            return '-'
+          }else{
+            return cellValue
+          }
+        },
         itemList() {
             this.$smoke_get(itemList, {}).then(res => {
                 if(res.code == 200) {
