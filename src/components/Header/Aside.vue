@@ -1,7 +1,7 @@
 <template>
   <div v-if="routersFlag" class="aside-all" :style="{minWidth: iscollapse ? 'auto' : '214px'}">
     <el-menu
-      :default-active="$route.path"
+      :default-active="activeIndex"
       ref="elmenu"
       class="el-menu-vertical-demo"
       :default-openeds="openedsIndex"
@@ -81,6 +81,9 @@ export default {
     }         
   },
   methods: {
+    selectSubmenu(index, indexPath){
+      console.log(index, indexPath)
+    },
     closeMenu(index){        
       this.$emit('setPageTitleLeft')
     },
@@ -94,12 +97,10 @@ export default {
       this.iscollapse = !this.iscollapse
     },
     active_router(index) {
-      var path = index.url,
-      endIndex = path.lastIndexOf('\/'),
-      currNav = path.substring(endIndex + 1, path.length)
       this.$store.commit('setPageNum', index.pageNum)
       this.$router.push({ path: index.url });
-      this.activeIndex = currNav;
+      this.activeIndex = index.uuid;
+      console.log(index)
     },
     router_index() {
       this.activeIndex = this.$route.path;
