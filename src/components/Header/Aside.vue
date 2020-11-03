@@ -81,6 +81,9 @@ export default {
     }         
   },
   methods: {
+    selectSubmenu(index, indexPath){
+      console.log(index, indexPath)
+    },
     closeMenu(index){        
       this.$emit('setPageTitleLeft')
     },
@@ -96,7 +99,8 @@ export default {
     active_router(index) {
       this.$store.commit('setPageNum', index.pageNum)
       this.$router.push({ path: index.url });
-      this.activeIndex = index.url;
+      this.activeIndex = index.uuid;
+      console.log(index)
     },
     router_index() {
       this.activeIndex = this.$route.path;
@@ -105,10 +109,7 @@ export default {
           let arr = [];
           this.$smoke_get(getClueDataNumber, {}).then(res => {
               if(res.code == 200) {
-                  for(let i in res.data) {
-                      arr.push(res.data[i]);
-                  }
-                  this.clueDataNumberList = arr;                    
+                  this.clueDataNumberList = res.data;                    
                   const userMenuList = JSON.parse(localStorage.getItem('userMenuList'));
                   this.$store.commit('setUserMenuList', menuNumberFunc(userMenuList, this.clueDataNumberList));
                   localStorage.setItem('userMenuList', JSON.stringify(menuNumberFunc(userMenuList, this.clueDataNumberList)));

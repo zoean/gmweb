@@ -1,7 +1,8 @@
 <template>
     <el-main class="index-main">
+        <div class="handle-area">
         <el-button type="primary" @click="add_menu" size="small" style="margin-bottom: .2rem;">新建菜单</el-button>
-
+        </div>
         <el-table
           :data="menuList"
           style="width: 100%"
@@ -16,6 +17,7 @@
             :label="item.label"
             :width="item.label == '菜单名称' ? '250px' : ''"
             v-for="(item, index) in columnList"
+            :formatter="item.formatter"
             :key="index"
             >
           </el-table-column>
@@ -70,6 +72,9 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item v-if="ruleForm.level != 3" label="菜单排序" prop="sortNo">
+                    <el-input-number v-model="ruleForm.sortNo" :min="1" label="菜单排序" placeholder="请输入菜单序号"></el-input-number>
+                </el-form-item>
                 <el-form-item label="页面字段编号" prop="pageNum">
                     <el-select v-model="ruleForm.pageNum" clearable placeholder="请选择页面字段编号">
                         <el-option
@@ -97,7 +102,7 @@
 
 // default-expand-all 默认table要不要展开
 
-import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu, itemList } from '../../request/api';
+import { getMenuDetailsSubsetByUuid, addMenu, deleteMenu, updateMenu, itemList, getUserLoginMessage } from '../../request/api';
 import { levelFunc } from '../../assets/js/common';
 export default {
     name: 'menua',
@@ -112,6 +117,7 @@ export default {
                 { 'prop': 'url', 'label': '菜单路由地址' },
                 { 'prop': 'level', 'label': '菜单类型' },
                 { 'prop': 'pageNum', 'label': '页面字段编号' },
+                { 'prop': 'sortNo', 'label': '菜单排序', formatter: this.sortFormatter}
             ],
             drawer: false,
             direction: 'rtl',
@@ -124,6 +130,7 @@ export default {
                 parentUuid: '',
                 level: 0,
                 pageNum: '',
+                sortNo: 0
             },
             rules: {
                 name: [
@@ -154,6 +161,13 @@ export default {
         this.itemList();
     },
     methods: {
+        sortFormatter(row, column, cellValue){
+          if(row.level == '按钮'){
+            return '-'
+          }else{
+            return cellValue
+          }
+        },
         itemList() {
             this.$smoke_get(itemList, {}).then(res => {
                 if(res.code == 200) {
@@ -186,7 +200,8 @@ export default {
             this.ruleForm.url = '';
             this.ruleForm.uuid = '';
             this.ruleForm.parentUuid = '';
-            this.ruleForm.level = 0;
+            this.ruleForm.level = '';
+            this.ruleForm.sortNo = 1;
         },
         handleDeleteClick(scope) {
             this.$smoke_post(deleteMenu, {
@@ -229,7 +244,9 @@ export default {
             this.ruleForm.parentUuid = row.parentUuid;
             if(row.level == '目录') {
                 this.ruleForm.level = 1;
+                this.ruleForm.sortNo = row.sortNo
             }else if(row.level == '页面') {
+                this.ruleForm.sortNo = row.sortNo
                 this.ruleForm.level = 2;
             }else if(row.level == '按钮') {
                 this.ruleForm.level = 3;
@@ -246,7 +263,7 @@ export default {
                         this.fullscreenLoading = false;
                         arr = JSON.parse(JSON.stringify(res.data).replace(/includeSubsetList/g,"children"));
                         this.menuList = levelFunc(arr);
-                        this.$emit('setTableHeight', this.menuList.length, 1, 1)
+                        this.$emit('setTableHeight', this.menuList.length, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -268,12 +285,24 @@ export default {
                 }
             })
         },
+        getUserLoginMessage() {
+            this.$smoke_post(getUserLoginMessage,{}).then(res => {
+                if(res.code == 200) {
+                    localStorage.setItem("userMenuList", JSON.stringify(res.data.userMenuList));
+                    localStorage.setItem("buttonMap", JSON.stringify(res.data.buttonMap));
+                    localStorage.setItem("userUuid", res.data.uuid);
+                    this.$store.commit('setUserRole', res.data.roleName)
+										this.$store.commit('setUserDepartment', res.data.orgName)										
+                }
+            })
+        },
         updateMenu() {
             this.$smoke_post(updateMenu, this.ruleForm).then(res => {
                 if(res.code == 200){
                     this.drawer = false;
                     this.getMenuDetailsSubsetByUuid();
-                    location.reload();
+                    this.getUserLoginMessage()
+                    // location.reload();
                 }
             })
         },

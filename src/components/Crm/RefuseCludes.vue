@@ -74,7 +74,7 @@ export default{
         if(res.code == 200){
           this.listData = res.data.list
           this.form.total = res.data.total
-          this.$emit('setTableHeight', this.form.total, 0, 1)
+          this.$emit('setTableHeight', this.form.total, 1)
           this.loadding = false
         }
       })

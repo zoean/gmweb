@@ -235,13 +235,20 @@ export default{
       }
     },
     getDeptDailyList: function(){
-      this.loading = true
-      this.$smoke_post(getDeptDailyList, this.searchForm).then(res => {
-        if(res.code == 200){
+      if(!this.searchForm.yearOrMonths[0]){
+        this.$message({
+          type: 'error',
+          message: '请选择日期'
+        })
+      }else{
+        this.loading = true
+        this.$smoke_post(getDeptDailyList, this.searchForm).then(res => {
           this.loading = false
-          this.dailyTableList = res.data[0].list
-        }
-      })
+          if(res.code == 200 && res.data.length > 0){
+            this.dailyTableList = res.data[0].list
+          }
+        })
+      }      
     },
     editDialyTarget: function (row){
       this.addEditDailyParams.visible = true

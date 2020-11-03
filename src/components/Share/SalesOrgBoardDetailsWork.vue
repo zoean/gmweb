@@ -2,7 +2,7 @@
     <div class="board">
         <el-dialog fullscreen title="工作明细" :visible.sync="boardWorkFlag_" :before-close="handleClose">
 
-            <el-row class="people-screen">
+            <el-row class="people-screen" style="width: 100%; height: 42px; position: fixed; top: 54px; z-index: 999; background: #fff; border-bottom: 1px solid #dedede;">
 
                 <el-col :span="4">
 
@@ -56,6 +56,8 @@
                 </el-col>
 
             </el-row>
+
+            <div style="height: 16px;"></div>
             
             <el-table
                 :data="list"
@@ -63,7 +65,6 @@
                 :summary-method="getSummaries"
                 show-summary
                 v-loading="fullscreenLoading"
-                :max-height="height"
                 style="width: 100%; margin-top: 16px;">
 
                 <el-table-column
@@ -78,6 +79,8 @@
                 </el-table-column>
 
             </el-table>
+
+            <div style="height: 31px;"></div>
             
             <!-- <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="handleClose" size="small">关闭</el-button>
@@ -198,7 +201,6 @@ export default {
                 { value: 0, label: '组织列表' },
                 { value: 1, label: '人员列表' },
             ],
-            height: document.documentElement.clientHeight - 150,
         }
     },
     created() {
@@ -232,6 +234,9 @@ export default {
                   return prev;
                 } 
               }, 0);
+            }
+            if(index === 11) {
+                sums[index] = sums[index].toFixed(2);
             }
           });   
 
