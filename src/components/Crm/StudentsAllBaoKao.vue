@@ -61,7 +61,7 @@
             </el-col>
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen handle-area">
 
             <el-col :span="3">
                 <el-select v-model="form.pictureStatus" placeholder="选择照片情况" class="screen-li" size="small" clearable>
@@ -109,7 +109,18 @@
                 </el-select>
             </el-col>
 
-            <el-col :span="9">
+            <el-col :span="3">
+                <el-select v-model="form.examPeriodId" placeholder="选择考期名称" class="screen-li" size="small" clearable>
+                    <el-option
+                      v-for="item in examList"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-col>
+
+            <el-col :span="6">
 
                 <el-button type="primary" @click="registerListClick" size="small">查 询</el-button>
 
@@ -214,7 +225,8 @@ import {
     queryProvinceAll,
     queryItemList,
     queryUserList,
-    allocationUser
+    allocationUser,
+    examPeriodList
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
 import BaoKaoMessage from '@/components/Share/BaoKaoMessage';
@@ -244,7 +256,8 @@ export default {
                 checkStatus: '', //审核状态（0-待审核，1-审核通过，2-审核失败）
                 currentPage: 1,
                 examLable: '', //考试项目
-                examProvince: '', //报考省份
+                examProvince: '', //报考省份	
+                examPeriodId: '',
                 itemName: '', //报考项目
                 itemNameText: '',
                 name: '',
@@ -267,6 +280,7 @@ export default {
                 { 'prop': 'examLable', 'label': '考试项目' },
                 { 'prop': 'itemName', 'label': '报考项目', width: 120 },
                 { 'prop': 'itemGradeName', 'label': '报考等级/专业', width: 120 },
+                { 'prop': 'examPeriodName', 'label': '考期名称', width: 110 },
                 { 'prop': 'province', 'label': '所在省份', width: 120},
                 { 'prop': 'examProvince', 'label': '报考省份', width: 120},
                 { 'prop': 'basicInfoStatus', 'label': '基本信息情况', width: 110},
@@ -314,7 +328,9 @@ export default {
             drawerMove: false,
             directionMove: 'rtl',
             teacherMoveList: [],
-            registerIds: '' //报考信息ID
+            registerIds: '', //报考信息ID
+
+            examList: [],
         }
     },
     created() {
@@ -327,8 +343,18 @@ export default {
         this.queryProvinceAll();
         this.registerList();
         this.queryItemList();
+        this.examPeriodList();
     },
     methods: {
+        examPeriodList() {
+          this.$smoke_post(examPeriodList, {
+            switches: 1
+          }).then(res => {
+            if(res.code == 200) {
+              this.examList = res.data;
+            }
+          })
+        },
         cationUserAllClick() {
             let arr = [];
             this.$refs.tableSelect.selection.map(sll => {
@@ -424,7 +450,7 @@ export default {
 
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1, 1)
+                        this.$emit('setTableHeight', this.form.total, 1)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -522,6 +548,9 @@ export default {
             .screen-li{
                 width: 94%;
             }
+        }
+        .el-col-6{
+            height: auto !important;
         }
     }
 </style>

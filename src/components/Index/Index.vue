@@ -174,7 +174,7 @@ export default {
             }).then(res => {
                 if(res.code == 200){
                     if(id == 1) {
-                        href = '/onelogin/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
+                        href = '/onelogin/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformsType;
                     }else if(id == 2) {
                         href = '/sx_api/admin_jhwx/privilege.php?act=login&sys=' + res.data.loginPlatform + '&site=' + res.data.loginPlatformType;
                     }else if(id == 3) {
