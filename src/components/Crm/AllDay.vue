@@ -230,7 +230,7 @@
               </el-select>
             </el-form-item>
             <el-form-item prop="school">
-              <el-select placeholder="请选择分校" filterable v-model="addCludeForm.school">
+              <el-select placeholder="请选择分校" :value="addCludeForm.school" :disabled="disabledSchool" filterable v-model="addCludeForm.school">
                 <el-option v-for="item in subSchoolList" :key="item.uuid" :label="item.name" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
@@ -281,7 +281,7 @@ import {
     geSeatWork,
     clueContactSign,    
     getExamBasic,
-    getSchoolList,
+    getAuthoritySchoolList,
     saleAddClueData
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
@@ -388,7 +388,7 @@ export default {
             subSchoolList: [],
             addCludeForm: {
               tel: '',
-              school: null,
+              school: '',
               examItem: null
             },
             telReg: /^1[3456789]\d{9}$/,
@@ -402,8 +402,9 @@ export default {
               school: [
                 {require: true, message: '请选择分校', trigger: 'blur'}
               ]
-            }
-        }
+            },
+            disabledSchool: false
+          }
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -433,7 +434,7 @@ export default {
 					})
         },
         getSubSchool(){
-          this.$smoke_get(getSchoolList).then(res => {
+          this.$smoke_get(getAuthoritySchoolList).then(res => {
             if(res.code == 200){
               this.subSchoolList = res.data
             }
@@ -442,11 +443,16 @@ export default {
         addClude(){
           this.addCludeVisible = true
           this.resetAddCludeForm()
+          if(this.subSchoolList.length > 0){
+            this.addCludeForm.school = this.subSchoolList[0].id
+          }else{
+            this.disabledSchool = true            
+          }
         },
         resetAddCludeForm(){
           this.addCludeForm = {
             tel: '',
-            school: null,
+            school: '',
             examItem: null
           }
         },
@@ -463,6 +469,7 @@ export default {
                       message: '线索添加成功'
                     })                    
                     this.addCludeVisible = false
+                    this.getClueDataAll();
                   }else{
                     this.$message({
                       type: 'error',
