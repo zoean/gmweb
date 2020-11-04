@@ -462,7 +462,6 @@ export default {
                 this.$message.error('请输入正确的手机号')
               }else{
                 this.$smoke_post(saleAddClueData, this.addCludeForm).then(res => {
-                  console.log(res, res.code)
                   if(res.code == 200){
                     this.$message({
                       type: 'success',
