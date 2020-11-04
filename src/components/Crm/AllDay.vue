@@ -469,7 +469,8 @@ export default {
                       message: '线索添加成功'
                     })                    
                     this.addCludeVisible = false
-                    this.getClueDataAll();
+                    this.getClueDataAll();                    
+                  }else{
                     this.$message({
                       type: 'error',
                       message: res.msg
