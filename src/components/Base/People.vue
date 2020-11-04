@@ -175,8 +175,8 @@ export default {
             exportPeople: null
         }
     },
-    mounted(){        
-        
+    activated(){
+      this.screenForm = JSON.parse(sessionStorage.getItem('screenForm'))
     },
     created() {  
         this.getRoleList();
@@ -242,6 +242,7 @@ export default {
 
         },
         handleEditClick(row) {
+            sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/change',
                 query: {
@@ -257,7 +258,8 @@ export default {
                 }
             })
         },
-        handlePermissClick(row) {
+        handlePermissClick(row) {            
+            sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/permiss',
                 query: {
