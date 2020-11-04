@@ -175,9 +175,6 @@ export default {
             exportPeople: null
         }
     },
-    mounted(){        
-        
-    },
     created() {  
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -242,6 +239,7 @@ export default {
 
         },
         handleEditClick(row) {
+            // sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/change',
                 query: {
@@ -257,7 +255,8 @@ export default {
                 }
             })
         },
-        handlePermissClick(row) {
+        handlePermissClick(row) {            
+            // sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/permiss',
                 query: {
