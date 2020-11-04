@@ -175,10 +175,6 @@ export default {
             exportPeople: null
         }
     },
-    activated(){
-      this.screenForm = JSON.parse(sessionStorage.getItem('screenForm'))      
-      sessionStorage.removeItem('screenForm')
-    },
     created() {  
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -243,7 +239,7 @@ export default {
 
         },
         handleEditClick(row) {
-            sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
+            // sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/change',
                 query: {
@@ -260,7 +256,7 @@ export default {
             })
         },
         handlePermissClick(row) {            
-            sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
+            // sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/permiss',
                 query: {
