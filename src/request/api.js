@@ -134,6 +134,7 @@ export const updateListField = '/api/phone/pageFieldsMag/upUserPageField';//更�
 export const getClueDataAll = '/api/phone/clueData/getClueDataAll'; //获取员工的全部客户
 export const firstConDataList = '/api/phone/clueData/firstConDataList'; //获取员工的首咨线索数据
 export const todayFirstConDataList = '/api/phone/clueData/todayFirstConDataList';//获取员工的今日首咨线索数据
+export const saleAddClueData = '/api/phone/clueData/saleAddClueData';//销售录入线索数据
 export const todayCallDataList = '/api/phone/clueData/todayCallDataList'; //获取员工今日联系的线索数据
 export const threeDaysNoCallDataList = '/api/phone/clueData/threeDaysNoCallDataList'; //获取员工三日未联系的线索数据
 export const clueDataRelease = '/api/phone/clueData/clueDataRelease'; //释放线索数据    
