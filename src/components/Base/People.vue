@@ -176,7 +176,7 @@ export default {
         }
     },
     activated(){
-      this.screenForm = JSON.parse(sessionStorage.getItem('screenForm'))
+    //   this.screenForm = JSON.parse(sessionStorage.getItem('screenForm'))
     },
     created() {  
         this.getRoleList();
