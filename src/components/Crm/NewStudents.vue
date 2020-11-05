@@ -1,6 +1,8 @@
 <template>
     <el-main class="index-main newStudents">
 
+        <Start></Start>
+
         <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
 
             <el-col :span="6">
@@ -177,6 +179,9 @@
             v-if="drawer"
             @changeDrawer="changeDrawer"
             :drawer.sync='drawer'
+            @phoneOutTea='phoneOutTea'
+            @seatOutTea='seatOutTea'
+            :scopeRow='scopeRow'
             :studentUuid='studentUuid'
             :userId='userId'
             :clueDataSUuid='clueDataSUuid'
@@ -198,6 +203,7 @@ import {
     seatOutTea,
 } from '../../request/api';
 import StudentsNotes from '@/components/Share/StudentsNotes';
+import Start from '@/components/Share/Start';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import { 
     timestampToTime, classTypeString, orderTypeText, getTextByJs,
@@ -209,7 +215,8 @@ export default {
     name: 'newStudents',
     props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
-        StudentsNotes
+        StudentsNotes,
+        Start,
     },
     data() {
         return {
@@ -266,6 +273,7 @@ export default {
             ],
             dataPickerValueSignUp: [],
             initOptions: {},
+            scopeRow: {}
         }
     },
     created() {
@@ -295,6 +303,7 @@ export default {
                             this.drawer = true;
                             this.studentDetails(scope);
                             this.callLogUuid = res.data.callLogUuid;
+                            this.scopeRow = scope;
                             this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
                         }else{
                             this.$message({
@@ -328,6 +337,7 @@ export default {
                             this.drawer = true;
                             this.studentDetails(scope);
                             this.callLogUuid = res.data.callLogUuid;
+                            this.scopeRow = scope;
                             this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
                         }else{
                             this.$message({
@@ -538,6 +548,7 @@ export default {
             this.studentUuid = row.uuid;
             this.userId = row.customerId;
             this.clueDataSUuid = row.clueDataSUuid;
+            this.scopeRow = row;
         },
         
         getClassTeaStuNotes() {

@@ -21,13 +21,11 @@
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
-                                    <!-- <el-tooltip effect="dark" content="复制手机号码" placement="top">
-                                        <el-image
-                                            style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"
-                                            @click="phoneCopyFun"
-                                            :src="require('../../assets/images/copy-icon.png')">
-                                        </el-image>
-                                    </el-tooltip> -->
+                                    <div style="position: relative; left: 120px; top: -42px;" v-if="!routePathFlag">
+                                      <svg-icon icon-class="copy" icon-title="复制手机号码" v-if="!copyPathFlag" @click="phoneCopy()" />
+                                      <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOutTea()" icon-class="takephone" />
+                                      <svg-icon style="color: #409EFF" icon-title="座机外拨" @click="seatOutTea()" icon-class="landline" />
+                                    </div>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
@@ -341,7 +339,7 @@
                                           v-for="item in examList"
                                           :key="item.id"
                                           :label="item.name"
-                                          :value="String(item.id)">
+                                          :value="item.id">
                                         </el-option>
                                     </el-select>
 
@@ -692,6 +690,10 @@ export default {
           type: String,
           default: ''
         },
+        scopeRow: {
+            type: Object,
+            default: {}
+        }
     },
     data() {
         return {
@@ -882,6 +884,8 @@ export default {
           ],
           provinceList: [],
           examList: [],
+
+          copyPathFlag: false
         }
     },
     created() {
@@ -895,8 +899,20 @@ export default {
         if(this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
             this.routePathFlag = true;
         }
+        if(this.$route.path.indexOf("newStudents") != -1){
+            this.copyPathFlag = true;
+        }
     },
     methods: {
+      phoneCopy() {
+        this.$emit("phoneCopy", this.scopeRow)
+      },
+      phoneOutTea() {
+        this.$emit("phoneOutTea", this.scopeRow)
+      },
+      seatOutTea() {
+        this.$emit("seatOutTea", this.scopeRow)
+      },
       lookAgreementDetailsClick(row) {
         const href = '/onelogin' + xieyi + row.orderNo;
         window.open(href, '_blank');
@@ -976,9 +992,6 @@ export default {
                   })
               }
           })
-      },
-      phoneCopyFun() {
-          this.copyTel(this.clueDataSUuid);
       },
       quxiao() {
         this.$emit("changeDrawer", false)
@@ -1066,6 +1079,7 @@ export default {
         });
       },
       addClassTeaStuNotes() {
+        // console.log(this.customerForm.graduationTime);
         this.$smoke_post(addClassTeaStuNotes, {
           customerForm: {
             age: this.customerForm.age,
@@ -1073,7 +1087,7 @@ export default {
             city: this.customerForm.city,
             education: this.customerForm.education,
             evidencePurpose: this.customerForm.evidencePurpose,
-            examPeriod: this.customerForm.examPeriod,
+            examPeriodIdList: this.customerForm.examPeriodIdList,
             gender: this.customerForm.gender,
             graduationMajor: this.customerForm.graduationMajor,
             name: this.customerForm.name,
