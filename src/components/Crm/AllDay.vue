@@ -126,6 +126,7 @@
                 <el-col :span="5">
                     <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                     <svg-icon class="border-icon smoke-fr" @click="clueDataReleaseAllClick" icon-title="释放数据" icon-class="release-grey" />
+                    <svg-icon class="border-icon smoke-fr" @click="addClude" icon-title="录入线索" icon-class="add"></svg-icon>
                 </el-col>
 
             </el-row>
@@ -218,7 +219,27 @@
             @size-change="handleSizeChange"
         >
         </el-pagination>
-
+        <el-dialog width="500px" :visible="addCludeVisible" title="添加线索" @close="addCludeVisible = false">
+          <el-form ref="addCludeForm" :model="addCludeForm" :rule="addCludeRule">
+            <el-form-item prop="tel">
+              <el-input type="tel" v-model="addCludeForm.tel" placeholder="请输入手机号"></el-input>
+            </el-form-item>
+            <el-form-item prop="examItem">
+              <el-select placeholder="请选择考试项目" filterable v-model="addCludeForm.examItem">
+                <el-option v-for="item in examItemList" :key="item.uuid" :label="item.name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="school">
+              <el-select placeholder="请选择分校" :value="addCludeForm.school" :disabled="disabledSchool" filterable v-model="addCludeForm.school">
+                <el-option v-for="item in subSchoolList" :key="item.uuid" :label="item.name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="addCludeVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitAddClude">确 定</el-button>
+          </div>
+        </el-dialog>
         <CustomerNotes
             v-if="drawer"
             @changeDrawer="changeDrawer"
@@ -258,7 +279,10 @@ import {
     getClueDataNumber,
     copyTel,
     geSeatWork,
-    clueContactSign
+    clueContactSign,    
+    getExamBasic,
+    getAuthoritySchoolList,
+    saleAddClueData
 } from '../../request/api';
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
@@ -358,8 +382,29 @@ export default {
             tag_gonghai_flag: false,
             SeatWorkObj: {},
             fullLib: false,
-            libStandard: 0
-        }
+            libStandard: 0,
+            addCludeVisible: false,
+            examItemList: [],
+            subSchoolList: [],
+            addCludeForm: {
+              tel: '',
+              school: '',
+              examItem: null
+            },
+            telReg: /^1[3456789]\d{9}$/,
+            addCludeRule: {
+              tel: [ 
+                {require: true, message: '请输入手机号', trigger: 'blur'}
+              ],
+              examItem: [
+                {require: true, message: '请选择考试项目', trigger: 'blur'}
+              ],
+              school: [
+                {require: true, message: '请选择分校', trigger: 'blur'}
+              ]
+            },
+            disabledSchool: false
+          }
     },
     created() {
         const seatDataPageSize = localStorage.getItem('seatDataPageSize');
@@ -377,11 +422,68 @@ export default {
         let arr = [MJ_1, MJ_2, MJ_16, MJ_5];
         this.enumByEnumNums(arr);
         this.getRuleItem();
-    },
-    mounted() {
-
+        this.getExamBasic()
+        this.getSubSchool()
     },
     methods: {
+        getExamBasic(){
+					this.$smoke_get(getExamBasic, {}).then(res=>{
+						if(res.code == 200){
+              this.examItemList = res.data
+            }
+					})
+        },
+        getSubSchool(){
+          this.$smoke_get(getAuthoritySchoolList).then(res => {
+            if(res.code == 200){
+              this.subSchoolList = res.data
+            }
+          })
+        },
+        addClude(){
+          this.addCludeVisible = true
+          this.resetAddCludeForm()
+          if(this.subSchoolList.length > 0){
+            this.addCludeForm.school = this.subSchoolList[0].id
+          }else{
+            this.disabledSchool = true            
+          }
+        },
+        resetAddCludeForm(){
+          this.addCludeForm = {
+            tel: '',
+            school: '',
+            examItem: null
+          }
+        },
+        submitAddClude(){
+          this.$refs['addCludeForm'].validate((valid) => {            
+            if(valid){
+              if(!this.telReg.test(this.addCludeForm.tel)){
+                this.$message.error('请输入正确的手机号')
+              }else{
+                this.$smoke_post(saleAddClueData, this.addCludeForm).then(res => {
+                  if(res.code == 200){
+                    this.$message({
+                      type: 'success',
+                      message: '线索添加成功'
+                    })                    
+                    this.addCludeVisible = false
+                    this.getClueDataAll();
+                  }else{
+                    this.$message({
+                      type: 'error',
+                      message: res.msg
+                    })
+                  }
+                })
+              }              
+            }else{
+              return false
+            }
+          })
+          
+        },
         clueConSignChange(row) {
             this.clueContactSign(row.clueConSign, row.userCDARUuid);
         },
@@ -793,4 +895,10 @@ export default {
             background-color: #fef0f0;
         }
     }
+    .el-form-item{
+      /deep/.el-form-item__content{
+        margin-left: 0 !important;
+      }
+    }
+    
 </style>
