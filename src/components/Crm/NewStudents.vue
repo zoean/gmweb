@@ -179,6 +179,9 @@
             v-if="drawer"
             @changeDrawer="changeDrawer"
             :drawer.sync='drawer'
+            @phoneOutTea='phoneOutTea'
+            @seatOutTea='seatOutTea'
+            :scopeRow='scopeRow'
             :studentUuid='studentUuid'
             :userId='userId'
             :clueDataSUuid='clueDataSUuid'
@@ -270,6 +273,7 @@ export default {
             ],
             dataPickerValueSignUp: [],
             initOptions: {},
+            scopeRow: {}
         }
     },
     created() {
@@ -299,6 +303,7 @@ export default {
                             this.drawer = true;
                             this.studentDetails(scope);
                             this.callLogUuid = res.data.callLogUuid;
+                            this.scopeRow = scope;
                             this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
                         }else{
                             this.$message({
@@ -332,6 +337,7 @@ export default {
                             this.drawer = true;
                             this.studentDetails(scope);
                             this.callLogUuid = res.data.callLogUuid;
+                            this.scopeRow = scope;
                             this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
                         }else{
                             this.$message({
@@ -542,6 +548,7 @@ export default {
             this.studentUuid = row.uuid;
             this.userId = row.customerId;
             this.clueDataSUuid = row.clueDataSUuid;
+            this.scopeRow = row;
         },
         
         getClassTeaStuNotes() {

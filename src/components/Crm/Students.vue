@@ -225,6 +225,10 @@
             @changeDrawer="changeDrawer"
             :drawer.sync='drawer'
             :studentUuid='studentUuid'
+            @phoneCopy="phoneCopy"
+            @phoneOutTea='phoneOutTea'
+            @seatOutTea='seatOutTea'
+            :scopeRow='scopeRow'
             :userId='userId'
             :clueDataSUuid='clueDataSUuid'
             :callLogUuid='callLogUuid'
@@ -356,6 +360,7 @@ export default {
             restaurants: [],
             enumList: {},
             provinceList: [],
+            scopeRow: {}
         }
     },
     created() {
@@ -484,6 +489,7 @@ export default {
                             this.drawer = true;
                             this.studentDetails(scope);
                             this.callLogUuid = res.data.callLogUuid;
+                            this.scopeRow = scope;
                             this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
                         }else{
                             this.$message({
@@ -517,6 +523,7 @@ export default {
                             this.drawer = true;
                             this.studentDetails(scope);
                             this.callLogUuid = res.data.callLogUuid;
+                            this.scopeRow = scope;
                             this.notesCallForm.clueDataSUuid = scope.clueDataSUuid;
                         }else{
                             this.$message({
@@ -566,6 +573,7 @@ export default {
             this.studentUuid = row.uuid;
             this.userId = row.customerId;
             this.clueDataSUuid = row.clueDataSUuid;
+            this.scopeRow = row;
         },
         getClassTeaStudentClick() {
             this.form.currentPage = 1;

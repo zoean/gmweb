@@ -21,13 +21,11 @@
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
                                     <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
-                                    <!-- <el-tooltip effect="dark" content="复制手机号码" placement="top">
-                                        <el-image
-                                            style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"
-                                            @click="phoneCopyFun"
-                                            :src="require('../../assets/images/copy-icon.png')">
-                                        </el-image>
-                                    </el-tooltip> -->
+                                    <div style="position: relative; left: 120px; top: -42px;" v-if="!routePathFlag">
+                                      <svg-icon icon-class="copy" icon-title="复制手机号码" v-if="!copyPathFlag" @click="phoneCopy()" />
+                                      <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOut()" icon-class="takephone" />
+                                      <svg-icon style="color: #409EFF" icon-title="座机外拨" @click="seatOut()" icon-class="landline" />
+                                    </div>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="6">
@@ -692,6 +690,10 @@ export default {
           type: String,
           default: ''
         },
+        scopeRow: {
+            type: Object,
+            default: {}
+        }
     },
     data() {
         return {
@@ -882,6 +884,8 @@ export default {
           ],
           provinceList: [],
           examList: [],
+
+          copyPathFlag: false
         }
     },
     created() {
@@ -895,8 +899,20 @@ export default {
         if(this.$route.path.indexOf("allStudents") != -1 || this.$route.path.indexOf("baokao") != -1){
             this.routePathFlag = true;
         }
+        if(this.$route.path.indexOf("newStudents") != -1){
+            this.copyPathFlag = true;
+        }
     },
     methods: {
+      phoneCopy() {
+        this.$emit("phoneCopy", this.scopeRow)
+      },
+      phoneOutTea() {
+        this.$emit("phoneOut", this.scopeRow)
+      },
+      seatOutTea() {
+        this.$emit("seatOut", this.scopeRow)
+      },
       lookAgreementDetailsClick(row) {
         const href = '/onelogin' + xieyi + row.orderNo;
         window.open(href, '_blank');
@@ -976,9 +992,6 @@ export default {
                   })
               }
           })
-      },
-      phoneCopyFun() {
-          this.copyTel(this.clueDataSUuid);
       },
       quxiao() {
         this.$emit("changeDrawer", false)
