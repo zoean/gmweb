@@ -34,7 +34,7 @@
             </el-col>
 
             <el-col :span="3">
-                <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+                <el-input v-model.trim="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
 
             <el-col :span="3" class="seatData">

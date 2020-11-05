@@ -53,7 +53,7 @@
                     <el-input :value="$store.state.name" style="width: 80%;" disabled size=small></el-input>
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-                    <el-input :value="form_phone.phone" style="width: 80%;" @input="input_change($event)" size=small></el-input>
+                    <el-input v-model.trim="form_phone.phone" style="width: 80%;" @input="input_change($event)" size=small></el-input>
                 </el-form-item>
             </el-form>
 

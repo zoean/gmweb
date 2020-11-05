@@ -9,7 +9,7 @@
               <el-input v-model="ruleForm.jobNumber"></el-input>
             </el-form-item>
             <el-form-item label="用户手机号" prop="describe">
-              <el-input v-model="ruleForm.accountNumber"></el-input>
+              <el-input v-model.trim="ruleForm.accountNumber"></el-input>
             </el-form-item>
 
         </el-form>

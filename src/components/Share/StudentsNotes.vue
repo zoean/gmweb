@@ -20,7 +20,7 @@
                         <el-row>
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
-                                    <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model.trim="customerForm.tel" readonly size="small" class="borderNone"></el-input>
                                     <!-- <el-tooltip effect="dark" content="复制手机号码" placement="top">
                                         <el-image
                                             style="position: relative; width: 14px;height: 14px; left: 104px; top: -38px; cursor: pointer;"

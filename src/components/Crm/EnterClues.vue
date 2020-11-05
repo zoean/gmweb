@@ -10,7 +10,7 @@
 
                     <el-col :span="6">
                         <el-form-item label="客户手机" prop="mobile">
-                            <el-input v-model="ruleForm.mobile" size="small" placeholder="请输入客户手机"></el-input>
+                            <el-input v-model.trim="ruleForm.mobile" size="small" placeholder="请输入客户手机"></el-input>
                         </el-form-item>
                     </el-col>
 
