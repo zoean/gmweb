@@ -23,8 +23,8 @@
                                     <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
                                     <div style="position: relative; left: 120px; top: -42px;" v-if="!routePathFlag">
                                       <svg-icon icon-class="copy" icon-title="复制手机号码" v-if="!copyPathFlag" @click="phoneCopy()" />
-                                      <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOut()" icon-class="takephone" />
-                                      <svg-icon style="color: #409EFF" icon-title="座机外拨" @click="seatOut()" icon-class="landline" />
+                                      <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOutTea()" icon-class="takephone" />
+                                      <svg-icon style="color: #409EFF" icon-title="座机外拨" @click="seatOutTea()" icon-class="landline" />
                                     </div>
                                 </el-form-item>
                             </el-col>
@@ -908,10 +908,10 @@ export default {
         this.$emit("phoneCopy", this.scopeRow)
       },
       phoneOutTea() {
-        this.$emit("phoneOut", this.scopeRow)
+        this.$emit("phoneOutTea", this.scopeRow)
       },
       seatOutTea() {
-        this.$emit("seatOut", this.scopeRow)
+        this.$emit("seatOutTea", this.scopeRow)
       },
       lookAgreementDetailsClick(row) {
         const href = '/onelogin' + xieyi + row.orderNo;
