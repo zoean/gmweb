@@ -130,7 +130,7 @@
                   <div>一、按搜索添加成员</div>
                   <el-row style="width: 100%; margin-top: .2rem;">
                         <el-col :span="9">
-                            <el-input v-model="innerForm.accountNumber" placeholder="请输入手机号"></el-input>
+                            <el-input v-model.trim="innerForm.accountNumber" placeholder="请输入手机号"></el-input>
                         </el-col>
                         <el-col :span="9" :offset="1">
                             <el-input v-model="innerForm.name" placeholder="请输入姓名"></el-input>

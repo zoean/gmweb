@@ -6,7 +6,7 @@
 
                 <el-row class="people-screen">
                     <el-col :span="3">
-                        <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
+                        <el-input v-model.trim="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
                     </el-col>
                     <el-col :span="21">
                         <el-button type="primary" size="small" @click="orderCallDataListClick">查 询</el-button>
