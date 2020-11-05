@@ -55,7 +55,7 @@
                 </el-col>
 
                 <el-col :span="3">
-                    <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
+                    <el-input v-model.trim="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
                 </el-col>
 
                 <el-col :span="3">

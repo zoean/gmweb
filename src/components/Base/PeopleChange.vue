@@ -15,7 +15,7 @@
                 </el-form-item>
         
                 <el-form-item label="手机号：">
-                    <el-input v-model="formText.accountNumber" size="small" disabled></el-input>
+                    <el-input v-model.trim="formText.accountNumber" size="small" disabled></el-input>
                 </el-form-item>
         
                 <el-form-item label="在职状态：">
@@ -182,7 +182,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="手机号码">
-                  <el-input v-model="createForm.mobile"></el-input>
+                  <el-input v-model.trim="createForm.mobile"></el-input>
                 </el-form-item>
                 <el-form-item label="电子邮箱">
                   <el-input v-model="createForm.email"></el-input>
