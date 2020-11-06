@@ -45,11 +45,11 @@
                 </el-col>
         
                 <el-col :span="3">
-                    <el-input v-model="form.calledId" size="small" placeholder="输入拨打电话" class="screen-li" clearable></el-input>
+                    <el-input v-model.trim="form.calledId" size="small" placeholder="输入拨打电话" class="screen-li" clearable></el-input>
                 </el-col>
         
                 <el-col :span="3">
-                    <el-input v-model="form.callerId" size="small" placeholder="输入客户电话" class="screen-li" clearable></el-input>
+                    <el-input v-model.trim="form.callerId" size="small" placeholder="输入客户电话" class="screen-li" clearable></el-input>
                 </el-col>
         
                 <el-col :span="3">

@@ -11,7 +11,7 @@
       <div style="text-align: center; margin-top: 20px; font-size: 20px; color: #218EFF;">忘记密码</div>
 
       <el-form-item label="手机号" :label-width="formLabelWidth" prop="accountNumber">
-        <el-input v-model="ruleForm.accountNumber" :readonly="readonlyFlag" @focus="readonlyFlag = false" placeholder="请输入手机号" style="width: 80%;" size="small"></el-input>
+        <el-input v-model.trim="ruleForm.accountNumber" :readonly="readonlyFlag" @focus="readonlyFlag = false" placeholder="请输入手机号" style="width: 80%;" size="small"></el-input>
       </el-form-item>
       <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPassword">
         <el-input v-model="ruleForm.newPassword" @input="input_change_password($event)" placeholder="请输入新密码" type="password" style="width: 80%;" size="small"></el-input>

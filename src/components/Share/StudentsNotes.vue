@@ -20,7 +20,7 @@
                         <el-row>
                             <el-col :span="6">
                                 <el-form-item label="客户手机" prop="tel">
-                                    <el-input v-model="customerForm.tel" readonly size="small" class="borderNone"></el-input>
+                                    <el-input v-model.trim="customerForm.tel" readonly size="small" class="borderNone"></el-input>
                                     <div style="position: relative; left: 120px; top: -42px;" v-if="!routePathFlag">
                                       <svg-icon icon-class="copy" icon-title="复制手机号码" v-if="!copyPathFlag" @click="phoneCopy()" />
                                       <svg-icon style="color: #409EFF" icon-title="手机外拨" @click="phoneOutTea()" icon-class="takephone" />
