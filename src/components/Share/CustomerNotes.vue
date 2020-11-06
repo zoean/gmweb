@@ -1290,7 +1290,7 @@ export default {
                     this.ruleForm.classOffer2 = clueData.classOffer2;
                     this.ruleForm.intentionLevel2 = clueData.intentionLevel2;
                     this.ruleForm.runOutPromise2 = clueData.runOutPromise2;
-                    this.ruleForm.remarks = clueData.remarks;
+                    // this.ruleForm.remarks = clueData.remarks;
 
                     if(clueData.comMode == '1') {
                         this.ruleForm.comModeName = '座机外呼';
