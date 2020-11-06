@@ -200,7 +200,7 @@ export default{
     getOrgInfo: function (){
       this.$smoke_post(getManageOrgList).then(res => {
         this.loading = false
-        if(res.code == 200 && this.orgList.length > 0){
+        if(res.code == 200 && res.data.length > 0){
           this.orgList = res.data
           this.orgUuid = this.orgList[0].orgUuid
           this.setFormOrgUuid()
