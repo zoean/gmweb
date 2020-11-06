@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="handle-area">
+        <el-row class="handle-area" :gutter="20">
 
             <el-col :span="5">
                 <el-date-picker
