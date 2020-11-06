@@ -55,7 +55,7 @@
                 </el-col>
 
                 <el-col :span="3">
-                    <el-input v-model="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
+                    <el-input v-model.trim="screenForm.accountNumber" size="small" placeholder="请输入手机号" class="screen-li"></el-input>                            
                 </el-col>
 
                 <el-col :span="3">
@@ -175,9 +175,6 @@ export default {
             exportPeople: null
         }
     },
-    mounted(){        
-        
-    },
     created() {  
         this.getRoleList();
         this.getOrgSubsetByUuid();
@@ -242,6 +239,7 @@ export default {
 
         },
         handleEditClick(row) {
+            // sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/change',
                 query: {
@@ -257,7 +255,8 @@ export default {
                 }
             })
         },
-        handlePermissClick(row) {
+        handlePermissClick(row) {            
+            // sessionStorage.setItem('screenForm', JSON.stringify(this.screenForm))
             this.$router.push({
                 path: '/base/people/permiss',
                 query: {
