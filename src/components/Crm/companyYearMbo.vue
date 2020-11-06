@@ -237,7 +237,6 @@ export default{
     },
     addYearTarget: function (){
       const resetTime = timestampToTime(this.curTime).slice(0, 4)
-      console.log()
       this.addEditYearParams.visible = true
       this.addEditYearParams.type = 1
       this.addEditYearParams.title = '添加年目标'

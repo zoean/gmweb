@@ -81,9 +81,6 @@ export default {
     }         
   },
   methods: {
-    selectSubmenu(index, indexPath){
-      console.log(index, indexPath)
-    },
     closeMenu(index){        
       this.$emit('setPageTitleLeft')
     },
