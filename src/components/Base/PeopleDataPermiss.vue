@@ -203,7 +203,7 @@
             :before-close="handleClose">
             <span class="bullets"></span>
 
-            <el-row style="border: 1px dashed #ccc; padding: 20px; margin: 20px;">
+            <el-row class="school-radio">
                 <el-radio v-model="radioId" v-for="(item, index) in tableDataSchool" :label="item.name" :key="index"></el-radio>
 
 
@@ -1073,6 +1073,13 @@ export default {
             line-height: 40px; 
             color: green; 
             font-size: 14px;
+        }
+        .school-radio{
+            border: 1px dashed #ccc;
+            padding: 20px;
+            margin: 20px;
+            line-height: 2em;
+
         }
     }
     .el-pagination{
