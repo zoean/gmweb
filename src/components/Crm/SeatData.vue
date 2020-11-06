@@ -85,65 +85,69 @@
 
         </el-row>
 
-        <el-row class="people-screen">
-            <el-col :span="2">
-                <el-select v-model="form.orderState" size="small" placeholder="选择成单状态" class="screen-li" clearable>
-                    <el-option
-                        v-for="item in orderStateList"
-                        :key="item.name"
-                        :label="item.name"
-                        :value="item.number">
-                    </el-option>
-                </el-select>
+        <el-row class="people-screen handle-area" type="flex" justify="space-between">
+            <el-col>
+                <el-row type="flex" class="seat-search">
+                    <el-col class="seat-normal">
+                        <el-select v-model="form.orderState" size="small" placeholder="选择成单状态" class="screen-li" clearable>
+                            <el-option
+                                v-for="item in orderStateList"
+                                :key="item.name"
+                                :label="item.name"
+                                :value="item.number">
+                            </el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col class="seat-normal">
+                        <el-cascader
+                            ref="cascader"
+                            size="small"
+                            class="smoke-cascader1 screen-li"
+                            placeholder="坐席组织架构"
+                            collapse-tags
+                            :show-all-levels='true'
+                            :options="zuzhiOptions"
+                            @change='handleZuzhiChange'
+                            filterable
+                            :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
+                            clearable>
+                        </el-cascader>
+                    </el-col>
+
+                    <el-col class="seat-normal">
+
+                        <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
+                            <el-option
+                            v-for="item in dialStateList"
+                            :key="item.name"
+                            :label="item.name"
+                            :value="item.number">
+                            </el-option>
+                        </el-select>
+
+                    </el-col>
+
+                    <el-col class="seat-normal">
+
+                        <el-input v-model="form.saleName" size="small" placeholder="输入坐席" class="screen-li"></el-input>
+
+                    </el-col>
+                    <el-col v-for="(item,index) in searchList" :key="item.id" :style="`width: ${item.width}px`">
+                        <el-tag
+                            :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
+                            type="info"
+                            effect="plain"
+                            @click="tagClick(item)"
+                            >{{item.name}}
+                        </el-tag>
+                    </el-col>
+                    <el-col class="search-btn">
+                        <el-button type="primary" size="small" style="margin-left: 2px;" @click="getAllUserClueDataClick">查 询</el-button>
+                    </el-col>
+                </el-row>
             </el-col>
-            <el-col :span="3">
-                <el-cascader
-                    ref="cascader"
-                    size="small"
-                    class="smoke-cascader1 screen-li"
-                    placeholder="坐席组织架构"
-                    collapse-tags
-                    :show-all-levels='true'
-                    :options="zuzhiOptions"
-                    @change='handleZuzhiChange'
-                    filterable
-                    :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'list', multiple: true }"
-                    clearable>
-                </el-cascader>
-            </el-col>
-
-            <el-col :span="2">
-
-                <el-select v-model="form.dialState" size="small" placeholder="选择是否首咨" class="screen-li" clearable>
-                    <el-option
-                      v-for="item in dialStateList"
-                      :key="item.name"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
-
-            </el-col>
-
-            <el-col :span="2">
-
-                <el-input v-model="form.saleName" size="small" placeholder="输入坐席" class="screen-li"></el-input>
-
-            </el-col>
-
-            <el-col :span="15">
-
-                <el-tag
-                    v-for="(item,index) in searchList" :key="item.id"
-                    :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
-                    type="info"
-                    effect="plain"
-                    @click="tagClick(item)"
-                    >{{item.name}}
-                </el-tag>
-
-                <el-button type="primary" size="small" style="margin-left: 2px;" @click="getAllUserClueDataClick">查 询</el-button>
-
+            
+            <el-col class="seat-handle" style="width:150px">
                 <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
                 <svg-icon class="border-icon smoke-fr" @click="TransferToGoogClick" icon-title="释放数据" icon-class="release-grey" />
                 <svg-icon class="border-icon smoke-fr" @click="pushPeopleClick" icon-title="线索转移" icon-class="toperson" />
@@ -158,7 +162,6 @@
             ref="tableSelect"
             v-loading="fullscreenLoading"
             :height="tableHeight"
-            class="table-fixed"
             >
 
             <el-table-column
@@ -191,7 +194,7 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="active" label="操作" width="60" class-name="table_active">
+            <el-table-column prop="active" label="操作" width="60" class-name="table_active" fixed="right">
               <template slot-scope="scope">
                 <svg-icon @click="customerInfo(scope.row)" icon-title="客户信息" icon-class="info" />
               </template>
@@ -338,12 +341,12 @@ export default {
             examItem: '',
             userCDARUuid: '',
             searchList: [
-                { name: '今日首咨', id: 1 },
-                { name: '2-3天数据', id: 2 },
-                { name: '4-7天数据', id: 3 },
-                { name: '8-14天数据', id: 4 },
-                { name: '14天以上数据', id: 5 },
-                { name: '公海领取数据', id: 6 },
+                { name: '今日首咨', id: 1, width: 80 },
+                { name: '2-3天数据', id: 2, width: 86 },
+                { name: '4-7天数据', id: 3, width: 86 },
+                { name: '8-14天数据', id: 4, width: 92 },
+                { name: '14天以上数据', id: 5, width: 100 },
+                { name: '公海领取数据', id: 6, width: 110 },
             ],
             tag_id: '',
             tag_name: '',
@@ -483,7 +486,7 @@ export default {
             this.form.num = pageNum
         },
         editFieldHandle(){
-            this.$store.commit('setEditFieldVisible', true)
+            this.$store.commit('setEditFieldVisible', true, this.getAllUserClueData())
         },
         tableSort(type, props){
             this.form.sortSet = []
@@ -561,7 +564,7 @@ export default {
                         this.list = res.data.list;
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1)
+                        this.$emit('setTableHeight', this.form.total, 2)
                     }, 300);
                 }else{
                     setTimeout(() => {
@@ -760,12 +763,6 @@ export default {
 .el-table::before{
     height: 0;
 }
-.table-fixed {
-    /deep/.el-table__body-wrapper {
-    height: calc(100% - 44px) !important;
-    overflow-x: scroll;
-  }
-}
 
     .index-main{
         .el-col-6{
@@ -786,6 +783,19 @@ export default {
             margin-bottom: 10px;
             .screen-li{
                 width: 94%;
+            }
+            .seat-search{
+              flex-shrink: 0;
+              flex-wrap: wrap;
+              .seat-normal{
+                width: 14%;
+              }
+              .search-btn{
+                width: 80px;
+              }
+            }
+            .seat-handle{
+              width: 150px;
             }
         }
     }

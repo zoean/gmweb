@@ -92,48 +92,48 @@
             </el-col>
 
         </el-row>
+        <div class="handle-area">
+            <el-row class="people-screen">
 
-        <el-row class="people-screen">
+                <el-col :span="3">
 
-            <el-col :span="3">
+                    <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable >
+                        <el-option
+                        v-for="item in orderStateList"
+                        :key="item.name"
+                        :label="item.name"
+                        :value="item.number">
+                        </el-option>
+                    </el-select>
 
-                <el-select v-model="form.orderState" size="small" class="screen-li"  placeholder="选择成单状态" clearable >
-                    <el-option
-                      v-for="item in orderStateList"
-                      :key="item.name"
-                      :label="item.name"
-                      :value="item.number">
-                    </el-option>
-                </el-select>
+                </el-col>
 
-            </el-col>
+                <el-col :span="16">
 
-            <el-col :span="16">
+                    <el-tag
+                        v-for="(item,index) in searchList" :key="item.id"
+                        :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
+                        type="info"
+                        effect="plain"
+                        @click="tagClick(item)"
+                        >{{item.name}}
+                    </el-tag>
 
-                <el-tag
-                    v-for="(item,index) in searchList" :key="item.id"
-                    :class="tag_id == item.id ? 'tag_class tag_default_class' : 'tag_default_class'"
-                    type="info"
-                    effect="plain"
-                    @click="tagClick(item)"
-                    >{{item.name}}
-                </el-tag>
+                    <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
 
-                <el-button type="primary" style="margin-left: 10px;" size="small" @click="getClueDataAllClick">查 询</el-button>
+                </el-col>
 
-            </el-col>
+                <el-col :span="5">
+                    <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
+                    <svg-icon class="border-icon smoke-fr" @click="clueDataReleaseAllClick" icon-title="释放数据" icon-class="release-grey" />
+                </el-col>
 
-            <el-col :span="5">
-                <svg-icon class="border-icon smoke-fr" @click="editFieldHandle" icon-title="表头管理" icon-class="field" />
-                <svg-icon class="border-icon smoke-fr" @click="clueDataReleaseAllClick" icon-title="释放数据" icon-class="release-grey" />
-            </el-col>
+            </el-row>
 
-        </el-row>
+            <div class="full_msg" v-if="fullLib">您的客户数量已达{{libStandard}}，请释放，否则不能接收新数据。</div>
 
-        <div class="full_msg">您的客户数量已达{{libStandard}}，请释放，否则不能接收新数据。</div>
-
-        <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
-
+            <div class="number_search" v-if="tag_flag"><svg-icon style="font-size: 14px; margin-left: 10px; cursor: default;" icon-title="" icon-class="tanhao" />本次查询出【{{tag_name}}】总人数{{SeatWorkObj.clueDataNum}}，拨打人数{{SeatWorkObj.callNum}}，接通人数{{SeatWorkObj.callOpenNum}}，成交人数{{SeatWorkObj.orderNum}}</div>
+        </div>
         <el-table
             :data="list"
             v-loading="fullscreenLoading"
@@ -263,7 +263,6 @@ import {
 import PageFieldManage from '@/components/Base/PageFieldManage';
 import Start from '../../components/Share/Start';
 import {
-    menuNumberFunc,
     receiveTimeFun
 } from '../../assets/js/common';
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from '../../assets/js/data';
@@ -358,7 +357,7 @@ export default {
             tag_flag: false,
             tag_gonghai_flag: false,
             SeatWorkObj: {},
-            fullLib: true,
+            fullLib: false,
             libStandard: 0
         }
     },
@@ -557,17 +556,19 @@ export default {
                         this.fullscreenLoading = false;
                         this.columnList = res.data.filedList;
                         this.schoolId = res.data.schoolId;
-                        console.log(this.schoolId, 'this.schoolId');
                         res.data.list.map(sll => {
                             sll.clueConSign = sll.clueConSign == 0 ? '' : sll.clueConSign
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        if(this.tag_flag){
-                            this.$emit('setTableHeight', res.data.total, 2.2, 1)
-                        }else{
-                            this.$emit('setTableHeight', res.data.total, 1, 1)
-                        }
+                            this.$emit('setTableHeight', res.data.total, 1)
+                        // if(this.tag_flag && this.fullLib){
+                            // this.$emit('setTableHeight', res.data.total, 1)
+                        // }else if(this.tag_flag || this.fullLib){
+                        //     this.$emit('setTableHeight', res.data.total, 1)
+                        // }else{
+                        //     this.$emit('setTableHeight', res.data.total, 1)
+                        // }
                     }, 300);
                     // 提示
                     if(res.data.userDataCount >= res.data.userDataStandard) {

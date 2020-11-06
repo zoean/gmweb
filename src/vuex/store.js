@@ -51,7 +51,7 @@ const mutations = {
         state.pageNum = pageNum
     },
     setEditFieldVisible(state, Boole){
-        state.editFieldVisible = Boole
+        state.editFieldVisible = Boole  
     },
     setUserRole(state, role){
         state.userRole = role.length && role.length > 1 ? role.join('/') : role[0] || '--'

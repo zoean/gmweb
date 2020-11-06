@@ -46,11 +46,11 @@ export default {
       windowHeight: 0,
       initHeight: 0,
       initSearchHeight: 0,
-      handleCount: 0,
       pageTitle: '',
       pageTitleLeft: 232,
       trHeight: 1,
-      iscollapse: false
+      iscollapse: false,
+      handleAreaHeight: 0
     }
   },
   created() {
@@ -59,7 +59,6 @@ export default {
     }else{
       this.$store.dispatch('actionsSetCommonFlag', true);
     }
-    // this.setTableHeight(this.total,this.handleCount, this.trHeight)
     this.resizeHandle()
   },
   distroyed(){
@@ -133,7 +132,7 @@ export default {
       this.toggleAction = !this.toggleAction
       setTimeout(()=>{
           this.hideSearch = !this.hideSearch 
-          this.setTableHeight(this.total, this.handleCount, this.trHeight)
+          this.setTableHeight(this.total, this.trHeight)
       }, 400)
     },
     setPageTitleLeft(){ 
@@ -147,37 +146,31 @@ export default {
         this.pageTitleLeft = 86
       }
     },
-    setTableHeight(total, handleCount, trH){//计算数据列表高度
-      this.handleCount = handleCount || 0
+    setTableHeight(total, trH){//计算数据列表高度
       this.total = total
       var elPagination = document.getElementsByClassName('el-pagination')[0],
-      searchArea = document.getElementsByClassName('people-screen')[0];
-      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
-      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
+      searchArea = document.getElementsByClassName('people-screen')[0],
+      handleArea = document.getElementsByClassName('handle-area')[0];
+      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0;
+      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0;
       this.windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      this.handleAreaHeight = handleArea && handleArea.offsetHeight ? handleArea.offsetHeight : 0;
+      if(this.$route.path == '/crm/myClient/completed'){
+        this.searchAreaHeight = this.searchAreaHeight * 2
+      }
       this.setPageTitleLeft() 
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
       }
       this.trHeight = trH
-      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleCount * 42 - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 - 116
-      // if(this.total * this.trHeight * 45 < this.tableHeight){
-        // if(this.total == 0){
-          // this.tableHeight = this.trHeight * 46 + 46
-        // }else{
-          // this.tableHeight = this.total * this.trHeight * 46 + 46
-          // this.tableHeight = this.total * this.trHeight * 46 + 46
-        // }
-      // }else{
-        // this.tableHeight = this.hideSearch && this.total > 15 ? this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleCount * 42 -78 : this.tableHeight
-      // }
+      this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleAreaHeight - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleAreaHeight - 116
       if(/^\/base\/menu/.test(this.$route.path)){
-        this.tableHeight = this.windowHeight - this.handleCount * 42 - 116
+        this.tableHeight = this.windowHeight - this.handleAreaHeight - 116
       }
     },
     resizeHandle(){
       window.addEventListener('resize', _.throttle(()=>{
-        this.setTableHeight(this.total,this.handleCount, this.trHeight)
+        this.setTableHeight(this.total, this.trHeight)
       }, 100))
     }
   }

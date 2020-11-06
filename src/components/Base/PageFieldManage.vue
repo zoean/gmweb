@@ -2,7 +2,7 @@
 <div>
   <el-dialog class="field-manage" :visible.sync="editFieldVisible" title="编辑字段" :close-on-click-modal="false" @close="cancleEditField">
     <p>拖拽表格数据行即可对字段进行排序</p>
-    <el-table ref="curFieldTable" :data="curFieldList" class="field-table" @selection-change="handleSelectionChange">
+    <el-table ref="curFieldTable" :data="curFieldList" class="field-table" @selection-change="handleSelectionChange" row-key="num">
       <el-table-column
         type="selection"
         width="55" :reserve-selection="true" :selectable="checkboxT" disabled>

@@ -61,7 +61,7 @@
             </el-col>
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen handle-area">
             <el-col :span="6">
                 <el-date-picker
                     class="screen-li"
@@ -500,7 +500,7 @@ export default {
 
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1, 1)
+                        this.$emit('setTableHeight', this.form.total)
                     }, 300);
                 }else{
                     setTimeout(() => {

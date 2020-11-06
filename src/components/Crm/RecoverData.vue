@@ -68,7 +68,7 @@
 
         </el-row>
 
-        <el-row class="people-screen">
+        <el-row class="people-screen handle-area">
 
             <el-col :span="3">
 
@@ -421,7 +421,7 @@ export default {
                         this.columnList = res.data.filedList
                         this.schoolId = res.data.schoolId;
                         this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1)
+                        this.$emit('setTableHeight', this.form.total)
                     }, 300);
                 }else{
                     setTimeout(() => {

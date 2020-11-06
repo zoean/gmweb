@@ -177,7 +177,7 @@
                 </el-badge>
 
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.33</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.34</span>
                 <a class="guide" href="https://www.jhwx.com/staff_open.php" target="_blank">使用教程</a>
             </el-col>
         </el-row>
@@ -569,10 +569,7 @@ export default {
             let arr = [];
             this.$smoke_get(getClueDataNumber, {}).then(res => {
                 if(res.code == 200) {
-                    for(let i in res.data) {
-                        arr.push(res.data[i]);
-                    }
-                    this.clueDataNumberList = arr;
+                    this.clueDataNumberList = res.data;
                     this.getUserLoginMessage();
                 }else{
                     this.getUserLoginMessage();

@@ -170,8 +170,16 @@ export default{
         }
       })
     },
-    searchYearList: function (){   
-      this.getYearTargetList()
+    searchYearList: function (){  
+      if(!this.searchForm.yearOrMonths[0]){
+        this.$message({
+          type: 'error',
+          message: '请选择年份'
+        })
+      }else{
+        this.getYearTargetList()
+      }
+      
     },
     tabClick(tab, event){
       if(tab.index == 1){
@@ -207,9 +215,9 @@ export default{
       this.loading = true
       this.$smoke_post(getYearTargetList, this.searchForm).then(res => {
         if(res.code == 200){
-          this.loading = false
           this.monthTableList = res.data
         }
+        this.loading = false
       })
     },
     changeYear: function (){

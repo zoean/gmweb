@@ -4,6 +4,18 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.34 -- 2020/11/04" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增菜单排序功能</p>
+          <p>2、坐席数据管理页面UI优化</p>
+          <p>3、员工编辑页面编辑信息后返回带搜索条件</p>
+          <p>4、主管目标、公司目标增加搜索条件不为空验证</p>
+          <h4>修复bug</h4>
+          <p>1、修复坐席管理页面列表横向滚动bug</p>
+          <p>2、修复主管目标、公司目标loading Bug</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.33 -- 2020/10/28" placement="top">
         <el-card>
           <h4>新增功能</h4>
