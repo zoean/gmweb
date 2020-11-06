@@ -151,10 +151,10 @@ export default {
       var elPagination = document.getElementsByClassName('el-pagination')[0],
       searchArea = document.getElementsByClassName('people-screen')[0],
       handleArea = document.getElementsByClassName('handle-area')[0];
-      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
-      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
-      this.windowHeight = document.documentElement.clientHeight || document.body.clientHeight,
-      this.handleAreaHeight = handleArea && handleArea.offsetHeight ? handleArea.offsetHeight : 0;
+      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0;      
+      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0;
+      this.windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      this.handleAreaHeight = handleArea && handleArea.offsetHeight ? handleArea.offsetHeight : 0;      
       this.setPageTitleLeft() 
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
