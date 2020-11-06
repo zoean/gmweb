@@ -123,6 +123,7 @@ export const getRuleUserLimit = '/api/phone/DataAutDis/getRuleUserLimit'; //获�
 export const getRuleItem = '/api/phone/DataAutDis/getRuleItem'; //获取分配组项列表
 export const getRuleItemAuth = '/api/phone/DataAutDis/getRuleItemAuth'; //获取分配组项列表（带权限）
 export const getSchoolList = '/api/phone/DataAutDis/getSchoolList'; //获取分校集合
+export const getAuthoritySchoolList = '/api/phone/DataAutDis/getAuthoritySchoolList';//获取分校集合（有权限）
 export const getPopularizeUrl = '/api/phone/DataAutDis/getPopularizeUrl'; //获取推广链接
 export const popularizeUrl = '/api/phone/DataAutDis/popularizeUrl'; //生成推广链接
 
@@ -134,6 +135,7 @@ export const updateListField = '/api/phone/pageFieldsMag/upUserPageField';//更�
 export const getClueDataAll = '/api/phone/clueData/getClueDataAll'; //获取员工的全部客户
 export const firstConDataList = '/api/phone/clueData/firstConDataList'; //获取员工的首咨线索数据
 export const todayFirstConDataList = '/api/phone/clueData/todayFirstConDataList';//获取员工的今日首咨线索数据
+export const saleAddClueData = '/api/phone/clueData/saleAddClueData';//销售录入线索数据
 export const todayCallDataList = '/api/phone/clueData/todayCallDataList'; //获取员工今日联系的线索数据
 export const threeDaysNoCallDataList = '/api/phone/clueData/threeDaysNoCallDataList'; //获取员工三日未联系的线索数据
 export const clueDataRelease = '/api/phone/clueData/clueDataRelease'; //释放线索数据    
