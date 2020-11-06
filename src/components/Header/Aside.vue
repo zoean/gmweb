@@ -100,7 +100,6 @@ export default {
       this.$store.commit('setPageNum', index.pageNum)
       this.$router.push({ path: index.url });
       this.activeIndex = index.uuid;
-      console.log(index)
     },
     router_index() {
       this.activeIndex = this.$route.path;
