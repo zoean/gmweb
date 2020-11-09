@@ -2,7 +2,7 @@
     <el-main class="index-main">
 
         <Start></Start>
-        <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" id="searchArea">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" id="searchArea">
 
             <el-col :span="3">
                 <el-input v-model="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
@@ -561,7 +561,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                            this.$emit('setTableHeight', res.data.total, 1)
+                        this.$emit('setTableHeight', res.data.total)
                         // if(this.tag_flag && this.fullLib){
                             // this.$emit('setTableHeight', res.data.total, 1)
                         // }else if(this.tag_flag || this.fullLib){
