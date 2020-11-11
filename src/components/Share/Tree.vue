@@ -135,7 +135,7 @@ export default {
         btnOk() {
             let treeDataFlag = true;
             this.tableData.map(sll => {
-                if(sll.limitLimit == 0){
+                if(sll.limitLimit < 0){
                     treeDataFlag = false;
                     return;
                 }
@@ -153,7 +153,7 @@ export default {
             }else{
                 this.$message({
                     type: 'error',
-                    message: '亲，分配上限值不能为0哦！'
+                    message: '亲，分配上限值不能小于0哦！'
                 })
             }
         },
