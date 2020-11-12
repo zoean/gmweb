@@ -2,7 +2,7 @@
     <el-main class="index-main">
 
         <Start></Start>
-        <el-row  :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" id="searchArea">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]" id="searchArea">
 
             <el-col :span="3">
                 <el-input v-model.trim="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
@@ -67,7 +67,7 @@
 
             <el-col :span="3">
 
-                <el-select v-model="form.ruleNumberName" size="small" filterable placeholder="选择分配组" class="screen-li" clearable>
+                <el-select v-model="form.ruleNumberName" size="small" filterable placeholder="请输入分配组" class="screen-li" clearable>
                     <el-option
                       v-for="item in ruleNumberNameList"
                       :key="item.name"
@@ -663,7 +663,7 @@ export default {
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
-                            this.$emit('setTableHeight', res.data.total, 1)
+                        this.$emit('setTableHeight', res.data.total)
                         // if(this.tag_flag && this.fullLib){
                             // this.$emit('setTableHeight', res.data.total, 1)
                         // }else if(this.tag_flag || this.fullLib){
