@@ -39,8 +39,8 @@
                 range-separator="至"
                 :default-time="['00:00:00', '23:59:59']"
                 @change="datePickerChange($event, 3)"
-                start-placeholder="最近一次联系时间"
-                end-placeholder="最近一次联系时间">
+                start-placeholder="最近联系时间"
+                end-placeholder="最近联系时间">
               </el-date-picker>
             </el-col>
             <el-col :span="3">
@@ -58,7 +58,7 @@
                 <area-cascader :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
             </el-col>                   
         </el-row>
-        <el-row class="handle-area">
+        <el-row class="people-screen handle-area">
           <el-col :span="3">
             <el-autocomplete
                 ref="autocomplete"
@@ -207,7 +207,7 @@ export default {
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '入库时间', 'sortable': true, 'width': 140 },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'sortable': true, 'width': 140 },
+                { 'prop': 'lastCallTime', 'label': '最近联系时间', 'sortable': true, 'width': 140 },
                 { 'prop': 'dataCreateTime', 'label': '最新回收时间', 'sortable': true, 'width': 140 },
                 { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
             ],
