@@ -27,7 +27,7 @@
             <el-button size="mini" type="primary" @click="addDialyTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
+        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading" :height="tableHeight">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -94,6 +94,7 @@
 import {getCurrentMonth, getComDailyList, getComDailyDetail, addOrEditDailyTarget} from '@/request/api'
 import {timestampToTime, formatNumber} from '@/assets/js/common'
 export default{
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -230,6 +231,7 @@ export default{
           this.loading = false
           if(res.code == 200 && res.data.length > 0){
             this.dailyTableList = res.data[0].list
+            this.$emit('setTableHeight', res.data[0].list.length)
           }
         })
       }      

@@ -3,7 +3,7 @@
     <el-tabs type="border-card" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
       <el-tab-pane label="年目标" name="year">年</el-tab-pane>
       <el-tab-pane label="月目标" name="month">
-        <el-row type="flex" justify="space-between">
+        <el-row class="people-screen" type="flex" justify="space-between">
           <el-col :span="4">
             <el-row type="flex" justify="start" :gutter="20">
               <el-col :span="18">
@@ -25,9 +25,9 @@
             <el-button size="mini" type="primary" @click="addMonthTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
+        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading" :height="tableHeight">
           <!-- <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column> -->
-          <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
+          <el-table-column class="handle-area" v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
               <el-progress :percentage="computedPercentage(scope.row) >= 100 ? 100 : computedPercentage(scope.row)" :format="computedPercentage(scope.row, 1)"></el-progress>
@@ -90,6 +90,7 @@
 import {getCurrentYear, getComMonthList, getComMonthDetail, addOrEditMonthTarget} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -254,6 +255,7 @@ export default{
         this.loading = false
         if(res.code == 200 && res.data.length > 0){
           this.monthTableList = res.data[0].list
+          this.$emit('setTableHeight', res.data[0].list.length)
         }
       })
     },

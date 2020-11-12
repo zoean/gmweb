@@ -23,7 +23,7 @@
             <el-button size="mini" type="primary" @click="addYearTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="monthTableList" v-loading="loading">
+        <el-table class="mt20" :data="monthTableList" v-loading="loading" :height="tableHeight">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -81,6 +81,7 @@
 import {getYearTargetList, getLastYear, getComYearDetail, addOrEditYearTarget} from '@/request/api'
 import {timestampToTime, formatComputed} from '@/assets/js/common'
 export default{
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -216,6 +217,8 @@ export default{
       this.$smoke_post(getYearTargetList, this.searchForm).then(res => {
         if(res.code == 200){
           this.monthTableList = res.data
+          this.$emit('setTableHeight', res.data.length)
+
         }
         this.loading = false
       })

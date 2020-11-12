@@ -166,6 +166,10 @@ export default {
       this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleAreaHeight - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleAreaHeight - 116
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleAreaHeight - 116
+      }else if(/^\/crm\/mbo\/company/.test(this.$route.path)){
+        this.tableHeight = this.windowHeight - this.searchAreaHeight - 216
+      }else if(/^\/crm\/mbo\/department/.test(this.$route.path)){
+        this.tableHeight = this.windowHeight - this.searchAreaHeight - 276
       }
     },
     resizeHandle(){
