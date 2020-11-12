@@ -1,6 +1,6 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model.trim="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
@@ -97,7 +97,7 @@
         </el-row>
         <el-table
             :data="list"
-            class="mt20"
+            class="mt10"
             ref="tree"
             v-loading="fullscreenLoading"
             style="width: 100%"
@@ -166,7 +166,7 @@ import pcaa from 'area-data/pcaa';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'toAllocate',
-    props: ['tableHeight'],
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         CustomerNotes,
     },
