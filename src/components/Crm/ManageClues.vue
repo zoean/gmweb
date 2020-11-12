@@ -87,7 +87,7 @@
 
         <el-row class="people-screen handle-area">
 
-            <el-col :span="6">
+            <el-col :span="5">
                 <el-date-picker
                     clearable
                     style="width: 97%;"
@@ -103,7 +103,7 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="6">
+            <el-col :span="5">
                 <el-date-picker
                     clearable
                     style="width: 97%;"
@@ -119,7 +119,7 @@
                 </el-date-picker>
             </el-col>
 
-            <el-col :span="3">
+            <el-col :span="2">
                 <el-select v-model="form.inputMode" size="small" placeholder="请选择属性" class="screen-li" clearable>
                     <el-option
                       v-for="item in inputModeArr"
@@ -145,7 +145,18 @@
             <el-col :span="3">
                 <el-input v-model="form.exteName" size="small" placeholder="请输入推广人" class="screen-li" clearable></el-input>
             </el-col>
+            <el-col :span="3">
 
+                <el-select v-model="form.ruleNumberName" size="small" filterable placeholder="请输入分配组" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in ruleNumberNameList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.ruleNumberName">
+                    </el-option>
+                </el-select>
+
+            </el-col>
             <el-col :span="3">
                 <el-button type="primary" size="small" @click="getExteAllClueDataClick">查 询</el-button>
 
@@ -285,6 +296,7 @@ import {
   seatActSeat,
   getRuleUserStructureLimit,
   spillPoolActSeat,
+  getRuleItem,
   recPoolActSeat
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid} from '../../assets/js/data';
@@ -321,7 +333,9 @@ export default {
                 receiveStartTime: '', //分配时间的查询开始时间（13位）
                 receiveEndTime: '', //分配时间的查询结束时间（13位）
                 intentionLevel: '',
+                ruleNumberName: '', //分配组组名
             },
+            ruleNumberNameList: [], //分配组数组
             isAllocationArr: [
                 { label: '未分配', value: 0 },
                 { label: '已分配', value: 1 },
@@ -443,6 +457,7 @@ export default {
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
+        this.getRuleItem();
     },
     watch: {
       filterText(val) {
@@ -450,6 +465,15 @@ export default {
       }
     },
     methods: {
+        getRuleItem() {
+            this.$smoke_get(getRuleItem, {
+                type: ''
+            }).then(res => {
+                if(res.code == 200){
+                    this.ruleNumberNameList = res.data;
+                }
+            })
+        },
         parseNull(row, column, cellValue){
             return cellValue || '- -'
         },
