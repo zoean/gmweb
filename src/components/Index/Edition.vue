@@ -4,6 +4,14 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.36 -- 2020/11/12" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、个人线索、主管线索页面新增分配组筛选项</p>
+          <p>2、可领取公池数据页面新增入库时间筛选、最近联系时间筛选项</p>
+          <p>3、分配组每日上限支持设置0</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.35 -- 2020/11/06" placement="top">
         <el-card>
           <h4>新增功能</h4>
