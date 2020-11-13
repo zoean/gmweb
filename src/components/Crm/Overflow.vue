@@ -242,6 +242,7 @@ export default {
                 { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '入库时间' },
                 { 'prop': 'ruleNumberName', 'label': '所属分配组' },
+                { 'prop': 'orderNumber', 'label': '订单数量' },
             ],
             dataPicker: [],
             ruleNumberNameList: [], //分配组数组
@@ -308,6 +309,7 @@ export default {
                         res.data.list.map(sll => {
                             sll.createTime = timestampToTime(Number(sll.createTime));
                             sll.provinceCity = sll.province == '' ? '- -' : sll.province + ' / ' + sll.city;
+                            sll.orderNumber = sll.orderNumber != 0 ? sll.orderNumber : '- -';
                         })
                         this.list = res.data.list;
                         this.form.total = res.data.total;
