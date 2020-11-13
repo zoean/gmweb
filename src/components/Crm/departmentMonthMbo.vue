@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-radio-group v-model="orgUuid" @change="changeOrg">
+    <el-radio-group v-model="orgUuid" @change="changeOrg" class="handle-area">
       <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
     </el-radio-group>
     <el-tabs type="border-card" class="mt20" row-key="id" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
@@ -28,7 +28,7 @@
             <el-button size="mini" type="primary" @click="addMonthTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
+        <el-table class="mt20" :data="monthTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading" :height="tableHeight">
           <el-table-column v-for="(item, index) in monthTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -95,6 +95,7 @@
 import {getDeptMonthList, getDeptMonthDetail, addOrEditDeptMonth} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -267,6 +268,7 @@ export default{
         if(res.code == 200 && res.data.length > 0){
           this.monthTableList = res.data[0].list
           this.monthListYear = res.data[0].yearTime
+          this.$emit('setTableHeight', res.data[0].list.length)
         }
       })
     },

@@ -4,6 +4,28 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.36 -- 2020/11/12" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、个人线索、主管线索页面新增分配组筛选项</p>
+          <p>2、可领取公池数据页面新增入库时间筛选、最近联系时间筛选项</p>
+          <p>3、分配组每日上限支持设置0</p>
+          <p>4、手机号搜索支持后模糊搜索</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.35 -- 2020/11/06" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增销售新建客户功能</p>
+          <p>2、代报考增加考期管理</p>
+          <p>3、优化已成单页面上下滚动</p>
+          <p>4、搜索手机号自动去除空格</p>
+          <p>5、溢出池搜索区域间距优化</p>
+          <p>6、数据权限页面员工分校编辑UI优化</p>
+          <h4>修复bug</h4>
+          <p>1、修复主管年目标、公司目标loading Bug</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.34 -- 2020/11/04" placement="top">
         <el-card>
           <h4>新增功能</h4>

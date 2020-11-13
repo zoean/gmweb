@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-radio-group v-model="orgUuid" @change="changeOrg">
+    <el-radio-group v-model="orgUuid" @change="changeOrg" class="handle-area">
       <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
     </el-radio-group>
     <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
@@ -30,7 +30,7 @@
             <el-button size="mini" type="primary" @click="addDialyTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
+        <el-table class="mt20" :data="dailyTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading" :height="tableHeight">
           <el-table-column v-for="(item, index) in dailyTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -89,6 +89,7 @@
 import {getDeptDailyList, getDeptDailyDetail, addOrEditDeptDaily} from '@/request/api'
 import {timestampToTime, formatNumber} from '@/assets/js/common'
 export default{
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -245,7 +246,8 @@ export default{
         this.$smoke_post(getDeptDailyList, this.searchForm).then(res => {
           this.loading = false
           if(res.code == 200 && res.data.length > 0){
-            this.dailyTableList = res.data[0].list
+            this.dailyTableList = res.data[0].list            
+            this.$emit('setTableHeight', res.data[0].list.length)
           }
         })
       }      

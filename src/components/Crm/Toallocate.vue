@@ -1,21 +1,47 @@
 <template>
     <el-main class="index-main">
-        <el-row class="people-screen">
+        <el-row :class="['people-screen', {actionHide: toggleAction, actionShow: !toggleAction, noSearch: hideSearch}]">
             <el-col :span="3">
                 <el-input v-model.trim="form.tel" size="small" placeholder="请输入手机号" class="screen-li"></el-input>
             </el-col>
             <el-col :span="5">
                 <el-date-picker
+                  v-model="datePicker"
                     size="small"
                     style="width: 97%;"
-                    v-model="dataPicker"
                     type="datetimerange"
                     range-separator="至"
                     :default-time="['00:00:00', '23:59:59']"
-                    @change="datePickerChange"
+                    @change="datePickerChange($event, 1)"
                     start-placeholder="最新回收时间"
                     end-placeholder="最新回收时间">
                 </el-date-picker>
+            </el-col>
+            <el-col :span="5">
+              <el-date-picker
+              v-model="dateCreatePicker"
+                size="small"
+                style="width: 97%;"
+                type="datetimerange"
+                range-separator="至"
+                :default-time="['00:00:00', '23:59:59']"
+                @change="datePickerChange($event, 2)"
+                start-placeholder="入库时间"
+                end-placeholder="入库时间">
+              </el-date-picker>
+            </el-col>
+            <el-col :span="5">
+              <el-date-picker
+              v-model="dateCallPicker"
+                size="small"
+                style="width: 97%;"
+                type="datetimerange"
+                range-separator="至"
+                :default-time="['00:00:00', '23:59:59']"
+                @change="datePickerChange($event, 3)"
+                start-placeholder="最近联系时间"
+                end-placeholder="最近联系时间">
+              </el-date-picker>
             </el-col>
             <el-col :span="3">
                 <el-select v-model="form.intentionLevel" placeholder="选择意向等级" size="small" class="screen-li" clearable>
@@ -30,47 +56,48 @@
             </el-col>
             <el-col :span="3" class="seatData">
                 <area-cascader :class="['screen-li', {'areaSelected': form.city, 'areaDefault': !form.city}]" type="text" placeholder="请选择地区" v-model="form.provinceCity" @change="cityChange" :data="pcaa"></area-cascader>
-            </el-col>
-            <el-col :span="3">
-                <el-autocomplete
-                    ref="autocomplete"
-                    size="small"
-                    class="screen-li"
-                    v-model="form.examItemText"
-                    :fetch-suggestions="querySearch"
-                    placeholder="请输入考试项目"
-                    :trigger-on-focus="true"
-                    clearable
-                    @clear="autocompleteClear"
-                    @select="handleSelect"
-                ></el-autocomplete>
-            </el-col>
-            <el-col :span="3">
-
-                <el-autocomplete
-                    clearable
-                    size="small"
-                    ref="autocompleteSpread"
-                    class="screen-li"
-                    v-model="form.spreadText"
-                    :fetch-suggestions="querySearchSpread"
-                    placeholder="输入推广渠道"
-                    :trigger-on-focus="true"
-                    @select="handleSelectSpread"
-                    @clear="autocompleteClearSpread"
-                ></el-autocomplete>
-
-            </el-col>
-            <el-col :span="2">
-                <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
-            </el-col>
-            <el-col :span="2">
-                <el-button size="small" @click="obtainRPCD" style="float: right;" plain>确认领取</el-button>
-            </el-col>
+            </el-col>                   
         </el-row>
+        <el-row class="people-screen handle-area">
+          <el-col :span="3">
+            <el-autocomplete
+                ref="autocomplete"
+                size="small"
+                class="screen-li"
+                v-model="form.examItemText"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入考试项目"
+                :trigger-on-focus="true"
+                clearable
+                @clear="autocompleteClear"
+                @select="handleSelect"
+            ></el-autocomplete>
+        </el-col>
+        <el-col :span="3">
 
+            <el-autocomplete
+                clearable
+                size="small"
+                ref="autocompleteSpread"
+                class="screen-li"
+                v-model="form.spreadText"
+                :fetch-suggestions="querySearchSpread"
+                placeholder="输入推广渠道"
+                :trigger-on-focus="true"
+                @select="handleSelectSpread"
+                @clear="autocompleteClearSpread"
+            ></el-autocomplete>
+        </el-col>     
+            <el-col :span="2">
+              <el-button type="primary" size="small" @click="getUserRPCDList">查 询</el-button>
+          </el-col>
+          <el-col :span="16">
+              <el-button size="small" @click="obtainRPCD" style="float: right;" plain>确认领取</el-button>
+          </el-col>
+        </el-row>
         <el-table
             :data="list"
+            class="mt10"
             ref="tree"
             v-loading="fullscreenLoading"
             style="width: 100%"
@@ -139,12 +166,15 @@ import pcaa from 'area-data/pcaa';
 import CustomerNotes from '../Share/CustomerNotes';
 export default {
     name: 'toAllocate',
-    props: ['tableHeight'],
+    props: ['tableHeight','toggleAction', 'hideSearch'],
     components: {
         CustomerNotes,
     },
     data() {
         return {
+          datePicker: [],
+          dateCreatePicker: [],
+          dateCallPicker: [],
             form: {
                 tel: "", //手机号
                 userUuid: "",
@@ -156,6 +186,10 @@ export default {
                 intentionLevel: '',
                 dataStartTime: '',
                 dataEndTime: '',
+                createStartTime: '',
+                createEndTime: '',
+                lastCallStartTime: '',
+                lastCallEndTime: '',
                 province: '',
                 spread: '',
                 spreadId: '',
@@ -173,7 +207,7 @@ export default {
                 { 'prop': 'callDialUp', 'label': '拨通 / 拨打', 'width': 100 },
                 { 'prop': 'spread', 'label': '推广渠道' },
                 { 'prop': 'createTime', 'label': '入库时间', 'sortable': true, 'width': 140 },
-                { 'prop': 'lastCallTime', 'label': '最近一次联系时间', 'sortable': true, 'width': 140 },
+                { 'prop': 'lastCallTime', 'label': '最近联系时间', 'sortable': true, 'width': 140 },
                 { 'prop': 'dataCreateTime', 'label': '最新回收时间', 'sortable': true, 'width': 140 },
                 { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150 },
             ],
@@ -303,14 +337,17 @@ export default {
                 }
             })
         },
-        datePickerChange(value) {
-            if (value == null) {
-                this.form.dataStartTime = '';
-                this.form.dataEndTime = '';
-            }else{
-                this.form.dataStartTime = value[0].getTime();
-                this.form.dataEndTime = value[1].getTime();
-            }
+        datePickerChange(e, dateType) {
+          if(dateType == 1){
+            this.form.dataStartTime = e ? e[0].getTime() : ''
+            this.form.dataEndTime = e ? e[1].getTime() : ''
+          }else if(dateType == 2){
+            this.form.createStartTime = e ? e[0].getTime() : ''
+            this.form.createEndTime = e ? e[1].getTime() : ''
+          }else{
+            this.form.lastCallStartTime = e ? e[0].getTime() : ''
+            this.form.lastCallEndTime = e ? e[1].getTime() : ''
+          }            
         },
         changeDrawer(val){
             this.drawer = val;

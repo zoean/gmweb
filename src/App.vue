@@ -37,7 +37,7 @@ export default {
       toggleAction: false,
       hideSearch: false,
       searchAreaHeight: 0,
-      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/myClient/toallocate', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData', '/crm/dataStatistics/eduData', '/crm/crmConfig/enums', '/crm/crmConfig/examManage', '/crm/crmConfig/FieldManagement', '/crm/eduAdmin/headMaster', '/crm/sms/smslist', '/crm/class/orgOpenClass', '/crm/class/openClass', '/crm/class/returnOrgVisit', '/crm/class/returnVisit', '/crm/wechat/wechatManagement', '/crm/mbo/companymonthmbo', '/crm/mbo/companydaymbo', '/crm/mbo/departmentmonthmbo', '/crm/mbo/departmentdaymbo', '/forget', '/edition', '/operate/activityA/createactivity', '/operate/activityA/ActivityDetail', '/operate/activityA/partinMember', '/operate/activityA/winninglist', '/operate/activityA/pricelist', '/base/people', '/base/people/change', '/base/people/permiss'],
+      excludeSearch: ['/login', '/', '/base/role', '/base/zuzhi', '/base/menu', '/crm/promotion/dataAllocation', '/crm/promotion/enterClues', '/crm/salesBoard/salesBoard', '/crm/salesBoard/salesOrgBoard', '/crm/mbo/companyyearmbo', '/crm/mbo/departmentyearmbo', '/knowp/vedio', '/knowp/subject', '/knowp/classManage', '/operate/activityA', '/crm/myClient/completed', '/crm/dataStatistics/overflow', '/crm/dataStatistics/timeData', '/crm/dataStatistics/eduData', '/crm/crmConfig/enums', '/crm/crmConfig/examManage', '/crm/crmConfig/FieldManagement', '/crm/eduAdmin/headMaster', '/crm/sms/smslist', '/crm/class/orgOpenClass', '/crm/class/openClass', '/crm/class/returnOrgVisit', '/crm/class/returnVisit', '/crm/wechat/wechatManagement', '/crm/mbo/companymonthmbo', '/crm/mbo/companydaymbo', '/crm/mbo/departmentmonthmbo', '/crm/mbo/departmentdaymbo', '/forget', '/edition', '/operate/activityA/createactivity', '/operate/activityA/ActivityDetail', '/operate/activityA/partinMember', '/operate/activityA/winninglist', '/operate/activityA/pricelist', '/base/people', '/base/people/change', '/base/people/permiss'],
       includeSearch: false,
       initOptions: {},
       total: 0,
@@ -151,10 +151,13 @@ export default {
       var elPagination = document.getElementsByClassName('el-pagination')[0],
       searchArea = document.getElementsByClassName('people-screen')[0],
       handleArea = document.getElementsByClassName('handle-area')[0];
-      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0,
-      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0,
-      this.windowHeight = document.documentElement.clientHeight || document.body.clientHeight,
+      this.paginationHeight = elPagination && elPagination.offsetHeight ? elPagination.offsetHeight : 0;
+      this.searchAreaHeight = searchArea && searchArea.offsetHeight ? searchArea.offsetHeight : 0;
+      this.windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
       this.handleAreaHeight = handleArea && handleArea.offsetHeight ? handleArea.offsetHeight : 0;
+      if(this.$route.path == '/crm/myClient/completed'){
+        this.searchAreaHeight = this.searchAreaHeight * 2
+      }
       this.setPageTitleLeft() 
       if(this.searchAreaHeight > 0){
         this.initSearchHeight =  this.searchAreaHeight
@@ -163,6 +166,10 @@ export default {
       this.tableHeight = this.hideSearch ? this.windowHeight - this.paginationHeight + this.initSearchHeight - this.handleAreaHeight - 136 : this.windowHeight - this.paginationHeight - this.initSearchHeight - this.handleAreaHeight - 116
       if(/^\/base\/menu/.test(this.$route.path)){
         this.tableHeight = this.windowHeight - this.handleAreaHeight - 116
+      }else if(/^\/crm\/mbo\/company/.test(this.$route.path)){
+        this.tableHeight = this.windowHeight - this.searchAreaHeight - 216
+      }else if(/^\/crm\/mbo\/department/.test(this.$route.path)){
+        this.tableHeight = this.windowHeight - this.searchAreaHeight - 276
       }
     },
     resizeHandle(){

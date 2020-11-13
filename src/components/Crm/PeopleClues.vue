@@ -141,8 +141,19 @@
                     </el-option>
                 </el-select>
             </el-col>
+            <el-col :span="3">
 
-            <el-col :span="6">
+                <el-select v-model="form.ruleNumberName" size="small" filterable placeholder="请输入分配组" class="screen-li" clearable>
+                    <el-option
+                      v-for="item in ruleNumberNameList"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.ruleNumberName">
+                    </el-option>
+                </el-select>
+
+            </el-col>
+            <el-col :span="3">
                 <el-button type="primary" size="small" @click="getExteClueDataClick">查询</el-button>
 
                 <el-button size="small" style="float:right;" plain @click="personalClueExport">导 出</el-button>
@@ -274,6 +285,7 @@ import {
   seatActSeat,
   getRuleUserStructureLimit,
   spillPoolActSeat,
+  getRuleItem,
   recPoolActSeat
 } from '../../request/api';
 import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid } from '../../assets/js/data';
@@ -305,8 +317,10 @@ export default {
                 spreadText: "",
                 inputMode: "",
                 startCreateTime: "",
-                total: null
+                total: null,
+                ruleNumberName: '', //分配组组名
             },
+            ruleNumberNameList: [], //分配组数组
             isAllocationArr: [
                 { label: '未分配', value: 0 },
                 { label: '已分配', value: 1 },
@@ -422,6 +436,7 @@ export default {
         this.getExamBasic();
         let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
         this.enumByEnumNums(arr);
+        this.getRuleItem();
     },
     watch: {
       filterText(val) {
@@ -429,6 +444,15 @@ export default {
       }
     },
     methods: {
+        getRuleItem() {
+            this.$smoke_get(getRuleItem, {
+                type: ''
+            }).then(res => {
+                if(res.code == 200){
+                    this.ruleNumberNameList = res.data;
+                }
+            })
+        },
         parseNull(row, column, cellValue){
             return cellValue || '- -'
         },

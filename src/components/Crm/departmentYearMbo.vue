@@ -1,6 +1,6 @@
 <template>
   <el-main class="index-main">
-    <el-radio-group v-model="orgUuid" @change="changeOrg">
+    <el-radio-group v-model="orgUuid" @change="changeOrg" class="handle-area">
       <el-radio-button v-for="(item, index) in orgList" :label="item.orgUuid">{{item.orgName}}目标管理</el-radio-button>
     </el-radio-group>
     <el-tabs class="mt20" type="border-card" v-model="tabActiveName" tab-position="top" @tab-click="tabClick">
@@ -26,7 +26,7 @@
             <el-button size="mini" type="primary" @click="addYearTarget">新增</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt20" :data="yearTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading">
+        <el-table class="mt20" :data="yearTableList" :tree-props="{children: 'list', hasChildren: 'hasChildren'}" row-key="uuid" v-loading="loading" :height="tableHeight">
           <el-table-column v-for="(item, index) in yearTableColumn" :prop="item.prop" :label="item.label" :key="index" :formatter="item.formatter"></el-table-column>
           <el-table-column label="完成率" align="center">
             <template slot-scope="scope">
@@ -89,6 +89,7 @@
 import {getManageOrgList, getLastDeptYear, addOrEditDeptYear, getDeptYearDetail, getDeptYearList} from '@/request/api'
 import {timestampToTime} from '@/assets/js/common'
 export default{
+  props: ['tableHeight'],
   data() {
     var validateNumber = (rule, value, callback) => {
       if(value < 0){
@@ -199,7 +200,8 @@ export default{
     },
     getOrgInfo: function (){
       this.$smoke_post(getManageOrgList).then(res => {
-        if(res.code == 200){
+        this.loading = false
+        if(res.code == 200 && res.data.length > 0){
           this.orgList = res.data
           this.orgUuid = this.orgList[0].orgUuid
           this.setFormOrgUuid()
@@ -261,7 +263,8 @@ export default{
       this.$smoke_post(getDeptYearList, this.searchForm).then(res => {
         this.loading = false
         if(res.code == 200 && res.data.length > 0){
-          this.yearTableList = res.data
+          this.yearTableList = res.data          
+          this.$emit('setTableHeight', res.data.length)
         }
       })
     },
