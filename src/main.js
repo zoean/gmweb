@@ -16,6 +16,7 @@ import './assets/js/rem'
 import '@/icons' // icon
 import 'default-passive-events'
 import Meta from 'vue-meta'
+import Copy from 'vue-to-copy'
 // import VueAudio from 'vue-audio-better'
  
 // Vue.use(VueAudio)
@@ -26,6 +27,9 @@ Vue.use(VScrollLock);
 Vue.use(VueAreaLinkage);
 Vue.use(Vuex);
 Vue.use(Meta)
+
+Vue.use(Copy);
+
 Vue.prototype.$smoke_get = smoke_get;
 Vue.prototype.$smoke_post = smoke_post;
 Vue.prototype.$smoke_post_big = smoke_post_big;
