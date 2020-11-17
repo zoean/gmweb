@@ -511,6 +511,7 @@ export default {
       //     brr.push(res[res.length - 1]);
       //   }
       // });
+      arr = arr.slice(-1);
       this.form.seatOrgList = arr;
     },
     seatActSeat() {

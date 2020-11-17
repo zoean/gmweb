@@ -4,6 +4,21 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.38 -- 2020/11/17" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、组织架构筛选支持可搜索</p>
+          <p>2、生成推广链接增加头条链接</p>
+          <h4>修复bug</h4>
+          <p>1、修复QQ浏览器复制失败bug</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.37 -- 2020/11/13" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、溢出池数据管理页面新增订单数量</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.36 -- 2020/11/12" placement="top">
         <el-card>
           <h4>新增功能</h4>
