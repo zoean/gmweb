@@ -147,6 +147,7 @@
               size="small"
               class="smoke-cascader1 screen-li"
               placeholder="坐席组织架构"
+              collapse-tags
               :show-all-levels="false"
               :options="zuzhiOptions"
               @change="handleZuzhiChange"
@@ -465,7 +466,7 @@ export default {
       tagId: "",
       tagIdText: "",
       zuzhiOptions: [],
-      copyCallbackPhone: "",
+      copyCallbackPhone: '',
     };
   },
   // watch:{
@@ -501,15 +502,16 @@ export default {
       });
     },
     handleZuzhiChange(arr) {
-      let brr = [];
-      arr.map((res) => {
-        if (res.length == 1) {
-          brr.push(res[0]);
-        } else {
-          brr.push(res[res.length - 1]);
-        }
-      });
-      this.form.seatOrgList = brr;
+      // let brr = [];
+      // console.log(arr);
+      // arr.map((res) => {
+      //   if (res.length == 1) {
+      //     brr.push(res[0]);
+      //   } else {
+      //     brr.push(res[res.length - 1]);
+      //   }
+      // });
+      this.form.seatOrgList = arr;
     },
     seatActSeat() {
       if (this.tagId == "") {
