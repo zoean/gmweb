@@ -168,7 +168,7 @@
             :title="drawerTitleLink"
             :visible.sync="drawerFlagLink"
             :direction="direction"
-            size="35%"
+            size="45%"
             :before-close="handleClose">
             <span class="bullets"></span>
             
@@ -495,7 +495,7 @@ export default {
                      + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc + '&jobnum=' + this.ruleFormLink.jobnum;
                     //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
                     this.createLinkUrlHead = '-' + this.creatUrlForm.ruleid + '|' + this.ruleFormLink.acc + '|' + this.ruleFormLink.projectId
-                    + '|' + this.ruleFormLink.jobnum + '|' + this.ruleFormLink.spread;
+                    + '|' + Number(this.ruleFormLink.jobnum) + '|' + this.ruleFormLink.spread;
                 }else{
                     this.$message({
                         type: 'error',
