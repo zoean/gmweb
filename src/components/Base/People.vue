@@ -7,7 +7,7 @@
                         size="small"
                         ref="cascader"
                         class="screen-li"
-                        placeholder="选择组织架构"
+                        placeholder="输入组织架构"
                         :show-all-levels=false
                         :options="zuzhiOptions"
                         filterable
