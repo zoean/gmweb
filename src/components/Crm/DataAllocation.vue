@@ -262,9 +262,14 @@
                         <el-button @click="quxiaoLink" size="small" style="margin-top: 20px;">取消</el-button>
                     </el-form-item>
 
-                    <el-form-item v-if="this.createLinkUrl">
-                        <div style="word-wrap: break-word; word-break: normal;">{{this.createLinkUrl}}</div>
-                        <el-button type="primary" @click="handleCopy" size="small">复制链接</el-button>
+                    <el-form-item label="通用链接" v-if="this.createLinkUrlDefault">
+                        <div style="word-wrap: break-word; word-break: normal; ">{{this.createLinkUrlDefault}}</div>
+                        <el-button type="primary" @click="handleCopyDefault" size="small">通用链接复制</el-button>
+                    </el-form-item>
+
+                    <el-form-item label="头条链接" v-if="this.createLinkUrlHead">
+                        <div style="word-wrap: break-word; word-break: normal; ">{{this.createLinkUrlHead}}</div>
+                        <el-button type="primary" @click="handleCopyHead" size="small">头条链接复制</el-button>
                     </el-form-item>
 
                 </el-form>
@@ -392,7 +397,8 @@ export default {
             },
             restaurants: [],
             enumList: {}, //枚举选项数组
-            createLinkUrl: '',
+            createLinkUrlDefault: '',
+            createLinkUrlHead: '',
             addDataAllocation: null,
             addDataAllocationLink: null,
             addDataAllocationPeople: null,
@@ -416,9 +422,23 @@ export default {
         this.oneKeyPush = buttonMap.oneKeyPush;
     },
     methods: {
-        handleCopy() {
-            Copy(this.createLinkUrl);
-            if(Copy(this.createLinkUrl)) {
+        handleCopyDefault() {
+            Copy(this.createLinkUrlDefault);
+            if(Copy(this.createLinkUrlDefault)) {
+                this.$message({
+                    type: 'success',
+                    message: '复制成功'
+                })
+            }else{
+                this.$message({
+                    type: 'error',
+                    message: '复制失败'
+                })
+            }
+        },
+        handleCopyHead() {
+            Copy(this.createLinkUrlHead);
+            if(Copy(this.createLinkUrlHead)) {
                 this.$message({
                     type: 'success',
                     message: '复制成功'
@@ -471,9 +491,11 @@ export default {
                 spreadId: this.ruleFormLink.spread,
             }).then(res => {
                 if(res.code == 200) {
-                    this.createLinkUrl = '?ruleid=' + this.creatUrlForm.ruleid + '&project=' + this.ruleFormLink.projectId
+                    this.createLinkUrlDefault = '?ruleid=' + this.creatUrlForm.ruleid + '&project=' + this.ruleFormLink.projectId
                      + '&spread=' + this.ruleFormLink.spread + '&acc=' + this.ruleFormLink.acc + '&jobnum=' + this.ruleFormLink.jobnum;
                     //  + '&jqadmin=' + this.ruleFormLink.jqadmin;
+                    this.createLinkUrlHead = '-' + this.creatUrlForm.ruleid + '|' + this.ruleFormLink.acc + '|' + this.ruleFormLink.projectId
+                    + '|' + this.ruleFormLink.jobnum + '|' + this.ruleFormLink.spread;
                 }else{
                     this.$message({
                         type: 'error',
@@ -493,7 +515,8 @@ export default {
                 spreadText: '',
                 projectText: ''
             }
-            this.createLinkUrl = '';
+            this.createLinkUrlDefault = '';
+            this.createLinkUrlHead = '';
             this.$nextTick(() => {
                 this.$refs['ruleFormLink'].resetFields();
             })

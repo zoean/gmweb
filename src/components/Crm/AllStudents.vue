@@ -97,7 +97,7 @@
                     class="smoke-cascader1 screen-li"
                     placeholder="坐席组织架构"
                     collapse-tags
-                    :show-all-levels='true'
+                    :show-all-levels='false'
                     :options="zuzhiOptions"
                     @change='handleZuzhiChange'
                     filterable
