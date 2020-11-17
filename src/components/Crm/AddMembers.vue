@@ -18,6 +18,7 @@
                     placeholder="请选择组织架构"
                     :show-all-levels=false
                     :options="zuzhiOptions"
+                    filterable
                     @change='handleZuzhiChange'
                     :props="{ checkStrictly: true, label: 'name', value: 'uuid', children: 'includeSubsetList', multiple: true}"
                     clearable>
