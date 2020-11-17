@@ -93,7 +93,7 @@
             <span
               ><svg-icon
                 class="copy-tel"
-                v-if="item.props == 'tel'"
+                v-if="item.prop == 'phone'"
                 icon-class="copy"
                 icon-title="复制手机号码"
             /></span>
@@ -376,7 +376,7 @@ export default {
             this.$message({
               type: "success",
               message:
-                "释放成功，提交的线索数量" +
+                "提交的线索数量" +
                 res.data.submitSize +
                 "条" +
                 "，实际释放的线索数量" +

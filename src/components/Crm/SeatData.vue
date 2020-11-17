@@ -282,7 +282,7 @@
         </template>
         <template slot-scope="scope">
           <span>{{ scope.row[item.props] }}</span>
-          <!-- <el-tooltip effect="dark" v-if="item.props == 'tel'" content="复制手机号码" placement="top">
+          <!-- <el-tooltip effect="dark" v-if="item.prop == 'phone'" content="复制手机号码" placement="top">
                         <el-image
                             class="copy-icon-style"
                             @click="phoneCopy(scope.row)"
