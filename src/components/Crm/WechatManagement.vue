@@ -20,6 +20,7 @@
           size="small"
           placeholder="请选择坐席组织架构"
           :options="orgOptions"
+          filterable
           :props="props"
           class="screen-li"
           collapse-tags
