@@ -608,7 +608,7 @@
                     style="width: 100%;"
                     placeholder="请选择省市县"
                     collapse-tags
-                    :show-all-levels='true'
+                    :show-all-levels='false'
                     :options="citysOptions"
                     @change='cityshandleChange'
                     v-model="ruleFormAddress.addressArr"
@@ -644,7 +644,6 @@ import {
   addClassTeaStuNotes, 
   getClassTeaStuNotes, 
   enumByEnumNums,
-  copyTel,
   getOrderList,
   getClueCallLog,
   // GetAgreementList,
@@ -967,31 +966,6 @@ export default {
         this.$nextTick(() => {
             this.$refs['ruleFormAddress'].resetFields();
         })
-      },
-      copyTel(id) {
-          this.$smoke_post(copyTel, {
-              uuid: id
-          }).then(res => {
-              if(res.code == 200) {
-                  Copy(res.data);
-                  if(Copy(res.data)) {
-                      this.$message({
-                          type: 'success',
-                          message: '复制成功'
-                      })
-                  }else{
-                      this.$message({
-                          type: 'error',
-                          message: '复制失败'
-                      })
-                  }
-              }else{
-                  this.$message({
-                      type: 'error',
-                      message: res.msg
-                  })
-              }
-          })
       },
       quxiao() {
         this.$emit("changeDrawer", false)

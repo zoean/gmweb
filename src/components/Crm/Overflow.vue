@@ -386,7 +386,7 @@ export default {
                         res.data.allocatedSize = res.data.allocatedSize == null ? 0 : res.data.allocatedSize;
                         this.$message({
                             type: 'success',
-                            message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
+                            message: '提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
                         });
                         this.getSpillPoolClueData();
                     }else{
@@ -536,7 +536,7 @@ export default {
                             res.data.allocatedSize = res.data.allocatedSize == null ? 0 : res.data.allocatedSize;
                             this.$message({
                                 type: 'success',
-                                message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
+                                message: '提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
                             });
                             this.getSpillPoolClueData();
                         }else{
