@@ -204,10 +204,8 @@
             <span class="bullets"></span>
 
             <el-row class="school-radio">
+                <el-radio v-model="radioId" v-for="(item, index) in tableDataSchool" :label="item.name" :key="index"></el-radio>
 
-                <el-checkbox-group v-model="tableDataSchoolNameList" @change="handleCheckedItemsChange">
-                    <el-checkbox v-for="(item, index) in tableDataSchool" :label="item.name" :key="index">{{item.name}}</el-checkbox>
-                </el-checkbox-group>
 
             </el-row>
 
@@ -480,7 +478,7 @@
 
 <script>
 import { getPermission, getPermissionUpdate } from '../../request/api';
-import { getTextByJs, peopleTreeFunc, peopleArrExp, removeEvery, ExamArrExp, ExamTreeFunc, quchong, SetArrExp, SpreadArrExp, SetTreeFunc, SpreadTreeFunc } from '../../assets/js/common';
+import { peopleTreeFunc, peopleArrExp, removeEvery, ExamArrExp, ExamTreeFunc, quchong, SetArrExp, SpreadArrExp, SetTreeFunc, SpreadTreeFunc } from '../../assets/js/common';
 export default {
     name: 'peopleDataPermiss',
     data() {
@@ -573,8 +571,8 @@ export default {
             drawerTitle0: '选择分校',
             direction0: 'rtl',
             tableDataSchool: [],
-            tableDataSchoolNameList: [],
-            tableDataSchoolFlagArr: [],
+            tableDataSchoolFlagArr: {},
+            radioId: '',
             cellStyle: {
                 'text-align': 'center'
             },
@@ -704,9 +702,9 @@ export default {
                         this.tableDataSchool = res.data.schoolList;
                         res.data.schoolList.map(sll => {
                             if(sll.flag) {
+                                this.radioId = sll.name
                                 this.schoolList[0].attrText += sll.name + '，';
-                                this.tableDataSchoolNameList.push(sll.name);
-                                this.tableDataSchoolFlagArr.push(sll);
+                                // this.tableDataSchoolFlagArr.push(sll);
                                 this.schoolList[0].attrData = this.tableDataSchoolFlagArr;
                             }
                         });
@@ -772,7 +770,7 @@ export default {
             })
         },
         onSubmit() {
-            this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.schoolList[0].attrData, this.spreadList[0].attrData);
+            this.onSubmitList = this.seatList[0].attrData.concat(this.backList[0].attrData, this.dataSetList[0].attrData, this.tableDataSchoolFlagArr, this.spreadList[0].attrData);
             // this.onSubmitList.push()
             this.$smoke_post(getPermissionUpdate, {
                 list: this.onSubmitList,
@@ -891,34 +889,29 @@ export default {
             }
             this.drawer4 = false;
         },
-        handleCheckedItemsChange(value) {
-            // console.log(value);
-            // console.log(this.tableDataSchool);
-            let arr = [];
-            let str = '';
-            value.map(sll => {
-                str += sll + '，';
-            })
-            this.schoolList[0].attrText = str;
-            this.tableDataSchool.map(sll => {
-                if(value.includes(sll.name)){
-                    arr.push(sll)
-                }
-            })
-            this.schoolList[0].attrData = arr;
-        },
         addSchool() {
-            if (this.schoolList[0].attrText.length > 0) {
 
-                this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+            if(this.tableDataSchoolFlagArr.name) {
+
+                this.schoolList[0].attrText = this.tableDataSchoolFlagArr.name;
+                this.schoolList[0].attrData = this.tableDataSchoolFlagArr.name;
+                // if (this.schoolList[0].attrText.length > 0) {
+                //     this.schoolList[0].attrText = this.schoolList[0].attrText.substr(0, this.schoolList[0].attrText.length - 1);
+                // }
                 this.drawer0 = false;
 
-            }
-            else{
+            }else if(this.tableDataSchoolFlagArr.length == 0){
                 
                 this.$message({
                     type: 'error',
                     message: '分校权限不能为空', 
+                });
+
+            }else{
+
+                this.$message({
+                    type: 'error',
+                    message: '分校权限是唯一选项', 
                 });
 
             }
@@ -988,6 +981,16 @@ export default {
         filterTextSpread(val) {
             this.$refs.treeSpread.filter(val);
         },
+        radioId(val){
+            this.tableDataSchoolFlagArr.name = val
+            let curSchool = this.tableDataSchool.find(item => {
+                return item.name === val
+            })
+            this.tableDataSchoolFlagArr.uuid = curSchool.uuid
+            this.tableDataSchoolFlagArr.type = curSchool.type
+            // this.schoolList.attrText = val
+            // this.schoolList.attrData = [val]
+        }
     },
 }
 </script>
