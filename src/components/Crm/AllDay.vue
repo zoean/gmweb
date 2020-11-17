@@ -885,7 +885,7 @@ export default {
             this.$message({
               type: "success",
               message:
-                "释放成功，提交的线索数量" +
+                "提交的线索数量" +
                 res.data.submitSize +
                 "条" +
                 "，实际释放的线索数量" +
