@@ -146,9 +146,8 @@
               ref="cascader"
               size="small"
               class="smoke-cascader1 screen-li"
-              placeholder="坐席组织架构"
-              collapse-tags
-              :show-all-levels="true"
+              placeholder="输入组织架构"
+              :show-all-levels="false"
               :options="zuzhiOptions"
               @change="handleZuzhiChange"
               filterable
@@ -157,7 +156,6 @@
                 label: 'name',
                 value: 'uuid',
                 children: 'list',
-                multiple: true,
               }"
               clearable
             >

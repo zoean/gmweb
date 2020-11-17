@@ -608,7 +608,7 @@
                     style="width: 100%;"
                     placeholder="请选择省市县"
                     collapse-tags
-                    :show-all-levels='true'
+                    :show-all-levels='false'
                     :options="citysOptions"
                     @change='cityshandleChange'
                     v-model="ruleFormAddress.addressArr"
