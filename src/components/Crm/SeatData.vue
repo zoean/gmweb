@@ -147,7 +147,6 @@
               size="small"
               class="smoke-cascader1 screen-li"
               placeholder="坐席组织架构"
-              collapse-tags
               :show-all-levels="false"
               :options="zuzhiOptions"
               @change="handleZuzhiChange"
@@ -157,7 +156,6 @@
                 label: 'name',
                 value: 'uuid',
                 children: 'list',
-                multiple: true,
               }"
               clearable
             >
