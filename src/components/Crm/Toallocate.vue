@@ -435,7 +435,7 @@ export default {
                         if(res.data.result){
                             this.$message({
                                 type: 'success',
-                                message: res.data.msg + '，提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
+                                message: '提交的线索数量' + res.data.allocationSize + '条' + '，实际获取的线索数量' + res.data.allocatedSize + '条'
                             });
                             this.getUserRPCDList();
                         }else{

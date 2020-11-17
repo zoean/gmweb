@@ -15,7 +15,7 @@
                 <el-cascader
                     ref="cascader"
                     class="screen-li"
-                    placeholder="请选择组织架构"
+                    placeholder="请输入组织架构"
                     :show-all-levels=false
                     :options="zuzhiOptions"
                     filterable

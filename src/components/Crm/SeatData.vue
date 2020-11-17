@@ -529,8 +529,7 @@ export default {
               this.$message({
                 type: "success",
                 message:
-                  res.data.msg +
-                  "，提交分配的线索数量" +
+                  "提交分配的线索数量" +
                   res.data.submitSize +
                   "条" +
                   "，实际分配的线索数量" +
