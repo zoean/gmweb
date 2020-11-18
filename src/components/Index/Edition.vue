@@ -4,6 +4,16 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.39 -- 2020/11/18" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、我的学员页面增加复制手机号码按钮</p>
+          <p>2、电话记录查询页面拨打时间筛选增加快捷键</p>
+          <h4>修复bug</h4>
+          <p>1、修复可领取公池数据页面渠道推广传值问题</p>
+          <p>2、修复可领取公池数据页面地区框显示不全问题</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.38 -- 2020/11/17" placement="top">
         <el-card>
           <h4>新增功能</h4>
