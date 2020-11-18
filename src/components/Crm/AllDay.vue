@@ -407,7 +407,6 @@
     <CustomerNotes
       v-if="drawer"
       @changeDrawer="changeDrawer"
-      @phoneCopy="phoneCopy"
       @phoneOut="phoneOut"
       @seatOut="seatOut"
       @release="release"

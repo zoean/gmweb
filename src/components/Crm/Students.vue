@@ -323,7 +323,6 @@
       @changeDrawer="changeDrawer"
       :drawer.sync="drawer"
       :studentUuid="studentUuid"
-      @phoneCopy="phoneCopy"
       @phoneOutTea="phoneOutTea"
       @seatOutTea="seatOutTea"
       :scopeRow="scopeRow"
