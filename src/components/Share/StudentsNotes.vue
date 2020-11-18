@@ -840,6 +840,7 @@ import {
   queryProvinceAll,
   xieyi,
   examPeriodList,
+  copyTel
 } from "../../request/api";
 import pcaa from "area-data/pcaa";
 import VueAudio from "@/components/Share/VueAudio";
