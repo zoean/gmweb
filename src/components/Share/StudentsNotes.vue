@@ -840,7 +840,7 @@ import {
   queryProvinceAll,
   xieyi,
   examPeriodList,
-  copyTel
+  copyTel,
 } from "../../request/api";
 import pcaa from "area-data/pcaa";
 import VueAudio from "@/components/Share/VueAudio";
@@ -1110,7 +1110,7 @@ export default {
       examList: [],
 
       copyPathFlag: false,
-      copyCallbackPhone: '',
+      copyCallbackPhone: "",
     };
   },
   created() {
