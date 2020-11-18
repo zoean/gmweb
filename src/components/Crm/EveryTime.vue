@@ -245,11 +245,22 @@ export default {
         timeLengthEnd: null,
       },
       pickerOptions: {
+        disabledDate(time) {
+          return (
+            time.getTime() >
+            new Date(new Date().toLocaleDateString()).getTime() +
+              3600 * 1000 * 24 -
+              1
+          );
+        },
         shortcuts: [
           {
             text: "今日",
             onClick(picker) {
-              const end = new Date().getTime();
+              const end =
+                new Date(new Date().toLocaleDateString()).getTime() +
+                3600 * 1000 * 24 -
+                1;
               const start = new Date(new Date().toLocaleDateString()).getTime();
               picker.$emit("pick", [start, end]);
             },
@@ -257,24 +268,33 @@ export default {
           {
             text: "最近7天",
             onClick(picker) {
-              const end = new Date().getTime();
-              const start = new Date().getTime() - 3600 * 1000 * 24 * 7;
+              const end =
+                new Date(new Date().toLocaleDateString()).getTime() +
+                3600 * 1000 * 24 -
+                1;
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7;
               picker.$emit("pick", [start, end]);
             },
           },
           {
             text: "最近30天",
             onClick(picker) {
-              const end = new Date().getTime();
-              const start = new Date().getTime() - 3600 * 1000 * 24 * 30;
+              const end =
+                new Date(new Date().toLocaleDateString()).getTime() +
+                3600 * 1000 * 24 -
+                1;
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30;
               picker.$emit("pick", [start, end]);
             },
           },
           {
             text: "最近三个月",
             onClick(picker) {
-              const end = new Date().getTime();
-              let start = new Date();
+              const end =
+                new Date(new Date().toLocaleDateString()).getTime() +
+                3600 * 1000 * 24 -
+                1;
+              let start = new Date(new Date().toLocaleDateString());
               start.setMonth(start.getMonth() - 3);
               start = start.getTime();
               picker.$emit("pick", [start, end]);
