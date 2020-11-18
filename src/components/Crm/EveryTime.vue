@@ -272,7 +272,7 @@ export default {
                 new Date(new Date().toLocaleDateString()).getTime() +
                 3600 * 1000 * 24 -
                 1;
-              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 7;
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 6;
               picker.$emit("pick", [start, end]);
             },
           },
@@ -283,7 +283,7 @@ export default {
                 new Date(new Date().toLocaleDateString()).getTime() +
                 3600 * 1000 * 24 -
                 1;
-              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30;
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 29;
               picker.$emit("pick", [start, end]);
             },
           },
