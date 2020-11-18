@@ -323,8 +323,10 @@ export default {
         { label: "工作手机", value: 2 },
       ],
       dataPicker: [
-        new Date().getTime() - 3600 * 1000 * 24 * 30,
-        new Date().getTime(),
+        new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 30,
+        new Date(new Date().toLocaleDateString()).getTime() +
+              3600 * 1000 * 24 -
+              1,
       ],
       tableData: [],
       columnList: everyTimeList,
