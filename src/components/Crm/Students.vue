@@ -246,7 +246,7 @@
             <span
               ><svg-icon
                 class="copy-tel"
-                v-if="item.prop == 'phone'"
+                v-if="item.props == 'tel'"
                 icon-class="copy"
                 icon-title="复制手机号码"
             /></span>
