@@ -177,7 +177,7 @@
                 </el-badge>
 
                 </el-popover>
-                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.36</span>
+                <span style="float: right; margin-right: 14px; font-size: 14px; cursor: pointer;" @click="editionClick">v 1.1.39</span>
                 <a class="guide" href="https://www.jhwx.com/staff_open.php" target="_blank">使用教程</a>
             </el-col>
         </el-row>

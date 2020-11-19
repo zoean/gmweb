@@ -246,7 +246,7 @@
             <span
               ><svg-icon
                 class="copy-tel"
-                v-if="item.prop == 'phone'"
+                v-if="item.props == 'tel'"
                 icon-class="copy"
                 icon-title="复制手机号码"
             /></span>
@@ -323,7 +323,6 @@
       @changeDrawer="changeDrawer"
       :drawer.sync="drawer"
       :studentUuid="studentUuid"
-      @phoneCopy="phoneCopy"
       @phoneOutTea="phoneOutTea"
       @seatOutTea="seatOutTea"
       :scopeRow="scopeRow"
@@ -795,7 +794,7 @@ export default {
     line-height: 40px;
     text-align: center;
     font-size: 15px;
-    background: #F1F1F1;
+    background: #f1f1f1;
     margin-bottom: 20px;
     color: #666666;
   }

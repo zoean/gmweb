@@ -298,607 +298,706 @@ import {
   getRuleUserStructureLimit,
   spillPoolActSeat,
   getRuleItem,
-  recPoolActSeat
-} from '../../request/api';
-import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid} from '../../assets/js/data';
-import { timestampToTime, input_mode_Text, isAllocationText, dialStateText, filepostDown, pushPeopleFunc } from '../../assets/js/common'
-import CustomerNotes from '../Share/CustomerNotes';
+  recPoolActSeat,
+} from "../../request/api";
+import { MJ_5, MJ_6, MJ_7, MJ_9, zuzhiUuid } from "../../assets/js/data";
+import {
+  timestampToTime,
+  input_mode_Text,
+  isAllocationText,
+  dialStateText,
+  filepostDown,
+  pushPeopleFunc,
+} from "../../assets/js/common";
+import CustomerNotes from "../Share/CustomerNotes";
 export default {
-    name: 'manageClues',
-    props: ['tableHeight','toggleAction', 'hideSearch'],
-    components: {
-        CustomerNotes
+  name: "manageClues",
+  props: ["tableHeight", "toggleAction", "hideSearch"],
+  components: {
+    CustomerNotes,
+  },
+  data() {
+    return {
+      form: {
+        accId: "",
+        accText: "",
+        belongingSeat: "",
+        currentPage: 1,
+        dialState: "",
+        endCreateTime: "",
+        examItemId: "",
+        examItemText: "",
+        isAllocation: "",
+        pageSize: 20,
+        sortSet: [{}],
+        spreadId: "",
+        spreadText: "",
+        inputMode: "",
+        exteName: "",
+        startCreateTime: "",
+        total: null,
+        receiveStartTime: "", //分配时间的查询开始时间（13位）
+        receiveEndTime: "", //分配时间的查询结束时间（13位）
+        intentionLevel: "",
+        ruleNumberName: "", //分配组组名
+      },
+      ruleNumberNameList: [], //分配组数组
+      isAllocationArr: [
+        { label: "未分配", value: 0 },
+        { label: "已分配", value: 1 },
+      ],
+      dialStateArr: [
+        { label: "已拨打", value: 1 },
+        { label: "未拨打", value: 0 },
+      ],
+      inputModeArr: [
+        { label: "线上", value: 0 },
+        { label: "录入", value: 1 },
+      ],
+      enumList: {},
+      dataPickerku: [
+        new Date(new Date(new Date().toLocaleDateString()).getTime()),
+        new Date(
+          new Date(new Date().toLocaleDateString()).getTime() +
+            3600 * 1000 * 24 -
+            1
+        ),
+      ],
+      dataPickerpei: [],
+      pickerOptions: {
+        disabledDate(time) {
+          return (
+            time.getTime() >
+            new Date(new Date().toLocaleDateString()).getTime() +
+              3600 * 1000 * 24 -
+              1
+          );
+        },
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              const start = new Date(
+                new Date(new Date().toLocaleDateString()).getTime()
+              );
+              const end = new Date(
+                new Date(new Date().toLocaleDateString()).getTime() +
+                  3600 * 1000 * 24 -
+                  1
+              );
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "近7天",
+            onClick(picker) {
+              const start = new Date(
+                new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 6
+              );
+              const end = new Date(
+                new Date(new Date().toLocaleDateString()).getTime() +
+                  3600 * 1000 * 24 -
+                  1
+              );
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "本月",
+            onClick(picker) {
+              let start = new Date();
+              start.setDate(1);
+              start.setHours(0);
+              start.setSeconds(0);
+              start.setMinutes(0);
+              const end = new Date(
+                new Date(new Date().toLocaleDateString()).getTime() +
+                  3600 * 1000 * 24 -
+                  1
+              );
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "近30天",
+            onClick(picker) {
+              const start = new Date(
+                new Date(new Date().toLocaleDateString()).getTime() -
+                  3600 * 1000 * 24 * 29
+              );
+              const end = new Date(
+                new Date(new Date().toLocaleDateString()).getTime() +
+                  3600 * 1000 * 24 -
+                  1
+              );
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
+      tableData: [],
+      columnList: [
+        { prop: "tel", label: "手机号码", width: 90 },
+        { prop: "name", label: "客户姓名", formatter: this.parseNull },
+        { prop: "examItemName", label: "考试项目", width: 120 },
+        {
+          prop: "spread",
+          label: "推广渠道",
+          width: 120,
+          formatter: this.parseNull,
+        },
+        { prop: "acc", label: "推广账号", width: 120 },
+        { prop: "exteName", label: "推广人" },
+        {
+          prop: "referencePage",
+          label: "推广落地页",
+          width: 200,
+          formatter: this.parseNull,
+        },
+        { prop: "isAllocation", label: "是否分配" },
+        { prop: "dialState", label: "是否拨打" },
+        {
+          prop: "dialUpNum",
+          label: "拨通 / 拨打",
+          formatter: this.parseCallNumber,
+        },
+        { prop: "createTime", label: "入库时间", width: 140 },
+        { prop: "allocationTime", label: "分配时间", width: 140 },
+        { prop: "belongingSeat", label: "所属坐席", formatter: this.parseNull },
+        {
+          prop: "intentionLevel",
+          label: "意向等级",
+          width: 150,
+          formatter: this.parseNull,
+        },
+        { prop: "inputMode", label: "属性" },
+        { prop: "notes", label: "备注", width: 180, formatter: this.parseNull },
+      ],
+      totalFlag: false, //当只有一页时隐藏分页
+      restaurants: [],
+      fullscreenLoading: false,
+      followFlag: false,
+      drawer: false,
+      clueDataSUuid: "",
+      callLogUuid: "",
+      comMode: "",
+      schoolId: "",
+      userId: "",
+      examItem: "",
+      userCDARUuid: "",
+      checkedData: [],
+      transferSeatVisible: false,
+      overflowRecoverVisible: false,
+      seatList: [],
+      transferSeatForm: {
+        seatUuid: "",
+        userCDARUuid: [],
+      },
+      overflowRecoverForm: {
+        clueDataSUuid: [],
+        seatUuid: [],
+      },
+      filterText: "",
+      defaultProps: {
+        children: "list",
+        label: "orgName",
+      },
+      seatProps: {
+        value: "orgUuid",
+        label: "orgName",
+        children: "list",
+      },
+      orgList: [],
+      clueDataType: 0,
+      tagId: "",
+      tagIdText: "",
+      tagList: [],
+      seatCascader: [],
+    };
+  },
+  created() {
+    this.form.startCreateTime = new Date(
+      new Date(new Date().toLocaleDateString()).getTime()
+    ).getTime();
+    this.form.endCreateTime =
+      new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() +
+      3600 * 1000 * 24 -
+      1;
+    this.getExteAllClueData();
+    this.getExamBasic();
+    let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
+    this.enumByEnumNums(arr);
+    this.getRuleItem();
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
     },
-    data() {
-        return {
-            form: {
-                accId: "",
-                accText: "",
-                belongingSeat: "",
-                currentPage: 1,
-                dialState: "",
-                endCreateTime: "",
-                examItemId: "",
-                examItemText: "",
-                isAllocation: "",
-                pageSize: 20,
-                sortSet: [
-                    {}
-                ],
-                spreadId: "",
-                spreadText: "",
-                inputMode: "",
-                exteName: "",
-                startCreateTime: "",
-                total: null,
-                receiveStartTime: '', //分配时间的查询开始时间（13位）
-                receiveEndTime: '', //分配时间的查询结束时间（13位）
-                intentionLevel: '',
-                ruleNumberName: '', //分配组组名
-            },
-            ruleNumberNameList: [], //分配组数组
-            isAllocationArr: [
-                { label: '未分配', value: 0 },
-                { label: '已分配', value: 1 },
-            ],
-            dialStateArr: [
-                { label: '已拨打', value: 1 },
-                { label: '未拨打', value: 0 },
-            ],
-            inputModeArr: [
-                { label: '线上', value: 0 },
-                { label: '录入', value: 1 },
-            ],
-            enumList: {},
-            dataPickerku: [new Date(new Date(new Date().toLocaleDateString()).getTime()), new Date(new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1)],
-            dataPickerpei: [],
-            pickerOptions: {
-                disabledDate(time) {
-                  return time.getTime() > new Date(new Date().toLocaleDateString()).getTime() + 3600 * 1000 * 24 - 1;
-                },
-                shortcuts: [{
-                  text: '今天',
-                  onClick(picker) {
-                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime());
-                    const end = new Date();
-                    picker.$emit('pick', [start, end]);
-                  }
-                }, {
-                  text: '近7天',
-                  onClick(picker) {
-                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 6);
-                    const end = new Date();
-                    picker.$emit('pick', [start, end]);
-                  }
-                }, {
-                  text: '本月',
-                  onClick(picker) {
-                    let start = new Date();
-                    start.setDate(1);
-                    start.setHours(0);
-                    start.setSeconds(0);
-                    start.setMinutes(0);
-                    const end = new Date();
-                    picker.$emit('pick', [start, end]);
-                  }
-                }, {
-                  text: '近30天',
-                  onClick(picker) {
-                    const start = new Date(new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 29);
-                    const end = new Date();
-                    picker.$emit('pick', [start, end]);
-                  }
-                }]
-            },
-            tableData: [],
-            columnList: [
-              { 'prop': 'tel', 'label': '手机号码', 'width': 90 },
-              { 'prop': 'name', 'label': '客户姓名', 'formatter': this.parseNull  },
-              { 'prop': 'examItemName', 'label': '考试项目', 'width': 120 },
-              { 'prop': 'spread', 'label': '推广渠道', 'width': 120, 'formatter': this.parseNull  },
-              { 'prop': 'acc', 'label': '推广账号', 'width': 120 },
-              { 'prop': 'exteName', 'label': '推广人' },
-              { 'prop': 'referencePage', 'label': '推广落地页', 'width': 200, 'formatter': this.parseNull  },
-              { 'prop': 'isAllocation', 'label': '是否分配' },
-              { 'prop': 'dialState', 'label': '是否拨打' },
-              { 'prop': 'dialUpNum', 'label': '拨通 / 拨打', 'formatter': this.parseCallNumber },
-              { 'prop': 'createTime', 'label': '入库时间', 'width': 140  },
-              { 'prop': 'allocationTime', 'label': '分配时间', 'width': 140 },
-              { 'prop': 'belongingSeat', 'label': '所属坐席', 'formatter': this.parseNull  },
-              { 'prop': 'intentionLevel', 'label': '意向等级', 'width': 150, 'formatter': this.parseNull },
-              { 'prop': 'inputMode', 'label': '属性' },
-              { 'prop': 'notes', 'label': '备注', 'width': 180, 'formatter': this.parseNull },
-            ],
-            totalFlag: false, //当只有一页时隐藏分页
-            restaurants: [],
-            fullscreenLoading: false,
-            followFlag: false,
-            drawer: false,
-            clueDataSUuid: '',
-            callLogUuid: '',
-            comMode: '',
-            schoolId: '',
-            userId: '',
-            examItem: '',
-            userCDARUuid: '',
-            checkedData: [],
-            transferSeatVisible: false,
-            overflowRecoverVisible: false,
-            seatList: [],
-            transferSeatForm: {
-                seatUuid: '',
-                userCDARUuid: []
-            },
-            overflowRecoverForm: {
-                clueDataSUuid: [],
-                seatUuid: []
-            },
-            filterText: '',
-            defaultProps: {
-                children: 'list',
-                label: 'orgName'
-            },
-            seatProps: {
-                value: 'orgUuid',
-                label: 'orgName',
-                children: 'list'
-            },
-            orgList: [],
-            clueDataType: 0,
-            tagId: '',
-            tagIdText: '',
-            tagList: [],
-            seatCascader: []
+  },
+  methods: {
+    getRuleItem() {
+      this.$smoke_get(getRuleItem, {
+        type: "",
+      }).then((res) => {
+        if (res.code == 200) {
+          this.ruleNumberNameList = res.data;
         }
+      });
     },
-    created() {
-        this.form.startCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime();
-        this.form.endCreateTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() + 3600 * 1000 * 24 - 1;
-        this.getExteAllClueData();
-        this.getExamBasic();
-        let arr = [MJ_5, MJ_6, MJ_7, MJ_9];
-        this.enumByEnumNums(arr);
-        this.getRuleItem();
+    parseNull(row, column, cellValue) {
+      return cellValue || "- -";
     },
-    watch: {
-      filterText(val) {
-        this.$refs.tree.filter(val);
+    parseCallNumber(row) {
+      return row.dialUpNum + "/" + row.callNum;
+    },
+    getUserList(obj) {
+      let userList = [];
+      function getLeaf(obj) {
+        obj.forEach((item) => {
+          if (item.userList) {
+            item.userList.forEach((leafItem) => {
+              userList.push({
+                userName: leafItem.userName,
+                userUuid: leafItem.userUuid,
+              });
+            });
+            // console.log(userList)
+          }
+          if (item.list) {
+            getLeaf(item.list);
+          }
+        });
+      }
+      getLeaf(obj);
+      return this.uniqArray(userList);
+    },
+    uniqArray(arr) {
+      var obj = {};
+      var result = arr.reduce(function (a, b) {
+        obj[b.userName] ? "" : (obj[b.userName] = true && a.push(b));
+        return a;
+      }, []);
+      return result;
+    },
+    queryUserList(queryString, cb) {
+      var restaurants = JSON.parse(
+        JSON.stringify(this.getUserList(this.orgList)).replace(
+          /userName/g,
+          "value"
+        )
+      );
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    querySearchTag(queryString, cb) {
+      var restaurants = this.tagList;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    getCheckedNodes() {
+      let arr = [];
+      this.$nextTick(() => {
+        this.$refs.tree.getCheckedNodes().map((sll) => {
+          if (sll.hasOwnProperty("userUin")) {
+            // hasOwnProperty 判断对象是否含有某个属性
+            arr.push(sll);
+          }
+        });
+        this.checkedData = arr;
+      });
+    },
+    handleCheckChange(data, value) {
+      this.getCheckedNodes();
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.orgName.indexOf(value) !== -1;
+    },
+    delCludes(row) {
+      this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then((res) => {
+        if (res.code == 200) {
+          this.getExteAllClueData();
+          this.$message({
+            type: "success",
+            message: "线索删除成功，可在线索垃圾站回收该线索。",
+          });
+        } else {
+          this.$message({
+            type: "error",
+            message: res.msg,
+          });
+        }
+      });
+    },
+    autocompleteClearTag() {
+      this.$nextTick(() => {
+        this.$refs.autocompleteTag.$children
+          .find((c) => c.$el.className.includes("el-input"))
+          .blur();
+        this.tagId = "";
+        this.$refs.autocompleteTag.focus();
+      });
+    },
+    handleSelectTag(item) {
+      this.tagId = item.userUuid;
+      this.tagIdText = item.value;
+    },
+    transferClude(row) {
+      this.clueDataType = row.clueDataType;
+      if (row.clueDataType == 1 || row.clueDataType == 2) {
+        //1-溢出池 2-公海
+        this.filterText = "";
+        this.checkedData = [];
+        this.overflowRecoverVisible = true;
+        this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid;
+      } else if (row.clueDataType == 3) {
+        //坐席名下
+        this.transferSeatForm.seatUuid = "";
+        this.tagIdText = "";
+        this.transferSeatVisible = true;
+        this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid;
+      }
+      this.$smoke_post(getRuleUserStructureLimit, {
+        uuid: zuzhiUuid,
+      }).then((res) => {
+        if (res.code == 200) {
+          this.orgList = pushPeopleFunc(res.data.list);
+          this.getUserList(this.orgList);
+        }
+      });
+    },
+    transferSeat() {
+      if (this.tagId == "") {
+        this.$message({
+          type: "error",
+          message: "请您先选择要分配的人员",
+        });
+      } else {
+        this.$smoke_post(seatActSeat, {
+          seatUuid: this.tagId,
+          userCDARUuid: this.transferSeatForm.userCDARUuid,
+        }).then((res) => {
+          if (res.code == 200) {
+            if (res.data.result) {
+              this.$message({
+                type: "success",
+                message: "线索转移成功",
+              });
+              this.getExteAllClueData();
+              this.transferSeatVisible = false;
+            } else {
+              this.$message({
+                type: "error",
+                message: res.data.msg,
+              });
+            }
+          } else {
+            this.$message({
+              type: "error",
+              message: res.msg,
+            });
+          }
+        });
       }
     },
-    methods: {
-        getRuleItem() {
-            this.$smoke_get(getRuleItem, {
-                type: ''
-            }).then(res => {
-                if(res.code == 200){
-                    this.ruleNumberNameList = res.data;
-                }
-            })
-        },
-        parseNull(row, column, cellValue){
-            return cellValue || '- -'
-        },
-        parseCallNumber(row){
-            return row.dialUpNum + '/' + row.callNum
-        },
-        getUserList(obj){
-            let userList = []
-            function getLeaf(obj){
-                obj.forEach(item => {
-                    if(item.userList){
-                        item.userList.forEach(leafItem => {
-                            userList.push({
-                                userName: leafItem.userName,
-                                userUuid: leafItem.userUuid
-                            })
-                        })
-                        // console.log(userList)
-                    }
-                    if(item.list){
-                        getLeaf(item.list)
-                    }
-                })
-            }
-            getLeaf(obj)
-            return this.uniqArray(userList)
-        },
-        uniqArray(arr){
-          var obj = {}
-          var result = arr.reduce(function(a, b){
-            obj[b.userName] ? '' : obj[b.userName] = true && a.push(b)
-            return a
-          }, [])
-          return result
-        },
-        queryUserList(queryString, cb) {
-            var restaurants = JSON.parse(JSON.stringify(this.getUserList(this.orgList)).replace(/userName/g,"value"));
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        querySearchTag(queryString, cb) {
-            var restaurants = this.tagList;
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        getCheckedNodes() {
-            let arr = [];
-            this.$nextTick(() => {
-                this.$refs.tree.getCheckedNodes().map(sll => {
-                    if(sll.hasOwnProperty('userUin')){ // hasOwnProperty 判断对象是否含有某个属性
-                        arr.push(sll);
-                    }
-                })
-                this.checkedData = arr;
-            })
-        },
-        handleCheckChange(data, value){
-            this.getCheckedNodes();
-        },
-        filterNode(value, data) {
-            if (!value) return true;
-                return data.orgName.indexOf(value) !== -1;
-        },
-        delCludes(row){
-            this.$smoke_post(deleteClueDatas + row.clueDataSUuid, {}).then(res=>{
-                if(res.code == 200){
-                    this.getExteAllClueData();
-                    this.$message({
-                        type: 'success',
-                        message: '线索删除成功，可在线索垃圾站回收该线索。'
-                    })
-                }else{
-                    this.$message({
-                        type: 'error',
-                        message: res.msg
-                    })
-                }
-            })
-
-        },
-        autocompleteClearTag() {
-            this.$nextTick(() => {
-                this.$refs.autocompleteTag.$children
-                    .find(c => c.$el.className.includes('el-input'))
-                    .blur();
-                this.tagId = '';
-                this.$refs.autocompleteTag.focus();
-            })
-        },
-        handleSelectTag(item) {
-            this.tagId = item.userUuid;
-            this.tagIdText = item.value;
-        },
-        transferClude(row){
-            this.clueDataType = row.clueDataType
-            if(row.clueDataType == 1 || row.clueDataType == 2){//1-溢出池 2-公海
-                this.filterText = ''
-                this.checkedData = []
-                this.overflowRecoverVisible = true
-                this.overflowRecoverForm.clueDataSUuid[0] = row.clueDataUuid
-            }else if(row.clueDataType == 3){//坐席名下
-                this.transferSeatForm.seatUuid = ''
-                this.tagIdText = ''
-                this.transferSeatVisible = true
-                this.transferSeatForm.userCDARUuid[0] = row.userCDARUuid
-            }
-            this.$smoke_post(getRuleUserStructureLimit, {
-                uuid: zuzhiUuid
-            }).then(res => {
-                if(res.code == 200) {
-                    this.orgList = pushPeopleFunc(res.data.list);
-                    this.getUserList(this.orgList)
-                }
-            })
-        },
-        transferSeat(){
-            if(this.tagId == '') {
-                this.$message({
-                    type: 'error',
-                    message: '请您先选择要分配的人员'
-                })
-            }else{
-                this.$smoke_post(seatActSeat, {
-                    seatUuid: this.tagId,
-                    userCDARUuid: this.transferSeatForm.userCDARUuid
-                }).then(res => {
-                    if(res.code == 200){
-                        if(res.data.result){
-                            this.$message({
-                                type: 'success',
-                                message: '线索转移成功'
-                            })
-                            this.getExteAllClueData();
-                            this.transferSeatVisible = false
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: res.data.msg
-                            })
-                        }
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message:  res.msg
-                        })
-                    }
-                })
-            }
-        },
-        getSeatList(){
-            this.$smoke_get(dataViewPermissionUserList + '/1', {}).then(res => {
-                if(res.code == 200){
-                    res.data.map(sll => {
-                        sll.value = sll.userName;
-                    })
-                    this.tagList = res.data
-
-                }
-            })
-        },
-        transferOverflow(){
-            let seatUuidArr = [];
-            this.checkedData.map(sll => {
-                seatUuidArr.push(sll.userUuid);
-            })
-            this.overflowRecoverForm.seatUuid = seatUuidArr
-            if(seatUuidArr.length == 0){
-                this.$message({
-                    type: 'error',
-                    message: '请您先勾选您要转移的目标人员'
-                })
-            }else{
-                if(this.clueDataType == 1){
-                    this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(res => {
-                        if(res.code == 200){
-                            if(res.data.result){
-                                this.$message({
-                                    type: 'success',
-                                    message: '线索转移成功'
-                                })
-                                this.getExteAllClueData();
-                                this.overflowRecoverVisible = false
-                            }else{
-                                this.$message({
-                                    type: 'error',
-                                    message: res.data.msg
-                                })
-                            }
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: res.msg
-                            })
-                        }
-                    })
-                }else{
-                    this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(res => {
-                        if(res.code == 200){
-                            if(res.data.result){
-                                this.$message({
-                                    type: 'success',
-                                    message: res.data.msg
-                                })
-                                this.getExteAllClueData();
-                                this.overflowRecoverVisible = false
-                            }else{
-                                this.$message({
-                                    type: 'error',
-                                    message: res.msg
-                                })
-                            }
-                        }else{
-                            this.$message({
-                                type: 'error',
-                                message: '线索转移失败'
-                            })
-                        }
-                    })
-                }
-
-            }
-        },
-        directorClueExport() {
-            let tmp = (new Date()).getTime();
-            let exportTime = new Date(new Date(new Date().toLocaleDateString()).getTime()).getTime() - 3600 * 1000 * 24 * 31;
-            if(this.form.startCreateTime == '' || this.form.endCreateTime == '') {
-                this.$message({
-                    type: 'error',
-                    message: '入库时间不能为空'
-                })
-            }else if(this.form.startCreateTime < exportTime) {
-                this.$message({
-                    type: 'error',
-                    message: '入库时间间隔不能超过31天'
-                })
-            }else{
-                tmp = timestampToTime(tmp);
-                filepostDown(directorClueExport, this.form, '线索-' + tmp + '.xlsx');
-            }
-            // this.$smoke_post(testAllClueExport, this.form).then(res => {})
-        },
-        changeDrawer(val){
-            this.drawer = val;
-        },
-        //客户信息
-        customerInfo(row) {
-            this.drawer = true;
-            this.clueDataSUuid = row.clueDataSUuid;
-            this.userId = row.customerId;
-            this.followFlag = false;
-        },
-        getExamBasic() {
-            let arr;
-            this.$smoke_get(getExamBasic, {}).then(res => {
-                arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"value"));
-                this.restaurants = arr;
-            })
-        },
-        querySearch(queryString, cb) {
-            var restaurants = this.restaurants;
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        querySearchSpread(queryString, cb){
-            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-6']).replace(/name/g,"value"));
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        querySearchAcc(queryString, cb){
-            var restaurants = JSON.parse(JSON.stringify(this.enumList['MJ-7']).replace(/name/g,"value"));
-            var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-            // 调用 callback 返回建议列表的数据
-            cb(results);
-        },
-        createFilter(queryString) {
-            return (restaurant) => {
-              return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1);
-            };
-        },
-        handleSelect(item) {
-            this.form.examItemId = item.id;
-            this.form.examItemText = item.value;
-        },
-        handleSelectSpread(item) {
-            this.form.spreadId = item.number;
-            this.form.spreadText = item.value;
-        },
-        handleSelectAcc(item) {
-            this.form.accId = item.number;
-            this.form.accText = item.value;
-        },
-        autocompleteClearAcc() {
-            this.$nextTick(() => {
-                this.$refs.autocompleteAcc.$children
-                    .find(c => c.$el.className.includes('el-input'))
-                    .blur();
-                this.form.accId = '';
-                this.$refs.autocompleteAcc.focus();
-            })
-        },
-        autocompleteClearSpread() {
-            this.$nextTick(() => {
-                this.$refs.autocompleteSpread.$children
-                    .find(c => c.$el.className.includes('el-input'))
-                    .blur();
-                this.form.spreadId = '';
-                this.$refs.autocompleteSpread.focus();
-            })
-        },
-        autocompleteClear() {
-            this.$nextTick(() => {
-                this.$refs.autocomplete.$children
-                    .find(c => c.$el.className.includes('el-input'))
-                    .blur();
-                this.form.examItemId = '';
-                this.$refs.autocomplete.focus();
-            })
-        },
-        enumByEnumNums(arr) {
-            this.$smoke_post(enumByEnumNums, {
-                numberList: arr
-            }).then(res => {
-                if(res.code == 200){
-                    this.enumList = res.data;
-                    // for(let i in res.data) {
-                    //     this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
-                    // }
-                    // console.log(this.enumList);
-                }
-            })
-        },
-        getExteAllClueDataClick() {
-          this.form.currentPage = 1;
-          this.getExteAllClueData();
-        },
-        getExteAllClueData() {
-            this.fullscreenLoading = true;
-            this.$smoke_post(getExteAllClueData, this.form).then(res => {
-                if(res.code == 200){
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-
-                        res.data.list.map((sll,index) => {
-                          sll.createTime = timestampToTime(Number(sll.createTime));
-                          sll.allocationTime = timestampToTime(Number(sll.allocationTime));
-                          sll.inputMode = input_mode_Text(sll.inputMode);
-                          sll.isAllocation = isAllocationText(sll.isAllocation);
-                          sll.dialState = dialStateText(sll.dialState);
-                        })
-
-                        this.tableData = res.data.list;
-                        this.form.total = res.data.total;
-                        this.$emit('setTableHeight', this.form.total, 1)
-                    }, 300);
-                }else{
-                    setTimeout(() => {
-                        this.fullscreenLoading = false;
-                        this.$message({
-                            type: 'error',
-                            message: res.msg
-                        })
-                    }, 300)
-                }
-            })
-        },
-        datePickerChangeku(value) {
-            if (value == null) {
-                this.form.startCreateTime = '';
-                this.form.endCreateTime = '';
-            }else{
-                this.form.startCreateTime = value[0].getTime();
-                this.form.endCreateTime = value[1].getTime();
-            }
-        },
-        datePickerChangepei(value) {
-            if (value == null) {
-                this.form.receiveStartTime = '';
-                this.form.receiveEndTime = '';
-            }else{
-                this.form.receiveStartTime = value[0].getTime();
-                this.form.receiveEndTime = value[1].getTime();
-            }
-        },
-        handleCurrentChange(index) {
-            this.form.currentPage = index;
-            this.getExteAllClueData();
-        },
-        handleSizeChange(index) {
-            this.form.pageSize = index;
-            this.form.currentPage = 1;
-            this.getExteAllClueData();
+    getSeatList() {
+      this.$smoke_get(dataViewPermissionUserList + "/1", {}).then((res) => {
+        if (res.code == 200) {
+          res.data.map((sll) => {
+            sll.value = sll.userName;
+          });
+          this.tagList = res.data;
         }
-    }
-}
+      });
+    },
+    transferOverflow() {
+      let seatUuidArr = [];
+      this.checkedData.map((sll) => {
+        seatUuidArr.push(sll.userUuid);
+      });
+      this.overflowRecoverForm.seatUuid = seatUuidArr;
+      if (seatUuidArr.length == 0) {
+        this.$message({
+          type: "error",
+          message: "请您先勾选您要转移的目标人员",
+        });
+      } else {
+        if (this.clueDataType == 1) {
+          this.$smoke_post(spillPoolActSeat, this.overflowRecoverForm).then(
+            (res) => {
+              if (res.code == 200) {
+                if (res.data.result) {
+                  this.$message({
+                    type: "success",
+                    message: "线索转移成功",
+                  });
+                  this.getExteAllClueData();
+                  this.overflowRecoverVisible = false;
+                } else {
+                  this.$message({
+                    type: "error",
+                    message: res.data.msg,
+                  });
+                }
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.msg,
+                });
+              }
+            }
+          );
+        } else {
+          this.$smoke_post(recPoolActSeat, this.overflowRecoverForm).then(
+            (res) => {
+              if (res.code == 200) {
+                if (res.data.result) {
+                  this.$message({
+                    type: "success",
+                    message: res.data.msg,
+                  });
+                  this.getExteAllClueData();
+                  this.overflowRecoverVisible = false;
+                } else {
+                  this.$message({
+                    type: "error",
+                    message: res.msg,
+                  });
+                }
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "线索转移失败",
+                });
+              }
+            }
+          );
+        }
+      }
+    },
+    directorClueExport() {
+      let tmp = new Date().getTime();
+      let exportTime =
+        new Date(
+          new Date(new Date().toLocaleDateString()).getTime()
+        ).getTime() -
+        3600 * 1000 * 24 * 31;
+      if (this.form.startCreateTime == "" || this.form.endCreateTime == "") {
+        this.$message({
+          type: "error",
+          message: "入库时间不能为空",
+        });
+      } else if (this.form.startCreateTime < exportTime) {
+        this.$message({
+          type: "error",
+          message: "入库时间间隔不能超过31天",
+        });
+      } else {
+        tmp = timestampToTime(tmp);
+        filepostDown(directorClueExport, this.form, "线索-" + tmp + ".xlsx");
+      }
+      // this.$smoke_post(testAllClueExport, this.form).then(res => {})
+    },
+    changeDrawer(val) {
+      this.drawer = val;
+    },
+    //客户信息
+    customerInfo(row) {
+      this.drawer = true;
+      this.clueDataSUuid = row.clueDataSUuid;
+      this.userId = row.customerId;
+      this.followFlag = false;
+    },
+    getExamBasic() {
+      let arr;
+      this.$smoke_get(getExamBasic, {}).then((res) => {
+        arr = JSON.parse(JSON.stringify(res.data).replace(/name/g, "value"));
+        this.restaurants = arr;
+      });
+    },
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    querySearchSpread(queryString, cb) {
+      var restaurants = JSON.parse(
+        JSON.stringify(this.enumList["MJ-6"]).replace(/name/g, "value")
+      );
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    querySearchAcc(queryString, cb) {
+      var restaurants = JSON.parse(
+        JSON.stringify(this.enumList["MJ-7"]).replace(/name/g, "value")
+      );
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) > -1
+        );
+      };
+    },
+    handleSelect(item) {
+      this.form.examItemId = item.id;
+      this.form.examItemText = item.value;
+    },
+    handleSelectSpread(item) {
+      this.form.spreadId = item.number;
+      this.form.spreadText = item.value;
+    },
+    handleSelectAcc(item) {
+      this.form.accId = item.number;
+      this.form.accText = item.value;
+    },
+    autocompleteClearAcc() {
+      this.$nextTick(() => {
+        this.$refs.autocompleteAcc.$children
+          .find((c) => c.$el.className.includes("el-input"))
+          .blur();
+        this.form.accId = "";
+        this.$refs.autocompleteAcc.focus();
+      });
+    },
+    autocompleteClearSpread() {
+      this.$nextTick(() => {
+        this.$refs.autocompleteSpread.$children
+          .find((c) => c.$el.className.includes("el-input"))
+          .blur();
+        this.form.spreadId = "";
+        this.$refs.autocompleteSpread.focus();
+      });
+    },
+    autocompleteClear() {
+      this.$nextTick(() => {
+        this.$refs.autocomplete.$children
+          .find((c) => c.$el.className.includes("el-input"))
+          .blur();
+        this.form.examItemId = "";
+        this.$refs.autocomplete.focus();
+      });
+    },
+    enumByEnumNums(arr) {
+      this.$smoke_post(enumByEnumNums, {
+        numberList: arr,
+      }).then((res) => {
+        if (res.code == 200) {
+          this.enumList = res.data;
+          // for(let i in res.data) {
+          //     this.enumList[i] = this.enumList[i].filter(item => item.enable != 0);
+          // }
+          // console.log(this.enumList);
+        }
+      });
+    },
+    getExteAllClueDataClick() {
+      this.form.currentPage = 1;
+      this.getExteAllClueData();
+    },
+    getExteAllClueData() {
+      this.fullscreenLoading = true;
+      this.$smoke_post(getExteAllClueData, this.form).then((res) => {
+        if (res.code == 200) {
+          setTimeout(() => {
+            this.fullscreenLoading = false;
+
+            res.data.list.map((sll, index) => {
+              sll.createTime = timestampToTime(Number(sll.createTime));
+              sll.allocationTime = timestampToTime(Number(sll.allocationTime));
+              sll.inputMode = input_mode_Text(sll.inputMode);
+              sll.isAllocation = isAllocationText(sll.isAllocation);
+              sll.dialState = dialStateText(sll.dialState);
+            });
+
+            this.tableData = res.data.list;
+            this.form.total = res.data.total;
+            this.$emit("setTableHeight", this.form.total, 1);
+          }, 300);
+        } else {
+          setTimeout(() => {
+            this.fullscreenLoading = false;
+            this.$message({
+              type: "error",
+              message: res.msg,
+            });
+          }, 300);
+        }
+      });
+    },
+    datePickerChangeku(value) {
+      if (value == null) {
+        this.form.startCreateTime = "";
+        this.form.endCreateTime = "";
+      } else {
+        this.form.startCreateTime = value[0].getTime();
+        this.form.endCreateTime = value[1].getTime();
+      }
+    },
+    datePickerChangepei(value) {
+      if (value == null) {
+        this.form.receiveStartTime = "";
+        this.form.receiveEndTime = "";
+      } else {
+        this.form.receiveStartTime = value[0].getTime();
+        this.form.receiveEndTime = value[1].getTime();
+      }
+    },
+    handleCurrentChange(index) {
+      this.form.currentPage = index;
+      this.getExteAllClueData();
+    },
+    handleSizeChange(index) {
+      this.form.pageSize = index;
+      this.form.currentPage = 1;
+      this.getExteAllClueData();
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
-    .index-main{
-        height: auto;
-        .el-col-6{
-            height: auto !important;
-        }
-        .people-title{
-            width: 100%;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            font-size: 15px;
-            background: #fff;
-            margin-bottom: .3rem;
-            color: #666666;
-        }
-        .people-screen{
-            margin-bottom: 10px;
-            .screen-li{
-                width: 94%;
-            }
-        }
+.index-main {
+  height: auto;
+  .el-col-6 {
+    height: auto !important;
+  }
+  .people-title {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 15px;
+    background: #fff;
+    margin-bottom: 0.3rem;
+    color: #666666;
+  }
+  .people-screen {
+    margin-bottom: 10px;
+    .screen-li {
+      width: 94%;
     }
-    .index-main /deep/ .bofang-column{
-        padding: 0 !important;
-    }
+  }
+}
+.index-main /deep/ .bofang-column {
+  padding: 0 !important;
+}
 </style>
