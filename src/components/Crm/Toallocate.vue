@@ -151,6 +151,9 @@
         :min-width="item.width"
         :sortable="item.sortable"
       >
+        <template slot-scope="scope">
+          <span>{{ scope.row[item.prop] || "- -" }}</span>
+        </template>
       </el-table-column>
 
       <el-table-column
