@@ -377,3 +377,5 @@ export const examPeriodListPage = '/api/phone/examPeriod/listPage' //查询考�
 export const examPeriodAdd = '/api/phone/examPeriod/add' //新增考期
 export const examPeriodUpdate = '/api/phone/examPeriod/update' //修改考期
 export const examPeriodFindById = '/api/phone/examPeriod/findById' //查询考期详情
+
+export const schSchool = '/api/refreshPer/sch' //切换分校数据权限
