@@ -410,7 +410,7 @@ export default {
         spreadText: "",
         userUuid: "",
         num: "",
-        sortSet: [],
+        sortSet: [{'lastCallTime': 'DESC'}],
         intentionLevel: "",
         saleName: "",
         seatOrgList: [],

@@ -159,7 +159,9 @@ export default {
                 orgUuidList: [], //组织唯一标识集合
                 pageSize: 20, //单页请求的数量
                 roleUuid: '', //角色唯一标识
-                sortSet: [], //排序集合
+                sortSet: [
+                  { hiredDate: "DESC" }
+                ], //排序集合
                 startHiredDate: '',
                 endHiredDate: '',
             },

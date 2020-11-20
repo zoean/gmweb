@@ -205,6 +205,7 @@ export default {
         userUuid: "",
         total: null,
         tel: "",
+        sortSet: [{'lastCallTime': 'ASC'}],
         dataType: "", //数据类型（1：首咨 2：回收池）
         receiveStartTime: "", //领取时间的查询开始时间（13位）
         receiveEndTime: "", //领取时间的查询结束时间（13位）
