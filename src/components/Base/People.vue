@@ -90,8 +90,17 @@
           class="screen-li"
         ></el-input>
       </el-col>
-
+    </el-row>
+    <el-row class="people-screen">
       <el-col :span="3">
+        <el-input
+          v-model.trim="screenForm.jobNum"
+          size="small"
+          placeholder="请输入员工工号"
+          class="screen-li"
+        ></el-input>
+      </el-col>
+      <el-col :span="21">
         <el-button type="primary" @click="smoke_search" size="small"
           >查 询</el-button
         >
@@ -120,9 +129,7 @@
         v-for="(item, index) in columnList"
         :min-width="item.width"
         :sortable="
-          item.prop == 'jobNumber'
-            ? 'custom'
-            : item.prop == 'name'
+          item.prop == 'name'
             ? 'custom'
             : item.prop == 'hiredDate'
             ? 'custom'
@@ -230,13 +237,12 @@ export default {
         accountNumber: "", //账号（手机号）
         currentPage: 1, //当前页
         jobStatus: 1, // 状态选择value
+        jobNum: "",
         name: "", //姓名
         orgUuidList: [], //组织唯一标识集合
         pageSize: 20, //单页请求的数量
         roleUuid: "", //角色唯一标识
-        sortSet: [
-          { hiredDate: "DESC" }
-        ], //排序集合
+        sortSet: [{ hiredDate: "DESC" }], //排序集合
         startHiredDate: "",
         endHiredDate: "",
       },
