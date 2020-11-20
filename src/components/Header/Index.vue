@@ -467,21 +467,19 @@ export default {
   created() {
     this.getClueDataNumber();
     this.noReadNum();
-    this.schoolArr = JSON.parse(localStorage.getItem("schoolArr"));
-    this.schoolArr.map((sll) => {
-      if (sll.disabled) {
-        this.schoolId = sll.schoolId;
-      }
-    });
   },
   methods: {
     schoolIdChange(value) {
+      let that = this;
       this.$smoke_get(`${schSchool}/${value}`, {}).then((res) => {
         if (res.code == 200) {
           this.$message({
             type: "success",
             message: "切换分校成功",
           });
+          setTimeout(() => {
+            that.$router.go(0);
+          }, 500);
         }else {
             this.$message({
             type: "error",
@@ -680,6 +678,7 @@ export default {
           localStorage.removeItem("userMenuList");
           localStorage.removeItem("initOptions");
           localStorage.removeItem("studentsPageSize");
+          localStorage.removeItem("schoolArr");
           sessionStorage.clear();
           this.$store.dispatch("actionsSetCommonFlag", false);
           this.$router.push({ path: "/login" });
@@ -842,6 +841,13 @@ export default {
             "schoolArr",
             JSON.stringify(res.data.schoolList)
           );
+
+          this.schoolArr = res.data.schoolList;
+          res.data.schoolList.map((sll) => {
+            if (sll.disabled) {
+              this.schoolId = sll.schoolId;
+            }
+          });
 
           if ("WebSocket" in window) {
             var http = websockHttp + res.data.uuid;
