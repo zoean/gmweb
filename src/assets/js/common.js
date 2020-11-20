@@ -12,13 +12,19 @@ export function formatNumber(n) {
     return n[1] ? n : '0' + n
   }
 
-export const getTextByJs = (arr) => {
+export const getTextByJs = (arr, name) => {
     let str = "";
+    let nameText = "";
+    if(name == undefined) {
+        nameText = 'name';
+    }else{
+        nameText = name;
+    }
     for (var i = 0; i < arr.length; i++) {
-        if(arr[i].name == undefined){
+        if(arr[i][nameText] == undefined){
             str = '';
         }else{
-            str += arr[i].name+ "，";
+            str += arr[i][nameText]+ "，";
         }
     }
     //去掉最后一个逗号(如果不需要去掉，就不用写)
