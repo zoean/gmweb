@@ -4,6 +4,12 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.1.40 -- 2020/11/19" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、可领取公池数据页面增加释放人字段</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.39 -- 2020/11/18" placement="top">
         <el-card>
           <h4>新增功能</h4>
