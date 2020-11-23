@@ -35,6 +35,11 @@ export const itemList = '/api/phone/pageFieldsMag/itemList'; //页面枚举列�
 export const getProfile = '/api/user/getProfile'; //获取个人资料
 export const upProfile = '/api/user/upProfile'; //获取个人资料
 export const sendDingVerCode = '/api/user/sendDingVerCode'; //发送钉钉验证码
+export const addBranch = '/api/branch/addBranch';//创建分校
+export const selectAllBranch = '/api/branch/getBranchListByNameAndActive';//分校列表
+export const updateBranch = '/api/branch/updateBranch';//编辑分校
+export const selectBranchByUuid = '/api/branch/selectBranchByUuid';//根据uuid查询分校信息
+export const turnOnBranch = '/api/branch/turnOnBranch'; //启用关闭分校
 
 // JQ接口
 export const phoneUserList = '/api/phone/phoneUserList'; //获取jq的员工信息
