@@ -186,6 +186,8 @@
             item.pause()
           }
         })
+
+        _czc.push(["_trackEvent", '音频', '播放'])
       },
       // 当timeupdate事件大概每秒一次，用来更新音频流的当前播放时间
       onTimeupdate(res) {
