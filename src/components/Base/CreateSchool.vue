@@ -54,7 +54,7 @@
     :total="searchForm.total"
     style="text-align: right;">
   </el-pagination>
-    <el-dialog :title="addEditTitle" :visible.sync="addEditVisible" width="500px">
+    <el-dialog class="beautiful-title" :title="addEditTitle" :visible.sync="addEditVisible" width="500px">
       <el-form :model="addEditForm" :rules="addEditRules" ref="addEditSchool">
         <el-form-item label="分校名称" prop="name">
           <el-input v-model="addEditForm.name"></el-input>
@@ -83,11 +83,11 @@
             :action="uploadFile"
             :data="uploadData"
             :on-success="function (res,file) {return uploadSuccess(res, file, 1)}"
-            :before-upload="verifyUpload"
+            :before-upload="function (res,file) {return verifyUpload(res, 500, 500)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logo" :src="addEditForm.logo" class="avatar">
+            <img v-if="addEditForm.logo" :src="addEditForm.logo" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">图片格式：png，100k以内，尺寸500*500</div>
           </el-upload>
         </el-form-item>
         <el-form-item label="上图下文LOGO">
@@ -96,11 +96,14 @@
             :action="uploadFile"
             :data="uploadData"
             :on-success="function (res,file) {return uploadSuccess(res, file, 2)}"
-            :before-upload="verifyUpload"
+            :before-upload="function (res,file) {return verifyUpload(res, 312, 312)}"
             :show-file-list="false">
             <img v-if="addEditForm.logoNameUp" :src="addEditForm.logoNameUp" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">
+              <p>图片形式：上LOGO图，下分校名称</p>
+              <p>图片格式：png，图片100K以内，尺寸312*312</p>
+            </div>
           </el-upload>
         </el-form-item>
         <el-form-item label="APP主页LOGO">
@@ -109,11 +112,14 @@
             :action="uploadFile"
             :data="uploadData"
             :on-success="function (res,file) {return uploadSuccess(res, file, 3)}"
-            :before-upload="verifyUpload"
+            :before-upload="function (res,file) {return verifyUpload(res, 390, 110)}"
             :show-file-list="false">
             <img v-if="addEditForm.logoNameDown" :src="addEditForm.logoNameDown" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">
+              <p>图片形式：左LOGO图，右分校名称，白矩形底</p>
+              <p>图片格式：png，图片100K以内，尺寸390*110</p>
+            </div>
           </el-upload>
         </el-form-item>
         <el-form-item label="APP直播LOGO">
@@ -122,11 +128,14 @@
             :action="uploadFile"
             :data="uploadData"
             :on-success="function (res,file) {return uploadSuccess(res, file, 4)}"
-            :before-upload="verifyUpload"
+            :before-upload="function (res,file) {return verifyUpload(res, 400, 160)}"
             :show-file-list="false">
             <img v-if="addEditForm.logoVideo" :src="addEditForm.logoVideo" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">
+              <p>图片形式：左LOGO图，右分校名称，乌云虚底</p>
+              <p>图片格式：png，图片100K以内，尺寸400*160</p>
+            </div>
           </el-upload>
         </el-form-item>
         <el-form-item label="左图右文LOGO">
@@ -135,11 +144,14 @@
             :action="uploadFile"
             :data="uploadData"
             :on-success="function (res,file) {return uploadSuccess(res, file, 5)}"
-            :before-upload="verifyUpload"
+            :before-upload="function (res,file) {return verifyUpload(res, 330, 90)}"
             :show-file-list="false">
             <img v-if="addEditForm.logoNameRight" :src="addEditForm.logoNameRight" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div slot="tip" class="el-upload__tip">
+              <p>图片形式：左LOGO图，右分校名称，黑矩形底</p>
+              <p>图片格式：png，图片100K以内，330*90</p>
+            </div>
           </el-upload>
         </el-form-item>
         <el-form-item label="公共公海" prop="commStatus">
@@ -210,8 +222,14 @@ export default{
       addEditRules: {
         name: [
           {
-            require: true, trigger: 'blur'
+            required: true, message: '请输入分校名称', trigger: 'blur'
           }
+        ],
+        domainName: [
+          {required: true, message: '请输入分校官网', trigger: 'blur'}
+        ],
+        companyName:[
+        {required: true, message: '请输入公司主体', trigger: 'blur'}
         ]
       }
     }
@@ -263,16 +281,32 @@ export default{
         }
       })
     },  
-    verifyUpload(file){
-      const isJPG = file.type === 'image/jpeg';
-      const isLt1M = file.size / 1024 / 1024 < 1;
-      if (!isJPG) {
-        this.$message.error('请上传jpg格式的图片');
+    verifyUpload(file, width, height){
+      const alowType = file.type === 'image/png';
+      const isLt100k = file.size / 100 < 1;
+      const isSize = new Promise(function(resolve, reject) {
+        let width = width,
+        height = height,
+        _URL = window.URL || window.webkitURL,
+        img = new Image()
+        img.onload = () => {
+          let valid = img.width <= width && img.height <= height
+          valid ? resolve() : reject()
+        }
+        img.src = _URL.createObjectURL(file)
+      }).then(() => {
+        return file
+      }, () => {
+        this.$message.error('图片尺寸需小于500*500')
+        // return promise.reject()
+      })
+      if (!alowType) {
+        this.$message.error('请上传png格式的图片');
       }
-      if (!isLt1M) {
-        this.$message.error('图片大小不能超过 1MB');
+      if (!isLt100k) {
+        this.$message.error('图片大小不能超过 100k');
       }
-      return isJPG && isLt1M;
+      return alowType && isLt100k && isSize;
     },
     uploadSuccess(res, file, id){
       if(res.code == 0){
@@ -297,24 +331,31 @@ export default{
       this.resetForm()
     },
     editSchool(row){
-      console.log(row)
       this.addEditType = 2
       this.addEditVisible = true
       this.addEditTitle = '编辑分校'
       this.resetForm()
       this.$smoke_post(selectBranchByUuid, {id: row.id}).then(res => {
         if(res.code == 200 && res.data){
-          let params = res.data[0]
-          let {name,schoolName, domainName, smsSignature, companyName, linkTelephone, agreementUrl, logo, logoNameUp, logoNameDown, logoVideo, logoNameRight, commStatus, clueAllocate, id} = params
+          let params = res.data
+          let {name, schoolName, domainName, smsSignature, companyName, linkTelephone, agreementUrl, logo, logoNameUp, logoNameDown, logoVideo, logoNameRight, commStatus, clueAllocate, id} = params
           this.addEditForm = {
             name,
-            logo,
+            logo, 
+            schoolName,
+            domainName,
+            smsSignature, 
+            companyName, 
+            linkTelephone, 
+            agreementUrl,
             logoNameUp,
             logoNameDown,
             logoNameRight,
             logoVideo,
             logoNameDown,
             logoNameRight,
+            commStatus, 
+            clueAllocate,
             id
           }
         }
@@ -341,49 +382,77 @@ export default{
     submitSchool(){
       this.$refs['addEditSchool'].validate(valid => {
         if(valid){
-          this.$smoke_post(addBranch, this.addEditForm).then(res => {
-            if(res.code == 200 && res.data){
-              this.$message({
-                type: 'success',
-                message: '添加成功'
-              })
-              this.addEditVisible = false
-            }
-          })
+          if(this.addEditType == 1){
+            this.$smoke_post(addBranch, this.addEditForm).then(res => {
+              if(res.code == 200 && res.data){
+                this.$message({
+                  type: 'success',
+                  message: '添加成功'
+                })
+                this.addEditVisible = false
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: res.msg
+                })
+              }
+            })
+          }else{
+            this.$smoke_post(updateBranch, this.addEditForm).then(res => {
+              if(res.code == 200 && res.data){
+                this.$message({
+                  type: 'success',
+                  message: '编辑成功'
+                })
+                this.addEditVisible = false
+              }else{
+                this.$message({
+                  type: 'error',
+                  message: res.msg
+                })
+              }
+            })
+          }
+          this.schoolList()
         }
       })
     }
   }
 }
 </script>
-<style>
+<style lang="less" scoped>
   .grey{
     color: #909399 !important;
   }
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .el-icon-plus:before{
-    line-height: 180px;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+  .avatar-uploader{
+    display: flex;
+    flex-direction: row;
+    /deep/.el-upload {
+      width: 178px;
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    /deep/.el-upload__tip{
+      color: #E65454;
+      line-height: 24px;
+      margin-top: 0;
+    }
+    .el-upload:hover {
+      border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
+      text-align: center;
+    }
+    .el-icon-plus:before{
+      line-height: 180px;
+    }
+  } 
 </style>
