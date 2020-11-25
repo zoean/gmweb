@@ -60,7 +60,7 @@
           <el-input v-model="addEditForm.name"></el-input>
         </el-form-item>
         <el-form-item v-if="addEditType == 2" label="分校简称" prop="schoolName">
-          <el-input v-model="addEditForm.schoolName" placeholder="英文简称"></el-input>
+          <el-input disabled v-model="addEditForm.schoolName" placeholder="英文简称"></el-input>
         </el-form-item>
         <el-form-item label="分校官网" prop="domainName">
           <el-input v-model="addEditForm.domainName"></el-input>
@@ -156,14 +156,14 @@
         </el-form-item>
         <el-form-item label="公共公海" prop="commStatus">
           <el-radio-group v-model="addEditForm.commStatus">
-            <el-radio label="使用"></el-radio>
-            <el-radio label="不使用"></el-radio>
+            <el-radio :label="1">使用</el-radio>
+            <el-radio :label="0">不使用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="数据分配" prop="clueAllocate">
           <el-radio-group v-model="addEditForm.clueAllocate">
-            <el-radio label="钉钉打卡"></el-radio>
-            <el-radio label="随时分配"></el-radio>
+            <el-radio :label="1">钉钉打卡</el-radio>
+            <el-radio :label="0">随时分配</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item>
@@ -210,14 +210,21 @@ export default{
       addEditTitle: '添加分校',
       addEditForm: {
         name: '',
-        logo: '',
+        logo: '', 
+        schoolName: '',
+        domainName: '',
+        smsSignature: '', 
+        companyName: '', 
+        linkTelephone: '', 
+        agreementUrl: '',
         logoNameUp: '',
         logoNameDown: '',
-        logoNameRight:'',
+        logoNameRight: '',
         logoVideo: '',
         logoNameDown: '',
         logoNameRight: '',
-        id: ''
+        commStatus: 1, 
+        clueAllocate: 0,
       },
       addEditRules: {
         name: [
@@ -249,14 +256,21 @@ export default{
     resetForm(){
       this.addEditForm = {
         name: '',
-        logo: '',
+        logo: '', 
+        schoolName: '',
+        domainName: '',
+        smsSignature: '', 
+        companyName: '', 
+        linkTelephone: '', 
+        agreementUrl: '',
         logoNameUp: '',
         logoNameDown: '',
-        logoNameRight:'',
+        logoNameRight: '',
         logoVideo: '',
         logoNameDown: '',
         logoNameRight: '',
-        id: ''
+        commStatus: 1, 
+        clueAllocate: 0,
       }
     },
     formatterFiled(row, column, cellValue){
@@ -433,7 +447,7 @@ export default{
       border-radius: 6px;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
+      margin-right: 10px;
     }
     /deep/.el-upload__tip{
       color: #E65454;
