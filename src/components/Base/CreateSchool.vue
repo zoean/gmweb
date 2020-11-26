@@ -304,6 +304,10 @@ export default{
       }
       this.$nextTick(()=>{
         this.$refs.addEditSchool.resetFields();
+        this.$refs['addEditSchool'].$el.scrollIntoView({
+          block: 'start',
+          behavior: 'smooth'
+        })
       })
     },
     formatterFiled(row, column, cellValue){
@@ -470,8 +474,8 @@ export default{
               block: 'start',
               behavior: 'smooth'
             })
+            return false
           }
-          return false
         }
       })
     }
@@ -481,6 +485,11 @@ export default{
 <style lang="less" scoped>
   .grey{
     color: #909399 !important;
+  }
+  /deep/.el-dialog{
+    .el-dialog__body{
+      padding: 0 20px;
+    }
   }
   .avatar-uploader{
     display: flex;
