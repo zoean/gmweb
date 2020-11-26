@@ -45,6 +45,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+    background
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
     :current-page="searchForm.currentPage"
@@ -255,7 +256,8 @@ export default{
         {required: true, message: '请输入公司主体', trigger: 'blur'}
         ]
       },
-      orgList: []
+      orgList: [],
+      hitOrg: []
     }
   },
   created(){
@@ -271,8 +273,10 @@ export default{
       })
     },   
     selectOrg(val){
-      this.addEditForm.orgFirst = val[val.length - 1]
-      this.$refs.elcascader.dropDownVisible = false;
+      if(val){
+        this.addEditForm.orgFirst = val[val.length - 1]
+        this.$refs.elcascader.dropDownVisible = false;
+      }
     },
     handleSizeChange(size){
       this.searchForm.pageSize = size
@@ -304,6 +308,8 @@ export default{
       }
       this.$nextTick(()=>{
         this.$refs.addEditSchool.resetFields();
+        this.$refs.elcascader.$refs.panel.clearCheckedNodes()
+        this.$refs.elcascader.$refs.panel.activePath = []
         this.$refs['addEditSchool'].$el.scrollIntoView({
           block: 'start',
           behavior: 'smooth'
@@ -329,6 +335,12 @@ export default{
           this.list = res.data.list         
           this.searchForm.total = res.data.total || 0  
           this.$emit('setTableHeight', res.data.total, 1)
+        }else{
+          this.list = []
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
         }
       })
     },  
@@ -351,11 +363,8 @@ export default{
       //   this.$message.error('图片尺寸需小于500*500')
       //   // return promise.reject()
       // })
-      if (!alowType) {
-        this.$message.error('请上传png格式的图片');
-      }
-      if (!isLt100k) {
-        this.$message.error('图片大小不能超过 100k');
+      if (!alowType || !isLt100k) {
+        this.$message.error('请上传小于100kb的png格式图片');
       }
       return alowType && isLt100k;
     },
@@ -390,6 +399,10 @@ export default{
         if(res.code == 200 && res.data){
           let params = res.data
           let {name, orgFirst, schoolName, domainName, smsSignature, companyName, linkTelephone, agreementUrl, logo, logoNameUp, logoNameDown, logoVideo, logoNameRight, commStatus, clueAllocate, id} = params
+          console.log(orgFirst)
+          // this.hitOrg = orgFirst
+          this.getCascaderObj(orgFirst, this.orgList)
+          
           this.addEditForm = {
             name,
             logo,
@@ -409,6 +422,23 @@ export default{
             commStatus, 
             clueAllocate,
             id
+          }
+        }
+      })
+    },
+    getCascaderObj(key, list){
+      this.hitOrg = []
+      list.map((item, index, arr)=>{
+        if(item.uuid == key){
+          this.hitOrg.push(item.uuid)
+          if(list[index].uuid){
+            this.hitOrg.push(list.uuid)
+          }
+          return true
+        }else{
+          if(item.includeSubsetList && item.includeSubsetList.length > 0){
+            this.getCascaderObj(key, item.includeSubsetList)
+            return true
           }
         }
       })
