@@ -5,7 +5,7 @@
         <el-input size="small" v-model="searchForm.name" placeholder="请输入分校名称"></el-input>
       </el-col>
       <el-col :span="3">
-        <el-select size="small" v-model="searchForm.active" placeholder="请选择状态">
+        <el-select clearable size="small" v-model="searchForm.active" placeholder="请选择状态">
           <el-option value="true" label="开启"></el-option>
           <el-option value="false" label="关闭"></el-option>
         </el-select>
@@ -56,19 +56,34 @@
   </el-pagination>
     <el-dialog class="beautiful-title" :title="addEditTitle" :visible.sync="addEditVisible" width="500px">
       <el-form :model="addEditForm" :rules="addEditRules" ref="addEditSchool">
-        <el-form-item label="分校名称" prop="name">
+        <el-form-item label="分校名称" prop="name" ref="name">
           <el-input v-model="addEditForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="上级部门" prop="orgFirst">
+          <el-cascader
+          ref="elcascader"
+          placeholder="请选择上级部门"
+          :options="orgList"
+          :props="{ 
+            checkStrictly: true,
+            label: 'name',
+            value: 'uuid',
+            children: 'includeSubsetList'
+          }"
+          clearable
+          v-model="addEditForm.orgFirst"
+          @change="selectOrg"></el-cascader>
         </el-form-item>
         <el-form-item v-if="addEditType == 2" label="分校简称" prop="schoolName">
           <el-input disabled v-model="addEditForm.schoolName" placeholder="英文简称"></el-input>
         </el-form-item>
-        <el-form-item label="分校官网" prop="domainName">
+        <el-form-item label="分校官网" prop="domainName" ref="domainName">
           <el-input v-model="addEditForm.domainName"></el-input>
         </el-form-item>
         <el-form-item label="短信签名" prop="smsSignature">
           <el-input v-model="addEditForm.smsSignature"></el-input>
         </el-form-item>
-        <el-form-item label="公司主体" prop="companyName">
+        <el-form-item label="公司主体" prop="companyName" ref="companyName">
           <el-input v-model="addEditForm.companyName" placeholder="请输入公司全称"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="linkTelephone">
@@ -98,7 +113,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 2)}"
             :before-upload="function (res,file) {return verifyUpload(res, 312, 312)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoNameUp" :src="addEditForm.logoNameUp" class="avatar">
+            <img v-if="addEditForm.logoNameUp" :src="addEditForm.logoNameUp" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：上LOGO图，下分校名称</p>
@@ -114,7 +129,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 3)}"
             :before-upload="function (res,file) {return verifyUpload(res, 390, 110)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoNameDown" :src="addEditForm.logoNameDown" class="avatar">
+            <img v-if="addEditForm.logoNameDown" :src="addEditForm.logoNameDown" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：左LOGO图，右分校名称，白矩形底</p>
@@ -130,7 +145,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 4)}"
             :before-upload="function (res,file) {return verifyUpload(res, 400, 160)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoVideo" :src="addEditForm.logoVideo" class="avatar">
+            <img v-if="addEditForm.logoVideo" :src="addEditForm.logoVideo" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：左LOGO图，右分校名称，乌云虚底</p>
@@ -146,7 +161,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 5)}"
             :before-upload="function (res,file) {return verifyUpload(res, 330, 90)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoNameRight" :src="addEditForm.logoNameRight" class="avatar">
+            <img v-if="addEditForm.logoNameRight" :src="addEditForm.logoNameRight" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：左LOGO图，右分校名称，黑矩形底</p>
@@ -175,7 +190,7 @@
   </el-main>
 </template>
 <script>
-import {addBranch, selectAllBranch, uploadFile, selectBranchByUuid, updateBranch, turnOnBranch} from '@/request/api'
+import {addBranch, selectAllBranch, uploadFile, selectBranchByUuid, updateBranch, turnOnBranch, getOrgSubsetByUuid} from '@/request/api'
 export default{
   name: 'createSchool',
   props: ['tableHeight'],
@@ -210,7 +225,8 @@ export default{
       addEditTitle: '添加分校',
       addEditForm: {
         name: '',
-        logo: '', 
+        logo: '',
+        orgFirst: '',
         schoolName: '',
         domainName: '',
         smsSignature: '', 
@@ -223,8 +239,8 @@ export default{
         logoVideo: '',
         logoNameDown: '',
         logoNameRight: '',
-        commStatus: 1, 
-        clueAllocate: 0,
+        commStatus: 0, 
+        clueAllocate: 1,
       },
       addEditRules: {
         name: [
@@ -238,13 +254,26 @@ export default{
         companyName:[
         {required: true, message: '请输入公司主体', trigger: 'blur'}
         ]
-      }
+      },
+      orgList: []
     }
   },
   created(){
     this.schoolList()
+    this.getOrgList()
   },
-  methods: {      
+  methods: {   
+    getOrgList(){
+      this.$smoke_post(getOrgSubsetByUuid, {uuid: ''}).then(res => {
+        if(res.code == 200 && res.data){
+          this.orgList = res.data
+        }
+      })
+    },   
+    selectOrg(val){
+      this.addEditForm.orgFirst = val[val.length - 1]
+      this.$refs.elcascader.dropDownVisible = false;
+    },
     handleSizeChange(size){
       this.searchForm.pageSize = size
       this.schoolList()
@@ -256,6 +285,7 @@ export default{
     resetForm(){
       this.addEditForm = {
         name: '',
+        orgFirst: '',
         logo: '', 
         schoolName: '',
         domainName: '',
@@ -269,9 +299,12 @@ export default{
         logoVideo: '',
         logoNameDown: '',
         logoNameRight: '',
-        commStatus: 1, 
-        clueAllocate: 0,
+        commStatus: 0, 
+        clueAllocate: 1,
       }
+      this.$nextTick(()=>{
+        this.$refs.addEditSchool.resetFields();
+      })
     },
     formatterFiled(row, column, cellValue){
       if(column.property == 'commStatus'){
@@ -297,30 +330,30 @@ export default{
     },  
     verifyUpload(file, width, height){
       const alowType = file.type === 'image/png';
-      const isLt100k = file.size / 100 < 1;
-      const isSize = new Promise(function(resolve, reject) {
-        let width = width,
-        height = height,
-        _URL = window.URL || window.webkitURL,
-        img = new Image()
-        img.onload = () => {
-          let valid = img.width <= width && img.height <= height
-          valid ? resolve() : reject()
-        }
-        img.src = _URL.createObjectURL(file)
-      }).then(() => {
-        return file
-      }, () => {
-        this.$message.error('图片尺寸需小于500*500')
-        // return promise.reject()
-      })
+      const isLt100k = file.size / 1000 / 100 < 1;
+      // const isSize = new Promise(function(resolve, reject) {
+      //   let width = width,
+      //   height = height,
+      //   _URL = window.URL || window.webkitURL,
+      //   img = new Image()
+      //   img.onload = () => {
+      //     let valid = img.width <= width && img.height <= height
+      //     valid ? resolve() : reject()
+      //   }
+      //   img.src = _URL.createObjectURL(file)
+      // }).then(() => {
+      //   return file
+      // }, () => {
+      //   this.$message.error('图片尺寸需小于500*500')
+      //   // return promise.reject()
+      // })
       if (!alowType) {
         this.$message.error('请上传png格式的图片');
       }
       if (!isLt100k) {
         this.$message.error('图片大小不能超过 100k');
       }
-      return alowType && isLt100k && isSize;
+      return alowType && isLt100k;
     },
     uploadSuccess(res, file, id){
       if(res.code == 0){
@@ -352,10 +385,11 @@ export default{
       this.$smoke_post(selectBranchByUuid, {id: row.id}).then(res => {
         if(res.code == 200 && res.data){
           let params = res.data
-          let {name, schoolName, domainName, smsSignature, companyName, linkTelephone, agreementUrl, logo, logoNameUp, logoNameDown, logoVideo, logoNameRight, commStatus, clueAllocate, id} = params
+          let {name, orgFirst, schoolName, domainName, smsSignature, companyName, linkTelephone, agreementUrl, logo, logoNameUp, logoNameDown, logoVideo, logoNameRight, commStatus, clueAllocate, id} = params
           this.addEditForm = {
             name,
-            logo, 
+            logo,
+            orgFirst,
             schoolName,
             domainName,
             smsSignature, 
@@ -394,7 +428,7 @@ export default{
 
     // },
     submitSchool(){
-      this.$refs['addEditSchool'].validate(valid => {
+      this.$refs['addEditSchool'].validate((valid, object) => {
         if(valid){
           if(this.addEditType == 1){
             this.$smoke_post(addBranch, this.addEditForm).then(res => {
@@ -404,6 +438,7 @@ export default{
                   message: '添加成功'
                 })
                 this.addEditVisible = false
+                this.schoolList()
               }else{
                 this.$message({
                   type: 'error',
@@ -419,6 +454,7 @@ export default{
                   message: '编辑成功'
                 })
                 this.addEditVisible = false
+                this.schoolList()
               }else{
                 this.$message({
                   type: 'error',
@@ -427,7 +463,15 @@ export default{
               }
             })
           }
-          this.schoolList()
+        }else{
+          for(let i in object){
+            let dom = this.$refs[i]
+            dom.$el.scrollIntoView({
+              block: 'start',
+              behavior: 'smooth'
+            })
+          }
+          return false
         }
       })
     }
@@ -469,4 +513,7 @@ export default{
       line-height: 180px;
     }
   } 
+  .el-cascader{
+    width: 332px;
+  }
 </style>
