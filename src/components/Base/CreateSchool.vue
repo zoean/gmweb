@@ -103,6 +103,14 @@
             :show-file-list="false">
             <img v-if="addEditForm.logo" :src="addEditForm.logo" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <div class="del-img">
+              <svg-icon
+                class=""
+                @click="editFieldHandle"
+                icon-title="删除图片"
+                icon-class="del"
+              />
+            </div>
             <div slot="tip" class="el-upload__tip">图片格式：png，100k以内，尺寸500*500</div>
           </el-upload>
         </el-form-item>
@@ -337,10 +345,6 @@ export default{
           this.$emit('setTableHeight', res.data.total, 1)
         }else{
           this.list = []
-          this.$message({
-            type: 'error',
-            message: res.msg
-          })
         }
       })
     },  
@@ -520,6 +524,14 @@ export default{
     .el-dialog__body{
       padding: 0 20px;
     }
+  }
+  .del-img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 178px;
+    height: 178px;
+    background: #000;
   }
   .avatar-uploader{
     display: flex;
