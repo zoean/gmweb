@@ -101,7 +101,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 1)}"
             :before-upload="function (res,file) {return verifyUpload(res, 500, 500)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logo" :src="addEditForm.logo" class="avatar" width="178">
+            <img v-if="addEditForm.logo" :src="addEditForm.logo" class="avatar" width="176">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片格式：png，100k以内，尺寸500*500</p>
@@ -123,7 +123,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 2)}"
             :before-upload="function (res,file) {return verifyUpload(res, 312, 312)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoNameUp" :src="addEditForm.logoNameUp" class="avatar" width="178">
+            <img v-if="addEditForm.logoNameUp" :src="addEditForm.logoNameUp" class="avatar" width="176">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：上LOGO图，下分校名称<br />图片格式：png，图片100K以内，尺寸312*312</p>
@@ -145,7 +145,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 3)}"
             :before-upload="function (res,file) {return verifyUpload(res, 390, 110)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoNameDown" :src="addEditForm.logoNameDown" class="avatar" width="178">
+            <img v-if="addEditForm.logoNameDown" :src="addEditForm.logoNameDown" class="avatar" width="176">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：左LOGO图，右分校名称，白矩形底<br />图片格式：png，图片100K以内，尺寸390*110</p>
@@ -167,7 +167,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 4)}"
             :before-upload="function (res,file) {return verifyUpload(res, 400, 160)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoVideo" :src="addEditForm.logoVideo" class="avatar" width="178">
+            <img v-if="addEditForm.logoVideo" :src="addEditForm.logoVideo" class="avatar" width="176">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：左LOGO图，右分校名称，乌云虚底<br />图片格式：png，图片100K以内，尺寸400*160</p>
@@ -189,7 +189,7 @@
             :on-success="function (res,file) {return uploadSuccess(res, file, 5)}"
             :before-upload="function (res,file) {return verifyUpload(res, 330, 90)}"
             :show-file-list="false">
-            <img v-if="addEditForm.logoNameRight" :src="addEditForm.logoNameRight" class="avatar" width="178">
+            <img v-if="addEditForm.logoNameRight" :src="addEditForm.logoNameRight" class="avatar" width="176">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
               <p>图片形式：左LOGO图，右分校名称，黑矩形底<br />图片格式：png，图片100K以内，330*90</p>
@@ -573,8 +573,10 @@ export default{
   .avatar-uploader{
     display: flex;
     flex-direction: row;
+    overflow: hidden;
     /deep/.el-upload {
       width: 178px;
+      height:178px;
       border: 1px dashed #d9d9d9;
       border-radius: 6px;
       cursor: pointer;
@@ -603,12 +605,8 @@ export default{
       font-size: 28px;
       color: #8c939d;
       width: 178px;
-      height: 178px;
-      line-height: 178px;
+      margin-top: 75px;
       text-align: center;
-    }
-    .el-icon-plus:before{
-      line-height: 180px;
     }
   } 
   .el-cascader{
