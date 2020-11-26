@@ -55,7 +55,7 @@
     :total="searchForm.total"
     style="text-align: right;">
   </el-pagination>
-    <el-dialog class="beautiful-title" :title="addEditTitle" :visible.sync="addEditVisible" width="500px">
+    <el-dialog class="beautiful-title" :title="addEditTitle" :visible.sync="addEditVisible" @close="addEditVisible = false" width="500px">
       <el-form :model="addEditForm" :rules="addEditRules" ref="addEditSchool">
         <el-form-item label="分校名称" prop="name" ref="name">
           <el-input v-model="addEditForm.name"></el-input>
@@ -103,7 +103,16 @@
             :show-file-list="false">
             <img v-if="addEditForm.logo" :src="addEditForm.logo" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">图片格式：png，100k以内，尺寸500*500</div>
+            <div slot="tip" class="el-upload__tip">
+              <p>图片格式：png，100k以内，尺寸500*500</p>
+              <p class="del-img" v-if="addEditForm.logo">
+                <svg-icon
+                  @click="delImg(1)"
+                  icon-title="删除logo"
+                  icon-class="del"
+                />
+              </p>
+            </div>
           </el-upload>
         </el-form-item>
         <el-form-item label="上图下文LOGO">
@@ -117,8 +126,14 @@
             <img v-if="addEditForm.logoNameUp" :src="addEditForm.logoNameUp" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
-              <p>图片形式：上LOGO图，下分校名称</p>
-              <p>图片格式：png，图片100K以内，尺寸312*312</p>
+              <p>图片形式：上LOGO图，下分校名称<br />图片格式：png，图片100K以内，尺寸312*312</p>
+              <p class="del-img" v-if="addEditForm.logoNameUp">
+                <svg-icon
+                  @click="delImg(2)"
+                  icon-title="删除logo"
+                  icon-class="del"
+                />
+              </p>
             </div>
           </el-upload>
         </el-form-item>
@@ -133,8 +148,14 @@
             <img v-if="addEditForm.logoNameDown" :src="addEditForm.logoNameDown" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
-              <p>图片形式：左LOGO图，右分校名称，白矩形底</p>
-              <p>图片格式：png，图片100K以内，尺寸390*110</p>
+              <p>图片形式：左LOGO图，右分校名称，白矩形底<br />图片格式：png，图片100K以内，尺寸390*110</p>
+              <p class="del-img" v-if="addEditForm.logoNameDown">
+                <svg-icon
+                  @click="delImg(3)"
+                  icon-title="删除logo"
+                  icon-class="del"
+                />
+              </p>
             </div>
           </el-upload>
         </el-form-item>
@@ -149,8 +170,14 @@
             <img v-if="addEditForm.logoVideo" :src="addEditForm.logoVideo" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
-              <p>图片形式：左LOGO图，右分校名称，乌云虚底</p>
-              <p>图片格式：png，图片100K以内，尺寸400*160</p>
+              <p>图片形式：左LOGO图，右分校名称，乌云虚底<br />图片格式：png，图片100K以内，尺寸400*160</p>
+              <p class="del-img" v-if="addEditForm.logoVideo">
+                <svg-icon
+                  @click="delImg(4)"
+                  icon-title="删除logo"
+                  icon-class="del"
+                />
+              </p>
             </div>
           </el-upload>
         </el-form-item>
@@ -165,8 +192,14 @@
             <img v-if="addEditForm.logoNameRight" :src="addEditForm.logoNameRight" class="avatar" width="178">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             <div slot="tip" class="el-upload__tip">
-              <p>图片形式：左LOGO图，右分校名称，黑矩形底</p>
-              <p>图片格式：png，图片100K以内，330*90</p>
+              <p>图片形式：左LOGO图，右分校名称，黑矩形底<br />图片格式：png，图片100K以内，330*90</p>
+              <p class="del-img" v-if="addEditForm.logoNameRight">
+                <svg-icon
+                  @click="delImg(5)"
+                  icon-title="删除logo"
+                  icon-class="del"
+                />
+              </p>
             </div>
           </el-upload>
         </el-form-item>
@@ -257,14 +290,28 @@ export default{
         ]
       },
       orgList: [],
-      hitOrg: []
+      hitOrg: [],
+      showDelImg: false
     }
   },
   created(){
     this.schoolList()
     this.getOrgList()
   },
-  methods: {   
+  methods: {  
+    delImg(id){
+      if(id == 1){
+        this.addEditForm.logo = ''
+      }else if(id == 2){
+        this.addEditForm.logoNameUp = ''
+      }else if(id == 3){
+        this.addEditForm.logoNameDown = ''
+      }else if(id == 4){
+        this.addEditForm.logoVideo = ''
+      }else if(id == 5){
+        this.addEditForm.logoNameRight = ''
+      }
+    }, 
     getOrgList(){
       this.$smoke_post(getOrgSubsetByUuid, {uuid: ''}).then(res => {
         if(res.code == 200 && res.data){
@@ -337,10 +384,6 @@ export default{
           this.$emit('setTableHeight', res.data.total, 1)
         }else{
           this.list = []
-          this.$message({
-            type: 'error',
-            message: res.msg
-          })
         }
       })
     },  
@@ -399,7 +442,6 @@ export default{
         if(res.code == 200 && res.data){
           let params = res.data
           let {name, orgFirst, schoolName, domainName, smsSignature, companyName, linkTelephone, agreementUrl, logo, logoNameUp, logoNameDown, logoVideo, logoNameRight, commStatus, clueAllocate, id} = params
-          console.log(orgFirst)
           // this.hitOrg = orgFirst
           this.getCascaderObj(orgFirst, this.orgList)
           
@@ -521,6 +563,14 @@ export default{
       padding: 0 20px;
     }
   }
+  
+  .del-img{
+    .svg-icon{
+      width: 20px;
+      height: 20px;
+    }
+  }
+
   .avatar-uploader{
     display: flex;
     flex-direction: row;
@@ -536,6 +586,16 @@ export default{
       color: #E65454;
       line-height: 24px;
       margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0 0 20px;
+      .del-img{
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        color: #999;
+      }
     }
     .el-upload:hover {
       border-color: #409EFF;
