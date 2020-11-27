@@ -447,7 +447,7 @@ export default{
           
           this.addEditForm = {
             name,
-            logo: `${process.env.VUE_APP_FILE_JHWX}/${logo}`,
+            logo: logo ? `${process.env.VUE_APP_FILE_JHWX}/${logo}` : '',
             orgFirst,
             schoolName,
             domainName,
@@ -455,10 +455,10 @@ export default{
             companyName, 
             linkTelephone, 
             agreementUrl,
-            logoNameUp: `${process.env.VUE_APP_FILE_JHWX}/${logoNameUp}`,
-            logoVideo: `${process.env.VUE_APP_FILE_JHWX}/${logoVideo}`,
-            logoNameDown: `${process.env.VUE_APP_FILE_JHWX}/${logoNameDown}`,
-            logoNameRight: `${process.env.VUE_APP_FILE_JHWX}/${logoNameRight}`,
+            logoNameUp: logoNameUp ? `${process.env.VUE_APP_FILE_JHWX}/${logoNameUp}` : '',
+            logoVideo: logoVideo ? `${process.env.VUE_APP_FILE_JHWX}/${logoVideo}` : '',
+            logoNameDown: logoNameDown? `${process.env.VUE_APP_FILE_JHWX}/${logoNameDown}` : '',
+            logoNameRight: logoNameRight? `${process.env.VUE_APP_FILE_JHWX}/${logoNameRight}` : '',
             commStatus, 
             clueAllocate,
             id
