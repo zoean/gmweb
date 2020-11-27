@@ -244,7 +244,7 @@
                 fit="fit"
               ></el-image>
             </div>
-            <el-select
+            <!--<el-select
               v-model="schoolId"
               placeholder="选择分校"
               style="width: 110px; margin-left: 20px"
@@ -258,7 +258,7 @@
                 :value="item.schoolId"
               >
               </el-option>
-            </el-select>
+            </el-select>-->
           </el-col>
           <el-col :span="19">
             <el-menu
@@ -366,7 +366,7 @@
             cursor: pointer;
           "
           @click="editionClick"
-          >v 1.1.40</span
+          >v 1.2.0</span
         >
         <a
           class="guide"
