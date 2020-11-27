@@ -239,7 +239,7 @@
         prop="clueConSign"
         label="标记"
         fixed="left"
-        width="80"
+        width="70"
         class-name="table_active"
       >
         <template slot-scope="scope">
@@ -281,7 +281,6 @@
         </template>
         <template slot-scope="scope">
           <span>{{ scope.row[item.props] }}</span>
-
           <Copy
             style="display: inline-block; width: auto"
             @mouseenter.native="phoneCopy(scope.row, 'enter')"
@@ -382,8 +381,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="school">
-          <el-select
+        <el-form-item prop="school"
+          ><el-select
             placeholder="请选择分校"
             :value="addCludeForm.school"
             :disabled="disabledSchool"
@@ -447,7 +446,7 @@ import {
 } from "../../request/api";
 import PageFieldManage from "@/components/Base/PageFieldManage";
 import Start from "../../components/Share/Start";
-import { receiveTimeFun, copyData } from "../../assets/js/common";
+import { receiveTimeFun } from "../../assets/js/common";
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from "../../assets/js/data";
 import CustomerNotes from "../Share/CustomerNotes";
 import Copy from "copy-util";
@@ -484,7 +483,7 @@ export default {
         selectTime: "", //未联间隔
         ruleNumberName: "", //分配组组名
         num: "",
-        sortSet: [],
+        sortSet: [{'relCreateTime': 'DESC'}],
         dataType: "", //数据类型（1：首咨 2：回收池）
         receiveStartTime: "", //领取时间的查询开始时间（13位）
         receiveEndTime: "", //领取时间的查询结束时间（13位）

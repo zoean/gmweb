@@ -1,6 +1,14 @@
 <template>
   <el-main class="index-main" id="indexMain">
-    <el-row class="people-screen">
+    <el-row :class="[
+        'people-screen',
+        {
+          actionHide: toggleAction,
+          actionShow: !toggleAction,
+          noSearch: hideSearch,
+        },
+      ]"
+      id="searchArea">
       <el-col :span="3">
         <el-cascader
           size="small"
@@ -90,8 +98,18 @@
           class="screen-li"
         ></el-input>
       </el-col>
-
+    </el-row>
+    <el-row class="people-screen handle-area">
       <el-col :span="3">
+        <el-input
+          v-model.trim="screenForm.jobNum"
+          size="small"
+          placeholder="请输入员工工号"
+          class="screen-li"
+          clearable
+        ></el-input>
+      </el-col>
+      <el-col :span="21">
         <el-button type="primary" @click="smoke_search" size="small"
           >查 询</el-button
         >
@@ -120,9 +138,7 @@
         v-for="(item, index) in columnList"
         :min-width="item.width"
         :sortable="
-          item.prop == 'jobNumber'
-            ? 'custom'
-            : item.prop == 'name'
+          item.prop == 'name'
             ? 'custom'
             : item.prop == 'hiredDate'
             ? 'custom'
@@ -197,7 +213,7 @@ import {
 import { add } from "lodash/fp";
 export default {
   name: "people",
-  props: ["tableHeight"],
+  props: ['tableHeight','toggleAction', 'hideSearch'],
   data() {
     return {
       userList: [],
@@ -206,9 +222,10 @@ export default {
         { prop: "name", label: "姓名" },
         { prop: "accountNumber", label: "手机号" },
         { prop: "jobStatus", label: "状态" },
+        { prop: "schoolList", label: "分校", width: 180 },
         { prop: "orgUuidList", label: "部门", width: 180 },
         { prop: "roleUuidList", label: "角色", width: 180 },
-        { prop: "hiredDate", label: "入职时间" },
+        { prop: "hiredDate", label: "入职时间", width: 120 },
       ],
       total: null, //总条目数
       totalFlag: false, //当只有一页时隐藏分页
@@ -230,11 +247,12 @@ export default {
         accountNumber: "", //账号（手机号）
         currentPage: 1, //当前页
         jobStatus: 1, // 状态选择value
+        jobNum: "",
         name: "", //姓名
         orgUuidList: [], //组织唯一标识集合
         pageSize: 20, //单页请求的数量
         roleUuid: "", //角色唯一标识
-        sortSet: [], //排序集合
+        sortSet: [{ hiredDate: "DESC" }], //排序集合
         startHiredDate: "",
         endHiredDate: "",
       },
@@ -389,6 +407,7 @@ export default {
             // 用户列表
             res.data.list.map((data) => {
               data.orgUuidList = getTextByJs(data.orgUuidList);
+              data.schoolList = getTextByJs(data.schoolList,'schoolName');
               data.roleUuidList = getTextByJs(data.roleUuidList);
               data.jobStatus = getTextByState(data.jobStatus);
               data.hiredDate = data.hiredDate.split(" ")[0];
@@ -449,9 +468,6 @@ export default {
 
 <style lang="less" scoped>
 .index-main {
-  margin-top: 24px;
-  position: relative;
-  overflow: hidden;
   #toggleSearch {
     position: absolute;
     top: -10px;

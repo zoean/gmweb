@@ -4,6 +4,22 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.2.0 -- 2020/11/26" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增创建分校</p>
+        </el-card>
+      </el-timeline-item>
+      <el-timeline-item timestamp="v 1.1.41 -- 2020/11/20" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、员工管理页面按入职时间倒序</p>
+          <p>2、全部客户页面按领取时间倒序</p>
+          <p>3、三日未联按最近一次联系时间正序</p>
+          <p>4、坐席数据管理页面按领取时间倒序</p>
+          <p>5、员工管理页面增加员工工号筛选项及分校字段</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.1.40 -- 2020/11/19" placement="top">
         <el-card>
           <h4>新增功能</h4>

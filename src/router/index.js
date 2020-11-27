@@ -16,6 +16,7 @@ import peopledataPermiss from '@/components/Base/PeopleDataPermiss';
 import role from '@/components/Base/Role';
 import zuzhi from '@/components/Base/Zuzhi';
 import userRecord from '@/components/Base/UserRecord';
+import createSchool from '@/components/Base/CreateSchool'
 
 import timeData from '@/components/Crm/TimeData';
 import everyTime from '@/components/Crm/EveryTime';
@@ -197,6 +198,15 @@ export default new Router({
             component: userRecord,
             meta: {
                 title: '用户操作记录'
+            }
+        },
+
+        {
+            path: '/base/createSchool',
+            name: 'createSchool',
+            component: createSchool,
+            meta: {
+                title: '创建分校'
             }
         },
 
