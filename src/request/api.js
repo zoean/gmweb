@@ -154,6 +154,7 @@ export const consumerCallDataList = '/api/phone/clueData/consumerCallDataList'; 
 export const getClueDataNumber = '/api/phone/clueData/getClueDataNumber'; //获取坐席的线索数量情况    
 export const copyTel = '/api/phone/clueData/copyTel'; //复制手机号码    
 export const entryClueData = '/api/phone/clueData/entryClueData'; //手动录入线索数据  
+export const wiringEntryClueData = '/api/phone/clueData/wiringEntryClueData';//接线录入线索数据
 export const jqEntryClueData = '/jhservice/AddUser' //JQ系统客户入库
 export const bulkImportClueData = '/api/phone/clueData/bulkImportClueData'; //批量导入线索数据    
 export const getOrderCustomer = '/api/phone/clueData/getOrderCustomer'; //获取坐席的成单用户
