@@ -4,6 +4,12 @@
     </el-page-header>
 
     <el-timeline>
+      <el-timeline-item timestamp="v 1.2.1 -- 2020/11/30" placement="top">
+        <el-card>
+          <h4>新增功能</h4>
+          <p>1、新增接线录入功能</p>
+        </el-card>
+      </el-timeline-item>
       <el-timeline-item timestamp="v 1.2.0 -- 2020/11/26" placement="top">
         <el-card>
           <h4>新增功能</h4>
