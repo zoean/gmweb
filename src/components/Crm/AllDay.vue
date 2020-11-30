@@ -365,7 +365,7 @@
             <el-form-item prop="tel">
               <el-input
                 type="tel"
-                v-model="addCludeForm.tel"
+                v-model.trim="addCludeForm.tel"
                 placeholder="请输入手机号"
               ></el-input>
             </el-form-item>
@@ -404,7 +404,7 @@
         <el-tab-pane label="接线录入" name="second">
           <el-form ref="wiringEntryForm" :model="wiringEntryForm" :rule="wiringEntryRule">
             <el-form-item prop="tel">
-              <el-input type="tel" v-model="wiringEntryForm.tel" placeholder="请输入手机号"></el-input>
+              <el-input type="tel" v-model.trim="wiringEntryForm.tel" placeholder="请输入手机号"></el-input>
             </el-form-item>
             <el-form-item>
               <el-input v-model="wiringEntryForm.url" placeholder="请输入推广链接"></el-input>
@@ -683,28 +683,31 @@ export default {
             if(!this.telReg.test(this.wiringEntryForm.tel)) {
               this.$message.error('请输入正确的手机号')
             }else{
-              let obj = urlFun(this.wiringEntryForm.url)
-              let {acc, ruleid, project, jobnum, spread} = obj
-              this.wiringEntryForm.acc = acc ? acc : ''
-              this.wiringEntryForm.clueRuleNumber = ruleid ? ruleid : ''
-              this.wiringEntryForm.examItemId = project ? project : ''
-              this.wiringEntryForm.jobNum = jobnum ? jobnum : ''
-              this.wiringEntryForm.spread = spread ? spread : ''
-              this.$smoke_post(wiringEntryClueData, this.wiringEntryForm).then(res => {
-                if (res.code == 200) {
-                  this.$message({
-                    type: "success",
-                    message: "线索添加成功",
-                  });
-                  this.addCludeVisible = false;
-                  this.getClueDataAll();
-                } else {
-                  this.$message({
-                    type: "error",
-                    message: res.msg,
-                  });
-                }
-              })
+              let obj = urlFun(this.wiringEntryForm.url
+              if(obj){
+                let {acc, ruleid, project, jobnum, spread} = obj
+                this.wiringEntryForm.acc = acc ? acc : ''
+                this.wiringEntryForm.clueRuleNumber = ruleid ? ruleid : ''
+                this.wiringEntryForm.examItemId = project ? project : ''
+                this.wiringEntryForm.jobNum = jobnum ? jobnum : ''
+                this.wiringEntryForm.spread = spread ? spread : ''
+                this.$smoke_post(wiringEntryClueData, this.wiringEntryForm).then(res => {
+                  if (res.code == 200) {
+                    this.$message({
+                      type: "success",
+                      message: "线索添加成功",
+                    });
+                    this.addCludeVisible = false;
+                    this.getClueDataAll();
+                  } else {
+                    this.$message({
+                      type: "error",
+                      message: res.msg,
+                    });
+                  }
+                })
+              }
+              
             }
           }else{
             return false
