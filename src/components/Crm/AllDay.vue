@@ -625,12 +625,19 @@ export default {
       });
     },
     addClude() {
-      this.addCludeVisible = true;
-      this.resetAddCludeForm();
-      if (this.subSchoolList.length > 0) {
-        this.addCludeForm.school = this.subSchoolList[0].id;
-      } else {
-        this.disabledSchool = true;
+      if(!this.fullLib){
+        this.addCludeVisible = true;
+        this.resetAddCludeForm();
+        if (this.subSchoolList.length > 0) {
+          this.addCludeForm.school = this.subSchoolList[0].id;
+        } else {
+          this.disabledSchool = true;
+        }
+      }else{
+        this.$message({
+          type: 'error',
+          message: '库满了，请先释放数据~'
+        })
       }
     },
     resetAddCludeForm() {
@@ -683,7 +690,7 @@ export default {
             if(!this.telReg.test(this.wiringEntryForm.tel)) {
               this.$message.error('请输入正确的手机号')
             }else{
-              let obj = urlFun(this.wiringEntryForm.url
+              let obj = urlFun(this.wiringEntryForm.url)
               if(obj){
                 let {acc, ruleid, project, jobnum, spread} = obj
                 this.wiringEntryForm.acc = acc ? acc : ''
@@ -714,7 +721,6 @@ export default {
           }
         })
       }
-      
     },
     clueConSignChange(row) {
       this.clueContactSign(row.clueConSign, row.userCDARUuid);
