@@ -683,7 +683,7 @@ export default {
             if(!this.telReg.test(this.wiringEntryForm.tel)) {
               this.$message.error('请输入正确的手机号')
             }else{
-              let obj = urlFun(this.wiringEntryForm.url
+              let obj = urlFun(this.wiringEntryForm.url)
               if(obj){
                 let {acc, ruleid, project, jobnum, spread} = obj
                 this.wiringEntryForm.acc = acc ? acc : ''
@@ -707,7 +707,6 @@ export default {
                   }
                 })
               }
-              
             }
           }else{
             return false
