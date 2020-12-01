@@ -234,7 +234,7 @@ export default {
         // hangupSide: '', //挂机方 1：座席侧 2：客户侧
         insertTimeStartTime: "", //电话开始呼叫开始时间；时间戳10位
         insertTimeEndTime: "", //电话开始呼叫结束时间；时间戳10位
-        isCalledPhone: "", //是否接通 1:接通 0、2、其他:未接通
+        isCalledPhone: 1, //是否接通 1:接通 0、2、其他:未接通
         pageSize: 20, //每页显示条目个数
         pathway: "", //呼叫途径 1：呼叫中心 2：工作手机
         // seatId: '', //坐席工号
