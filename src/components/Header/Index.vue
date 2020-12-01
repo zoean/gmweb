@@ -366,7 +366,7 @@
             cursor: pointer;
           "
           @click="editionClick"
-          >v 1.2.0</span
+          >v 1.2.1</span
         >
         <a
           class="guide"

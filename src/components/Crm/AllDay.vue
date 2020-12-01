@@ -359,45 +359,59 @@
       title="添加线索"
       @close="addCludeVisible = false"
     >
-      <el-form ref="addCludeForm" :model="addCludeForm" :rule="addCludeRule">
-        <el-form-item prop="tel">
-          <el-input
-            type="tel"
-            v-model="addCludeForm.tel"
-            placeholder="请输入手机号"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="examItem">
-          <el-select
-            placeholder="请选择考试项目"
-            filterable
-            v-model="addCludeForm.examItem"
-          >
-            <el-option
-              v-for="item in examItemList"
-              :key="item.uuid"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="school"
-          ><el-select
-            placeholder="请选择分校"
-            :value="addCludeForm.school"
-            :disabled="disabledSchool"
-            filterable
-            v-model="addCludeForm.school"
-          >
-            <el-option
-              v-for="item in subSchoolList"
-              :key="item.uuid"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="转介绍" name="first">
+          <el-form ref="addCludeForm" :model="addCludeForm" :rule="addCludeRule">
+            <el-form-item prop="tel">
+              <el-input
+                type="tel"
+                v-model.trim="addCludeForm.tel"
+                placeholder="请输入手机号"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="examItem">
+              <el-select
+                placeholder="请选择考试项目"
+                filterable
+                v-model="addCludeForm.examItem"
+              >
+                <el-option
+                  v-for="item in examItemList"
+                  :key="item.uuid"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item prop="school"
+              ><el-select
+                placeholder="请选择分校"
+                :value="addCludeForm.school"
+                :disabled="disabledSchool"
+                filterable
+                v-model="addCludeForm.school"
+              >
+                <el-option
+                  v-for="item in subSchoolList"
+                  :key="item.uuid"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="接线录入" name="second">
+          <el-form ref="wiringEntryForm" :model="wiringEntryForm" :rule="wiringEntryRule">
+            <el-form-item prop="tel">
+              <el-input type="tel" v-model.trim="wiringEntryForm.tel" placeholder="请输入手机号"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="wiringEntryForm.url" placeholder="请输入推广链接"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addCludeVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitAddClude">确 定</el-button>
@@ -443,10 +457,11 @@ import {
   getExamBasic,
   getAuthoritySchoolList,
   saleAddClueData,
+  wiringEntryClueData
 } from "../../request/api";
 import PageFieldManage from "@/components/Base/PageFieldManage";
 import Start from "../../components/Share/Start";
-import { receiveTimeFun } from "../../assets/js/common";
+import { receiveTimeFun, urlFun } from "../../assets/js/common";
 import { MJ_1, MJ_2, MJ_16, MJ_5 } from "../../assets/js/data";
 import CustomerNotes from "../Share/CustomerNotes";
 import Copy from "copy-util";
@@ -467,6 +482,7 @@ export default {
   // },
   data() {
     return {
+      activeName: 'first',
       fieldNum: [],
       form: {
         currentPage: 1,
@@ -509,7 +525,6 @@ export default {
       list: [],
       columnList: [{ label: "" }],
       initOptions: {},
-
       followFlag: false,
       drawer: false,
       clueDataSUuid: "",
@@ -520,7 +535,6 @@ export default {
       examItem: "",
       userCDARUuid: "",
       scopeRow: {},
-
       enumList: {},
       fullscreenLoading: false,
       clueDataNumberList: [],
@@ -557,6 +571,23 @@ export default {
       },
       disabledSchool: false,
       copyCallbackPhone: "",
+      wiringEntryForm: {
+        tel: '',
+        acc: '',
+        clueRuleNumber: '',
+        examItemId: '',
+        jobNum: '',
+        spread: '',
+        url: ''
+      },
+      wiringEntryRule: {
+        tel: [{
+          require: true, message: "请输入手机号", trigger: "blur" 
+        }],
+        url: [{
+          require: true, message: "请输入推广链接", trigger: "blur"
+        }]
+      }
     };
   },
   created() {
@@ -594,12 +625,19 @@ export default {
       });
     },
     addClude() {
-      this.addCludeVisible = true;
-      this.resetAddCludeForm();
-      if (this.subSchoolList.length > 0) {
-        this.addCludeForm.school = this.subSchoolList[0].id;
-      } else {
-        this.disabledSchool = true;
+      if(!this.fullLib){
+        this.addCludeVisible = true;
+        this.resetAddCludeForm();
+        if (this.subSchoolList.length > 0) {
+          this.addCludeForm.school = this.subSchoolList[0].id;
+        } else {
+          this.disabledSchool = true;
+        }
+      }else{
+        this.$message({
+          type: 'error',
+          message: '库满了，请先释放数据~'
+        })
       }
     },
     resetAddCludeForm() {
@@ -607,34 +645,82 @@ export default {
         tel: "",
         school: "",
         examItem: null,
-      };
+      }
+      this.wiringEntryForm = {
+        tel: '',
+        acc: '',
+        clueRuleNumber: '',
+        examItemId: '',
+        jobNum: '',
+        spread: '',
+        url: ''
+      }
+      this.activeName = 'first'
     },
     submitAddClude() {
-      this.$refs["addCludeForm"].validate((valid) => {
-        if (valid) {
-          if (!this.telReg.test(this.addCludeForm.tel)) {
-            this.$message.error("请输入正确的手机号");
+      if(this.activeName == 'first'){
+        this.$refs["addCludeForm"].validate((valid) => {
+          if (valid) {
+            if (!this.telReg.test(this.addCludeForm.tel)) {
+              this.$message.error("请输入正确的手机号");
+            } else {
+              this.$smoke_post(saleAddClueData, this.addCludeForm).then((res) => {
+                if (res.code == 200) {
+                  this.$message({
+                    type: "success",
+                    message: "线索添加成功",
+                  });
+                  this.addCludeVisible = false;
+                  this.getClueDataAll();
+                } else {
+                  this.$message({
+                    type: "error",
+                    message: res.msg,
+                  });
+                }
+              });
+            }
           } else {
-            this.$smoke_post(saleAddClueData, this.addCludeForm).then((res) => {
-              if (res.code == 200) {
-                this.$message({
-                  type: "success",
-                  message: "线索添加成功",
-                });
-                this.addCludeVisible = false;
-                this.getClueDataAll();
-              } else {
-                this.$message({
-                  type: "error",
-                  message: res.msg,
-                });
-              }
-            });
+            return false;
           }
-        } else {
-          return false;
-        }
-      });
+        });
+      }else if(this.activeName == 'second'){
+        this.$refs['wiringEntryForm'].validate((valid) => {
+          if(valid){
+            if(!this.telReg.test(this.wiringEntryForm.tel)) {
+              this.$message.error('请输入正确的手机号')
+            }else{
+              let obj = urlFun(this.wiringEntryForm.url)
+              if(obj){
+                let {acc, ruleid, project, jobnum, spread} = obj
+                this.wiringEntryForm.acc = acc ? acc : ''
+                this.wiringEntryForm.clueRuleNumber = ruleid ? ruleid : ''
+                this.wiringEntryForm.examItemId = project ? project : ''
+                this.wiringEntryForm.jobNum = jobnum ? jobnum : ''
+                this.wiringEntryForm.spread = spread ? spread : ''
+                this.$smoke_post(wiringEntryClueData, this.wiringEntryForm).then(res => {
+                  if (res.code == 200) {
+                    this.$message({
+                      type: "success",
+                      message: "线索添加成功",
+                    });
+                    this.addCludeVisible = false;
+                    this.getClueDataAll();
+                  } else {
+                    this.$message({
+                      type: "error",
+                      message: res.msg,
+                    });
+                  }
+                })
+              }
+              
+            }
+          }else{
+            return false
+          }
+        })
+      }
     },
     clueConSignChange(row) {
       this.clueContactSign(row.clueConSign, row.userCDARUuid);
