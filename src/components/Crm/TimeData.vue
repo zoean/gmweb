@@ -71,7 +71,8 @@ export default {
                 orgUuidList: [],
                 time: 0
             },
-            columnList: columnListNo,
+            // columnList: columnListNo,
+            columnList: columnListYes,
             tableData: [],
             timeDate: '',
             fullscreenLoading: false,
@@ -121,7 +122,6 @@ export default {
                                 })
                             })
                             this.tableData = res.data;
-                            this.columnList = columnListYes;
                             this.$emit('setTableHeight', this.tableData.length)
                         }, 300);
                     }else{
