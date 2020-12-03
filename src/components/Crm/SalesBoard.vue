@@ -350,7 +350,7 @@
 <script>
 import { dayWork, todayWork, saleAims, workDetail } from "../../request/api";
 import {} from "../../assets/js/data";
-import { timeReturn } from "../../assets/js/common";
+import { timeReturn, dateNumText } from "../../assets/js/common";
 export default {
   name: "salesBoard",
   data() {
@@ -412,34 +412,25 @@ export default {
             },
           },
           {
-            text: "昨天",
+            text: '本周',
             onClick(picker) {
               const end = new Date(new Date().toLocaleDateString()).getTime();
-              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24;
+              let str = "日一二三四五六".charAt(new Date().getDay());
+              const num = dateNumText(str);
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * num;
               picker.$emit("pick", [start, end]);
             },
           },
           {
-            text: "前天",
+            text: "本月",
             onClick(picker) {
+              let start = new Date();
+              start.setDate(1);
+              start.setHours(0);
+              start.setSeconds(0);
+              start.setMinutes(0);
+              start = start.getTime();
               const end = new Date(new Date().toLocaleDateString()).getTime();
-              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 2;
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "2天前",
-            onClick(picker) {
-              const end = new Date(new Date().toLocaleDateString()).getTime();
-              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 3;
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "3天前",
-            onClick(picker) {
-              const end = new Date(new Date().toLocaleDateString()).getTime();
-              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 4;
               picker.$emit("pick", [start, end]);
             },
           },
