@@ -143,6 +143,34 @@ export const genderText = (id) => {
     return str;
 }
 
+export const dateNumText = (text) => {
+    let id;
+    switch (text) {
+        case '日':
+            id = 6;
+            break;
+        case '一':
+            id = 0;
+            break;
+        case '二':
+            id = 1;
+            break;
+        case '三':
+            id = 2;
+            break;
+        case '四':
+            id = 3;
+            break;
+        case '五':
+            id = 4;
+            break;
+        case '六':
+            id = 5;
+            break;
+    }
+    return id;
+}
+
 export const educationText = (id) => {
     let str;
     switch (id) {
