@@ -406,51 +406,41 @@ export default {
           {
             text: "今天",
             onClick(picker) {
-              const date = new Date(
-                new Date(new Date().toLocaleDateString()).getTime()
-              );
-              date.setTime(date.getTime());
-              picker.$emit("pick", date);
+              const end = new Date(new Date().toLocaleDateString()).getTime();
+              const start = new Date(new Date().toLocaleDateString()).getTime();
+              picker.$emit("pick", [start, end]);
             },
           },
           {
             text: "昨天",
             onClick(picker) {
-              const date = new Date(
-                new Date(new Date().toLocaleDateString()).getTime()
-              );
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit("pick", date);
+              const end = new Date(new Date().toLocaleDateString()).getTime();
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24;
+              picker.$emit("pick", [start, end]);
             },
           },
           {
             text: "前天",
             onClick(picker) {
-              const date = new Date(
-                new Date(new Date().toLocaleDateString()).getTime()
-              );
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 2);
-              picker.$emit("pick", date);
+              const end = new Date(new Date().toLocaleDateString()).getTime();
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 2;
+              picker.$emit("pick", [start, end]);
             },
           },
           {
             text: "2天前",
             onClick(picker) {
-              const date = new Date(
-                new Date(new Date().toLocaleDateString()).getTime()
-              );
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 3);
-              picker.$emit("pick", date);
+              const end = new Date(new Date().toLocaleDateString()).getTime();
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 3;
+              picker.$emit("pick", [start, end]);
             },
           },
           {
             text: "3天前",
             onClick(picker) {
-              const date = new Date(
-                new Date(new Date().toLocaleDateString()).getTime()
-              );
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 4);
-              picker.$emit("pick", date);
+              const end = new Date(new Date().toLocaleDateString()).getTime();
+              const start = new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 4;
+              picker.$emit("pick", [start, end]);
             },
           },
         ],
@@ -591,13 +581,14 @@ export default {
       });
     },
     timeChange() {
-      this.form.time = this.timeDate;
+      this.form.startTime = this.timeDate[0];
+      this.form.endTime = this.timeDate[1];
     },
     timeChangeWork() {
       this.workForm.time = this.timeDateWork;
     },
     salesBoardClick() {
-      if (this.form.time) {
+      if (this.form.startTime && this.form.endTime) {
         this.dayWork();
       } else {
         this.$message({
