@@ -304,6 +304,7 @@ export default{
   created(){
     this.schoolList()
     this.getOrgList()
+    this.verifyEditUrl('www.baidu.com')
   },
   methods: {  
     delImg(id){
@@ -484,14 +485,24 @@ export default{
             id
           }
           this.logoView = {
-            logo: logo ? `${process.env.VUE_APP_FILE_JHWX}/${logo}` : '',
-            logoNameUp: logoNameUp ? `${process.env.VUE_APP_FILE_JHWX}/${logoNameUp}` : '',
-            logoVideo: logoVideo ? `${process.env.VUE_APP_FILE_JHWX}/${logoVideo}` : '',
-            logoNameDown: logoNameDown? `${process.env.VUE_APP_FILE_JHWX}/${logoNameDown}` : '',
-            logoNameRight: logoNameRight? `${process.env.VUE_APP_FILE_JHWX}/${logoNameRight}` : '',
+            logo: this.verifyEditUrl(logo),
+            logoNameUp: this.verifyEditUrl(logoNameUp),
+            logoVideo: this.verifyEditUrl(logoVideo),
+            logoNameDown: this.verifyEditUrl(logoNameDown),
+            logoNameRight: this.verifyEditUrl(logoNameRight),
           }
         }
       })
+    },
+    verifyEditUrl(url){
+      const httpReg = /^http/g
+      if(!url){
+        return ''
+      }else if(httpReg.test(url)){
+        return url
+      }else{
+        return `${process.env.VUE_APP_FILE_JHWX}/${url}`
+      }
     },
     getCascaderObj(key, list){
       this.hitOrg = []
