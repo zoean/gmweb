@@ -216,7 +216,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitSchool">立即创建</el-button>
+          <el-button type="primary" @click="submitSchool">{{addEditType == 1 ? "立即创建" : "保存"}}</el-button>
           <el-button @click="addEditVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
